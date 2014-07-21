@@ -1,51 +1,24 @@
-Cuba
-====
+Sinuba
+======
 
-_n_. a microframework for web development.
-
-![Cuba and Rum, by Jan Sochor](http://farm3.static.flickr.com/2619/4032103097_8324c6fecf.jpg)
-
-Community
----------
-
-Meet us on IRC: [#cuba.rb][irc] on [freenode.net][freenode].
-
-[irc]: irc://chat.freenode.net/#cuba.rb
-[freenode]: http://freenode.net/
-
-Description
------------
-
-Cuba is a microframework for web development originally inspired
-by [Rum][rum], a tiny but powerful mapper for [Rack][rack]
-applications.
-
-It integrates many templates via [Tilt][tilt], and testing via
-[Cutest][cutest] and [Capybara][capybara].
-
-[rum]: http://github.com/chneukirchen/rum
-[rack]: http://github.com/chneukirchen/rack
-[tilt]: http://github.com/rtomayko/tilt
-[cutest]: http://github.com/djanowski/cutest
-[capybara]: http://github.com/jnicklas/capybara
-[rack-test]: https://github.com/brynary/rack-test
-
-Guide
------
-
-There's a book called [The Guide to Cuba][guide] that explains how
-to build web applications by following a minimalistic approach. It
-is recommended reading for anyone trying to learn the basics of
-Cuba and other related tools.
-
-[guide]: http://theguidetocuba.io
+Sinuba is a microframework for web development, inspired by Cuba
+and Sinatra.
 
 Installation
 ------------
 
 ``` console
-$ gem install cuba
+$ gem install sinuba
 ```
+
+Resources
+---------
+
+* Website: http://sinuba.jeremyevans.net
+* Source: http://github.com/jeremyevans/sinuba
+* Bugs: http://github.com/jeremyevans/sinuba/issues
+* Google Group: http://groups.google.com/group/ruby-sinuba
+* IRC: irc://chat.freenode.net/#sinuba
 
 Usage
 -----
@@ -53,54 +26,57 @@ Usage
 Here's a simple application:
 
 ``` ruby
-# cat hello_world.rb
-require "cuba"
-require "rack/protection"
-
-Cuba.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
-Cuba.use Rack::Protection
-
-Cuba.define do
-  on get do
-    on "hello" do
-      res.write "Hello world!"
-    end
-
-    on root do
-      res.redirect "/hello"
-    end
-  end
-end
-```
-
-And the test file:
-
-``` ruby
-# cat hello_world_test.rb
-require "cuba/test"
-require "./hello_world"
-
-scope do
-  test "Homepage" do
-    get "/"
-
-    follow_redirect!
-
-    assert_equal "Hello world!", last_response.body
-  end
-end
-```
-
-To run it, you can create a `config.ru` file:
-
-``` ruby
 # cat config.ru
-require "./hello_world"
+require "sinuba"
 
-run Cuba
+run(Sinuba.define do
+  use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+
+  route do |r|
+    r.get do
+      r.on "hello" do
+        "Hello world!"
+      end
+
+      r.on :root=>true do
+        r.redirect "/hello"
+      end
+    end
+  end
+end.app)
 ```
 
 You can now run `rackup` and enjoy what you have just created.
+
+Here's a breakdown of what is going on in the above block:
+
+`Sinuba.define` creates an anonymous subclass of Sinuba, and
+`class_eval`s the block in the context of the subclass. So any
+methods you define in the `define` block are available as
+instance methods inside the route block.
+
+The `route` block is called whenever a new request comes in, 
+and it is yieled an instance of a subclass of `Rack::Request`
+that uses `Sinuba::RequestMethods`, which handles matching
+routes.  By convention, this argument should be named `r`.
+
+The primary way routes are matched in Sinuba is by calling
+`r.on`, or a method like `r.get` which calls `r.on`.  `r.on`
+takes each of the arguments given and tries to match them to
+the current request.  If it is able to successfully match
+them, it yields to the `r.on` block, otherwise it returns
+immediately.
+
+If `r.on` matches and control is yielded to the block, whenever
+the block returns, the response will be returned.  If the block
+returns a string, it will interpreted as the body for the
+response.
+
+`r.redirect` immediately returns the response, allowing for
+code such as `r.redirect(path) if some_condition`.
+
+The `.app` at the end is an optimization, which you can leave
+off, but which saves a few methods call for every response.
 
 Matchers
 --------
@@ -108,74 +84,71 @@ Matchers
 Here's an example showcasing how different matchers work:
 
 ``` ruby
-require "cuba"
-require "rack/protection"
+require "sinuba"
 
-Cuba.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
-Cuba.use Rack::Protection
+Sinuba.define do
+  use Rack::Session::Cookie, :secret => "__a_very_long_string__"
 
-Cuba.define do
+  route do |r|
+    # only GET requests
+    r.get do
 
-  # only GET requests
-  on get do
-
-    # /
-    on root do
-      res.write "Home"
-    end
-
-    # /about
-    on "about" do
-      res.write "About"
-    end
-
-    # /styles/basic.css
-    on "styles", extension("css") do |file|
-      res.write "Filename: #{file}" #=> "Filename: basic"
-    end
-
-    # /post/2011/02/16/hello
-    on "post/:y/:m/:d/:slug" do |y, m, d, slug|
-      res.write "#{y}-#{m}-#{d} #{slug}" #=> "2011-02-16 hello"
-    end
-
-    # /username/foobar
-    on "username/:username" do |username|
-      user = User.find_by_username(username) # username == "foobar"
-
-      # /username/foobar/posts
-      on "posts" do
-
-        # You can access `user` here, because the `on` blocks
-        # are closures.
-        res.write "Total Posts: #{user.posts.size}" #=> "Total Posts: 6"
+      # /
+      r.on root=>true do
+        "Home"
       end
 
-      # /username/foobar/following
-      on "following" do
-        res.write user.following.size #=> "1301"
+      # /about
+      r.on "about" do
+        "About"
+      end
+
+      # /styles/basic.css
+      r.on "styles", :extension => "css" do |file|
+        "Filename: #{file}" #=> "Filename: basic"
+      end
+
+      # /post/2011/02/16/hello
+      r.on "post/:y/:m/:d/:slug" do |y, m, d, slug|
+        "#{y}-#{m}-#{d} #{slug}" #=> "2011-02-16 hello"
+      end
+
+      # /username/foobar
+      r.on "username/:username" do |username|
+        user = User.find_by_username(username) # username == "foobar"
+
+        # /username/foobar/posts
+        r.on "posts" do
+
+          # You can access `user` here, because the `on` blocks
+          # are closures.
+          "Total Posts: #{user.posts.size}" #=> "Total Posts: 6"
+        end
+
+        # /username/foobar/following
+        r.on "following" do
+          user.following.size.to_s #=> "1301"
+        end
+      end
+
+      # /search?q=barbaz
+      r.on "search", :param=>"q" do |query|
+        res.write "Searched for #{query}" #=> "Searched for barbaz"
       end
     end
 
-    # /search?q=barbaz
-    on "search", param("q") do |query|
-      res.write "Searched for #{query}" #=> "Searched for barbaz"
-    end
-  end
+    # only POST requests
+    r.post do
+      r.on "login" do
 
-  # only POST requests
-  on post do
-    on "login" do
+        # POST /login, user: foo, pass: baz
+        r.on {:param=>"user"}, {:param=>"pass"} do |user, pass|
+          "#{user}:#{pass}" #=> "foo:baz"
+        end
 
-      # POST /login, user: foo, pass: baz
-      on param("user"), param("pass") do |user, pass|
-        res.write "#{user}:#{pass}" #=> "foo:baz"
-      end
-
-      # If the params `user` and `pass` are not provided, this block will
-      # get executed.
-      on true do
-        res.write "You need to provide user and pass!"
+        # If the params `user` and `pass` are not provided, this block will
+        # get executed.
+        "You need to provide user and pass!"
       end
     end
   end
@@ -185,174 +158,30 @@ end
 Status codes
 ------------
 
-As soon as an `on` block is executed, the status code for the
-response is changed to 200. The default status code is 404, and it
-is returned if no `on` block succeeds inside a Cuba app.
+When it comes time to finalize a response, if a status code has not
+been set manually, it will use a 200 status code if anything has been
+written to the response, otherwise it will use a 404 status code.
+This enables the principle of least surprise to work, where if you
+don't handle an action, a 404 response is assumed.
 
-As this behavior can be tricky, let's look at some examples:
+You can always set the status code manually via the status attribute
+for the response.
 
 ``` ruby
-Cuba.define do
-  on get do
-    on "hello" do
-      res.write "hello world"
+route do |r|
+  r.get do
+    r.on "hello" do
+      r.status = 200
     end
   end
 end
-
-# Requests:
-#
-# GET /            # 200, ""
-# GET /hello       # 200, "hello world"
-# GET /hello/world # 200, "hello world"
-```
-
-As you can see, as soon as `on get` matched, the status code was
-changed to 200. If you expected some of those requests to return a
-404 status code, you may be surprised by this behavior.
-
-In the following example, as both arguments to `on` must match,
-the requests to `/` return 404.
-
-``` ruby
-Cuba.define do
-  on get, "hello" do
-    res.write "hello world"
-  end
-end
-
-# Requests:
-#
-# GET /            # 404, ""
-# GET /hello       # 200, "hello world"
-# GET /hello/world # 200, "hello world"
-```
-
-Another way is to add a default block:
-
-``` ruby
-Cuba.define do
-  on get do
-    on "hello" do
-      res.write "hello world"
-    end
-
-    on default do
-      res.status = 404
-    end
-  end
-end
-
-# Requests:
-#
-# GET /            # 404, ""
-# GET /hello       # 200, "hello world"
-# GET /hello/world # 200, "hello world"
-```
-
-Yet another way is to mount an application with routes that don't
-match the request:
-
-``` ruby
-SomeApp = Cuba.new do
-  on "bye" do
-    res.write "bye!"
-  end
-end
-
-Cuba.define do
-  on get do
-    run SomeApp
-  end
-end
-
-# Requests:
-#
-# GET /            # 404, ""
-# GET /hello       # 404, ""
-# GET /hello/world # 404, ""
-```
-
-As Cuba encourages the composition of applications, this last
-example is a very common pattern.
-
-You can also change the status code at any point inside the define
-block. That way you can change the default status, as shown in the
-following example:
-
-``` ruby
-Cuba.define do
-  res.status = 404
-
-  on get do
-    on "hello" do
-      res.status = 200
-      res.write "hello world"
-    end
-  end
-end
-
-# Requests:
-#
-# GET /            # 404, ""
-# GET /hello       # 200, "hello world"
-# GET /hello/world # 200, "hello world"
-```
-
-If you really want to return 404 for everything under "hello", you
-can match the end of line:
-
-``` ruby
-Cuba.define do
-  res.status = 404
-
-  on get do
-    on /hello\/?\z/ do
-      res.status = 200
-      res.write "hello world"
-    end
-  end
-end
-
-# Requests:
-#
-# GET /            # 404, ""
-# GET /hello       # 200, "hello world"
-# GET /hello/world # 404, ""
-```
-
-This last example is not a common usage pattern. It's here only to
-illustrate how Cuba can be adapted for different use cases.
-
-If you need this behavior, you can create a helper:
-
-``` ruby
-module TerminalMatcher
-  def terminal(path)
-    /#{path}\/?\z/
-  end
-end
-
-Cuba.plugin TerminalMatcher
-
-Cuba.define do
-  res.status = 404
-
-  on get do
-    on terminal("hello") do
-      res.status = 200
-      res.write "hello world"
-    end
-  end
-end
-```
 
 Security
 --------
 
-The favorite security layer for Cuba is
+The favorite security layer for Sinuba is
 [Rack::Protection][rack-protection]. It is not included by default
-because there are legitimate uses for plain Cuba (for instance,
+because there are legitimate uses for plain Sinuba (for instance,
 when designing an API).
 
 If you are building a web application, by all means make sure
@@ -366,66 +195,55 @@ value. Keep in mind that the content in the session cookie is
 [rack-protection]: https://github.com/rkh/rack-protection
 
 ``` ruby
-require "cuba"
+require "sinuba"
 require "rack/protection"
 
-Cuba.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
-Cuba.use Rack::Protection
-Cuba.use Rack::Protection::RemoteReferrer
+Sinuba.define do
+  use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+  use Rack::Protection
+  use Rack::Protection::RemoteReferrer
 
-Cuba.define do
-
-  # Now your app is protected against a wide range of attacks.
-  ...
+  route do |r|
+    # Now your app is protected against a wide range of attacks.
+    ...
+  end
 end
 ```
 
 HTTP Verbs
 ----------
 
-There are four matchers defined for HTTP Verbs: `get`, `post`, `put` and
-`delete`. But the world doesn't end there, does it? As you have the whole
-request available via the `req` object, you can query it with helper methods
-like `req.options?` or `req.head?`, or you can even go to a lower level
-and inspect the environment via the `env` object, and check for example if
-`env["REQUEST_METHOD"]` equals the obscure verb `PATCH`.
+The main match method is `r.on`, but as displayed above, you can also
+use `r.get` or r.post`.  These are just sugar:
 
-What follows is an example of different ways of saying the same thing:
-
-``` ruby
-on env["REQUEST_METHOD"] == "GET", "api" do ... end
-
-on req.get?, "api" do ... end
-
-on get, "api" do ... end
-```
-
-Actually, `get` is syntax sugar for `req.get?`, which in turn is syntax sugar
-for `env["REQUEST_METHOD"] == "GET"`.
+    r.get "hello"
+    r.on r.get?, "hello"
 
 Request and Response
 --------------------
 
-You may have noticed we use `req` and `res` a lot. Those variables are
-instances of [Rack::Request][request] and `Cuba::Response` respectively, and
-`Cuba::Response` is just an optimized version of
-[Rack::Response][response].
+While the request object is yielded to the route block, it is also
+available via the `request` method.  Likewise, the response object
+is available via the `response` method.
 
-[request]: http://rack.rubyforge.org/doc/classes/Rack/Request.html
-[response]: http://rack.rubyforge.org/doc/classes/Rack/Response.html
+The request object is an instance of a subclass of Rack::Request
+that uses Sinuba::RequestMethods, and the response object is an
+instance of a subclass of Rack::Response that uses Sinuba::ResponseMethods.
 
-Those objects are helpers for accessing the request and for building
-the response. Most of the time, you will just use `res.write`.
+If you want to access the `env` hash for the request, it is available
+via `r.env`.
 
-If you want to use custom `Request` or `Response` objects, you can
-set the new values as follows:
+If you want to extend the request and response objects with additional
+modules, you can do so via plugins.
 
-``` ruby
-Cuba.settings[:req] = MyRequest
-Cuba.settings[:res] = MyResponse
-```
+Pollution
+---------
 
-Make sure to provide classes compatible with those from Rack.
+Sinuba tries very hard to avoid polluting the scope in which the
+`route` block operates.  The only instance variables defined
+by Sinuba are `@\_block`, `@\_request`, and `@\_response`.  The
+only methods defined (beyond the default methods for `Object`) are:
+`opts`, `request`, `response`, `call`, and `session`.
 
 Captures
 --------
@@ -436,8 +254,8 @@ for determining if a matcher will yield a value are simple:
 1. Regex captures: `"posts/(\\d+)-(.*)"` will yield two values, corresponding to each capture.
 2. Placeholders: `"users/:id"` will yield the value in the position of :id.
 3. Symbols: `:foobar` will yield if a segment is available.
-4. File extensions: `extension("css")` will yield the basename of the matched file.
-5. Parameters: `param("user")` will yield the value of the parameter user, if present.
+4. File extensions: `:extension=>"css"` will yield the basename of the matched file.
+5. Parameters: `:param=>"user"` will yield the value of the parameter user, if present.
 
 The first case is important because it shows the underlying effect of regex
 captures.
@@ -446,7 +264,7 @@ In the second case, the substring `:id` gets replaced by `([^\\/]+)` and the
 string becomes `"users/([^\\/]+)"` before performing the match, thus it reverts
 to the first form we saw.
 
-In the third case, the symbol ––no matter what it says––gets replaced
+In the third case, the symbol, no matter what it says, gets replaced
 by `"([^\\/]+)"`, and again we are in presence of case 1.
 
 The fourth case, again, reverts to the basic matcher: it generates the string
@@ -458,78 +276,48 @@ in the request (via POST or QUERY_STRING) and it pushes the value as a capture.
 Composition
 -----------
 
-You can mount a Cuba app, along with middlewares, inside another Cuba app:
+You can mount a Sinuba app, along with middlewares, inside another Sinuba app,
+via `r.run`:
 
 ``` ruby
-class API < Cuba; end
+API = Sinuba.define do
+  use SomeMiddleware
 
-API.use SomeMiddleware
-
-API.define do
-  on param("url") do |url|
-    ...
+  route do |r|
+    r.on :param=>'url' do |url|
+      ...
+    end
   end
 end
 
-Cuba.define do
-  on "api" do
-    run API
+run(Sinuba.define do
+  route do |r|
+    r.on "api" do
+      r.run API
+    end
   end
-end
+end.app)
 ```
 
 Testing
 -------
 
-Given that Cuba is essentially Rack, it is very easy to test with
-`Rack::Test`, `Webrat` or `Capybara`. Cuba's own tests are written
-with a combination of [Cutest][cutest] and [Rack::Test][rack-test],
-and if you want to use the same for your tests it is as easy as
-requiring `cuba/test`:
-
-``` ruby
-require "cuba/test"
-require "your/app"
-
-scope do
-  test "Homepage" do
-    get "/"
-
-    assert_equal "Hello world!", last_response.body
-  end
-end
-```
-
-If you prefer to use [Capybara][capybara], instead of requiring
-`cuba/test` you can require `cuba/capybara`:
-
-``` ruby
-require "cuba/capybara"
-require "your/app"
-
-scope do
-  test "Homepage" do
-    visit "/"
-
-    assert has_content?("Hello world!")
-  end
-end
-```
-
-To read more about testing, check the documentation for
-[Cutest][cutest], [Rack::Test][rack-test] and [Capybara][capybara].
+Given that Sinuba is essentially Rack, it is very easy to test with
+`Rack::Test` or `Capybara`. Sinuba's own tests are written
+with a combination of rspec and [Rack::Test][rack-test].  The
+default rake task will run the specs for Sinuba, if rspec is installed.
 
 Settings
 --------
 
-Each Cuba app can store settings in the `Cuba.settings` hash. The settings are
-inherited if you happen to subclass `Cuba`
+Each Sinuba app can store settings in the `opts` hash. The settings are
+inherited if you happen to subclass `Sinuba`.  
 
 ``` ruby
-Cuba.settings[:layout] = "guest"
+Sinuba.settings[:layout] = "guest"
 
-class Users < Cuba; end
-class Admin < Cuba; end
+class Users < Sinuba; end
+class Admin < Sinuba; end
 
 Admin.settings[:layout] = "admin"
 
@@ -537,114 +325,111 @@ assert_equal "guest", Users.settings[:layout]
 assert_equal "admin", Admin.settings[:layout]
 ```
 
-Feel free to store whatever you find convenient.
+Feel free to store whatever you find convenient.  Note that when subclassing,
+Sinuba only does a shallow clone.  If you store nested structures and plan
+to mutate them in subclasses, it is your responsibility to dup the nested
+structures as well.  The plugins that ship with Sinuba all handle this.
 
 Rendering
 ---------
 
-Cuba ships with a plugin that provides helpers for rendering templates. It uses
-[Tilt][tilt], a gem that interfaces with many template engines.
-
-``` ruby
-require "cuba/render"
-
-Cuba.plugin Cuba::Render
-
-Cuba.define do
-  on default do
-
-    # Within the partial, you will have access to the local variable `content`,
-    # that will hold the value "hello, world".
-    res.write render("home.haml", content: "hello, world")
-  end
-end
-```
+Sinuba ships with a plugin that provides helpers for rendering templates. It uses
+[Tilt][tilt], a gem that interfaces with many template engines. The erb engine is
+used by default.
 
 Note that in order to use this plugin you need to have [Tilt][tilt] installed, along
 with the templating engines you want to use.
 
-You can also configure the template engine in the app's settings,
-and that will allow you to skip the file extension when rendering a
-file:
+This plugin adds the `render` and `view` methods, for rendering templates.
+The difference between `render` and `view` is that `view` will by default
+attempt to render the template inside the default layout template, where
+`render` will just render the template.
 
 ``` ruby
-require "cuba/render"
+Sinuba.define do
+  plugin :render
 
-Cuba.plugin Cuba::Render
-Cuba.settings[:render][:template_engine] = "slim"
+  route do |r|
+    @var = '1'
 
-Cuba.define do
-  on default do
+    r.on "render" do
+      # Renders the views/home.erb template, which will have access to the
+      # instance variable @var, as well as local variable content
+      render("home", :locals=>{:content => "hello, world"})
+    end
 
-    # Now we can use the `view` helper, which guesses the file
-    # extension based on the configured template_engine.
-    res.write view("home", content: "hello, world")
+    r.on "render" do
+      @var2 = '1'
+
+      # Renders the views/home.erb template, which will have access to the
+      # instance variables @var and @var2, and takes the output of that and
+      # renders it inside views/layout.erb (which should yield where the
+      # content should be inserted).
+      view("home")
+    end
   end
+end
+```
+
+You can override the default rendering options by passing a hash to the plugin,
+or modifying the `render_opts` hash after loading the plugin:
+
+``` ruby
+Sinuba.define do
+  plugin :render, :engine=>'slim' # Tilt engine/template file extension to use
+  render_opts[:views] = 'admin_views' # Default views directory
+  render_opts[:layout] = "admin_layout" # Default layout template
+  render_opts[:layout_opts] = {:engine=>'haml'} # Default layout template options
+  render_opts[:opts] = {:default_encoding=>'UTF-8'} # Default template options
 end
 ```
 
 Plugins
 -------
 
-Cuba provides a way to extend its functionality with plugins.
+Sinuba provides a way to extend its functionality with plugins.  Plugins can
+override any Sinuba method and call `super` to get the default behavior.
 
 ### How to create plugins
 
-Authoring your own plugins is pretty straightforward.
+Authoring your own plugins is pretty straightforward.  Plugins are just modules
+that contain one of the following modules:
+
+* InstanceMethods: module included in the Sinuba class
+* ClassMethods: module that extends the Sinuba class
+* RequestMethods: module included in the class of the request
+* ResponseMethods: module included in the class of the response
+
+So a simple plugin to add an instance method would be:
 
 ``` ruby
 module MyOwnHelper
-  def markdown(str)
-    BlueCloth.new(str).to_html
+  module InstanceMethods
+    def markdown(str)
+      BlueCloth.new(str).to_html
+    end
   end
 end
 
-Cuba.plugin MyOwnHelper
+Sinuba.plugin MyOwnHelper
 ```
 
-That's the simplest kind of plugin you'll write. In fact, that's exactly how
-the `markdown` helper is written in `Cuba::TextHelpers`.
-
-A more complicated plugin can make use of `Cuba.settings` to provide default
-values. In the following example, note that if the module has a `setup` method, it will
-be called as soon as it is included:
+A more complicated plugin can make use of `Sinuba.opts` to provide default
+values. In the following example, note that if the module has a `configure` method, it will
+be called as soon as it is included, along with the opts given to the plugin method
 
 ``` ruby
 module Render
-  def self.setup(app)
-    app.settings[:template_engine] = "erb"
+  def self.configure(app, opts={})
+    app.settings[:engine] = opts[:engine] || "erb"
   end
 
-  def partial(template, locals = {})
-    render("#{template}.#{settings[:template_engine]}", locals)
-  end
-end
-
-Cuba.plugin Render
-```
-
-This sample plugin actually resembles how `Cuba::Render` works.
-
-Finally, if a module called `ClassMethods` is present, `Cuba` will be extended
-with it.
-
-``` ruby
-module GetSetter
-  module ClassMethods
-    def set(key, value)
-      settings[key] = value
-    end
-
-    def get(key)
-      settings[key]
+  module InstanceMethods
+    def render(template, opts={})
+      ...
     end
   end
 end
 
-Cuba.plugin GetSetter
-
-Cuba.set(:foo, "bar")
-
-assert_equal "bar", Cuba.get(:foo)
-assert_equal "bar", Cuba.settings[:foo]
+Sinuba.plugin Render, :engine=>'slim'
 ```
