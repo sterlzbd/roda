@@ -1,12 +1,60 @@
 $:.unshift(File.expand_path("../lib", File.dirname(__FILE__)))
-require "cuba"
 
-prepare { Cuba.reset! }
+require "sinuba"
 
-def assert_response(body, expected)
-  arr = []
-  body.each { |line| arr << line }
+unless defined?(RSPEC_EXAMPLE_GROUP)
+  if defined?(RSpec)
+    require 'rspec/version'
+    if RSpec::Version::STRING >= '2.11.0'
+      RSpec.configure do |config|
+        config.expect_with :rspec do |c|
+          c.syntax = :should
+        end
+        config.mock_with :rspec do |c|
+          c.syntax = :should
+        end
+      end
+    end
+    RSPEC_EXAMPLE_GROUP = RSpec::Core::ExampleGroup
+  else
+    RSPEC_EXAMPLE_GROUP = Spec::Example::ExampleGroup
+  end
+end
 
-  flunk "#{arr.inspect} != #{expected.inspect}" unless arr == expected
-  print "."
+class RSPEC_EXAMPLE_GROUP
+  def app(type=:use, &block)
+    if type == :new
+      @app = nil
+    end
+
+    @app ||= if type == :bare
+      Sinuba.define(&block)
+    else
+      Sinuba.define{route(&block)}
+    end
+  end
+
+  
+  def req(path, env={})
+    if path.is_a?(Hash)
+      env = path
+    else
+      env['PATH_INFO'] = path
+    end
+
+    env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge(env)
+    app.call(env)
+  end
+  
+  def status(path='/', env={})
+    req(path, env)[0]
+  end
+
+  def header(name, path='/', env={})
+    req(path, env)[1][name]
+  end
+
+  def body(path='/', env={})
+    req(path, env)[2].join
+  end
 end

@@ -1,162 +1,111 @@
 require File.expand_path("helper", File.dirname(__FILE__))
 
-test "doesn't yield HOST" do
-  Cuba.define do
-    on host("example.com") do |*args|
-      res.write args.size
+describe "capturing" do
+  it "doesn't yield HOST" do
+    app do |r|
+      r.on :host=>"example.com" do |*args|
+        args.size.to_s
+      end
     end
+
+    body("HTTP_HOST" => "example.com").should == '0'
   end
 
-  env = { "HTTP_HOST" => "example.com" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["0"]
-end
-
-test "doesn't yield the verb" do
-  Cuba.define do
-    on get do |*args|
-      res.write args.size
+  it "doesn't yield the verb" do
+    app do |r|
+      r.get do |*args|
+        args.size.to_s
+      end
     end
+
+    body.should == '0'
   end
 
-  env = { "REQUEST_METHOD" => "GET" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["0"]
-end
-
-test "doesn't yield the path" do
-  Cuba.define do
-    on get, "home" do |*args|
-      res.write args.size
+  it "doesn't yield the path" do
+    app do |r|
+      r.get "home" do |*args|
+        args.size.to_s
+      end
     end
+
+    body('/home').should == '0'
   end
 
-  env = { "REQUEST_METHOD" => "GET", "PATH_INFO" => "/home",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["0"]
-end
-
-test "yields the segment" do
-  Cuba.define do
-    on get, "user", :id do |id|
-      res.write id
+  it "yields the segment" do
+    app do |r|
+      r.get "user", :id do |id|
+        id
+      end
     end
+
+    body("/user/johndoe").should == 'johndoe'
   end
 
-  env = { "REQUEST_METHOD" => "GET", "PATH_INFO" => "/user/johndoe",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["johndoe"]
-end
-
-test "yields a number" do
-  Cuba.define do
-    on get, "user", :id do |id|
-      res.write id
+  it "yields a number" do
+    app do |r|
+      r.get "user", :id do |id|
+        id
+      end
     end
+
+    body("/user/101").should == '101'
   end
 
-  env = { "REQUEST_METHOD" => "GET", "PATH_INFO" => "/user/101",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["101"]
-end
-
-test "yield a file name with a matching extension" do
-  Cuba.define do
-    on get, "css", extension("css") do |file|
-      res.write file
+  it "yield a file name with a matching extension" do
+    app do |r|
+      r.get "css", :extension=>"css" do |file|
+        file
+      end
     end
+
+    body("/css/app.css").should == 'app'
   end
 
-  env = { "REQUEST_METHOD" => "GET", "PATH_INFO" => "/css/app.css",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["app"]
-end
-
-test "yields a segment per nested block" do
-  Cuba.define do
-    on :one do |one|
-      on :two do |two|
-        on :three do |three|
-          res.write one
-          res.write two
-          res.write three
+  it "yields a segment per nested block" do
+    app do |r|
+      r.on :one do |one|
+        r.on :two do |two|
+          r.on :three do |three|
+            response.write one
+            response.write two
+            response.write three
+          end
         end
       end
     end
+
+    body("/one/two/three").should == "onetwothree"
   end
 
-  env = { "REQUEST_METHOD" => "GET", "PATH_INFO" => "/one/two/three",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["one", "two", "three"]
-end
-
-test "consumes a slash if needed" do
-  Cuba.define do
-    on get, "(.+\\.css)" do |file|
-      res.write file
+  it "consumes a slash if needed" do
+    app do |r|
+      r.get "(.+\\.css)" do |file|
+        file
+      end
     end
+
+    body("/foo/bar.css").should == "foo/bar.css"
   end
 
-  env = { "REQUEST_METHOD" => "GET", "PATH_INFO" => "/foo/bar.css",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["foo/bar.css"]
-end
-
-test "regex captures in string format" do
-  Cuba.define do
-    on get, "posts/(\\d+)-(.*)" do |id, slug|
-      res.write id
-      res.write slug
+  it "regex captures in string format" do
+    app do |r|
+      r.get "posts/(\\d+)-(.*)" do |id, slug|
+        response.write id
+        response.write slug
+      end
     end
+
+    body("/posts/123-postal-service").should == "123postal-service"
   end
 
-
-  env = { "REQUEST_METHOD" => "GET",
-          "PATH_INFO" => "/posts/123-postal-service",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-
-  assert_response resp, ["123", "postal-service"]
-end
-
-test "regex captures in regex format" do
-  Cuba.define do
-    on get, %r{posts/(\d+)-(.*)} do |id, slug|
-      res.write id
-      res.write slug
+  it "regex captures in regex format" do
+    app do |r|
+      r.get %r{posts/(\d+)-(.*)} do |id, slug|
+        response.write id
+        response.write slug
+      end
     end
+
+    body("/posts/123-postal-service").should == "123postal-service"
   end
-
-  env = { "REQUEST_METHOD" => "GET",
-          "PATH_INFO" => "/posts/123-postal-service",
-          "SCRIPT_NAME" => "/" }
-
-  _, _, resp = Cuba.call(env)
-
-
-  assert_response resp, ["123", "postal-service"]
 end

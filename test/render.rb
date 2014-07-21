@@ -1,130 +1,79 @@
-require_relative "helper"
+require File.expand_path("helper", File.dirname(__FILE__))
 
-require "cuba/render"
 
-test "doesn't override the settings if they already exist" do
-  Cuba.settings[:render] = {
-    :views => "./test/views",
-    :template_engine => "haml"
-  }
+describe "render plugin" do
+  before do
+    app(:bare) do
+      plugin :render
+      render_opts[:views] = "./test/views"
 
-  Cuba.plugin Cuba::Render
+      route do |r|
+        r.on "home" do
+          view("home", :locals=>{:name => "Agent Smith", :title => "Home"}, :layout_opts=>{:locals=>{:title=>"Home"}})
+        end
 
-  assert_equal "./test/views", Cuba.settings[:render][:views]
-  assert_equal "haml", Cuba.settings[:render][:template_engine]
-end
+        r.on "about" do
+          render("about", :locals=>{:title => "About Sinuba"})
+        end
 
-scope do
-  setup do
-    Cuba.plugin Cuba::Render
-    Cuba.settings[:render][:views] = "./test/views"
-    Cuba.settings[:render][:template_engine] = "erb"
+        r.on "inline" do
+          view(:inline=>"Hello <%= name %>", :locals=>{:name => "Agent Smith"}, :layout=>nil)
+        end
 
-    Cuba.define do
-      on "home" do
-        res.write view("home", name: "Agent Smith", title: "Home")
-      end
-
-      on "about" do
-        res.write partial("about", title: "About Cuba")
-      end
-
-      on "inline" do
-        template = "Hello <%= name %>"
-        res.write render(template, {name: "Agent Smith"}, :template_block=>proc{template})
+        r.on "path" do
+          render(:path=>"./test/views/about.erb", :locals=>{:title => "Path"}, :layout_opts=>{:locals=>{:title=>"Home"}})
+        end
       end
     end
   end
 
-  test "partial" do
-    _, _, body = Cuba.call({ "PATH_INFO" => "/about", "SCRIPT_NAME" => "/" })
-
-    assert_response body, ["<h1>About Cuba</h1>\n"]
+  it "default actions" do
+    body("/about").strip.should == "<h1>About Sinuba</h1>"
+    body("/home").strip.should == "<title>Sinuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/inline").strip.should == "Hello Agent Smith"
+    body("/path").strip.should == "<h1>Path</h1>"
   end
 
-  test "view" do
-    _, _, body = Cuba.call({ "PATH_INFO" => "/home", "SCRIPT_NAME" => "/" })
-
-    assert_response body.map{|s| s.strip}, ["<title>Cuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
+  it "with str as engine" do
+    app.render_opts[:engine] = "str"
+    body("/about").strip.should == "<h1>About Sinuba</h1>"
+    body("/home").strip.should == "<title>Sinuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
-  test "inline render" do
-    _, _, body = Cuba.call({ "PATH_INFO" => "/inline", "SCRIPT_NAME" => "/" })
-
-    assert_response body, ["Hello Agent Smith"]
-  end
-
-  test "partial with str as engine" do
-    Cuba.settings[:render][:template_engine] = "str"
-
-    _, _, body = Cuba.call({ "PATH_INFO" => "/about", "SCRIPT_NAME" => "/" })
-
-    assert_response body, ["<h1>About Cuba</h1>\n"]
-  end
-
-  test "view with str as engine" do
-    Cuba.settings[:render][:template_engine] = "str"
-
-    _, _, body = Cuba.call({ "PATH_INFO" => "/home", "SCRIPT_NAME" => "/" })
-
-    assert_response body.map{|s| s.strip}, ["<title>Cuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
-  end
-
-  test "custom default layout support" do
-    Cuba.settings[:render][:layout] = "layout-alternative"
-
-    _, _, body = Cuba.call({ "PATH_INFO" => "/home", "SCRIPT_NAME" => "/" })
-
-    assert_response body.map{|s| s.strip}, ["<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
+  it "custom default layout support" do
+    app.render_opts[:layout] = "layout-alternative"
+    body("/home").strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 end
 
-test "caching behavior" do
-  Thread.current[:_cache] = nil
-
-  Cuba.plugin Cuba::Render
-  Cuba.settings[:render][:views] = "./test/views"
-
-  Cuba.define do
-    on "foo/:i" do |i|
-      res.write partial("test", title: i)
+describe "render plugin layouts" do
+  it "simple layout support" do
+    app(:bare) do
+      plugin :render
+      
+      route do |r|
+        r.on true do
+          render(:path=>"test/views/layout-yield.erb") do
+            render(:path=>"test/views/content-yield.erb")
+          end
+        end
+      end
     end
+
+    body.gsub(/\n+/, "\n").should == "Header\nThis is the actual content.\nFooter\n"
   end
 
-  10.times do |i|
-    _, _, resp = Cuba.call({ "PATH_INFO" => "/foo/#{i}", "SCRIPT_NAME" => "" })
-  end
-
-  assert_equal 1, Thread.current[:_cache].instance_variable_get(:@cache).size
-end
-
-test "simple layout support" do
-  Cuba.plugin Cuba::Render
-
-  Cuba.define do
-    on true do
-      res.write render("test/views/layout-yield.erb") {
-        render("test/views/content-yield.erb")
-      }
+  it "layout overrides" do
+    app(:bare) do
+      plugin :render, :views=>"./test/views"
+      
+      route do |r|
+        r.on true do
+          view("home", :locals=>{:name=>"Agent Smith", :title=>"Home" }, :layout=>"layout-alternative", :layout_opts=>{:locals=>{:title=>"Home"}})
+        end
+      end
     end
+
+    body.strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
-
-  _, _, resp = Cuba.call({})
-
-  assert_response resp.map{|s| s.gsub(/\n+/, "\n")}, ["Header\nThis is the actual content.\nFooter\n"]
-end
-
-test "overrides layout" do
-  Cuba.plugin Cuba::Render
-  Cuba.settings[:render][:views] = "./test/views"
-
-  Cuba.define do
-    on true do
-      res.write view("home", { name: "Agent Smith", title: "Home" }, "layout-alternative")
-    end
-  end
-
-  _, _, body = Cuba.call({})
-
-  assert_response body.map{|s| s.strip}, ["<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
 end

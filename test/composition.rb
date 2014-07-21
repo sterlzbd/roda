@@ -1,21 +1,19 @@
 require File.expand_path("helper", File.dirname(__FILE__))
 
-test "composing on top of a PATH" do
-  Services = Cuba.new {
-    on "services/:id" do |id|
-      res.write "View #{id}"
+describe "r.run" do
+  it "should allow composition of apps" do
+    a = app do |r|
+      r.on "services/:id" do |id|
+        "View #{id}"
+      end
     end
-  }
 
-  Cuba.define do
-    on "provider" do
-      run Services
+    app(:new) do |r|
+      r.on "provider" do
+        r.run a
+      end
     end
+
+    body("/provider/services/101").should == 'View 101'
   end
-
-  env = { "SCRIPT_NAME" => "/", "PATH_INFO" => "/provider/services/101" }
-
-   _, _, resp = Cuba.call(env)
-
-   assert_response resp, ["View 101"]
 end

@@ -1,83 +1,48 @@
 require File.expand_path("helper", File.dirname(__FILE__))
 
-test "matching an empty segment" do
-  Cuba.define do
-    on "" do
-      res.write req.path
+describe "root/empty segment matching" do
+  it "matching an empty segment" do
+    app do |r|
+      r.on "" do
+        r.path
+      end
     end
+
+    body.should == '/'
+    status("/foo").should == 404
   end
 
-  env = {
-    "SCRIPT_NAME" => "",
-    "PATH_INFO" => "/"
-  }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["/"]
-end
-
-test "nested empty segments" do
-  Cuba.define do
-    on "" do
-      on "" do
-        on "1" do
-          res.write "IT WORKS!"
-          res.write req.path
+  it "nested empty segments" do
+    app do |r|
+      r.on "" do
+        r.on "" do
+          r.on "1" do
+            r.path
+          end
         end
       end
     end
+
+    body("///1").should == '///1'
+    status("/1").should == 404
+    status("//1").should == 404
   end
 
-  env = {
-    "SCRIPT_NAME" => "",
-    "PATH_INFO" => "///1"
-  }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["IT WORKS!", "///1"]
-end
-
-test "/events/? scenario" do
-  class Events < Cuba
-    define do
-      on root do
-        res.write "Hooray"
+  it "/events/? scenario" do
+    a = app do |r|
+      r.on :root=>true do
+        "Hooray"
       end
     end
-  end
 
-  Cuba.define do
-    on "events" do
-      run Events
+    app(:new) do |r|
+      r.on "events" do
+        r.run a
+      end
     end
+
+    body("/events").should == 'Hooray'
+    body("/events/").should == 'Hooray'
+    status("/events/foo").should == 404
   end
-
-  env = {
-    "SCRIPT_NAME" => "",
-    "PATH_INFO" => "/events"
-  }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["Hooray"]
-
-  env = {
-    "SCRIPT_NAME" => "",
-    "PATH_INFO" => "/events/"
-  }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["Hooray"]
-
-  env = {
-    "SCRIPT_NAME" => "",
-    "PATH_INFO" => "/events/a"
-  }
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, []
 end

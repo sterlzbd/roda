@@ -37,16 +37,20 @@ class Sinuba
     module ClassMethods
       def inherited(subclass)
         super
-        opts = subclass.opts[:render] = opts[:render].dup
+        opts = subclass.opts[:render] = render_opts.dup
         opts[:layout_opts] = opts[:layout_opts].dup
         opts[:opts] = opts[:opts].dup
         opts[:cache] = Cache.new
+      end
+
+      def render_opts
+        opts[:render]
       end
     end
 
     module InstanceMethods
       def render_opts
-        opts[:render]
+        self.class.render_opts
       end
 
       def view(template, opts={})
@@ -61,7 +65,7 @@ class Sinuba
             layout_opts = render_opts[:layout_opts].merge(layout_opts)
           end
 
-          content = render(opts[:layout] || render_opts[:layout], layout_opts){content}
+          content = render(opts[:layout] || render_opts[:layout], layout_opts||{}){content}
         end
 
         content
@@ -101,7 +105,7 @@ class Sinuba
         else
           template_class = Tilt
           unless path = opts[:path]
-            path = template_path(template)
+            path = template_path(template, opts)
           end
         end
 

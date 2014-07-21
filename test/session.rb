@@ -1,21 +1,32 @@
-require_relative "helper"
+require File.expand_path("helper", File.dirname(__FILE__))
 
-test do
-  Cuba.define do
-    on default do
-      begin
-        session
-      rescue Exception => e
-        res.write e.message
+describe "session handling" do
+  it "should give a warning if session variable is not available" do
+    app do |r|
+      r.on true do
+        begin
+          session
+        rescue Exception => e
+          e.message
+        end
       end
     end
+
+    body.should =~ /Sinuba.use Rack::Session::Cookie/
   end
 
-  _, _, body = Cuba.call({})
+  it "should return session if available" do
+    app(:bare) do
+      use Rack::Session::Cookie, :secret=>'1'
 
-  body.each do |e|
-    assert e =~ /Cuba.use Rack::Session::Cookie/
+      route do |r|
+        r.on true do
+          session[1] = 'a'
+          session[1]
+        end
+      end
+    end
+
+    body.should == 'a'
   end
 end
-
-

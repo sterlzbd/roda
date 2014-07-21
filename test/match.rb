@@ -1,86 +1,90 @@
 require File.expand_path("helper", File.dirname(__FILE__))
 
-setup do
-  { "SCRIPT_NAME" => "/", "PATH_INFO" => "/posts/123" }
-end
-
-test "text-book example" do |env|
-  Cuba.define do
-    on "posts/:id" do |id|
-      res.write id
-    end
-  end
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["123"]
-end
-
-test "multi-param" do |env|
-  Cuba.define do
-    on "u/:uid/posts/:id" do |uid, id|
-      res.write uid
-      res.write id
-    end
-  end
-
-  env["PATH_INFO"] = "/u/jdoe/posts/123"
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["jdoe", "123"]
-end
-
-test "regex nesting" do |env|
-  Cuba.define do
-    on(/u\/(\w+)/) do |uid|
-      res.write uid
-
-      on(/posts\/(\d+)/) do |id|
-        res.write id
+describe "matchers" do
+  it "should handle string with embedded param" do
+    app do |r|
+      r.on "posts/:id" do |id|
+        id
       end
     end
+
+    body('/posts/123').should == '123'
+    status('/post/123').should == 404
   end
 
-  env["PATH_INFO"] = "/u/jdoe/posts/123"
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["jdoe", "123"]
-end
-
-test "regex nesting colon param style" do |env|
-  Cuba.define do
-    on(/u:(\w+)/) do |uid|
-      res.write uid
-
-      on(/posts:(\d+)/) do |id|
-        res.write id
+  it "should handle multiple params in single string" do
+    app do |r|
+      r.on "u/:uid/posts/:id" do |uid, id|
+        uid + id
       end
     end
+
+    body("/u/jdoe/posts/123").should == 'jdoe123'
+    status("/u/jdoe/pots/123").should == 404
   end
 
-  env["PATH_INFO"] = "/u:jdoe/posts:123"
-
-  _, _, resp = Cuba.call(env)
-
-  assert_response resp, ["jdoe", "123"]
-end
-
-test "symbol matching" do |env|
-  Cuba.define do
-    on "user", :id do |uid|
-      res.write uid
-
-      on "posts", :pid do |id|
-        res.write id
+  it "should handle regexes and nesting" do
+    app do |r|
+      r.on(/u\/(\w+)/) do |uid|
+        r.on(/posts\/(\d+)/) do |id|
+          uid + id
+        end
       end
     end
+
+    body("/u/jdoe/posts/123").should == 'jdoe123'
+    status("/u/jdoe/pots/123").should == 404
   end
 
-  env["PATH_INFO"] = "/user/jdoe/posts/123"
+  it "should handle regex nesting colon param style" do
+    app do |r|
+      r.on(/u:(\w+)/) do |uid|
+        r.on(/posts:(\d+)/) do |id|
+          uid + id
+        end
+      end
+    end
 
-  _, _, resp = Cuba.call(env)
+    body("/u:jdoe/posts:123").should == 'jdoe123'
+    status("/u:jdoe/poss:123").should == 404
+  end
 
-  assert_response resp, ["jdoe", "123"]
+  it "symbol matching" do
+    app do |r|
+      r.on "user", :id do |uid|
+        r.on "posts", :pid do |id|
+          uid + id
+        end
+      end
+    end
+
+    body("/user/jdoe/posts/123").should == 'jdoe123'
+    status("/user/jdoe/pots/123").should == 404
+  end
+
+  it "paths and numbers" do
+    app do |r|
+      r.on "about" do
+        r.on :one, :two do |one, two|
+          one + two
+        end
+      end
+    end
+
+    body("/about/1/2").should == '12'
+    status("/about/1").should == 404
+  end
+
+  it "paths and decimals" do
+    app do |r|
+     r.on "about" do
+        r.on(/(\d+)/) do |one|
+          one
+        end
+      end
+    end
+
+    body("/about/1").should == '1'
+    status("/about/1.2").should == 404
+  end
 end

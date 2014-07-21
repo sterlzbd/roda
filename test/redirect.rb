@@ -1,23 +1,24 @@
 require File.expand_path("helper", File.dirname(__FILE__))
 
-test "redirect" do
-  Cuba.define do
-    on "hello" do
-      res.write "hello, world"
+describe "redirects" do
+  it "should be immediately processed" do
+    app do |r|
+      r.on "about" do
+        r.redirect "/hello", 301
+        "Foo"
+      end
+      r.on true do
+        r.redirect "/hello"
+        "Foo"
+      end
     end
 
-    on "" do
-      res.redirect "/hello"
-    end
+    status.should == 302
+    header('Location').should == '/hello'
+    body.should == ''
+
+    status("/about").should == 301
+    header('Location', "/about").should == '/hello'
+    body("/about").should == ''
   end
-
-  env = { "SCRIPT_NAME" => "/", "PATH_INFO" => "/" }
-
-  status, headers, body = Cuba.call(env)
-
-  assert_equal status, 302
-  assert_equal headers, {
-    "Content-Type" => "text/html; charset=utf-8",
-    "Location" => "/hello" }
-  assert_response body, []
 end

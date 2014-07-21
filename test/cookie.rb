@@ -1,34 +1,29 @@
 require File.expand_path("helper", File.dirname(__FILE__))
 
-test "set cookie" do
-  Cuba.define do
-    on default do
-      res.set_cookie("foo", "bar")
-      res.set_cookie("bar", "baz")
-      res.write "Hello"
+describe "cookie handling" do
+  it "should set cookies on response" do
+    app do |r|
+      r.on true do
+        response.set_cookie("foo", "bar")
+        response.set_cookie("bar", "baz")
+        "Hello"
+      end
     end
+
+    header('Set-Cookie').should == "foo=bar\nbar=baz"
+    body.should == 'Hello'
   end
 
-  env = { "SCRIPT_NAME" => "/", "PATH_INFO" => "/" }
-
-   _, headers, body = Cuba.call(env)
-
-   assert_equal "foo=bar\nbar=baz", headers["Set-Cookie"]
-end
-
-test "delete cookie" do
-  Cuba.define do
-    on default do
-      res.set_cookie("foo", "bar")
-      res.delete_cookie("foo")
-      res.write "Hello"
+  it "should delete cookies on response" do
+    app do |r|
+      r.on true do
+        response.set_cookie("foo", "bar")
+        response.delete_cookie("foo")
+        "Hello"
+      end
     end
+
+    header('Set-Cookie').should =~ /foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/
+    body.should == 'Hello'
   end
-
-  env = { "SCRIPT_NAME" => "/", "PATH_INFO" => "/" }
-
-   _, headers, body = Cuba.call(env)
-
-   assert /foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/ =~
-     headers["Set-Cookie"]
 end

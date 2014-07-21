@@ -223,7 +223,6 @@ class Sinuba
 
       captures.push(*vars)
     end
-    private :consume
 
     def match(matcher)
       case matcher
@@ -251,7 +250,7 @@ class Sinuba
     #   on "style", extension("css") do |file|
     #     res.write file # writes app
     #   end
-    MATCHERS[:extension] = lambda{|req, ext| consume("([^\\/]+?)\.#{ext}\\z")}
+    MATCHERS[:extension] = lambda{|req, ext| req.consume("([^\\/]+?)\.#{ext}\\z")}
 
     # Used to ensure that certain request parameters are present. Acts like a
     # precondition / assertion for your route.
@@ -261,7 +260,7 @@ class Sinuba
     #   on "signup", param("user") do |atts|
     #     User.create(atts)
     #   end
-    MATCHERS[:param] = lambda{|req, key| captures << req[key] unless req[key].to_s.empty?}
+    MATCHERS[:param] = lambda{|req, key| req.captures << req[key] unless req[key].to_s.empty?}
 
     MATCHERS[:header] = lambda{|req, key| req.env[key.upcase.tr("-","_")]}
 
@@ -285,7 +284,7 @@ class Sinuba
       accept = String(req.env["HTTP_ACCEPT"]).split(",")
 
       if accept.any? { |s| s.strip == mimetype }
-        response["Content-Type"] = mimetype
+        req.response["Content-Type"] = mimetype
       end
     end
 
@@ -334,6 +333,11 @@ class Sinuba
     def halt(response)
       throw :halt, response
     end
+
+    def redirect(path, status=302)
+      response.redirect(path, status)
+      halt response.finish
+    end
   end
 
   module ResponseMethods
@@ -366,12 +370,12 @@ class Sinuba
       @length += s.bytesize
       @headers["Content-Length"] = @length.to_s
       @body << s
+      nil
     end
 
     def redirect(path, status = 302)
       @headers["Location"] = path
       @status  = status
-      throw :halt, finish
     end
 
     def finish

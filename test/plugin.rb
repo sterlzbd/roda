@@ -1,107 +1,44 @@
-require_relative "helper"
+require File.expand_path("helper", File.dirname(__FILE__))
 
-scope do
-  module Helper
-    def clean(str)
-      str.strip
-    end
-  end
+describe "plugins" do
+  it "should be able to override class, instance, response, and request methods, and execute configure method" do
+    c = Module.new do
+      self::ClassMethods = Module.new do
+        def fix(str)
+          opts[:prefix] + str.strip
+        end
+      end
+      self::InstanceMethods = Module.new do
+        def fix(str)
+          self.class.fix(str)
+        end
+      end
+      self::RequestMethods = Module.new do
+        def hello(&block)
+          on 'hello', &block
+        end
+      end
+      self::ResponseMethods = Module.new do
+        def foobar
+          "Default   "
+        end
+      end
 
-  test do
-    Cuba.plugin Helper
-
-    Cuba.define do
-      on default do
-        res.write clean " foo "
+      def self.configure(mod, prefix)
+        mod.opts[:prefix] = prefix
       end
     end
 
-    _, _, body = Cuba.call({})
+    app(:bare) do
+      plugin c, "Foo "
 
-    assert_response body, ["foo"]
+      route do |r|
+        r.hello do
+          fix(response.foobar)
+        end
+      end
+    end
+
+    body('/hello').should == 'Foo Default'
   end
 end
-
-scope do
-  module Number
-    def num
-      1
-    end
-  end
-
-  module Plugin
-    def self.setup(app)
-      app.plugin Number
-    end
-
-    def bar
-      "baz"
-    end
-
-    module ClassMethods
-      def foo
-        "bar"
-      end
-    end
-  end
-
-  setup do
-    Cuba.plugin Plugin
-
-    Cuba.define do
-      on default do
-        res.write bar
-        res.write num
-      end
-    end
-  end
-
-  test do
-    assert_equal "bar", Cuba.foo
-  end
-
-  test do
-    _, _, body = Cuba.call({})
-
-    assert_response body, ["baz", "1"]
-  end
-end
-
-scope do
-  module Helper
-    module ClassMethods
-      def settings
-        super.merge(:foo=>:bar)
-      end
-    end
-    def accept(mimetype)
-      if mimetype =~ /(\w+)\/\*/
-        type = $1
-        String(env["HTTP_ACCEPT"]) =~ /#{type}\/\w+/
-      else
-        super
-      end
-    end
-  end
-
-  test do
-    Cuba.plugin Helper
-
-    Cuba.define do
-      on accept('text/*') do
-        res.write "foo#{settings[:foo]}"
-      end
-      on accept('application/xml') do
-        res.write "bar"
-      end
-      on default do
-        res.write "baz"
-      end
-    end
-
-    assert_response Cuba.call("HTTP_ACCEPT"=>'application/xml').last, ['bar']
-    assert_response Cuba.call("HTTP_ACCEPT"=>'text/foo').last, ['foobar']
-    assert_response Cuba.call({}).last, ['baz']
-  end
-end
-
