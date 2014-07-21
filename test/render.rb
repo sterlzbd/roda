@@ -45,7 +45,7 @@ scope do
   test "view" do
     _, _, body = Cuba.call({ "PATH_INFO" => "/home", "SCRIPT_NAME" => "/" })
 
-    assert_response body, ["<title>Cuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>\n"]
+    assert_response body.map{|s| s.strip}, ["<title>Cuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
   end
 
   test "inline render" do
@@ -67,7 +67,7 @@ scope do
 
     _, _, body = Cuba.call({ "PATH_INFO" => "/home", "SCRIPT_NAME" => "/" })
 
-    assert_response body, ["<title>Cuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>\n\n"]
+    assert_response body.map{|s| s.strip}, ["<title>Cuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
   end
 
   test "custom default layout support" do
@@ -75,7 +75,7 @@ scope do
 
     _, _, body = Cuba.call({ "PATH_INFO" => "/home", "SCRIPT_NAME" => "/" })
 
-    assert_response body, ["<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>\n"]
+    assert_response body.map{|s| s.strip}, ["<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
   end
 end
 
@@ -111,7 +111,7 @@ test "simple layout support" do
 
   _, _, resp = Cuba.call({})
 
-  assert_response resp, ["Header\nThis is the actual content.\nFooter\n"]
+  assert_response resp.map{|s| s.gsub(/\n+/, "\n")}, ["Header\nThis is the actual content.\nFooter\n"]
 end
 
 test "overrides layout" do
@@ -126,5 +126,5 @@ test "overrides layout" do
 
   _, _, body = Cuba.call({})
 
-  assert_response body, ["<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>\n"]
+  assert_response body.map{|s| s.strip}, ["<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"]
 end
