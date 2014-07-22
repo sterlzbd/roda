@@ -447,6 +447,8 @@ override any Sinuba method and call `super` to get the default behavior.
 
 ### Included Plugins
 
+* error\_handler: Adds a `error` block that is called for all responses that
+  raise exceptions.
 * not\_found: Adds a `not_found` block that is called for all 404 responses
   without bodies.
 * render: Adds support for rendering templates via tilt, as described above.
