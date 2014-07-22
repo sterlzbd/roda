@@ -1,5 +1,22 @@
 $:.unshift(File.expand_path("../lib", File.dirname(__FILE__)))
 
+if ENV['COVERAGE']
+  require 'coverage'
+  require 'simplecov'
+
+  def SimpleCov.sinuba_coverage(opts = {})
+    start do
+      add_filter "/spec/"
+      add_group('Missing'){|src| src.covered_percent < 100}
+      add_group('Covered'){|src| src.covered_percent == 100}
+      yield self if block_given?
+    end
+  end
+
+  ENV.delete('COVERAGE')
+  SimpleCov.sinuba_coverage
+end
+
 require "sinuba"
 
 unless defined?(RSPEC_EXAMPLE_GROUP)
