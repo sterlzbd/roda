@@ -2,16 +2,21 @@ require "rack"
 require "thread"
 
 class Sinuba
-  class Error < StandardError
-  end
+  class Error < StandardError; end
+
+  class Request < Rack::Request; end
+
+  class Response < Rack::Response; end
 
   Plugins = {}
+
+  @builder = Rack::Builder.new
+  @opts = {}
 
   module ClassMethods
     MUTEX = Mutex.new
 
     attr_reader :app
-    attr_reader :builder
     attr_reader :opts
 
     def call(env)
@@ -20,19 +25,17 @@ class Sinuba
 
     def define(&block)
       klass = Class.new(self)
-      klass.class_eval do
-        builder = @builder = Rack::Builder.new
-        class_eval(&block)
-        routes = @routes
-        builder.run lambda{|env| new(routes).call(env)}
-        @app = builder.to_app
-      end
+      klass.class_eval(&block)
       klass
     end
 
     def inherited(child)
       super
+      @builder = Rack::Builder.new
+      child.instance_variable_set(:@builder, Rack::Builder.new)
       child.instance_variable_set(:@opts, opts.dup)
+      child.const_set(:Request, Class.new(self::Request))
+      child.const_set(:Response, Class.new(self::Response))
     end
 
     def plugin(mixin, *args, &block)
@@ -47,10 +50,10 @@ class Sinuba
         extend mixin::ClassMethods
       end
       if defined?(mixin::RequestMethods)
-        use_module(:request, mixin::RequestMethods)
+        self::Request.send(:include, mixin::RequestMethods)
       end
       if defined?(mixin::ResponseMethods)
-        use_module(:response, mixin::ResponseMethods)
+        self::Response.send(:include, mixin::ResponseMethods)
       end
       
       if mixin.respond_to?(:configure)
@@ -59,11 +62,12 @@ class Sinuba
     end
 
     def route(&block)
-      @routes = block
+      @builder.run lambda{|env| new(block).call(env)}
+      @app = @builder.to_app
     end
 
     def use(middleware, *args, &block)
-      builder.use(middleware, *args, &block)
+      @builder.use(middleware, *args, &block)
     end
 
     private
@@ -78,12 +82,6 @@ class Sinuba
 
     def register_plugin(name, mod)
       MUTEX.synchronize{Plugins[name] = mod}
-    end
-
-    def use_module(type, mod)
-      klass = Class.new(opts[type])
-      klass.send(:include, mod)
-      opts[type] = klass
     end
   end
 
@@ -105,8 +103,8 @@ class Sinuba
     end
 
     def call(env)
-      res = @_response = opts[:response].new
-      req = @_request = opts[:request].new(res, env)
+      response = @_response = self.class::Response.new
+      r = @_request = self.class::Request.new(response, env)
 
       # This `catch` statement will either receive a
       # rack response tuple via a `halt`, or will
@@ -116,9 +114,9 @@ class Sinuba
       # of this whole `call!` method will be the
       # rack response tuple, which is exactly what we want.
       catch(:halt) do
-        instance_exec(req, &@_block)
+        instance_exec(r, &@_block)
 
-        res.finish
+        response.finish
       end
     end
 
@@ -395,7 +393,6 @@ class Sinuba
     end
   end
 
-  @opts = {:request=>Rack::Request, :response=>Rack::Response}
   extend ClassMethods
   plugin self
 end
