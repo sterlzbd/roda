@@ -21,12 +21,17 @@ describe "session handling" do
 
       route do |r|
         r.on do
-          session[1] = 'a'
+          (session[1] ||= 'a') << 'b'
           session[1]
         end
       end
     end
 
-    body.should == 'a'
+    _, h, b = req
+    b.join.should == 'ab'
+    _, h, b = req('HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", ''))
+    b.join.should == 'abb'
+    _, h, b = req('HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", ''))
+    b.join.should == 'abbb'
   end
 end
