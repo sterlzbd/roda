@@ -64,7 +64,7 @@ class Sinuba
     end
 
     def route(&block)
-      @builder.run lambda{|env| new(block).call(env)}
+      @builder.run lambda{|env| new.call(env, &block)}
       @app = @builder.to_app
     end
 
@@ -88,10 +88,6 @@ class Sinuba
   end
 
   module InstanceMethods
-    def initialize(block)
-      @_block = block
-    end
-
     def opts
       self.class.opts
     end
@@ -101,12 +97,11 @@ class Sinuba
     end
 
     def response
-      @_response
+      request.response
     end
 
-    def call(env)
-      response = @_response = self.class::Response.new
-      r = @_request = self.class::Request.new(response, env)
+    def call(env, &block)
+      r = @_request = self.class::Request.new(self.class::Response.new, env)
 
       # This `catch` statement will either receive a
       # rack response tuple via a `halt`, or will
@@ -116,7 +111,7 @@ class Sinuba
       # of this whole `call!` method will be the
       # rack response tuple, which is exactly what we want.
       catch(:halt) do
-        instance_exec(r, &@_block)
+        instance_exec(r, &block)
 
         response.finish
       end

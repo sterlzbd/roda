@@ -295,10 +295,10 @@ Pollution
 ---------
 
 Sinuba tries very hard to avoid polluting the scope in which the
-`route` block operates.  The only instance variables defined
-by Sinuba are `@\_block`, `@\_request`, and `@\_response`.  The
-only methods defined (beyond the default methods for `Object`) are:
-`opts`, `request`, `response`, `call`, and `session`.
+`route` block operates.  The only instance variable defined by base
+Sinuba is `@\_request`.  The only methods defined (beyond the default
+methods for `Object`) are: `opts`, `request`, `response`, `call`, and
+`session`.
 
 Captures
 --------
