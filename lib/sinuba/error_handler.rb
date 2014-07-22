@@ -21,8 +21,6 @@ class Sinuba
           request.on do
             handle_error(e)
           end
-
-          response.finish
         end
       end
 

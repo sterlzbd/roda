@@ -22,8 +22,6 @@ class Sinuba
             request.on do
               not_found
             end
-
-            response.finish
           end
         end
 
