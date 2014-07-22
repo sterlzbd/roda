@@ -1,5 +1,10 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
 
+begin
+  require 'tilt'
+rescue LoadError
+  warn "tilt not installed, skipping render plugin test"  
+else
 describe "render plugin" do
   before do
     app(:bare) do
@@ -86,4 +91,5 @@ describe "render plugin" do
     c.render_opts[:opts].should_not equal(sc.render_opts[:opts])
     c.render_opts[:cache].should_not equal(sc.render_opts[:cache])
   end
+end
 end

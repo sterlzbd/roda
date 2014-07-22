@@ -1,5 +1,10 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
 
+begin
+  require 'sinatra/flash/hash'
+rescue LoadError
+  warn "sinatra-flash not installed, skipping flash plugin test"  
+else
 describe "flash plugin" do 
   it "flash.now[] sets flash for current page" do
     app(:bare) do
@@ -50,4 +55,5 @@ describe "flash plugin" do
     _, h, b = req(env[h])
     b.join.should == 'bb'
   end
+end
 end
