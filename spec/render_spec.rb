@@ -45,7 +45,7 @@ describe "render plugin" do
   end
 end
 
-describe "render plugin layouts" do
+describe "render plugin" do
   it "simple layout support" do
     app(:bare) do
       plugin :render
@@ -74,5 +74,16 @@ describe "render plugin layouts" do
     end
 
     body.strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+  end
+
+  it "render_opts inheritance" do
+    c = Class.new(Sinuba)
+    c.plugin :render
+    sc = Class.new(c)
+
+    c.render_opts.should_not equal(sc.render_opts)
+    c.render_opts[:layout_opts].should_not equal(sc.render_opts[:layout_opts])
+    c.render_opts[:opts].should_not equal(sc.render_opts[:opts])
+    c.render_opts[:cache].should_not equal(sc.render_opts[:cache])
   end
 end
