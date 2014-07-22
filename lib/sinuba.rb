@@ -2,6 +2,8 @@ require "rack"
 require "thread"
 
 class Sinuba
+  VERSION = '0.9.0'.freeze
+
   class Error < StandardError; end
 
   class Request < Rack::Request; end
