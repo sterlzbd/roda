@@ -237,7 +237,14 @@ class Sinuba
       when Hash
         matcher.all?{|k,v| matcher_for(k).call(self, v)}
       when Array
-        matcher.any?{|m| match(m)}
+        matcher.any? do |m|
+          if matched = match(m)
+            if m.is_a?(String)
+              captures.push(m)
+            end
+          end
+          matched
+        end
       when Proc
         matcher.call
       else

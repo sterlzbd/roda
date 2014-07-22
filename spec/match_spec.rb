@@ -87,4 +87,28 @@ describe "matchers" do
     body("/about/1").should == '1'
     status("/about/1.2").should == 404
   end
+
+  it "should allow arrays to match any value" do
+    app do |r|
+      r.on [/(\d+)/, /\d+(bar)?/] do |id|
+        id
+      end
+    end
+
+    body('/123').should == '123'
+    body('/123bar').should == 'bar'
+    status('/123bard').should == 404
+  end
+
+  it "should have array capture match string if match" do
+    app do |r|
+      r.on %w'p q' do |id|
+        id
+      end
+    end
+
+    body('/p').should == 'p'
+    body('/q').should == 'q'
+    status('/r').should == 404
+  end
 end
