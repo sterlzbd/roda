@@ -1,4 +1,4 @@
-require File.expand_path("helper", File.dirname(__FILE__))
+require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "plugins" do
   it "should be able to override class, instance, response, and request methods, and execute configure method" do

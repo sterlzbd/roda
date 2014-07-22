@@ -1,11 +1,10 @@
-require File.expand_path("helper", File.dirname(__FILE__))
-
+require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "render plugin" do
   before do
     app(:bare) do
       plugin :render
-      render_opts[:views] = "./test/views"
+      render_opts[:views] = "./spec/views"
 
       route do |r|
         r.on "home" do
@@ -21,7 +20,7 @@ describe "render plugin" do
         end
 
         r.on "path" do
-          render(:path=>"./test/views/about.erb", :locals=>{:title => "Path"}, :layout_opts=>{:locals=>{:title=>"Home"}})
+          render(:path=>"./spec/views/about.erb", :locals=>{:title => "Path"}, :layout_opts=>{:locals=>{:title=>"Home"}})
         end
       end
     end
@@ -53,8 +52,8 @@ describe "render plugin layouts" do
       
       route do |r|
         r.on true do
-          render(:path=>"test/views/layout-yield.erb") do
-            render(:path=>"test/views/content-yield.erb")
+          render(:path=>"spec/views/layout-yield.erb") do
+            render(:path=>"spec/views/content-yield.erb")
           end
         end
       end
@@ -65,7 +64,7 @@ describe "render plugin layouts" do
 
   it "layout overrides" do
     app(:bare) do
-      plugin :render, :views=>"./test/views"
+      plugin :render, :views=>"./spec/views"
       
       route do |r|
         r.on true do

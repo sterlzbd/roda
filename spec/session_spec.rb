@@ -1,4 +1,4 @@
-require File.expand_path("helper", File.dirname(__FILE__))
+require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "session handling" do
   it "should give a warning if session variable is not available" do

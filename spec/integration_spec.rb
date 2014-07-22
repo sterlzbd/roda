@@ -1,4 +1,4 @@
-require File.expand_path("helper", File.dirname(__FILE__))
+require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "integration" do 
   it "should setup middleware using use " do
