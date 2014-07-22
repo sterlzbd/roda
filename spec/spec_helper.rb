@@ -52,7 +52,7 @@ class RSPEC_EXAMPLE_GROUP
   end
 
   
-  def req(path, env={})
+  def req(path='/', env={})
     if path.is_a?(Hash)
       env = path
     else
