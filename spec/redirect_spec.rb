@@ -7,7 +7,7 @@ describe "redirects" do
         r.redirect "/hello", 301
         "Foo"
       end
-      r.on true do
+      r.on do
         r.redirect "/hello"
         "Foo"
       end

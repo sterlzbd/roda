@@ -3,7 +3,7 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 describe "session handling" do
   it "should give a warning if session variable is not available" do
     app do |r|
-      r.on true do
+      r.on do
         begin
           session
         rescue Exception => e
@@ -20,7 +20,7 @@ describe "session handling" do
       use Rack::Session::Cookie, :secret=>'1'
 
       route do |r|
-        r.on true do
+        r.on do
           session[1] = 'a'
           session[1]
         end

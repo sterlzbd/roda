@@ -51,7 +51,7 @@ describe "render plugin" do
       plugin :render
       
       route do |r|
-        r.on true do
+        r.on do
           render(:path=>"spec/views/layout-yield.erb") do
             render(:path=>"spec/views/content-yield.erb")
           end
@@ -67,7 +67,7 @@ describe "render plugin" do
       plugin :render, :views=>"./spec/views"
       
       route do |r|
-        r.on true do
+        r.on do
           view("home", :locals=>{:name=>"Agent Smith", :title=>"Home" }, :layout=>"layout-alternative", :layout_opts=>{:locals=>{:title=>"Home"}})
         end
       end

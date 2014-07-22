@@ -1,6 +1,16 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "r.on" do 
+  it "executes on no arguments" do
+    app do |r|
+      r.on do
+        "+1"
+      end
+    end
+
+    body.should == '+1'
+  end
+
   it "executes on true" do
     app do |r|
       r.on true do
@@ -27,7 +37,7 @@ describe "r.on" do
         "Unreachable"
       end
       
-      r.on true do
+      r.on do
         r.env["SCRIPT_NAME"] + ':' + r.env["PATH_INFO"]
       end
     end
@@ -37,11 +47,11 @@ describe "r.on" do
 
   it "skips consecutive matches" do
     app do |r|
-      r.on true do
+      r.on do
         "foo"
       end
 
-      r.on true do
+      r.on do
         "bar"
       end
     end
@@ -55,7 +65,7 @@ describe "r.on" do
         "foo"
       end
 
-      r.on true do
+      r.on do
         "bar"
       end
     end
@@ -69,7 +79,7 @@ describe "r.on" do
         "Should be unmet"
       end
 
-      r.on true do
+      r.on do
         r.env["SCRIPT_NAME"] + ':' + r.env["PATH_INFO"]
       end
     end

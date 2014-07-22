@@ -3,7 +3,7 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 describe "cookie handling" do
   it "should set cookies on response" do
     app do |r|
-      r.on true do
+      r.on do
         response.set_cookie("foo", "bar")
         response.set_cookie("bar", "baz")
         "Hello"
@@ -16,7 +16,7 @@ describe "cookie handling" do
 
   it "should delete cookies on response" do
     app do |r|
-      r.on true do
+      r.on do
         response.set_cookie("foo", "bar")
         response.delete_cookie("foo")
         "Hello"

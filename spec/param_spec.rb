@@ -8,7 +8,7 @@ describe "param matcher" do
         email
       end
 
-      r.on true do
+      r.on do
         "No email"
       end
     end
