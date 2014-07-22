@@ -445,6 +445,12 @@ Plugins
 Sinuba provides a way to extend its functionality with plugins.  Plugins can
 override any Sinuba method and call `super` to get the default behavior.
 
+### Included Plugins
+
+* not\_found: Adds a `not_found` block that is called for all 404 responses
+  without bodies.
+* render: Adds support for rendering templates via tilt, as described above.
+
 ### How to create plugins
 
 Authoring your own plugins is pretty straightforward.  Plugins are just modules

@@ -1,0 +1,85 @@
+require File.expand_path("spec_helper", File.dirname(__FILE__))
+
+describe "not_found plugin" do 
+  it "executes on no arguments" do
+    app(:bare) do
+      plugin :not_found
+
+      not_found do
+        "not found"
+      end
+
+      route do |r|
+        r.on "a" do
+          "found"
+        end
+      end
+    end
+
+    body.should == 'not found'
+    body("/a").should == 'found'
+  end
+
+  it "does not modify behavior if not_found is not called" do
+    app(:bare) do
+      plugin :not_found
+
+      route do |r|
+        r.on "a" do
+          "found"
+        end
+      end
+    end
+
+    body.should == ''
+    body("/a").should == 'found'
+  end
+
+  it "can set not_found via the plugin block" do
+    app(:bare) do
+      plugin :not_found do
+        "not found"
+      end
+
+      route do |r|
+        r.on "a" do
+          "found"
+        end
+      end
+    end
+
+    body.should == 'not found'
+    body("/a").should == 'found'
+  end
+
+  it "does not modify behavior if body is not an array" do
+    app(:bare) do
+      plugin :not_found do
+        "not found"
+      end
+
+      o = Object.new
+      def o.join() '' end
+      route do |r|
+        r.halt [404, {}, o]
+      end
+    end
+
+    body.should == ''
+  end
+
+  it "does not modify behavior if body is not an empty array" do
+    app(:bare) do
+      plugin :not_found do
+        "not found"
+      end
+
+      route do |r|
+        response.status = 404
+        response.write 'a'
+      end
+    end
+
+    body.should == 'a'
+  end
+end
