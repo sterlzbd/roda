@@ -450,6 +450,8 @@ override any Sinuba method and call `super` to get the default behavior.
 * error\_handler: Adds a `error` block that is called for all responses that
   raise exceptions.
 * flash: Adds a flash handler, requires sinatra-flash.
+* indifferent\_params: Adds params method with indifferent access to params,
+  allowing use of symbol keys for accessing params.
 * not\_found: Adds a `not_found` block that is called for all 404 responses
   without bodies.
 * render: Adds support for rendering templates via tilt, as described above.

@@ -18,6 +18,7 @@ if ENV['COVERAGE']
 end
 
 require "sinuba"
+require "stringio"
 
 unless defined?(RSPEC_EXAMPLE_GROUP)
   if defined?(RSpec)

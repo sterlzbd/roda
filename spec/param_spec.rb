@@ -1,5 +1,4 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
-require "stringio"
 
 describe "param matcher" do
   it "should yield a param only if not empty" do
