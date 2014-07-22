@@ -91,5 +91,21 @@ describe "render plugin" do
     c.render_opts[:opts].should_not equal(sc.render_opts[:opts])
     c.render_opts[:cache].should_not equal(sc.render_opts[:cache])
   end
+
+  it "with caching disabled" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :cache=>false
+      
+      route do |r|
+        r.on do
+          view(:inline=>"Hello <%= name %>: <%= render_opts[:cache] %>", :locals=>{:name => "Agent Smith"}, :layout=>nil)
+        end
+      end
+    end
+
+    body("/inline").strip.should == "Hello Agent Smith: false"
+
+    Class.new(app).render_opts[:cache].should == false
+  end
 end
 end

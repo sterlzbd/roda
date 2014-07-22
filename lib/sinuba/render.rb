@@ -31,7 +31,8 @@ class Sinuba
       if RUBY_VERSION >= "1.9"
         opts[:opts][:default_encoding] ||= Encoding.default_external
       end
-      opts[:cache] = Cache.new
+      cache = opts.fetch(:cache, true)
+      opts[:cache] = Cache.new if cache == true
     end
 
     module ClassMethods
@@ -40,7 +41,7 @@ class Sinuba
         opts = subclass.opts[:render] = render_opts.dup
         opts[:layout_opts] = opts[:layout_opts].dup
         opts[:opts] = opts[:opts].dup
-        opts[:cache] = Cache.new
+        opts[:cache] = Cache.new if opts[:cache]
       end
 
       def render_opts
@@ -109,9 +110,19 @@ class Sinuba
           end
         end
 
-        render_opts[:cache].fetch(path) do
+        cached_template(path) do
           template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
         end.render(self, opts[:locals], &block)
+      end
+
+      private
+
+      def cached_template(path, &block)
+        if cache = render_opts[:cache]
+          cache.fetch(path, &block)
+        else
+          yield
+        end
       end
     end
   end
