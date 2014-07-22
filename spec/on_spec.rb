@@ -45,6 +45,24 @@ describe "r.on" do
     body("/hello").should == ':/hello'
   end
 
+  it "doesn't mutate SCRIPT_NAME or PATH_INFO after request is returned" do
+    app do |r|
+      r.on 'login', 'foo' do 
+        "Unreachable"
+      end
+      
+      r.on do
+        r.env["SCRIPT_NAME"] + ':' + r.env["PATH_INFO"]
+      end
+    end
+
+    pi, sn = '/login', ''
+    env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => pi, "SCRIPT_NAME" => sn}
+    app.call(env)[2].join.should == ":/login"
+    env["PATH_INFO"].should equal(pi)
+    env["SCRIPT_NAME"].should equal(sn)
+  end
+
   it "skips consecutive matches" do
     app do |r|
       r.on do

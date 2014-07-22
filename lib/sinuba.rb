@@ -215,7 +215,8 @@ class Sinuba
 
       path, *vars = matchdata.captures
 
-      env[SCRIPT_NAME] << "/#{path}"
+      # Don't mutate SCRIPT_NAME, breaks try
+      env[SCRIPT_NAME] += "/#{path}"
       env[PATH_INFO] = "#{vars.pop}#{matchdata.post_match}"
 
       captures.push(*vars)
