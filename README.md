@@ -29,6 +29,88 @@ Here's a simple application:
 # cat config.ru
 require "sinuba"
 
+Sinuba.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+
+Sinuba.route do |r|
+  r.get do
+    r.on "hello" do
+      "Hello world!"
+    end
+
+    r.on :root=>true do
+      r.redirect "/hello"
+    end
+  end
+end
+
+run Sinuba.app
+```
+
+You can now run `rackup` and enjoy what you have just created.
+
+Here's a breakdown of what is going on in the above block:
+
+The `route` block is called whenever a new request comes in, 
+and it is yieled an instance of a subclass of `Rack::Request`
+that uses `Sinuba::RequestMethods`, which handles matching
+routes.  By convention, this argument should be named `r`.
+
+The primary way routes are matched in Sinuba is by calling
+`r.on`, or a method like `r.get` which calls `r.on`.  `r.on`
+takes each of the arguments given and tries to match them to
+the current request.  If it is able to successfully match
+them, it yields to the `r.on` block, otherwise it returns
+immediately.  If you want a block to always run, you can call
+`r.on` with no arguments.
+
+If `r.on` matches and control is yielded to the block, whenever
+the block returns, the response will be returned.  If the block
+returns a string, it will interpreted as the body for the
+response.
+
+`r.redirect` immediately returns the response, allowing for
+code such as `r.redirect(path) if some_condition`.
+
+The `.app` at the end is an optimization, which you can leave
+off, but which saves a few methods call for every response.
+
+Subclasses
+----------
+
+In general, it's not recommended to use the Sinuba class directly
+as displayed above.  Instead, it's better to subclass Sinuba. You
+can do this the standard way:
+
+``` ruby
+# cat config.ru
+require "sinuba"
+
+class App < Sinuba
+end
+
+App.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+
+App.route do |r|
+  r.get do
+    r.on "hello" do
+      "Hello world!"
+    end
+
+    r.on :root=>true do
+      r.redirect "/hello"
+    end
+  end
+end
+
+run App.app
+```
+
+Or you can use the `Sinuba.define` method:
+
+``` ruby
+# cat config.ru
+require "sinuba"
+
 run(Sinuba.define do
   use Rack::Session::Cookie, :secret => "__a_very_long_string__"
 
@@ -46,37 +128,10 @@ run(Sinuba.define do
 end.app)
 ```
 
-You can now run `rackup` and enjoy what you have just created.
-
-Here's a breakdown of what is going on in the above block:
-
 `Sinuba.define` creates an anonymous subclass of Sinuba, and
 `class_eval`s the block in the context of the subclass. So any
 methods you define in the `define` block are available as
 instance methods inside the route block.
-
-The `route` block is called whenever a new request comes in, 
-and it is yieled an instance of a subclass of `Rack::Request`
-that uses `Sinuba::RequestMethods`, which handles matching
-routes.  By convention, this argument should be named `r`.
-
-The primary way routes are matched in Sinuba is by calling
-`r.on`, or a method like `r.get` which calls `r.on`.  `r.on`
-takes each of the arguments given and tries to match them to
-the current request.  If it is able to successfully match
-them, it yields to the `r.on` block, otherwise it returns
-immediately.
-
-If `r.on` matches and control is yielded to the block, whenever
-the block returns, the response will be returned.  If the block
-returns a string, it will interpreted as the body for the
-response.
-
-`r.redirect` immediately returns the response, allowing for
-code such as `r.redirect(path) if some_condition`.
-
-The `.app` at the end is an optimization, which you can leave
-off, but which saves a few methods call for every response.
 
 Matchers
 --------
@@ -94,7 +149,7 @@ Sinuba.define do
     r.get do
 
       # /
-      r.on root=>true do
+      r.on :root=>true do
         "Home"
       end
 
@@ -146,8 +201,8 @@ Sinuba.define do
           "#{user}:#{pass}" #=> "foo:baz"
         end
 
-        # If the params `user` and `pass` are not provided, this block will
-        # get executed.
+        # If the params `user` and `pass` are not provided, this
+        # will get executed.
         "You need to provide user and pass!"
       end
     end
@@ -214,7 +269,7 @@ HTTP Verbs
 ----------
 
 The main match method is `r.on`, but as displayed above, you can also
-use `r.get` or r.post`.  These are just sugar:
+use `r.get` or r.post`.  These are just sugar, so both of these are the same:
 
     r.get "hello"
     r.on r.get?, "hello"
@@ -433,3 +488,13 @@ end
 
 Sinuba.plugin Render, :engine=>'slim'
 ```
+
+License
+-------
+
+MIT
+
+Maintainer
+----------
+
+Jeremy Evans <code@jeremyevans.net>
