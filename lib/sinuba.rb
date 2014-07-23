@@ -138,7 +138,7 @@ class Sinuba
       module RequestMethods
         PATH_INFO = "PATH_INFO".freeze
         SCRIPT_NAME = "SCRIPT_NAME".freeze
-        MATCHERS = {}
+        TERM = {:term=>true}.freeze
         SEGMENT = "([^\\/]+)".freeze
 
         attr_reader :response
@@ -149,10 +149,6 @@ class Sinuba
           @response = response
           @captures = []
           super(env)
-        end
-
-        def matcher_for(type)
-          MATCHERS[type]
         end
 
         # The heart of the path / verb / any condition matching.
@@ -242,7 +238,7 @@ class Sinuba
           when Symbol
             consume(SEGMENT)
           when Hash
-            matcher.all?{|k,v| matcher_for(k).call(self, v)}
+            matcher.all?{|k,v| send("match_#{k}", v)}
           when Array
             matcher.any? do |m|
               if matched = match(m)
@@ -266,7 +262,9 @@ class Sinuba
         #   on "style", extension("css") do |file|
         #     res.write file # writes app
         #   end
-        MATCHERS[:extension] = lambda{|req, ext| req.consume("([^\\/]+?)\.#{ext}\\z")}
+        def match_extension(ext)
+          consume("([^\\/]+?)\.#{ext}\\z")
+        end
 
         # Used to ensure that certain request parameters are present. Acts like a
         # precondition / assertion for your route.
@@ -276,13 +274,15 @@ class Sinuba
         #   on "signup", param("user") do |atts|
         #     User.create(atts)
         #   end
-        MATCHERS[:param] = lambda do |req, key|
-          if v = req[key]
-            req.captures << v
+        def match_param(key)
+          if v = self[key]
+            captures << v
           end
         end
 
-        MATCHERS[:header] = lambda{|req, key| req.env[key.upcase.tr("-","_")]}
+        def match_header(key)
+          env[key.upcase.tr("-","_")]
+        end
 
         # Useful for matching against the request host (i.e. HTTP_HOST).
         #
@@ -290,7 +290,9 @@ class Sinuba
         #   on host("account1.example.com"), "api" do
         #     res.write "You have reached the API of account1."
         #   end
-        MATCHERS[:host] = lambda{|req, hostname| hostname === req.host}
+        def match_host(hostname)
+          hostname === host
+        end
 
         # If you want to match against the HTTP_ACCEPT value.
         #
@@ -300,17 +302,16 @@ class Sinuba
         #     # automatically set to application/xml.
         #     res.write res["Content-Type"]
         #   end
-        MATCHERS[:accept] = lambda do |req, mimetype|
-          accept = String(req.env["HTTP_ACCEPT"]).split(",")
-
-          if accept.any? { |s| s.strip == mimetype }
-            req.response["Content-Type"] = mimetype
+        def match_accept(mimetype)
+          if env["HTTP_ACCEPT"].to_s.split(',').any?{|s| s.strip == mimetype}
+            response["Content-Type"] = mimetype
           end
         end
 
-        MATCHERS[:term] = lambda{|req, is_term| !(is_term ^ (req.env[PATH_INFO] == ""))}
+        def match_term(term)
+          !(term ^ (env[PATH_INFO] == ""))
+        end
 
-        TERM = {:term=>true}.freeze
         def is(*args, &block)
           args << TERM
           on(*args, &block)
