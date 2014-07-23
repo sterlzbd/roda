@@ -570,3 +570,21 @@ describe "extension matcher" do
     status("/styles/reset.bar").should == 404
   end
 end
+
+describe "method matcher" do
+  it "should match given request types" do
+    app do |r|
+      r.is "", :method=>:get do
+        "foo"
+      end
+      r.is "", :method=>[:patch, :post] do
+        "bar"
+      end
+    end
+
+    body("REQUEST_METHOD"=>"GET").should == 'foo'
+    body("REQUEST_METHOD"=>"PATCH").should == 'bar'
+    body("REQUEST_METHOD"=>"POST").should == 'bar'
+    status("REQUEST_METHOD"=>"DELETE").should == 404
+  end
+end

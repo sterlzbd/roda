@@ -284,6 +284,14 @@ class Sinuba
           !(term ^ (env[PATH_INFO] == ""))
         end
 
+        def match_method(type)
+          if type.is_a?(Array)
+            type.any?{|t| match_method(t)}
+          else
+            type.to_s.upcase == env['REQUEST_METHOD']
+          end
+        end
+
         def is(*args, &block)
           args << TERM
           on(*args, &block)

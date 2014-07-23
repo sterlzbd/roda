@@ -325,6 +325,14 @@ This matcher yields the part before the extension.  Note that unlike other
 matchers, this matcher assumes terminal behavior, it doesn't match if there
 are additional segments.
 
+#### :method
+
+This matches the method of the request.  You can provide an array to specify multiple
+request methods and match on any of them:
+
+  :method => :post matches POST
+  :method => %w'post patch' matches POST and PATCH
+
 #### :param
 
 The :param matcher matches if the given parameter is present, even if empty.
