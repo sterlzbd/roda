@@ -603,6 +603,8 @@ override any Sinuba method and call `super` to get the default behavior.
   allowing use of symbol keys for accessing params.
 * not\_found: Adds a `not_found` block that is called for all 404 responses
   without bodies.
+* pass: Adds a pass method allowing you to skip the current `r.on` block as if
+  it did not match.
 * render: Adds support for rendering templates via tilt, as described above.
 
 ### How to create plugins
