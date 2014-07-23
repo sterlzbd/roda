@@ -27,7 +27,7 @@ class Sinuba
       opts[:layout] ||= "layout"
       opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
       opts[:opts] ||= (opts[:opts] || {}).dup
-      opts[:opts][:outvar] ||= '@_output'
+      opts[:opts][:outvar] ||= '@_out_buf'
       if RUBY_VERSION >= "1.9"
         opts[:opts][:default_encoding] ||= Encoding.default_external
       end
