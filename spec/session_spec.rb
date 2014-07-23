@@ -12,7 +12,7 @@ describe "session handling" do
       end
     end
 
-    body.should =~ /Sinuba.use Rack::Session::Cookie/
+    body.should =~ /use Rack::Session::Cookie/
   end
 
   it "should return session if available" do
