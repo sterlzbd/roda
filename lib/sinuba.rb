@@ -82,7 +82,7 @@ class Sinuba
         def load_plugin(name)
           h = Sinuba.instance_variable_get(:@plugins)
           unless plugin = MUTEX.synchronize{h[name]}
-            require "sinuba/#{name}"
+            require "sinuba/plugins/#{name}"
             raise SinubaError, "Plugin #{name} did not register itself correctly in Sinuba::Plugins" unless plugin = MUTEX.synchronize{h[name]}
           end
           plugin

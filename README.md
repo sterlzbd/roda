@@ -505,9 +505,9 @@ Sinuba.plugin Render, :engine=>'slim'
 
 If you want to ship an Sinuba plugin in a gem, but still have
 Sinuba load it automatically via `Sinuba.plugin :plugin_name`, you should
-store the file in `lib/sinuba/plugin_name.rb`, and then register it.  It's
-recommended but not required that you store your plugin module in the
-Sinuba::SinubaPlugins namespace:
+so it can be required via `sinuba/plugins/plugin_name`, and then register
+it.  It's recommended but not required that you store your plugin module
+in the Sinuba::SinubaPlugins namespace:
 
 ``` ruby
 module Sinuba
