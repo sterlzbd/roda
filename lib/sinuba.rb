@@ -99,6 +99,10 @@ class Sinuba
           self.class.opts
         end
 
+        def env
+          request.env
+        end
+
         def request
           @_request
         end
@@ -125,7 +129,7 @@ class Sinuba
         end
 
         def session
-          request.env["rack.session"] || raise(SinubaError, "You're missing a session handler. You can get started by adding Sinuba.use Rack::Session::Cookie")
+          env["rack.session"] || raise(SinubaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
         end
       end
 
