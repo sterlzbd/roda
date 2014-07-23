@@ -2,17 +2,16 @@ require "rack"
 require "thread"
 
 class Sinuba
-  VERSION = '0.9.0'.freeze
+  SinubaVersion = '0.9.0'.freeze
 
-  class Error < StandardError; end
+  class SinubaError < StandardError; end
 
-  class Request < Rack::Request; end
+  class SinubaRequest < Rack::Request; end
 
-  class Response < Rack::Response; end
-
-  Plugins = {}
+  class SinubaResponse < Rack::Response; end
 
   @builder = Rack::Builder.new
+  @plugins = {}
   @opts = {}
 
   module ClassMethods
@@ -36,8 +35,8 @@ class Sinuba
       @builder = Rack::Builder.new
       child.instance_variable_set(:@builder, Rack::Builder.new)
       child.instance_variable_set(:@opts, opts.dup)
-      child.const_set(:Request, Class.new(self::Request))
-      child.const_set(:Response, Class.new(self::Response))
+      child.const_set(:SinubaRequest, Class.new(self::SinubaRequest))
+      child.const_set(:SinubaResponse, Class.new(self::SinubaResponse))
     end
 
     def plugin(mixin, *args, &block)
@@ -52,15 +51,19 @@ class Sinuba
         extend mixin::ClassMethods
       end
       if defined?(mixin::RequestMethods)
-        self::Request.send(:include, mixin::RequestMethods)
+        self::SinubaRequest.send(:include, mixin::RequestMethods)
       end
       if defined?(mixin::ResponseMethods)
-        self::Response.send(:include, mixin::ResponseMethods)
+        self::SinubaResponse.send(:include, mixin::ResponseMethods)
       end
       
       if mixin.respond_to?(:configure)
         mixin.configure(self, *args, &block)
       end
+    end
+
+    def request(env)
+      self::SinubaRequest.new(self::SinubaResponse.new, env)
     end
 
     def route(&block)
@@ -75,15 +78,17 @@ class Sinuba
     private
 
     def load_plugin(name)
-      unless plugin = MUTEX.synchronize{Plugins[name]}
+      h = Sinuba.instance_variable_get(:@plugins)
+      unless plugin = MUTEX.synchronize{h[name]}
         require "sinuba/#{name}"
-        raise Error, "Plugin #{name} did not register itself correctly in Sinuba::Plugins" unless plugin = MUTEX.synchronize{Plugins[name]}
+        raise SinubaError, "Plugin #{name} did not register itself correctly in Sinuba::Plugins" unless plugin = MUTEX.synchronize{h[name]}
       end
       plugin
     end
 
     def register_plugin(name, mod)
-      MUTEX.synchronize{Plugins[name] = mod}
+      h = Sinuba.instance_variable_get(:@plugins)
+      MUTEX.synchronize{h[name] = mod}
     end
   end
 
@@ -101,7 +106,7 @@ class Sinuba
     end
 
     def call(env, &block)
-      r = @_request = self.class::Request.new(self.class::Response.new, env)
+      r = @_request = self.class.request(env)
 
       # This `catch` statement will either receive a
       # rack response tuple via a `halt`, or will
@@ -118,9 +123,7 @@ class Sinuba
     end
 
     def session
-      request.env["rack.session"] || raise(RuntimeError,
-        "You're missing a session handler. You can get started " +
-        "by adding Sinuba.use Rack::Session::Cookie")
+      request.env["rack.session"] || raise(SinubaError, "You're missing a session handler. You can get started by adding Sinuba.use Rack::Session::Cookie")
     end
   end
 

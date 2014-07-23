@@ -2,7 +2,7 @@ require File.expand_path("../lib/sinuba", __FILE__)
 
 Gem::Specification.new do |s|
   s.name              = "sinuba"
-  s.version           = Sinuba::VERSION.dup
+  s.version           = Sinuba::SinubaVersion.dup
   s.summary           = "Microframework for web applications"
   s.description       = "Sinuba is a microframework for web applications, inspired by Cuba and Sinatra."
   s.authors           = ["Jeremy Evans"]

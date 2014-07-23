@@ -4,7 +4,7 @@ require "rake/clean"
 NAME = 'sinuba'
 VERS = lambda do
   require File.expand_path("../lib/sinuba.rb", __FILE__)
-  Sinuba::VERSION
+  Sinuba::SinubaVersion
 end
 CLEAN.include ["#{NAME}-*.gem", "rdoc", "coverage"]
 
