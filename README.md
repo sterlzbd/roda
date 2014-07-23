@@ -325,9 +325,9 @@ are additional segments.
 
 #### :param
 
-The :param matcher matches if the given parameter is present.
+The :param matcher matches if the given parameter is present, even if empty.
 
-  :param => "user" matches "/foo?user=bar"
+  :param => "user" matches "/foo?user=bar", "/foo?user="
   :param => "user" does not matches "/foo"
 
 #### :term

@@ -276,7 +276,11 @@ class Sinuba
         #   on "signup", param("user") do |atts|
         #     User.create(atts)
         #   end
-        MATCHERS[:param] = lambda{|req, key| req.captures << req[key] unless req[key].to_s.empty?}
+        MATCHERS[:param] = lambda do |req, key|
+          if v = req[key]
+            req.captures << v
+          end
+        end
 
         MATCHERS[:header] = lambda{|req, key| req.env[key.upcase.tr("-","_")]}
 
