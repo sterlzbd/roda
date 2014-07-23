@@ -32,13 +32,26 @@ require "sinuba"
 Sinuba.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
 
 Sinuba.route do |r|
+  # matches any GET request
   r.get do
-    r.on "hello" do
-      "Hello world!"
+
+    # matches GET /
+    r.is "" do
+      r.redirect "/hello"
     end
 
-    r.on :root=>true do
-      r.redirect "/hello"
+    # matches GET /hello or GET /hello/.*
+    r.on "hello" do
+
+      # matches GET /hello/world
+      r.is "world" do
+        "Hello world!"
+      end
+
+      # matches GET /hello
+      r.is do
+        "Hello!"
+      end
     end
   end
 end
@@ -52,16 +65,20 @@ Here's a breakdown of what is going on in the above block:
 
 The `route` block is called whenever a new request comes in, 
 and it is yieled an instance of a subclass of `Rack::Request`
-that uses `Sinuba::RequestMethods`, which handles matching
-routes.  By convention, this argument should be named `r`.
+with some additional methods for matching routes.  By
+convention, this argument should be named `r`.
 
 The primary way routes are matched in Sinuba is by calling
-`r.on`, or a method like `r.get` which calls `r.on`.  `r.on`
-takes each of the arguments given and tries to match them to
+`r.on`, or a method like `r.get` or `r.is` which calls `r.on`.
+`r.on` takes each of the arguments given and tries to match them to
 the current request.  If it is able to successfully match
 them, it yields to the `r.on` block, otherwise it returns
 immediately.  If you want a block to always run, you can call
 `r.on` with no arguments.
+
+`r.get` is a shortcut that matches any GET request, and
+`r.is` is a shortcut that ensures the the exact route is
+matched and there are no further entries in the path.
 
 If `r.on` matches and control is yielded to the block, whenever
 the block returns, the response will be returned.  If the block
@@ -86,18 +103,11 @@ can do this the standard way:
 require "sinuba"
 
 class App < Sinuba
-end
+  use Rack::Session::Cookie, :secret => "__a_very_long_string__"
 
-App.use Rack::Session::Cookie, :secret => "__a_very_long_string__"
-
-App.route do |r|
-  r.get do
-    r.on "hello" do
-      "Hello world!"
-    end
-
-    r.on :root=>true do
-      r.redirect "/hello"
+  route do |r|
+    r.is "" do
+      "Hello"
     end
   end
 end
@@ -115,14 +125,8 @@ run(Sinuba.define do
   use Rack::Session::Cookie, :secret => "__a_very_long_string__"
 
   route do |r|
-    r.get do
-      r.on "hello" do
-        "Hello world!"
-      end
-
-      r.on :root=>true do
-        r.redirect "/hello"
-      end
+    r.is "" do
+      "Hello"
     end
   end
 end.app)
@@ -155,22 +159,22 @@ Sinuba.define do
     r.get do
 
       # /
-      r.on :root=>true do
+      r.is "" do
         "Home"
       end
 
       # /about
-      r.on "about" do
+      r.is "about" do
         "About"
       end
 
       # /styles/basic.css
-      r.on "styles", :extension => "css" do |file|
+      r.is "styles", :extension => "css" do |file|
         "Filename: #{file}" #=> "Filename: basic"
       end
 
       # /post/2011/02/16/hello
-      r.on "post/:y/:m/:d/:slug" do |y, m, d, slug|
+      r.is "post/:y/:m/:d/:slug" do |y, m, d, slug|
         "#{y}-#{m}-#{d} #{slug}" #=> "2011-02-16 hello"
       end
 
@@ -179,7 +183,7 @@ Sinuba.define do
         user = User.find_by_username(username) # username == "foobar"
 
         # /username/foobar/posts
-        r.on "posts" do
+        r.is "posts" do
 
           # You can access `user` here, because the `on` blocks
           # are closures.
@@ -187,20 +191,20 @@ Sinuba.define do
         end
 
         # /username/foobar/following
-        r.on "following" do
+        r.is "following" do
           user.following.size.to_s #=> "1301"
         end
       end
 
       # /search?q=barbaz
-      r.on "search", :param=>"q" do |query|
+      r.is "search", :param=>"q" do |query|
         res.write "Searched for #{query}" #=> "Searched for barbaz"
       end
     end
 
     # only POST requests
     r.post do
-      r.on "login" do
+      r.is "login" do
 
         # POST /login, user: foo, pass: baz
         r.on {:param=>"user"}, {:param=>"pass"} do |user, pass|
@@ -215,6 +219,134 @@ Sinuba.define do
   end
 end
 ```
+
+Here's a description of the matchers.  Note that segment as used
+here means one part of the path preceeded by a /.  Go a path such
+as `/foo/bar//baz` has 4 segments, `/foo`, `/bar`, `/` and `/baz`.
+The `/` here is considered the empty segment.
+
+### String
+
+If it does not contain a colon or slash, matches single segment
+with the text of the string, preceeded by a slash.
+
+  "" matches "/"
+  "foo" matches "/foo"
+  "foo" does not match "/food"
+
+If it contains any slashes, it matches one additional segment for
+each slash:
+
+  "foo/bar" matches "/foo/bar"
+  "foo/bar" does not match "/foo/bard"
+
+If it contains a colon, the colon matches any nonempty segment
+contains at least one character:
+
+  "foo/:id" matches "/foo/bar", "/foo/baz", etc.
+  "foo/:id" does not match "/fo/bar"
+
+You can use multiple colons in a string:
+
+  ":x/:y" matches "/foo/bar", "/bar/foo" etc.
+  ":x/:y" does not match "/foo", "/bar/"
+
+You can prefix colons:
+
+  "foo:x/bar:y" matches "/food/bard", "/fool/bart", etc.
+  "foo:x/bar:y" does not match "/foo/bart", "/fool/bar", etc.
+
+If any colons are used, the block will yield one argument for
+each segment matched containing the matched text.  So:
+
+  "foo:x/:y" matching "/fool/bar" yields "l", "bar"
+
+### Regexp
+
+Regexps match one or more segments by looking pattern preceeded by a
+slash:
+
+  /foo\w+/ matches "/foobar"
+  /foo\w+/ does not match "/foo/bar"
+
+If any patterns are captured by the regexp, they are yielded:
+
+  /foo\w+/ matches "/foobar", yields nothing
+  /foo(\w+)/ matches "/foobar", yields "bar" 
+
+### Symbol
+
+Symbols match any segment with one or more characters,
+yielding the segment:
+
+  :id matches "/foo" yields "foo"
+  :id does not match "/"
+
+### Proc
+
+Procs match unless they return false or nil:
+
+  proc{true} matches anything
+  proc{false} does not match anything
+
+Procs don't capture anything by default, but they can if you add
+them to `r.captures`.
+
+### Arrays
+
+Arrays match when any of their elements matches.  If multiple matchers
+are given to `r.on`, they all must match (an AND condition), while
+if an array of matchers is given, only one needs to match (an OR
+condition).  Evaluation stops at the first matcher that matches.
+
+Additionally, if the matched object is a String, the string is yielded.
+This makes it easy to handle multiple strings without a Regexp:
+
+  %w'page1 page2' matches "/page1", "/page2"
+  [] does not match anything
+
+### Hash
+
+Hashes call a registered matcher with the given key using the hash value,
+and match if that matcher returns true.  Keys should always be symbols.
+
+The default registered matchers included with Sinuba are:
+
+#### :extension
+
+The :extension matcher matches any nonempty path ending with the given extension:
+
+  :extension => "css" matches "/foo.css", "/bar.css"
+  :extension => "css" does not match "/foo.css/x", "/foo.bar", "/.css"
+
+This matcher yields the part before the extension.  Note that unlike other
+matchers, this matcher assumes terminal behavior, it doesn't match if there
+are additional segments.
+
+#### :param
+
+The :param matcher matches if the given parameter is present.
+
+  :param => "user" matches "/foo?user=bar"
+  :param => "user" does not matches "/foo"
+
+#### :term
+
+The :term matcher matches if true and there are no segments left.  This matcher is
+added by `r.is` to ensure an exact path match.
+
+  :term => true matches ""
+  :term => true does not match "/"
+  :term => false matches "/"
+  :term => false does not match ""
+
+### false, nil
+
+If false or nil is given directly as a matcher, it doesn't match anything.
+
+### Everything else
+
+Everything else matches anything.
 
 Status codes
 ------------
@@ -231,7 +363,7 @@ for the response.
 ``` ruby
 route do |r|
   r.get do
-    r.on "hello" do
+    r.is "hello" do
       r.status = 200
     end
   end
@@ -288,14 +420,12 @@ available via the `request` method.  Likewise, the response object
 is available via the `response` method.
 
 The request object is an instance of a subclass of Rack::Request
-that uses Sinuba::RequestMethods, and the response object is an
-instance of a subclass of Rack::Response that uses Sinuba::ResponseMethods.
-
-If you want to access the `env` hash for the request, it is available
-via `r.env`.
+with some additional methods, and the response object is an
+instance of a subclass of Rack::Response with some additional
+methods.
 
 If you want to extend the request and response objects with additional
-modules, you can do so via plugins.
+modules, you can do so via plugins, see below.
 
 Pollution
 ---------
@@ -346,7 +476,7 @@ API = Sinuba.define do
   use SomeMiddleware
 
   route do |r|
-    r.on :param=>'url' do |url|
+    r.is do
       ...
     end
   end
@@ -364,10 +494,9 @@ end.app)
 Testing
 -------
 
-Given that Sinuba is essentially Rack, it is very easy to test with
-`Rack::Test` or `Capybara`. Sinuba's own tests are written
-with a combination of rspec and [Rack::Test][rack-test].  The
-default rake task will run the specs for Sinuba, if rspec is installed.
+It is very easy to test Sinuba with `Rack::Test` or `Capybara`. Sinuba's
+own tests are written with a combination of rspec and [Rack::Test][rack-test].
+The default rake task will run the specs for Sinuba, if rspec is installed.
 
 Settings
 --------
@@ -390,9 +519,9 @@ assert_equal "admin", Admin.opts[:layout]
 Feel free to store whatever you find convenient.  Note that when subclassing,
 Sinuba only does a shallow clone.  If you store nested structures and plan
 to mutate them in subclasses, it is your responsibility to dup the nested
-structures as well.  The plugins that ship with Sinuba all handle this.  Also,
-note that this means that future modifications to the parent class after
-subclassing do not affect the subclass.
+structures inside Sinuba.inherited as well.  The plugins that ship with
+Sinuba all handle this.  Also, note that this means that future modifications
+to the parent class after subclassing do not affect the subclass.
 
 Rendering
 ---------
@@ -416,13 +545,13 @@ Sinuba.define do
   route do |r|
     @var = '1'
 
-    r.on "render" do
+    r.is "render" do
       # Renders the views/home.erb template, which will have access to the
       # instance variable @var, as well as local variable content
       render("home", :locals=>{:content => "hello, world"})
     end
 
-    r.on "render" do
+    r.is "view" do
       @var2 = '1'
 
       # Renders the views/home.erb template, which will have access to the
@@ -511,10 +640,11 @@ Sinuba.plugin Render, :engine=>'slim'
 
 ### Registering plugins
 
-If you want to ship an Sinuba plugin in a gem, but still have
+If you want to ship a Sinuba plugin in a gem, but still have
 Sinuba load it automatically via `Sinuba.plugin :plugin_name`, you should
-so it can be required via `sinuba/plugins/plugin_name`, and then register
-it.  It's recommended but not required that you store your plugin module
+place it where it can be required via `sinuba/plugins/plugin_name`, and
+then have the file register it as a plugin via `Sinuba.register_plugin`.
+It's recommended but not required that you store your plugin module
 in the Sinuba::SinubaPlugins namespace:
 
 ``` ruby
