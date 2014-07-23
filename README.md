@@ -133,6 +133,12 @@ end.app)
 methods you define in the `define` block are available as
 instance methods inside the route block.
 
+Note that middleware and options in the parent class are copied
+into subclasses, but routes in the parent class are not copied into
+the subclass, by design.  Additionally, the request and response
+classes used by subclasses of Sinuba are subclasses of the request
+and request classes used by Sinuba.
+
 Matchers
 --------
 

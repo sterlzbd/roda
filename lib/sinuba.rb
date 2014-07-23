@@ -11,6 +11,7 @@ class Sinuba
   class SinubaResponse < Rack::Response; end
 
   @builder = Rack::Builder.new
+  @middleware = []
   @plugins = {}
   @opts = {}
 
@@ -34,8 +35,8 @@ class Sinuba
 
         def inherited(child)
           super
-          @builder = Rack::Builder.new
           child.instance_variable_set(:@builder, Rack::Builder.new)
+          child.instance_variable_set(:@middleware, @middleware.dup)
           child.instance_variable_set(:@opts, opts.dup)
           child.const_set(:SinubaRequest, Class.new(self::SinubaRequest))
           child.const_set(:SinubaResponse, Class.new(self::SinubaResponse))
@@ -69,12 +70,13 @@ class Sinuba
         end
 
         def route(&block)
+          @middleware.each{|a, b| @builder.use(*a, &b)}
           @builder.run lambda{|env| new.call(env, &block)}
           @app = @builder.to_app
         end
 
-        def use(middleware, *args, &block)
-          @builder.use(middleware, *args, &block)
+        def use(*args, &block)
+          @middleware << [args, block]
         end
 
         private
