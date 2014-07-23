@@ -1,131 +1,133 @@
 require "tilt"
 
 class Sinuba
-  module Render
-    class Cache
-      MUTEX = Mutex.new
+  module SinubaPlugins
+    module Render
+      class Cache
+        MUTEX = Mutex.new
 
-      def initialize
-        MUTEX.synchronize{@cache = {}}
-      end
-      alias clear initialize
-
-      def fetch(*key)
-        unless template = MUTEX.synchronize{@cache[key]}
-          template = yield
-          MUTEX.synchronize{@cache[key] = template}
+        def initialize
+          MUTEX.synchronize{@cache = {}}
         end
+        alias clear initialize
 
-        template
-      end
-    end
-
-    def self.configure(app, opts={})
-      opts = app.opts[:render] = opts.dup
-      opts[:engine] ||= "erb"
-      opts[:views] ||= File.expand_path("views", Dir.pwd)
-      opts[:layout] ||= "layout"
-      opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
-      opts[:opts] ||= (opts[:opts] || {}).dup
-      opts[:opts][:outvar] ||= '@_out_buf'
-      if RUBY_VERSION >= "1.9"
-        opts[:opts][:default_encoding] ||= Encoding.default_external
-      end
-      cache = opts.fetch(:cache, true)
-      opts[:cache] = Cache.new if cache == true
-    end
-
-    module ClassMethods
-      def inherited(subclass)
-        super
-        opts = subclass.opts[:render] = render_opts.dup
-        opts[:layout_opts] = opts[:layout_opts].dup
-        opts[:opts] = opts[:opts].dup
-        opts[:cache] = Cache.new if opts[:cache]
-      end
-
-      def render_opts
-        opts[:render]
-      end
-    end
-
-    module InstanceMethods
-      def render_opts
-        self.class.render_opts
-      end
-
-      def view(template, opts={})
-        if template.is_a?(Hash)
-          opts = template
-        end
-
-        content = render(template, opts)
-
-        if opts.fetch(:layout, true)
-          if layout_opts = opts[:layout_opts]
-            layout_opts = render_opts[:layout_opts].merge(layout_opts)
+        def fetch(*key)
+          unless template = MUTEX.synchronize{@cache[key]}
+            template = yield
+            MUTEX.synchronize{@cache[key] = template}
           end
 
-          content = render(opts[:layout] || render_opts[:layout], layout_opts||{}){content}
+          template
         end
-
-        content
       end
 
-      def template_path(template, opts)
-        render_opts = render_opts()
-        "#{opts[:views] || render_opts[:views]}/#{template}.#{opts[:engine] || render_opts[:engine]}"
+      def self.configure(app, opts={})
+        opts = app.opts[:render] = opts.dup
+        opts[:engine] ||= "erb"
+        opts[:views] ||= File.expand_path("views", Dir.pwd)
+        opts[:layout] ||= "layout"
+        opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
+        opts[:opts] ||= (opts[:opts] || {}).dup
+        opts[:opts][:outvar] ||= '@_out_buf'
+        if RUBY_VERSION >= "1.9"
+          opts[:opts][:default_encoding] ||= Encoding.default_external
+        end
+        cache = opts.fetch(:cache, true)
+        opts[:cache] = Cache.new if cache == true
       end
 
-      # Render any type of template file supported by Tilt.
-      #
-      # @example
-      #
-      #   # Renders home, and is assumed to be HAML.
-      #   render("home.haml")
-      #
-      #   # Renders with some local variables
-      #   render("home.haml", site_name: "My Site")
-      #
-      #   # Renders with HAML options
-      #   render("home.haml", {}, ugly: true, format: :html5)
-      #
-      #   # Renders in layout
-      #   render("layout.haml") { render("home.haml") }
-      #
-      def render(template, opts = {}, &block)
-        if template.is_a?(Hash)
-          opts = template
+      module ClassMethods
+        def inherited(subclass)
+          super
+          opts = subclass.opts[:render] = render_opts.dup
+          opts[:layout_opts] = opts[:layout_opts].dup
+          opts[:opts] = opts[:opts].dup
+          opts[:cache] = Cache.new if opts[:cache]
         end
-        render_opts = render_opts()
 
-        if content = opts[:inline]
-          path = content
-          template_block = Proc.new{content}
-          template_class = Tilt[opts[:engine] || render_opts[:engine]]
-        else
-          template_class = Tilt
-          unless path = opts[:path]
-            path = template_path(template, opts)
+        def render_opts
+          opts[:render]
+        end
+      end
+
+      module InstanceMethods
+        def render_opts
+          self.class.render_opts
+        end
+
+        def view(template, opts={})
+          if template.is_a?(Hash)
+            opts = template
           end
+
+          content = render(template, opts)
+
+          if opts.fetch(:layout, true)
+            if layout_opts = opts[:layout_opts]
+              layout_opts = render_opts[:layout_opts].merge(layout_opts)
+            end
+
+            content = render(opts[:layout] || render_opts[:layout], layout_opts||{}){content}
+          end
+
+          content
         end
 
-        cached_template(path) do
-          template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
-        end.render(self, opts[:locals], &block)
-      end
+        def template_path(template, opts)
+          render_opts = render_opts()
+          "#{opts[:views] || render_opts[:views]}/#{template}.#{opts[:engine] || render_opts[:engine]}"
+        end
 
-      private
+        # Render any type of template file supported by Tilt.
+        #
+        # @example
+        #
+        #   # Renders home, and is assumed to be HAML.
+        #   render("home.haml")
+        #
+        #   # Renders with some local variables
+        #   render("home.haml", site_name: "My Site")
+        #
+        #   # Renders with HAML options
+        #   render("home.haml", {}, ugly: true, format: :html5)
+        #
+        #   # Renders in layout
+        #   render("layout.haml") { render("home.haml") }
+        #
+        def render(template, opts = {}, &block)
+          if template.is_a?(Hash)
+            opts = template
+          end
+          render_opts = render_opts()
 
-      def cached_template(path, &block)
-        if cache = render_opts[:cache]
-          cache.fetch(path, &block)
-        else
-          yield
+          if content = opts[:inline]
+            path = content
+            template_block = Proc.new{content}
+            template_class = Tilt[opts[:engine] || render_opts[:engine]]
+          else
+            template_class = Tilt
+            unless path = opts[:path]
+              path = template_path(template, opts)
+            end
+          end
+
+          cached_template(path) do
+            template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
+          end.render(self, opts[:locals], &block)
+        end
+
+        private
+
+        def cached_template(path, &block)
+          if cache = render_opts[:cache]
+            cache.fetch(path, &block)
+          else
+            yield
+          end
         end
       end
     end
   end
 
-  register_plugin(:render, Render)
+  register_plugin(:render, SinubaPlugins::Render)
 end

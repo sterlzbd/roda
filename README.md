@@ -298,7 +298,8 @@ Sinuba tries very hard to avoid polluting the scope in which the
 `route` block operates.  The only instance variable defined by base
 Sinuba is `@\_request`.  The only methods defined (beyond the default
 methods for `Object`) are: `opts`, `request`, `response`, `call`, and
-`session`.
+`session`.  Constants inside the Sinuba namespace are all prefixed
+with Sinuba.
 
 Captures
 --------
@@ -469,7 +470,7 @@ that contain one of the following modules:
 So a simple plugin to add an instance method would be:
 
 ``` ruby
-module MyOwnHelper
+module MarkdownHelper
   module InstanceMethods
     def markdown(str)
       BlueCloth.new(str).to_html
@@ -477,7 +478,7 @@ module MyOwnHelper
   end
 end
 
-Sinuba.plugin MyOwnHelper
+Sinuba.plugin MarkdownHelper
 ```
 
 A more complicated plugin can make use of `Sinuba.opts` to provide default
@@ -499,6 +500,33 @@ end
 
 Sinuba.plugin Render, :engine=>'slim'
 ```
+
+### Registering plugins
+
+If you want to ship an Sinuba plugin in a gem, but still have
+Sinuba load it automatically via `Sinuba.plugin :plugin_name`, you should
+store the file in `lib/sinuba/plugin_name.rb`, and then register it.  It's
+recommended but not required that you store your plugin module in the
+Sinuba::SinubaPlugins namespace:
+
+``` ruby
+module Sinuba
+  module SinubaPlugins
+    module Markdown
+      module InstanceMethods
+        def markdown(str)
+          BlueCloth.new(str).to_html
+        end
+      end
+    end
+  end
+
+  register_plugin :markdown, SinubaPlugins::Markdown
+end
+```
+
+You should avoid creating your module directly in the `Sinuba` namespace
+to avoid polluting the namespace.
 
 License
 -------

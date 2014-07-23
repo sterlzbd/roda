@@ -1,39 +1,41 @@
 class Sinuba
-  module NotFound
-    def self.configure(app, &block)
-      if block
-        app.not_found(&block)
+  module SinubaPlugins
+    module NotFound
+      def self.configure(app, &block)
+        if block
+          app.not_found(&block)
+        end
       end
-    end
 
-    module ClassMethods
-      def not_found(&block)
-        define_method(:not_found, &block)
-        private :not_found
+      module ClassMethods
+        def not_found(&block)
+          define_method(:not_found, &block)
+          private :not_found
+        end
       end
-    end
 
-    module InstanceMethods
-      def call(env)
-        result = super
+      module InstanceMethods
+        def call(env)
+          result = super
 
-        if result[0] == 404 && result[2].is_a?(Array) && result[2].empty?
-          catch(:halt) do
-            request.on do
-              not_found
+          if result[0] == 404 && result[2].is_a?(Array) && result[2].empty?
+            catch(:halt) do
+              request.on do
+                not_found
+              end
             end
           end
+
+          result
         end
 
-        result
-      end
+        private
 
-      private
-
-      def not_found
+        def not_found
+        end
       end
     end
   end
 
-  register_plugin(:not_found, NotFound)
+  register_plugin(:not_found, SinubaPlugins::NotFound)
 end
