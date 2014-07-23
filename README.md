@@ -376,21 +376,23 @@ Each Sinuba app can store settings in the `opts` hash. The settings are
 inherited if you happen to subclass `Sinuba`.  
 
 ``` ruby
-Sinuba.settings[:layout] = "guest"
+Sinuba.opts[:layout] = "guest"
 
 class Users < Sinuba; end
 class Admin < Sinuba; end
 
-Admin.settings[:layout] = "admin"
+Admin.opts[:layout] = "admin"
 
-assert_equal "guest", Users.settings[:layout]
-assert_equal "admin", Admin.settings[:layout]
+assert_equal "guest", Users.opts[:layout]
+assert_equal "admin", Admin.opts[:layout]
 ```
 
 Feel free to store whatever you find convenient.  Note that when subclassing,
 Sinuba only does a shallow clone.  If you store nested structures and plan
 to mutate them in subclasses, it is your responsibility to dup the nested
-structures as well.  The plugins that ship with Sinuba all handle this.
+structures as well.  The plugins that ship with Sinuba all handle this.  Also,
+note that this means that future modifications to the parent class after
+subclassing do not affect the subclass.
 
 Rendering
 ---------
