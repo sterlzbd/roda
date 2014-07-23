@@ -74,11 +74,6 @@ class Sinuba
           content
         end
 
-        def template_path(template, opts)
-          render_opts = render_opts()
-          "#{opts[:views] || render_opts[:views]}/#{template}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
-        end
-
         # Render any type of template file supported by Tilt.
         #
         # @example
@@ -125,6 +120,11 @@ class Sinuba
           else
             yield
           end
+        end
+
+        def template_path(template, opts)
+          render_opts = render_opts()
+          "#{opts[:views] || render_opts[:views]}/#{template}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
         end
       end
     end
