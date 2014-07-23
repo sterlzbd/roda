@@ -21,13 +21,9 @@ describe "not_found plugin" do
   end
 
   it "does not modify behavior if not_found is not called" do
-    app(:bare) do
-      plugin :not_found
-
-      route do |r|
-        r.on "a" do
-          "found"
-        end
+    app(:not_found) do |r|
+      r.on "a" do
+        "found"
       end
     end
 
