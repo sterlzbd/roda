@@ -42,6 +42,14 @@ describe "render plugin" do
     app.render_opts[:engine] = "str"
     body("/about").strip.should == "<h1>About Sinuba</h1>"
     body("/home").strip.should == "<title>Sinuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/inline").strip.should == "Hello <%= name %>"
+  end
+
+  it "with str as ext" do
+    app.render_opts[:ext] = "str"
+    body("/about").strip.should == "<h1>About Sinuba</h1>"
+    body("/home").strip.should == "<title>Sinuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/inline").strip.should == "Hello Agent Smith"
   end
 
   it "custom default layout support" do
