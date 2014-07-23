@@ -40,15 +40,19 @@ unless defined?(RSPEC_EXAMPLE_GROUP)
 end
 
 class RSPEC_EXAMPLE_GROUP
-  def app(type=:use, &block)
-    if type == :new
-      @app = nil
-    end
-
-    @app ||= if type == :bare
-      Sinuba.define(&block)
+  def app(type=nil, &block)
+    case type
+    when :new
+      @app = Sinuba.define{route(&block)}
+    when :bare
+      @app = Sinuba.define(&block)
+    when Symbol
+      @app = Sinuba.define do
+        plugin type
+        route(&block)
+      end
     else
-      Sinuba.define{route(&block)}
+      @app ||= Sinuba.define{route(&block)}
     end
   end
 

@@ -310,7 +310,9 @@ This makes it easy to handle multiple strings without a Regexp:
 Hashes call a registered matcher with the given key using the hash value,
 and match if that matcher returns true.  Keys should always be symbols.
 
-The default registered matchers included with Sinuba are:
+The default registered matchers included with Sinuba are included below.
+You can add your own hash matchers by adding the approrpriate match\_\*
+method to the request class via a plugin.
 
 #### :extension
 
@@ -588,6 +590,7 @@ override any Sinuba method and call `super` to get the default behavior.
 * error\_handler: Adds a `error` block that is called for all responses that
   raise exceptions.
 * flash: Adds a flash handler, requires sinatra-flash.
+* header\_matchers: Adds host, header, and accept hash matchers.
 * indifferent\_params: Adds params method with indifferent access to params,
   allowing use of symbol keys for accessing params.
 * not\_found: Adds a `not_found` block that is called for all 404 responses

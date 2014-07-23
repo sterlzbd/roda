@@ -1,16 +1,6 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "capturing" do
-  it "doesn't yield HOST" do
-    app do |r|
-      r.on :host=>"example.com" do |*args|
-        args.size.to_s
-      end
-    end
-
-    body("HTTP_HOST" => "example.com").should == '0'
-  end
-
   it "doesn't yield the verb" do
     app do |r|
       r.get do |*args|
