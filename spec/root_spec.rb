@@ -30,8 +30,12 @@ describe "root/empty segment matching" do
 
   it "/events/? scenario" do
     a = app do |r|
-      r.on :root=>true do
+      r.on "" do
         "Hooray"
+      end
+
+      r.is do
+        "Foo"
       end
     end
 
@@ -41,7 +45,7 @@ describe "root/empty segment matching" do
       end
     end
 
-    body("/events").should == 'Hooray'
+    body("/events").should == 'Foo'
     body("/events/").should == 'Hooray'
     status("/events/foo").should == 404
   end

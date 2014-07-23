@@ -304,15 +304,13 @@ class Sinuba
           end
         end
 
-        # Access the root of the application.
-        #
-        # @example
-        #
-        #   # GET /
-        #   on root do
-        #     res.write "Home"
-        #   end
-        MATCHERS[:root] = lambda{|req, is_root| !(is_root ^ (req.env[PATH_INFO] == "/" || req.env[PATH_INFO] == ""))}
+        MATCHERS[:term] = lambda{|req, is_term| !(is_term ^ (req.env[PATH_INFO] == ""))}
+
+        TERM = {:term=>true}.freeze
+        def is(*args, &block)
+          args << TERM
+          on(*args, &block)
+        end
 
         # Syntatic sugar for providing HTTP Verb matching.
         #
