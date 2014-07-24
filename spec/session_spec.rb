@@ -2,13 +2,11 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "session handling" do
   it "should give a warning if session variable is not available" do
-    app do |r|
-      r.on do
-        begin
-          session
-        rescue Exception => e
-          e.message
-        end
+    app(:on) do |r|
+      begin
+        session
+      rescue Exception => e
+        e.message
       end
     end
 

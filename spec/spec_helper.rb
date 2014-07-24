@@ -46,6 +46,8 @@ class RSPEC_EXAMPLE_GROUP
       @app = Sinuba.define{route(&block)}
     when :bare
       @app = Sinuba.define(&block)
+    when :on
+      @app = Sinuba.define{route{|r| r.on{instance_exec(r, &block)}}}
     when Symbol
       @app = Sinuba.define do
         plugin type
@@ -56,7 +58,6 @@ class RSPEC_EXAMPLE_GROUP
     end
   end
 
-  
   def req(path='/', env={})
     if path.is_a?(Hash)
       env = path
@@ -65,7 +66,7 @@ class RSPEC_EXAMPLE_GROUP
     end
 
     env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge(env)
-    app.call(env)
+    @app.call(env)
   end
   
   def status(path='/', env={})

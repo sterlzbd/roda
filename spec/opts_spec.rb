@@ -19,7 +19,7 @@ describe "opts" do
       opts[:hello] = "Hello World"
 
       route do |r|
-        r.on true do
+        r.on do
           opts[:hello]
         end
       end

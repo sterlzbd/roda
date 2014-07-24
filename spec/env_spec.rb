@@ -2,10 +2,8 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "Sinuba#env" do
   it "should return the environment" do
-    app do |r|
-      r.on do
-        env['PATH_INFO']
-      end
+    app(:on) do |r|
+      env['PATH_INFO']
     end
 
     body("/foo").should ==  "/foo"

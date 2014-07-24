@@ -2,12 +2,10 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "cookie handling" do
   it "should set cookies on response" do
-    app do |r|
-      r.on do
-        response.set_cookie("foo", "bar")
-        response.set_cookie("bar", "baz")
-        "Hello"
-      end
+    app(:on) do |r|
+      response.set_cookie("foo", "bar")
+      response.set_cookie("bar", "baz")
+      "Hello"
     end
 
     header('Set-Cookie').should == "foo=bar\nbar=baz"
@@ -15,12 +13,10 @@ describe "cookie handling" do
   end
 
   it "should delete cookies on response" do
-    app do |r|
-      r.on do
-        response.set_cookie("foo", "bar")
-        response.delete_cookie("foo")
-        "Hello"
-      end
+    app(:on) do |r|
+      response.set_cookie("foo", "bar")
+      response.delete_cookie("foo")
+      "Hello"
     end
 
     header('Set-Cookie').should =~ /foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/
@@ -30,11 +26,9 @@ end
 
 describe "response #[] and #[]=" do
   it "should get/set headers" do
-    app do |r|
-      r.on do
-        response['foo'] = 'bar'
-        response['foo'] + response.headers['foo']
-      end
+    app(:on) do |r|
+      response['foo'] = 'bar'
+      response['foo'] + response.headers['foo']
     end
 
     header('foo').should == "bar"
@@ -44,11 +38,9 @@ end
 
 describe "response #write" do
   it "should add to body" do
-    app do |r|
-      r.on do
-        response.write 'a'
-        response.write 'b'
-      end
+    app(:on) do |r|
+      response.write 'a'
+      response.write 'b'
     end
 
     body.should == 'ab'
@@ -57,35 +49,29 @@ end
 
 describe "response #finish" do
   it "should set status to 404 if body has not been written to" do
-    app do |r|
-      r.on do
-        s, h, b = response.finish
-        "#{s}#{h['Content-Type']}#{b.length}"
-      end
+    app(:on) do |r|
+      s, h, b = response.finish
+      "#{s}#{h['Content-Type']}#{b.length}"
     end
 
     body.should == '404text/html; charset=utf-80'
   end
 
   it "should set status to 200 if body has been written to" do
-    app do |r|
-      r.on do
-        response.write 'a'
-        s, h, b = response.finish
-        response.write "#{s}#{h['Content-Type']}#{b.length}"
-      end
+    app(:on) do |r|
+      response.write 'a'
+      s, h, b = response.finish
+      response.write "#{s}#{h['Content-Type']}#{b.length}"
     end
 
     body.should == 'a200text/html; charset=utf-81'
   end
 
   it "should not overwrite existing status" do
-    app do |r|
-      r.on do
-        response.status = 500
-        s, h, b = response.finish
-        "#{s}#{h['Content-Type']}#{b.length}"
-      end
+    app(:on) do |r|
+      response.status = 500
+      s, h, b = response.finish
+      "#{s}#{h['Content-Type']}#{b.length}"
     end
 
     body.should == '500text/html; charset=utf-80'
