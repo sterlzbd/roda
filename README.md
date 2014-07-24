@@ -619,6 +619,7 @@ override any Sinuba method and call `super` to get the default behavior.
 
 These plugins ship with sinuba:
 
+* all\_verbs: Adds routing methods to the request for all http verbs.
 * error\_handler: Adds a `error` block that is called for all responses that
   raise exceptions.
 * flash: Adds a flash handler, requires sinatra-flash.
