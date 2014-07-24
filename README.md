@@ -625,6 +625,7 @@ These plugins ship with sinuba:
 * flash: Adds a flash handler, requires sinatra-flash.
 * h: Adds h method for html escaping.
 * header\_matchers: Adds host, header, and accept hash matchers.
+* hooks: Adds before and after methods to run code before and after requests.
 * indifferent\_params: Adds params method with indifferent access to params,
   allowing use of symbol keys for accessing params.
 * multi\_route: Adds the ability for multiple named route blocks, with the
