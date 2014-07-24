@@ -25,7 +25,7 @@ describe "plugins" do
       end
 
       def self.load_dependencies(mod, prefix)
-        mod.include(Module.new do
+        mod.send(:include, Module.new do
           def fix(str)
             self.class.fix(str)
           end
