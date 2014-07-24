@@ -617,6 +617,8 @@ override any Sinuba method and call `super` to get the default behavior.
 
 ### Included Plugins
 
+These plugins ship with sinuba:
+
 * error\_handler: Adds a `error` block that is called for all responses that
   raise exceptions.
 * flash: Adds a flash handler, requires sinatra-flash.
@@ -628,6 +630,12 @@ override any Sinuba method and call `super` to get the default behavior.
 * pass: Adds a pass method allowing you to skip the current `r.on` block as if
   it did not match.
 * render: Adds support for rendering templates via tilt, as described above.
+
+### External Plugins
+
+The following libraries include sinuba plugins:
+
+* forme: Adds support for easy HTML form creation in erb templates.
 
 ### How to create plugins
 
