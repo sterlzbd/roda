@@ -1,5 +1,7 @@
 $:.unshift(File.expand_path("../lib", File.dirname(__FILE__)))
 
+require "rubygems"
+
 if ENV['COVERAGE']
   require 'coverage'
   require 'simplecov'
