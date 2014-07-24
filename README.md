@@ -627,6 +627,8 @@ These plugins ship with sinuba:
 * header\_matchers: Adds host, header, and accept hash matchers.
 * indifferent\_params: Adds params method with indifferent access to params,
   allowing use of symbol keys for accessing params.
+* multi\_route: Adds the ability for multiple named route blocks, with the
+  ability to dispatch to them add any point in the main route block.
 * not\_found: Adds a `not_found` block that is called for all 404 responses
   without bodies.
 * pass: Adds a pass method allowing you to skip the current `r.on` block as if
