@@ -340,6 +340,11 @@ class Sinuba
       end
 
       module ResponseMethods
+        CONTENT_LENGTH = "Content-Length".freeze
+        CONTENT_TYPE = "Content-Type".freeze
+        DEFAULT_CONTENT_TYPE = "text/html; charset=utf-8".freeze
+        LOCATION = "Location".freeze
+
         attr_accessor :status
 
         attr_reader :headers
@@ -352,7 +357,7 @@ class Sinuba
         end
 
         def default_headers
-          {"Content-Type" => "text/html; charset=utf-8"}
+          {CONTENT_TYPE => DEFAULT_CONTENT_TYPE}
         end
 
         def [](key)
@@ -367,24 +372,20 @@ class Sinuba
           s = str.to_s
 
           @length += s.bytesize
-          @headers["Content-Length"] = @length.to_s
+          @headers[CONTENT_LENGTH] = @length.to_s
           @body << s
           nil
         end
 
         def redirect(path, status = 302)
-          @headers["Location"] = path
+          @headers[LOCATION] = path
           @status  = status
         end
 
         def finish
-          @status ||= if @body.empty?
-            404
-          else
-            200
-          end
-
-          [@status, @headers, @body]
+          b = @body
+          s = (@status ||= b.empty? ? 404 : 200)
+          [s, @headers, b]
         end
 
         def set_cookie(key, value)
