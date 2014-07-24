@@ -633,9 +633,11 @@ These plugins ship with sinuba:
 
 ### External Plugins
 
-The following libraries include sinuba plugins:
+The following libraries include Sinuba plugins:
 
 * forme: Adds support for easy HTML form creation in erb templates.
+* autoforme: Adds support for easily creating a simple administrative front
+  end for Sequel models.
 
 ### How to create plugins
 
