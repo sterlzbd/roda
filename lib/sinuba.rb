@@ -221,17 +221,17 @@ class Sinuba
         private :try
 
         def consume(pattern)
-          matchdata = env[PATH_INFO].match(/\A\/(#{pattern})(\/|\z)/)
+          matchdata = env[PATH_INFO].match(/\A(\/(?:#{pattern}))(\/|\z)/)
 
           return false unless matchdata
 
-          path, *vars = matchdata.captures
+          vars = matchdata.captures
 
           # Don't mutate SCRIPT_NAME, breaks try
-          env[SCRIPT_NAME] += "/#{path}"
+          env[SCRIPT_NAME] += vars.shift
           env[PATH_INFO] = "#{vars.pop}#{matchdata.post_match}"
 
-          captures.push(*vars)
+          captures.concat(vars)
         end
 
         def match(matcher)
