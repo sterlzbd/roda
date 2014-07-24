@@ -341,6 +341,13 @@ The :param matcher matches if the given parameter is present, even if empty.
   :param => "user" matches "/foo?user=bar", "/foo?user="
   :param => "user" does not matches "/foo"
 
+#### :param!
+
+The :param! matcher matches if the given parameter is present and not empty.
+
+  :param! => "user" matches "/foo?user=bar"
+  :param! => "user" does not matches "/foo", "/foo?user="
+
 #### :term
 
 The :term matcher matches if true and there are no segments left.  This matcher is

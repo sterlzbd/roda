@@ -281,6 +281,12 @@ class Sinuba
           end
         end
 
+        def match_param!(key)
+          if (v = self[key]) && !v.empty?
+            captures << v
+          end
+        end
+
         def match_term(term)
           !(term ^ (env[PATH_INFO] == ""))
         end
