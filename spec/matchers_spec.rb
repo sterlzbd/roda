@@ -56,9 +56,7 @@ describe "capturing" do
       r.on :one do |one|
         r.on :two do |two|
           r.on :three do |three|
-            response.write one
-            response.write two
-            response.write three
+            one + two + three
           end
         end
       end
@@ -80,8 +78,7 @@ describe "capturing" do
   it "regex captures in string format" do
     app do |r|
       r.get "posts/(\\d+)-(.*)" do |id, slug|
-        response.write id
-        response.write slug
+        id + slug
       end
     end
 
@@ -91,8 +88,7 @@ describe "capturing" do
   it "regex captures in regex format" do
     app do |r|
       r.get %r{posts/(\d+)-(.*)} do |id, slug|
-        response.write id
-        response.write slug
+        id + slug
       end
     end
 
