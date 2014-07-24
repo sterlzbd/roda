@@ -182,18 +182,19 @@ class Sinuba
             #
             #    # PATH_INFO=/user
             #    on true, "signup"
-            return unless args.all? { |arg| match(arg) }
+            return unless args.all?{|arg| match(arg)}
 
             # The captures we yield here were generated and assembled
             # by evaluating each of the `arg`s above. Most of these
             # are carried out by #consume.
             body = yield(*captures)
 
-            if body.is_a?(String)
-              response.write(body)
+            res = response
+            if body.is_a?(String) && res.empty?
+              res.write(body)
             end
 
-            halt response.finish
+            halt res.finish
           end
         end
 
@@ -375,6 +376,10 @@ class Sinuba
           @headers[CONTENT_LENGTH] = @length.to_s
           @body << s
           nil
+        end
+
+        def empty?
+          @body.empty?
         end
 
         def redirect(path, status = 302)

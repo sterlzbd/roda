@@ -372,6 +372,17 @@ describe "r.on" do
 
     body("/hello").should == ':/hello'
   end
+
+  it "doesn't write to body if body already written to" do
+    app do |r|
+      r.on do
+        response.write "a"
+        "b"
+      end
+    end
+
+    body.should == 'a'
+  end
 end
 
 describe "param matcher" do
