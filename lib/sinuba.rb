@@ -33,13 +33,13 @@ class Sinuba
           klass
         end
 
-        def inherited(child)
+        def inherited(subclass)
           super
-          child.instance_variable_set(:@builder, Rack::Builder.new)
-          child.instance_variable_set(:@middleware, @middleware.dup)
-          child.instance_variable_set(:@opts, opts.dup)
-          child.const_set(:SinubaRequest, Class.new(self::SinubaRequest))
-          child.const_set(:SinubaResponse, Class.new(self::SinubaResponse))
+          subclass.instance_variable_set(:@builder, Rack::Builder.new)
+          subclass.instance_variable_set(:@middleware, @middleware.dup)
+          subclass.instance_variable_set(:@opts, opts.dup)
+          subclass.const_set(:SinubaRequest, Class.new(self::SinubaRequest))
+          subclass.const_set(:SinubaResponse, Class.new(self::SinubaResponse))
         end
 
         def plugin(mixin, *args, &block)
