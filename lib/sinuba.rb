@@ -118,24 +118,21 @@ class Sinuba
         end
 
         def call(env, &block)
-          r = @_request = self.class.request(env)
-
-          # This `catch` statement will either receive a
-          # rack response tuple via a `halt`, or will
-          # fall back to issuing a 404.
-          #
-          # When it `catch`es a throw, the return value
-          # of this whole `call!` method will be the
-          # rack response tuple, which is exactly what we want.
-          catch(:halt) do
-            instance_exec(r, &block)
-
-            response.finish
-          end
+          @_request = self.class.request(env)
+          _route(&block)
         end
 
         def session
           env["rack.session"] || raise(SinubaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
+        end
+
+        private
+
+        def _route(&block)
+          catch(:halt) do
+            instance_exec(@_request, &block)
+            response.finish
+          end
         end
       end
 

@@ -465,9 +465,9 @@ Pollution
 Sinuba tries very hard to avoid polluting the scope in which the
 `route` block operates.  The only instance variable defined by base
 Sinuba is `@\_request`.  The only methods defined (beyond the default
-methods for `Object`) are: `env`, `opts`, `request`, `response`, `call`, and
-`session`.  Constants inside the Sinuba namespace are all prefixed
-with Sinuba.
+methods for `Object`) are: `env`, `opts`, `request`, `response`, `call`, 
+`session`, and `_route` (private). Constants inside the Sinuba namespace
+are all prefixed with Sinuba.
 
 Captures
 --------

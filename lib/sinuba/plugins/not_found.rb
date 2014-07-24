@@ -15,7 +15,9 @@ class Sinuba
       end
 
       module InstanceMethods
-        def call(env)
+        private
+
+        def _route
           result = super
 
           if result[0] == 404 && result[2].is_a?(Array) && result[2].empty?
@@ -28,8 +30,6 @@ class Sinuba
 
           result
         end
-
-        private
 
         def not_found
         end

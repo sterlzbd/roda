@@ -11,7 +11,9 @@ class Sinuba
           @_flash ||= FlashHash.new((session ? session[KEY] : {}))
         end
 
-        def call(env)
+        private
+
+        def _route
           res = super
 
           if f = @_flash

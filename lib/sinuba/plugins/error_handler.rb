@@ -15,7 +15,9 @@ class Sinuba
       end
 
       module InstanceMethods
-        def call(env)
+        private
+
+        def _route
           super
         rescue => e
           catch(:halt) do
@@ -24,8 +26,6 @@ class Sinuba
             end
           end
         end
-
-        private
 
         def handle_error
         end
