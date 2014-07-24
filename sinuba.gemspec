@@ -10,10 +10,11 @@ Gem::Specification.new do |s|
   s.homepage          = "https://github.com/jeremyevans/sinuba"
   s.license           = "MIT"
 
-  s.files = %w'README.md MIT-LICENSE CHANGELOG lib/sinuba.rb' + Dir['lib/sinuba/*.rb']
+  s.files = %w'README.md MIT-LICENSE CHANGELOG' + Dir['{lib,spec}/**/*.rb']
 
   s.add_dependency "rack"
   s.add_development_dependency "rspec"
   s.add_development_dependency "rack-test"
+  s.add_development_dependency "sinatra-flash"
   s.add_development_dependency "tilt"
 end
