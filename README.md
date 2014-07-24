@@ -622,6 +622,7 @@ These plugins ship with sinuba:
 * error\_handler: Adds a `error` block that is called for all responses that
   raise exceptions.
 * flash: Adds a flash handler, requires sinatra-flash.
+* h: Adds h method for html escaping.
 * header\_matchers: Adds host, header, and accept hash matchers.
 * indifferent\_params: Adds params method with indifferent access to params,
   allowing use of symbol keys for accessing params.
