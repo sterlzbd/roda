@@ -10,7 +10,7 @@ describe "plugins" do
       end
       self::InstanceMethods = Module.new do
         def fix(str)
-          self.class.fix(str)
+          super("a" + str)
         end
       end
       self::RequestMethods = Module.new do
@@ -22,6 +22,14 @@ describe "plugins" do
         def foobar
           "Default   "
         end
+      end
+
+      def self.load_dependencies(mod, prefix)
+        mod.include(Module.new do
+          def fix(str)
+            self.class.fix(str)
+          end
+        end)
       end
 
       def self.configure(mod, prefix)
@@ -39,6 +47,6 @@ describe "plugins" do
       end
     end
 
-    body('/hello').should == 'Foo Default'
+    body('/hello').should == 'Foo aDefault'
   end
 end

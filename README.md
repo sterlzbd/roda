@@ -639,6 +639,15 @@ that contain one of the following modules:
 * RequestMethods: module included in the class of the request
 * ResponseMethods: module included in the class of the response
 
+If the plugin responds to load\_dependencies, it will be called first, and should
+be used if the plugin depends on another plugin.
+
+If the plugin responds to configure, it will be called last, and should be
+used to configure the plugin.
+
+Both load\_dependencies and configure are called with the additional arguments
+and block given to the plugin call.
+
 So a simple plugin to add an instance method would be:
 
 ``` ruby
@@ -651,26 +660,6 @@ module MarkdownHelper
 end
 
 Sinuba.plugin MarkdownHelper
-```
-
-A more complicated plugin can make use of `Sinuba.opts` to provide default
-values. In the following example, note that if the module has a `configure` method, it will
-be called as soon as it is included, along with the opts given to the plugin method
-
-``` ruby
-module Render
-  def self.configure(app, opts={})
-    app.settings[:engine] = opts[:engine] || "erb"
-  end
-
-  module InstanceMethods
-    def render(template, opts={})
-      ...
-    end
-  end
-end
-
-Sinuba.plugin Render, :engine=>'slim'
 ```
 
 ### Registering plugins

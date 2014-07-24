@@ -47,6 +47,10 @@ class Sinuba
             mixin = load_plugin(mixin)
           end
 
+          if mixin.respond_to?(:load_dependencies)
+            mixin.load_dependencies(self, *args, &block)
+          end
+
           if defined?(mixin::InstanceMethods)
             include mixin::InstanceMethods
           end
