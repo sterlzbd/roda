@@ -82,8 +82,9 @@ matched and there are no further entries in the path.
 
 If `r.on` matches and control is yielded to the block, whenever
 the block returns, the response will be returned.  If the block
-returns a string, it will interpreted as the body for the
-response.
+returns a string and the response body hasn't already been
+written to, the block return value will interpreted as the body
+for the response.
 
 `r.redirect` immediately returns the response, allowing for
 code such as `r.redirect(path) if some_condition`.
@@ -413,14 +414,28 @@ Sinuba.define do
 end
 ```
 
-HTTP Verbs
-----------
+Verb Methods
+------------
 
 The main match method is `r.on`, but as displayed above, you can also
-use `r.get` or r.post`.  These are just sugar, so both of these are the same:
+use `r.get` or r.post`.  When called without any arguments, these
+call `r.on` as long as the request has the appropriate method, so:
 
-    r.get "hello"
-    r.on r.get?, "hello"
+    r.get{}
+
+is syntax sugar for:
+
+    r.on{} if r.get? 
+
+If any arguments are given to the method, these call `r.is` as long as
+the request has the appropriate method, so:
+
+    r.post(""){}
+
+is syntax sugar for:
+
+    r.is(""){} if r.post?
+
 
 Request and Response
 --------------------

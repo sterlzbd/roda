@@ -548,7 +548,7 @@ describe "segment handling" do
 end
 
 describe "request verb methods" do 
-  it "executes on true" do
+  it "executes if verb matches" do
     app do |r|
       r.get do
         "g"
@@ -560,6 +560,46 @@ describe "request verb methods" do
 
     body.should == 'g'
     body('REQUEST_METHOD'=>'POST').should == 'p'
+  end
+
+  it "requires exact match if given arguments" do
+    app do |r|
+      r.get "" do
+        "g"
+      end
+      r.post "" do
+        "p"
+      end
+    end
+
+    body.should == 'g'
+    body('REQUEST_METHOD'=>'POST').should == 'p'
+    status("/a").should == 404
+    status("/a", 'REQUEST_METHOD'=>'POST').should == 404
+  end
+
+  it "does not require exact match if given arguments" do
+    app do |r|
+      r.get do
+        r.is "" do
+          "g"
+        end
+
+        "get"
+      end
+      r.post do
+        r.is "" do
+          "p"
+        end
+
+        "post"
+      end
+    end
+
+    body.should == 'g'
+    body('REQUEST_METHOD'=>'POST').should == 'p'
+    body("/a").should == 'get'
+    body("/a", 'REQUEST_METHOD'=>'POST').should == 'post'
   end
 end
 

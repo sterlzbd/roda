@@ -307,10 +307,10 @@ class Sinuba
         #   on post, "signup" do
         #   end
         def get(*args, &block)
-          on(get?, *args, &block)
+          is_or_on(*args, &block) if get?
         end
         def post(*args, &block)
-          on(post?, *args, &block)
+          is_or_on(*args, &block) if post?
         end
 
         # If you want to halt the processing of an existing handler
@@ -337,6 +337,16 @@ class Sinuba
         def redirect(path, status=302)
           response.redirect(path, status)
           halt response.finish
+        end
+
+        private
+
+        def is_or_on(*args, &block)
+          if args.empty?
+            on(*args, &block)
+          else
+            is(*args, &block)
+          end
         end
       end
 
