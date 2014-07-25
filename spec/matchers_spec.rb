@@ -41,16 +41,6 @@ describe "capturing" do
     body("/user/101").should == '101'
   end
 
-  it "yield a file name with a matching extension" do
-    app do |r|
-      r.get "css", :extension=>"css" do |file|
-        file
-      end
-    end
-
-    body("/css/app.css").should == 'app'
-  end
-
   it "yields a segment per nested block" do
     app do |r|
       r.on :one do |one|
@@ -63,26 +53,6 @@ describe "capturing" do
     end
 
     body("/one/two/three").should == "onetwothree"
-  end
-
-  it "consumes a slash if needed" do
-    app do |r|
-      r.get "(.+\\.css)" do |file|
-        file
-      end
-    end
-
-    body("/foo/bar.css").should == "foo/bar.css"
-  end
-
-  it "regex captures in string format" do
-    app do |r|
-      r.get "posts/(\\d+)-(.*)" do |id, slug|
-        id + slug
-      end
-    end
-
-    body("/posts/123-postal-service").should == "123postal-service"
   end
 
   it "regex captures in regex format" do
@@ -176,6 +146,28 @@ describe "matchers" do
 
     body("/u/jdoe/posts/123").should == 'jdoe123'
     status("/u/jdoe/pots/123").should == 404
+  end
+
+  it "should escape regexp metacharaters in string" do
+    app do |r|
+      r.on "u/:uid/posts?/:id" do |uid, id|
+        uid + id
+      end
+    end
+
+    body("/u/jdoe/posts?/123").should == 'jdoe123'
+    status("/u/jdoe/post/123").should == 404
+  end
+
+  it "should handle colons by themselves" do
+    app do |r|
+      r.on "u/:/:uid/posts/::id" do |uid, id|
+        uid + id
+      end
+    end
+
+    body("/u/:/jdoe/posts/:123").should == 'jdoe123'
+    status("/u/a/jdoe/post/b123").should == 404
   end
 
   it "should handle regexes and nesting" do
@@ -466,7 +458,7 @@ describe "path matchers" do
 
   it "a path with some regex captures" do
     app do |r|
-      r.on "user(\\d+)" do |uid|
+      r.on /user(\d+)/ do |uid|
         uid
       end
     end

@@ -272,7 +272,9 @@ class Roda
         def match(matcher)
           case matcher
           when String
-            consume(matcher.gsub(/:\w+/, SEGMENT))
+            matcher = Regexp.escape(matcher)
+            matcher.gsub!(/:\w+/, SEGMENT)
+            consume(matcher)
           when Regexp
             consume(matcher)
           when Symbol

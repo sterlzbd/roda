@@ -243,8 +243,9 @@ each slash:
   "foo/bar" matches "/foo/bar"
   "foo/bar" does not match "/foo/bard"
 
-If it contains a colon, the colon matches any nonempty segment
-contains at least one character:
+If it contains a colon followed by any \w characters, the colon and
+remaing \w characters matches any nonempty segment that contains at
+least one character:
 
   "foo/:id" matches "/foo/bar", "/foo/baz", etc.
   "foo/:id" does not match "/fo/bar"
@@ -263,6 +264,16 @@ If any colons are used, the block will yield one argument for
 each segment matched containing the matched text.  So:
 
   "foo:x/:y" matching "/fool/bar" yields "l", "bar"
+
+Colons that are not followed by a \w character are matched literally:
+
+  ":/a" matches "/:/a"
+
+Note that strings are regexp escaped before being used in a regular
+expression, so:
+
+  "\\d+(/\\w+)?" matches "\d+(/\w+)?"
+  "\\d+/\\w+" does not match "123/abc"
 
 ### Regexp
 
