@@ -17,7 +17,7 @@ describe "render plugin" do
         end
 
         r.on "about" do
-          render("about", :locals=>{:title => "About Sinuba"})
+          render("about", :locals=>{:title => "About Roda"})
         end
 
         r.on "inline" do
@@ -32,23 +32,23 @@ describe "render plugin" do
   end
 
   it "default actions" do
-    body("/about").strip.should == "<h1>About Sinuba</h1>"
-    body("/home").strip.should == "<title>Sinuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/about").strip.should == "<h1>About Roda</h1>"
+    body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
     body("/inline").strip.should == "Hello Agent Smith"
     body("/path").strip.should == "<h1>Path</h1>"
   end
 
   it "with str as engine" do
     app.render_opts[:engine] = "str"
-    body("/about").strip.should == "<h1>About Sinuba</h1>"
-    body("/home").strip.should == "<title>Sinuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/about").strip.should == "<h1>About Roda</h1>"
+    body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
     body("/inline").strip.should == "Hello <%= name %>"
   end
 
   it "with str as ext" do
     app.render_opts[:ext] = "str"
-    body("/about").strip.should == "<h1>About Sinuba</h1>"
-    body("/home").strip.should == "<title>Sinuba: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/about").strip.should == "<h1>About Roda</h1>"
+    body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
     body("/inline").strip.should == "Hello Agent Smith"
   end
 
@@ -90,7 +90,7 @@ describe "render plugin" do
   end
 
   it "render_opts inheritance" do
-    c = Class.new(Sinuba)
+    c = Class.new(Roda)
     c.plugin :render
     sc = Class.new(c)
 

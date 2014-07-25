@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module IndifferentParams
       module InstanceMethods
         def params
@@ -24,5 +24,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:indifferent_params, SinubaPlugins::IndifferentParams)
+  register_plugin(:indifferent_params, RodaPlugins::IndifferentParams)
 end

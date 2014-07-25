@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module ErrorHandler
       def self.configure(app, &block)
         if block
@@ -33,5 +33,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:error_handler, SinubaPlugins::ErrorHandler)
+  register_plugin(:error_handler, RodaPlugins::ErrorHandler)
 end

@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module HeaderMatchers
       module RequestMethods
         def match_header(key)
@@ -33,5 +33,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:header_matchers, SinubaPlugins::HeaderMatchers)
+  register_plugin(:header_matchers, RodaPlugins::HeaderMatchers)
 end

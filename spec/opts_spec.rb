@@ -2,7 +2,7 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "opts" do
   it "is inheritable and allows overriding" do
-    c = Class.new(Sinuba)
+    c = Class.new(Roda)
     c.opts[:foo] = "bar"
     c.opts[:foo].should == "bar"
 
@@ -29,7 +29,7 @@ describe "opts" do
   end
 
   it "should only shallow clone by default" do
-    c = Class.new(Sinuba)
+    c = Class.new(Roda)
     c.opts[:foo] = "bar"
     c.opts[:foo].should == "bar"
 

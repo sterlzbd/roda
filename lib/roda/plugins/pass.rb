@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module Pass
       module RequestMethods
         def on(*)
@@ -14,5 +14,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:pass, SinubaPlugins::Pass)
+  register_plugin(:pass, RodaPlugins::Pass)
 end

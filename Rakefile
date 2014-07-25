@@ -1,10 +1,10 @@
 require "rake"
 require "rake/clean"
 
-NAME = 'sinuba'
+NAME = 'roda'
 VERS = lambda do
-  require File.expand_path("../lib/sinuba.rb", __FILE__)
-  Sinuba::SinubaVersion
+  require File.expand_path("../lib/roda.rb", __FILE__)
+  Roda::RodaVersion
 end
 CLEAN.include ["#{NAME}-*.gem", "rdoc", "coverage"]
 
@@ -17,7 +17,7 @@ end
 
 ### RDoc
 
-RDOC_DEFAULT_OPTS = ["--line-numbers", "--inline-source", '--title', 'Sinuba']
+RDOC_DEFAULT_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web framework']
 
 begin
   gem 'hanna-nouveau'

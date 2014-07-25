@@ -1,7 +1,7 @@
 require 'sinatra/flash/hash'
 
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module Flash
       FlashHash = ::Sinatra::Flash::FlashHash
 
@@ -26,5 +26,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:flash, SinubaPlugins::Flash)
+  register_plugin(:flash, RodaPlugins::Flash)
 end

@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module AllVerbs
       module RequestMethods
         %w'delete head options link patch put trace unlink'.each do |t|
@@ -15,5 +15,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:all_verbs, SinubaPlugins::AllVerbs)
+  register_plugin(:all_verbs, RodaPlugins::AllVerbs)
 end

@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module Hooks
       def self.configure(mod)
         mod.instance_variable_set(:@before, nil)
@@ -59,5 +59,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:hooks, SinubaPlugins::Hooks)
+  register_plugin(:hooks, RodaPlugins::Hooks)
 end

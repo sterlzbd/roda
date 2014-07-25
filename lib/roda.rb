@@ -1,21 +1,21 @@
 require "rack"
 require "thread"
 
-class Sinuba
-  SinubaVersion = '0.9.0'.freeze
+class Roda
+  RodaVersion = '0.9.0'.freeze
 
-  class SinubaError < StandardError; end
+  class RodaError < StandardError; end
 
-  class SinubaRequest < Rack::Request; end
+  class RodaRequest < Rack::Request; end
 
-  class SinubaResponse < Rack::Response; end
+  class RodaResponse < Rack::Response; end
 
   @builder = Rack::Builder.new
   @middleware = []
   @plugins = {}
   @opts = {}
 
-  module SinubaPlugins
+  module RodaPlugins
     module Base
       module ClassMethods
         MUTEX = Mutex.new
@@ -38,8 +38,8 @@ class Sinuba
           subclass.instance_variable_set(:@builder, Rack::Builder.new)
           subclass.instance_variable_set(:@middleware, @middleware.dup)
           subclass.instance_variable_set(:@opts, opts.dup)
-          subclass.const_set(:SinubaRequest, Class.new(self::SinubaRequest))
-          subclass.const_set(:SinubaResponse, Class.new(self::SinubaResponse))
+          subclass.const_set(:RodaRequest, Class.new(self::RodaRequest))
+          subclass.const_set(:RodaResponse, Class.new(self::RodaResponse))
         end
 
         def plugin(mixin, *args, &block)
@@ -58,10 +58,10 @@ class Sinuba
             extend mixin::ClassMethods
           end
           if defined?(mixin::RequestMethods)
-            self::SinubaRequest.send(:include, mixin::RequestMethods)
+            self::RodaRequest.send(:include, mixin::RequestMethods)
           end
           if defined?(mixin::ResponseMethods)
-            self::SinubaResponse.send(:include, mixin::ResponseMethods)
+            self::RodaResponse.send(:include, mixin::ResponseMethods)
           end
           
           if mixin.respond_to?(:configure)
@@ -70,7 +70,7 @@ class Sinuba
         end
 
         def request(env)
-          self::SinubaRequest.new(self::SinubaResponse.new, env)
+          self::RodaRequest.new(self::RodaResponse.new, env)
         end
 
         def route(&block)
@@ -86,16 +86,16 @@ class Sinuba
         private
 
         def load_plugin(name)
-          h = Sinuba.instance_variable_get(:@plugins)
+          h = Roda.instance_variable_get(:@plugins)
           unless plugin = MUTEX.synchronize{h[name]}
-            require "sinuba/plugins/#{name}"
-            raise SinubaError, "Plugin #{name} did not register itself correctly in Sinuba::Plugins" unless plugin = MUTEX.synchronize{h[name]}
+            require "roda/plugins/#{name}"
+            raise RodaError, "Plugin #{name} did not register itself correctly in Roda::Plugins" unless plugin = MUTEX.synchronize{h[name]}
           end
           plugin
         end
 
         def register_plugin(name, mod)
-          h = Sinuba.instance_variable_get(:@plugins)
+          h = Roda.instance_variable_get(:@plugins)
           MUTEX.synchronize{h[name] = mod}
         end
       end
@@ -123,7 +123,7 @@ class Sinuba
         end
 
         def session
-          env["rack.session"] || raise(SinubaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
+          env["rack.session"] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
         end
 
         private
@@ -325,7 +325,7 @@ class Sinuba
         #
         # @example
         #   def redirect(*args)
-        #     run Sinuba.define{route{|r| r.on(true){r.redirect(*args)}}}.app
+        #     run Roda.define{route{|r| r.on(true){r.redirect(*args)}}}.app
         #   end
         #
         #   on "account" do
@@ -421,6 +421,6 @@ class Sinuba
     end
   end
 
-  extend SinubaPlugins::Base::ClassMethods
-  plugin SinubaPlugins::Base
+  extend RodaPlugins::Base::ClassMethods
+  plugin RodaPlugins::Base
 end

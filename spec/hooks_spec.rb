@@ -40,7 +40,7 @@ describe "hooks plugin" do
   it "after hooks are still called if an exception is raised" do
     a = @a
     @app.before do
-      raise Sinuba::SinubaError, "foo"
+      raise Roda::RodaError, "foo"
     end
 
     @app.after do |r|
@@ -48,8 +48,8 @@ describe "hooks plugin" do
       a << $!
     end
 
-    proc{req}.should raise_error(Sinuba::SinubaError)
-    a.pop.should be_a_kind_of(Sinuba::SinubaError)
+    proc{req}.should raise_error(Roda::RodaError)
+    a.pop.should be_a_kind_of(Roda::RodaError)
     a.pop.should == nil
   end
 

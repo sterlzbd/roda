@@ -6,7 +6,7 @@ if ENV['COVERAGE']
   require 'coverage'
   require 'simplecov'
 
-  def SimpleCov.sinuba_coverage(opts = {})
+  def SimpleCov.roda_coverage(opts = {})
     start do
       add_filter "/spec/"
       add_group('Missing'){|src| src.covered_percent < 100}
@@ -16,10 +16,10 @@ if ENV['COVERAGE']
   end
 
   ENV.delete('COVERAGE')
-  SimpleCov.sinuba_coverage
+  SimpleCov.roda_coverage
 end
 
-require "sinuba"
+require "roda"
 require "stringio"
 
 unless defined?(RSPEC_EXAMPLE_GROUP)
@@ -45,18 +45,18 @@ class RSPEC_EXAMPLE_GROUP
   def app(type=nil, &block)
     case type
     when :new
-      @app = Sinuba.define{route(&block)}
+      @app = Roda.define{route(&block)}
     when :bare
-      @app = Sinuba.define(&block)
+      @app = Roda.define(&block)
     when :on
-      @app = Sinuba.define{route{|r| r.on{instance_exec(r, &block)}}}
+      @app = Roda.define{route{|r| r.on{instance_exec(r, &block)}}}
     when Symbol
-      @app = Sinuba.define do
+      @app = Roda.define do
         plugin type
         route(&block)
       end
     else
-      @app ||= Sinuba.define{route(&block)}
+      @app ||= Roda.define{route(&block)}
     end
   end
 

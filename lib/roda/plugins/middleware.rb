@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module Middleware
       class Forwarder
         def initialize(mid, app)
@@ -42,5 +42,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:middleware, SinubaPlugins::Middleware)
+  register_plugin(:middleware, RodaPlugins::Middleware)
 end

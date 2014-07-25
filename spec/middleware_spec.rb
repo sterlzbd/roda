@@ -1,7 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "middleware plugin" do 
-  it "turns Sinuba app into middlware" do
+  it "turns Roda app into middlware" do
     a2 = app(:bare) do
       plugin :middleware
 

@@ -1,7 +1,7 @@
 require "tilt"
 
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module Render
       class Cache
         MUTEX = Mutex.new
@@ -130,5 +130,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:render, SinubaPlugins::Render)
+  register_plugin(:render, RodaPlugins::Render)
 end

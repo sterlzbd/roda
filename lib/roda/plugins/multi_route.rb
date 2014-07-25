@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module MultiRoute
       def self.configure(mod)
         mod.instance_variable_set(:@named_routes, {})
@@ -32,5 +32,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:multi_route, SinubaPlugins::MultiRoute)
+  register_plugin(:multi_route, RodaPlugins::MultiRoute)
 end

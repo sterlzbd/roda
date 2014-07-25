@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module NotFound
       def self.configure(app, &block)
         if block
@@ -37,5 +37,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:not_found, SinubaPlugins::NotFound)
+  register_plugin(:not_found, RodaPlugins::NotFound)
 end

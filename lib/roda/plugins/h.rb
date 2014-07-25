@@ -1,5 +1,5 @@
-class Sinuba
-  module SinubaPlugins
+class Roda
+  module RodaPlugins
     module H
       module InstanceMethods
         def h(s)
@@ -9,5 +9,5 @@ class Sinuba
     end
   end
 
-  register_plugin(:h, SinubaPlugins::H)
+  register_plugin(:h, RodaPlugins::H)
 end

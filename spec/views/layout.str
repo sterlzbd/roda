@@ -1,2 +1,2 @@
-<title>Sinuba: #{ title }</title>
+<title>Roda: #{ title }</title>
 #{ yield }
