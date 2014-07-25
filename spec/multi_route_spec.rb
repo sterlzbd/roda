@@ -51,5 +51,32 @@ describe "multi_route plugin" do
     body('/b', 'REQUEST_METHOD'=>'POST').should == 'postb'
     status('/c').should == 404
     status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+
+    @app = Class.new(@app)
+    @app.route do |r|
+      r.get do
+        route(:post)
+
+        r.is "b" do
+          "1b"
+        end
+      end
+      r.post do
+        route(:get)
+
+        r.is "b" do
+          "2b"
+        end
+      end
+    end
+
+    body.should == 'post'
+    body('REQUEST_METHOD'=>'POST').should == 'get'
+    body('/a').should == 'posta'
+    body('/a', 'REQUEST_METHOD'=>'POST').should == 'geta'
+    body('/b').should == '1b'
+    body('/b', 'REQUEST_METHOD'=>'POST').should == '2b'
+    status('/c').should == 404
+    status('/c', 'REQUEST_METHOD'=>'POST').should == 404
   end
 end
