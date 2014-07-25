@@ -360,7 +360,7 @@ class Sinuba
       module ResponseMethods
         CONTENT_LENGTH = "Content-Length".freeze
         CONTENT_TYPE = "Content-Type".freeze
-        DEFAULT_CONTENT_TYPE = "text/html; charset=utf-8".freeze
+        DEFAULT_CONTENT_TYPE = "text/html".freeze
         LOCATION = "Location".freeze
 
         attr_accessor :status

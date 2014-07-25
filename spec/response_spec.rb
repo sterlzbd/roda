@@ -54,7 +54,7 @@ describe "response #finish" do
       "#{s}#{h['Content-Type']}#{b.length}"
     end
 
-    body.should == '404text/html; charset=utf-80'
+    body.should == '404text/html0'
   end
 
   it "should set status to 200 if body has been written to" do
@@ -64,7 +64,7 @@ describe "response #finish" do
       response.write "#{s}#{h['Content-Type']}#{b.length}"
     end
 
-    body.should == 'a200text/html; charset=utf-81'
+    body.should == 'a200text/html1'
   end
 
   it "should not overwrite existing status" do
@@ -74,7 +74,7 @@ describe "response #finish" do
       "#{s}#{h['Content-Type']}#{b.length}"
     end
 
-    body.should == '500text/html; charset=utf-80'
+    body.should == '500text/html0'
   end
 end
 
