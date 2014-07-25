@@ -220,7 +220,7 @@ class Roda
             # are carried out by #consume.
             handle_on_result(yield(*captures))
 
-            halt response.finish
+            _halt response.finish
           end
         end
 
@@ -357,19 +357,47 @@ class Roda
         # If you want to halt the processing of an existing handler
         # and continue it via a different handler.
         def run(app)
-          halt app.call(env)
+          _halt app.call(env)
         end
 
-        def halt(response)
-          throw :halt, response
+        def halt(*res)
+          case res.length
+          when 0 # do nothing
+          when 1
+            case v = res[0]
+            when Integer
+              response.status = v
+            when String
+              response.write v
+            when Array
+              _halt v
+            else
+              raise Roda::RodaError, "singular argument to #halt must be Integer, String, or Array"
+            end
+          when 2
+            response.status = res[0]
+            response.write res[1]
+          when 3
+            response.status = res[0]
+            response.headers.merge!(res[1])
+            response.write res[2]
+          else
+            raise Roda::RodaError, "too many arguments given to #halt (accepts 0-3, received #{res.length})"
+          end
+
+          _halt response.finish
         end
 
         def redirect(path, status=302)
           response.redirect(path, status)
-          halt response.finish
+          _halt response.finish
         end
 
         private
+
+        def _halt(response)
+          throw :halt, response
+        end
 
         def is_or_on(*args, &block)
           if args.empty?
