@@ -21,11 +21,7 @@ class Roda
           result = super
 
           if result[0] == 404 && result[2].is_a?(Array) && result[2].empty?
-            catch(:halt) do
-              request.on do
-                not_found
-              end
-            end
+            super{not_found}
           end
 
           result

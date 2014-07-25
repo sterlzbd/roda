@@ -20,11 +20,7 @@ class Roda
         def _route
           super
         rescue => e
-          catch(:halt) do
-            request.on do
-              handle_error(e)
-            end
-          end
+          super{handle_error(e)}
         end
 
         def handle_error(e)
