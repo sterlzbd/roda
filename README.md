@@ -312,8 +312,23 @@ Hashes call a registered matcher with the given key using the hash value,
 and match if that matcher returns true.  Keys should always be symbols.
 
 The default registered matchers included with Roda are included below.
-You can add your own hash matchers by adding the approrpriate match\_\*
-method to the request class via a plugin.
+You can add your own hash matchers by adding the appropriate match\_\*
+method to the request class using the request\_module method:
+
+  class Roda
+    request_module do
+      def match_foo(v)
+        ...
+      end
+    end
+
+    route do |r|
+      r.on :foo=>'bar' do
+        ...
+      end
+    end
+  end
+
 
 #### :extension
 
@@ -457,7 +472,8 @@ instance of a subclass of Rack::Response with some additional
 methods.
 
 If you want to extend the request and response objects with additional
-modules, you can do so via plugins, see below.
+modules, you can do so via the request\_module or response\_module
+methods, or via plugins.
 
 Pollution
 ---------

@@ -73,6 +73,14 @@ class Roda
           self::RodaRequest.new(self::RodaResponse.new, env)
         end
 
+        def request_module(mod = nil, &block)
+          module_include(:request, mod, &block)
+        end
+    
+        def response_module(mod = nil, &block)
+          module_include(:response, mod, &block)
+        end
+
         def route(&block)
           @middleware.each{|a, b| @builder.use(*a, &b)}
           @builder.run lambda{|env| new.call(env, &block)}
@@ -94,6 +102,30 @@ class Roda
           plugin
         end
 
+        def module_include(type, mod)
+          if type == :response
+            klass = self::RodaResponse
+            iv = :@response_module
+          else
+            klass = self::RodaRequest
+            iv = :@request_module
+          end
+
+          if mod
+            raise RodaError, "can't provide both argument and block to response_module" if block_given?
+            klass.send(:include, mod)
+          else
+            unless mod = instance_variable_get(iv)
+              mod = instance_variable_set(iv, Module.new)
+              klass.send(:include, mod)
+            end
+
+            mod.module_eval(&Proc.new) if block_given?
+          end
+
+          mod
+        end
+    
         def register_plugin(name, mod)
           h = Roda.instance_variable_get(:@plugins)
           MUTEX.synchronize{h[name] = mod}
