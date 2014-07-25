@@ -654,3 +654,13 @@ describe "method matcher" do
     status("REQUEST_METHOD"=>"DELETE").should == 404
   end
 end
+
+describe "route block that returns string" do
+  it "should be treated as if an on block returned string" do
+    app do |r|
+      "+1"
+    end
+
+    body.should == '+1'
+  end
+end

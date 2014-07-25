@@ -84,6 +84,8 @@ If `r.on` matches and control is yielded to the block, whenever
 the block returns, the response will be returned.  If the block
 returns a string and the response body hasn't already been
 written to, the block return value will interpreted as the body
+for the response.  If the non of the `r.on` blocks match and the
+route block returns a string, it will be interpreted as the body
 for the response.
 
 `r.redirect` immediately returns the response, allowing for

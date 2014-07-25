@@ -162,7 +162,7 @@ class Roda
 
         def _route(&block)
           catch(:halt) do
-            instance_exec(@_request, &block)
+            request.handle_on_result(instance_exec(@_request, &block))
             response.finish
           end
         end
@@ -223,6 +223,13 @@ class Roda
             handle_on_result(yield(*captures))
 
             halt response.finish
+          end
+        end
+
+        def handle_on_result(result)
+          res = response
+          if result.is_a?(String) && res.empty?
+            res.write(result)
           end
         end
 
@@ -374,13 +381,6 @@ class Roda
         end
 
         private
-
-        def handle_on_result(result)
-          res = response
-          if result.is_a?(String) && res.empty?
-            res.write(result)
-          end
-        end
 
         def is_or_on(*args, &block)
           if args.empty?
