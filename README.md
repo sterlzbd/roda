@@ -636,6 +636,7 @@ override any Roda method and call `super` to get the default behavior.
 These plugins ship with roda:
 
 * all\_verbs: Adds routing methods to the request for all http verbs.
+* default\_headers: Override the default response headers used.
 * error\_handler: Adds a `error` block that is called for all responses that
   raise exceptions.
 * flash: Adds a flash handler, requires sinatra-flash.
