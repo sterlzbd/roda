@@ -27,7 +27,8 @@ class Roda
           end
         end
 
-        def handle_error
+        def handle_error(e)
+          raise e
         end
       end
     end

@@ -35,4 +35,16 @@ describe "error_handler plugin" do
 
     body.should == 'bad idea'
   end
+
+  it "has default error handler also raise" do
+    app(:bare) do
+      plugin :error_handler
+
+      route do |r|
+        raise ArgumentError, "bad idea"
+      end
+    end
+
+    proc{req}.should raise_error(ArgumentError)
+  end
 end
