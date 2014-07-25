@@ -654,6 +654,7 @@ These plugins ship with roda:
 * pass: Adds a pass method allowing you to skip the current `r.on` block as if
   it did not match.
 * render: Adds support for rendering templates via tilt, as described above.
+* streaming: Adds support for streaming responses.
 
 ### External Plugins
 
