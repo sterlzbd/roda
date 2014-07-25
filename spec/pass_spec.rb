@@ -4,7 +4,7 @@ describe "pass plugin" do
   it "executes on no arguments" do
     app(:pass) do |r|
       r.on :id do |id|
-        pass if id == 'foo'
+        r.pass if id == 'foo'
         id
       end
 

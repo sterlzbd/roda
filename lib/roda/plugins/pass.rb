@@ -5,8 +5,7 @@ class Roda
         def on(*)
           catch(:pass){super}
         end
-      end
-      module InstanceMethods
+
         def pass
           throw :pass
         end
