@@ -48,8 +48,6 @@ class RSPEC_EXAMPLE_GROUP
       @app = Roda.define{route(&block)}
     when :bare
       @app = Roda.define(&block)
-    when :on
-      @app = Roda.define{route{|r| r.on{instance_exec(r, &block)}}}
     when Symbol
       @app = Roda.define do
         plugin type

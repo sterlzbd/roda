@@ -2,7 +2,7 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "cookie handling" do
   it "should set cookies on response" do
-    app(:on) do |r|
+    app do |r|
       response.set_cookie("foo", "bar")
       response.set_cookie("bar", "baz")
       "Hello"
@@ -13,7 +13,7 @@ describe "cookie handling" do
   end
 
   it "should delete cookies on response" do
-    app(:on) do |r|
+    app do |r|
       response.set_cookie("foo", "bar")
       response.delete_cookie("foo")
       "Hello"
@@ -26,7 +26,7 @@ end
 
 describe "response #[] and #[]=" do
   it "should get/set headers" do
-    app(:on) do |r|
+    app do |r|
       response['foo'] = 'bar'
       response['foo'] + response.headers['foo']
     end
@@ -38,7 +38,7 @@ end
 
 describe "response #write" do
   it "should add to body" do
-    app(:on) do |r|
+    app do |r|
       response.write 'a'
       response.write 'b'
     end
@@ -49,7 +49,7 @@ end
 
 describe "response #finish" do
   it "should set status to 404 if body has not been written to" do
-    app(:on) do |r|
+    app do |r|
       s, h, b = response.finish
       "#{s}#{h['Content-Type']}#{b.length}"
     end
@@ -58,7 +58,7 @@ describe "response #finish" do
   end
 
   it "should set status to 200 if body has been written to" do
-    app(:on) do |r|
+    app do |r|
       response.write 'a'
       s, h, b = response.finish
       response.write "#{s}#{h['Content-Type']}#{b.length}"
@@ -68,7 +68,7 @@ describe "response #finish" do
   end
 
   it "should not overwrite existing status" do
-    app(:on) do |r|
+    app do |r|
       response.status = 500
       s, h, b = response.finish
       "#{s}#{h['Content-Type']}#{b.length}"
