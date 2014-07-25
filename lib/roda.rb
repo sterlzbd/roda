@@ -220,14 +220,9 @@ class Roda
             # The captures we yield here were generated and assembled
             # by evaluating each of the `arg`s above. Most of these
             # are carried out by #consume.
-            body = yield(*captures)
+            handle_on_result(yield(*captures))
 
-            res = response
-            if body.is_a?(String) && res.empty?
-              res.write(body)
-            end
-
-            halt res.finish
+            halt response.finish
           end
         end
 
@@ -379,6 +374,13 @@ class Roda
         end
 
         private
+
+        def handle_on_result(result)
+          res = response
+          if result.is_a?(String) && res.empty?
+            res.write(result)
+          end
+        end
 
         def is_or_on(*args, &block)
           if args.empty?
