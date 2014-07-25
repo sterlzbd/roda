@@ -184,6 +184,10 @@ class Roda
           super(env)
         end
 
+        def full_path_info
+          "#{env[SCRIPT_NAME]}#{env[PATH_INFO]}"
+        end
+
         # The heart of the path / verb / any condition matching.
         #
         # @example
