@@ -628,6 +628,8 @@ These plugins ship with sinuba:
 * hooks: Adds before and after methods to run code before and after requests.
 * indifferent\_params: Adds params method with indifferent access to params,
   allowing use of symbol keys for accessing params.
+* middleware: Allows the Sinuba app to be used as a rack middleware, calling the
+  next middleware if no route matches.
 * multi\_route: Adds the ability for multiple named route blocks, with the
   ability to dispatch to them add any point in the main route block.
 * not\_found: Adds a `not_found` block that is called for all 404 responses
