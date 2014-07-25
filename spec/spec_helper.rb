@@ -45,16 +45,16 @@ class RSPEC_EXAMPLE_GROUP
   def app(type=nil, &block)
     case type
     when :new
-      @app = Roda.define{route(&block)}
+      @app = _app{route(&block)}
     when :bare
-      @app = Roda.define(&block)
+      @app = _app(&block)
     when Symbol
-      @app = Roda.define do
+      @app = _app do
         plugin type
         route(&block)
       end
     else
-      @app ||= Roda.define{route(&block)}
+      @app ||= _app{route(&block)}
     end
   end
 
@@ -79,5 +79,11 @@ class RSPEC_EXAMPLE_GROUP
 
   def body(path='/', env={})
     req(path, env)[2].join
+  end
+
+  def _app(&block)
+    c = Class.new(Roda)
+    c.class_eval(&block)
+    c
   end
 end

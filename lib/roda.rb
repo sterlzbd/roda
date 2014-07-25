@@ -27,12 +27,6 @@ class Roda
           app.call(env)
         end
 
-        def define(&block)
-          klass = Class.new(self)
-          klass.class_eval(&block)
-          klass
-        end
-
         def inherited(subclass)
           super
           subclass.instance_variable_set(:@builder, Rack::Builder.new)
@@ -362,17 +356,6 @@ class Roda
 
         # If you want to halt the processing of an existing handler
         # and continue it via a different handler.
-        #
-        # @example
-        #   def redirect(*args)
-        #     run Roda.define{route{|r| r.on(true){r.redirect(*args)}}}.app
-        #   end
-        #
-        #   on "account" do
-        #     redirect "/login" unless session["uid"]
-        #
-        #     res.write "Super secure account info."
-        #   end
         def run(app)
           halt app.call(env)
         end
