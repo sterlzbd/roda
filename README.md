@@ -604,6 +604,8 @@ These plugins ship with roda:
   raise exceptions.
 * flash: Adds a flash handler, requires sinatra-flash.
 * h: Adds h method for html escaping.
+* halt: Augments request#halt method to take status and/or body or status,
+  headers, and body.
 * header\_matchers: Adds host, header, and accept hash matchers.
 * hooks: Adds before and after methods to run code before and after requests.
 * indifferent\_params: Adds params method with indifferent access to params,
