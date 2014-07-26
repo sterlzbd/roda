@@ -76,7 +76,7 @@ begin
   end
   
   task :default => [:spec]
-  spec_with_cov.call("spec", Dir["spec/*_spec.rb"], "Run specs")
+  spec_with_cov.call("spec", Dir["spec/*_spec.rb"] + Dir["spec/plugin/*_spec.rb"], "Run specs")
 rescue LoadError
   task :default do
     puts "Must install rspec to run the default task (which runs specs)"
