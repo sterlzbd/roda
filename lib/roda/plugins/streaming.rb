@@ -56,10 +56,16 @@ class Roda
           end
         end
 
-        def initialize(keep_open = false, scheduler = nil, &back)
-          @scheduler = scheduler || Scheduler.new(self)
-          @back, @keep_open = back.to_proc, keep_open
-          @callbacks, @closed = [], false
+        def initialize(opts={}, &back)
+          @scheduler = opts[:scheduler] || Scheduler.new(self)
+          @back = back.to_proc
+          @keep_open = opts[:keep_open]
+          @callbacks = []
+          @closed = false
+
+          if opts[:callback]
+            callback(&opts[:callback])
+          end
         end
 
         def close
@@ -98,10 +104,19 @@ class Roda
       end
 
       module InstanceMethods
-        def stream(keep_open=false)
-          scheduler = EventMachine if env['async.callback']
+        def stream(opts={}, &block)
+          opts = opts.merge(:scheduler=>EventMachine) if !opts.has_key?(:scheduler) && env['async.callback']
+
+          if opts[:loop]
+            block = proc do |out|
+              until out.closed?
+                yield(out)
+              end
+            end
+          end
+
           res = response
-          request.halt [res.status || 200, res.headers, Stream.new(keep_open, scheduler){|out| yield(out)}]
+          request.halt [res.status || 200, res.headers, Stream.new(opts, &block)]
         end
       end
     end
