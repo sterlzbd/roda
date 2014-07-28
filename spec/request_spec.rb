@@ -21,3 +21,18 @@ describe "request.halt" do
     body.should ==  "foo"
   end
 end
+
+describe "request.scope" do
+  it "should return roda instance" do
+    app(:bare) do
+      attr_accessor :b
+
+      route do |r|
+        self.b = 'a'
+        request.scope.b
+      end
+    end
+
+    body.should ==  "a"
+  end
+end

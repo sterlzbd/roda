@@ -63,10 +63,6 @@ class Roda
           end
         end
 
-        def request(env)
-          self::RodaRequest.new(self::RodaResponse.new, env)
-        end
-
         def request_module(mod = nil, &block)
           module_include(:request, mod, &block)
         end
@@ -144,7 +140,7 @@ class Roda
         end
 
         def call(env, &block)
-          @_request = self.class.request(env)
+          @_request = self.class::RodaRequest.new(self, env)
           _route(&block)
         end
 
@@ -172,8 +168,11 @@ class Roda
 
         attr_reader :captures
 
-        def initialize(response, env)
-          @response = response
+        attr_reader :scope
+
+        def initialize(scope, env)
+          @scope = scope
+          @response = scope.class::RodaResponse.new
           @captures = []
           super(env)
         end
