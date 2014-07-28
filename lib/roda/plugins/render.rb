@@ -58,7 +58,11 @@ class Roda
 
         def view(template, opts={})
           if template.is_a?(Hash)
-            opts = template
+            if opts.empty?
+              opts = template
+            else
+              opts = opts.merge(template)
+            end
           end
 
           content = render(template, opts)
@@ -92,7 +96,11 @@ class Roda
         #
         def render(template, opts = {}, &block)
           if template.is_a?(Hash)
-            opts = template
+            if opts.empty?
+              opts = template
+            else
+              opts = opts.merge(template)
+            end
           end
           render_opts = render_opts()
 

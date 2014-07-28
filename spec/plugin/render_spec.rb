@@ -64,10 +64,8 @@ describe "render plugin" do
       plugin :render
       
       route do |r|
-        r.on do
-          render(:path=>"spec/views/layout-yield.erb") do
-            render(:path=>"spec/views/content-yield.erb")
-          end
+        render(:path=>"spec/views/layout-yield.erb") do
+          render(:path=>"spec/views/content-yield.erb")
         end
       end
     end
@@ -80,13 +78,27 @@ describe "render plugin" do
       plugin :render, :views=>"./spec/views"
       
       route do |r|
-        r.on do
-          view("home", :locals=>{:name=>"Agent Smith", :title=>"Home" }, :layout=>"layout-alternative", :layout_opts=>{:locals=>{:title=>"Home"}})
-        end
+        view("home", :locals=>{:name=>"Agent Smith", :title=>"Home" }, :layout=>"layout-alternative", :layout_opts=>{:locals=>{:title=>"Home"}})
       end
     end
 
     body.strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+  end
+
+  it "inline layouts and inline views" do
+    app(:render) do
+      view({:inline=>'bar'}, :layout=>{:inline=>'Foo: <%= yield %>'})
+    end
+
+    body.strip.should == "Foo: bar"
+  end
+
+  it "inline renders with opts" do
+    app(:render) do
+      render({:inline=>'<%= bar %>'}, {:engine=>'str'})
+    end
+
+    body.strip.should == '<%= bar %>'
   end
 
   it "render_opts inheritance" do
@@ -105,9 +117,7 @@ describe "render plugin" do
       plugin :render, :views=>"./spec/views", :cache=>false
       
       route do |r|
-        r.on do
-          view(:inline=>"Hello <%= name %>: <%= render_opts[:cache] %>", :locals=>{:name => "Agent Smith"}, :layout=>nil)
-        end
+        view(:inline=>"Hello <%= name %>: <%= render_opts[:cache] %>", :locals=>{:name => "Agent Smith"}, :layout=>nil)
       end
     end
 
