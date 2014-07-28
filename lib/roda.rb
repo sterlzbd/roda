@@ -136,11 +136,12 @@ class Roda
         end
 
         def response
-          request.response
+          @_response
         end
 
         def call(env, &block)
           @_request = self.class::RodaRequest.new(self, env)
+          @_response = self.class::RodaResponse.new
           _route(&block)
         end
 
@@ -164,17 +165,18 @@ class Roda
         TERM = {:term=>true}.freeze
         SEGMENT = "([^\\/]+)".freeze
 
-        attr_reader :response
-
         attr_reader :captures
 
         attr_reader :scope
 
         def initialize(scope, env)
           @scope = scope
-          @response = scope.class::RodaResponse.new
           @captures = []
           super(env)
+        end
+
+        def response
+          scope.response
         end
 
         def full_path_info

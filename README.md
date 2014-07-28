@@ -441,12 +441,14 @@ methods, or via plugins.
 Pollution
 ---------
 
-Roda tries very hard to avoid polluting the scope in which the
-`route` block operates.  The only instance variable defined by base
-Roda is `@\_request`.  The only methods defined (beyond the default
-methods for `Object`) are: `env`, `opts`, `request`, `response`, `call`, 
-`session`, and `\_route` (private). Constants inside the Roda namespace
-are all prefixed with Roda.
+Roda tries very hard to avoid polluting the scope in which the `route`
+block operates.  The only instance variables defined by default in the scope of
+the `route` block are `@\_request` and `@\_response`.  The only methods defined
+(beyond the default methods for `Object`) are: `env`, `opts`, `request`,
+`response`, `call`, `session`, and `\_route` (private). Constants inside the
+Roda namespace are all prefixed with `Roda` (e.g. Roda::RodaRequest).  This
+should make it unlikely that Roda will cause a namespace issue with your
+application code.
 
 Captures
 --------
