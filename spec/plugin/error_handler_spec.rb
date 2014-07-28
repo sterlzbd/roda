@@ -19,7 +19,24 @@ describe "error_handler plugin" do
     end
 
     body("/a").should == 'found'
+    status("/a").should == 200
     body.should == 'bad idea'
+    status.should == 500
+  end
+
+  it "can override status inside error block" do
+    app(:bare) do
+      plugin :error_handler do |e|
+        response.status = 501
+        e.message
+      end
+
+      route do |r|
+        raise ArgumentError, "bad idea"
+      end
+    end
+
+    status.should == 501
   end
 
   it "can set error via the plugin block" do

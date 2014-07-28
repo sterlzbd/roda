@@ -20,6 +20,7 @@ class Roda
         def _route
           super
         rescue => e
+          response.status = 500
           super{handle_error(e)}
         end
 
