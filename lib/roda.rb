@@ -6,7 +6,7 @@ class Roda
 
   class RodaError < StandardError; end
 
-  class RodaRequest < Rack::Request;
+  class RodaRequest < ::Rack::Request;
     @roda_class = ::Roda
 
     class << self
@@ -18,7 +18,7 @@ class Roda
     end
   end
 
-  class RodaResponse < Rack::Response;
+  class RodaResponse < ::Rack::Response;
     @roda_class = ::Roda
 
     class << self
@@ -30,7 +30,7 @@ class Roda
     end
   end
 
-  @builder = Rack::Builder.new
+  @builder = ::Rack::Builder.new
   @middleware = []
   @plugins = {}
   @opts = {}
@@ -38,7 +38,7 @@ class Roda
   module RodaPlugins
     module Base
       module ClassMethods
-        MUTEX = Mutex.new
+        MUTEX = ::Mutex.new
 
         attr_reader :app
         attr_reader :opts
@@ -49,7 +49,7 @@ class Roda
 
         def inherited(subclass)
           super
-          subclass.instance_variable_set(:@builder, Rack::Builder.new)
+          subclass.instance_variable_set(:@builder, ::Rack::Builder.new)
           subclass.instance_variable_set(:@middleware, @middleware.dup)
           subclass.instance_variable_set(:@opts, opts.dup)
           
@@ -431,7 +431,7 @@ class Roda
         end
 
         def delete_cookie(key, value = {})
-          Rack::Utils.delete_cookie_header!(@headers, key, value)
+          ::Rack::Utils.delete_cookie_header!(@headers, key, value)
         end
 
         def empty?
@@ -450,7 +450,7 @@ class Roda
         end
 
         def set_cookie(key, value)
-          Rack::Utils.set_cookie_header!(@headers, key, value)
+          ::Rack::Utils.set_cookie_header!(@headers, key, value)
         end
 
         def write(str)

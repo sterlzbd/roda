@@ -3,7 +3,7 @@ class Roda
     module H
       module InstanceMethods
         def h(s)
-          Rack::Utils.escape_html(s.to_s)
+          ::Rack::Utils.escape_html(s.to_s)
         end
       end
     end

@@ -4,7 +4,7 @@ class Roda
   module RodaPlugins
     module Render
       class Cache
-        MUTEX = Mutex.new
+        MUTEX = ::Mutex.new
 
         def initialize
           MUTEX.synchronize{@cache = {}}
@@ -107,9 +107,9 @@ class Roda
           if content = opts[:inline]
             path = content
             template_block = Proc.new{content}
-            template_class = Tilt[opts[:engine] || render_opts[:engine]]
+            template_class = ::Tilt[opts[:engine] || render_opts[:engine]]
           else
-            template_class = Tilt
+            template_class = ::Tilt
             unless path = opts[:path]
               path = template_path(template, opts)
             end
