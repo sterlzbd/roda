@@ -73,6 +73,18 @@ describe "render plugin" do
     body.gsub(/\n+/, "\n").should == "Header\nThis is the actual content.\nFooter\n"
   end
 
+  it "views without default layouts" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :layout=>false
+      
+      route do |r|
+        view("home", :locals=>{:name=>"Agent Smith", :title=>"Home"})
+      end
+    end
+
+    body.strip.should == "<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+  end
+
   it "layout overrides" do
     app(:bare) do
       plugin :render, :views=>"./spec/views"

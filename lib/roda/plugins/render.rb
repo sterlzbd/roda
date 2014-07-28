@@ -26,7 +26,7 @@ class Roda
         opts[:engine] ||= "erb"
         opts[:ext] = nil unless opts.has_key?(:ext) 
         opts[:views] ||= File.expand_path("views", Dir.pwd)
-        opts[:layout] ||= "layout"
+        opts[:layout] = "layout" unless opts.has_key?(:layout)
         opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
         opts[:opts] ||= (opts[:opts] || {}).dup
         opts[:opts][:outvar] ||= '@_out_buf'
@@ -67,12 +67,12 @@ class Roda
 
           content = render(template, opts)
 
-          if opts.fetch(:layout, true)
+          if layout = opts.fetch(:layout, render_opts[:layout])
             if layout_opts = opts[:layout_opts]
               layout_opts = render_opts[:layout_opts].merge(layout_opts)
             end
 
-            content = render(opts[:layout] || render_opts[:layout], layout_opts||{}){content}
+            content = render(layout, layout_opts||{}){content}
           end
 
           content
