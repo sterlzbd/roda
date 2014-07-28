@@ -149,12 +149,18 @@ class Roda
       end
 
       module InstanceMethods
-        def opts
-          self.class.opts
+        def call(env, &block)
+          @_request = self.class::RodaRequest.new(self, env)
+          @_response = self.class::RodaResponse.new
+          _route(&block)
         end
 
         def env
           request.env
+        end
+
+        def opts
+          self.class.opts
         end
 
         def request
@@ -163,12 +169,6 @@ class Roda
 
         def response
           @_response
-        end
-
-        def call(env, &block)
-          @_request = self.class::RodaRequest.new(self, env)
-          @_response = self.class::RodaResponse.new
-          _route(&block)
         end
 
         def session
@@ -201,38 +201,34 @@ class Roda
           super(env)
         end
 
-        def response
-          scope.response
-        end
-
         def full_path_info
           "#{env[SCRIPT_NAME]}#{env[PATH_INFO]}"
+        end
+
+        def get(*args, &block)
+          is_or_on(*args, &block) if get?
+        end
+
+        def halt(response)
+          _halt(response)
+        end
+
+        def handle_on_result(result)
+          res = response
+          if result.is_a?(String) && res.empty?
+            res.write(result)
+          end
         end
 
         def inspect
           "#<#{self.class.inspect} #{env['REQUEST_METHOD']} #{full_path_info}>"
         end
 
-        # The heart of the path / verb / any condition matching.
-        #
-        # @example
-        #
-        #   on get do
-        #     res.write "GET"
-        #   end
-        #
-        #   on get, "signup" do
-        #     res.write "Signup"
-        #   end
-        #
-        #   on "user/:id" do |uid|
-        #     res.write "User: #{uid}"
-        #   end
-        #
-        #   on "styles", extension("css") do |file|
-        #     res.write render("styles/#{file}.sass")
-        #   end
-        #
+        def is(*args, &block)
+          args << TERM
+          on(*args, &block)
+        end
+
         def on(*args, &block)
           try do
             # We stop evaluation of this entire matcher unless
@@ -255,30 +251,30 @@ class Roda
           end
         end
 
-        def handle_on_result(result)
-          res = response
-          if result.is_a?(String) && res.empty?
-            res.write(result)
-          end
+        def post(*args, &block)
+          is_or_on(*args, &block) if post?
         end
 
-        # @private Used internally by #on to ensure that SCRIPT_NAME and
-        #          PATH_INFO are reset to their proper values.
-        def try
-          script = env[SCRIPT_NAME]
-          path = env[PATH_INFO]
-
-          # For every block, we make sure to reset captures so that
-          # nesting matchers won't mess with each other's captures.
-          captures.clear
-
-          yield
-
-        ensure
-          env[SCRIPT_NAME] = script
-          env[PATH_INFO] = path
+        def response
+          scope.response
         end
-        private :try
+
+        def redirect(path, status=302)
+          response.redirect(path, status)
+          _halt response.finish
+        end
+
+        # If you want to halt the processing of an existing handler
+        # and continue it via a different handler.
+        def run(app)
+          _halt app.call(env)
+        end
+
+        private
+
+        def _halt(response)
+          throw :halt, response
+        end
 
         def consume(pattern)
           matchdata = env[PATH_INFO].match(/\A(\/(?:#{pattern}))(\/|\z)/)
@@ -294,12 +290,18 @@ class Roda
           captures.concat(vars)
         end
 
+        def is_or_on(*args, &block)
+          if args.empty?
+            on(*args, &block)
+          else
+            is(*args, &block)
+          end
+        end
+
         def match(matcher)
           case matcher
           when String
-            matcher = Regexp.escape(matcher)
-            matcher.gsub!(/:\w+/, SEGMENT)
-            consume(matcher)
+            match_string(matcher)
           when Regexp
             consume(matcher)
           when Symbol
@@ -307,20 +309,26 @@ class Roda
           when Hash
             matcher.all?{|k,v| send("match_#{k}", v)}
           when Array
-            matcher.any? do |m|
-              if matched = match(m)
-                if m.is_a?(String)
-                  captures.push(m)
-                end
-              end
-              matched
-            end
+            match_array(matcher)
           when Proc
             matcher.call
           else
             matcher
           end
         end
+
+        def match_array(matcher)
+          matcher.any? do |m|
+            if matched = match(m)
+              if m.is_a?(String)
+                captures.push(m)
+              end
+            end
+
+            matched
+          end
+        end
+
 
         # A matcher for files with a certain extension.
         #
@@ -331,6 +339,14 @@ class Roda
         #   end
         def match_extension(ext)
           consume("([^\\/]+?)\.#{ext}\\z")
+        end
+
+        def match_method(type)
+          if type.is_a?(Array)
+            type.any?{|t| match_method(t)}
+          else
+            type.to_s.upcase == env['REQUEST_METHOD']
+          end
         end
 
         # Used to ensure that certain request parameters are present. Acts like a
@@ -353,65 +369,31 @@ class Roda
           end
         end
 
+        def match_string(str)
+          str = Regexp.escape(str)
+          str.gsub!(/:\w+/, SEGMENT)
+          consume(str)
+        end
+
         def match_term(term)
           !(term ^ (env[PATH_INFO] == ""))
         end
 
-        def match_method(type)
-          if type.is_a?(Array)
-            type.any?{|t| match_method(t)}
-          else
-            type.to_s.upcase == env['REQUEST_METHOD']
-          end
-        end
+        # @private Used internally by #on to ensure that SCRIPT_NAME and
+        #          PATH_INFO are reset to their proper values.
+        def try
+          script = env[SCRIPT_NAME]
+          path = env[PATH_INFO]
 
-        def is(*args, &block)
-          args << TERM
-          on(*args, &block)
-        end
+          # For every block, we make sure to reset captures so that
+          # nesting matchers won't mess with each other's captures.
+          captures.clear
 
-        # Syntatic sugar for providing HTTP Verb matching.
-        #
-        # @example
-        #   on get, "signup" do
-        #   end
-        #
-        #   on post, "signup" do
-        #   end
-        def get(*args, &block)
-          is_or_on(*args, &block) if get?
-        end
-        def post(*args, &block)
-          is_or_on(*args, &block) if post?
-        end
+          yield
 
-        # If you want to halt the processing of an existing handler
-        # and continue it via a different handler.
-        def run(app)
-          _halt app.call(env)
-        end
-
-        def halt(response)
-          _halt(response)
-        end
-
-        def redirect(path, status=302)
-          response.redirect(path, status)
-          _halt response.finish
-        end
-
-        private
-
-        def _halt(response)
-          throw :halt, response
-        end
-
-        def is_or_on(*args, &block)
-          if args.empty?
-            on(*args, &block)
-          else
-            is(*args, &block)
-          end
+        ensure
+          env[SCRIPT_NAME] = script
+          env[PATH_INFO] = path
         end
       end
 
@@ -432,10 +414,6 @@ class Roda
           @length  = 0
         end
 
-        def default_headers
-          {CONTENT_TYPE => DEFAULT_CONTENT_TYPE}
-        end
-
         def [](key)
           @headers[key]
         end
@@ -448,22 +426,16 @@ class Roda
           "#<#{self.class.inspect} #{@status.inspect} #{@headers.inspect} #{@body.inspect}>"
         end
 
-        def write(str)
-          s = str.to_s
+        def default_headers
+          {CONTENT_TYPE => DEFAULT_CONTENT_TYPE}
+        end
 
-          @length += s.bytesize
-          @headers[CONTENT_LENGTH] = @length.to_s
-          @body << s
-          nil
+        def delete_cookie(key, value = {})
+          Rack::Utils.delete_cookie_header!(@headers, key, value)
         end
 
         def empty?
           @body.empty?
-        end
-
-        def redirect(path, status = 302)
-          @headers[LOCATION] = path
-          @status  = status
         end
 
         def finish
@@ -472,12 +444,22 @@ class Roda
           [s, @headers, b]
         end
 
+        def redirect(path, status = 302)
+          @headers[LOCATION] = path
+          @status  = status
+        end
+
         def set_cookie(key, value)
           Rack::Utils.set_cookie_header!(@headers, key, value)
         end
 
-        def delete_cookie(key, value = {})
-          Rack::Utils.delete_cookie_header!(@headers, key, value)
+        def write(str)
+          s = str.to_s
+
+          @length += s.bytesize
+          @headers[CONTENT_LENGTH] = @length.to_s
+          @body << s
+          nil
         end
       end
     end
