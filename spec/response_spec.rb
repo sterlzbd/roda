@@ -112,3 +112,20 @@ describe "response #empty?" do
     header('foo').should == 'false'
   end
 end
+
+describe "response #inspect" do
+  it "should return information about response" do
+    app(:bare) do
+      def self.inspect
+        'Foo'
+      end
+
+      route do |r|
+        response.status = 200
+        response.inspect
+      end
+    end
+
+    body.should == '#<Foo::RodaResponse 200 {"Content-Type"=>"text/html"} []>'
+  end
+end

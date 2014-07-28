@@ -6,9 +6,29 @@ class Roda
 
   class RodaError < StandardError; end
 
-  class RodaRequest < Rack::Request; end
+  class RodaRequest < Rack::Request;
+    @roda_class = ::Roda
 
-  class RodaResponse < Rack::Response; end
+    class << self
+      attr_accessor :roda_class
+
+      def inspect
+        "#{roda_class.inspect}::RodaRequest"
+      end
+    end
+  end
+
+  class RodaResponse < Rack::Response;
+    @roda_class = ::Roda
+
+    class << self
+      attr_accessor :roda_class
+
+      def inspect
+        "#{roda_class.inspect}::RodaResponse"
+      end
+    end
+  end
 
   @builder = Rack::Builder.new
   @middleware = []
@@ -32,8 +52,14 @@ class Roda
           subclass.instance_variable_set(:@builder, Rack::Builder.new)
           subclass.instance_variable_set(:@middleware, @middleware.dup)
           subclass.instance_variable_set(:@opts, opts.dup)
-          subclass.const_set(:RodaRequest, Class.new(self::RodaRequest))
-          subclass.const_set(:RodaResponse, Class.new(self::RodaResponse))
+          
+          request_class = Class.new(self::RodaRequest)
+          request_class.roda_class = subclass
+          subclass.const_set(:RodaRequest, request_class)
+
+          response_class = Class.new(self::RodaResponse)
+          response_class.roda_class = subclass
+          subclass.const_set(:RodaResponse, response_class)
         end
 
         def plugin(mixin, *args, &block)
@@ -181,6 +207,10 @@ class Roda
 
         def full_path_info
           "#{env[SCRIPT_NAME]}#{env[PATH_INFO]}"
+        end
+
+        def inspect
+          "#<#{self.class.inspect} #{env['REQUEST_METHOD']} #{full_path_info}>"
         end
 
         # The heart of the path / verb / any condition matching.
@@ -412,6 +442,10 @@ class Roda
 
         def []=(key, value)
           @headers[key] = value
+        end
+
+        def inspect
+          "#<#{self.class.inspect} #{@status.inspect} #{@headers.inspect} #{@body.inspect}>"
         end
 
         def write(str)

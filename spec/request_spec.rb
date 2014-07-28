@@ -36,3 +36,20 @@ describe "request.scope" do
     body.should ==  "a"
   end
 end
+
+describe "request.inspect" do
+  it "should return information about request" do
+    app(:bare) do
+      def self.inspect
+        'Foo'
+      end
+
+      route do |r|
+        request.inspect
+      end
+    end
+
+    body('/a/b').should ==  "#<Foo::RodaRequest GET /a/b>"
+    body('REQUEST_METHOD'=>'POST').should ==  "#<Foo::RodaRequest POST />"
+  end
+end
