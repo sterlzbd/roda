@@ -20,11 +20,11 @@ class Roda
         def _route
           result = super
 
-          if result[0] == 404 && result[2].is_a?(Array) && result[2].empty?
+          if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
             super{not_found}
+          else
+            result
           end
-
-          result
         end
 
         def not_found

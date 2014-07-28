@@ -17,7 +17,25 @@ describe "not_found plugin" do
     end
 
     body.should == 'not found'
+    status.should == 404
     body("/a").should == 'found'
+    status("/a").should == 200
+  end
+
+  it "allows overriding status inside not_found" do
+    app(:bare) do
+      plugin :not_found
+
+      not_found do
+        response.status = 403
+        "not found"
+      end
+
+      route do |r|
+      end
+    end
+
+    status.should == 403
   end
 
   it "does not modify behavior if not_found is not called" do
