@@ -263,6 +263,8 @@ class Roda
       module RequestMethods
         PATH_INFO = "PATH_INFO".freeze
         SCRIPT_NAME = "SCRIPT_NAME".freeze
+        REQUEST_METHOD = "REQUEST_METHOD".freeze
+        EMPTY_STRING = "".freeze
         TERM = {:term=>true}.freeze
         SEGMENT = "([^\\/]+)".freeze
 
@@ -311,7 +313,7 @@ class Roda
         # Show information about current request, including request class,
         # request method and full path.
         def inspect
-          "#<#{self.class.inspect} #{env['REQUEST_METHOD']} #{full_path_info}>"
+          "#<#{self.class.inspect} #{env[REQUEST_METHOD]} #{full_path_info}>"
         end
 
         # Adds TERM as the final argument and passes to #on, ensuring that
@@ -456,7 +458,7 @@ class Roda
           if type.is_a?(Array)
             type.any?{|t| match_method(t)}
           else
-            type.to_s.upcase == env['REQUEST_METHOD']
+            type.to_s.upcase == env[REQUEST_METHOD]
           end
         end
 
@@ -488,7 +490,7 @@ class Roda
         # Only match if the request path is empty, which usually indicates it
         # has already been fully matched.
         def match_term(term)
-          !(term ^ (env[PATH_INFO] == ""))
+          !(term ^ (env[PATH_INFO] == EMPTY_STRING))
         end
 
         # Yield to the given block, clearing any captures before
