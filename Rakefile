@@ -33,12 +33,12 @@ rescue LoadError
   Rake::RDocTask
 end
 
-RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.md']
+RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.rdoc']
 
 rdoc_task_class.new do |rdoc|
   rdoc.rdoc_dir = "rdoc"
   rdoc.options += RDOC_OPTS
-  rdoc.rdoc_files.add %w"README.md CHANGELOG MIT-LICENSE lib/**/*.rb"
+  rdoc.rdoc_files.add %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb"
 end
 
 ### Specs
