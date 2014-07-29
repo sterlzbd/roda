@@ -120,7 +120,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:streaming, RodaPlugins::Streaming)
+    register_plugin(:streaming, Streaming)
+  end
 end

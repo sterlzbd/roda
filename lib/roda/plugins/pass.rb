@@ -11,7 +11,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:pass, RodaPlugins::Pass)
+    register_plugin(:pass, Pass)
+  end
 end

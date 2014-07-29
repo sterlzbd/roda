@@ -57,7 +57,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:hooks, RodaPlugins::Hooks)
+    register_plugin(:hooks, Hooks)
+  end
 end

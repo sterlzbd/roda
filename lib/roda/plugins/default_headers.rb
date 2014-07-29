@@ -9,7 +9,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:default_headers, RodaPlugins::DefaultHeaders)
+    register_plugin(:default_headers, DefaultHeaders)
+  end
 end

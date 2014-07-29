@@ -22,7 +22,7 @@ class Roda
         end
       end  
     end
-  end
 
-  register_plugin(:indifferent_params, RodaPlugins::IndifferentParams)
+    register_plugin(:indifferent_params, IndifferentParams)
+  end
 end

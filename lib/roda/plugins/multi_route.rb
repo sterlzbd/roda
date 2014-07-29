@@ -30,7 +30,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:multi_route, RodaPlugins::MultiRoute)
+    register_plugin(:multi_route, MultiRoute)
+  end
 end

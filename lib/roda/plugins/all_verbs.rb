@@ -13,7 +13,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:all_verbs, RodaPlugins::AllVerbs)
+    register_plugin(:all_verbs, AllVerbs)
+  end
 end

@@ -7,7 +7,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:h, RodaPlugins::H)
+    register_plugin(:h, H)
+  end
 end

@@ -24,7 +24,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:flash, RodaPlugins::Flash)
+    register_plugin(:flash, Flash)
+  end
 end

@@ -49,4 +49,13 @@ describe "plugins" do
 
     body('/hello').should == 'Foo aDefault'
   end
+
+  it "should support registering plugins and loading them by symbol" do
+    Roda::RodaPlugins.register_plugin(:foo, Module.new{module self::InstanceMethods; def a; '1' end end})
+    app(:foo) do
+      a
+    end
+
+    body.should == '1'
+  end
 end

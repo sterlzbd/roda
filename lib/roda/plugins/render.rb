@@ -136,7 +136,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:render, RodaPlugins::Render)
+    register_plugin(:render, Render)
+  end
 end

@@ -31,7 +31,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:halt, RodaPlugins::Halt)
+    register_plugin(:halt, Halt)
+  end
 end

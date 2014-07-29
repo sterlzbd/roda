@@ -51,20 +51,42 @@ class Roda
 
   @builder = ::Rack::Builder.new
   @middleware = []
-  @plugins = {}
   @opts = {}
 
-  # Module in which all Roda plugins should be stored.
+  # Module in which all Roda plugins should be stored. Also contains logic for
+  # registering and loading plugins.
   module RodaPlugins
+    # Mutex protecting the plugins hash
+    @mutex = ::Mutex.new
+
+    # Stores registered plugins
+    @plugins = {}
+
+    # If the registered plugin already exists, use it.  Otherwise,
+    # require it and return it.  This raises a LoadError if such a
+    # plugin doesn't exist, or a RodaError if it exists but it does
+    # not register itself correctly.
+    def self.load_plugin(name)
+      h = @plugins
+      unless plugin = @mutex.synchronize{h[name]}
+        require "roda/plugins/#{name}"
+        raise RodaError, "Plugin #{name} did not register itself correctly in Roda::RodaPlugins" unless plugin = @mutex.synchronize{h[name]}
+      end
+      plugin
+    end
+
+    # Register the given plugin with Roda, so that it can be loaded using #plugin
+    # with a symbol.  Should be used by plugin files.
+    def self.register_plugin(name, mod)
+      @mutex.synchronize{@plugins[name] = mod}
+    end
+
     # The base plugin for Roda, implementing all default functionality.
     # Methods are put into a plugin so future plugins can easily override
     # them and call super to get the default behavior.
     module Base
       # Class methods for the Roda class.
       module ClassMethods
-        # Mutex protecting the plugins hash
-        MUTEX = ::Mutex.new
-
         # The rack application that this class uses.
         attr_reader :app
 
@@ -105,7 +127,7 @@ class Roda
         # which will be required and then used.
         def plugin(mixin, *args, &block)
           if mixin.is_a?(Symbol)
-            mixin = load_plugin(mixin)
+            mixin = RodaPlugins.load_plugin(mixin)
           end
 
           if mixin.respond_to?(:load_dependencies)
@@ -160,19 +182,6 @@ class Roda
 
         private
 
-        # If the registered plugin already exists, use it.  Otherwise,
-        # require it and return it.  This raises a LoadError if such a
-        # plugin doesn't exist, or a RodaError if it exists but it does
-        # not register itself correctly.
-        def load_plugin(name)
-          h = Roda.instance_variable_get(:@plugins)
-          unless plugin = MUTEX.synchronize{h[name]}
-            require "roda/plugins/#{name}"
-            raise RodaError, "Plugin #{name} did not register itself correctly in Roda::Plugins" unless plugin = MUTEX.synchronize{h[name]}
-          end
-          plugin
-        end
-
         # Backbone of the request_module and response_module support.
         def module_include(type, mod)
           if type == :response
@@ -196,13 +205,6 @@ class Roda
           end
 
           mod
-        end
-    
-        # Register the given plugin with Roda, so that it can be loaded using #plugin
-        # with a symbol.  Should be used by plugin files.
-        def register_plugin(name, mod)
-          h = Roda.instance_variable_get(:@plugins)
-          MUTEX.synchronize{h[name] = mod}
         end
       end
 

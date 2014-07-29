@@ -29,7 +29,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:error_handler, RodaPlugins::ErrorHandler)
+    register_plugin(:error_handler, ErrorHandler)
+  end
 end

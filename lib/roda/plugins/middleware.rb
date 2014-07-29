@@ -40,7 +40,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:middleware, RodaPlugins::Middleware)
+    register_plugin(:middleware, Middleware)
+  end
 end

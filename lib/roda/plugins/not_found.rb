@@ -31,7 +31,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:not_found, RodaPlugins::NotFound)
+    register_plugin(:not_found, NotFound)
+  end
 end

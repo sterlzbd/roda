@@ -31,7 +31,7 @@ class Roda
         end
       end
     end
-  end
 
-  register_plugin(:header_matchers, RodaPlugins::HeaderMatchers)
+    register_plugin(:header_matchers, HeaderMatchers)
+  end
 end
