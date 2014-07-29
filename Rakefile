@@ -51,9 +51,18 @@ end
 ### Website
 
 desc "Make local version of website"
-task :website do
+task :website_base do
   sh %{#{FileUtils::RUBY} www/make_www.rb}
 end
+
+desc "Make local version of website, with rdoc"
+task :website => [:website_base, :website_rdoc]
+
+desc "Make local version of website"
+task :serve => :website do
+  sh %{#{FileUtils::RUBY} -C www -S rackup}
+end
+
 
 ### Specs
 
