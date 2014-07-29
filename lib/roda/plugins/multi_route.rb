@@ -36,8 +36,8 @@ class Roda
     # named route after accepting requests.
     module MultiRoute
       # Initialize storage for the named routes.
-      def self.configure(mod)
-        mod.instance_variable_set(:@named_routes, {})
+      def self.configure(app)
+        app.instance_variable_set(:@named_routes, {})
       end
 
       module ClassMethods

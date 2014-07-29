@@ -29,9 +29,9 @@ class Roda
     # However, this code makes it easier to write after hooks, as well as
     # handle cases where before hooks are added after the route block.
     module Hooks
-      def self.configure(mod)
-        mod.instance_variable_set(:@before, nil)
-        mod.instance_variable_set(:@after, nil)
+      def self.configure(app)
+        app.instance_variable_set(:@before, nil)
+        app.instance_variable_set(:@after, nil)
       end
 
       module ClassMethods

@@ -12,8 +12,8 @@ class Roda
     #
     #   plugin :default_headers, 'Content-Type'=>'text/csv'
     module DefaultHeaders
-      def self.configure(mod, headers)
-        mod.response_module do
+      def self.configure(app, headers)
+        app.response_module do
           define_method(:default_headers) do
             headers.dup
           end
