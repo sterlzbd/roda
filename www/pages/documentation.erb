@@ -1,0 +1,83 @@
+<h1>Documentation for Roda (v<%= Roda::RodaVersion %>)</h1>
+
+<h2><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
+
+<h2><a href="rdoc/index.html">RDoc</a> (frames)</h2>
+
+<p>Here are direct links to the most important pages:</p>
+
+<ul>
+  <li><a href="rdoc/classes/Roda.html">Roda</a> (main class)</li>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/ClassMethods.html">Roda ClassMethods</a></li>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/InstanceMethods.html">Roda InstanceMethods</a></li>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/RequestMethods.html">Roda RequestMethods</a></li>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/ResponseMethods.html">Roda ResponseMethods</a></li>
+</ul>
+
+<h2>Plugins</h2>
+
+<p>Plugins are a very important part of Roda, since by design Roda is designed to have a very small core.</p>
+
+<h3>Plugins that Ship with Roda</h3>
+
+<ul>
+<li><a href="rdoc/classes/Roda/RodaPlugins/AllVerbs.html">all_verbs</a>: Adds request routing methods for all http verbs.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/DefaultHeaders.html">default_headers</a>: Allows modifying the default headers for responses.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling, using <a href="https://github.com/SFEley/sinatra-flash">sinatra-flash</a>.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/H.html">h</a>: Adds h method for html escaping.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/HeaderMatchers.html">header_matchers</a>: Adds matchers for hostname, accept, or presence of arbitrary headers.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/IndifferentParams.html">indifferent_params</a>: Adds params method for indifferent parameters.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Middleware.html">middleware</a>: Allows the Roda app to be used as middleware by another app.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows for multiple named route blocks that can be dispatched to inside main route block.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/NotFound.html">not_found</a>: Adds not_found method for handling responses not otherwise handled by a route.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
+</ul>
+
+<h3>External Plugins</h3>
+
+<p>These projects ship external plugins for Roda:</p>
+
+<ul>
+<li><a href="https://github.com/jeremyevans/autoforme">autoforme</a>: Adds autoforme method for automatic creation of administrative front-end for Sequel models.</li>
+<li><a href="https://github.com/jeremyevans/forme">forme</a>: Adds form method for simple creation of html forms.</li>
+</ul>
+
+<% if false %>
+<h2><a href="rdoc/files/CHANGELOG.html">Change Log</a></h2>
+
+<h2>Release Notes</h2>
+<ul>
+  <% %w'1'.each do |i| %>
+    <li>Roda <%= i %>:<ul>
+      <% 
+         lines = []
+         Dir["../doc/release_notes/#{i}.*.txt"].map{|f| File.basename(f)}.each do |f|
+           (lines[f.split('.')[1].to_i/10] ||= []) << f
+         end
+         lines.reverse.each do |fs|
+      %>
+        <li>
+          <% fs.sort_by{|f| f.split('.').map{|x| x.to_i}}.reverse.each do |f| %>
+            <a href="rdoc/files/doc/release_notes/<%= f.gsub('.', '_') %>.html"><%= f.sub(/\.txt$/, '').sub(/(..)\.0$/, '\\1') %></a> |
+          <% end %>
+        </li>
+      <% end %>
+    </ul></li>
+  <% end %>
+</ul>
+<% end %>
+
+<h2><a href="rdoc/files/MIT-LICENSE.html">License</a></h2>
+
+<% if false %>
+<h2>Presentations</h2>
+
+<ul>
+</ul>
+<% end %>
+

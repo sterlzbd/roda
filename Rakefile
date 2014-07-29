@@ -34,11 +34,25 @@ rescue LoadError
 end
 
 RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.rdoc']
+RDOC_FILES = %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb"
 
 rdoc_task_class.new do |rdoc|
   rdoc.rdoc_dir = "rdoc"
   rdoc.options += RDOC_OPTS
-  rdoc.rdoc_files.add %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb"
+  rdoc.rdoc_files.add RDOC_FILES
+end
+
+rdoc_task_class.new(:website_rdoc) do |rdoc|
+  rdoc.rdoc_dir = "www/public/rdoc"
+  rdoc.options += RDOC_OPTS
+  rdoc.rdoc_files.add RDOC_FILES
+end
+
+### Website
+
+desc "Make local version of website"
+task :website do
+  sh %{#{FileUtils::RUBY} www/make_www.rb}
 end
 
 ### Specs

@@ -1,0 +1,44 @@
+nav.navbar.navbar-default a.navbar-brand, nav.navbar.navbar-default ul.nav > li > a {
+  color: white;
+}
+
+a.navbar-brand, #site_title, #site_subtitle {
+  font-family: 'Italianno', cursive;
+}
+
+a.navbar-brand {
+  padding-top: 20px;
+  margin-right: 30px;
+  font-size: 40px;
+}
+#site_title {
+  font-size: 192px; 
+  margin-top: 30px;
+  margin-left: 30px;
+}
+#site_subtitle {
+  font-size: 128px; 
+  margin-top: 150px;
+  margin-left: 30px;
+}
+
+body #content a {
+  color: #141;
+  text-decoration: underline;
+}
+nav.navbar {
+  background: #141;
+}
+body{
+  background: #cdc;
+}
+
+div#roda_tree {
+  color: white;
+  background: url(roda.jpg);
+  background-size: 100%;
+}
+
+.path {
+  background: white;
+}
