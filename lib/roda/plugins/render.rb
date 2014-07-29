@@ -83,7 +83,7 @@ class Roda
         # If the template is found in the cache under the given key,
         # return it, otherwise yield to get the template, and
         # store the template under the given key
-        def fetch(*key)
+        def fetch(key)
           unless template = MUTEX.synchronize{@cache[key]}
             template = yield
             MUTEX.synchronize{@cache[key] = template}
