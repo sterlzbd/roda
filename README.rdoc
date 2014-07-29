@@ -22,7 +22,7 @@ Here's a simple application, showing how the routing tree works:
   require "roda"
 
   class App < Roda
-    use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+    use Rack::Session::Cookie, :secret => ENV['SECRET']
 
     route do |r|
       # matches any GET request
@@ -96,8 +96,6 @@ Here's an example showcasing how different matchers work.  Matchers
 are arguments passed to +r.on+.
 
   class App < Roda
-    use Rack::Session::Cookie, :secret => "__a_very_long_string__"
-
     route do |r|
       # only GET requests
       r.get do
@@ -369,7 +367,7 @@ tampering.
   require "rack/protection"
 
   class App < Roda
-    use Rack::Session::Cookie, :secret => "__a_very_long_string__"
+    use Rack::Session::Cookie, :secret => ENV['SECRET']
     use Rack::Protection
 
     route do |r|
