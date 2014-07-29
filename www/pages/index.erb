@@ -1,4 +1,45 @@
-<div id="roda_tree">
-  <h1 id="site_title">Roda</h1>
-  <h2 id="site_subtitle">Routing Tree<br />Web Framework</h2>
+<div class="col-md-6">
+<pre><code># cat config.ru
+require "roda"
+
+class App < Roda
+  use Rack::Session::Cookie, secret: ENV['SECRET']
+
+  route do |r|
+    # matches any GET request
+    r.get do
+
+      # matches GET /
+      r.is "" do
+        r.redirect "/hello"
+      end
+
+      # matches GET /hello or GET /hello/.*
+      r.on "hello" do
+
+        # matches GET /hello/world
+        r.is "world" do
+          "Hello world!"
+        end
+
+        # matches GET /hello
+        r.is do
+          "Hello!"
+        end
+      end
+    end
+  end
+end
+
+run App.app
+</code></pre>
 </div>
+
+<div class="col-md-6">
+  <div id="roda_tree">
+    <h1 id="site_title">Roda</h1>
+    <h2 id="site_subtitle">Routing Tree<br />Web Framework</h2>
+  </div>
+</div>
+
+<p style="clear: both;">Roda is a new ruby web framework, allowing for fast and DRY code using a routing tree.  Find out <a href="why.html">why you should use it</a>.</p>
