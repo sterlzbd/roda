@@ -69,6 +69,11 @@ class Roda
             @stream = stream
           end
 
+          # Immediately yield.
+          def defer(*)
+            yield
+          end
+
           # Close the stream if there is an exception when scheduling,
           # and reraise the exception if so.
           def schedule(*)
@@ -76,11 +81,6 @@ class Roda
           rescue Exception
             @stream.close
             raise
-          end
-
-          # Immediately yield.
-          def defer(*)
-            yield
           end
         end
 
@@ -94,27 +94,6 @@ class Roda
 
           if opts[:callback]
             callback(&opts[:callback])
-          end
-        end
-
-        # If not already closed, close the connection, and call
-        # any callbacks.
-        def close
-          return if closed?
-          @closed = true
-          @scheduler.schedule{@callbacks.each{|c| c.call}}
-        end
-
-        # Yield values to the block as they are passed in via #<<.
-        def each(&front)
-          @front = front
-          @scheduler.defer do
-            begin
-              @back.call(self)
-            rescue Exception => e
-              @scheduler.schedule{raise e}
-            end
-            close unless @keep_open
           end
         end
 
@@ -133,9 +112,30 @@ class Roda
         # Alias to callback for EventMachine compatibility.
         alias errback callback
 
+        # If not already closed, close the connection, and call
+        # any callbacks.
+        def close
+          return if closed?
+          @closed = true
+          @scheduler.schedule{@callbacks.each{|c| c.call}}
+        end
+
         # Whether the connection has already been closed.
         def closed?
           @closed
+        end
+
+        # Yield values to the block as they are passed in via #<<.
+        def each(&front)
+          @front = front
+          @scheduler.defer do
+            begin
+              @back.call(self)
+            rescue Exception => e
+              @scheduler.schedule{raise e}
+            end
+            close unless @keep_open
+          end
         end
       end
 

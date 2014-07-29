@@ -129,6 +129,33 @@ class Roda
       end
 
       module InstanceMethods
+        # Render the given template. See Render for details.
+        def render(template, opts = {}, &block)
+          if template.is_a?(Hash)
+            if opts.empty?
+              opts = template
+            else
+              opts = opts.merge(template)
+            end
+          end
+          render_opts = render_opts()
+
+          if content = opts[:inline]
+            path = content
+            template_block = Proc.new{content}
+            template_class = ::Tilt[opts[:engine] || render_opts[:engine]]
+          else
+            template_class = ::Tilt
+            unless path = opts[:path]
+              path = template_path(template, opts)
+            end
+          end
+
+          cached_template(path) do
+            template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
+          end.render(self, opts[:locals], &block)
+        end
+
         # Return the render options for the instance's class.
         def render_opts
           self.class.render_opts
@@ -157,33 +184,6 @@ class Roda
           end
 
           content
-        end
-
-        # Render the given template. See Render for details.
-        def render(template, opts = {}, &block)
-          if template.is_a?(Hash)
-            if opts.empty?
-              opts = template
-            else
-              opts = opts.merge(template)
-            end
-          end
-          render_opts = render_opts()
-
-          if content = opts[:inline]
-            path = content
-            template_block = Proc.new{content}
-            template_class = ::Tilt[opts[:engine] || render_opts[:engine]]
-          else
-            template_class = ::Tilt
-            unless path = opts[:path]
-              path = template_path(template, opts)
-            end
-          end
-
-          cached_template(path) do
-            template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
-          end.render(self, opts[:locals], &block)
         end
 
         private

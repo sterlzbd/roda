@@ -33,6 +33,13 @@ class Roda
       module RequestMethods
         private
 
+        # Match if the given mimetype is one of the accepted mimetypes.
+        def match_accept(mimetype)
+          if env["HTTP_ACCEPT"].to_s.split(',').any?{|s| s.strip == mimetype}
+            response["Content-Type"] = mimetype
+          end
+        end
+
         # Match if the given uppercase key is present inside the environment.
         def match_header(key)
           env[key.upcase.tr("-","_")]
@@ -41,13 +48,6 @@ class Roda
         # Match if the host of the request is the same as the hostname.
         def match_host(hostname)
           hostname === host
-        end
-
-        # Match if the given mimetype is one of the accepted mimetypes.
-        def match_accept(mimetype)
-          if env["HTTP_ACCEPT"].to_s.split(',').any?{|s| s.strip == mimetype}
-            response["Content-Type"] = mimetype
-          end
         end
       end
     end

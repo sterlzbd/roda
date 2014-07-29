@@ -41,6 +41,17 @@ class Roda
       end
 
       module ClassMethods
+        # Copy the named routes into the subclass when inheriting.
+        def inherited(subclass)
+          super
+          subclass.instance_variable_set(:@named_routes, @named_routes.dup)
+        end
+
+        # Return the named route with the given name.
+        def named_route(name)
+          @named_routes[name]
+        end
+
         # If the given route has a named, treat it as a named route and
         # store the route block.  Otherwise, this is the main route, so
         # call super.
@@ -50,17 +61,6 @@ class Roda
           else
             super(&block)
           end
-        end
-
-        # Return the named route with the given name.
-        def named_route(name)
-          @named_routes[name]
-        end
-
-        # Copy the named routes into the subclass when inheriting.
-        def inherited(subclass)
-          super
-          subclass.instance_variable_set(:@named_routes, @named_routes.dup)
         end
       end
 
