@@ -2,6 +2,8 @@ class Roda
   module RodaPlugins
     module HeaderMatchers
       module RequestMethods
+        private
+
         def match_header(key)
           env[key.upcase.tr("-","_")]
         end
