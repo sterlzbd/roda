@@ -1,6 +1,6 @@
 class Roda
   module RodaPlugins
-    # The default_headers plugin accept a hash of headers,
+    # The default_headers plugin accepts a hash of headers,
     # and overrides the default_headers method in the
     # response class to be a copy of the headers.
     #
@@ -11,12 +11,36 @@ class Roda
     # Example:
     #
     #   plugin :default_headers, 'Content-Type'=>'text/csv'
+    #
+    # You can also modify the default headers later:
+    #
+    #   plugin :default_headers
+    #   default_headers['Foo'] = 'bar'
+    #   default_headers.merge!('Bar'=>'baz')
     module DefaultHeaders
-      def self.configure(app, headers)
-        app.response_module do
-          define_method(:default_headers) do
-            headers.dup
-          end
+      # Merge the given headers into the existing default headers, if any.
+      def self.configure(app, headers={})
+        app.instance_eval do
+          @default_headers ||= {}
+          @default_headers.merge!(headers)
+        end
+      end 
+
+      module ClassMethods
+        # The default response headers to use for the current class.
+        attr_reader :default_headers
+
+        # Copy the default headers into the subclass when inheriting.
+        def inherited(subclass)
+          super
+          subclass.instance_variable_set(:@default_headers, default_headers.dup)
+        end
+      end
+
+      module ResponseMethods
+        # Get the default headers from the related roda class.
+        def default_headers
+          self.class.roda_class.default_headers.dup
         end
       end
     end
