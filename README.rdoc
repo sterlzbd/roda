@@ -515,9 +515,9 @@ the route block:
 == Testing
 
 It is very easy to test Roda with {Rack::Test}[https://github.com/brynary/rack-test]
-or {Capybara}[https://github.com/jnicklas/capybara]. Roda's own tests are written
-with a combination of {RSpec}[http://rspec.info] and Rack::Test
-The default rake task will run the specs for Roda, if RSpec is installed.
+or {Capybara}[https://github.com/jnicklas/capybara]. Roda's own tests use
+{RSpec}[http://rspec.info].  The default rake task will run the specs for Roda, if
+RSpec is installed.
 
 == Settings
 
@@ -680,14 +680,14 @@ in the <tt>Roda::RodaPlugins</tt> namespace:
           end
         end
       end
-    end
 
-    register_plugin :markdown, RodaPlugins::Markdown
+      register_plugin :markdown, Markdown
+    end
   end
 
 You should avoid creating your module directly in the +Roda+ namespace
 to avoid polluting the namespace.  Additionally, any instance variables
-created inside an InstanceMethods should be prefixed with an underscore
+created inside InstanceMethods should be prefixed with an underscore
 (e.g. <tt>@_variable</tt>) to avoid polluting the scope.
 
 == Inspiration
