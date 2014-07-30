@@ -1,7 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 describe "multi_route plugin" do 
-  it "adds named routing support" do
+  before do
     app(:bare) do
       plugin :multi_route
 
@@ -42,7 +42,9 @@ describe "multi_route plugin" do
         end
       end
     end
+  end
 
+  it "adds named routing support" do
     body.should == 'get'
     body('REQUEST_METHOD'=>'POST').should == 'post'
     body('/a').should == 'geta'
@@ -51,7 +53,21 @@ describe "multi_route plugin" do
     body('/b', 'REQUEST_METHOD'=>'POST').should == 'postb'
     status('/c').should == 404
     status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+  end
 
+  it "handles loading the plugin multiple times correctly" do
+    app.plugin :multi_route
+    body.should == 'get'
+    body('REQUEST_METHOD'=>'POST').should == 'post'
+    body('/a').should == 'geta'
+    body('/a', 'REQUEST_METHOD'=>'POST').should == 'posta'
+    body('/b').should == 'getb'
+    body('/b', 'REQUEST_METHOD'=>'POST').should == 'postb'
+    status('/c').should == 404
+    status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+  end
+
+  it "handles subclassing correctly" do
     @app = Class.new(@app)
     @app.route do |r|
       r.get do

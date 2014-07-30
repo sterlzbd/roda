@@ -37,6 +37,15 @@ describe "hooks plugin" do
     @a.should == [[200, 'baz', ['bar']]]
   end
 
+  it "multiple plugin calls do not override existing hooks" do
+    app.plugin :hooks
+    s, h, b = req
+    s.should == 201
+    h['foo'].should == 'baz'
+    b.join.should == 'bar'
+    @a.should == [[200, 'baz', ['bar']]]
+  end
+
   it "after hooks are still called if an exception is raised" do
     a = @a
     @app.before do

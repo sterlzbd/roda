@@ -30,8 +30,10 @@ class Roda
     # handle cases where before hooks are added after the route block.
     module Hooks
       def self.configure(app)
-        app.instance_variable_set(:@before, nil)
-        app.instance_variable_set(:@after, nil)
+        @app.instance_exec do
+          @after ||= nil
+          @before ||= nil
+        end
       end
 
       module ClassMethods

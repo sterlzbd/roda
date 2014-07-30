@@ -95,7 +95,13 @@ class Roda
 
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts={})
-        opts = app.opts[:render] = opts.dup
+        if app.opts[:render]
+          app.opts[:render].merge!(opts)
+        else 
+          app.opts[:render] = opts.dup
+        end
+
+        opts = app.opts[:render]
         opts[:engine] ||= "erb"
         opts[:ext] = nil unless opts.has_key?(:ext) 
         opts[:views] ||= File.expand_path("views", Dir.pwd)

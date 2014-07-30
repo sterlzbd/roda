@@ -124,6 +124,13 @@ describe "render plugin" do
     c.render_opts[:cache].should_not equal(sc.render_opts[:cache])
   end
 
+  it "render plugin call should not override options" do
+    c = Class.new(Roda)
+    c.plugin :render, :layout=>:foo
+    c.plugin :render
+    c.render_opts[:layout].should == :foo
+  end
+
   it "with caching disabled" do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :cache=>false

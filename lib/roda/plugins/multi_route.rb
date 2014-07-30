@@ -37,7 +37,7 @@ class Roda
     module MultiRoute
       # Initialize storage for the named routes.
       def self.configure(app)
-        app.instance_variable_set(:@named_routes, {})
+        app.instance_exec{@named_routes ||= {}}
       end
 
       module ClassMethods
