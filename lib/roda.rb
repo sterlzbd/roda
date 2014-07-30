@@ -210,6 +210,8 @@ class Roda
 
       # Instance methods for the Roda class.
       module InstanceMethods
+        SESSION_KEY = 'rack.session'.freeze
+
         # Create a request and response of the appopriate
         # class, the instance_exec the route block with
         # the request, handling any halts.
@@ -243,7 +245,7 @@ class Roda
         # The session for the current request.  Raises a RodaError if
         # a session handler has not been loaded.
         def session
-          env["rack.session"] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
+          env[SESSION_KEY] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
         end
 
         private
