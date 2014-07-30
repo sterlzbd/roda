@@ -1,0 +1,63 @@
+nav.navbar.navbar-default a.navbar-brand, nav.navbar.navbar-default ul.nav > li > a {
+  color: white;
+}
+
+a.navbar-brand, #site_title, #site_subtitle, .roda {
+  font-family: 'Italianno', cursive;
+}
+
+span.roda {
+  color: black;
+  font-size: 120%;
+}
+
+a.navbar-brand {
+  padding-top: 20px;
+  margin-right: 30px;
+  font-size: 40px;
+}
+#site_title {
+  font-size: 192px; 
+  margin-top: 30px;
+  margin-left: 30px;
+}
+#site_subtitle {
+  text-align: right;
+  font-size: 96px; 
+  margin-top: 173px;
+  margin-right: 30px;
+}
+
+body #content a {
+  color: #141;
+  text-decoration: underline;
+}
+nav.navbar {
+  background: #141;
+}
+body, p, h1, h2, h3, a {
+  font-family: 'Open Sans', sans-serif;
+}
+body {
+  background: #cdc;
+}
+
+div#roda_tree {
+  margin-top: -15px;
+  color: white;
+  background: url(roda.jpg);
+}
+
+.path, .code {
+  background: white;
+  padding: 3px 5px;
+}
+
+.path, .code, pre code {
+  font-family: 'PT Mono', monospace;
+  font-size: 14px;
+}
+
+body, p, li {
+  font-size: 16px;
+}

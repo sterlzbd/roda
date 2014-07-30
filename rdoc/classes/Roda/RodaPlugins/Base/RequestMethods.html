@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::Base::RequestMethods</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::Base::RequestMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../../files/lib/roda_rb.html">lib/roda.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>Instance methods for <a href="../../RodaRequest.html">RodaRequest</a>,
+            mostly related to handling routing for the request.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-new">new</a></li>
+            </ol>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#attribute-i-captures">captures</a></li>
+              <li><a target="docwin" href="#method-i-full_path_info">full_path_info</a></li>
+              <li><a target="docwin" href="#method-i-get">get</a></li>
+              <li><a target="docwin" href="#method-i-halt">halt</a></li>
+              <li><a target="docwin" href="#method-i-handle_on_result">handle_on_result</a></li>
+              <li><a target="docwin" href="#method-i-inspect">inspect</a></li>
+              <li><a target="docwin" href="#method-i-is">is</a></li>
+              <li><a target="docwin" href="#method-i-on">on</a></li>
+              <li><a target="docwin" href="#method-i-post">post</a></li>
+              <li><a target="docwin" href="#method-i-redirect">redirect</a></li>
+              <li><a target="docwin" href="#method-i-response">response</a></li>
+              <li><a target="docwin" href="#method-i-run">run</a></li>
+              <li><a target="docwin" href="#attribute-i-scope">scope</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>EMPTY_STRING</td>
+                    <td>=</td>
+                    <td class='context-item-value'>"".freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>PATH_INFO</td>
+                    <td>=</td>
+                    <td class='context-item-value'>"PATH_INFO".freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>REQUEST_METHOD</td>
+                    <td>=</td>
+                    <td class='context-item-value'>"REQUEST_METHOD".freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>SCRIPT_NAME</td>
+                    <td>=</td>
+                    <td class='context-item-value'>"SCRIPT_NAME".freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>SEGMENT</td>
+                    <td>=</td>
+                    <td class='context-item-value'>"([^\\/]+)".freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>TERM</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{:term=>true}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='attribute-list'>
+              <h2 class='section-bar'>Attributes</h2>
+              <div class='name-list'>
+                <table>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-captures'>captures</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The current captures for the request.  This gets modified as routing
+                      occurs.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
+                      <a name='attribute-i-scope'>scope</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The <a href="../../../Roda.html">Roda</a> instance related to this request
+                      object.  Useful if routing methods need access to the scope of the <a
+                      href="../../../Roda.html">Roda</a> route block.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(scope, env)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Store the roda instance and environment.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 282</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;  <span class="ruby-ivar">@captures</span> = []&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-full_path_info'>
+                <a name='method-i-full_path_info'></a>
+                <div class='synopsis'>
+                  <span class='name'>full_path_info</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>As request routing modifies <a
+                  href="RequestMethods.html#SCRIPT_NAME">SCRIPT_NAME</a> and <a
+                  href="RequestMethods.html#PATH_INFO">PATH_INFO</a>, this exists as a helper
+                  method to get the full request of the path info.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-full_path_info-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-full_path_info-source'><span class="ruby-comment"># File lib/roda.rb, line 290</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">full_path_info</span>&#x000A;  <span class="ruby-node">&quot;#{env[SCRIPT_NAME]}#{env[PATH_INFO]}&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-get'>
+                <a name='method-i-get'></a>
+                <div class='synopsis'>
+                  <span class='name'>get</span>
+                  <span class='arguments'>(*args, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>If this is not a GET method, returns immediately.  Otherwise, calls <a
+                  href="RequestMethods.html#method-i-is">is</a> if there are any arguments,
+                  or <a href="RequestMethods.html#method-i-on">on</a> if there are no
+                  arguments.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-get-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-get-source'><span class="ruby-comment"># File lib/roda.rb, line 296</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">is_or_on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">get?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-halt'>
+                <a name='method-i-halt'></a>
+                <div class='synopsis'>
+                  <span class='name'>halt</span>
+                  <span class='arguments'>(response)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Immediately stop execution of the route block and return the given rack
+                  response array of status, headers, and body.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-halt-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-halt-source'><span class="ruby-comment"># File lib/roda.rb, line 302</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">halt</span>(<span class="ruby-identifier">response</span>)&#x000A;  <span class="ruby-identifier">_halt</span>(<span class="ruby-identifier">response</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-handle_on_result'>
+                <a name='method-i-handle_on_result'></a>
+                <div class='synopsis'>
+                  <span class='name'>handle_on_result</span>
+                  <span class='arguments'>(result)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Handle <a href="RequestMethods.html#method-i-on">on</a> block return
+                  values.  By default, if a string is given and the response is empty, use
+                  the string as the response body.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-handle_on_result-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-handle_on_result-source'><span class="ruby-comment"># File lib/roda.rb, line 308</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">handle_on_result</span>(<span class="ruby-identifier">result</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">response</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">result</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-inspect'>
+                <a name='method-i-inspect'></a>
+                <div class='synopsis'>
+                  <span class='name'>inspect</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Show information about current request, including request class, request
+                  method and full path.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inspect-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 317</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#&lt;#{self.class.inspect} #{env[REQUEST_METHOD]} #{full_path_info}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-is'>
+                <a name='method-i-is'></a>
+                <div class='synopsis'>
+                  <span class='name'>is</span>
+                  <span class='arguments'>(*args, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Adds <a href="RequestMethods.html#TERM">TERM</a> as the final argument and
+                  passes to <a href="RequestMethods.html#method-i-on">on</a>, ensuring that
+                  there is only a match if <a href="RequestMethods.html#method-i-on">on</a>
+                  has fully matched the path.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-is-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-is-source'><span class="ruby-comment"># File lib/roda.rb, line 323</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">TERM</span>&#x000A;  <span class="ruby-identifier">on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-on'>
+                <a name='method-i-on'></a>
+                <div class='synopsis'>
+                  <span class='name'>on</span>
+                  <span class='arguments'>(*args, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Attempts to match on all of the arguments.  If all of the arguments match,
+                  control is yielded to the block, and after the block returns, the rack
+                  response will be returned. If any of the arguments fails, ensures the
+                  request state is returned to that before matches were attempted.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-on-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-on-source'><span class="ruby-comment"># File lib/roda.rb, line 333</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">try</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># We stop evaluation of this entire matcher unless</span>&#x000A;    <span class="ruby-comment"># each and every `arg` defined for this matcher evaluates</span>&#x000A;    <span class="ruby-comment"># to a non-false value.</span>&#x000A;    <span class="ruby-comment">#</span>&#x000A;    <span class="ruby-comment"># Short circuit examples:</span>&#x000A;    <span class="ruby-comment">#    on true, false do</span>&#x000A;    <span class="ruby-comment">#</span>&#x000A;    <span class="ruby-comment">#    # PATH_INFO=/user</span>&#x000A;    <span class="ruby-comment">#    on true, &quot;signup&quot;</span>&#x000A;    <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">all?</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">arg</span><span class="ruby-operator">|</span> <span class="ruby-identifier">match</span>(<span class="ruby-identifier">arg</span>)}&#x000A;&#x000A;    <span class="ruby-comment"># The captures we yield here were generated and assembled</span>&#x000A;    <span class="ruby-comment"># by evaluating each of the `arg`s above. Most of these</span>&#x000A;    <span class="ruby-comment"># are carried out by #consume.</span>&#x000A;    <span class="ruby-identifier">handle_on_result</span>(<span class="ruby-keyword">yield</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">captures</span>))&#x000A;&#x000A;    <span class="ruby-identifier">_halt</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-post'>
+                <a name='method-i-post'></a>
+                <div class='synopsis'>
+                  <span class='name'>post</span>
+                  <span class='arguments'>(*args, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>If this is not a POST method, returns immediately.  Otherwise, calls <a
+                  href="RequestMethods.html#method-i-is">is</a> if there are any arguments,
+                  or <a href="RequestMethods.html#method-i-on">on</a> if there are no
+                  arguments.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-post-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-post-source'><span class="ruby-comment"># File lib/roda.rb, line 357</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">post</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">is_or_on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">post?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-redirect'>
+                <a name='method-i-redirect'></a>
+                <div class='synopsis'>
+                  <span class='name'>redirect</span>
+                  <span class='arguments'>(path, status=302)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Immediately redirect to the given path.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-redirect-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-redirect-source'><span class="ruby-comment"># File lib/roda.rb, line 367</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span>=<span class="ruby-value">302</span>)&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span>)&#x000A;  <span class="ruby-identifier">_halt</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-response'>
+                <a name='method-i-response'></a>
+                <div class='synopsis'>
+                  <span class='name'>response</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>The response related to the current request.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-response-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-response-source'><span class="ruby-comment"># File lib/roda.rb, line 362</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">response</span>&#x000A;  <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">response</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-run'>
+                <a name='method-i-run'></a>
+                <div class='synopsis'>
+                  <span class='name'>run</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Call the given rack app with the environment and immediately return the
+                  response as the response for this request.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda.rb, line 374</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">_halt</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

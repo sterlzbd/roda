@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>class</span>
+          Roda
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../files/lib/roda_rb.html">lib/roda.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/all_verbs_rb.html">lib/roda/plugins/all_verbs.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/default_headers_rb.html">lib/roda/plugins/default_headers.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/error_handler_rb.html">lib/roda/plugins/error_handler.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/flash_rb.html">lib/roda/plugins/flash.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/h_rb.html">lib/roda/plugins/h.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/halt_rb.html">lib/roda/plugins/halt.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/header_matchers_rb.html">lib/roda/plugins/header_matchers.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/hooks_rb.html">lib/roda/plugins/hooks.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/indifferent_params_rb.html">lib/roda/plugins/indifferent_params.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/middleware_rb.html">lib/roda/plugins/middleware.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/multi_route_rb.html">lib/roda/plugins/multi_route.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/not_found_rb.html">lib/roda/plugins/not_found.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/pass_rb.html">lib/roda/plugins/pass.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/render_rb.html">lib/roda/plugins/render.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/streaming_rb.html">lib/roda/plugins/streaming.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Superclass:
+          <strong>Object</strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The main class for <a href="Roda.html">Roda</a>.  <a
+            href="Roda.html">Roda</a> is built completely out of plugins, with the
+            default plugin being <a
+            href="Roda/RodaPlugins/Base.html">Roda::RodaPlugins::Base</a>, so this
+            class is mostly empty except for some constants.</p>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="Roda/Rack.html">Roda::Rack</a></li>
+              <li><a target="docwin" href="Roda/RodaPlugins.html">Roda::RodaPlugins</a></li>
+              <li><a target="docwin" href="Roda/RodaError.html">Roda::RodaError</a></li>
+              <li><a target="docwin" href="Roda/RodaRequest.html">Roda::RodaRequest</a></li>
+              <li><a target="docwin" href="Roda/RodaResponse.html">Roda::RodaResponse</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>RodaVersion</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'0.9.0'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>Roda&#39;s version, always specified by a string in d+.d+.d+ format.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

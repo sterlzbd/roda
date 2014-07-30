@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::Render</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::Render
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/render_rb.html">lib/roda/plugins/render.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The render plugin adds support for template rendering using the tilt
+            library.  Two methods are provided for template rendering,
+            <code>view</code> (which uses the layout) and <code>render</code> (which
+            does not).</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-comment"># renders views/foo.erb inside views/layout.erb</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">render</span>(<span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-comment"># renders views/bar.erb</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>You can provide options to the plugin method, or later by modifying
+            <code>render_opts</code>.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>, :<span class="ruby-identifier">engine=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;haml&#39;</span>&#x000A;&#x000A;<span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">views</span>] = <span class="ruby-string">&#39;admin_views&#39;</span></pre>
+            
+            <p>The following options are supported:</p>
+            <dl class="rdoc-list note-list"><dt>:cache 
+            <dd>
+            <p>A specific cache to store templates in, or nil/false to not cache templates
+            (useful for development), defaults to true to automatically use the default
+            template cache.</p>
+            </dd><dt>:engine 
+            <dd>
+            <p>The tilt engine to use for rendering, defaults to &#39;erb&#39;.</p>
+            </dd><dt>:ext 
+            <dd>
+            <p>The file extension to assume for view files, defaults to the :engine
+            option.</p>
+            </dd><dt>:layout 
+            <dd>
+            <p>The base name of the layout file, defaults to &#39;layout&#39;.</p>
+            </dd><dt>:layout_opts 
+            <dd>
+            <p>The options to use when rendering the layout, if different from the default
+            options.</p>
+            </dd><dt>:opts 
+            <dd>
+            <p>The tilt options used when rendering templates, defaults to
+            {:outvar=&gt;&#39;@_out_buf&#39;}.</p>
+            </dd><dt>:views 
+            <dd>
+            <p>The directory holding the view files, defaults to &#39;views&#39; in the
+            current directory.</p>
+            </dd></dl>
+            
+            <p>Most of these options can be overridden at runtime by passing options to
+            the <code>view</code> or <code>render</code> methods:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;foo&#39;</span>, :<span class="ruby-identifier">ext=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;html.erb&#39;</span>)&#x000A;<span class="ruby-identifier">render</span>(<span class="ruby-string">&#39;foo&#39;</span>, :<span class="ruby-identifier">views=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;admin_views&#39;</span>)</pre>
+            
+            <p>There are a couple of additional options to <code>view</code> and
+            <code>render</code> that are available at runtime:</p>
+            <dl class="rdoc-list note-list"><dt>:inline 
+            <dd>
+            <p>Use the value given as the template code, instead of looking for template
+            code in a file.</p>
+            </dd><dt>:locals 
+            <dd>
+            <p>Hash of local variables to make available inside the template.</p>
+            </dd><dt>:path 
+            <dd>
+            <p>Use the value given as the full pathname for the file, instead of using the
+            :views and :ext option in combination with the template name.</p>
+            </dd></dl>
+            
+            <p>Here&#39;s how those options are used:</p>
+            
+            <pre>view(:inline=&gt;&#39;&lt;%= @foo %&gt;&#39;)&#x000A;render(:path=&gt;&#39;/path/to/template.erb&#39;)</pre>
+            
+            <p>If you pass a hash as the first argument to <code>view</code> or
+            <code>render</code>, it should have either <code>:inline</code> or
+            <code>:path</code> as one of the keys.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-configure">configure</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="Render/ClassMethods.html">Roda::RodaPlugins::Render::ClassMethods</a></li>
+              <li><a target="docwin" href="Render/InstanceMethods.html">Roda::RodaPlugins::Render::InstanceMethods</a></li>
+              <li><a target="docwin" href="Render/Cache.html">Roda::RodaPlugins::Render::Cache</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app, opts={})</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Setup default rendering options.  See <a href="Render.html">Render</a> for
+                  details.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/render.rb, line 97</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>]&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>].<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">else</span> &#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>]&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:engine</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;erb&quot;</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:ext</span>] = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:ext</span>) &#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:views</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-string">&quot;views&quot;</span>, <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout</span>] = <span class="ruby-string">&quot;layout&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:layout</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_opts</span>] <span class="ruby-operator">||=</span> (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_opts</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:opts</span>] <span class="ruby-operator">||=</span> (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:opts</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:opts</span>][<span class="ruby-value">:outvar</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;@_out_buf&#39;</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-string">&quot;1.9&quot;</span>&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:opts</span>][<span class="ruby-value">:default_encoding</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Encoding</span>.<span class="ruby-identifier">default_external</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">cache</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:cache</span>, <span class="ruby-keyword">true</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:cache</span>] = <span class="ruby-constant">Cache</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">cache</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">true</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Roda</title>
+    <link href='http://fonts.googleapis.com/css?family=Italianno|Open+Sans|PT+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/roda.css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Roda</a>
+        <ul class="nav navbar-nav">
+          <li><a href="why.html">Why</a></li>
+          <li><a href="documentation.html">Documentation</a></li>
+          <li><a href="development.html">Development</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container" id="content">
+      <div class="col-md-6">
+<pre><code># cat config.ru
+require "roda"
+
+class App < Roda
+  use Rack::Session::Cookie, secret: ENV['SECRET']
+
+  route do |r|
+    # matches any GET request
+    r.get do
+
+      # matches GET /
+      r.is "" do
+        r.redirect "/hello"
+      end
+
+      # matches GET /hello or GET /hello/.*
+      r.on "hello" do
+
+        # matches GET /hello/world
+        r.is "world" do
+          "Hello world!"
+        end
+
+        # matches GET /hello
+        r.is do
+          "Hello!"
+        end
+      end
+    end
+  end
+end
+
+run App.app
+</code></pre>
+</div>
+
+<div class="col-md-6">
+  <div id="roda_tree">
+    <h1 id="site_title">Roda</h1>
+    <h2 id="site_subtitle">Routing Tree<br />Web Framework</h2>
+  </div>
+</div>
+
+<p style="clear: both;">Roda is a new ruby web framework, allowing for fast and DRY code using a routing tree.  Find out <a href="why.html">why you should use it</a>.</p>
+
+    </div>
+  </body>
+</html>

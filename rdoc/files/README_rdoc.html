@@ -1,0 +1,618 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>README.rdoc</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>README.rdoc</h1>
+        <div class='paths'>
+          README.rdoc
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2014-07-29 15:58:36 -0700</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <h1 id="label-Roda"><a href="../classes/Roda.html">Roda</a><span><a href="#label-Roda">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            
+            <p><a href="../classes/Roda.html">Roda</a> is a routing tree web framework.</p>
+            
+            <h1 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            
+            <pre>$ gem install roda</pre>
+            
+            <h2 id="label-Resources">Resources<span><a href="#label-Resources">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <dl class="rdoc-list note-list"><dt>Website 
+            <dd>
+            <p><a target="_top" href="http://roda.jeremyevans.net">roda.jeremyevans.net</a></p>
+            </dd><dt>Source 
+            <dd>
+            <p><a
+            href="http://github.com/jeremyevans/roda">github.com/jeremyevans/roda</a></p>
+            </dd><dt>Bugs 
+            <dd>
+            <p><a
+            href="http://github.com/jeremyevans/roda/issues">github.com/jeremyevans/roda/issues</a></p>
+            </dd><dt>Google Group 
+            <dd>
+            <p><a
+            href="http://groups.google.com/group/ruby-roda">groups.google.com/group/ruby-roda</a></p>
+            </dd><dt>IRC 
+            <dd>
+            <p><a href="irc://chat.freenode.net/#roda">chat.freenode.net/#roda</a></p>
+            </dd></dl>
+            
+            <h2 id="label-Usage">Usage<span><a href="#label-Usage">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>Here&#39;s a simple application, showing how the routing tree works:</p>
+            
+            <pre class="ruby"><span class="ruby-comment"># cat config.ru</span>&#x000A;<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;roda&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Session</span><span class="ruby-operator">::</span><span class="ruby-constant">Cookie</span>, :<span class="ruby-identifier">secret</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;SECRET&#39;</span>]&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># matches any GET request</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;&#x000A;      <span class="ruby-comment"># matches GET /</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># matches GET /hello or GET /hello/.*</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;&#x000A;        <span class="ruby-comment"># matches GET /hello/world</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-comment"># matches GET /hello</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>.<span class="ruby-identifier">app</span></pre>
+            
+            <p>You can now run <code>rackup</code> and enjoy what you have just created.</p>
+            
+            <p>Here&#39;s a breakdown of what is going on in the above block:</p>
+            
+            <p>After requiring the library and subclassing <a
+            href="../classes/Roda.html">Roda</a>, the <code>use</code> method is
+            called, which loads a rack middleware into the current application.</p>
+            
+            <p>The <code>route</code> block is called whenever a new request comes in, 
+            and it is yielded an instance of a subclass of <code>Rack::Request</code>
+            with some additional methods for matching routes.  By convention, this
+            argument should be named <code>r</code>.</p>
+            
+            <p>The primary way routes are matched in <a
+            href="../classes/Roda.html">Roda</a> is by calling <code>r.on</code>, or a
+            method like <code>r.get</code> or <code>r.is</code> which calls
+            <code>r.on</code>. <code>r.on</code> takes each of the arguments given and
+            tries to match them to the current request.  If it is able to successfully
+            match all of the arguments, it yields to the <code>r.on</code> block,
+            otherwise it returns immediately.</p>
+            
+            <p><code>r.get</code> is a shortcut that matches any GET request, and
+            <code>r.is</code> is a shortcut that ensures the the exact route is matched
+            and there are no further entries in the path.</p>
+            
+            <p>If <code>r.on</code> matches and control is yielded to the block, whenever
+            the block returns, the response will be returned.  If the block returns a
+            string and the response body hasn&#39;t already been written to, the block
+            return value will interpreted as the body for the response.  If none of the
+            <code>r.on</code> blocks match and the route block returns a string, it
+            will be interpreted as the body for the response.</p>
+            
+            <p><code>r.redirect</code> immediately returns the response, allowing for code
+            such as <code>r.redirect(path) if some_condition</code>.</p>
+            
+            <p>The <code>.app</code> at the end is an optimization, which you can leave
+            off, but which saves a few methods call for every response.</p>
+            
+            <h2 id="label-Matchers">Matchers<span><a href="#label-Matchers">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>Here&#39;s an example showcasing how different matchers work.  Matchers are
+            arguments passed to <code>r.on</code>.</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># only GET requests</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;&#x000A;      <span class="ruby-comment"># /</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-string">&quot;Home&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># /about</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;about&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-string">&quot;About&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># /styles/basic.css</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;styles&quot;</span>, :<span class="ruby-identifier">extension</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;css&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-node">&quot;Filename: #{file}&quot;</span> <span class="ruby-comment">#=&gt; &quot;Filename: basic&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># /post/2011/02/16/hello</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;post/:y/:m/:d/:slug&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span>, <span class="ruby-identifier">m</span>, <span class="ruby-identifier">d</span>, <span class="ruby-identifier">slug</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-node">&quot;#{y}-#{m}-#{d} #{slug}&quot;</span> <span class="ruby-comment">#=&gt; &quot;2011-02-16 hello&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># /username/foobar</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;username/:username&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">username</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">find_by_username</span>(<span class="ruby-identifier">username</span>) <span class="ruby-comment"># username == &quot;foobar&quot;</span>&#x000A;&#x000A;        <span class="ruby-comment"># /username/foobar/posts</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;posts&quot;</span> <span class="ruby-keyword">do</span>&#x000A;&#x000A;          <span class="ruby-comment"># You can access user here, because the blocks are closures.</span>&#x000A;          <span class="ruby-node">&quot;Total Posts: #{user.posts.size}&quot;</span> <span class="ruby-comment">#=&gt; &quot;Total Posts: 6&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-comment"># /username/foobar/following</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;following&quot;</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">user</span>.<span class="ruby-identifier">following</span>.<span class="ruby-identifier">size</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-comment">#=&gt; &quot;1301&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># /search?q=barbaz</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;search&quot;</span>, :<span class="ruby-identifier">param=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;q&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">query</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-node">&quot;Searched for #{query}&quot;</span> <span class="ruby-comment">#=&gt; &quot;Searched for barbaz&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># only POST requests</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;login&quot;</span> <span class="ruby-keyword">do</span>&#x000A;&#x000A;        <span class="ruby-comment"># POST /login, user: foo, pass: baz</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> {:<span class="ruby-identifier">param=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;user&quot;</span>}, {:<span class="ruby-identifier">param=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;pass&quot;</span>} <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user</span>, <span class="ruby-identifier">pass</span><span class="ruby-operator">|</span>&#x000A;          <span class="ruby-node">&quot;#{user}:#{pass}&quot;</span> <span class="ruby-comment">#=&gt; &quot;foo:baz&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-comment"># If the params user and pass are not provided, this</span>&#x000A;        <span class="ruby-comment"># will get executed.</span>&#x000A;        <span class="ruby-string">&quot;You need to provide user and pass!&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Here&#39;s a description of the matchers.  Note that segment as used here
+            means one part of the path preceeded by a <code>/</code>.  So a path such
+            as <code>/foo/bar//baz</code> has 4 segments, <code>/foo</code>,
+            <code>/bar</code>, <code>/</code> and <code>/baz</code>. The <code>/</code>
+            here is considered the empty segment.</p>
+            
+            <h3 id="label-String">String<span><a href="#label-String">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>If it does not contain a colon or slash, it matches single segment with the
+            text of the string, preceeded by a slash.</p>
+            
+            <pre>&quot;&quot; matches &quot;/&quot;&#x000A;&quot;foo&quot; matches &quot;/foo&quot;&#x000A;&quot;foo&quot; does not match &quot;/food&quot;</pre>
+            
+            <p>If it contains any slashes, it matches one additional segment for each
+            slash:</p>
+            
+            <pre>&quot;foo/bar&quot; matches &quot;/foo/bar&quot;&#x000A;&quot;foo/bar&quot; does not match &quot;/foo/bard&quot;</pre>
+            
+            <p>If it contains a colon followed by any <code>\w</code> characters, the
+            colon and remaing <code>\w</code> characters matches any nonempty segment
+            that contains at least one character:</p>
+            
+            <pre>&quot;foo/:id&quot; matches &quot;/foo/bar&quot;, &quot;/foo/baz&quot;, etc.&#x000A;&quot;foo/:id&quot; does not match &quot;/fo/bar&quot;</pre>
+            
+            <p>You can use multiple colons in a string:</p>
+            
+            <pre>&quot;:x/:y&quot; matches &quot;/foo/bar&quot;, &quot;/bar/foo&quot; etc.&#x000A;&quot;:x/:y&quot; does not match &quot;/foo&quot;, &quot;/bar/&quot;</pre>
+            
+            <p>You can prefix colons:</p>
+            
+            <pre>&quot;foo:x/bar:y&quot; matches &quot;/food/bard&quot;, &quot;/fool/bart&quot;, etc.&#x000A;&quot;foo:x/bar:y&quot; does not match &quot;/foo/bart&quot;, &quot;/fool/bar&quot;, etc.</pre>
+            
+            <p>If any colons are used, the block will yield one argument for each segment
+            matched containing the matched text.  So:</p>
+            
+            <pre>&quot;foo:x/:y&quot; matching &quot;/fool/bar&quot; yields &quot;l&quot;, &quot;bar&quot;</pre>
+            
+            <p>Colons that are not followed by a <code>\w</code> character are matched
+            literally:</p>
+            
+            <pre>&quot;:/a&quot; matches &quot;/:/a&quot;</pre>
+            
+            <p>Note that strings are regexp escaped before being used in a regular
+            expression, so:</p>
+            
+            <pre>&quot;\\d+(/\\w+)?&quot; matches &quot;\d+(/\w+)?&quot;&#x000A;&quot;\\d+/\\w+&quot; does not match &quot;123/abc&quot;</pre>
+            
+            <h3 id="label-Regexp">Regexp<span><a href="#label-Regexp">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>Regexps match one or more segments by looking for the pattern preceeded by
+            a slash:</p>
+            
+            <pre>/foo\w+/ matches &quot;/foobar&quot;&#x000A;/foo\w+/ does not match &quot;/foo/bar&quot;</pre>
+            
+            <p>If any patterns are captured by the regexp, they are yielded:</p>
+            
+            <pre>/foo\w+/ matches &quot;/foobar&quot;, yields nothing&#x000A;/foo(\w+)/ matches &quot;/foobar&quot;, yields &quot;bar&quot;</pre>
+            
+            <h3 id="label-Symbol">Symbol<span><a href="#label-Symbol">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>Symbols match any nonempty segment, yielding the segment except for the
+            preceeding slash:</p>
+            
+            <pre>:id matches &quot;/foo&quot; yields &quot;foo&quot;&#x000A;:id does not match &quot;/&quot;</pre>
+            
+            <h3 id="label-Proc">Proc<span><a href="#label-Proc">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>Procs match unless they return false or nil:</p>
+            
+            <pre>proc{true} matches anything&#x000A;proc{false} does not match anything</pre>
+            
+            <p>Procs don&#39;t capture anything by default, but they can if you add the
+            captured text to <code>r.captures</code>.</p>
+            
+            <h3 id="label-Arrays">Arrays<span><a href="#label-Arrays">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>Arrays match when any of their elements matches.  If multiple matchers are
+            given to <code>r.on</code>, they all must match (an AND condition), while
+            if an array of matchers is given, only one needs to match (an OR
+            condition).  Evaluation stops at the first matcher that matches.</p>
+            
+            <p>Additionally, if the matched object is a String, the string is yielded.
+            This makes it easy to handle multiple strings without a Regexp:</p>
+            
+            <pre>%w&#39;page1 page2&#39; matches &quot;/page1&quot;, &quot;/page2&quot;&#x000A;[] does not match anything</pre>
+            
+            <h3 id="label-Hash">Hash<span><a href="#label-Hash">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>Hashes call a <code>match_*</code> method with the given key using the hash
+            value, and match if that matcher returns true.</p>
+            
+            <p>The default registered matchers included with <a
+            href="../classes/Roda.html">Roda</a> are documented below. You can add your
+            own hash matchers by adding the appropriate <code>match_*</code> method to
+            the request class using the <code>request_module</code> method:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">request_module</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">def</span> <span class="ruby-identifier">match_foo</span>(<span class="ruby-identifier">v</span>)&#x000A;      <span class="ruby-operator">...</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">foo=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-operator">...</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <h4 id="label-%3Aextension">:extension<span><a href="#label-%3Aextension">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+            
+            <p>The :extension matcher matches any nonempty path ending with the given
+            extension:</p>
+            
+            <pre class="ruby">:<span class="ruby-identifier">extension</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;css&quot;</span> <span class="ruby-identifier">matches</span> <span class="ruby-string">&quot;/foo.css&quot;</span>, <span class="ruby-string">&quot;/bar.css&quot;</span>&#x000A;:<span class="ruby-identifier">extension</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;css&quot;</span> <span class="ruby-identifier">does</span> <span class="ruby-keyword">not</span> <span class="ruby-identifier">match</span> <span class="ruby-string">&quot;/foo.css/x&quot;</span>, <span class="ruby-string">&quot;/foo.bar&quot;</span>, <span class="ruby-string">&quot;/.css&quot;</span></pre>
+            
+            <p>This matcher yields the part before the extension.  Note that unlike other
+            matchers, this matcher assumes terminal behavior, it doesn&#39;t match if
+            there are additional segments.</p>
+            
+            <h4 id="label-%3Amethod">:method<span><a href="#label-%3Amethod">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+            
+            <p>This matches the method of the request.  You can provide an array to
+            specify multiple request methods and match on any of them:</p>
+            
+            <pre class="ruby">:<span class="ruby-identifier">method</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">post</span> <span class="ruby-identifier">matches</span> <span class="ruby-constant">POST</span>&#x000A;:<span class="ruby-identifier">method</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-node">%wpost patch&#39;</span> <span class="ruby-identifier">matches</span> <span class="ruby-constant">POST</span> <span class="ruby-keyword">and</span> <span class="ruby-constant">PATCH</span></pre>
+            
+            <h4 id="label-%3Aparam">:param<span><a href="#label-%3Aparam">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+            
+            <p>The :param matcher matches if the given parameter is present, even if
+            empty.</p>
+            
+            <pre class="ruby">:<span class="ruby-identifier">param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;user&quot;</span> <span class="ruby-identifier">matches</span> <span class="ruby-string">&quot;/foo?user=bar&quot;</span>, <span class="ruby-string">&quot;/foo?user=&quot;</span>&#x000A;:<span class="ruby-identifier">param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;user&quot;</span> <span class="ruby-identifier">does</span> <span class="ruby-keyword">not</span> <span class="ruby-identifier">matches</span> <span class="ruby-string">&quot;/foo&quot;</span></pre>
+            
+            <h4 id="label-%3Aparam%21">:param!<span><a href="#label-%3Aparam%21">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+            
+            <p>The :param! matcher matches if the given parameter is present and not
+            empty.</p>
+            
+            <pre class="ruby">:<span class="ruby-identifier">param!</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;user&quot;</span> <span class="ruby-identifier">matches</span> <span class="ruby-string">&quot;/foo?user=bar&quot;</span>&#x000A;:<span class="ruby-identifier">param!</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;user&quot;</span> <span class="ruby-identifier">does</span> <span class="ruby-keyword">not</span> <span class="ruby-identifier">matches</span> <span class="ruby-string">&quot;/foo&quot;</span>, <span class="ruby-string">&quot;/foo?user=&quot;</span></pre>
+            
+            <h4 id="label-%3Aterm">:term<span><a href="#label-%3Aterm">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+            
+            <p>The :term matcher matches if true and there are no segments left.  This
+            matcher is added by <code>r.is</code> to ensure an exact path match.</p>
+            
+            <pre class="ruby">:<span class="ruby-identifier">term</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> <span class="ruby-identifier">matches</span> <span class="ruby-string">&quot;&quot;</span>&#x000A;:<span class="ruby-identifier">term</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> <span class="ruby-identifier">does</span> <span class="ruby-keyword">not</span> <span class="ruby-identifier">match</span> <span class="ruby-string">&quot;/&quot;</span>&#x000A;:<span class="ruby-identifier">term</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span> <span class="ruby-identifier">matches</span> <span class="ruby-string">&quot;/&quot;</span>&#x000A;:<span class="ruby-identifier">term</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span> <span class="ruby-identifier">does</span> <span class="ruby-keyword">not</span> <span class="ruby-identifier">match</span> <span class="ruby-string">&quot;&quot;</span></pre>
+            
+            <h3 id="label-false%2C+nil">false, nil<span><a href="#label-false%2C+nil">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>If false or nil is given directly as a matcher, it doesn&#39;t match
+            anything.</p>
+            
+            <h3 id="label-Everything+else">Everything else<span><a href="#label-Everything+else">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>Everything else matches anything.</p>
+            
+            <h2 id="label-Status+codes">Status codes<span><a href="#label-Status+codes">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>When it comes time to finalize a response, if a status code has not been
+            set manually, it will use a 200 status code if anything has been written to
+            the response, otherwise it will use a 404 status code. This enables the
+            principle of least surprise to work, where if you don&#39;t handle an
+            action, a 404 response is assumed.</p>
+            
+            <p>You can always set the status code manually via the status attribute for
+            the response.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">200</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <h2 id="label-Security">Security<span><a href="#label-Security">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>If you want to protect against some common web application vulnerabilities,
+            you can use <a
+            href="https://github.com/rkh/rack-protection">Rack::Protection</a>. It is
+            not included by default because there are legitimate uses for plain <a
+            href="../classes/Roda.html">Roda</a> (for instance, when designing an API).</p>
+            
+            <p>If you are using sessions, you should also always set a session secret to
+            some undisclosed value. Keep in mind that the content in the session cookie
+            is not encrypted, just signed to prevent tampering.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&quot;roda&quot;</span>&#x000A;<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;rack/protection&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Session</span><span class="ruby-operator">::</span><span class="ruby-constant">Cookie</span>, :<span class="ruby-identifier">secret</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;SECRET&#39;</span>]&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Protection</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <h2 id="label-Verb+Methods">Verb Methods<span><a href="#label-Verb+Methods">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>The main match method is <code>r.on</code>, but as displayed above, you can
+            also use <code>r.get</code> or <code>r.post</code>.  When called without
+            any arguments, these call <code>r.on</code> as long as the request has the
+            appropriate method, so:</p>
+            
+            <pre>r.get{}</pre>
+            
+            <p>is syntax sugar for:</p>
+            
+            <pre>r.on{} if r.get?</pre>
+            
+            <p>If any arguments are given to the method, these call <code>r.is</code> as
+            long as the request has the appropriate method, so:</p>
+            
+            <pre>r.post(&quot;&quot;){}</pre>
+            
+            <p>is syntax sugar for:</p>
+            
+            <pre>r.is(&quot;&quot;){} if r.post?</pre>
+            
+            <p>The reason for this difference in behavior is that if you are not providing
+            any arguments, you probably don&#39;t want to to also test for an exact
+            match with the current path.  If that is something you do want, you can
+            provide true as an argument:</p>
+            
+            <pre>r.on &quot;foo&quot; do&#x000A;  r.get true do # Matches GET /foo, not GET /foo/.*&#x000A;  end&#x000A;end</pre>
+            
+            <p>If you want to match the request method and do a partial match on the
+            request path, you need to use <code>r.on</code> with the
+            <code>:method</code> hash matcher:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span>, :<span class="ruby-identifier">method=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span> <span class="ruby-comment"># Matches GET /foo(/.*)?</span>&#x000A;<span class="ruby-identifier">edn</span></pre>
+            
+            <h2 id="label-Request+and+Response">Request and Response<span><a href="#label-Request+and+Response">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>While the request object is yielded to the route block, it is also
+            available via the <code>request</code> method.  Likewise, the response
+            object is available via the <code>response</code> method.</p>
+            
+            <p>The request object is an instance of a subclass of
+            <code>Rack::Request</code> with some additional methods, and the response
+            object is an instance of a subclass of <code>Rack::Response</code> with
+            some additional methods.</p>
+            
+            <p>If you want to extend the request and response objects with additional
+            modules, you can do so via the <code>request_module</code> or
+            <code>response_module</code> methods, or via plugins.</p>
+            
+            <h2 id="label-Pollution">Pollution<span><a href="#label-Pollution">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p><a href="../classes/Roda.html">Roda</a> tries very hard to avoid polluting
+            the scope in which the <code>route</code> block operates.  The only
+            instance variables defined by default in the scope of the
+            <code>route</code> block are <code>@_request</code> and
+            <code>@_response</code>.  The only methods defined (beyond the default
+            methods for <code>Object</code>) are: <code>env</code>, <code>opts</code>,
+            <code>request</code>, <code>response</code>, <code>call</code>,
+            <code>session</code>, and <code>_route</code> (private). Constants inside
+            the <a href="../classes/Roda.html">Roda</a> namespace are all prefixed with
+            <code>Roda</code> (e.g. <code>Roda::RodaRequest</code>).  This should make
+            it unlikely that <a href="../classes/Roda.html">Roda</a> will cause a
+            namespace issue with your application code.</p>
+            
+            <h2 id="label-Captures">Captures<span><a href="#label-Captures">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>You may have noticed that some matchers yield a value to the block. The
+            rules for determining if a matcher will yield a value are simple:</p>
+            <ol><li>
+            <p>Regexp captures: <code>/posts\/(\d+)-(.*)/</code> will yield two values,
+            corresponding to each capture.</p>
+            </li><li>
+            <p>String placeholders: <code>&quot;users/:id&quot;</code> will yield the
+            value in the position of <code>:id</code>.</p>
+            </li><li>
+            <p>Symbols: <code>:foobar</code> will yield if a segment is available.</p>
+            </li><li>
+            <p>File extensions: <code>:extension=&gt;&quot;css&quot;</code> will yield the
+            basename of the matched file.</p>
+            </li><li>
+            <p>Parameters: <code>:param=&gt;&quot;user&quot;</code> will yield the value
+            of the parameter user, if present.</p>
+            </li></ol>
+            
+            <p>The first case is important because it shows the underlying effect of regex
+            captures.</p>
+            
+            <p>In the second case, the substring <code>:id</code> gets replaced by
+            <code>([^\/]+)</code> and the regexp becomes <code>/users\/([^\/]+)/</code>
+            before performing the match, thus it reverts to the first form we saw.</p>
+            
+            <p>In the third case, the symbol, no matter what it says, gets replaced by
+            <code>/([^\/]+)/</code>, and again we are in presence of case 1.</p>
+            
+            <p>The fourth case, again, reverts to the basic matcher: it generates the
+            string <code>/([^\/]+?)\.#{ext}\z/</code> before performing the match.</p>
+            
+            <p>The fifth case is different: it checks if the the parameter supplied is
+            present in the request (via POST or QUERY_STRING) and it pushes the value
+            as a capture.</p>
+            
+            <h2 id="label-Composition">Composition<span><a href="#label-Composition">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>You can mount a <a href="../classes/Roda.html">Roda</a> app, along with
+            middlewares, inside another <a href="../classes/Roda.html">Roda</a> app,
+            via <code>r.run</code>:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">API</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">SomeMiddleware</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># ...</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;api&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">API</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>.<span class="ruby-identifier">app</span></pre>
+            
+            <p>You can also use the <code>multi_route</code> plugin, which keeps the
+            current scope of the route block:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_route</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> :<span class="ruby-identifier">api</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># ...</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;api&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">route</span> :<span class="ruby-identifier">api</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>.<span class="ruby-identifier">app</span></pre>
+            
+            <h2 id="label-Testing">Testing<span><a href="#label-Testing">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>It is very easy to test <a href="../classes/Roda.html">Roda</a> with <a
+            href="https://github.com/brynary/rack-test">Rack::Test</a> or <a
+            href="https://github.com/jnicklas/capybara">Capybara</a>. Roda&#39;s own
+            tests are written with a combination of <a
+            href="http://rspec.info">RSpec</a> and Rack::Test The default rake task
+            will run the specs for <a href="../classes/Roda.html">Roda</a>, if RSpec is
+            installed.</p>
+            
+            <h2 id="label-Settings">Settings<span><a href="#label-Settings">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>Each <a href="../classes/Roda.html">Roda</a> app can store settings in the
+            <code>opts</code> hash. The settings are inherited if you happen to
+            subclass <code>Roda</code>.</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;guest&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">Users</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>; <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">Admin</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>; <span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-constant">Admin</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;admin&quot;</span>&#x000A;&#x000A;<span class="ruby-constant">Users</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] <span class="ruby-comment"># =&gt; &#39;guest&#39;</span>&#x000A;<span class="ruby-constant">Admin</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] <span class="ruby-comment"># =&gt; &#39;admin&#39;</span></pre>
+            
+            <p>Feel free to store whatever you find convenient.  Note that when
+            subclassing, <a href="../classes/Roda.html">Roda</a> only does a shallow
+            clone of the settings.  If you store nested structures and plan to mutate
+            them in subclasses, it is your responsibility to dup the nested structures
+            inside <code>Roda.inherited</code> (making sure to call
+            <code>super</code>).  The plugins that ship with <a
+            href="../classes/Roda.html">Roda</a> all handle this.  Also, note that this
+            means that future modifications to the parent class after subclassing do
+            not affect the subclass.</p>
+            
+            <h2 id="label-Rendering">Rendering<span><a href="#label-Rendering">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p><a href="../classes/Roda.html">Roda</a> ships with a <code>render</code>
+            plugin that provides helpers for rendering templates. It uses <a
+            href="https://github.com/rtomayko/tilt">Tilt</a>, a gem that interfaces
+            with many template engines. The <code>erb</code> engine is used by default.</p>
+            
+            <p>Note that in order to use this plugin you need to have Tilt installed,
+            along with the templating engines you want to use.</p>
+            
+            <p>This plugin adds the <code>render</code> and <code>view</code> methods, for
+            rendering templates. The difference between <code>render</code> and
+            <code>view</code> is that <code>view</code> will by default attempt to
+            render the template inside the default layout template, where
+            <code>render</code> will just render the template.</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-ivar">@var</span> = <span class="ruby-string">&#39;1&#39;</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;render&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># Renders the views/home.erb template, which will have access to the</span>&#x000A;      <span class="ruby-comment"># instance variable @var, as well as local variable content</span>&#x000A;      <span class="ruby-identifier">render</span>(<span class="ruby-string">&quot;home&quot;</span>, :<span class="ruby-identifier">locals=</span><span class="ruby-operator">&gt;</span>{:<span class="ruby-identifier">content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;hello, world&quot;</span>})&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;view&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-ivar">@var2</span> = <span class="ruby-string">&#39;1&#39;</span>&#x000A;&#x000A;      <span class="ruby-comment"># Renders the views/home.erb template, which will have access to the</span>&#x000A;      <span class="ruby-comment"># instance variables @var and @var2, and takes the output of that and</span>&#x000A;      <span class="ruby-comment"># renders it inside views/layout.erb (which should yield where the</span>&#x000A;      <span class="ruby-comment"># content should be inserted).</span>&#x000A;      <span class="ruby-identifier">view</span>(<span class="ruby-string">&quot;home&quot;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>You can override the default rendering options by passing a hash to the
+            plugin, or modifying the <code>render_opts</code> hash after loading the
+            plugin:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>, :<span class="ruby-identifier">engine=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;slim&#39;</span> <span class="ruby-comment"># Tilt engine/template file extension to use</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">views</span>] = <span class="ruby-string">&#39;admin_views&#39;</span> <span class="ruby-comment"># Default views directory</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;admin_layout&quot;</span> <span class="ruby-comment"># Default layout template</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">layout_opts</span>] = {:<span class="ruby-identifier">engine=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;haml&#39;</span>} <span class="ruby-comment"># Default layout template options</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">opts</span>] = {:<span class="ruby-identifier">default_encoding=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;UTF-8&#39;</span>} <span class="ruby-comment"># Default template options</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <h2 id="label-Plugins">Plugins<span><a href="#label-Plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p><a href="../classes/Roda.html">Roda</a> provides a way to extend its
+            functionality with plugins.  Plugins can override any <a
+            href="../classes/Roda.html">Roda</a> method and call <code>super</code> to
+            get the default behavior.</p>
+            
+            <h3 id="label-Included+Plugins">Included Plugins<span><a href="#label-Included+Plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>These plugins ship with roda:</p>
+            <dl class="rdoc-list note-list"><dt>all_verbs 
+            <dd>
+            <p>Adds routing methods to the request for all http verbs.</p>
+            </dd><dt>default_headers 
+            <dd>
+            <p>Override the default response headers used.</p>
+            </dd><dt>error_handler 
+            <dd>
+            <p>Adds a <code>error</code> block that is called for all responses that raise
+            exceptions.</p>
+            </dd><dt>flash 
+            <dd>
+            <p>Adds a flash handler, requires sinatra-flash.</p>
+            </dd><dt>h 
+            <dd>
+            <p>Adds h method for html escaping.</p>
+            </dd><dt>halt 
+            <dd>
+            <p>Augments request#halt method to take status and/or body or status, headers,
+            and body.</p>
+            </dd><dt>header_matchers 
+            <dd>
+            <p>Adds host, header, and accept hash matchers.</p>
+            </dd><dt>hooks 
+            <dd>
+            <p>Adds before and after methods to run code before and after requests.</p>
+            </dd><dt>indifferent_params 
+            <dd>
+            <p>Adds params method with indifferent access to params, allowing use of
+            symbol keys for accessing params.</p>
+            </dd><dt>middleware 
+            <dd>
+            <p>Allows the <a href="../classes/Roda.html">Roda</a> app to be used as a rack
+            middleware, calling the next middleware if no route matches.</p>
+            </dd><dt>multi_route 
+            <dd>
+            <p>Adds the ability for multiple named route blocks, with the ability to
+            dispatch to them add any point in the main route block.</p>
+            </dd><dt>not_found 
+            <dd>
+            <p>Adds a <code>not_found</code> block that is called for all 404 responses
+            without bodies.</p>
+            </dd><dt>pass 
+            <dd>
+            <p>Adds a pass method allowing you to skip the current <code>r.on</code> block
+            as if it did not match.</p>
+            </dd><dt>render 
+            <dd>
+            <p>Adds support for rendering templates via tilt, as described above.</p>
+            </dd><dt>streaming 
+            <dd>
+            <p>Adds support for streaming responses.</p>
+            </dd></dl>
+            
+            <h3 id="label-External+Plugins">External Plugins<span><a href="#label-External+Plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>The following libraries include <a href="../classes/Roda.html">Roda</a>
+            plugins:</p>
+            <dl class="rdoc-list note-list"><dt>forme 
+            <dd>
+            <p>Adds support for easy HTML form creation in erb templates.</p>
+            </dd><dt>autoforme 
+            <dd>
+            <p>Adds support for easily creating a simple administrative front end for
+            Sequel models.</p>
+            </dd></dl>
+            
+            <h3 id="label-How+to+create+plugins">How to create plugins<span><a href="#label-How+to+create+plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>Authoring your own plugins is pretty straightforward.  Plugins are just
+            modules that contain one of the following modules:</p>
+            <dl class="rdoc-list note-list"><dt>InstanceMethods 
+            <dd>
+            <p>module included in the <a href="../classes/Roda.html">Roda</a> class</p>
+            </dd><dt>ClassMethods 
+            <dd>
+            <p>module that extends the <a href="../classes/Roda.html">Roda</a> class</p>
+            </dd><dt>RequestMethods 
+            <dd>
+            <p>module included in the class of the request</p>
+            </dd><dt>ResponseMethods 
+            <dd>
+            <p>module included in the class of the response</p>
+            </dd></dl>
+            
+            <p>If the plugin responds to <code>load_dependencies</code>, it will be called
+            first, and should be used if the plugin depends on another plugin.</p>
+            
+            <p>If the plugin responds to <code>configure</code>, it will be called last,
+            and should be used to configure the plugin.</p>
+            
+            <p>Both <code>load_dependencies</code> and <code>configure</code> are called
+            with the additional arguments and block given to the plugin call.</p>
+            
+            <p>So a simple plugin to add an instance method would be:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">module</span> <span class="ruby-constant">MarkdownHelper</span>&#x000A;  <span class="ruby-keyword">module</span> <span class="ruby-constant">InstanceMethods</span>&#x000A;    <span class="ruby-keyword">def</span> <span class="ruby-identifier">markdown</span>(<span class="ruby-identifier">str</span>)&#x000A;      <span class="ruby-constant">BlueCloth</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">str</span>).<span class="ruby-identifier">to_html</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-constant">MarkdownHelper</span></pre>
+            
+            <h3 id="label-Registering+plugins">Registering plugins<span><a href="#label-Registering+plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            
+            <p>If you want to ship a <a href="../classes/Roda.html">Roda</a> plugin in a
+            gem, but still have <a href="../classes/Roda.html">Roda</a> load it
+            automatically via <code>Roda.plugin :plugin_name</code>, you should place
+            it where it can be required via <code>roda/plugins/plugin_name</code>, and
+            then have the file register it as a plugin via
+            <code>Roda.register_plugin</code>. It&#39;s recommended but not required
+            that you store your plugin module in the <code>Roda::RodaPlugins</code>
+            namespace:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">module</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-keyword">module</span> <span class="ruby-constant">RodaPlugins</span>&#x000A;    <span class="ruby-keyword">module</span> <span class="ruby-constant">Markdown</span>&#x000A;      <span class="ruby-keyword">module</span> <span class="ruby-constant">InstanceMethods</span>&#x000A;        <span class="ruby-keyword">def</span> <span class="ruby-identifier">markdown</span>(<span class="ruby-identifier">str</span>)&#x000A;          <span class="ruby-constant">BlueCloth</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">str</span>).<span class="ruby-identifier">to_html</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">register_plugin</span> :<span class="ruby-identifier">markdown</span>, <span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">Markdown</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>You should avoid creating your module directly in the <code>Roda</code>
+            namespace to avoid polluting the namespace.  Additionally, any instance
+            variables created inside an InstanceMethods should be prefixed with an
+            underscore (e.g. <code>@_variable</code>) to avoid polluting the scope.</p>
+            
+            <h2 id="label-Inspiration">Inspiration<span><a href="#label-Inspiration">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p><a href="../classes/Roda.html">Roda</a> was inspired by <a
+            href="http://www.sinatrarb.com">Sinatra</a> and <a
+            href="http://cuba.is">Cuba</a>, two other Ruby web frameworks.  It started
+            out as a fork of Cuba, from which it borrows the idea of using a routing
+            tree (which Cuba in turn took from <a
+            href="https://github.com/chneukirchen/rum">Rum</a>).  From Sinatra it takes
+            the ideas that route blocks should return the request bodies and that
+            routes should be canonical. It pilfers the idea for an extensible plugin
+            system from the Ruby database library <a
+            href="http://sequel.jeremyevans.net">Sequel</a>.</p>
+            
+            <h2 id="label-License">License<span><a href="#label-License">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>MIT</p>
+            
+            <h2 id="label-Maintainer">Maintainer<span><a href="#label-Maintainer">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            
+            <p>Jeremy Evans &lt;code@jeremyevans.net&gt;</p>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

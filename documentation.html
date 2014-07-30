@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Roda - Documentation</title>
+    <link href='http://fonts.googleapis.com/css?family=Italianno|Open+Sans|PT+Mono' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/roda.css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Roda</a>
+        <ul class="nav navbar-nav">
+          <li><a href="why.html">Why</a></li>
+          <li><a href="documentation.html">Documentation</a></li>
+          <li><a href="development.html">Development</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container" id="content">
+      <h1>Documentation for <span class="roda">Roda</span> (v0.9.0)</h1>
+
+<h2><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
+
+<h2><a href="rdoc/index.html">RDoc</a> (frames)</h2>
+
+<p>Here are direct links to the most important pages:</p>
+
+<ul>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/ClassMethods.html">Roda ClassMethods</a></li>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/InstanceMethods.html">Roda InstanceMethods</a></li>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/RequestMethods.html">Roda RequestMethods</a></li>
+  <li><a href="rdoc/classes/Roda/RodaPlugins/Base/ResponseMethods.html">Roda ResponseMethods</a></li>
+</ul>
+
+<h2>Plugins</h2>
+
+<p>Plugins are a very important part of Roda, since by design Roda has a very small core.</p>
+
+<h3>Plugins that Ship with Roda</h3>
+
+<ul>
+<li><a href="rdoc/classes/Roda/RodaPlugins/AllVerbs.html">all_verbs</a>: Adds request routing methods for all http verbs.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/DefaultHeaders.html">default_headers</a>: Allows modifying the default headers for responses.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling, using <a href="https://github.com/SFEley/sinatra-flash">sinatra-flash</a>.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/H.html">h</a>: Adds h method for html escaping.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/HeaderMatchers.html">header_matchers</a>: Adds matchers for hostname, accept, or presence of arbitrary headers.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/IndifferentParams.html">indifferent_params</a>: Adds params method for indifferent parameters.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Middleware.html">middleware</a>: Allows the Roda app to be used as middleware by another app.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows for multiple named route blocks that can be dispatched to inside main route block.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/NotFound.html">not_found</a>: Adds not_found method for handling responses not otherwise handled by a route.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
+<li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
+</ul>
+
+<h3>External Plugins</h3>
+
+<p>These projects ship external plugins for Roda:</p>
+
+<ul>
+<li><a href="https://github.com/jeremyevans/autoforme">autoforme</a>: Adds autoforme method for automatic creation of administrative front-end for Sequel models.</li>
+<li><a href="https://github.com/jeremyevans/forme">forme</a>: Adds form method for simple creation of html forms inside erb templates.</li>
+</ul>
+
+
+
+<h2><a href="rdoc/files/MIT-LICENSE.html">License</a></h2>
+
+
+
+
+    </div>
+  </body>
+</html>
