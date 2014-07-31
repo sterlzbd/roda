@@ -1,7 +1,9 @@
 source 'https://rubygems.org'
-gemspec
 
 gem 'rake'
+gem 'rack'
 gem 'rspec'
 gem 'tilt'
 gem 'sinatra-flash'
+
+gemspec
