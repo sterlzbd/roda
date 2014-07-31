@@ -3,7 +3,7 @@ require "rake/clean"
 
 NAME = 'roda'
 VERS = lambda do
-  require File.expand_path("../lib/roda.rb", __FILE__)
+  require File.expand_path("../lib/roda/version.rb", __FILE__)
   Roda::RodaVersion
 end
 CLEAN.include ["#{NAME}-*.gem", "rdoc", "coverage", "www/public/*.html", "www/public/rdoc"]

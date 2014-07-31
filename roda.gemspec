@@ -1,4 +1,4 @@
-require File.expand_path("../lib/roda", __FILE__)
+require File.expand_path("../lib/roda/version", __FILE__)
 
 Gem::Specification.new do |s|
   s.name              = "roda"

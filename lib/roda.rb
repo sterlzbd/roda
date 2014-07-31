@@ -1,13 +1,11 @@
 require "rack"
 require "thread"
+require "roda/version"
 
 # The main class for Roda.  Roda is built completely out of plugins, with the
 # default plugin being Roda::RodaPlugins::Base, so this class is mostly empty
 # except for some constants.
 class Roda
-  # Roda's version, always specified by a string in \d+\.\d+\.\d+ format.
-  RodaVersion = '0.9.0'.freeze
-
   # Error class raised by Roda
   class RodaError < StandardError; end
 
