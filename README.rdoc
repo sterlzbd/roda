@@ -14,6 +14,16 @@ Bugs :: http://github.com/jeremyevans/roda/issues
 Google Group :: http://groups.google.com/group/ruby-roda
 IRC :: irc://chat.freenode.net/#roda
 
+== Inspiration
+
+Roda was inspired by {Sinatra}[http://www.sinatrarb.com] and {Cuba}[http://cuba.is],
+two other Ruby web frameworks.  It started out as a fork of Cuba, from which it borrows
+the idea of using a routing tree (which Cuba in turn took from
+{Rum}[https://github.com/chneukirchen/rum]).  From Sinatra it takes the ideas that
+route blocks should return the request bodies and that routes should be canonical.
+It pilfers the idea for an extensible plugin system from the Ruby database library
+{Sequel}[http://sequel.jeremyevans.net].
+
 == Usage
 
 Here's a simple application, showing how the routing tree works:
@@ -689,16 +699,6 @@ You should avoid creating your module directly in the +Roda+ namespace
 to avoid polluting the namespace.  Additionally, any instance variables
 created inside InstanceMethods should be prefixed with an underscore
 (e.g. <tt>@_variable</tt>) to avoid polluting the scope.
-
-== Inspiration
-
-Roda was inspired by {Sinatra}[http://www.sinatrarb.com] and {Cuba}[http://cuba.is],
-two other Ruby web frameworks.  It started out as a fork of Cuba, from which it borrows
-the idea of using a routing tree (which Cuba in turn took from
-{Rum}[https://github.com/chneukirchen/rum]).  From Sinatra it takes the ideas that
-route blocks should return the request bodies and that routes should be canonical.
-It pilfers the idea for an extensible plugin system from the Ruby database library
-{Sequel}[http://sequel.jeremyevans.net].
 
 == License
 
