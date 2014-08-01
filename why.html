@@ -32,11 +32,11 @@
 
 <p>There are already plenty of ruby web frameworks. Why another one? Well, Roda has a very useful combination of features that make web development easy.  It's designed to be fast, <acronym title="Don't Repeat Yourself">DRY</acronym>, and correct.  It's probably easiest to explain the advantages by comparing it with <a href="http://www.sinatrarb.com">Sinatra</a>, which it tries to emulate in many respects.</p>
 
-<h2>Advantages over Sinatra</h2>
+<h2>Differences with Sinatra</h2>
 
 <h3>Routing Tree</h3>
 
-<p>The primary advantage that Roda offers over Sinatra is that it uses a routing tree, while Sinatra uses a simple list of routes.  At any point in the routing tree, you can operate on the current route.  If your URLs reflect your application architecture, this allows you to have much DRYer code.  Let's examine code examples for a simple app, implemented in both Sinatra and Roda:</p>
+<p>The primary difference between Roda and Sinatra is that Roda uses a routing tree, while Sinatra uses a simple list of routes.  At any point in the routing tree, you can operate on the current route.  If your URLs reflect your application architecture, this allows you to have much DRYer code.  Let's examine code examples for a simple app, implemented in both Sinatra and Roda:</p>
 
 <div class="col-md-6">
 Roda:
@@ -154,17 +154,17 @@ end
 
 <h3>Faster</h3>
 
-<p>In addition to being more maintainable, Roda's approach is also much faster in general.  This is because Sinatra is doing more work to determine which route to take compared to Roda.  Let's say you are going to <span class="path">/artist/1/album/2/track/3</span>.  What Sinatra is going to do is check each route in order, comparing the request method and route against the full path of the request, and if it doesn't match, starting again with the next route.  With Roda, as soon as part of the route matches, that part does not need to be rechecked every time.  Also, the request method is only checked once at the end to determine whether to take get or post as the final branch.</p>
+<p>In addition to being more maintainable, Roda's approach is also faster in general.  This is because Sinatra is doing more work to determine which route to take compared to Roda.  Let's say you are going to <span class="path">/artist/1/album/2/track/3</span>.  What Sinatra is going to do is check each route in order, comparing the request method and route against the full path of the request, and if it doesn't match, starting again with the next route.  With Roda, as soon as part of the route matches, that part does not need to be rechecked every time.  Also, the request method is only checked once at the end to determine whether to take get or post as the final branch.</p>
 
 <h3>Plugin System</h3>
 
-<p>Another advantage Roda brings over Sinatra is that it has a plugin system modeled on <a href="http://sequel.jeremyevans.net">Sequel</a>'s.  All parts of Roda (class/instance/request/response) can be overridden by plugins and call super to get the default behavior.  This includes when plugins are applied to the Roda class itself (affecting all subclasses).  Roda has a very small core, and many features that are built into Sinatra are shipped as plugins in Roda. This way they can easily used if needed, but if you don't use them you don't pay the cost for loading them.  Near the top of the Roda example, you can see <span class="code">plugin :render</span>, which adds support for template rendering, as the default Roda code doesn't ship with template support.</p>
+<p>Another difference between Roda and Sinatra is that Roda has a plugin system modeled on <a href="http://sequel.jeremyevans.net">Sequel</a>'s.  All parts of Roda (class/instance/request/response) can be overridden by plugins and call super to get the default behavior.  This includes when plugins are applied to the Roda class itself (affecting all subclasses).  Roda has a very small core, and many features that are built into Sinatra are shipped as plugins in Roda. This way they can easily used if needed, but if you don't use them you don't pay the cost for loading them.  Near the top of the Roda example, you can see <span class="code">plugin :render</span>, which adds support for template rendering, as the default Roda code doesn't ship with template support.</p>
 
 <h3>Less Pollution</h3>
 
 <p>Finally, Roda is very concerned about pollution.  In this case, pollution of the scope in which the route block operates.  Roda purposely limits the instance variables, instance methods, and class namespaces available in the route block scope, so that it is very unlikely you will run into conflicts.  If you've ever tried to use an instance variable named <span class="code">@request</span> or a model named <span class="code">Response</span> inside a <span class="code">Sinatra::Base</span> subclass, you'll appreciate that Roda attempts to avoid polluting the scope.</p>
 
-<h2>Advantages over Cuba</h2>
+<h2>Differences with Cuba</h2>
 
 <p>Roda started out as a fork of <a href="http://cuba.is">Cuba</a>.  Both share the idea of using a routing tree, but there are some important differences.</p>
 
@@ -202,7 +202,7 @@ end
 
 <h3 style="clear: both;">Status Codes</h3>
 
-<p>Roda does a better job handling status codes.  In Cuba, if any <span class="code">on</span> block matches, a 200 status code is used, even if the response is not handled by the <span class="code">on</span> block.  With the following example:</p>
+<p>Roda handles status codes differently.  In Cuba, if any <span class="code">on</span> block matches, a 200 status code is used by default, even if the response is not handled by the <span class="code">on</span> block.   With Roda, a 200 status code is only used by default if the block returns a response body. With the following example:</p>
 
 <div class="col-md-6">
 Roda:
@@ -262,7 +262,7 @@ end
 
 <h3>Plugin System</h3>
 
-<p>While both Roda and Cuba have plugin systems, Roda's is based on <a href="http://sequel.jeremyevans.net">Sequel</a>'s and is much more flexible, allowing overriding of all Roda methods, even when plugins are used directly on the Roda class.  Additionally, Roda ships with many plugins, and those plugins are tested in the same test suite as the core Roda code, ensuring that updates to Roda will not break any of the plugins.</p>
+<p>While both Roda and Cuba have plugin systems, Roda's is based on <a href="http://sequel.jeremyevans.net">Sequel</a>'s and is more flexible, allowing overriding of all Roda methods, even when plugins are used directly on the Roda class.  Additionally, Roda ships with many plugins, and those plugins are tested in the same test suite as the core Roda code, ensuring that updates to Roda will not break any of the plugins.</p>
 
 
     </div>
