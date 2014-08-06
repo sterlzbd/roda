@@ -614,7 +614,7 @@ all_verbs :: Adds routing methods to the request for all http verbs.
 default_headers :: Override the default response headers used.
 error_handler :: Adds a +error+ block that is called for all responses that
                  raise exceptions.
-flash :: Adds a flash handler, requires sinatra-flash.
+flash :: Adds a flash handler.
 h :: Adds h method for html escaping.
 halt :: Augments request#halt method to take status and/or body or status,
         headers, and body.

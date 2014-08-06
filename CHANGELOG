@@ -1,5 +1,7 @@
 = HEAD
 
+* Make flash plugin no longer depend on sinatra-flash (jeremyevans)
+
 * Move version file to roda/version so it can be required separately without loading dependencies (jeremyevans)
 
 = 0.9.0 (2014-07-30)
