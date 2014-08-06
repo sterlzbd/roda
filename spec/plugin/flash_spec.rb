@@ -116,7 +116,7 @@ describe "FlashHash" do
     @h[nil] = 3
     @h.next.should == {1=>2, nil=>3}
     @h.now.should == {}
-    @h.sweep.should equal(@h)
+    @h.sweep.should == {1=>2, nil=>3}
     @h.next.should == {}
     @h.now.should == {1=>2, nil=>3}
   end
