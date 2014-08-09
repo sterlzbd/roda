@@ -7,6 +7,7 @@
     <title>Roda</title>
     <link href='http://fonts.googleapis.com/css?family=Italianno|Open+Sans|PT+Mono' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/default.min.css">
     <link rel="stylesheet" href="css/roda.css">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -15,6 +16,9 @@
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 <![endif]-->
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
   </head>
   <body>
     <nav class="navbar navbar-default" role="navigation">
@@ -29,7 +33,7 @@
     </nav>
     <div class="container" id="content">
       <div class="col-md-6">
-<pre><code># cat config.ru
+<pre><code class="ruby"># cat config.ru
 require "roda"
 
 class App < Roda
