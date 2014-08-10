@@ -677,9 +677,9 @@ So a simple plugin to add an instance method would be:
 If you want to ship a Roda plugin in a gem, but still have
 Roda load it automatically via <tt>Roda.plugin :plugin_name</tt>, you should
 place it where it can be required via +roda/plugins/plugin_name+, and
-then have the file register it as a plugin via +Roda.register_plugin+.
-It's recommended but not required that you store your plugin module
-in the <tt>Roda::RodaPlugins</tt> namespace:
+then have the file register it as a plugin via
+<tt>Roda::RodaPlugins.register_plugin</tt>.  It's recommended but not required
+that you store your plugin module in the <tt>Roda::RodaPlugins</tt> namespace:
 
   module Roda
     module RodaPlugins
