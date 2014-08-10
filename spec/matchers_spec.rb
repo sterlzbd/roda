@@ -467,15 +467,40 @@ describe "path matchers" do
     status('/useradf').should == 404
   end
 
-  it "matching the root" do
+  it "matching the root with a string" do
     app do |r|
-      r.on "" do
+      r.is "" do
         "Home"
       end
     end
 
     body.should == 'Home'
+    status("//").should == 404
     status("/foo").should == 404
+  end
+
+  it "matching the root with the root method" do
+    app do |r|
+      r.root do
+        "Home"
+      end
+    end
+
+    body.should == 'Home'
+    status("//").should == 404
+    status("/foo").should == 404
+  end
+
+  it "matching the root with the root method and request method symbol" do
+    app do |r|
+      r.root(:get) do
+        "Home"
+      end
+    end
+
+    body.should == 'Home'
+    status("//").should == 404
+    status('REQUEST_METHOD'=>"POST").should == 404
   end
 end
 

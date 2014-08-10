@@ -39,7 +39,7 @@ Here's a simple application, showing how the routing tree works:
       r.get do
 
         # matches GET /
-        r.is "" do
+        r.root do
           r.redirect "/hello"
         end
 
@@ -111,7 +111,7 @@ are arguments passed to +r.on+.
       r.get do
 
         # /
-        r.is "" do
+        r.root do
           "Home"
         end
 
@@ -412,6 +412,22 @@ hash matcher:
 
   r.on "foo", :method=>:get do # Matches GET /foo(/.*)?
   edn
+
+== Root Method
+
+As displayed above, you can also use +r.root+ as a match method.  This
+method matches only if the path at that point is exactly +/+.  +r.root+
+is similar to <tt>r.is ""</tt>, except that it does not
+consume the +/+ from the path.
+
+Unlike the other matching methods, +r.root+ does not take multiple
+arguments and pass them to +r.on+.  It only accepts an optional request
+method symbol, so <tt>r.root :get</tt> is similar to <tt>r.get ""</tt>,
+except that it does not consume the +/+ from the path.
+
+Note that +r.root+ does not match if the path is empty, you should use
++r.is+ with no arguments for that.  If you want to match either the
+the empty path or +/+, you can use <tt>r.is ["", true]</tt>.
 
 == Request and Response
 

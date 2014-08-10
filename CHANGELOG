@@ -1,5 +1,7 @@
 = HEAD
 
+* Add r.root for matching root (path "/"), for easier to read version of r.is "" (jeremyevans)
+
 * Optimize r.is terminal matcher, remove :term hash matcher (jeremyevans)
 
 * Make flash plugin no longer depend on sinatra-flash (jeremyevans)

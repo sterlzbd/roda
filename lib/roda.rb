@@ -265,6 +265,7 @@ class Roda
         SCRIPT_NAME = "SCRIPT_NAME".freeze
         REQUEST_METHOD = "REQUEST_METHOD".freeze
         EMPTY_STRING = "".freeze
+        SLASH = "/".freeze
         TERM = Object.new.freeze
         SEGMENT = "([^\\/]+)".freeze
 
@@ -365,6 +366,13 @@ class Roda
         def redirect(path, status=302)
           response.redirect(path, status)
           _halt response.finish
+        end
+
+        #
+        def root(request_method=nil, &block)
+          if env[PATH_INFO] == SLASH && (!request_method || send(:"#{request_method}?"))
+            on(&block)
+          end
         end
 
         # Call the given rack app with the environment and immediately return
