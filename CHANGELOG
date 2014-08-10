@@ -1,5 +1,7 @@
 = HEAD
 
+* Optimize r.is terminal matcher, remove :term hash matcher (jeremyevans)
+
 * Make flash plugin no longer depend on sinatra-flash (jeremyevans)
 
 * Move version file to roda/version so it can be required separately without loading dependencies (jeremyevans)

@@ -265,7 +265,7 @@ class Roda
         SCRIPT_NAME = "SCRIPT_NAME".freeze
         REQUEST_METHOD = "REQUEST_METHOD".freeze
         EMPTY_STRING = "".freeze
-        TERM = {:term=>true}.freeze
+        TERM = Object.new.freeze
         SEGMENT = "([^\\/]+)".freeze
 
         # The current captures for the request.  This gets modified as routing
@@ -420,6 +420,8 @@ class Roda
             consume(matcher)
           when Symbol
             consume(SEGMENT)
+          when TERM
+            env[PATH_INFO] == EMPTY_STRING
           when Hash
             matcher.all?{|k,v| send("match_#{k}", v)}
           when Array
@@ -485,12 +487,6 @@ class Roda
           str = Regexp.escape(str)
           str.gsub!(/:\w+/, SEGMENT)
           consume(str)
-        end
-
-        # Only match if the request path is empty, which usually indicates it
-        # has already been fully matched.
-        def match_term(term)
-          !(term ^ (env[PATH_INFO] == EMPTY_STRING))
         end
 
         # Yield to the given block, clearing any captures before
