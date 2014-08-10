@@ -16,7 +16,7 @@ class App &lt; Roda
   plugin :render
 
   route do |r|
-    r.get '' do
+    r.root :get do
       view :index
     end
 

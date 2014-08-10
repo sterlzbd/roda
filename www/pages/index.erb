@@ -10,7 +10,7 @@ class App < Roda
     r.get do
 
       # matches GET /
-      r.is "" do
+      r.root do
         r.redirect "/hello"
       end
 
