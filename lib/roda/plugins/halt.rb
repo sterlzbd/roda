@@ -22,19 +22,19 @@ class Roda
     # Or set the response body and return:
     #
     #   route do |r|
-    #     r.halt("body')
+    #     r.halt('body')
     #   end
     #
     # Or set both:
     #
     #   route do |r|
-    #     r.halt(403, "body')
+    #     r.halt(403, 'body')
     #   end
     #
     # Or set response status, headers, and body:
     #
     #   route do |r|
-    #     r.halt(403, {'Content-Type'=>'text/csv'}, "body')
+    #     r.halt(403, {'Content-Type'=>'text/csv'}, 'body')
     #   end
     #
     # Note that there is a difference between provide status, headers, and body as separate
