@@ -605,6 +605,7 @@ or modifying the +render_opts+ hash after loading the plugin:
     render_opts[:layout] = "admin_layout" # Default layout template
     render_opts[:layout_opts] = {:engine=>'haml'} # Default layout template options
     render_opts[:opts] = {:default_encoding=>'UTF-8'} # Default template options
+    render_opts[:cache] = false # Disable template caching
   end
 
 == Plugins

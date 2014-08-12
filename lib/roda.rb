@@ -9,52 +9,59 @@ class Roda
   # Error class raised by Roda
   class RodaError < StandardError; end
 
+  if defined?(RUBY_ENGINE) && RUBY_ENGINE != 'ruby'
+    # A thread safe cache class, offering only #[] and #[]= methods,
+    # each protected by a mutex.  Used on non-MRI where Hash is not
+    # thread safe.
+    class RodaCache
+      # Create a new thread safe cache.
+      def initialize
+        @mutex = Mutex.new
+        @hash = {}
+      end
+
+      # Make getting value from underlying hash thread safe.
+      def [](key)
+        @mutex.synchronize{@hash[key]}
+      end
+
+      # Make setting value in underlying hash thread safe.
+      def []=(key, value)
+        @mutex.synchronize{@hash[key] = value}
+      end
+    end
+  else
+    # Hashes are already thread-safe in MRI, due to the GVL, so they
+    # can safely be used as a cache.
+    RodaCache = Hash
+  end
+
   # Base class used for Roda requests.  The instance methods for this
   # class are added by Roda::RodaPlugins::Base::RequestMethods, so this
   # only contains the class methods.
   class RodaRequest < ::Rack::Request;
     @roda_class = ::Roda
-    @match_pattern_cache = {}
+    @match_pattern_cache = RodaCache.new
 
-    if defined?(RUBY_ENGINE) && RUBY_ENGINE != 'ruby'
-      # :nocov:
-      @match_pattern_mutex = Mutex.new
+    # Return the cached pattern for the given object.  If the object is
+    # not already cached, yield to get the basic pattern, and convert the
+    # basic pattern to a pattern that does not partial segments.
+    def self.cached_matcher(obj)
+      cache = @match_pattern_cache
 
-      def self.cached_matcher(obj)
-        unless pattern = @match_pattern_mutex.synchronize{@match_pattern_cache[obj]}
-          pattern = consume_pattern(yield)
-          @match_pattern_mutex.synchronize{@match_pattern_cache[obj] = pattern}
-        end
-        pattern
+      unless pattern = cache[obj]
+        pattern = cache[obj] = consume_pattern(yield)
       end
 
-      def self.inherited(subclass)
-        super
-        subclass.instance_variable_set(:@match_pattern_cache, {})
-        subclass.instance_variable_set(:@match_pattern_mutex, Mutex.new)
-      end
-      # :nocov:
-    else
-      # Return the cached pattern for the given object.  If the object is
-      # not already cached, yield to get the basic pattern, and convert the
-      # basic pattern to a pattern that does not partial segments.
-      def self.cached_matcher(obj)
-        unless pattern = @match_pattern_cache[obj]
-          pattern = @match_pattern_cache[obj] = consume_pattern(yield)
-        end
-        pattern
-      end
-
-      # Initialize the match_pattern cache in the subclass.
-      def self.inherited(subclass)
-        super
-        subclass.instance_variable_set(:@match_pattern_cache, {})
-      end
+      pattern
     end
 
     class << self
       # Reference to the Roda class related to this request class.
       attr_accessor :roda_class
+
+      # The cache to use for match patterns for this request class.
+      attr_accessor :match_pattern_cache
 
       # Since RodaRequest is anonymously subclassed when Roda is subclassed,
       # and then assigned to a constant of the Roda subclass, make inspect
@@ -159,6 +166,7 @@ class Roda
           
           request_class = Class.new(self::RodaRequest)
           request_class.roda_class = subclass
+          request_class.match_pattern_cache = thread_safe_cache
           subclass.const_set(:RodaRequest, request_class)
 
           response_class = Class.new(self::RodaResponse)
@@ -216,6 +224,12 @@ class Roda
           @middleware.each{|a, b| @builder.use(*a, &b)}
           @builder.run lambda{|env| new.call(env, &block)}
           @app = @builder.to_app
+        end
+
+        # A new thread safe cache instance.  This is a method so it can be
+        # easily overridden for alternative implementations.
+        def thread_safe_cache
+          RodaCache.new
         end
 
         # Add a middleware to use for the rack application.  Must be

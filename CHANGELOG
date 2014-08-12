@@ -1,5 +1,7 @@
 = HEAD
 
+* Add Roda::RodaCache for a thread safe cache, currently used for match patterns and templates (jeremyevans)
+
 * Optimize matching by caching consume regexp for strings, regexp, symbol, and :extension matchers (jeremyevans)
 
 * Add r.root for matching root (path "/"), for easier to read version of r.is "" (jeremyevans)

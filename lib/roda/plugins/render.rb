@@ -27,9 +27,8 @@ class Roda
     #
     # The following options are supported:
     #
-    # :cache :: A specific cache to store templates in, or nil/false to not
-    #           cache templates (useful for development), defaults to true to
-    #           automatically use the default template cache.
+    # :cache :: nil/false to not cache templates (useful for development), defaults
+    #           to true to automatically use the default template cache.
     # :engine :: The tilt engine to use for rendering, defaults to 'erb'.
     # :ext :: The file extension to assume for view files, defaults to the :engine
     #         option.
@@ -65,34 +64,6 @@ class Roda
     # If you pass a hash as the first argument to +view+ or +render+, it should
     # have either +:inline+ or +:path+ as one of the keys.
     module Render
-      # Default template cache.  Thread-safe so that multiple threads can
-      # simultaneously use the cache.
-      class Cache
-        # Mutex used to synchronize access to the cache.  Uses a
-        # singleton mutex to reduce memory.
-        MUTEX = ::Mutex.new
-
-        # Initialize the cache.
-        def initialize
-          MUTEX.synchronize{@cache = {}}
-        end
-        
-        # Clear the cache.
-        alias clear initialize
-
-        # If the template is found in the cache under the given key,
-        # return it, otherwise yield to get the template, and
-        # store the template under the given key
-        def fetch(key)
-          unless template = MUTEX.synchronize{@cache[key]}
-            template = yield
-            MUTEX.synchronize{@cache[key] = template}
-          end
-
-          template
-        end
-      end
-
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts={})
         if app.opts[:render]
@@ -112,8 +83,7 @@ class Roda
         if RUBY_VERSION >= "1.9"
           opts[:opts][:default_encoding] ||= Encoding.default_external
         end
-        cache = opts.fetch(:cache, true)
-        opts[:cache] = Cache.new if cache == true
+        opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, true)
       end
 
       module ClassMethods
@@ -125,7 +95,7 @@ class Roda
           opts = subclass.opts[:render] = render_opts.dup
           opts[:layout_opts] = opts[:layout_opts].dup
           opts[:opts] = opts[:opts].dup
-          opts[:cache] = Cache.new if opts[:cache]
+          opts[:cache] = thread_safe_cache if opts[:cache]
         end
 
         # Return the render options for this class.
@@ -198,7 +168,10 @@ class Roda
         # to get the template.
         def cached_template(path, &block)
           if cache = render_opts[:cache]
-            cache.fetch(path, &block)
+            unless template = cache[path]
+              template = cache[path] = yield
+            end
+            template
           else
             yield
           end
