@@ -656,7 +656,9 @@ that contain one of the following modules:
 InstanceMethods :: module included in the Roda class
 ClassMethods :: module that extends the Roda class
 RequestMethods :: module included in the class of the request
+RequestClassMethods :: module extending the class of the request
 ResponseMethods :: module included in the class of the response
+ResponseClassMethods :: module extending the class of the response
 
 If the plugin responds to +load_dependencies+, it will be called first, and should
 be used if the plugin depends on another plugin.

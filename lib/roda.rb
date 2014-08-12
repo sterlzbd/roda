@@ -37,67 +37,18 @@ class Roda
   end
 
   # Base class used for Roda requests.  The instance methods for this
-  # class are added by Roda::RodaPlugins::Base::RequestMethods, so this
-  # only contains the class methods.
+  # class are added by Roda::RodaPlugins::Base::RequestMethods, the
+  # class methods are added by Roda::RodaPlugins::Base::RequestClassMethods.
   class RodaRequest < ::Rack::Request;
     @roda_class = ::Roda
-    @match_pattern_cache = RodaCache.new
-
-    # Return the cached pattern for the given object.  If the object is
-    # not already cached, yield to get the basic pattern, and convert the
-    # basic pattern to a pattern that does not partial segments.
-    def self.cached_matcher(obj)
-      cache = @match_pattern_cache
-
-      unless pattern = cache[obj]
-        pattern = cache[obj] = consume_pattern(yield)
-      end
-
-      pattern
-    end
-
-    class << self
-      # Reference to the Roda class related to this request class.
-      attr_accessor :roda_class
-
-      # The cache to use for match patterns for this request class.
-      attr_accessor :match_pattern_cache
-
-      # Since RodaRequest is anonymously subclassed when Roda is subclassed,
-      # and then assigned to a constant of the Roda subclass, make inspect
-      # reflect the likely name for the class.
-      def inspect
-        "#{roda_class.inspect}::RodaRequest"
-      end
-
-      private
-
-      # The pattern to use for consuming, based on the given argument.  The returned
-      # pattern requires the path starts with a string and does not match partial
-      # segments.
-      def consume_pattern(pattern)
-        /\A(\/(?:#{pattern}))(\/|\z)/
-      end
-    end
+    @match_pattern_cache = ::Roda::RodaCache.new
   end
 
   # Base class used for Roda responses.  The instance methods for this
-  # class are added by Roda::RodaPlugins::Base::ResponseMethods, so this
-  # only contains the class methods.
+  # class are added by Roda::RodaPlugins::Base::ResponseMethods, the class
+  # methods are added by Roda::RodaPlugins::Base::ResponseClassMethods.
   class RodaResponse < ::Rack::Response;
     @roda_class = ::Roda
-
-    class << self
-      # Reference to the Roda class related to this response class.
-      attr_accessor :roda_class
-
-      # Since RodaResponse is anonymously subclassed when Roda is subclassed,
-      # and then assigned to a constant of the Roda subclass, make inspect
-      # reflect the likely name for the class.
-      def inspect
-        "#{roda_class.inspect}::RodaResponse"
-      end
-    end
   end
 
   @builder = ::Rack::Builder.new
@@ -195,8 +146,14 @@ class Roda
           if defined?(mixin::RequestMethods)
             self::RodaRequest.send(:include, mixin::RequestMethods)
           end
+          if defined?(mixin::RequestClassMethods)
+            self::RodaRequest.extend mixin::RequestClassMethods
+          end
           if defined?(mixin::ResponseMethods)
             self::RodaResponse.send(:include, mixin::ResponseMethods)
+          end
+          if defined?(mixin::ResponseClassMethods)
+            self::RodaResponse.extend mixin::ResponseClassMethods
           end
           
           if mixin.respond_to?(:configure)
@@ -315,6 +272,44 @@ class Roda
             request.handle_on_result(instance_exec(@_request, &block))
             response.finish
           end
+        end
+      end
+
+      # Class methods for RodaRequest
+      module RequestClassMethods
+        # Reference to the Roda class related to this request class.
+        attr_accessor :roda_class
+
+        # The cache to use for match patterns for this request class.
+        attr_accessor :match_pattern_cache
+
+        # Return the cached pattern for the given object.  If the object is
+        # not already cached, yield to get the basic pattern, and convert the
+        # basic pattern to a pattern that does not partial segments.
+        def cached_matcher(obj)
+          cache = @match_pattern_cache
+
+          unless pattern = cache[obj]
+            pattern = cache[obj] = consume_pattern(yield)
+          end
+
+          pattern
+        end
+
+        # Since RodaRequest is anonymously subclassed when Roda is subclassed,
+        # and then assigned to a constant of the Roda subclass, make inspect
+        # reflect the likely name for the class.
+        def inspect
+          "#{roda_class.inspect}::RodaRequest"
+        end
+
+        private
+
+        # The pattern to use for consuming, based on the given argument.  The returned
+        # pattern requires the path starts with a string and does not match partial
+        # segments.
+        def consume_pattern(pattern)
+          /\A(\/(?:#{pattern}))(\/|\z)/
         end
       end
 
@@ -585,6 +580,19 @@ class Roda
         ensure
           env[SCRIPT_NAME] = script
           env[PATH_INFO] = path
+        end
+      end
+
+      # Class methods for RodaResponse
+      module ResponseClassMethods
+        # Reference to the Roda class related to this response class.
+        attr_accessor :roda_class
+
+        # Since RodaResponse is anonymously subclassed when Roda is subclassed,
+        # and then assigned to a constant of the Roda subclass, make inspect
+        # reflect the likely name for the class.
+        def inspect
+          "#{roda_class.inspect}::RodaResponse"
         end
       end
 

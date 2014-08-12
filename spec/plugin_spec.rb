@@ -15,10 +15,20 @@ describe "plugins" do
       end
       self::RequestMethods = Module.new do
         def hello(&block)
-          on 'hello', &block
+          on self.class.hello, &block
+        end
+      end
+      self::RequestClassMethods = Module.new do
+        def hello(&block)
+          'hello'
         end
       end
       self::ResponseMethods = Module.new do
+        def foobar
+          self.class.foobar
+        end
+      end
+      self::ResponseClassMethods = Module.new do
         def foobar
           "Default   "
         end
