@@ -14,6 +14,43 @@ class Roda
   # only contains the class methods.
   class RodaRequest < ::Rack::Request;
     @roda_class = ::Roda
+    @match_pattern_cache = {}
+
+    if defined?(RUBY_ENGINE) && RUBY_ENGINE != 'ruby'
+      # :nocov:
+      @match_pattern_mutex = Mutex.new
+
+      def self.cached_matcher(obj)
+        unless pattern = @match_pattern_mutex.synchronize{@match_pattern_cache[obj]}
+          pattern = consume_pattern(yield)
+          @match_pattern_mutex.synchronize{@match_pattern_cache[obj] = pattern}
+        end
+        pattern
+      end
+
+      def self.inherited(subclass)
+        super
+        subclass.instance_variable_set(:@match_pattern_cache, {})
+        subclass.instance_variable_set(:@match_pattern_mutex, Mutex.new)
+      end
+      # :nocov:
+    else
+      # Return the cached pattern for the given object.  If the object is
+      # not already cached, yield to get the basic pattern, and convert the
+      # basic pattern to a pattern that does not partial segments.
+      def self.cached_matcher(obj)
+        unless pattern = @match_pattern_cache[obj]
+          pattern = @match_pattern_cache[obj] = consume_pattern(yield)
+        end
+        pattern
+      end
+
+      # Initialize the match_pattern cache in the subclass.
+      def self.inherited(subclass)
+        super
+        subclass.instance_variable_set(:@match_pattern_cache, {})
+      end
+    end
 
     class << self
       # Reference to the Roda class related to this request class.
@@ -24,6 +61,15 @@ class Roda
       # reflect the likely name for the class.
       def inspect
         "#{roda_class.inspect}::RodaRequest"
+      end
+
+      private
+
+      # The pattern to use for consuming, based on the given argument.  The returned
+      # pattern requires the path starts with a string and does not match partial
+      # segments.
+      def consume_pattern(pattern)
+        /\A(\/(?:#{pattern}))(\/|\z)/
       end
     end
   end
@@ -390,12 +436,49 @@ class Roda
           throw :halt, response
         end
 
+        # Match any of the elements in the given array.  Return at the
+        # first match without evaluating future matches.  Returns false
+        # if no elements in the array match.
+        def _match_array(matcher)
+          matcher.any? do |m|
+            if matched = match(m)
+              if m.is_a?(String)
+                captures.push(m)
+              end
+            end
+
+            matched
+          end
+        end
+
+        # Match the given regexp exactly if it matches a full segment.
+        def _match_regexp(re)
+          consume(self.class.cached_matcher(re){re})
+        end
+
+        # Match the given hash if all hash matchers match.
+        def _match_hash(hash)
+          hash.all?{|k,v| send("match_#{k}", v)}
+        end
+
+        # Match the given string to the request path.  Regexp escapes the
+        # string so that regexp metacharacters are not matched, and recognizes
+        # colon tokens for placeholders.
+        def _match_string(str)
+          consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:\w+/, SEGMENT)})
+        end
+
+        # Match the given symbol if any segment matches.
+        def _match_symbol(sym)
+          consume(self.class.cached_matcher(sym){SEGMENT})
+        end
+
         # Attempts to match the pattern to the current path.  If there is no
         # match, returns false without changes.  Otherwise, modifies
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
-          matchdata = env[PATH_INFO].match(/\A(\/(?:#{pattern}))(\/|\z)/)
+          matchdata = env[PATH_INFO].match(pattern)
 
           return false unless matchdata
 
@@ -423,17 +506,17 @@ class Roda
         def match(matcher)
           case matcher
           when String
-            match_string(matcher)
+            _match_string(matcher)
           when Regexp
-            consume(matcher)
+            _match_regexp(matcher)
           when Symbol
-            consume(SEGMENT)
+            _match_symbol(matcher)
           when TERM
             env[PATH_INFO] == EMPTY_STRING
           when Hash
-            matcher.all?{|k,v| send("match_#{k}", v)}
+            _match_hash(matcher)
           when Array
-            match_array(matcher)
+            _match_array(matcher)
           when Proc
             matcher.call
           else
@@ -441,25 +524,10 @@ class Roda
           end
         end
 
-        # Match any of the elements in the given array.  Return at the
-        # first match without evaluating future matches.  Returns false
-        # if no elements in the array match.
-        def match_array(matcher)
-          matcher.any? do |m|
-            if matched = match(m)
-              if m.is_a?(String)
-                captures.push(m)
-              end
-            end
-
-            matched
-          end
-        end
-
         # Match files with the given extension.  Requires that the
         # request path end with the extension.
         def match_extension(ext)
-          consume("([^\\/]+?)\.#{ext}\\z")
+          consume(self.class.cached_matcher(ext){"([^\\/]+?)\.#{ext}\\z"})
         end
 
         # Match by request method.  This can be an array if you want
@@ -486,15 +554,6 @@ class Roda
           if (v = self[key]) && !v.empty?
             captures << v
           end
-        end
-
-        # Match the given string to the request path.  Regexp escapes the
-        # string so that regexp metacharacters are not matched, and recognizes
-        # colon tokens for placeholders.
-        def match_string(str)
-          str = Regexp.escape(str)
-          str.gsub!(/:\w+/, SEGMENT)
-          consume(str)
         end
 
         # Yield to the given block, clearing any captures before
