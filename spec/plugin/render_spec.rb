@@ -1,7 +1,8 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 begin
-  require 'tilt'
+  require 'tilt/erb'
+  require 'tilt/string'
 rescue LoadError
   warn "tilt not installed, skipping render plugin test"  
 else
