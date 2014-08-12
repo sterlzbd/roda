@@ -18,7 +18,7 @@ class Roda
     module Pass
       module RequestMethods
         # Handle passing inside the current block.
-        def on(*)
+        def _on(_)
           catch(:pass){super}
         end
 

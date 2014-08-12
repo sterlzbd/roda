@@ -1,5 +1,7 @@
 = HEAD
 
+* Optimize r.is, r.get, r.post and similar methods by reducing the number of Array objects created (jeremyevans)
+
 * Support RequestClassMethods and ResponseClassMethods in plugins (jeremyevans)
 
 * Add Roda::RodaCache for a thread safe cache, currently used for match patterns, templates, and plugins (jeremyevans)

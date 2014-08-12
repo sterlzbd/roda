@@ -320,6 +320,7 @@ class Roda
         SLASH = "/".freeze
         TERM = Object.new.freeze
         SEGMENT = "([^\\/]+)".freeze
+        EMPTY_ARRAY = [].freeze
 
         # The current captures for the request.  This gets modified as routing
         # occurs.
@@ -342,10 +343,11 @@ class Roda
           "#{env[SCRIPT_NAME]}#{env[PATH_INFO]}"
         end
 
-        # If this is not a GET method, returns immediately.  Otherwise, calls
-        # #is if there are any arguments, or #on if there are no arguments.
+        # If this is not a GET method, returns immediately.  Otherwise, if there
+        # are arguments, do a terminal match on the arguments, otherwise do a
+        # regular match.
         def get(*args, &block)
-          is_or_on(*args, &block) if get?
+          is_or_on(args, &block) if get?
         end
 
         # Immediately stop execution of the route block and return the given
@@ -373,7 +375,7 @@ class Roda
         # there is only a match if #on has fully matched the path.
         def is(*args, &block)
           args << TERM
-          on(*args, &block)
+          _on(args, &block)
         end
 
         # Attempts to match on all of the arguments.  If all of the
@@ -382,31 +384,14 @@ class Roda
         # If any of the arguments fails, ensures the request state is
         # returned to that before matches were attempted.
         def on(*args, &block)
-          try do
-            # We stop evaluation of this entire matcher unless
-            # each and every `arg` defined for this matcher evaluates
-            # to a non-false value.
-            #
-            # Short circuit examples:
-            #    on true, false do
-            #
-            #    # PATH_INFO=/user
-            #    on true, "signup"
-            return unless args.all?{|arg| match(arg)}
-
-            # The captures we yield here were generated and assembled
-            # by evaluating each of the `arg`s above. Most of these
-            # are carried out by #consume.
-            handle_on_result(yield(*captures))
-
-            _halt response.finish
-          end
+          _on(args, &block)
         end
 
-        # If this is not a POST method, returns immediately.  Otherwise, calls
-        # #is if there are any arguments, or #on if there are no arguments.
+        # If this is not a GET method, returns immediately.  Otherwise, if there
+        # are arguments, do a terminal match on the arguments, otherwise do a
+        # regular match.
         def post(*args, &block)
-          is_or_on(*args, &block) if post?
+          is_or_on(args, &block) if post?
         end
 
         # The response related to the current request.
@@ -420,10 +405,12 @@ class Roda
           _halt response.finish
         end
 
-        #
+        # If the current path is the root ("/"), match on the block.  If a request
+        # method is given, return immediately if the request does not use the given
+        # method.
         def root(request_method=nil, &block)
           if env[PATH_INFO] == SLASH && (!request_method || send(:"#{request_method}?"))
-            on(&block)
+            _on(EMPTY_ARRAY, &block)
           end
         end
 
@@ -479,6 +466,16 @@ class Roda
           consume(self.class.cached_matcher(sym){SEGMENT})
         end
 
+        # Internal match method taking array of matchers instead of multiple
+        # arguments.
+        def _on(args)
+          try do
+            return unless args.all?{|arg| match(arg)}
+            handle_on_result(yield(*captures))
+            _halt response.finish
+          end
+        end
+
         # Attempts to match the pattern to the current path.  If there is no
         # match, returns false without changes.  Otherwise, modifies
         # SCRIPT_NAME to include the matched path, removes the matched
@@ -497,14 +494,13 @@ class Roda
           captures.concat(vars)
         end
 
-        # Backbone of the verb method support, calling #is if there are any
-        # arguments, or #on if there are none.
-        def is_or_on(*args, &block)
-          if args.empty?
-            on(*args, &block)
-          else
-            is(*args, &block)
+        # Backbone of the verb method support, using a terminal match if
+        # args is not empty, or a regular match if it is empty.
+        def is_or_on(args, &block)
+          unless args.empty?
+            args << TERM
           end
+          _on(args, &block)
         end
 
         # Attempt to match the argument to the given request, handling
