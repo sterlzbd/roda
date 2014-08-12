@@ -35,7 +35,7 @@ class Roda
           if ::Rack::Request.method_defined?("#{t}?")
             class_eval(<<-END, __FILE__, __LINE__+1)
               def #{t}(*args, &block)
-                is_or_on(args, &block) if #{t}?
+                _verb(args, &block) if #{t}?
               end
             END
           end

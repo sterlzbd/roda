@@ -347,7 +347,7 @@ class Roda
         # are arguments, do a terminal match on the arguments, otherwise do a
         # regular match.
         def get(*args, &block)
-          is_or_on(args, &block) if get?
+          _verb(args, &block) if get?
         end
 
         # Immediately stop execution of the route block and return the given
@@ -391,7 +391,7 @@ class Roda
         # are arguments, do a terminal match on the arguments, otherwise do a
         # regular match.
         def post(*args, &block)
-          is_or_on(args, &block) if post?
+          _verb(args, &block) if post?
         end
 
         # The response related to the current request.
@@ -476,6 +476,15 @@ class Roda
           end
         end
 
+        # Backbone of the verb method support, using a terminal match if
+        # args is not empty, or a regular match if it is empty.
+        def _verb(args, &block)
+          unless args.empty?
+            args << TERM
+          end
+          _on(args, &block)
+        end
+
         # Attempts to match the pattern to the current path.  If there is no
         # match, returns false without changes.  Otherwise, modifies
         # SCRIPT_NAME to include the matched path, removes the matched
@@ -492,15 +501,6 @@ class Roda
           env[PATH_INFO] = "#{vars.pop}#{matchdata.post_match}"
 
           captures.concat(vars)
-        end
-
-        # Backbone of the verb method support, using a terminal match if
-        # args is not empty, or a regular match if it is empty.
-        def is_or_on(args, &block)
-          unless args.empty?
-            args << TERM
-          end
-          _on(args, &block)
         end
 
         # Attempt to match the argument to the given request, handling
