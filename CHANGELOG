@@ -2,7 +2,7 @@
 
 * Support RequestClassMethods and ResponseClassMethods in plugins (jeremyevans)
 
-* Add Roda::RodaCache for a thread safe cache, currently used for match patterns and templates (jeremyevans)
+* Add Roda::RodaCache for a thread safe cache, currently used for match patterns, templates, and plugins (jeremyevans)
 
 * Optimize matching by caching consume regexp for strings, regexp, symbol, and :extension matchers (jeremyevans)
 

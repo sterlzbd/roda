@@ -58,11 +58,8 @@ class Roda
   # Module in which all Roda plugins should be stored. Also contains logic for
   # registering and loading plugins.
   module RodaPlugins
-    # Mutex protecting the plugins hash
-    @mutex = ::Mutex.new
-
     # Stores registered plugins
-    @plugins = {}
+    @plugins = RodaCache.new
 
     # If the registered plugin already exists, use it.  Otherwise,
     # require it and return it.  This raises a LoadError if such a
@@ -70,9 +67,9 @@ class Roda
     # not register itself correctly.
     def self.load_plugin(name)
       h = @plugins
-      unless plugin = @mutex.synchronize{h[name]}
+      unless plugin = h[name]
         require "roda/plugins/#{name}"
-        raise RodaError, "Plugin #{name} did not register itself correctly in Roda::RodaPlugins" unless plugin = @mutex.synchronize{h[name]}
+        raise RodaError, "Plugin #{name} did not register itself correctly in Roda::RodaPlugins" unless plugin = h[name]
       end
       plugin
     end
@@ -80,7 +77,7 @@ class Roda
     # Register the given plugin with Roda, so that it can be loaded using #plugin
     # with a symbol.  Should be used by plugin files.
     def self.register_plugin(name, mod)
-      @mutex.synchronize{@plugins[name] = mod}
+      @plugins[name] = mod
     end
 
     # The base plugin for Roda, implementing all default functionality.
