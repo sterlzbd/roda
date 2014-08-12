@@ -1,7 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 describe "pass plugin" do 
-  it "executes on no arguments" do
+  it "skips the current block if pass is called" do
     app(:pass) do |r|
       r.on :id do |id|
         r.pass if id == 'foo'
