@@ -458,12 +458,18 @@ class Roda
         # string so that regexp metacharacters are not matched, and recognizes
         # colon tokens for placeholders.
         def _match_string(str)
-          consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:\w+/, SEGMENT)})
+          consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})
         end
 
         # Match the given symbol if any segment matches.
         def _match_symbol(sym)
-          consume(self.class.cached_matcher(sym){SEGMENT})
+          consume(self.class.cached_matcher(sym){_match_symbol_regexp(sym)})
+        end
+
+        # The regular expression to use for matching symbols.  By default, any non-empty
+        # segment matches.
+        def _match_symbol_regexp(s)
+          SEGMENT
         end
 
         # Internal match method taking array of matchers instead of multiple

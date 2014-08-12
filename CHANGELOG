@@ -1,5 +1,7 @@
 = HEAD
 
+* Add symbol_matchers plugin, for using symbol-specific matching regexps (jeremyevans)
+
 * Add csrf plugin for csrf protection using rack_csrf (jeremyevans)
 
 * Optimize r.is, r.get, r.post and similar methods by reducing the number of Array objects created (jeremyevans)
