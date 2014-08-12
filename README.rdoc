@@ -618,6 +618,8 @@ override any Roda method and call +super+ to get the default behavior.
 These plugins ship with roda:
 
 all_verbs :: Adds routing methods to the request for all http verbs.
+csrf :: Adds CSRF protection and helper methods using
+        {rack_csrf}[https://github.com/baldowl/rack_csrf].
 default_headers :: Override the default response headers used.
 error_handler :: Adds a +error+ block that is called for all responses that
                  raise exceptions.
