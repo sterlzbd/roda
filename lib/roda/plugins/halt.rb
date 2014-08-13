@@ -54,7 +54,7 @@ class Roda
             when String
               response.write v
             when Array
-              super
+              throw :halt, v
             else
               raise Roda::RodaError, "singular argument to #halt must be Integer, String, or Array"
             end
@@ -69,7 +69,7 @@ class Roda
             raise Roda::RodaError, "too many arguments given to #halt (accepts 0-3, received #{res.length})"
           end
 
-          _halt response.finish
+          throw :halt, response.finish
         end
       end
     end

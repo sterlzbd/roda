@@ -353,7 +353,7 @@ class Roda
         # Immediately stop execution of the route block and return the given
         # rack response array of status, headers, and body.
         def halt(response)
-          _halt(response)
+          throw :halt, response
         end
 
         # Handle #on block return values.  By default, if a string is given
@@ -402,7 +402,7 @@ class Roda
         # Immediately redirect to the given path.
         def redirect(path, status=302)
           response.redirect(path, status)
-          _halt response.finish
+          throw :halt, response.finish
         end
 
         # If the current path is the root ("/"), match on the block.  If a request
@@ -417,16 +417,7 @@ class Roda
         # Call the given rack app with the environment and immediately return
         # the response as the response for this request.
         def run(app)
-          _halt app.call(env)
-        end
-
-        private
-
-        # Internal halt method, used so that halt can be overridden to handle
-        # non-rack response arrays, but internal code that always generates
-        # rack response arrays can use this for performance.
-        def _halt(response)
-          throw :halt, response
+          throw :halt, app.call(env)
         end
 
         # Match any of the elements in the given array.  Return at the
@@ -484,7 +475,7 @@ class Roda
 
           return unless args.all?{|arg| match(arg)}
           handle_on_result(yield(*captures))
-          _halt response.finish
+          throw :halt, response.finish
         ensure
           env[SCRIPT_NAME] = script
           env[PATH_INFO] = path
