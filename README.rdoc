@@ -641,6 +641,8 @@ per_thread_caching :: Switches the thread-safe cache from a shared cache to a
 render :: Adds support for rendering templates via tilt, as described above.
 streaming :: Adds support for streaming responses.
 symbol_matchers :: Adds support for symbol-specific matching regexps.
+symbol_views :: Allows match blocks to return template name symbols, uses the
+                template view as the response body.
 
 === External Plugins
 

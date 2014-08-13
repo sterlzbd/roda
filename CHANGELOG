@@ -1,5 +1,7 @@
 = HEAD
 
+* Add symbol_views plugin, allowing match blocks to return a template name symbol (jeremyevans)
+
 * Add per_thread_caching plugin, for using separate caches per thread instead of shared thread-safe caches (jeremyevans)
 
 * Add hash_matcher class method, for easily creating hash match methods (jeremyevans)
