@@ -29,12 +29,13 @@ class Roda
     # By default, this plugin sets up the following symbol matchers:
     #
     # :d :: <tt>/\d+/</tt>, a decimal segment
-    # :w :: <tt>/\w+/</tt>, a alphanumeric segment
+    # :format :: <tt>/(?:\.(\w+))?/</tt>, an optional format
     # :opt :: <tt>/(?:\/([^\/]+))?</tt>, an optional segment
     # :optd :: <tt>/(?:\/(\d+))?</tt>, an optional decimal segment
+    # :w :: <tt>/\w+/</tt>, a alphanumeric segment
     #
-    # Note that because of segment matching works, :opt and :optd are only
-    # going to work inside of a string, like this:
+    # Note that because of how segment matching works, :format, :opt, and :optd
+    # are only going to work inside of a string, like this:
     #
     #   r.is "album:opt" do |id|
     #   # matches /album (yielding nil) and /album/foo (yielding "foo")
@@ -42,9 +43,10 @@ class Roda
     module SymbolMatchers
       def self.configure(app)
         app.symbol_matcher(:d, /(\d+)/)
-        app.symbol_matcher(:w, /(\w+)/)
+        app.symbol_matcher(:format, /(?:\.(\w+))?/)
         app.symbol_matcher(:opt, /(?:\/([^\/]+))?/)
         app.symbol_matcher(:optd, /(?:\/(\d+))?/)
+        app.symbol_matcher(:w, /(\w+)/)
       end
 
       module ClassMethods

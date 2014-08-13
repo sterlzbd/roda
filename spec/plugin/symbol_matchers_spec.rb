@@ -19,6 +19,10 @@ describe "symbol_matchers plugin" do
           "bar#{o.inspect}"
         end
 
+        r.is "format:format" do |f|
+          "format#{f.inspect}"
+        end
+
         r.is :f do |f|
           "f#{f}"
         end
@@ -46,6 +50,9 @@ describe "symbol_matchers plugin" do
     body("/bar").should == 'barnil'
     body("/bar/foo").should == 'bar"foo"'
     status("/bar/foo/baz").should == 404
+    body("/format").should == 'formatnil'
+    body("/format.json").should == 'format"json"'
+    status("/format.").should == 404
     body("/ffffffffffffffff").should == 'fffffffffffffffff'
     status("/-").should == 404
     body("/1/1a/f").should == 'dwf11af'
