@@ -656,8 +656,8 @@ autoforme :: Adds support for easily creating a simple administrative front
 
 === How to create plugins
 
-Authoring your own plugins is pretty straightforward.  Plugins are just modules
-that contain one of the following modules:
+Authoring your own plugins is pretty straightforward.  Plugins are just modules,
+which may contain any of the following modules:
 
 InstanceMethods :: module included in the Roda class
 ClassMethods :: module that extends the Roda class
