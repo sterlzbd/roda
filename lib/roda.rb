@@ -496,9 +496,7 @@ class Roda
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
-          matchdata = env[PATH_INFO].match(pattern)
-
-          return false unless matchdata
+          return unless matchdata = env[PATH_INFO].match(pattern)
 
           vars = matchdata.captures
 
