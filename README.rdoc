@@ -643,6 +643,8 @@ streaming :: Adds support for streaming responses.
 symbol_matchers :: Adds support for symbol-specific matching regexps.
 symbol_views :: Allows match blocks to return template name symbols, uses the
                 template view as the response body.
+view_subdirs :: Allows for setting a view subdirectory to use on a per-request
+                basis.
 
 === External Plugins
 

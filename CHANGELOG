@@ -1,5 +1,7 @@
 = HEAD
 
+* Add view_subdirs plugin, for setting a subdirectory for views on a per-request basis (jeremyevans)
+
 * Allow default halt method to take no arguments, and use the current response (jeremyevans)
 
 * Add symbol_views plugin, allowing match blocks to return a template name symbol (jeremyevans)
