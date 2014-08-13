@@ -639,6 +639,22 @@ describe "request verb methods" do
   end
 end
 
+describe "all matcher" do
+  it "should match only all all arguments match" do
+    app do |r|
+      r.is :all=>['foo', :y] do |file|
+        file
+      end
+    end
+
+    body("/foo/bar").should == 'bar'
+    status.should == 404
+    status("/foo").should == 404
+    status("/foo/").should == 404
+    status("/foo/bar/baz").should == 404
+  end
+end
+
 describe "extension matcher" do
   it "should match given file extensions" do
     app do |r|

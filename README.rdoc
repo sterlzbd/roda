@@ -276,7 +276,7 @@ block will be called with the value of the hash.
 
   class App < Roda
     hash_matcher(:foo) do |v|
-      # ...
+      ...
     end
     
     route do |r|
@@ -286,6 +286,27 @@ block will be called with the value of the hash.
     end
   end
 
+==== :all
+
+The :all matcher matches if all of the entries in the given array matches. So
+
+  r.on :all=>[:a, :b] do
+    ...
+  end
+
+is the same as:
+
+  r.on :a, :b do
+    ...
+  end
+
+The reason it also exists as a separate hash matcher is so you can use it inside
+an array matcher. so:
+
+  r.on ['foo', {:all=>['foos', :id]}] do
+  end
+
+Would match +/foo+ and +/foos/10+, but not +/foos+.
 
 ==== :extension
 

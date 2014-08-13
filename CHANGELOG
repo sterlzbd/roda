@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :all hash matcher, allowing array matchers to include conditions where you want to match multiple conditions (jeremyevans)
+
 * Add json plugin, allowing match blocks to return arrays/hashes, returning JSON (jeremyevans)
 
 * Add view_subdirs plugin, for setting a subdirectory for views on a per-request basis (jeremyevans)

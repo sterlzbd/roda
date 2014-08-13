@@ -484,7 +484,7 @@ class Roda
           # nesting matchers won't mess with each other's captures.
           captures.clear
 
-          return unless args.all?{|arg| match(arg)}
+          return unless match_all(args)
           block_result(yield(*captures))
           throw :halt, response.finish
         ensure
@@ -547,6 +547,11 @@ class Roda
           else
             matcher
           end
+        end
+
+        # Match only if all of the arguments in the given array match.
+        def match_all(args)
+          args.all?{|arg| match(arg)}
         end
 
         # Match files with the given extension.  Requires that the
