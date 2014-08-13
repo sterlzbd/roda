@@ -100,6 +100,14 @@ class Roda
           app.call(env)
         end
 
+        # Create a match_#{key} method in the request class using the given
+        # block, so that using a hash key in a request match method will
+        # call the block.  The block should return nil or false to not
+        # match, and anything else to match.
+        def hash_matcher(key, &block)
+          request_module{define_method(:"match_#{key}", &block)}
+        end
+
         # When inheriting Roda, setup a new rack app builder, copy the
         # default middleware and opts into the subclass, and set the
         # request and response classes in the subclasses to be subclasses

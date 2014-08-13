@@ -681,3 +681,29 @@ describe "route block that returns string" do
     body.should == '+1'
   end
 end
+
+describe "hash_matcher" do
+  it "should enable the handling of arbitrary hash keys" do
+    app(:bare) do 
+      hash_matcher(:foos){|v| consume(self.class.cached_matcher(:"foos-#{v}"){/((?:foo){#{v}})/})}
+      route do |r|
+        r.is :foos=>1 do |f|
+          "1#{f}"
+        end
+        r.is :foos=>2 do |f|
+          "2#{f}"
+        end
+        r.is :foos=>3 do |f|
+          "3#{f}"
+        end
+      end
+    end
+
+    body("/foo").should == '1foo'
+    body("/foofoo").should == '2foofoo'
+    body("/foofoofoo").should == '3foofoofoo'
+    status("/foofoofoofoo").should == 404
+    status.should == 404
+  end
+end
+

@@ -1,5 +1,7 @@
 = HEAD
 
+* Add hash_matcher class method, for easily creating hash match methods (jeremyevans)
+
 * Add symbol_matchers plugin, for using symbol-specific matching regexps (jeremyevans)
 
 * Add csrf plugin for csrf protection using rack_csrf (jeremyevans)

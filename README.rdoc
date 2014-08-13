@@ -268,20 +268,17 @@ This makes it easy to handle multiple strings without a Regexp:
 
 === Hash
 
-Hashes call a <tt>match_*</tt> method with the given key using the hash value,
-and match if that matcher returns true.
-
+Hashes allow easily calling specialized match methods on the request.
 The default registered matchers included with Roda are documented below.
-You can add your own hash matchers by adding the appropriate <tt>match_*</tt>
-method to the request class using the +request_module+ method:
+You can add your own hash matchers using the +hash_matcher+ class method,
+which creates an appropriate request match method.  The +hash_matcher+
+block will be called with the value of the hash.
 
   class App < Roda
-    request_module do
-      def match_foo(v)
-        ...
-      end
+    hash_matcher(:foo) do |v|
+      # ...
     end
-
+    
     route do |r|
       r.on :foo=>'bar' do
         ...
