@@ -1,5 +1,7 @@
 = HEAD
 
+* Add backtracking_array plugin, allowing array matchers to backtrack if later matchers do not match (jeremyevans)
+
 * Add :all hash matcher, allowing array matchers to include conditions where you want to match multiple conditions (jeremyevans)
 
 * Add json plugin, allowing match blocks to return arrays/hashes, returning JSON (jeremyevans)

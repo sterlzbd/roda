@@ -636,6 +636,8 @@ override any Roda method and call +super+ to get the default behavior.
 These plugins ship with roda:
 
 all_verbs :: Adds routing methods to the request for all http verbs.
+backtracking_array :: Allows array matchers to backtrack if later matchers
+                      do not match.
 csrf :: Adds CSRF protection and helper methods using
         {rack_csrf}[https://github.com/baldowl/rack_csrf].
 default_headers :: Override the default response headers used.
