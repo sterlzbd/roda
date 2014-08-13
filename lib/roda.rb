@@ -428,6 +428,8 @@ class Roda
           throw :halt, app.call(env)
         end
 
+        private
+
         # Match any of the elements in the given array.  Return at the
         # first match without evaluating future matches.  Returns false
         # if no elements in the array match.
