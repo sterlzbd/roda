@@ -368,8 +368,8 @@ class Roda
         # and the response is empty, use the string as the response body.
         def block_result(result)
           res = response
-          if result.is_a?(String) && res.empty?
-            res.write(result)
+          if res.empty? && (body = block_result_body(result))
+            res.write(body)
           end
         end
 
@@ -498,6 +498,15 @@ class Roda
             args << TERM
           end
           _on(args, &block)
+        end
+
+        # The body to use for the response if the response does not return
+        # a body.  By default, a String is returned directly, and nil is
+        # returned otherwise.
+        def block_result_body(result)
+          if result.is_a?(String)
+            result
+          end
         end
 
         # Attempts to match the pattern to the current path.  If there is no
