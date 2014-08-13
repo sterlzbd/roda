@@ -69,7 +69,7 @@ class Roda
             raise Roda::RodaError, "too many arguments given to #halt (accepts 0-3, received #{res.length})"
           end
 
-          throw :halt, response.finish
+          super()
         end
       end
     end

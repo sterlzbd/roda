@@ -20,6 +20,15 @@ describe "request.halt" do
 
     body.should ==  "foo"
   end
+
+  it "should use current response if no argument is given" do
+    app do |r|
+      response.write('foo')
+      r.halt
+    end
+
+    body.should ==  "foo"
+  end
 end
 
 describe "request.scope" do

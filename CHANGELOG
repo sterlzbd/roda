@@ -1,5 +1,7 @@
 = HEAD
 
+* Allow default halt method to take no arguments, and use the current response (jeremyevans)
+
 * Add symbol_views plugin, allowing match blocks to return a template name symbol (jeremyevans)
 
 * Add per_thread_caching plugin, for using separate caches per thread instead of shared thread-safe caches (jeremyevans)

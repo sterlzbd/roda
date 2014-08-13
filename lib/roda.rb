@@ -359,9 +359,10 @@ class Roda
         end
 
         # Immediately stop execution of the route block and return the given
-        # rack response array of status, headers, and body.
-        def halt(response)
-          throw :halt, response
+        # rack response array of status, headers, and body.  If no argument
+        # is given, uses the current response.
+        def halt(res=response.finish)
+          throw :halt, res
         end
 
         # Handle #on block return values.  By default, if a string is given
