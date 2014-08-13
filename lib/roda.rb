@@ -274,7 +274,7 @@ class Roda
         # behavior after the request and response have been setup.
         def _route(&block)
           catch(:halt) do
-            request.handle_on_result(instance_exec(@_request, &block))
+            request.block_result(instance_exec(@_request, &block))
             response.finish
           end
         end
@@ -366,7 +366,7 @@ class Roda
 
         # Handle #on block return values.  By default, if a string is given
         # and the response is empty, use the string as the response body.
-        def handle_on_result(result)
+        def block_result(result)
           res = response
           if result.is_a?(String) && res.empty?
             res.write(result)
@@ -484,7 +484,7 @@ class Roda
           captures.clear
 
           return unless args.all?{|arg| match(arg)}
-          handle_on_result(yield(*captures))
+          block_result(yield(*captures))
           throw :halt, response.finish
         ensure
           env[SCRIPT_NAME] = script
