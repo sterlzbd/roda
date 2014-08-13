@@ -475,11 +475,19 @@ class Roda
         # Internal match method taking array of matchers instead of multiple
         # arguments.
         def _on(args)
-          try do
-            return unless args.all?{|arg| match(arg)}
-            handle_on_result(yield(*captures))
-            _halt response.finish
-          end
+          script = env[SCRIPT_NAME]
+          path = env[PATH_INFO]
+
+          # For every block, we make sure to reset captures so that
+          # nesting matchers won't mess with each other's captures.
+          captures.clear
+
+          return unless args.all?{|arg| match(arg)}
+          handle_on_result(yield(*captures))
+          _halt response.finish
+        ensure
+          env[SCRIPT_NAME] = script
+          env[PATH_INFO] = path
         end
 
         # Backbone of the verb method support, using a terminal match if
@@ -560,23 +568,6 @@ class Roda
           if (v = self[key]) && !v.empty?
             captures << v
           end
-        end
-
-        # Yield to the given block, clearing any captures before
-        # yielding and restoring the SCRIPT_NAME and PATH_INFO on exit.
-        def try
-          script = env[SCRIPT_NAME]
-          path = env[PATH_INFO]
-
-          # For every block, we make sure to reset captures so that
-          # nesting matchers won't mess with each other's captures.
-          captures.clear
-
-          yield
-
-        ensure
-          env[SCRIPT_NAME] = script
-          env[PATH_INFO] = path
         end
       end
 
