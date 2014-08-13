@@ -326,9 +326,15 @@ class Roda
         REQUEST_METHOD = "REQUEST_METHOD".freeze
         EMPTY_STRING = "".freeze
         SLASH = "/".freeze
-        TERM = Object.new.freeze
         SEGMENT = "([^\\/]+)".freeze
         EMPTY_ARRAY = [].freeze
+        TERM_INSPECT = "TERM".freeze
+
+        TERM = Object.new
+        def TERM.inspect
+          TERM_INSPECT
+        end
+        TERM.freeze
 
         # The current captures for the request.  This gets modified as routing
         # occurs.
