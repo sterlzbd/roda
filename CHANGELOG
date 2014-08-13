@@ -1,5 +1,7 @@
 = HEAD
 
+* Add json plugin, allowing match blocks to return arrays/hashes, returning JSON (jeremyevans)
+
 * Add view_subdirs plugin, for setting a subdirectory for views on a per-request basis (jeremyevans)
 
 * Allow default halt method to take no arguments, and use the current response (jeremyevans)
