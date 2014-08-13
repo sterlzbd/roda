@@ -26,14 +26,25 @@ class Roda
     # Would match +/users/foobar123+, but not +/users/foo+, +/users/FooBar123+,
     # or +/users/foobar_123+.
     #
-    # By default, this plugin sets up two symbol matchers:
+    # By default, this plugin sets up the following symbol matchers:
     #
-    # :d :: <tt>/\d+/</tt>
-    # :w :: <tt>/\w+/</tt>
+    # :d :: <tt>/\d+/</tt>, a decimal segment
+    # :w :: <tt>/\w+/</tt>, a alphanumeric segment
+    # :opt :: <tt>/(?:\/([^\/]+))?</tt>, an optional segment
+    # :optd :: <tt>/(?:\/(\d+))?</tt>, an optional decimal segment
+    #
+    # Note that because of segment matching works, :opt and :optd are only
+    # going to work inside of a string, like this:
+    #
+    #   r.is "album:opt" do |id|
+    #   # matches /album (yielding nil) and /album/foo (yielding "foo")
+    #   # does not match /album/ or /album/foo/bar
     module SymbolMatchers
       def self.configure(app)
         app.symbol_matcher(:d, /(\d+)/)
         app.symbol_matcher(:w, /(\w+)/)
+        app.symbol_matcher(:opt, /(?:\/([^\/]+))?/)
+        app.symbol_matcher(:optd, /(?:\/(\d+))?/)
       end
 
       module ClassMethods

@@ -1,7 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 describe "symbol_matchers plugin" do 
-  it "allows usage of s" do
+  it "allows symbol specific regexps" do
     app(:bare) do
       plugin :symbol_matchers
       symbol_matcher(:f, /(f+)/)
@@ -9,6 +9,14 @@ describe "symbol_matchers plugin" do
       route do |r|
         r.is :d do |d|
           "d#{d}"
+        end
+
+        r.is "foo:optd" do |o|
+          "foo#{o.inspect}"
+        end
+
+        r.is "bar:opt" do |o|
+          "bar#{o.inspect}"
         end
 
         r.is :f do |f|
@@ -31,6 +39,13 @@ describe "symbol_matchers plugin" do
     body("/a").should == 'wa'
     body("/1az0").should == 'w1az0'
     body("/f").should == 'ff'
+    body("/foo").should == 'foonil'
+    body("/foo/123").should == 'foo"123"'
+    status("/foo/bar").should == 404
+    status("/foo/123/a").should == 404
+    body("/bar").should == 'barnil'
+    body("/bar/foo").should == 'bar"foo"'
+    status("/bar/foo/baz").should == 404
     body("/ffffffffffffffff").should == 'fffffffffffffffff'
     status("/-").should == 404
     body("/1/1a/f").should == 'dwf11af'
