@@ -57,6 +57,8 @@ class Roda
       end
 
       module RequestMethods
+        private
+
         # Allow for symbol specific regexps, by using match_symbol_#{s} if
         # defined.  If not defined, calls super for the default behavior.
         def _match_symbol_regexp(s)

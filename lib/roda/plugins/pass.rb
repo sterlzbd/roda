@@ -17,14 +17,16 @@ class Roda
     #   end
     module Pass
       module RequestMethods
-        # Handle passing inside the current block.
-        def _on(_)
-          catch(:pass){super}
-        end
-
         # Skip the current #on block as if it did not match.
         def pass
           throw :pass
+        end
+
+        private
+
+        # Handle passing inside the current block.
+        def _on(_)
+          catch(:pass){super}
         end
       end
     end
