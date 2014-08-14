@@ -1,5 +1,7 @@
 = HEAD
 
+* Optimize match blocks with no arguments (jeremyevans)
+
 * Add content_for plugin, for storing content in one template and retrieving it in another (jeremyevans)
 
 * Add render_each plugin, for rendering a template for each value in an enumerable (jeremyevans)
