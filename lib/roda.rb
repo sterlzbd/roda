@@ -423,8 +423,8 @@ class Roda
         # If the current path is the root ("/"), match on the block.  If a request
         # method is given, return immediately if the request does not use the given
         # method.
-        def root(request_method=nil, &block)
-          if env[PATH_INFO] == SLASH && (!request_method || send(:"#{request_method}?"))
+        def root(&block)
+          if env[PATH_INFO] == SLASH && get?
             _on(EMPTY_ARRAY, &block)
           end
         end

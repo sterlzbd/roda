@@ -32,7 +32,7 @@
 
 * Optimize matching by caching consume regexp for strings, regexp, symbol, and :extension matchers (jeremyevans)
 
-* Add r.root for matching root (path "/"), for easier to read version of r.is "" (jeremyevans)
+* Add r.root for GET / requests, for easier to read version of r.get "" (jeremyevans)
 
 * Optimize r.is terminal matcher, remove :term hash matcher (jeremyevans)
 
