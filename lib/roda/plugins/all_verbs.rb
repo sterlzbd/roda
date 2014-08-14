@@ -30,14 +30,12 @@ class Roda
     # The verb methods are defined via metaprogramming, so there
     # isn't documentation for the individual methods created.
     module AllVerbs
-      module RequestMethods
-        %w'delete head options link patch put trace unlink'.each do |t|
-          if ::Rack::Request.method_defined?("#{t}?")
-            class_eval(<<-END, __FILE__, __LINE__+1)
-              def #{t}(*args, &block)
-                _verb(args, &block) if #{t}?
-              end
-            END
+      def self.configure(app)
+        %w'delete head options link patch put trace unlink'.each do |v|
+          if ::Rack::Request.method_defined?("#{v}?")
+            app.request_module do
+              app::RodaRequest.def_verb_method(self, v)
+            end
           end
         end
       end

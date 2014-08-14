@@ -301,6 +301,17 @@ class Roda
           pattern
         end
 
+        # Define a verb method in the given that will yield to the match block
+        # if the request method matches and there are either no arguments or
+        # there is a successful terminal match on the arguments.
+        def def_verb_method(mod, verb)
+          mod.class_eval(<<-END, __FILE__, __LINE__+1)
+            def #{verb}(*args, &block)
+              _verb(args, &block) if #{verb}?
+            end
+          END
+        end
+
         # Since RodaRequest is anonymously subclassed when Roda is subclassed,
         # and then assigned to a constant of the Roda subclass, make inspect
         # reflect the likely name for the class.
@@ -356,13 +367,6 @@ class Roda
           "#{env[SCRIPT_NAME]}#{env[PATH_INFO]}"
         end
 
-        # If this is not a GET method, returns immediately.  Otherwise, if there
-        # are arguments, do a terminal match on the arguments, otherwise do a
-        # regular match.
-        def get(*args, &block)
-          _verb(args, &block) if get?
-        end
-
         # Immediately stop execution of the route block and return the given
         # rack response array of status, headers, and body.  If no argument
         # is given, uses the current response.
@@ -409,13 +413,6 @@ class Roda
           else
             if_match(args, &block)
           end
-        end
-
-        # If this is not a POST method, returns immediately.  Otherwise, if there
-        # are arguments, do a terminal match on the arguments, otherwise do a
-        # regular match.
-        def post(*args, &block)
-          _verb(args, &block) if post?
         end
 
         # The response related to the current request.
@@ -714,4 +711,6 @@ class Roda
 
   extend RodaPlugins::Base::ClassMethods
   plugin RodaPlugins::Base
+  RodaRequest.def_verb_method(RodaPlugins::Base::RequestMethods, :get)
+  RodaRequest.def_verb_method(RodaPlugins::Base::RequestMethods, :post)
 end

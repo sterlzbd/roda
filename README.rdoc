@@ -658,6 +658,8 @@ middleware :: Allows the Roda app to be used as a rack middleware, calling the
               next middleware if no route matches.
 multi_route :: Adds the ability for multiple named route blocks, with the
                ability to dispatch to them add any point in the main route block.
+not_allowed :: Adds support for automatically returning 405 Method Not Allowed
+               responses.
 not_found :: Adds a +not_found+ block that is called for all 404 responses
              without bodies.
 pass :: Adds a pass method allowing you to skip the current +r.on+ block as if

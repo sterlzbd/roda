@@ -1,5 +1,7 @@
 = HEAD
 
+* Add not_allowed plugin, for automatically returning 405 Method Not Allowed responses (jeremyevans)
+
 * Optimize match blocks with no arguments (jeremyevans)
 
 * Add content_for plugin, for storing content in one template and retrieving it in another (jeremyevans)
