@@ -327,7 +327,6 @@ class Roda
         EMPTY_STRING = "".freeze
         SLASH = "/".freeze
         SEGMENT = "([^\\/]+)".freeze
-        EMPTY_ARRAY = [].freeze
         TERM_INSPECT = "TERM".freeze
 
         TERM = Object.new
@@ -425,7 +424,8 @@ class Roda
         # method.
         def root(&block)
           if env[PATH_INFO] == SLASH && get?
-            _on(EMPTY_ARRAY, &block)
+            block_result(yield)
+            throw :halt, response.finish
           end
         end
 
