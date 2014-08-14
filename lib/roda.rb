@@ -579,7 +579,7 @@ class Roda
         # Match files with the given extension.  Requires that the
         # request path end with the extension.
         def match_extension(ext)
-          consume(self.class.cached_matcher(ext){"([^\\/]+?)\.#{ext}\\z"})
+          consume(self.class.cached_matcher([:extension, ext]){"([^\\/]+?)\.#{ext}\\z"})
         end
 
         # Match by request method.  This can be an array if you want

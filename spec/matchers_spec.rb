@@ -647,15 +647,15 @@ end
 describe "extension matcher" do
   it "should match given file extensions" do
     app do |r|
-      r.on "styles" do
+      r.on "css" do
         r.on :extension=>"css" do |file|
           file
         end
       end
     end
 
-    body("/styles/reset.css").should == 'reset'
-    status("/styles/reset.bar").should == 404
+    body("/css/reset.css").should == 'reset'
+    status("/css/reset.bar").should == 404
   end
 end
 
