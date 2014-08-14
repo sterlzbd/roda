@@ -638,6 +638,8 @@ These plugins ship with roda:
 all_verbs :: Adds routing methods to the request for all http verbs.
 backtracking_array :: Allows array matchers to backtrack if later matchers
                       do not match.
+content_for :: Allows storage of content in one template and retrieval of
+               that content in a different template.
 csrf :: Adds CSRF protection and helper methods using
         {rack_csrf}[https://github.com/baldowl/rack_csrf].
 default_headers :: Override the default response headers used.

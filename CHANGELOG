@@ -1,5 +1,7 @@
 = HEAD
 
+* Add content_for plugin, for storing content in one template and retrieving it in another (jeremyevans)
+
 * Add render_each plugin, for rendering a template for each value in an enumerable (jeremyevans)
 
 * Add backtracking_array plugin, allowing array matchers to backtrack if later matchers do not match (jeremyevans)
