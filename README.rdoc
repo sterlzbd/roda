@@ -664,6 +664,7 @@ pass :: Adds a pass method allowing you to skip the current +r.on+ block as if
 per_thread_caching :: Switches the thread-safe cache from a shared cache to a
                       per-thread cache.
 render :: Adds support for rendering templates via tilt, as described above.
+render_each :: Render a template for each value in an enumerable.
 streaming :: Adds support for streaming responses.
 symbol_matchers :: Adds support for symbol-specific matching regexps.
 symbol_views :: Allows match blocks to return template name symbols, uses the
