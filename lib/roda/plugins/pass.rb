@@ -22,15 +22,15 @@ class Roda
           throw :pass
         end
 
-        # Handle passing inside the root block.
-        def root
-          catch(:pass){super}
-        end
-
         private
 
         # Handle passing inside the match block.
-        def _on(_)
+        def always
+          catch(:pass){super}
+        end
+
+        # Handle passing inside the match block.
+        def if_match(_)
           catch(:pass){super}
         end
       end

@@ -370,7 +370,7 @@ class Roda
           throw :halt, res
         end
 
-        # Handle #on block return values.  By default, if a string is given
+        # Handle match block return values.  By default, if a string is given
         # and the response is empty, use the string as the response body.
         def block_result(result)
           res = response
@@ -385,11 +385,17 @@ class Roda
           "#<#{self.class.inspect} #{env[REQUEST_METHOD]} #{full_path_info}>"
         end
 
-        # Adds TERM as the final argument and passes to #on, ensuring that
-        # there is only a match if #on has fully matched the path.
+        # Does a terminal match on the input, matching only if the arguments
+        # have fully matched the patch.
         def is(*args, &block)
-          args << TERM
-          _on(args, &block)
+          if args.empty?
+            if env[PATH_INFO] == EMPTY_STRING
+              always(&block)
+            end
+          else
+            args << TERM
+            if_match(args, &block)
+          end
         end
 
         # Attempts to match on all of the arguments.  If all of the
@@ -398,10 +404,14 @@ class Roda
         # If any of the arguments fails, ensures the request state is
         # returned to that before matches were attempted.
         def on(*args, &block)
-          _on(args, &block)
+          if args.empty?
+            always(&block)
+          else
+            if_match(args, &block)
+          end
         end
 
-        # If this is not a GET method, returns immediately.  Otherwise, if there
+        # If this is not a POST method, returns immediately.  Otherwise, if there
         # are arguments, do a terminal match on the arguments, otherwise do a
         # regular match.
         def post(*args, &block)
@@ -419,13 +429,10 @@ class Roda
           throw :halt, response.finish
         end
 
-        # If the current path is the root ("/"), match on the block.  If a request
-        # method is given, return immediately if the request does not use the given
-        # method.
+        # If this is a GET request for the root ("/"), yield to the match block.
         def root(&block)
           if env[PATH_INFO] == SLASH && get?
-            block_result(yield)
-            throw :halt, response.finish
+            always(&block)
           end
         end
 
@@ -480,38 +487,21 @@ class Roda
           SEGMENT
         end
 
-        # Internal match method taking array of matchers instead of multiple
-        # arguments.
-        def _on(args)
-          if args.empty?
-            block_result(yield(*captures))
-            throw :halt, response.finish
-          else
-            script = env[SCRIPT_NAME]
-            path = env[PATH_INFO]
-
-            # For every block, we make sure to reset captures so that
-            # nesting matchers won't mess with each other's captures.
-            captures.clear
-
-            begin
-              return unless match_all(args)
-              block_result(yield(*captures))
-              throw :halt, response.finish
-            ensure
-              env[SCRIPT_NAME] = script
-              env[PATH_INFO] = path
-            end
-          end
-        end
-
         # Backbone of the verb method support, using a terminal match if
         # args is not empty, or a regular match if it is empty.
         def _verb(args, &block)
-          unless args.empty?
+          if args.empty?
+            always(&block)
+          else
             args << TERM
+            if_match(args, &block)
           end
-          _on(args, &block)
+        end
+
+        # Yield to the match block and return rack response after the block returns.
+        def always
+          block_result(yield)
+          throw :halt, response.finish
         end
 
         # The body to use for the response if the response does not return
@@ -539,6 +529,25 @@ class Roda
           captures.concat(vars)
         end
 
+        # If all of the arguments match, yields to the match block and
+        # returns the rack response when the block returns.  If any of
+        # the match arguments doesn't match, does nothing.
+        def if_match(args)
+          script = env[SCRIPT_NAME]
+          path = env[PATH_INFO]
+
+          # For every block, we make sure to reset captures so that
+          # nesting matchers won't mess with each other's captures.
+          captures.clear
+
+          return unless match_all(args)
+          block_result(yield(*captures))
+          throw :halt, response.finish
+        ensure
+          env[SCRIPT_NAME] = script
+          env[PATH_INFO] = path
+        end
+        
         # Attempt to match the argument to the given request, handling
         # common ruby types.
         def match(matcher)
