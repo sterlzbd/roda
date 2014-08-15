@@ -1,5 +1,7 @@
 = HEAD
 
+* Add r.multi_route method to multi_route plugin, for dispatching to named route based on first segment in path (jeremyevans)
+
 * Allow non-GET requests to use r.redirect with no argument, redirecting to current path (jeremyevans)
 
 * Add head plugin, for handling HEAD requests like GET requests with an empty body (jeremyevans)

@@ -5,7 +5,7 @@ describe "multi_route plugin" do
     app(:bare) do
       plugin :multi_route
 
-      route(:get) do |r|
+      route("get") do |r|
         r.is "" do
           "get"
         end
@@ -15,7 +15,7 @@ describe "multi_route plugin" do
         end
       end
 
-      route(:post) do |r|
+      route("post") do |r|
         r.is "" do
           "post"
         end
@@ -26,15 +26,22 @@ describe "multi_route plugin" do
       end
 
       route do |r|
+        r.on 'foo' do
+          r.multi_route do
+            "foo"
+          end
+        end
+
         r.get do
-          route(:get)
+          route("get")
 
           r.is "b" do
             "getb"
           end
         end
+
         r.post do
-          route(:post)
+          route("post")
 
           r.is "b" do
             "postb"
@@ -55,6 +62,15 @@ describe "multi_route plugin" do
     status('/c', 'REQUEST_METHOD'=>'POST').should == 404
   end
 
+  it "uses multi_route to dispatch to any named route" do
+    status('/foo').should == 404
+    body('/foo/get/').should == 'get'
+    body('/foo/get/a').should == 'geta'
+    body('/foo/post/').should == 'post'
+    body('/foo/post/a').should == 'posta'
+    body('/foo/post/b').should == 'foo'
+  end
+
   it "handles loading the plugin multiple times correctly" do
     app.plugin :multi_route
     body.should == 'get'
@@ -71,14 +87,14 @@ describe "multi_route plugin" do
     @app = Class.new(@app)
     @app.route do |r|
       r.get do
-        route(:post)
+        route("post")
 
         r.is "b" do
           "1b"
         end
       end
       r.post do
-        route(:get)
+        route("get")
 
         r.is "b" do
           "2b"
