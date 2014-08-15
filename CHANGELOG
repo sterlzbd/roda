@@ -1,5 +1,7 @@
 = HEAD
 
+* Optimize consuming patterns by using a positive lookahead assertion (jeremyevans)
+
 * Add not_allowed plugin, for automatically returning 405 Method Not Allowed responses (jeremyevans)
 
 * Optimize match blocks with no arguments (jeremyevans)

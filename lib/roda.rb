@@ -325,7 +325,7 @@ class Roda
         # pattern requires the path starts with a string and does not match partial
         # segments.
         def consume_pattern(pattern)
-          /\A(\/(?:#{pattern}))(\/|\z)/
+          /\A(\/(?:#{pattern}))(?=\/|\z)/
         end
       end
 
@@ -529,7 +529,7 @@ class Roda
 
           # Don't mutate SCRIPT_NAME, breaks try
           env[SCRIPT_NAME] += vars.shift
-          env[PATH_INFO] = "#{vars.pop}#{matchdata.post_match}"
+          env[PATH_INFO] = matchdata.post_match
 
           captures.concat(vars)
         end
