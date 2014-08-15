@@ -429,7 +429,7 @@ class Roda
         end
 
         # Immediately redirect to the given path.
-        def redirect(path, status=302)
+        def redirect(path=default_redirect_path, status=302)
           response.redirect(path, status)
           throw :halt, response.finish
         end
@@ -533,6 +533,19 @@ class Roda
           env[PATH_INFO] = matchdata.post_match
 
           captures.concat(vars)
+        end
+
+        # The default path to use for redirects when a path is not given.
+        # For non-GET requests, redirects to the current path, which will
+        # trigger a GET request.  This is to make the common case where
+        # a POST request will redirect to a GET request at the same location
+        # will work fine.
+        #
+        # If the current request is a GET request, raise an error, as otherwise
+        # it is easy to create an infinite redirect.
+        def default_redirect_path
+          raise RodaError, "must provide path argument to redirect for get requests" if is_get?
+          full_path_info
         end
 
         # If all of the arguments match, yields to the match block and

@@ -1,5 +1,7 @@
 = HEAD
 
+* Allow non-GET requests to use r.redirect with no argument, redirecting to current path (jeremyevans)
+
 * Add head plugin, for handling HEAD requests like GET requests with an empty body (jeremyevans)
 
 * Optimize consuming patterns by using a positive lookahead assertion (jeremyevans)

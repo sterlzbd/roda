@@ -30,7 +30,7 @@ class App &lt; Roda
 
         r.post do
           @artist.update(params[:artist])
-          r.redirect(r.full_path_info)
+          r.redirect
         end
       end
 
@@ -44,7 +44,7 @@ class App &lt; Roda
 
           r.post do
             @album.update(params[:album])
-            r.redirect(r.full_path_info)
+            r.redirect
           end
         end
 
@@ -58,7 +58,7 @@ class App &lt; Roda
 
             r.post do
               @track.update(params[:track])
-              r.redirect(r.full_path_info)
+              r.redirect
             end
           end
         end
