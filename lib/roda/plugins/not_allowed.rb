@@ -85,7 +85,7 @@ class Roda
             def #{verb}(*args, &block)
               if args.empty?
                 @_is_verbs << "#{verb.to_s.upcase}" if @_is_verbs
-                always(&block) if #{verb}?
+                always(&block) if #{verb == :get ? :is_get : verb}?
               else
                 args << ::Roda::RodaPlugins::Base::RequestMethods::TERM
                 if_match(args) do

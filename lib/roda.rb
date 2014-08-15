@@ -307,7 +307,7 @@ class Roda
         def def_verb_method(mod, verb)
           mod.class_eval(<<-END, __FILE__, __LINE__+1)
             def #{verb}(*args, &block)
-              _verb(args, &block) if #{verb}?
+              _verb(args, &block) if #{verb == :get ? :is_get : verb}?
             end
           END
         end
@@ -339,6 +339,7 @@ class Roda
         SLASH = "/".freeze
         SEGMENT = "([^\\/]+)".freeze
         TERM_INSPECT = "TERM".freeze
+        GET_REQUEST_METHOD = 'GET'.freeze
 
         TERM = Object.new
         def TERM.inspect
@@ -372,6 +373,13 @@ class Roda
         # is given, uses the current response.
         def halt(res=response.finish)
           throw :halt, res
+        end
+
+        # Whether this request is a get request.  Similar to the default
+        # Rack::Request get? method, but can be overridden without changing
+        # rack's behavior.
+        def is_get?
+          env[REQUEST_METHOD] == GET_REQUEST_METHOD
         end
 
         # Handle match block return values.  By default, if a string is given
@@ -428,7 +436,7 @@ class Roda
 
         # If this is a GET request for the root ("/"), yield to the match block.
         def root(&block)
-          if env[PATH_INFO] == SLASH && get?
+          if env[PATH_INFO] == SLASH && is_get?
             always(&block)
           end
         end
