@@ -27,6 +27,10 @@ describe "symbol_matchers plugin" do
           "f#{f}"
         end
 
+        r.is 'q:rest' do |r|
+          "rest#{r}"
+        end
+
         r.is :w do |w|
           "w#{w}"
         end
@@ -58,5 +62,7 @@ describe "symbol_matchers plugin" do
     body("/1/1a/f").should == 'dwf11af'
     body("/12/1azy/fffff").should == 'dwf121azyfffff'
     status("/1/f/a").should == 404
+    body("/qa/b/c/d//f/g").should == 'resta/b/c/d//f/g'
+    body('/q').should == 'rest'
   end
 end

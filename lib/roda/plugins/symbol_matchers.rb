@@ -28,11 +28,12 @@ class Roda
     #
     # By default, this plugin sets up the following symbol matchers:
     #
-    # :d :: <tt>/\d+/</tt>, a decimal segment
-    # :format :: <tt>/(?:\.(\w+))?/</tt>, an optional format
+    # :d :: <tt>/(\d+)/</tt>, a decimal segment
+    # :format :: <tt>/(?:\.(\w+))?/</tt>, an optional format/extension
     # :opt :: <tt>/(?:\/([^\/]+))?</tt>, an optional segment
     # :optd :: <tt>/(?:\/(\d+))?</tt>, an optional decimal segment
-    # :w :: <tt>/\w+/</tt>, a alphanumeric segment
+    # :rest :: <tt>/(.*)/</tt>, all remaining characters, if any
+    # :w :: <tt>/(\w+)/</tt>, a alphanumeric segment
     #
     # Note that because of how segment matching works, :format, :opt, and :optd
     # are only going to work inside of a string, like this:
@@ -46,6 +47,7 @@ class Roda
         app.symbol_matcher(:format, /(?:\.(\w+))?/)
         app.symbol_matcher(:opt, /(?:\/([^\/]+))?/)
         app.symbol_matcher(:optd, /(?:\/(\d+))?/)
+        app.symbol_matcher(:rest, /(.*)/)
         app.symbol_matcher(:w, /(\w+)/)
       end
 
