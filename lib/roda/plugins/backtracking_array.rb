@@ -35,6 +35,7 @@ class Roda
         # entry in the array.
         def _match_array(arg, rest=nil)
           return super unless rest
+          env = @env
 
           script = env[SCRIPT_NAME]
           path = env[PATH_INFO]

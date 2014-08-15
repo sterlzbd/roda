@@ -365,7 +365,7 @@ class Roda
         # As request routing modifies SCRIPT_NAME and PATH_INFO, this exists
         # as a helper method to get the full request of the path info.
         def full_path_info
-          "#{env[SCRIPT_NAME]}#{env[PATH_INFO]}"
+          "#{@env[SCRIPT_NAME]}#{@env[PATH_INFO]}"
         end
 
         # Immediately stop execution of the route block and return the given
@@ -379,7 +379,7 @@ class Roda
         # Rack::Request get? method, but can be overridden without changing
         # rack's behavior.
         def is_get?
-          env[REQUEST_METHOD] == GET_REQUEST_METHOD
+          @env[REQUEST_METHOD] == GET_REQUEST_METHOD
         end
 
         # Handle match block return values.  By default, if a string is given
@@ -394,14 +394,14 @@ class Roda
         # Show information about current request, including request class,
         # request method and full path.
         def inspect
-          "#<#{self.class.inspect} #{env[REQUEST_METHOD]} #{full_path_info}>"
+          "#<#{self.class.inspect} #{@env[REQUEST_METHOD]} #{full_path_info}>"
         end
 
         # Does a terminal match on the input, matching only if the arguments
         # have fully matched the patch.
         def is(*args, &block)
           if args.empty?
-            if env[PATH_INFO] == EMPTY_STRING
+            if @env[PATH_INFO] == EMPTY_STRING
               always(&block)
             end
           else
@@ -436,7 +436,7 @@ class Roda
 
         # If this is a GET request for the root ("/"), yield to the match block.
         def root(&block)
-          if env[PATH_INFO] == SLASH && is_get?
+          if @env[PATH_INFO] == SLASH && is_get?
             always(&block)
           end
         end
@@ -444,7 +444,7 @@ class Roda
         # Call the given rack app with the environment and immediately return
         # the response as the response for this request.
         def run(app)
-          throw :halt, app.call(env)
+          throw :halt, app.call(@env)
         end
 
         private
@@ -523,6 +523,7 @@ class Roda
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
+          env = @env
           return unless matchdata = env[PATH_INFO].match(pattern)
 
           vars = matchdata.captures
@@ -538,6 +539,7 @@ class Roda
         # returns the rack response when the block returns.  If any of
         # the match arguments doesn't match, does nothing.
         def if_match(args)
+          env = @env
           script = env[SCRIPT_NAME]
           path = env[PATH_INFO]
 
@@ -564,7 +566,7 @@ class Roda
           when Symbol
             _match_symbol(matcher)
           when TERM
-            env[PATH_INFO] == EMPTY_STRING
+            @env[PATH_INFO] == EMPTY_STRING
           when Hash
             _match_hash(matcher)
           when Array
@@ -593,7 +595,7 @@ class Roda
           if type.is_a?(Array)
             type.any?{|t| match_method(t)}
           else
-            type.to_s.upcase == env[REQUEST_METHOD]
+            type.to_s.upcase == @env[REQUEST_METHOD]
           end
         end
 
