@@ -2,7 +2,7 @@ require 'json'
 
 class Roda
   module RodaPlugins
-    # The json plugin allows matching blocks to return
+    # The json plugin allows match blocks to return
     # arrays or hashes, and have those arrays or hashes be
     # converted to json which is used as the response body.
     # It also sets the response content type to application/json.

@@ -1,6 +1,6 @@
 class Roda
   module RodaPlugins
-    # The symbol_views plugin allows matching blocks to return
+    # The symbol_views plugin allows match blocks to return
     # symbols, and consider those symbols as views to use for the
     # response body.  So you can take code like:
     #

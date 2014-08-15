@@ -7,7 +7,7 @@ class Roda
     #     # ...
     #   end
     #
-    # By default this will match all segments.  However, if your usernames
+    # By default this will match all nonempty segments.  However, if your usernames
     # must be 6-20 characters, and can only contain +a-z+ and +0-9+, you can do:
     #
     #   plugin :symbol_matchers

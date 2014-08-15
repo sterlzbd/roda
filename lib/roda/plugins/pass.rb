@@ -1,6 +1,6 @@
 class Roda
   module RodaPlugins
-    # The pass plugin adds a request +pass+ method to skip the current +on+
+    # The pass plugin adds a request +pass+ method to skip the current match
     # block as if it did not match.
     #
     #   plugin :pass
