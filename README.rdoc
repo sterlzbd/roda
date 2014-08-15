@@ -648,6 +648,7 @@ flash :: Adds a flash handler.
 h :: Adds h method for html escaping.
 halt :: Augments request#halt method to take status and/or body or status,
         headers, and body.
+head :: Treat HEAD requests like GET requests with an empty response body.
 header_matchers :: Adds host, header, and accept hash matchers.
 hooks :: Adds before and after methods to run code before and after requests.
 indifferent_params :: Adds params method with indifferent access to params,

@@ -1,5 +1,7 @@
 = HEAD
 
+* Add head plugin, for handling HEAD requests like GET requests with an empty body (jeremyevans)
+
 * Optimize consuming patterns by using a positive lookahead assertion (jeremyevans)
 
 * Add not_allowed plugin, for automatically returning 405 Method Not Allowed responses (jeremyevans)
