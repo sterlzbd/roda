@@ -368,31 +368,6 @@ for the response.
     end
   end
 
-== Security
-
-If you want to protect against some common web application
-vulnerabilities, you can use
-{Rack::Protection}[https://github.com/rkh/rack-protection].
-It is not included by default because there are legitimate
-uses for plain Roda (for instance, when designing an API).
-
-If you are using sessions, you should also always set a session
-secret to some undisclosed value. Keep in mind that the content
-in the session cookie is not encrypted, just signed to prevent
-tampering.
-
-  require "roda"
-  require "rack/protection"
-
-  class App < Roda
-    use Rack::Session::Cookie, :secret => ENV['SECRET']
-    use Rack::Protection
-
-    route do |r|
-      # ...
-    end
-  end
-
 == Verb Methods
 
 The main match method is +r.on+, but as displayed above, you can also
@@ -617,12 +592,82 @@ You can override the default rendering options by passing a hash to the plugin,
 or modifying the +render_opts+ hash after loading the plugin:
 
   class App < Roda
-    plugin :render, :engine=>'slim' # Tilt engine/template file extension to use
+    plugin :render, :escape => true # Automatically escape output in erb templates
     render_opts[:views] = 'admin_views' # Default views directory
     render_opts[:layout] = "admin_layout" # Default layout template
     render_opts[:layout_opts] = {:engine=>'haml'} # Default layout template options
     render_opts[:opts] = {:default_encoding=>'UTF-8'} # Default template options
     render_opts[:cache] = false # Disable template caching
+    render_opts[:engine] = 'slim' # Tilt engine/template file extension to use
+  end
+
+== Sessions
+
+By default, Roda doesn't turn on sessions, but most users are going to
+want to turn on session support, and the simplest way to do that is to
+use the <tt>Rack::Session::Cookie</tt> middleware that comes with rack:
+
+  require "roda"
+
+  class App < Roda
+    use Rack::Session::Cookie, :secret => ENV['SECRET']
+  end
+
+== Security
+
+Web application security is a very large topic, but here are some
+things you can do with Roda to prevent some common web application
+vulnerabilities.
+
+=== Session Security
+
+If you are using sessions, you should also always set a session
+secret using the +:secret+ option as shown above.  Make sure this
+secret is not disclosed, because if an attacker knows the +:secret+
+value, they can inject arbitrary session values, which in the worst case
+scenario can lead to remote code execution.
+
+Keep in mind that with <tt>Rack::Session::Cookie</tt>, the content in
+the session cookie is not encrypted, just signed to prevent tampering.
+This means you should not store any data in the session that itself is
+secret.
+
+=== Cross Site Request Forgery (CSRF)
+
+CSRF can be prevented by using the +csrf+ plugin that ships with Roda,
+which uses the {rack_csrf}[https://github.com/baldowl/rack_csrf]
+library.  Just make sure that you include the CSRF token tags in your
+html as appropriate.
+
+It's also possible to use the <tt>Rack::Csrf</tt> middleware directly,
+you don't have to use the +csrf+ plugin.
+
+=== Cross Site Scripting (XSS)
+
+The easiest way to prevent XSS with Roda is to use a template library
+that automatically escapes output by default.  The +:escape+ option
+to the render plugin sets the ERB template processor to escape by
+default, so that in your templates:
+
+  <%= '<>' %>  # outputs &lt;&gt; 
+  <%== '<>' %> # outputs <>
+
+Note that unlike most other render options, the :escape option
+must be passed to the <tt>plugin :render</tt> call, it won't be
+respected if added later.
+
+=== Other
+
+For prevention of some other vulnerabilities, such as click-jacking,
+directory traversal, session hijacking, and IP spoofing, consider using
+{Rack::Protection}[https://github.com/rkh/rack-protection], which is
+a rack middleware that can be added the usual way:
+
+  require 'roda'
+  require 'rack/protection'
+
+  class App < Roda
+    use Rack::Protection
   end
 
 == Plugins
