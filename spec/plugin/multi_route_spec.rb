@@ -33,7 +33,7 @@ describe "multi_route plugin" do
         end
 
         r.get do
-          route("get")
+          r.route("get")
 
           r.is "b" do
             "getb"
@@ -41,7 +41,7 @@ describe "multi_route plugin" do
         end
 
         r.post do
-          route("post")
+          r.route("post")
 
           r.is "b" do
             "postb"
@@ -87,14 +87,14 @@ describe "multi_route plugin" do
     @app = Class.new(@app)
     @app.route do |r|
       r.get do
-        route("post")
+        r.route("post")
 
         r.is "b" do
           "1b"
         end
       end
       r.post do
-        route("get")
+        r.route("get")
 
         r.is "b" do
           "2b"

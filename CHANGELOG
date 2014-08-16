@@ -1,5 +1,7 @@
 = HEAD
 
+* Make multi_route plugin route("route_name") method a request method instead of an instance method (jeremyevans)
+
 * Add r.multi_route method to multi_route plugin, for dispatching to named route based on first segment in path (jeremyevans)
 
 * Allow non-GET requests to use r.redirect with no argument, redirecting to current path (jeremyevans)

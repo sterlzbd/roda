@@ -32,11 +32,11 @@ class Roda
     #     # or
     #
     #     r.on "foo" do
-    #       route 'foo'
+    #       r.route 'foo'
     #     end
     #
     #     r.on "bar" do
-    #       route 'bar'
+    #       r.route 'bar'
     #     end
     #   end
     #
@@ -86,13 +86,6 @@ class Roda
         end
       end
 
-      module InstanceMethods
-        # Dispatch to the named route with the given name.
-        def route(name)
-          instance_exec(request, &self.class.named_route(name))
-        end
-      end
-
       module RequestClassMethods
         # A regexp matching any of the current named routes.
         def named_route_regexp
@@ -107,9 +100,14 @@ class Roda
         # is given, yield to the block.
         def multi_route
           on self.class.named_route_regexp do |section|
-            scope.route(section)
+            route(section)
             yield if block_given?
           end
+        end
+
+        # Dispatch to the named route with the given name.
+        def route(name)
+          scope.instance_exec(self, &self.class.roda_class.named_route(name))
         end
       end
     end
