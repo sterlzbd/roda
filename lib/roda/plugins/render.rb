@@ -51,6 +51,9 @@ class Roda
     # There are a couple of additional options to +view+ and +render+ that are
     # available at runtime:
     #
+    # :content :: Only respected by +view+, provides the content to render
+    #             inside the layout, instead of rendering a template to get
+    #             the content.
     # :inline :: Use the value given as the template code, instead of looking
     #            for template code in a file.
     # :locals :: Hash of local variables to make available inside the template.
@@ -160,7 +163,7 @@ class Roda
             end
           end
 
-          content = render(template, opts)
+          content = opts[:content] || render(template, opts)
 
           if layout = opts.fetch(:layout, render_opts[:layout])
             if layout_opts = opts[:layout_opts]

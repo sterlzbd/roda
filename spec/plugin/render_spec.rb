@@ -28,6 +28,10 @@ describe "render plugin" do
         r.on "path" do
           render(:path=>"./spec/views/about.erb", :locals=>{:title => "Path"}, :layout_opts=>{:locals=>{:title=>"Home"}})
         end
+
+        r.on "content" do
+          view(:content=>'bar', :layout_opts=>{:locals=>{:title=>"Home"}})
+        end
       end
     end
   end
@@ -37,6 +41,7 @@ describe "render plugin" do
     body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
     body("/inline").strip.should == "Hello Agent Smith"
     body("/path").strip.should == "<h1>Path</h1>"
+    body("/content").strip.should == "<title>Roda: Home</title>\nbar"
   end
 
   it "with str as engine" do
