@@ -30,6 +30,8 @@ class Roda
     # :cache :: nil/false to not cache templates (useful for development), defaults
     #           to true to automatically use the default template cache.
     # :engine :: The tilt engine to use for rendering, defaults to 'erb'.
+    # :escape :: Use Roda's Erubis escaping support, which handles postfix
+    #            conditions inside <%= %> tags.
     # :ext :: The file extension to assume for view files, defaults to the :engine
     #         option.
     # :layout :: The base name of the layout file, defaults to 'layout'.
@@ -64,6 +66,12 @@ class Roda
     # If you pass a hash as the first argument to +view+ or +render+, it should
     # have either +:inline+ or +:path+ as one of the keys.
     module Render
+      def self.load_dependencies(app, opts={})
+        if opts[:escape]
+          app.plugin :_erubis_escaping
+        end
+      end
+
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts={})
         if app.opts[:render]
@@ -82,6 +90,9 @@ class Roda
         opts[:opts][:outvar] ||= '@_out_buf'
         if RUBY_VERSION >= "1.9"
           opts[:opts][:default_encoding] ||= Encoding.default_external
+        end
+        if opts[:escape]
+          opts[:opts][:engine_class] = ErubisEscaping::Eruby
         end
         opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, true)
       end

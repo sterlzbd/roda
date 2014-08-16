@@ -15,5 +15,6 @@ Gem::Specification.new do |s|
   s.add_dependency "rack"
   s.add_development_dependency "rspec"
   s.add_development_dependency "tilt"
+  s.add_development_dependency "erubis"
   s.add_development_dependency "rack_csrf"
 end

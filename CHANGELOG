@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :escape option to render plugin for using erb templates where <%= %> escapes and <%== %> does not (jeremyevans)
+
 * Make multi_route plugin route("route_name") method a request method instead of an instance method (jeremyevans)
 
 * Add r.multi_route method to multi_route plugin, for dispatching to named route based on first segment in path (jeremyevans)
