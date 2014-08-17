@@ -16,7 +16,7 @@ class Roda
     #   plugin :all_verbs
     #
     #   route do |r|
-    #     r.delete
+    #     r.delete do
     #       # Handle DELETE
     #     end
     #     r.put do

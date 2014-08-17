@@ -7,7 +7,7 @@ class Roda
     # block does not match +/a/b+ by default:
     #
     #   r.is ['a', 'a/b'] do |path|
-    #     ...
+    #     # ...
     #   end
     #
     # This is because the <tt>'a'</tt> entry in the array matches, which

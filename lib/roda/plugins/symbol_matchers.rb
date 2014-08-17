@@ -38,7 +38,7 @@ class Roda
     # Note that because of how segment matching works, :format, :opt, and :optd
     # are only going to work inside of a string, like this:
     #
-    #   r.is "album:opt" do |id|
+    #   r.is "album:opt" do |id| end
     #   # matches /album (yielding nil) and /album/foo (yielding "foo")
     #   # does not match /album/ or /album/foo/bar
     module SymbolMatchers
