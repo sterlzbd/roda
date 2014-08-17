@@ -363,7 +363,12 @@ class Roda
         end
 
         # As request routing modifies SCRIPT_NAME and PATH_INFO, this exists
-        # as a helper method to get the full request of the path info.
+        # as a helper method to get the full path of the request.
+        #
+        #   r.env['SCRIPT_NAME'] = '/foo'
+        #   r.env['PATH_INFO'] = '/bar'
+        #   r.full_path_info
+        #   # => '/foo/bar'
         def full_path_info
           "#{@env[SCRIPT_NAME]}#{@env[PATH_INFO]}"
         end
@@ -371,13 +376,20 @@ class Roda
         # Immediately stop execution of the route block and return the given
         # rack response array of status, headers, and body.  If no argument
         # is given, uses the current response.
+        #
+        #   r.halt [200, {'Content-Type'=>'text/html'}, ['Hello World!']]
+        #   
+        #   response.status = 200
+        #   response['Content-Type'] = 'text/html'
+        #   response.write 'Hello World!'
+        #   r.halt
         def halt(res=response.finish)
           throw :halt, res
         end
 
-        # Whether this request is a get request.  Similar to the default
-        # Rack::Request get? method, but can be overridden without changing
-        # rack's behavior.
+        # Optimized method for whether this request is a +GET+ request.
+        # Similar to the default Rack::Request get? method, but can be
+        # overridden without changing rack's behavior.
         def is_get?
           @env[REQUEST_METHOD] == GET_REQUEST_METHOD
         end
@@ -393,12 +405,56 @@ class Roda
 
         # Show information about current request, including request class,
         # request method and full path.
+        #
+        #   r.inspect
+        #   # => '#<Roda::RodaRequest GET /foo/bar>'
         def inspect
           "#<#{self.class.inspect} #{@env[REQUEST_METHOD]} #{full_path_info}>"
         end
 
-        # Does a terminal match on the input, matching only if the arguments
-        # have fully matched the patch.
+        # Does a terminal match on the current path, matching only if the arguments
+        # have fully matched the path.  If it matches, the match block is
+        # executed, and when the match block returns, the rack response is
+        # returned.
+        # 
+        #   r.path_info
+        #   # => "/foo/bar"
+        #
+        #   r.is 'foo' do
+        #     # does not match, as path isn't fully matched (/bar remaining)
+        #   end
+        #
+        #   r.is 'foo/bar' do
+        #     # matches as path is empty after matching
+        #   end
+        #
+        # If no arguments are given, matches if the path is already fully matched.
+        # 
+        #   r.on 'foo/bar' do
+        #     r.is do
+        #       # matches as path is already empty
+        #     end
+        #   end
+        #
+        # Note that this matches only if the path after matching the arguments
+        # is empty, not if it still contains a trailing slash:
+        #
+        #   r.path_info
+        #   # =>  "/foo/bar/"
+        #
+        #   r.is 'foo/bar' do
+        #     # does not match, as path isn't fully matched (/ remaining)
+        #   end
+        # 
+        #   r.is 'foo/bar/' do
+        #     # matches as path is empty after matching
+        #   end
+        # 
+        #   r.on 'foo/bar' do
+        #     r.is "" do
+        #       # matches as path is empty after matching
+        #     end
+        #   end
         def is(*args, &block)
           if args.empty?
             if @env[PATH_INFO] == EMPTY_STRING
@@ -410,11 +466,33 @@ class Roda
           end
         end
 
-        # Attempts to match on all of the arguments.  If all of the
-        # arguments match, control is yielded to the block, and after
-        # the block returns, the rack response will be returned.
-        # If any of the arguments fails, ensures the request state is
-        # returned to that before matches were attempted.
+        # Does a match on the path, matching only if the arguments
+        # have matched the path.  Because this doesn't fully match the
+        # path, this is usually used to setup branches of the routing tree,
+        # not for final handling of the request.
+        # 
+        #   r.path_info
+        #   # => "/foo/bar"
+        #
+        #   r.on 'foo' do
+        #     # matches, path is /bar after matching
+        #   end
+        #
+        #   r.on 'bar' do
+        #     # does not match
+        #   end
+        #
+        # Like other routing methods, If it matches, the match block is
+        # executed, and when the match block returns, the rack response is
+        # returned.  However, in general you will call another routing method
+        # inside the match block that fully matches the path and does the
+        # final handling for the request:
+        #
+        #   r.on 'foo' do
+        #     r.is 'bar' do
+        #       # handle /foo/bar request
+        #     end
+        #   end
         def on(*args, &block)
           if args.empty?
             always(&block)
@@ -423,26 +501,104 @@ class Roda
           end
         end
 
-        # The response related to the current request.
+        # The response related to the current request.  See ResponseMethods for
+        # instance methods for the response, but in general the most common usage
+        # is to override the response status and headers:
+        #
+        #   response.status = 200
+        #   response['Header-Name'] = 'Header value'
         def response
           scope.response
         end
 
-        # Immediately redirect to the given path.
+        # Immediately redirect to the path using the status code.  This ends
+        # the processing of the request:
+        #
+        #   r.redirect '/page1', 301 if r['param'] == 'value1'
+        #   r.redirect '/page2' # uses 302 status code
+        #   response.status = 404 # not reached
+        #   
+        # If you do not provide a path, by default it will redirect to the same
+        # path if the request is not a +GET+ request.  This is designed to make
+        # it easy to use where a +POST+ request to a URL changes state, +GET+
+        # returns the current state, and you want to show the current state
+        # after changing:
+        #
+        #   r.is "foo" do
+        #     r.get do
+        #       # show state
+        #     end
+        #   
+        #     r.post do
+        #       # change state
+        #       r.redirect
+        #     end
+        #   end
         def redirect(path=default_redirect_path, status=302)
           response.redirect(path, status)
           throw :halt, response.finish
         end
 
-        # If this is a GET request for the root ("/"), yield to the match block.
+        # Routing matches that only matches +GET+ requests where the current
+        # path is +/+.  If it matches, the match block is executed, and when
+        # the match block returns, the rack response is returned.
+        #
+        #   [r.request_method, r.path_info]
+        #   # => ['GET', '/']
+        #
+        #   r.root do
+        #     # matches
+        #   end
+        #
+        # This is usuable inside other match blocks:
+        #
+        #   [r.request_method, r.path_info]
+        #   # => ['GET', '/foo/']
+        #
+        #   r.on 'foo' do
+        #     r.root do
+        #       # matches
+        #     end
+        #   end
+        #
+        # Note that this does not match non-+GET+ requests:
+        #
+        #   [r.request_method, r.path_info]
+        #   # => ['POST', '/']
+        #
+        #   r.root do
+        #     # does not match
+        #   end
+        #
+        # Use <tt>r.post ""</tt> for +POST+ requests where the current path
+        # is +/+.
+        # 
+        # Nor does it match empty paths:
+        #
+        #   [r.request_method, r.path_info]
+        #   # => ['GET', '/foo']
+        #
+        #   r.on 'foo' do
+        #     r.root do
+        #       # does not match
+        #     end
+        #   end
+        #
+        # Use <tt>r.get true</tt> to handle +GET+ requests where the current
+        # path is empty.
         def root(&block)
           if @env[PATH_INFO] == SLASH && is_get?
             always(&block)
           end
         end
 
-        # Call the given rack app with the environment and immediately return
-        # the response as the response for this request.
+        # Call the given rack app with the environment and return the response
+        # from the rack app as the response for this request.  This ends
+        # the processing of the request:
+        #
+        #   r.run(proc{[403, {}, []]}) unless r['letmein'] == '1'
+        #   r.run(proc{[404, {}, []]})
+        #   response.status = 404 # not reached
         def run(app)
           throw :halt, app.call(@env)
         end
