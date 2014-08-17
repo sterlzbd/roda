@@ -505,7 +505,7 @@ the route block:
   class App < Roda
     plugin :multi_route
 
-    route :api do |r|
+    route "api" do |r|
       r.is do
         # ...
       end
@@ -513,7 +513,7 @@ the route block:
 
     route do |r|
       r.on "api" do
-        route :api
+        r.route "api"
       end
     end
   end
