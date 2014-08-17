@@ -389,9 +389,7 @@ The :extension matcher matches any nonempty path ending with the given extension
   :extension => "css" matches "/foo.css", "/bar.css"
   :extension => "css" does not match "/foo.css/x", "/foo.bar", "/.css"
 
-This matcher yields the part before the extension.  Note that unlike other
-matchers, this matcher assumes terminal behavior, it doesn't match if there
-are additional segments.
+This matcher yields the part before the extension.
 
 ==== :method
 
