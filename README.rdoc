@@ -35,25 +35,30 @@ Here's a simple application, showing how the routing tree works:
     use Rack::Session::Cookie, :secret => ENV['SECRET']
 
     route do |r|
-      # matches any GET request
-      r.get do
+      # GET / request
+      r.root do
+        r.redirect "/hello"
+      end
 
-        # matches GET /
-        r.root do
-          r.redirect "/hello"
+      # /hello branch
+      r.on "hello" do
+
+        # GET /hello/world request
+        r.get "world" do
+          "Hello world!"
         end
 
-        # matches GET /hello or GET /hello/.*
-        r.on "hello" do
-
-          # matches GET /hello/world
-          r.is "world" do
-            "Hello world!"
+        # /hello request
+        r.is do
+          # GET /hello request
+          r.get do
+            "Hello!"
           end
 
-          # matches GET /hello
-          r.is do
-            "Hello!"
+          # POST /hello request
+          r.post do
+            puts "Someone said hello!"
+            r.redirect
           end
         end
       end
@@ -61,8 +66,6 @@ Here's a simple application, showing how the routing tree works:
   end
 
   run App.app
-
-You can now run +rackup+ and enjoy what you have just created.
 
 Here's a breakdown of what is going on in the above block:
 
@@ -76,34 +79,106 @@ with some additional methods for matching routes.  By
 convention, this argument should be named +r+.
 
 The primary way routes are matched in Roda is by calling
-+r.on+, or a method like +r.get+ or +r.is+ which calls +r.on+.
-+r.on+ takes each of the arguments given and tries to match them to
-the current request.  If it is able to successfully match
-all of the arguments, it yields to the +r.on+ block, otherwise
-it returns immediately.
++r.on+, +r.is+, +r.root+, +r.get+, or +r.post+.  These methods are
+calling the routing methods, and each of them takes a block. The
+block is referred to as a match block.
 
-+r.get+ is a shortcut that matches any GET request, and
-+r.is+ is a shortcut that ensures the the exact route is
-matched and there are no further entries in the path.
+Each routing method takes each of the arguments (called matchers)
+given and tries to match them to the current request.  If it is
+able to match all of the arguments, it yields to the match block,
+otherwise the block is skipped and execution continues.
 
-If +r.on+ matches and control is yielded to the block, whenever
-the block returns, the response will be returned.  If the block
-returns a string and the response body hasn't already been
-written to, the block return value will interpreted as the body
-for the response.  If none of the +r.on+ blocks match and the
-route block returns a string, it will be interpreted as the body
-for the response.
++r.on+ matches if all of the arguments match.
++r.is+ matches if all of the arguments match, and there are no
+further entries in the path after matching.
++r.get+ when called without arguments matches any +GET+ request.
++r.get+ when called with any arguments matches only if the
+current request is a +GET+ request and there are no further entries
+in the path after matching.
++r.root+ only matches a +GET+ request where the current path is +/+.
+
+If a routing method matches and control is yielded to the match
+block, whenever the match block returns, Roda will return the
+rack response array of status, headers, and body, to the caller.
+
+If the match block returns a string and the response body hasn't
+already been written to, the block return value will interpreted
+as the body for the response.  If none of the routing methods match
+and the route block returns a string, it will be interpreted as the
+body for the response.
 
 +r.redirect+ immediately returns the response, allowing for
-code such as <tt>r.redirect(path) if some_condition</tt>.
+code such as <tt>r.redirect(path) if some_condition</tt>. If
+called without arguments, it redirects to the current path if
+the current request method is not +GET+.
 
 The +.app+ at the end is an optimization, which you can leave
 off, but which saves a few methods call for every response.
 
+== The Routing Tree
+
+Roda is called a routing tree web framework because the way most
+sites are structured, routing takes the form of a tree based on the
+URL structure of the site.  In general, +r.on+ is used to split the
+tree into different branches, and +r.is+ is finalizes the routing,
+where the request is actually handled.
+
+So a simple routing tree may look something like this (slightly compressed):
+
+  r.on "a" do        # /a branch
+    r.on "b" do      # /a/b branch
+      r.is "c" do    # /a/b/c request
+        r.get do     # GET /a/b/c request
+        r.post do    # POST /a/b/c request
+      r.get "d" do   # GET /a/b/d request
+      r.post "e" do  # POST /a/b/e request
+
+It's also possible to handling the same requests, but structure the
+routing tree by first branching on the request method:
+
+  r.get do           # GET 
+    r.on "a"         # GET /a branch
+      r.on "b"       # GET /a/b branch
+        r.is "c"     # GET /a/b/c request
+        r.is "d"     # GET /a/b/d request
+  r.post do          # POST
+    r.on "a"         # POST /a branch
+      r.on "b"       # POST /a/b branch
+        r.is "c"     # POST /a/b/c request
+        r.is "e"     # POST /a/b/e request
+
+This allows you to easily separate your GET request handling from
+your POST request handling.  If you only have a small number of
+POST request URLs and a large number of GET request URLs, this
+may make things easier.
+
+However, in general routing first by the path and last by the
+request method is likely to lead to simpler and DRYer code. This
+is because at any point during the routing, you can act on the
+request.  For example, if all requests in the +/a+ branch need
+need access permission +A+ and all requests in the +/a/b+ branch
+need access permission +B+, you can easily handle this in the
+routing tree:
+
+  r.on "a" do        # /a branch
+    check_perm(:A)  
+    r.on "b" do      # /a/b branch
+      check_perm(:B)  
+      r.is "c" do    # /a/b/c request
+        r.get do     # GET /a/b/c request
+        r.post do    # POST /a/b/c request
+      r.get "d" do   # GET /a/b/d request
+      r.post "e" do  # POST /a/b/e request
+
+Being able to operate on the request at any point during the
+the routing is one of the major advantages of Roda compared
+to other web frameworks that do not use a routing tree.
+
 == Matchers
 
-Here's an example showcasing how different matchers work.  Matchers
-are arguments passed to +r.on+.
+Other than +r.root+, the routing methods all take arguments called
+matchers.  If all of the matchers match, the match block is yielded
+to.  Here's an example showcasing how different matchers work.
 
   class App < Roda
     route do |r|
@@ -136,7 +211,6 @@ are arguments passed to +r.on+.
 
           # /username/foobar/posts
           r.is "posts" do
-
             # You can access user here, because the blocks are closures.
             "Total Posts: #{user.posts.size}" #=> "Total Posts: 6"
           end
@@ -219,8 +293,8 @@ Colons that are not followed by a <tt>\\w</tt> character are matched literally:
 Note that strings are regexp escaped before being used in a regular
 expression, so:
 
-  "\\d+(/\\w+)?" matches "\d+(/\w+)?"
-  "\\d+/\\w+" does not match "123/abc"
+  "\\d+(/\\w+)?" matches "/\d+(/\w+)?"
+  "\\d+/\\w+" does not match "/123/abc"
 
 === Regexp
 
@@ -361,10 +435,8 @@ You can always set the status code manually via the status attribute
 for the response.
 
   route do |r|
-    r.get do
-      r.is "hello" do
-        response.status = 200
-      end
+    r.get "hello" do
+      response.status = 200
     end
   end
 
@@ -372,22 +444,27 @@ for the response.
 
 The main match method is +r.on+, but as displayed above, you can also
 use +r.get+ or +r.post+.  When called without any arguments, these
-call +r.on+ as long as the request has the appropriate method, so:
+match as long as the request has the appropriate method, so:
 
-    r.get{}
+  r.get do
 
-is syntax sugar for:
+matches any +GET+ request, and
 
-    r.on{} if r.get? 
+  r.post do
 
-If any arguments are given to the method, these call +r.is+ as long as
-the request has the appropriate method, so:
+matches any +POST+ request
 
-    r.post(""){}
+If any arguments are given to the method, these match only
+if the request method matches, all arguments match, and
+only the path has been fully matched by the arguments.  So:
 
-is syntax sugar for:
+  r.post "" do
 
-    r.is(""){} if r.post?
+matches only +POST+ requests where the current path is +/+.
+
+  r.get "a/b"
+
+matches only +GET+ requests where the current path is +/a/b+.
 
 The reason for this difference in behavior is that if you are not
 providing any arguments, you probably don't want to to also test
@@ -400,8 +477,8 @@ you do want, you can provide true as an argument:
   end
 
 If you want to match the request method and do a partial match
-on the request path, you need to use +r.on+ with the <tt>:method</tt>
-hash matcher:
+on the request path instead of a full match, you need to use
++r.on+ with the <tt>:method</tt> hash matcher:
 
   r.on "foo", :method=>:get do # Matches GET /foo(/.*)?
   edn
@@ -409,8 +486,8 @@ hash matcher:
 == Root Method
 
 As displayed above, you can also use +r.root+ as a match method.  This
-method matches <tt>GET /</tt> requests.  +r.root+ is similar to <tt>r.get ""</tt>,
-except that it does not consume the +/+ from the path.
+method matches +GET+ requests where the current path +/+.  +r.root+ is
+similar to <tt>r.get ""</tt>, except that it does not consume the +/+ from the path.
 
 Unlike the other matching methods, +r.root+ takes no arguments.
 
@@ -669,6 +746,8 @@ default, so that in your templates:
 Note that unlike most other render options, the :escape option
 must be passed to the <tt>plugin :render</tt> call, it won't be
 respected if added later.
+
+This support requires {Erubis}[http://www.kuwata-lab.com/erubis/].
 
 === Other
 
