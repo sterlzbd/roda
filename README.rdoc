@@ -476,8 +476,8 @@ in the request (via POST or QUERY_STRING) and it pushes the value as a capture.
 
 == Composition
 
-You can mount a Roda app, along with middlewares, inside another Roda app,
-via +r.run+:
+You can mount any Rack app (including another Roda app), with its own middlewares,
+inside a Roda app, using +r.run+:
 
   class API < Roda
     use SomeMiddleware
@@ -499,7 +499,18 @@ via +r.run+:
 
   run App.app
 
-You can also use the +multi_route+ plugin, which keeps the current scope of
+This will take any path starting with +/api+ and send it to +API+.  In this
+example, +API+ is a Roda app, but it could easily be a Sinatra, Rails, or
+other Rack app.
+
+When you use +r.run+, it is going to call the given Rack app (+API+ in this
+case), and whatever the Rack app returns will be returned as the response
+for the current application.
+
+=== multi_route plugin
+
+If you are just looking to split up the main route block up by branches, you
+should use the +multi_route+ plugin, which keeps the current scope of
 the route block:
 
   class App < Roda
@@ -519,6 +530,9 @@ the route block:
   end
 
   run App.app
+
+This allows you so set instance variables in the main route block, and still
+have access to them inside the +api+ route block.
 
 == Testing
 
