@@ -123,29 +123,39 @@ URL structure of the site.  In general, +r.on+ is used to split the
 tree into different branches, and +r.is+ is finalizes the routing,
 where the request is actually handled.
 
-So a simple routing tree may look something like this (slightly compressed):
+So a simple routing tree may look something like this:
 
-  r.on "a" do        # /a branch
-    r.on "b" do      # /a/b branch
-      r.is "c" do    # /a/b/c request
-        r.get do     # GET /a/b/c request
-        r.post do    # POST /a/b/c request
-      r.get "d" do   # GET /a/b/d request
-      r.post "e" do  # POST /a/b/e request
+  r.on "a" do           # /a branch
+    r.on "b" do         # /a/b branch
+      r.is "c" do       # /a/b/c request
+        r.get do end    # GET /a/b/c request
+        r.post do end   # POST /a/b/c request
+      end
+      r.get "d" do end  # GET /a/b/d request
+      r.post "e" do end # POST /a/b/e request
+    end
+  end
 
 It's also possible to handling the same requests, but structure the
 routing tree by first branching on the request method:
 
-  r.get do           # GET 
-    r.on "a"         # GET /a branch
-      r.on "b"       # GET /a/b branch
-        r.is "c"     # GET /a/b/c request
-        r.is "d"     # GET /a/b/d request
-  r.post do          # POST
-    r.on "a"         # POST /a branch
-      r.on "b"       # POST /a/b branch
-        r.is "c"     # POST /a/b/c request
-        r.is "e"     # POST /a/b/e request
+  r.get do              # GET 
+    r.on "a" do         # GET /a branch
+      r.on "b" do       # GET /a/b branch
+        r.is "c" do end # GET /a/b/c request
+        r.is "d" do end # GET /a/b/d request
+      end
+    end
+  end
+
+  r.post do             # POST
+    r.on "a" do         # POST /a branch
+      r.on "b" do       # POST /a/b branch
+        r.is "c" do end # POST /a/b/c request
+        r.is "e" do end # POST /a/b/e request
+      end
+    end
+  end
 
 This allows you to easily separate your GET request handling from
 your POST request handling.  If you only have a small number of
@@ -160,15 +170,18 @@ need access permission +A+ and all requests in the +/a/b+ branch
 need access permission +B+, you can easily handle this in the
 routing tree:
 
-  r.on "a" do        # /a branch
+  r.on "a" do           # /a branch
     check_perm(:A)  
-    r.on "b" do      # /a/b branch
+    r.on "b" do         # /a/b branch
       check_perm(:B)  
-      r.is "c" do    # /a/b/c request
-        r.get do     # GET /a/b/c request
-        r.post do    # POST /a/b/c request
-      r.get "d" do   # GET /a/b/d request
-      r.post "e" do  # POST /a/b/e request
+      r.is "c" do       # /a/b/c request
+        r.get do end    # GET /a/b/c request
+        r.post do end   # POST /a/b/c request
+      end
+      r.get "d" do end  # GET /a/b/d request
+      r.post "e" do end # POST /a/b/e request
+    end
+  end
 
 Being able to operate on the request at any point during the
 the routing is one of the major advantages of Roda compared
@@ -232,7 +245,7 @@ to.  Here's an example showcasing how different matchers work.
         r.is "login" do
 
           # POST /login, user: foo, pass: baz
-          r.on {:param=>"user"}, {:param=>"pass"} do |user, pass|
+          r.on({:param=>"user"}, {:param=>"pass"}) do |user, pass|
             "#{user}:#{pass}" #=> "foo:baz"
           end
 
@@ -254,75 +267,75 @@ The +/+ here is considered the empty segment.
 If it does not contain a colon or slash, it matches single segment
 with the text of the string, preceeded by a slash.
 
-  "" matches "/"
-  "foo" matches "/foo"
-  "foo" does not match "/food"
+  ""    # matches "/"
+  "foo" # matches "/foo"
+  "foo" # does not match "/food"
 
 If it contains any slashes, it matches one additional segment for
 each slash:
 
-  "foo/bar" matches "/foo/bar"
-  "foo/bar" does not match "/foo/bard"
+  "foo/bar" # matches "/foo/bar"
+  "foo/bar" # does not match "/foo/bard"
 
 If it contains a colon followed by any <tt>\\w</tt> characters, the colon and
 remaing <tt>\\w</tt> characters matches any nonempty segment that contains at
 least one character:
 
-  "foo/:id" matches "/foo/bar", "/foo/baz", etc.
-  "foo/:id" does not match "/fo/bar"
+  "foo/:id" # matches "/foo/bar", "/foo/baz", etc.
+  "foo/:id" # does not match "/fo/bar"
 
 You can use multiple colons in a string:
 
-  ":x/:y" matches "/foo/bar", "/bar/foo" etc.
-  ":x/:y" does not match "/foo", "/bar/"
+  ":x/:y" # matches "/foo/bar", "/bar/foo" etc.
+  ":x/:y" # does not match "/foo", "/bar/"
 
 You can prefix colons:
 
-  "foo:x/bar:y" matches "/food/bard", "/fool/bart", etc.
-  "foo:x/bar:y" does not match "/foo/bart", "/fool/bar", etc.
+  "foo:x/bar:y" # matches "/food/bard", "/fool/bart", etc.
+  "foo:x/bar:y" # does not match "/foo/bart", "/fool/bar", etc.
 
 If any colons are used, the block will yield one argument for
 each segment matched containing the matched text.  So:
 
-  "foo:x/:y" matching "/fool/bar" yields "l", "bar"
+  "foo:x/:y" # matching "/fool/bar" yields "l", "bar"
 
 Colons that are not followed by a <tt>\\w</tt> character are matched literally:
 
-  ":/a" matches "/:/a"
+  ":/a" # matches "/:/a"
 
 Note that strings are regexp escaped before being used in a regular
 expression, so:
 
-  "\\d+(/\\w+)?" matches "/\d+(/\w+)?"
-  "\\d+/\\w+" does not match "/123/abc"
+  "\\d+(/\\w+)?" # matches "/\d+(/\w+)?"
+  "\\d+(/\\w+)?" # does not match "/123/abc"
 
 === Regexp
 
 Regexps match one or more segments by looking for the pattern preceeded by a
 slash:
 
-  /foo\w+/ matches "/foobar"
-  /foo\w+/ does not match "/foo/bar"
+  /foo\w+/ # matches "/foobar"
+  /foo\w+/ # does not match "/foo/bar"
 
 If any patterns are captured by the regexp, they are yielded:
 
-  /foo\w+/ matches "/foobar", yields nothing
-  /foo(\w+)/ matches "/foobar", yields "bar" 
+  /foo\w+/   # matches "/foobar", yields nothing
+  /foo(\w+)/ # matches "/foobar", yields "bar" 
 
 === Symbol
 
 Symbols match any nonempty segment, yielding the segment except for the
 preceeding slash:
 
-  :id matches "/foo" yields "foo"
-  :id does not match "/"
+  :id # matches "/foo" yields "foo"
+  :id # does not match "/"
 
 === Proc
 
 Procs match unless they return false or nil:
 
-  proc{true} matches anything
-  proc{false} does not match anything
+  proc{true}  # matches anything
+  proc{false} # does not match anything
 
 Procs don't capture anything by default, but they can if you add
 the captured text to +r.captures+.
@@ -337,8 +350,8 @@ condition).  Evaluation stops at the first matcher that matches.
 Additionally, if the matched object is a String, the string is yielded.
 This makes it easy to handle multiple strings without a Regexp:
 
-  %w'page1 page2' matches "/page1", "/page2"
-  [] does not match anything
+  %w'page1 page2' # matches "/page1", "/page2"
+  []              # does not match anything
 
 === Hash
 
@@ -350,12 +363,12 @@ block will be called with the value of the hash.
 
   class App < Roda
     hash_matcher(:foo) do |v|
-      ...
+      # ...
     end
     
     route do |r|
       r.on :foo=>'bar' do
-        ...
+        # ...
       end
     end
   end
@@ -365,13 +378,13 @@ block will be called with the value of the hash.
 The :all matcher matches if all of the entries in the given array matches. So
 
   r.on :all=>[:a, :b] do
-    ...
+    # ...
   end
 
 is the same as:
 
   r.on :a, :b do
-    ...
+    # ...
   end
 
 The reason it also exists as a separate hash matcher is so you can use it inside
@@ -386,8 +399,8 @@ Would match +/foo+ and +/foos/10+, but not +/foos+.
 
 The :extension matcher matches any nonempty path ending with the given extension:
 
-  :extension => "css" matches "/foo.css", "/bar.css"
-  :extension => "css" does not match "/foo.css/x", "/foo.bar", "/.css"
+  {:extension => "css"} # matches "/foo.css", "/bar.css"
+  {:extension => "css"} # does not match "/foo.css/x", "/foo.bar", "/.css"
 
 This matcher yields the part before the extension.
 
@@ -396,22 +409,22 @@ This matcher yields the part before the extension.
 This matches the method of the request.  You can provide an array to specify multiple
 request methods and match on any of them:
 
-  :method => :post matches POST
-  :method => %w'post patch' matches POST and PATCH
+  {:method => :post}          # matches POST
+  {:method => %w'post patch'} # matches POST and PATCH
 
 ==== :param
 
 The :param matcher matches if the given parameter is present, even if empty.
 
-  :param => "user" matches "/foo?user=bar", "/foo?user="
-  :param => "user" does not matches "/foo"
+  {:param => "user"} # matches "/foo?user=bar", "/foo?user="
+  {:param => "user"} # does not matches "/foo"
 
 ==== :param!
 
 The :param! matcher matches if the given parameter is present and not empty.
 
-  :param! => "user" matches "/foo?user=bar"
-  :param! => "user" does not matches "/foo", "/foo?user="
+  {:param! => "user"} # matches "/foo?user=bar"
+  {:param! => "user"} # does not matches "/foo", "/foo?user="
 
 === false, nil
 
@@ -444,11 +457,11 @@ The main match method is +r.on+, but as displayed above, you can also
 use +r.get+ or +r.post+.  When called without any arguments, these
 match as long as the request has the appropriate method, so:
 
-  r.get do
+  r.get do end
 
 matches any +GET+ request, and
 
-  r.post do
+  r.post do end
 
 matches any +POST+ request
 
@@ -456,11 +469,11 @@ If any arguments are given to the method, these match only
 if the request method matches, all arguments match, and
 only the path has been fully matched by the arguments.  So:
 
-  r.post "" do
+  r.post "" do end
 
 matches only +POST+ requests where the current path is +/+.
 
-  r.get "a/b"
+  r.get "a/b" do end
 
 matches only +GET+ requests where the current path is +/a/b+.
 
@@ -479,7 +492,7 @@ on the request path instead of a full match, you need to use
 +r.on+ with the <tt>:method</tt> hash matcher:
 
   r.on "foo", :method=>:get do # Matches GET /foo(/.*)?
-  edn
+  end
 
 == Root Method
 
