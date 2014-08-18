@@ -136,7 +136,7 @@ So a simple routing tree may look something like this:
     end
   end
 
-It's also possible to handling the same requests, but structure the
+It's also possible to handle the same requests, but structure the
 routing tree by first branching on the request method:
 
   r.get do              # GET 
@@ -157,9 +157,9 @@ routing tree by first branching on the request method:
     end
   end
 
-This allows you to easily separate your GET request handling from
-your POST request handling.  If you only have a small number of
-POST request URLs and a large number of GET request URLs, this
+This allows you to easily separate your +GET+ request handling from
+your +POST+ request handling.  If you only have a small number of
++POST+ request URLs and a large number of +GET+ request URLs, this
 may make things easier.
 
 However, in general routing first by the path and last by the
@@ -190,8 +190,9 @@ to other web frameworks that do not use a routing tree.
 == Matchers
 
 Other than +r.root+, the routing methods all take arguments called
-matchers.  If all of the matchers match, the match block is yielded
-to.  Here's an example showcasing how different matchers work.
+matchers.  If all of the matchers match, the routing method yields to
+the match block.  Here's an example showcasing how different
+matchers work:
 
   class App < Roda
     route do |r|
@@ -350,8 +351,8 @@ condition).  Evaluation stops at the first matcher that matches.
 Additionally, if the matched object is a String, the string is yielded.
 This makes it easy to handle multiple strings without a Regexp:
 
-  %w'page1 page2' # matches "/page1", "/page2"
-  []              # does not match anything
+  ['page1', 'page2'] # matches "/page1", "/page2"
+  []                 # does not match anything
 
 === Hash
 
@@ -409,8 +410,8 @@ This matcher yields the part before the extension.
 This matches the method of the request.  You can provide an array to specify multiple
 request methods and match on any of them:
 
-  {:method => :post}          # matches POST
-  {:method => %w'post patch'} # matches POST and PATCH
+  {:method => :post}             # matches POST
+  {:method => ['post', 'patch']} # matches POST and PATCH
 
 ==== :param
 
@@ -526,8 +527,8 @@ methods, or via plugins.
 
 == Pollution
 
-Roda tries very hard to avoid polluting the scope in which the +route+
-block operates.  The only instance variables defined by default in the scope of
+Roda tries very hard to avoid polluting the scope of the +route+
+block.  The only instance variables defined by default in the scope of
 the +route+ block are <tt>@_request</tt> and <tt>@_response</tt>.  The only methods defined
 (beyond the default methods for +Object+) are: +env+, +opts+, +request+,
 +response+, +call+, +session+, and +_route+ (private). Constants inside the
@@ -591,7 +592,7 @@ This will take any path starting with +/api+ and send it to +API+.  In this
 example, +API+ is a Roda app, but it could easily be a Sinatra, Rails, or
 other Rack app.
 
-When you use +r.run+, it is going to call the given Rack app (+API+ in this
+When you use +r.run+, Roda calls the given Rack app (+API+ in this
 case), and whatever the Rack app returns will be returned as the response
 for the current application.
 
@@ -619,7 +620,7 @@ the route block:
 
   run App.app
 
-This allows you so set instance variables in the main route block, and still
+This allows you to set instance variables in the main route block, and still
 have access to them inside the +api+ route block.
 
 == Testing
