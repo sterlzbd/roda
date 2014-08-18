@@ -10,7 +10,8 @@ Gem::Specification.new do |s|
   s.homepage          = "https://github.com/jeremyevans/roda"
   s.license           = "MIT"
 
-  s.files = %w'README.rdoc MIT-LICENSE CHANGELOG Rakefile' + Dir['{lib,spec}/**/*.rb']
+  s.files = %w'README.rdoc MIT-LICENSE CHANGELOG Rakefile' + Dir['doc/*.rdoc'] + Dir['doc/release_notes/*.txt'] + Dir['{lib,spec}/**/*.rb']
+  s.extra_rdoc_files = %w'README.rdoc MIT-LICENSE CHANGELOG' + Dir["doc/*.rdoc"] + Dir['doc/release_notes/*.txt']
 
   s.add_dependency "rack"
   s.add_development_dependency "rspec"

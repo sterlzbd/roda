@@ -57,13 +57,11 @@
 <li><a href="https://github.com/jeremyevans/forme">forme</a>: Adds form method for simple creation of html forms inside erb templates.</li>
 </ul>
 
-<% if false %>
 <h2><a href="rdoc/files/CHANGELOG.html">Change Log</a></h2>
 
 <h2>Release Notes</h2>
 <ul>
   <% %w'1'.each do |i| %>
-    <li>Roda <%= i %>:<ul>
       <% 
          lines = []
          Dir["../doc/release_notes/#{i}.*.txt"].map{|f| File.basename(f)}.each do |f|
@@ -72,15 +70,13 @@
          lines.reverse.each do |fs|
       %>
         <li>
-          <% fs.sort_by{|f| f.split('.').map{|x| x.to_i}}.reverse.each do |f| %>
-            <a href="rdoc/files/doc/release_notes/<%= f.gsub('.', '_') %>.html"><%= f.sub(/\.txt$/, '').sub(/(..)\.0$/, '\\1') %></a> |
-          <% end %>
+          <%= fs.sort_by{|f| f.split('.').map{|x| x.to_i}}.reverse.map do |f|
+            "<a href='rdoc/files/doc/release_notes/#{f.gsub('.', '_')}.html'>#{f.sub(/\.txt$/, '').sub(/(..)\.0$/, '\\1')}</a>"
+             end.join(' | ') %>
         </li>
       <% end %>
-    </ul></li>
   <% end %>
 </ul>
-<% end %>
 
 <h2><a href="rdoc/files/MIT-LICENSE.html">License</a></h2>
 

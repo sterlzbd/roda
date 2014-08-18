@@ -34,7 +34,7 @@ rescue LoadError
 end
 
 RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.rdoc']
-RDOC_FILES = %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb"
+RDOC_FILES = %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb" + Dir["doc/*.rdoc"] + Dir['doc/release_notes/*.txt']
 
 rdoc_task_class.new do |rdoc|
   rdoc.rdoc_dir = "rdoc"
