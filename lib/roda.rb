@@ -75,7 +75,9 @@ class Roda
     end
 
     # Register the given plugin with Roda, so that it can be loaded using #plugin
-    # with a symbol.  Should be used by plugin files.
+    # with a symbol.  Should be used by plugin files. Example:
+    #
+    #   Roda::RodaPlugins.register_plugin(:plugin_name, PluginModule)
     def self.register_plugin(name, mod)
       @plugins[name] = mod
     end
@@ -104,6 +106,18 @@ class Roda
         # block, so that using a hash key in a request match method will
         # call the block.  The block should return nil or false to not
         # match, and anything else to match.
+        #
+        #   class App < Roda
+        #     hash_matcher(:foo) do |v|
+        #       self['foo'] == v
+        #     end
+        #
+        #     route do
+        #       r.on :foo=>'bar' do
+        #         # matches when param foo has value bar
+        #       end
+        #     end
+        #   end
         def hash_matcher(key, &block)
           request_module{define_method(:"match_#{key}", &block)}
         end
@@ -133,6 +147,9 @@ class Roda
         # Load a new plugin into the current class.  A plugin can be a module
         # which is used directly, or a symbol represented a registered plugin
         # which will be required and then used.
+        #
+        #   Roda.plugin PluginModule
+        #   Roda.plugin :csrf
         def plugin(mixin, *args, &block)
           if mixin.is_a?(Symbol)
             mixin = RodaPlugins.load_plugin(mixin)
@@ -168,20 +185,55 @@ class Roda
 
         # Include the given module in the request class. If a block
         # is provided instead of a module, create a module using the
-        # the block.
+        # the block. Example:
+        #
+        #   Roda.request_module SomeModule
+        #
+        #   Roda.request_module do
+        #     def description
+        #       "#{request_method} #{path_info}"
+        #     end
+        #   end
+        #
+        #   Roda.route do |r|
+        #     r.description
+        #   end
         def request_module(mod = nil, &block)
           module_include(:request, mod, &block)
         end
     
         # Include the given module in the response class. If a block
         # is provided instead of a module, create a module using the
-        # the block.
+        # the block. Example:
+        #
+        #   Roda.response_module SomeModule
+        #
+        #   Roda.response_module do
+        #     def error!
+        #       self.status = 500
+        #     end
+        #   end
+        #
+        #   Roda.route do |r|
+        #     response.error!
+        #   end
         def response_module(mod = nil, &block)
           module_include(:response, mod, &block)
         end
 
-        # Setup route definitions for the current class, and build the
-        # rack application using the stored middleware.
+        # Setup routing tree for the current Roda application, and build the
+        # underlying rack application using the stored middleware. Requires
+        # a block, which is yielded the request.  By convention, the block
+        # argument should be named +r+.  Example:
+        #
+        #   Roda.route do |r|
+        #     r.root do
+        #       "Root"
+        #     end
+        #   end
+        #
+        # This should only be called once per class, and if called multiple
+        # times will overwrite the previous routing.
         def route(&block)
           @middleware.each{|a, b| @builder.use(*a, &b)}
           @builder.run lambda{|env| new.call(env, &block)}
@@ -195,7 +247,9 @@ class Roda
         end
 
         # Add a middleware to use for the rack application.  Must be
-        # called before calling #route.
+        # called before calling #route to have an effect. Example:
+        #
+        #   Roda.use Rack::Session::Cookie, :secret=>ENV['secret']
         def use(*args, &block)
           @middleware << [args, block]
         end
@@ -234,25 +288,34 @@ class Roda
 
         # Create a request and response of the appopriate
         # class, the instance_exec the route block with
-        # the request, handling any halts.
+        # the request, handling any halts.  This is not usually
+        # called directly.
         def call(env, &block)
           @_request = self.class::RodaRequest.new(self, env)
           @_response = self.class::RodaResponse.new
           _route(&block)
         end
 
-        # The environment for the current request.
+        # The environment hash for the current request. Example:
+        #
+        #   env['REQUEST_METHOD'] # => 'GET'
         def env
           request.env
         end
 
         # The class-level options hash.  This should probably not be
-        # modified at the instance level.
+        # modified at the instance level. Example:
+        #
+        #   Roda.plugin :render
+        #   Roda.route do |r|
+        #     opts[:render_opts].inspect
+        #   end
         def opts
           self.class.opts
         end
 
         # The instance of the request class related to this request.
+        # This is the same object yielded by Roda.route.
         def request
           @_request
         end
@@ -820,12 +883,16 @@ class Roda
           @length  = 0
         end
 
-        # Return the response header with the given key.
+        # Return the response header with the given key. Example:
+        #
+        #   response['Content-Type'] # => 'text/html'
         def [](key)
           @headers[key]
         end
 
         # Set the response header with the given key to the given value.
+        #
+        #   response['Content-Type'] = 'application/json'
         def []=(key, value)
           @headers[key] = value
         end
@@ -843,19 +910,29 @@ class Roda
         # Modify the headers to include a Set-Cookie value that
         # deletes the cookie.  A value hash can be provided to
         # override the default one used to delete the cookie.
+        # Example:
+        #
+        #   response.delete_cookie('foo')
+        #   response.delete_cookie('foo', :domain=>'example.org')
         def delete_cookie(key, value = {})
           ::Rack::Utils.delete_cookie_header!(@headers, key, value)
         end
 
         # Whether the response body has been written to yet.  Note
         # that writing an empty string to the response body marks
-        # the response as not empty.
+        # the response as not empty. Example:
+        #
+        #   response.empty? # => true
+        #   response.write('a')
+        #   response.empty? # => false
         def empty?
           @body.empty?
         end
 
         # Return the rack response array of status, headers, and body
-        # for the current response.
+        # for the current response. Example:
+        #
+        #   response.finish # => [200, {'Content-Type'=>'text/html'}, []]
         def finish
           b = @body
           s = (@status ||= b.empty? ? 404 : 200)
@@ -863,19 +940,28 @@ class Roda
         end
 
         # Set the Location header to the given path, and the status
-        # to the given status.
+        # to the given status.  Example:
+        #
+        #   response.redirect('foo', 301)
+        #   response.redirect('bar')
         def redirect(path, status = 302)
           @headers[LOCATION] = path
           @status  = status
         end
 
         # Set the cookie with the given key in the headers.
+        #
+        #   response.set_cookie('foo', 'bar')
+        #   response.set_cookie('foo', :value=>'bar', :domain=>'example.org')
         def set_cookie(key, value)
           ::Rack::Utils.set_cookie_header!(@headers, key, value)
         end
 
         # Write to the response body.  Updates Content-Length header
-        # with the size of the string written.  Returns nil.
+        # with the size of the string written.  Returns nil. Example:
+        #
+        #   response.write('foo')
+        #   response['Content-Length'] # =>'3'
         def write(str)
           s = str.to_s
 
