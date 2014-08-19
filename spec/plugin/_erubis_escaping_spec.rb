@@ -1,6 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 begin
+  require 'erubis'
   require 'tilt/erb'
   begin
     require 'tilt/erubis'
