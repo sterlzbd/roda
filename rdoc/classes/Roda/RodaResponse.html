@@ -46,63 +46,12 @@
             <p>Base class used for <a href="../Roda.html">Roda</a> responses.  The
             instance methods for this class are added by <a
             href="RodaPlugins/Base/ResponseMethods.html">Roda::RodaPlugins::Base::ResponseMethods</a>,
-            so this only contains the class methods.</p>
-          </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a target="docwin" href="#attribute-c-roda_class">roda_class</a></li>
-            </ol>
-            <h3>Public Instance</h3>
-            <ol>
-              <li><a target="docwin" href="#method-i-inspect">inspect</a></li>
-            </ol>
+            the class methods are added by <a
+            href="RodaPlugins/Base/ResponseClassMethods.html">Roda::RodaPlugins::Base::ResponseClassMethods</a>.</p>
           </div>
           <div id='context'>
           </div>
           <div id='section'>
-            <div id='attribute-list'>
-              <h2 class='section-bar'>Attributes</h2>
-              <div class='name-list'>
-                <table>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-c-roda_class'>roda_class</a>
-                    </td>
-                    <td class='context-item-value'>[RW]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>Reference to the <a href="../Roda.html">Roda</a> class related to this
-                      response class.</p>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div id='methods'>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-inspect'>
-                <a name='method-i-inspect'></a>
-                <div class='synopsis'>
-                  <span class='name'>inspect</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Since <a href="RodaResponse.html">RodaResponse</a> is anonymously
-                  subclassed when <a href="../Roda.html">Roda</a> is subclassed, and then
-                  assigned to a constant of the <a href="../Roda.html">Roda</a> subclass,
-                  make inspect reflect the likely name for the class.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inspect-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#{roda_class.inspect}::RodaResponse&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

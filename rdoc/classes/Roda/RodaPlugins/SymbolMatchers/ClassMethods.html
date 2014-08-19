@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::SymbolMatchers::ClassMethods</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::SymbolMatchers::ClassMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/symbol_matchers_rb.html">lib/roda/plugins/symbol_matchers.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-symbol_matcher">symbol_matcher</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-symbol_matcher'>
+                <a name='method-i-symbol_matcher'></a>
+                <div class='synopsis'>
+                  <span class='name'>symbol_matcher</span>
+                  <span class='arguments'>(s, re)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the regexp to use for the given symbol, instead of the default.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-symbol_matcher-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-symbol_matcher-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">re</span>)&#x000A;  <span class="ruby-identifier">request_module</span>{<span class="ruby-identifier">define_method</span>(<span class="ruby-value">:&quot;match_symbol_#{s}&quot;</span>){<span class="ruby-identifier">re</span>}}&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

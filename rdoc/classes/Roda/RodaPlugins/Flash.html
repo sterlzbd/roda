@@ -48,9 +48,6 @@
             and the resulting GET request will return &#39;b&#39;.</p>
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">flash</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;&#39;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>The flash plugin uses sinatra-flash internally, so you must install
-            sinatra-flash in order to use it.</p>
           </div>
           <div id='context'>
           </div>
@@ -58,23 +55,10 @@
             <h2>Classes and Modules</h2>
             <ol>
               <li><a target="docwin" href="Flash/InstanceMethods.html">Roda::RodaPlugins::Flash::InstanceMethods</a></li>
+              <li><a target="docwin" href="Flash/FlashHash.html">Roda::RodaPlugins::Flash::FlashHash</a></li>
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>FlashHash</td>
-                    <td>=</td>
-                    <td class='context-item-value'>::Sinatra::Flash::FlashHash</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
       </div>

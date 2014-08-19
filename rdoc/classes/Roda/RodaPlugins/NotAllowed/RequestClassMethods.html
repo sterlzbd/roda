@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::NotAllowed::RequestClassMethods</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::NotAllowed::RequestClassMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/not_allowed_rb.html">lib/roda/plugins/not_allowed.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-def_verb_method">def_verb_method</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-def_verb_method'>
+                <a name='method-i-def_verb_method'></a>
+                <div class='synopsis'>
+                  <span class='name'>def_verb_method</span>
+                  <span class='arguments'>(mod, verb)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Define a method named <code>verb</code> in the given module which will
+                  return a 405 response if the method is called with any arguments and the
+                  arguments terminally match but the request method does not.</p>
+                  
+                  <p>If called without any arguments, check to see if the call is inside a
+                  terminal match, and in that case record the request method used.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-def_verb_method-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-def_verb_method-source'><span class="ruby-comment"># File lib/roda/plugins/not_allowed.rb, line 83</span>&#x000A;        <span class="ruby-keyword">def</span> <span class="ruby-identifier">def_verb_method</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">verb</span>)&#x000A;          <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">class_eval</span>(<span class="ruby-string">&quot;            def #{verb}(*args, &amp;block)&#x000A;              if args.empty?&#x000A;                @_is_verbs &lt;&lt; &quot;#{verb.to_s.upcase}&quot; if @_is_verbs&#x000A;                always(&amp;block) if #{verb == :get ? :is_get : verb}?&#x000A;              else&#x000A;                args &lt;&lt; ::Roda::RodaPlugins::Base::RequestMethods::TERM&#x000A;                if_match(args) do |*args|&#x000A;                  if #{verb == :get ? :is_get : verb}?&#x000A;                    block_result(yield(*args))&#x000A;                    throw :halt, response.finish&#x000A;                  end&#x000A;                  response.status = 405&#x000A;                  response[&#39;Allow&#39;] = &#39;#{verb.to_s.upcase}&#39;&#x000A;                  nil&#x000A;                end&#x000A;              end&#x000A;            end&#x000A;&quot;</span>, <span class="ruby-keyword">__FILE__</span>, <span class="ruby-keyword">__LINE__</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>)&#x000A;        <span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

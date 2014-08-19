@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::Render::Cache</title>
+    <title>Roda::RodaPlugins::PerThreadCaching::Cache</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>class</span>
-          Roda::RodaPlugins::Render::Cache
+          Roda::RodaPlugins::PerThreadCaching::Cache
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/render_rb.html">lib/roda/plugins/render.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/per_thread_caching_rb.html">lib/roda/plugins/per_thread_caching.rb</a>
           </li>
         </ol>
         <div class='parent'>
@@ -41,11 +41,7 @@
       </div>
       <div id='content'>
         <div id='text'>
-          <div id='description'>
-            
-            <p>Default template cache.  Thread-safe so that multiple threads can
-            simultaneously use the cache.</p>
-          </div>
+          <div id='description'></div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>Public Class</h3>
@@ -54,7 +50,8 @@
             </ol>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-fetch">fetch</a></li>
+              <li><a target="docwin" href="#method-i-5B-5D">[]</a></li>
+              <li><a target="docwin" href="#method-i-5B-5D-3D">[]=</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -71,8 +68,18 @@
                     <td>&nbsp;</td>
                     <td class='context-item-desc'>
                       
-                      <p>Mutex used to synchronize access to the cache.  Uses a singleton mutex to
-                      reduce memory.</p>
+                      <p>Mutex used to ensure multiple per-thread caches don&#39;t use the same key</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>N</td>
+                    <td>=</td>
+                    <td class='context-item-value'>lambda{MUTEX.synchronize{n += 1}}</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>Auto incrementing number proc used to make sure multiple thread-thread
+                      caches don&#39;t use the same key.</p>
                     </td>
                   </tr>
                 </table>
@@ -88,33 +95,48 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Initialize the cache.</p>
+                  <p>Store unique symbol used to look up in the per thread caches.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/render.rb, line 76</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@cache</span> = {}}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 38</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-ivar">@o</span> = <span class="ruby-value">:&quot;roda_per_thread_cache_#{N.call}&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-fetch'>
-                <a name='method-i-fetch'></a>
+              <div class='method public-instance' id='method-method-i-5B-5D'>
+                <a name='method-i-5B-5D'></a>
                 <div class='synopsis'>
-                  <span class='name'>fetch</span>
+                  <span class='name'>[]</span>
                   <span class='arguments'>(key)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>If the template is found in the cache under the given key, return it,
-                  otherwise yield to get the template, and store the template under the given
-                  key</p>
+                  <p>Return the current thread&#39;s cached value.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-fetch-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-fetch-source'><span class="ruby-comment"># File lib/roda/plugins/render.rb, line 86</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">template</span> = <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@cache</span>[<span class="ruby-identifier">key</span>]}&#x000A;    <span class="ruby-identifier">template</span> = <span class="ruby-keyword">yield</span>&#x000A;    <span class="ruby-constant">MUTEX</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@cache</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">template</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">template</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-5B-5D-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-identifier">_hash</span>[<span class="ruby-identifier">key</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-5B-5D-3D'>
+                <a name='method-i-5B-5D-3D'></a>
+                <div class='synopsis'>
+                  <span class='name'>[]=</span>
+                  <span class='arguments'>(key, value)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the current thread&#39;s cached value.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-3D-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-5B-5D-3D-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 48</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-identifier">_hash</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

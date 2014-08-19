@@ -31,12 +31,101 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2014-07-30 10:44:37 -0700</span>
+          <span class='datetime'>2014-08-19 09:04:25 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-1.0.0+%282014-08-19%29">1.0.0 (2014-08-19)<span><a href="#label-1.0.0+%282014-08-19%29">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Don&#39;t have :extension hash matcher force a terminal match (jeremyevans)</p>
+            </li><li>
+            <p>Add :content option to view method in render plugin to use given content
+            instead of rendering a template (jeremyevans)</p>
+            </li><li>
+            <p>Add :escape option to render plugin for using erb templates where &lt;%=
+            %&gt; escapes and &lt;%== %&gt; does not (jeremyevans)</p>
+            </li><li>
+            <p>Make multi_route plugin route(“route_name”) method a request method instead
+            of an instance method (jeremyevans)</p>
+            </li><li>
+            <p>Add r.multi_route method to multi_route plugin, for dispatching to named
+            route based on first segment in path (jeremyevans)</p>
+            </li><li>
+            <p>Allow non-GET requests to use r.redirect with no argument, redirecting to
+            current path (jeremyevans)</p>
+            </li><li>
+            <p>Add head plugin, for handling HEAD requests like GET requests with an empty
+            body (jeremyevans)</p>
+            </li><li>
+            <p>Optimize consuming patterns by using a positive lookahead assertion
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add not_allowed plugin, for automatically returning 405 Method Not Allowed
+            responses (jeremyevans)</p>
+            </li><li>
+            <p>Optimize match blocks with no arguments (jeremyevans)</p>
+            </li><li>
+            <p>Add content_for plugin, for storing content in one template and retrieving
+            it in another (jeremyevans)</p>
+            </li><li>
+            <p>Add render_each plugin, for rendering a template for each value in an
+            enumerable (jeremyevans)</p>
+            </li><li>
+            <p>Add backtracking_array plugin, allowing array matchers to backtrack if
+            later matchers do not match (jeremyevans)</p>
+            </li><li>
+            <p>Add :all hash matcher, allowing array matchers to include conditions where
+            you want to match multiple conditions (jeremyevans)</p>
+            </li><li>
+            <p>Add json plugin, allowing match blocks to return arrays/hashes, returning
+            JSON (jeremyevans)</p>
+            </li><li>
+            <p>Add view_subdirs plugin, for setting a subdirectory for views on a
+            per-request basis (jeremyevans)</p>
+            </li><li>
+            <p>Allow default halt method to take no arguments, and use the current
+            response (jeremyevans)</p>
+            </li><li>
+            <p>Add symbol_views plugin, allowing match blocks to return a template name
+            symbol (jeremyevans)</p>
+            </li><li>
+            <p>Add per_thread_caching plugin, for using separate caches per thread instead
+            of shared thread-safe caches (jeremyevans)</p>
+            </li><li>
+            <p>Add hash_matcher class method, for easily creating hash match methods
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add symbol_matchers plugin, for using symbol-specific matching regexps
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add csrf plugin for csrf protection using rack_csrf (jeremyevans)</p>
+            </li><li>
+            <p>Optimize r.is, r.get, r.post and similar methods by reducing the number of
+            Array objects created (jeremyevans)</p>
+            </li><li>
+            <p>Support RequestClassMethods and ResponseClassMethods in plugins
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add <a href="../classes/Roda/RodaCache.html">Roda::RodaCache</a> for a
+            thread safe cache, currently used for match patterns, templates, and
+            plugins (jeremyevans)</p>
+            </li><li>
+            <p>Optimize matching by caching consume regexp for strings, regexp, symbol,
+            and :extension matchers (jeremyevans)</p>
+            </li><li>
+            <p>Add r.root for GET / requests, for easier to read version of r.get “”
+            (jeremyevans)</p>
+            </li><li>
+            <p>Optimize r.is terminal matcher, remove :term hash matcher (jeremyevans)</p>
+            </li><li>
+            <p>Make flash plugin no longer depend on sinatra-flash (jeremyevans)</p>
+            </li><li>
+            <p>Move version file to roda/version so it can be required separately without
+            loading dependencies (jeremyevans)</p>
+            </li></ul>
             
             <h1 id="label-0.9.0+%282014-07-30%29">0.9.0 (2014-07-30)<span><a href="#label-0.9.0+%282014-07-30%29">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
             <ul><li>

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::RenderEach</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::RenderEach
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/render_each_rb.html">lib/roda/plugins/render_each.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The render_each plugin allows you to render a template for each value in an
+            enumerable, returning the concatention of all of the template renderings. 
+            For example:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>)</pre>
+            
+            <p>will render the <code>foo</code> template 3 times.  Each time the template
+            is rendered, the local variable <code>foo</code> will contain the given
+            value (e.g. on the first rendering <code>foo</code> is 1).</p>
+            
+            <p>You can pass additional render options via an options hash:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">views=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;partials&#39;</span>)</pre>
+            
+            <p>One additional option supported by is <code>:local</code>, which sets the
+            local variable containing the current value to use.  So:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">local=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">bar</span>)</pre>
+            
+            <p>Will render the <code>foo</code> template, but the local variable used
+            inside the template will be <code>bar</code>.  You can use
+            <code>:local=&gt;nil</code> to not set a local variable inside the
+            template.</p>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="RenderEach/InstanceMethods.html">Roda::RodaPlugins::RenderEach::InstanceMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

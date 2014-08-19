@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>1.0.0.txt</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>1.0.0.txt</h1>
+        <div class='paths'>
+          doc/release_notes/1.0.0.txt
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2014-08-19 09:04:25 -0700</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <ul><li>
+            <p>A csrf plugin has been added for CSRF prevention, using Rack::Csrf.  It
+            also adds helper methods for views such as csrf_tag.</p>
+            </li><li>
+            <p>A symbol_matchers plugin has been added, for customizing the regexps used
+            per symbol.  This also affects the use of embedded colons in strings.  This
+            supports the following symbol regexps by default:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:d </td><td>
+            <p>(d+), a decimal segment</p>
+            </td></tr><tr><td class='label'>:format </td><td>
+            <p>(?:.(w+))?, an optional format/extension</p>
+            </td></tr><tr><td class='label'>:opt </td><td>
+            <p>(?:/([^/]+))?, an optional segment</p>
+            </td></tr><tr><td class='label'>:optd </td><td>
+            <p>(?:/(d+))?, an optional decimal segment</p>
+            </td></tr><tr><td class='label'>:rest </td><td>
+            <p>(.*), all remaining characters, if any</p>
+            </td></tr><tr><td class='label'>:w </td><td>
+            <p>(w+), a alphanumeric segment</p>
+            </td></tr></tbody></table>
+            
+            <p>This allows you to write code such as:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">symbol_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;track/:d&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>And have it only match routes such as /track/123, not /track/abc.</p>
+            
+            <p>Note that :opt, :optd, and :format are only going to make sense when used
+            as embedded colons in strings, due to how segment matching works.</p>
+            
+            <p>You can add your own symbol matchers using the symbol_matcher class method:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">symbol_matchers</span>&#x000A;<span class="ruby-identifier">symbol_matcher</span> :<span class="ruby-identifier">slug</span>, <span class="ruby-regexp">/([\w-]+)/</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">slug</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li><li>
+            <p>A symbol_views plugin has been added, which allows match blocks to return
+            symbols, which are interpreted as template names:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">symbol_views</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  :<span class="ruby-identifier">template_name</span> <span class="ruby-comment"># same as view :template_name</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li><li>
+            <p>A json plugin has been added, which allows match blocks to return arrays or
+            hashes, and uses a JSON version of them as the response body:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">json</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  {<span class="ruby-string">&#39;a&#39;</span>=<span class="ruby-operator">&gt;</span>[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>]} <span class="ruby-comment"># response: {&quot;a&quot;:[1,2,3]}</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>This also sets the Content-Type of the response to application/json.</p>
+            
+            <p>To convert additional object types to JSON, you can modify
+            json_response_classes:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">json</span>&#x000A;<span class="ruby-identifier">json_response_classes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span></pre>
+            </li><li>
+            <p>A view_subdirs plugin has been added for setting a default subdirectory to
+            use for views:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;admin&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">set_view_subdir</span> <span class="ruby-string">&quot;admin&quot;</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;index&quot;</span> <span class="ruby-comment"># uses admin/index view</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li><li>
+            <p>A render_each plugin has been added, for rendering the same template for
+            multiple objects, and returning the concatenation of all of the output:</p>
+            
+            <pre>&lt;%= render_each([1,2,3], &#39;number&#39;) %&gt;</pre>
+            
+            <p>This renders the number template 3 times.  Each time the template is
+            rendered, a local variable named number will be present with the current
+            entry in the enumerable.  You can control the name of the local variable
+            using the :local option:</p>
+            
+            <pre>&lt;%= render_each([1,2,3], &#39;number&#39;, :local=&gt;:n) %&gt;</pre>
+            </li><li>
+            <p>A content_for plugin has been added, for storing content in one template
+            and retrieving that content in a different template (such as the layout). 
+            To set content, you call content_for with a block:</p>
+            
+            <pre>&lt;% content_for :foo do %&gt;&#x000A;  content for foo&#x000A;&lt;% end %&gt;</pre>
+            
+            <p>To retrieve content, you call content_for without a block:</p>
+            
+            <pre>&lt;%= content_for :foo %&gt;</pre>
+            
+            <p>This plugin probably only works when using erb templates.</p>
+            </li><li>
+            <p>A not_allowed plugin has been added, for automatically returning 405 Method
+            Not Allowed responses when a route is handled for a different request
+            method than the one used.  For this routing tree:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">not_allowed</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>If you submit a POST /foo request, it will return a 405 error instead of a
+            404 error.</p>
+            
+            <p>This also handles cases when multiple methods are supported for a single
+            path, so for this routing tree:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>If you submit a DELETE /foo request, it will return a 405 error instead of
+            a 404 error.</p>
+            </li><li>
+            <p>A head plugin has been added, automatically handling HEAD requests the same
+            as GET requests, except returning an empty body. So for this routing tree:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">head</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>A request for HEAD /foo will return a 200 result instead of a 404 error.</p>
+            </li><li>
+            <p>A backtracking_array plugin has been added, which makes matching backtrack
+            to the next entry in an array if a later matcher fails. For example, the
+            following code does not match /foo/bar by default in Roda:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;foo/bar&#39;</span>] <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>This is because the &#39;foo&#39; entry in the array matches, so the array
+            matches.  However, after the array is matched, the terminal matcher added
+            by r.is fails to match.  That causes the routing method not to match the
+            request, so the match block is not called.</p>
+            
+            <p>With the backtracking_array plugin, failures of later matchers after an
+            array matcher backtrack so the next entry in the array is tried.</p>
+            </li><li>
+            <p>A per_thread_caching plugin has been added, allowing you to change from a
+            thread-safe shared cache to a per-thread cache, which may be faster on
+            alternative ruby implementations, at the cost of additional memory usage.</p>
+            </li></ul>
+            
+            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <ul><li>
+            <p>The hash_matcher class method has been added to make it easier to define
+            custom hash matchers:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">hash_matcher</span>(:<span class="ruby-identifier">foo</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-keyword">self</span>[<span class="ruby-string">&#39;foo&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">v</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">foo=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches when param foo has value bar</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li><li>
+            <p>An r.root routing method has been added for handling GET requests where the
+            current path is /.  This is basically a faster and simpler version of r.get
+            “”, except it does not consume the / from the path.</p>
+            </li><li>
+            <p>The r.halt method now works without an argument, in which case it uses the
+            current response.</p>
+            </li><li>
+            <p>The r.redirect method now works without an argument for non-GET requests,
+            redirecting to the current path.</p>
+            </li><li>
+            <p>An :all hash matcher has been added, which takes an array and matches only
+            if all of the elements match.  This is mainly designed for usage inside an
+            array matcher, so:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> [<span class="ruby-string">&quot;foo&quot;</span>, {:<span class="ruby-identifier">all=</span><span class="ruby-operator">&gt;</span>[<span class="ruby-string">&quot;bar&quot;</span>, :<span class="ruby-identifier">id</span>]}] <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>will match either /foo or /bar/123, but not /bar.</p>
+            </li><li>
+            <p>The render plugin&#39;s view method now accepts a :content option, in which
+            case it uses the content directly without running it through the template
+            engine.  This is useful if you have arbitrary content you want rendered
+            inside the layout.</p>
+            </li><li>
+            <p>The render plugin now accepts an :escape option, in which case it will
+            automatically set the default :engine_class for erb templates to an
+            Erubis::EscapedEruby subclass.  This changes the behavior of erb templates
+            such that:</p>
+            
+            <pre>&lt;%= &#39;&lt;escaped&gt;&#39; %&gt; # &amp;lt;escaped&amp;gt;&#x000A;&lt;%== &#39;&lt;not escaped&gt;&#39; %&gt; # &lt;not escaped&gt;</pre>
+            
+            <p>This makes it easier to protect against XSS attacks in your templates, as
+            long as you only use &lt;%== %&gt; for content that has already been
+            escaped.</p>
+            
+            <p>Note that similar behavior is available in Erubis by default, using the
+            :opts=&gt;{:escape_html=&gt;true} render option, but that doesn&#39;t
+            handle postfix conditionals in &lt;%= %&gt; tags.</p>
+            </li><li>
+            <p>The multi_route plugin now has an r.multi_route method, which will attempt
+            to dispatch to one of the named routes based on first segment in the path. 
+            So this routing tree:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_route</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;e&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;d&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;f&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_route</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>will return “e” for /a/c and “f” for /b/d.</p>
+            </li><li>
+            <p>Plugins can now override request and response class methods using
+            RequestClassMethods and ResponseClassMethods modules.</p>
+            </li></ul>
+            
+            <h1 id="label-Optimizations">Optimizations<span><a href="#label-Optimizations">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <ul><li>
+            <p>String, hash, and symbol matchers are now much faster by caching the
+            underlying regexp.</p>
+            </li><li>
+            <p>String, hash, and symbol matchers are now faster by using a regexp positive
+            lookahead assertion instead of an additional capture.</p>
+            </li><li>
+            <p>Terminal matching in the r.is, r.get, and r.post routing methods is now
+            faster, as it does not use a hash matcher internally.</p>
+            </li><li>
+            <p>The routing methods are now faster by reducing the number of Array objects
+            created.</p>
+            </li><li>
+            <p>Calling routing methods without arguments is now faster.</p>
+            </li><li>
+            <p>The r.get method is now faster by reducing the number of string
+            allocations.</p>
+            </li><li>
+            <p>Many request methods are faster by reducing the number of method calls
+            used.</p>
+            </li><li>
+            <p>Template caching no longer uses a mutex on MRI, since one is not needed for
+            thread safety there.</p>
+            </li></ul>
+            
+            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <ul><li>
+            <p>The flash plugin now implements its own flash hash instead of using
+            sinatra-flash.  It is now slightly faster and handles nil keys in keep and
+            discard.</p>
+            </li><li>
+            <p>Roda&#39;s version is now stored in roda/version.rb so that it can be
+            required without requiring <a href="../../../classes/Roda.html">Roda</a>
+            itself.</p>
+            </li></ul>
+            
+            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <ul><li>
+            <p>The multi_route plugin&#39;s route instance method has been changed to a
+            request method.  So the new usage is:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_route</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-comment"># instead of: route &quot;a&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li><li>
+            <p>The session key used for the flash hash in the flash plugin is now :_flash,
+            not :flash.</p>
+            </li><li>
+            <p>The :extension matcher now longer forces a terminal match, use one of the
+            routing methods that forces a terminal match if you want that behavior.</p>
+            </li><li>
+            <p>The :term hash matcher has been removed.</p>
+            </li><li>
+            <p>The r.consume private method now takes the exact regexp to use to search
+            the current path, it no longer enforces a preceeding slash and that the
+            match end on a segment boundary.</p>
+            </li><li>
+            <p>Dynamically constructing match patterns is now a potential memory leak due
+            to them being cached.  So you shouldn&#39;t do things like:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;param&#39;</span>] <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li><li>
+            <p>Many private routing methods were changed or removed, if you were using
+            them, you&#39;ll probably need to update your code.</p>
+            </li></ul>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::SymbolMatchers</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::SymbolMatchers
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/symbol_matchers_rb.html">lib/roda/plugins/symbol_matchers.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The symbol_matchers plugin allows you do define custom regexps to use for
+            specific symbols.  For example, if you have a route such as:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">username</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>By default this will match all nonempty segments.  However, if your
+            usernames must be 6-20 characters, and can only contain <code>a-z</code>
+            and <code>0-9</code>, you can do:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">symbol_matchers</span>&#x000A;<span class="ruby-identifier">symbol_matcher</span> :<span class="ruby-identifier">username</span>, <span class="ruby-regexp">/([a-z0-9]{6,20})/</span></pre>
+            
+            <p>Then the route will only if the path is <code>/foobar123</code>, but not if
+            it is <code>/foo</code>, <code>/FooBar123</code>, or
+            <code>/foobar_123</code>.</p>
+            
+            <p>Note that this feature does not apply to just symbols, but also to embedded
+            colons in strings, so the following:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users/:username&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Would match <code>/users/foobar123</code>, but not <code>/users/foo</code>,
+            <code>/users/FooBar123</code>, or <code>/users/foobar_123</code>.</p>
+            
+            <p>By default, this plugin sets up the following symbol matchers:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:d </td><td>
+            <p><code>/(\d+)/</code>, a decimal segment</p>
+            </td></tr><tr><td class='label'>:format </td><td>
+            <p><code>/(?:\.(\w+))?/</code>, an optional format/extension</p>
+            </td></tr><tr><td class='label'>:opt </td><td>
+            <p><code>/(?:\/([^\/]+))?</code>, an optional segment</p>
+            </td></tr><tr><td class='label'>:optd </td><td>
+            <p><code>/(?:\/(\d+))?</code>, an optional decimal segment</p>
+            </td></tr><tr><td class='label'>:rest </td><td>
+            <p><code>/(.*)/</code>, all remaining characters, if any</p>
+            </td></tr><tr><td class='label'>:w </td><td>
+            <p><code>/(\w+)/</code>, a alphanumeric segment</p>
+            </td></tr></tbody></table>
+            
+            <p>Note that because of how segment matching works, :format, :opt, and :optd
+            are only going to work inside of a string, like this:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;album:opt&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># matches /album (yielding nil) and /album/foo (yielding &quot;foo&quot;)</span>&#x000A;<span class="ruby-comment"># does not match /album/ or /album/foo/bar</span></pre>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-configure">configure</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="SymbolMatchers/ClassMethods.html">Roda::RodaPlugins::SymbolMatchers::ClassMethods</a></li>
+              <li><a target="docwin" href="SymbolMatchers/RequestMethods.html">Roda::RodaPlugins::SymbolMatchers::RequestMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 45</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:d</span>, <span class="ruby-regexp">/(\d+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:format</span>, <span class="ruby-regexp">/(?:\.(\w+))?/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:opt</span>, <span class="ruby-regexp">/(?:\/([^\/]+))?/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:optd</span>, <span class="ruby-regexp">/(?:\/(\d+))?/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:rest</span>, <span class="ruby-regexp">/(.*)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:w</span>, <span class="ruby-regexp">/(\w+)/</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

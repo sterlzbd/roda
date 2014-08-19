@@ -40,17 +40,28 @@
           <div id='description'>
             
             <p>The multi_route plugin allows for multiple named routes, which the main
-            route block can dispatch to by name at any point.  If the named route
-            doesn&#39;t handle the request, execution will continue, and if the named
-            route does handle the request, the response by the named route will be
-            returned.</p>
+            route block can dispatch to by name at any point by calling
+            <code>route</code>. If the named route doesn&#39;t handle the request,
+            execution will continue, and if the named route does handle the request,
+            the response returned by the named route will be returned.</p>
+            
+            <p>In addition, this also adds the <code>r.multi_route</code> method, which
+            will assume check if the first segment in the path matches a named route,
+            and dispatch to that named route.</p>
             
             <p>Example:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_route</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(:<span class="ruby-identifier">foo</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;/foo/bar&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(:<span class="ruby-identifier">bar</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;/bar/foo&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">route</span> :<span class="ruby-identifier">foo</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">route</span> :<span class="ruby-identifier">bar</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_route</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;/foo/bar&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;/bar/foo&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_route</span>&#x000A;&#x000A;  <span class="ruby-comment"># or</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&#39;foo&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&#39;bar&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>Note that in multi-threaded code, you should not attempt to add a named
             route after accepting requests.</p>
+            
+            <p>If you want to use the <code>r.multi_route</code> method, use string names
+            for the named routes.  Also, you can provide a block to
+            <code>r.multi_route</code> that is called if the route matches but the
+            named route did not handle the request:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;default body&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -65,7 +76,8 @@
             <h2>Classes and Modules</h2>
             <ol>
               <li><a target="docwin" href="MultiRoute/ClassMethods.html">Roda::RodaPlugins::MultiRoute::ClassMethods</a></li>
-              <li><a target="docwin" href="MultiRoute/InstanceMethods.html">Roda::RodaPlugins::MultiRoute::InstanceMethods</a></li>
+              <li><a target="docwin" href="MultiRoute/RequestClassMethods.html">Roda::RodaPlugins::MultiRoute::RequestClassMethods</a></li>
+              <li><a target="docwin" href="MultiRoute/RequestMethods.html">Roda::RodaPlugins::MultiRoute::RequestMethods</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -85,7 +97,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 39</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_exec</span>{<span class="ruby-ivar">@named_routes</span> <span class="ruby-operator">||=</span> {}}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_exec</span>{<span class="ruby-ivar">@named_routes</span> <span class="ruby-operator">||=</span> {}}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

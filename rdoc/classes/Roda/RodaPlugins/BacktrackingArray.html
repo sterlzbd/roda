@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::BacktrackingArray</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::BacktrackingArray
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/backtracking_array_rb.html">lib/roda/plugins/backtracking_array.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The backtracking_array plugin changes the handling of array matchers such
+            that if one of the array entries matches, but a later match argument fails,
+            it will backtrack and try the next entry in the array.  For example, the
+            following match block does not match <code>/a/b</code> by default:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> [<span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;a/b&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>This is because the <code>&#39;a&#39;</code> entry in the array matches,
+            which makes the array match.  However, the next matcher is the terminal
+            matcher (since <code>r.is</code> was used), and since the path is not
+            terminal as it still contains <code>/b</code> after matching
+            <code>&#39;a&#39;</code>.</p>
+            
+            <p>With the backtracking_array plugin, when the terminal matcher fails,
+            matching will go on to the next entry in the array,
+            <code>&#39;a/b&#39;</code>, which will also match.  Since
+            <code>&#39;a/b&#39;</code> matches the path fully, the terminal matcher
+            also matches, and the match block yields.</p>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="BacktrackingArray/RequestMethods.html">Roda::RodaPlugins::BacktrackingArray::RequestMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::MultiRoute::InstanceMethods</title>
+    <title>Roda::RodaPlugins::Head::RequestMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::MultiRoute::InstanceMethods
+          Roda::RodaPlugins::Head::RequestMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/multi_route_rb.html">lib/roda/plugins/multi_route.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/head_rb.html">lib/roda/plugins/head.rb</a>
           </li>
         </ol>
       </div>
@@ -42,7 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-route">route</a></li>
+              <li><a target="docwin" href="#method-i-is_get-3F">is_get?</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -50,21 +50,21 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-route'>
-                <a name='method-i-route'></a>
+              <div class='method public-instance' id='method-method-i-is_get-3F'>
+                <a name='method-i-is_get-3F'></a>
                 <div class='synopsis'>
-                  <span class='name'>route</span>
-                  <span class='arguments'>(name)</span>
+                  <span class='name'>is_get?</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Dispatch to the named route with the given name.</p>
+                  <p>Consider HEAD requests as GET requests.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-route-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-is_get-3F-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-route-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 69</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">route</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">request</span>, <span class="ruby-operator">&amp;</span><span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">named_route</span>(<span class="ruby-identifier">name</span>))&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-is_get-3F-source'><span class="ruby-comment"># File lib/roda/plugins/head.rb, line 40</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_get?</span>&#x000A;  <span class="ruby-keyword">super</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">head?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

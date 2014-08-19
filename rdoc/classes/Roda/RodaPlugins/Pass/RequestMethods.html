@@ -42,7 +42,6 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-on">on</a></li>
               <li><a target="docwin" href="#method-i-pass">pass</a></li>
             </ol>
           </div>
@@ -51,23 +50,6 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-on'>
-                <a name='method-i-on'></a>
-                <div class='synopsis'>
-                  <span class='name'>on</span>
-                  <span class='arguments'>(*)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Handle passing inside the current block.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-on-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-on-source'><span class="ruby-comment"># File lib/roda/plugins/pass.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">on</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-identifier">catch</span>(<span class="ruby-value">:pass</span>){<span class="ruby-keyword">super</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
               <div class='method public-instance' id='method-method-i-pass'>
                 <a name='method-i-pass'></a>
                 <div class='synopsis'>
@@ -76,14 +58,13 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Skip the current <a href="RequestMethods.html#method-i-on">on</a> block as
-                  if it did not match.</p>
+                  <p>Skip the current match block as if it did not match.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-pass-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-pass-source'><span class="ruby-comment"># File lib/roda/plugins/pass.rb, line 26</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">pass</span>&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:pass</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-pass-source'><span class="ruby-comment"># File lib/roda/plugins/pass.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">pass</span>&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:pass</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -40,15 +40,11 @@
           <div id='description'>
             
             <p>The halt plugin augments the standard request <code>halt</code> method to
-            handle more than just rack response arrays.</p>
+            allow the response status, body, or headers to be changed when halting.</p>
             
             <p>After loading the halt plugin:</p>
             
-            <pre>plugin :halt</pre>
-            
-            <p>You can call halt with no arguments to immediately stop processing:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">halt</span></pre>
             
             <p>You can call the halt method with an integer to set the response status and
             return:</p>
@@ -57,21 +53,21 @@
             
             <p>Or set the response body and return:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-string">&quot;body&#39;)&#x000A;end&#x000A;</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-string">&#39;body&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>Or set both:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-value">403</span>, <span class="ruby-string">&quot;body&#39;)&#x000A;end&#x000A;</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-value">403</span>, <span class="ruby-string">&#39;body&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>Or set response status, headers, and body:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-value">403</span>, {<span class="ruby-string">&#39;Content-Type&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/csv&#39;</span>}, <span class="ruby-string">&quot;body&#39;)&#x000A;end&#x000A;</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-value">403</span>, {<span class="ruby-string">&#39;Content-Type&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/csv&#39;</span>}, <span class="ruby-string">&#39;body&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>Note that there is a difference between provide status, headers, and body
-            as separate arguments and providing them as a rack response array.  With a
-            rack response array, the values are used directly, while with 3 arguments,
-            the headers given are merged into the existing headers and the given body
-            is written to the existing response body.</p>
+            as separate arguments and providing them as a single rack response array. 
+            With a rack response array, the values are used directly, while with 3
+            arguments, the headers given are merged into the existing headers and the
+            given body is written to the existing response body.</p>
           </div>
           <div id='context'>
           </div>

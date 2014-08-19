@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Roda</title>
+    <title>Roda: Routing Tree Web Framework</title>
     <link href='http://fonts.googleapis.com/css?family=Italianno|Open+Sans|PT+Mono' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/default.min.css">
@@ -37,35 +37,38 @@
 require "roda"
 
 class App < Roda
-  use Rack::Session::Cookie, secret: ENV['SECRET']
+  use Rack::Session::Cookie, :secret => ENV['SECRET']
 
   route do |r|
-    # matches any GET request
-    r.get do
+    # GET / request
+    r.root do
+      r.redirect "/hello"
+    end
 
-      # matches GET /
-      r.is "" do
-        r.redirect "/hello"
+    # /hello branch
+    r.on "hello" do
+
+      # GET /hello/world request
+      r.get "world" do
+        "Hello world!"
       end
 
-      # matches GET /hello or GET /hello/.*
-      r.on "hello" do
-
-        # matches GET /hello/world
-        r.is "world" do
-          "Hello world!"
+      # /hello request
+      r.is do
+        # GET /hello request
+        r.get do
+          "Hello!"
         end
 
-        # matches GET /hello
-        r.is do
-          "Hello!"
+        # POST /hello request
+        r.post do
+          puts "Someone said hello!"
+          r.redirect
         end
       end
     end
   end
 end
-
-run App.app
 </code></pre>
 </div>
 

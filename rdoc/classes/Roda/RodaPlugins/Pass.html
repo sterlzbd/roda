@@ -40,7 +40,7 @@
           <div id='description'>
             
             <p>The pass plugin adds a request <code>pass</code> method to skip the current
-            <code>on</code> block as if it did not match.</p>
+            match block as if it did not match.</p>
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">pass</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo/:bar&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">pass</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">bar</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;baz&#39;</span>&#x000A;    <span class="ruby-node">&quot;/foo/#{bar} (not baz)&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo/baz&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;/foo/baz&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
           </div>

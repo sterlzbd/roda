@@ -50,20 +50,40 @@
             
             <p>Example:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">all_verbs</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">delete</span>&#x000A;    <span class="ruby-comment"># Handle DELETE</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">put</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle PUT</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">patch</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle PATCH</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">all_verbs</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">delete</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle DELETE</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">put</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle PUT</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">patch</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle PATCH</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>The verb methods are defined via metaprogramming, so there isn&#39;t
             documentation for the individual methods created.</p>
           </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
             <ol>
-              <li><a target="docwin" href="AllVerbs/RequestMethods.html">Roda::RodaPlugins::AllVerbs::RequestMethods</a></li>
+              <li><a target="docwin" href="#method-c-configure">configure</a></li>
             </ol>
           </div>
+          <div id='context'>
+          </div>
           <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/all_verbs.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-node">%wdelete head options link patch put trace unlink&#39;</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">method_defined?</span>(<span class="ruby-node">&quot;#{v}?&quot;</span>)&#x000A;      <span class="ruby-identifier">app</span>.<span class="ruby-identifier">request_module</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">def_verb_method</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">v</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

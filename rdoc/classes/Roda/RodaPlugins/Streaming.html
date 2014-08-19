@@ -48,18 +48,15 @@
             app must not buffer responses.</p>
             
             <p>The stream method takes the following options:</p>
-            <dl class="rdoc-list note-list"><dt>:callback 
-            <dd>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:callback </td><td>
             <p>A callback proc to call when the connection is closed.</p>
-            </dd><dt>:keep_open 
-            <dd>
+            </td></tr><tr><td class='label'>:keep_open </td><td>
             <p>Whether to keep the connection open after the stream block returns, default
             is false.</p>
-            </dd><dt>:loop 
-            <dd>
+            </td></tr><tr><td class='label'>:loop </td><td>
             <p>Whether to call the stream block continuously until the connection is
             closed.</p>
-            </dd></dl>
+            </td></tr></tbody></table>
             
             <p>The implementation was originally taken from Sinatra, which is also
             released under the MIT License:</p>

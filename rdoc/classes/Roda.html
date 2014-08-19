@@ -34,7 +34,19 @@
             <a target="docwin" href="../files/lib/roda_rb.html">lib/roda.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/_erubis_escaping_rb.html">lib/roda/plugins/_erubis_escaping.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/all_verbs_rb.html">lib/roda/plugins/all_verbs.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/backtracking_array_rb.html">lib/roda/plugins/backtracking_array.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/content_for_rb.html">lib/roda/plugins/content_for.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/csrf_rb.html">lib/roda/plugins/csrf.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/default_headers_rb.html">lib/roda/plugins/default_headers.rb</a>
@@ -52,6 +64,9 @@
             <a target="docwin" href="../files/lib/roda/plugins/halt_rb.html">lib/roda/plugins/halt.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/head_rb.html">lib/roda/plugins/head.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/header_matchers_rb.html">lib/roda/plugins/header_matchers.rb</a>
           </li>
           <li class='other'>
@@ -61,10 +76,16 @@
             <a target="docwin" href="../files/lib/roda/plugins/indifferent_params_rb.html">lib/roda/plugins/indifferent_params.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/json_rb.html">lib/roda/plugins/json.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/middleware_rb.html">lib/roda/plugins/middleware.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/multi_route_rb.html">lib/roda/plugins/multi_route.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/not_allowed_rb.html">lib/roda/plugins/not_allowed.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/not_found_rb.html">lib/roda/plugins/not_found.rb</a>
@@ -73,10 +94,28 @@
             <a target="docwin" href="../files/lib/roda/plugins/pass_rb.html">lib/roda/plugins/pass.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/per_thread_caching_rb.html">lib/roda/plugins/per_thread_caching.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/render_rb.html">lib/roda/plugins/render.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/render_each_rb.html">lib/roda/plugins/render_each.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/streaming_rb.html">lib/roda/plugins/streaming.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/symbol_matchers_rb.html">lib/roda/plugins/symbol_matchers.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/symbol_views_rb.html">lib/roda/plugins/symbol_views.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/view_subdirs_rb.html">lib/roda/plugins/view_subdirs.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/version_rb.html">lib/roda/version.rb</a>
           </li>
           <li>
             <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
@@ -104,6 +143,7 @@
             <ol>
               <li><a target="docwin" href="Roda/Rack.html">Roda::Rack</a></li>
               <li><a target="docwin" href="Roda/RodaPlugins.html">Roda::RodaPlugins</a></li>
+              <li><a target="docwin" href="Roda/RodaCache.html">Roda::RodaCache</a></li>
               <li><a target="docwin" href="Roda/RodaError.html">Roda::RodaError</a></li>
               <li><a target="docwin" href="Roda/RodaRequest.html">Roda::RodaRequest</a></li>
               <li><a target="docwin" href="Roda/RodaResponse.html">Roda::RodaResponse</a></li>
@@ -115,14 +155,22 @@
               <div class='name-list'>
                 <table summary='Constants'>
                   <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>RodaVersion</td>
+                    <td class='context-item-name'>RodaCache</td>
                     <td>=</td>
-                    <td class='context-item-value'>'0.9.0'.freeze</td>
+                    <td class='context-item-value'>Hash</td>
                     <td>&nbsp;</td>
                     <td class='context-item-desc'>
                       
-                      <p>Roda&#39;s version, always specified by a string in d+.d+.d+ format.</p>
+                      <p>Hashes are already thread-safe in MRI, due to the GVL, so they can safely
+                      be used as a cache.</p>
                     </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>RodaVersion</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'1.0.0'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
                   </tr>
                 </table>
               </div>

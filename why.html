@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Roda - Why</title>
+    <title>Roda: Routing Tree Web Framework - Why</title>
     <link href='http://fonts.googleapis.com/css?family=Italianno|Open+Sans|PT+Mono' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/default.min.css">
@@ -50,7 +50,7 @@ class App &lt; Roda
   plugin :render
 
   route do |r|
-    r.get '' do
+    r.root do
       view :index
     end
 
@@ -64,7 +64,7 @@ class App &lt; Roda
 
         r.post do
           @artist.update(params[:artist])
-          r.redirect(r.full_path_info)
+          r.redirect
         end
       end
 
@@ -78,7 +78,7 @@ class App &lt; Roda
 
           r.post do
             @album.update(params[:album])
-            r.redirect(r.full_path_info)
+            r.redirect
           end
         end
 
@@ -92,7 +92,7 @@ class App &lt; Roda
 
             r.post do
               @track.update(params[:track])
-              r.redirect(r.full_path_info)
+              r.redirect
             end
           end
         end
@@ -162,7 +162,7 @@ end
 
 <h3>Plugin System</h3>
 
-<p>Another difference between Roda and Sinatra is that Roda has a plugin system modeled on <a href="http://sequel.jeremyevans.net">Sequel</a>'s.  All parts of Roda (class/instance/request/response) can be overridden by plugins and call super to get the default behavior.  This includes when plugins are applied to the Roda class itself (affecting all subclasses).  Roda has a very small core, and many features that are built into Sinatra are shipped as plugins in Roda. This way they can easily used if needed, but if you don't use them you don't pay the cost for loading them.  Near the top of the Roda example, you can see <span class="code">plugin :render</span>, which adds support for template rendering, as the default Roda code doesn't ship with template support.</p>
+<p>Another difference between Roda and Sinatra is that Roda has a plugin system modeled on <a href="http://sequel.jeremyevans.net">Sequel</a>'s.  All parts of Roda (class/instance/request/response) can be overridden by plugins and call super to get the default behavior.  This includes when plugins are applied to the Roda class itself (affecting all subclasses).  Roda has a very small core, and many features that are built into Sinatra are shipped as plugins in Roda. This way they can easily be used if needed, but if you don't use them you don't pay the cost for loading them.  Near the top of the Roda example, you can see <span class="code">plugin :render</span>, which adds support for template rendering, as the default Roda code doesn't ship with template support.</p>
 
 <h3>Less Pollution</h3>
 
