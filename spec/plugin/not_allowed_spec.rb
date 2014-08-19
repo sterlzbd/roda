@@ -23,6 +23,12 @@ describe "not_allowed plugin" do
         r.is 'b' do
           'b'
         end
+        r.is /(d)/ do |s|
+          s
+        end
+        r.get /(e)/ do |s|
+          s
+        end
       end
     end
 
@@ -33,6 +39,13 @@ describe "not_allowed plugin" do
     body('/b').should == 'b'
     status('/b', 'REQUEST_METHOD'=>'POST').should == 404
 
+    body('/d').should == 'd'
+    status('/d', 'REQUEST_METHOD'=>'POST').should == 404
+
+    body('/e').should == 'e'
+    status('/d', 'REQUEST_METHOD'=>'POST').should == 404
+
+    body('/c').should == 'cg'
     body('/c').should == 'cg'
     body('/c', 'REQUEST_METHOD'=>'POST').should == 'cp'
     body('/c', 'REQUEST_METHOD'=>'PATCH').should == 'c'

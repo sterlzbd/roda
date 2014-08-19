@@ -88,8 +88,11 @@ class Roda
                 always(&block) if #{verb == :get ? :is_get : verb}?
               else
                 args << ::Roda::RodaPlugins::Base::RequestMethods::TERM
-                if_match(args) do
-                  #{verb}(&block)
+                if_match(args) do |*args|
+                  if #{verb == :get ? :is_get : verb}?
+                    block_result(yield(*args))
+                    throw :halt, response.finish
+                  end
                   response.status = 405
                   response['Allow'] = '#{verb.to_s.upcase}'
                   nil
@@ -112,7 +115,11 @@ class Roda
             begin
               @_is_verbs = []
 
-              ret = yield
+              ret = if verbs.empty?
+                yield
+              else
+                yield(*captures)
+              end
 
               unless @_is_verbs.empty?
                 response.status = 405
