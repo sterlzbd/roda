@@ -6,7 +6,7 @@ class Roda
     # use, and template names that do not contain a slash will
     # automatically use that view subdirectory.  Example:
     #
-    #   plugin :render
+    #   plugin :render, :layout=>'./layout'
     #   plugin :view_subdirs
     #
     #   route do |r|
@@ -25,6 +25,12 @@ class Roda
     #
     # This plugin should be loaded after the render plugin, since
     # it works by overriding parts of the render plugin.
+    # 
+    # Note that when a view subdirectory is set, the layout will
+    # also be looked up in the subdirectory unless it contains
+    # a slash.  So if you want to use a view subdirectory for
+    # templates but have a shared layout, you should make sure your
+    # layout contains a slash, similar to the example above.
     module ViewSubdirs
       module InstanceMethods
         # Set the view subdirectory to use.  This can be set to nil
