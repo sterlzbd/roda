@@ -792,6 +792,8 @@ content_for :: Allows storage of content in one template and retrieval of
 csrf :: Adds CSRF protection and helper methods using
         {rack_csrf}[https://github.com/baldowl/rack_csrf].
 default_headers :: Override the default response headers used.
+error_email :: Adds an +error_email+ method that can be used to email when
+               an exception is raised.
 error_handler :: Adds a +error+ block that is called for all responses that
                  raise exceptions.
 flash :: Adds a flash handler.

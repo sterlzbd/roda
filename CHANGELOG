@@ -1,3 +1,7 @@
+= HEAD
+
+* Add error_email plugin, for easily emailing an error notification for an exception (jeremyevans)
+
 = 1.0.0 (2014-08-19)
 
 * Don't have :extension hash matcher force a terminal match (jeremyevans)
