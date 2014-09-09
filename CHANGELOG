@@ -1,5 +1,7 @@
 = HEAD
 
+* Add path plugin, for named path support (jeremyevans) (#4)
+
 * Add error_email plugin, for easily emailing an error notification for an exception (jeremyevans)
 
 = 1.0.0 (2014-08-19)
