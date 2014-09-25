@@ -1,5 +1,7 @@
 = HEAD
 
+* Pick up newly added named routes while running in the multi_route plugin, useful for development (jeremyevans)
+
 * Add path plugin, for named path support (jeremyevans) (#4)
 
 * Add error_email plugin, for easily emailing an error notification for an exception (jeremyevans)

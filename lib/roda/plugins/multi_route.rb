@@ -80,6 +80,7 @@ class Roda
         def route(name=nil, &block)
           if name
             @named_routes[name] = block
+            self::RodaRequest.clear_named_route_regexp!
           else
             super(&block)
           end
@@ -87,6 +88,16 @@ class Roda
       end
 
       module RequestClassMethods
+        # Clear cached regexp for named routes, it will be regenerated
+        # the next time it is needed.
+        #
+        # This shouldn't be an issue in production applications, but
+        # during development it's useful to support new named routes
+        # being added while the application is running.
+        def clear_named_route_regexp!
+          @named_route_regexp = nil
+        end
+
         # A regexp matching any of the current named routes.
         def named_route_regexp
           @named_route_regexp ||= /(#{Regexp.union(roda_class.named_routes)})/

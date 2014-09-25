@@ -71,6 +71,13 @@ describe "multi_route plugin" do
     body('/foo/post/b').should == 'foo'
   end
 
+  it "Can have multi_route pick up routes newly added" do
+    body('/foo/get/').should == 'get'
+    status('/foo/delete').should == 404
+    app.route('delete'){|r| r.on{'delete'}}
+    body('/foo/delete').should == 'delete'
+  end
+
   it "handles loading the plugin multiple times correctly" do
     app.plugin :multi_route
     body.should == 'get'
