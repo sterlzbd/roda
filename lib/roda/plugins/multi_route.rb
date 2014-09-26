@@ -64,7 +64,7 @@ class Roda
           subclass.instance_variable_set(:@named_routes, @named_routes.dup)
         end
 
-        # An names for the currently stored named routes
+        # The names for the currently stored named routes
         def named_routes
           @named_routes.keys
         end
@@ -74,7 +74,7 @@ class Roda
           @named_routes[name]
         end
 
-        # If the given route has a named, treat it as a named route and
+        # If the given route has a name, treat it as a named route and
         # store the route block.  Otherwise, this is the main route, so
         # call super.
         def route(name=nil, &block)
@@ -100,7 +100,7 @@ class Roda
 
         # A regexp matching any of the current named routes.
         def named_route_regexp
-          @named_route_regexp ||= /(#{Regexp.union(roda_class.named_routes)})/
+          @named_route_regexp ||= /(#{Regexp.union(roda_class.named_routes.select{|s| s.is_a?(String)})})/
         end
       end
 

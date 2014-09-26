@@ -1,5 +1,7 @@
 = HEAD
 
+* Have r.multi_route ignore non-String named routes (jeremyevans)
+
 * Pick up newly added named routes while running in the multi_route plugin, useful for development (jeremyevans)
 
 * Add path plugin, for named path support (jeremyevans) (#4)
