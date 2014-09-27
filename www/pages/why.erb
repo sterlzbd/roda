@@ -30,7 +30,7 @@ class App &lt; Roda
       end
 
       r.post do
-        @artist.update(params[:artist])
+        @artist.update(r['artist'])
         r.redirect
       end
 
