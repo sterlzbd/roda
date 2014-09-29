@@ -1,5 +1,7 @@
 = HEAD
 
+* Add caching plugin, for handling http caching (jeremyevans)
+
 * Support adding middleware after the route block has been added (jeremyevans)
 
 * Allow Roda subclasses to use route block from superclass (jeremyevans)
