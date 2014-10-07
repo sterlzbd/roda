@@ -23,10 +23,10 @@ describe "not_allowed plugin" do
         r.is 'b' do
           'b'
         end
-        r.is /(d)/ do |s|
+        r.is(/(d)/) do |s|
           s
         end
-        r.get /(e)/ do |s|
+        r.get(/(e)/) do |s|
           s
         end
       end

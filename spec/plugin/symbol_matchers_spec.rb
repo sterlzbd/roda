@@ -27,8 +27,8 @@ describe "symbol_matchers plugin" do
           "f#{f}"
         end
 
-        r.is 'q:rest' do |r|
-          "rest#{r}"
+        r.is 'q:rest' do |rest|
+          "rest#{rest}"
         end
 
         r.is :w do |w|
