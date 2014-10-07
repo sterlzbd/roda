@@ -281,7 +281,9 @@ class Roda
             raise RodaError, "can't provide both argument and block to response_module" if block_given?
             klass.send(:include, mod)
           else
-            unless mod = instance_variable_get(iv)
+            if instance_variable_defined?(iv)
+              mod = instance_variable_get(iv)
+            else
               mod = instance_variable_set(iv, Module.new)
               klass.send(:include, mod)
             end
