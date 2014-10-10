@@ -100,7 +100,7 @@ class Roda
 
         # A regexp matching any of the current named routes.
         def named_route_regexp
-          @named_route_regexp ||= /(#{Regexp.union(roda_class.named_routes.select{|s| s.is_a?(String)})})/
+          @named_route_regexp ||= /(#{Regexp.union(roda_class.named_routes.select{|s| s.is_a?(String)}.sort.reverse)})/
         end
       end
 

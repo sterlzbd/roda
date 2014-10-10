@@ -1,5 +1,7 @@
 = HEAD
 
+* Make r.multi_route prefer longer route if multiple routes have the same prefix (jeremyevans)
+
 * Add caching plugin, for handling http caching (jeremyevans)
 
 * Support adding middleware after the route block has been added (jeremyevans)

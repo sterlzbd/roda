@@ -86,11 +86,22 @@ describe "multi_route plugin" do
     status('/foo/p/2').should == 404
   end
 
-  it "Can have multi_route pick up routes newly added" do
+  it "has multi_route pick up routes newly added" do
     body('/foo/get/').should == 'get'
     status('/foo/delete').should == 404
     app.route('delete'){|r| r.on{'delete'}}
     body('/foo/delete').should == 'delete'
+  end
+
+  it "makes multi_route match longest route if multiple routes have the same prefix" do
+    app.route("post/a"){|r| r.on{"pa2"}}
+    app.route("get/a"){|r| r.on{"ga2"}}
+    status('/foo').should == 404
+    body('/foo/get/').should == 'get'
+    body('/foo/get/a').should == 'ga2'
+    body('/foo/post/').should == 'post'
+    body('/foo/post/a').should == 'pa2'
+    body('/foo/post/b').should == 'foo'
   end
 
   it "handles loading the plugin multiple times correctly" do
