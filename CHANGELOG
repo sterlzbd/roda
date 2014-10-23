@@ -1,5 +1,7 @@
 = HEAD
 
+* Add chunked plugin, for easy streaming of template responses using Transfer-Encoding: chunked (jeremyevans)
+
 * Add namespace support to the multi_route plugin, to support more complex applications (jeremyevans)
 
 * Make r.multi_route use named route return value if not passed a block (jeremyevans)
