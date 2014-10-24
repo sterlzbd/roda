@@ -74,6 +74,15 @@ class Roda
     #     <% flush %>
     #   <% end %>
     #
+    # Note that you should not call flush from inside subtemplates of the
+    # content or layout templates, unless you are also calling flush directly
+    # before rendering the subtemplate, and also directly injecting the
+    # subtemplate into the current template without modification.  So if you
+    # are using the above template code in a subtemplate, in your content
+    # template you should do:
+    #
+    #   <% flush %><%= render(:subtemplate) %>
+    #
     # If you want to use chunked encoding when rendering a template, but don't
     # want to use a layout, pass the :layout=>false option to chunked.
     #
@@ -106,7 +115,8 @@ class Roda
     #
     # The chunked plugin requires the render plugin, and only works for
     # template engines that store their template output variable in
-    # @_out_buf.
+    # @_out_buf.  Also, it only works if the content template is directly
+    # injected into the layout template without modification.
     module Chunked
       # Depend on the render plugin
       def self.load_dependencies(app, opts={})
