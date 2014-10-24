@@ -105,6 +105,8 @@ class Roda
     # plugin only works for HTTP/1.1 requests since Transfer-Encoding: chunked
     # is not supported in HTTP/1.0.  If an HTTP/1.0 request is submitted, this
     # plugin will automatically fallback to the normal template rendering.
+    # Note that some proxies including nginx default to HTTP/1.0 even if the
+    # client supports HTTP/1.1.  For nginx, set the proxy_http_version to 1.1.
     #
     # If you are using nginx and have it set to buffer proxy responses by
     # default, you can turn this off on a per response basis using the
