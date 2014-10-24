@@ -262,7 +262,7 @@ class Roda
           if block = @route_block
             builder = Rack::Builder.new
             @middleware.each{|a, b| builder.use(*a, &b)}
-            builder.run lambda{|env| new.call(env, &block)}
+            builder.run lambda{|env| allocate.call(env, &block)}
             @app = builder.to_app
           end
         end
