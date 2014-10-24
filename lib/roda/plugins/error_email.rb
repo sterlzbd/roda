@@ -31,7 +31,9 @@ class Roda
       DEFAULTS = {
         :headers=>{},
         :host=>'localhost',
+        # :nocov:
         :emailer=>lambda{|h| Net::SMTP.start(h[:host]){|s| s.send_message(h[:message], h[:from], h[:to])}},
+        # :nocov:
         :default_headers=>lambda do |h, e|
           {'From'=>h[:from], 'To'=>h[:to], 'Subject'=>"#{h[:prefix]}#{e.class}: #{e.message}"}
         end,

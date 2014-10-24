@@ -10,6 +10,7 @@ class Roda
   class RodaError < StandardError; end
 
   if defined?(RUBY_ENGINE) && RUBY_ENGINE != 'ruby'
+  # :nocov:
     # A thread safe cache class, offering only #[] and #[]= methods,
     # each protected by a mutex.  Used on non-MRI where Hash is not
     # thread safe.
@@ -30,6 +31,7 @@ class Roda
         @mutex.synchronize{@hash[key] = value}
       end
     end
+  # :nocov:
   else
     # Hashes are already thread-safe in MRI, due to the GVL, so they
     # can safely be used as a cache.

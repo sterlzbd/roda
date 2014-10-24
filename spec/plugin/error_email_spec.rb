@@ -19,12 +19,12 @@ describe "error_email plugin" do
 
   it "adds error_email method for emailing exceptions" do
     app
-    body('rack.input'=>StringIO.new).should == 'e'
+    body('rack.input'=>StringIO.new, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'}).should == 'e'
     email[:to].should == 't'
     email[:from].should == 'f'
     email[:host].should == 'localhost'
     email[:message].should =~ /^Subject: ArgumentError/
-    email[:message].should =~ /Backtrace.*ENV/m
+    email[:message].should =~ /^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^"b" => "c"$\s+^Session:$\s+^"d" => "e"$/m
   end
 
   it "uses :host option" do
