@@ -119,6 +119,11 @@ class Roda
     # template engines that store their template output variable in
     # @_out_buf.  Also, it only works if the content template is directly
     # injected into the layout template without modification.
+    #
+    # If using the chunked plugin with the flash plugin, make sure you
+    # call the flash method early in your route block.  If the flash
+    # method is not called until template rendering, the flash may not be
+    # rotated.
     module Chunked
       # Depend on the render plugin
       def self.load_dependencies(app, opts={})
