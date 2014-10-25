@@ -209,18 +209,18 @@ class Roda
             end
           end
           
+          # Hack so that the arguments don't need to be passed
+          # through the response and body objects.
+          @_each_chunk_args = [template, opts, block]
+
           res = response
           headers = res.headers
           if chunk_headers = self.opts[:chunk_headers]
             headers.merge!(chunk_headers)
           end
-
-          # Hack so that the arguments don't need to be passed
-          # through the response and body objects.
-          @_each_chunk_args = [template, opts, block]
-
           headers[TRANSFER_ENCODING] = CHUNKED
-          throw(:halt, [res.status || 200, headers, Body.new(self)])
+
+          throw :halt, res.finish_with_body(Body.new(self))
         end
 
         # Yield each chunk of the template rendering separately.

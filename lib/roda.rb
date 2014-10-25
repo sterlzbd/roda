@@ -945,13 +945,31 @@ class Roda
         end
 
         # Return the rack response array of status, headers, and body
-        # for the current response. Example:
+        # for the current response.  If the status has not been set,
+        # uses a 200 status if the body has been written to, otherwise
+        # uses a 404 status.  Adds the Content-Length header to the
+        # size of the response body.
         #
-        #   response.finish # => [200, {'Content-Type'=>'text/html'}, []]
+        # Example:
+        #
+        #   response.finish
+        #   #  => [200,
+        #   #      {'Content-Type'=>'text/html', 'Content-Length'=>'0'},
+        #   #      []]
         def finish
           b = @body
           s = (@status ||= b.empty? ? 404 : 200)
-          [s, @headers, b]
+          h = @headers
+          h[CONTENT_LENGTH] = @length.to_s
+          [s, h, b]
+        end
+
+        # Return the rack response array using a given body.  Assumes a
+        # 200 response status unless status has been explicitly set,
+        # and doesn't add the Content-Length header or use the existing
+        # body.
+        def finish_with_body(body)
+          [@status || 200, @headers, body]
         end
 
         # Set the Location header to the given path, and the status
@@ -972,16 +990,12 @@ class Roda
           ::Rack::Utils.set_cookie_header!(@headers, key, value)
         end
 
-        # Write to the response body.  Updates Content-Length header
-        # with the size of the string written.  Returns nil. Example:
+        # Write to the response body.  Returns nil.
         #
         #   response.write('foo')
-        #   response['Content-Length'] # =>'3'
         def write(str)
           s = str.to_s
-
           @length += s.bytesize
-          @headers[CONTENT_LENGTH] = @length.to_s
           @body << s
           nil
         end

@@ -84,6 +84,16 @@ describe "chunked plugin" do
     body.should == "ahmt"
   end
 
+  it "should not include Content-Length header even if body is already written to" do
+    app(:chunked) do |r|
+      response.write('a')
+      response.write chunked(:inline=>'m', :layout=>{:inline=>'h<%= yield %>t'})
+    end
+
+    header('Content-Length', 'HTTP_VERSION'=>'HTTP/1.1').should == nil
+    header('Content-Length', 'HTTP_VERSION'=>'HTTP/1.0').should == '4'
+  end
+
   it "stream template responses for view if :chunk_by_default is used" do
     app(:bare) do
       plugin :chunked, :chunk_by_default=>true

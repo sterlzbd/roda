@@ -1,5 +1,9 @@
 = HEAD
 
+* Make response.finish add the Content-Length header, not response.write (jeremyevans)
+
+* Add response.finish_with_body to override response body used (jeremyevans)
+
 * Use allocate instead of new in rack app (jeremyevans)
 
 * Add chunked plugin, for easy streaming of template responses using Transfer-Encoding: chunked (jeremyevans)
