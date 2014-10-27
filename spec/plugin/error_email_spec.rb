@@ -33,6 +33,15 @@ describe "error_email plugin" do
     email[:host].should == 'foo.bar.com'
   end
 
+  it "handles error messages with new lines" do
+    app.route do |r|
+      raise "foo\nbar\nbaz" rescue error_email($!)
+      'e'
+    end
+    body('rack.input'=>StringIO.new).should == 'e'
+    email[:message].should =~ %r{From: f\r\nSubject: RuntimeError: foo\r\n bar\r\n baz\r\nTo: t\r\n\r\n}
+  end
+
   it "adds :prefix option to subject line" do
     app(:prefix=>'TEST ')
     body('rack.input'=>StringIO.new).should == 'e'
@@ -64,5 +73,4 @@ describe "error_email plugin" do
     email[:message].should =~ /^Subject: ArgumentError/
     email[:message].should =~ /Backtrace.*ENV/m
   end
-
 end
