@@ -79,13 +79,13 @@ class Roda
       def self.configure(app, opts={})
         if app.opts[:render]
           app.opts[:render].merge!(opts)
-        else 
+        else
           app.opts[:render] = opts.dup
         end
 
         opts = app.opts[:render]
         opts[:engine] ||= "erb"
-        opts[:ext] = nil unless opts.has_key?(:ext) 
+        opts[:ext] = nil unless opts.has_key?(:ext)
         opts[:views] ||= File.expand_path("views", Dir.pwd)
         opts[:layout] = "layout" unless opts.has_key?(:layout)
         opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
@@ -143,7 +143,7 @@ class Roda
 
           cached_template(path) do
             template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
-          end.render(self, opts[:locals], &block)
+          end.render(self, (opts[:locals]||{}), &block)
         end
 
         # Return the render options for the instance's class.
