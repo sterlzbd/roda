@@ -129,16 +129,17 @@ class Roda
       HTTP11 = "HTTP/1.1".freeze
       TRANSFER_ENCODING = 'Transfer-Encoding'.freeze
       CHUNKED = 'chunked'.freeze
+      OPTS = {}.freeze
 
       # Depend on the render plugin
-      def self.load_dependencies(app, opts={})
+      def self.load_dependencies(app, opts=OPTS)
         app.plugin :render
       end
 
       # Set plugin specific options.  Options:
       # :chunk_by_default :: chunk all calls to view by default
       # :headers :: Set default additional headers to use when calling view
-      def self.configure(app, opts={})
+      def self.configure(app, opts=OPTS)
         app.opts[:chunk_by_default] = opts[:chunk_by_default]
         app.opts[:chunk_headers] = opts[:headers]
       end
@@ -190,7 +191,7 @@ class Roda
 
         # Render a response to the user in chunks.  See Chunked for
         # an overview.
-        def chunked(template, opts={}, &block)
+        def chunked(template, opts=OPTS, &block)
           unless defined?(@_chunked)
             @_chunked = env[HTTP_VERSION] == HTTP11
           end
@@ -242,7 +243,7 @@ class Roda
               layout_opts = render_opts[:layout_opts].merge(layout_opts)
             end
 
-            @_out_buf = render(layout, layout_opts||{}) do
+            @_out_buf = render(layout, layout_opts||OPTS) do
               flush
               block.call if block
               yield opts[:content] || render(template, opts)

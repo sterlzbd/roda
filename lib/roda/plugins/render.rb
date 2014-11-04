@@ -67,14 +67,16 @@ class Roda
     # If you pass a hash as the first argument to +view+ or +render+, it should
     # have either +:inline+ or +:path+ as one of the keys.
     module Render
-      def self.load_dependencies(app, opts={})
+      OPTS={}.freeze
+
+      def self.load_dependencies(app, opts=OPTS)
         if opts[:escape]
           app.plugin :_erubis_escaping
         end
       end
 
       # Setup default rendering options.  See Render for details.
-      def self.configure(app, opts={})
+      def self.configure(app, opts=OPTS)
         if app.opts[:render]
           app.opts[:render].merge!(opts)
         else
@@ -118,7 +120,7 @@ class Roda
 
       module InstanceMethods
         # Render the given template. See Render for details.
-        def render(template, opts = {}, &block)
+        def render(template, opts = OPTS, &block)
           if template.is_a?(Hash)
             if opts.empty?
               opts = template
@@ -141,7 +143,7 @@ class Roda
 
           cached_template(path) do
             template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
-          end.render(self, (opts[:locals]||{}), &block)
+          end.render(self, (opts[:locals]||OPTS), &block)
         end
 
         # Return the render options for the instance's class. While this
@@ -154,7 +156,7 @@ class Roda
         # Render the given template.  If there is a default layout
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
-        def view(template, opts={})
+        def view(template, opts=OPTS)
           if template.is_a?(Hash)
             if opts.empty?
               opts = template
@@ -170,7 +172,7 @@ class Roda
               layout_opts = render_opts[:layout_opts].merge(layout_opts)
             end
 
-            content = render(layout, layout_opts||{}){content}
+            content = render(layout, layout_opts||OPTS){content}
           end
 
           content
