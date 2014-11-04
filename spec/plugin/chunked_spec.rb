@@ -1,5 +1,10 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
+begin
+  require 'tilt/erb'
+rescue LoadError
+  warn "tilt not installed, skipping chunked plugin test"  
+else
 describe "chunked plugin" do 
   def cbody(env={})
     b = ''
@@ -173,4 +178,5 @@ describe "chunked plugin" do
     cbody.should == "1\r\nh\r\n1\r\nm\r\n1\r\ne\r\n0\r\n\r\n"
     proc{body}.should raise_error
   end
+end
 end
