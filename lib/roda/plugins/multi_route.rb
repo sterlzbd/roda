@@ -55,7 +55,17 @@ class Roda
     # If a block is not provided to multi_route, the return value of the named
     # route block will be used.
     #
-    # ## Namespace Support
+    # == Routing Files
+    #
+    # The convention when using the multi_route plugin is to have a single
+    # named route per file, and these routing files should be stored in
+    # a routes subdirectory in your application.  So for the above example, you
+    # would use the following files:
+    #
+    #   routes/bar.rb
+    #   routes/foo.rb
+    #
+    # == Namespace Support
     #
     # The multi_route plugin also has support for namespaces, allowing you to
     # use r.multi_route at multiple levels in your routing tree.  Example:
@@ -100,6 +110,18 @@ class Roda
     #     end
     #   end
     #
+    # === Routing Files
+    #
+    # The convention when using namespaces with the multi_route plugin is to
+    # store the routing files in subdirectories per namespace. So for the
+    # above example, you would have the following routing files:
+    #
+    #   routes/bar.rb
+    #   routes/bar/baz.rb
+    #   routes/bar/quux.rb
+    #   routes/foo.rb
+    #   routes/foo/baz.rb
+    #   routes/foo/quux.rb
     module MultiRoute
       # Initialize storage for the named routes.
       def self.configure(app)
