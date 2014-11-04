@@ -125,6 +125,11 @@ class Roda
     # method is not called until template rendering, the flash may not be
     # rotated.
     module Chunked
+      HTTP_VERSION = 'HTTP_VERSION'.freeze
+      HTTP11 = "HTTP/1.1".freeze
+      TRANSFER_ENCODING = 'Transfer-Encoding'.freeze
+      CHUNKED = 'chunked'.freeze
+
       # Depend on the render plugin
       def self.load_dependencies(app, opts={})
         app.plugin :render
@@ -167,11 +172,6 @@ class Roda
       end
 
       module InstanceMethods
-        HTTP_VERSION = 'HTTP_VERSION'.freeze
-        HTTP11 = "HTTP/1.1".freeze
-        TRANSFER_ENCODING = 'Transfer-Encoding'.freeze
-        CHUNKED = 'chunked'.freeze
-
         # Disable chunking for the current request.  Mostly useful when
         # chunking is turned on by default.
         def no_chunk!

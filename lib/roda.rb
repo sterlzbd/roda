@@ -89,6 +89,8 @@ class Roda
     # Methods are put into a plugin so future plugins can easily override
     # them and call super to get the default behavior.
     module Base
+      SESSION_KEY = 'rack.session'.freeze
+
       # Class methods for the Roda class.
       module ClassMethods
         # The rack application that this class uses.
@@ -299,8 +301,6 @@ class Roda
 
       # Instance methods for the Roda class.
       module InstanceMethods
-        SESSION_KEY = 'rack.session'.freeze
-
         # Create a request and response of the appopriate
         # class, the instance_exec the route block with
         # the request, handling any halts.  This is not usually

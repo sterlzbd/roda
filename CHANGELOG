@@ -1,5 +1,7 @@
 = HEAD
 
+* Make InstanceMethods in plugins not include constants, as they would pollute the constant namespace (jeremyevans)
+
 * Make response.finish add the Content-Length header, not response.write (jeremyevans)
 
 * Add response.finish_with_body to override response body used (jeremyevans)

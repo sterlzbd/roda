@@ -24,8 +24,6 @@ class Roda
     # not set a local variable inside the template.
     module RenderEach
       module InstanceMethods
-        EMPTY_STRING = ''.freeze
-
         # For each value in enum, render the given template using the
         # given opts.  The template and options hash are passed to +render+.
         # Additional options supported:

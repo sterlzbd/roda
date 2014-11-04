@@ -26,6 +26,9 @@ class Roda
     #     end
     #   end
     module Flash
+      # The internal session key used to store the flash.
+      KEY = :_flash
+
       # Simple flash hash, where assiging to the hash updates the flash
       # used in the following request.
       class FlashHash < DelegateClass(Hash)
@@ -78,9 +81,6 @@ class Roda
       end
 
       module InstanceMethods
-        # The internal session key used to store the flash.
-        KEY = :_flash
-
         # Access the flash hash for the current request, loading
         # it from the session if it is not already loaded.
         def flash
