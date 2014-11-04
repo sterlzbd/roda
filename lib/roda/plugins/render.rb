@@ -18,20 +18,18 @@ class Roda
     #     end
     #   end
     #
-    # You can provide options to the plugin method, or later by modifying
-    # +render_opts+.
+    # You can provide options to the plugin method:
     #
-    #   plugin :render, :engine=>'haml'
-    #
-    #   render_opts[:views] = 'admin_views'
+    #   plugin :render, :engine=>'haml', :views=>'admin_views'
     #
     # The following options are supported:
     #
     # :cache :: nil/false to not cache templates (useful for development), defaults
     #           to true to automatically use the default template cache.
     # :engine :: The tilt engine to use for rendering, defaults to 'erb'.
-    # :escape :: Use Roda's Erubis escaping support, which handles postfix
-    #            conditions inside <%= %> tags.
+    # :escape :: Use Roda's Erubis escaping support, which makes <%= %> escape output,
+    #            <%== %> not escape output, and handles postfix conditions inside
+    #            <%= %> tags.
     # :ext :: The file extension to assume for view files, defaults to the :engine
     #         option.
     # :layout :: The base name of the layout file, defaults to 'layout'.
@@ -146,7 +144,9 @@ class Roda
           end.render(self, (opts[:locals]||{}), &block)
         end
 
-        # Return the render options for the instance's class.
+        # Return the render options for the instance's class. While this
+        # is not currently frozen, it may be frozen in a future version,
+        # so you should not attempt to modify it.
         def render_opts
           self.class.render_opts
         end

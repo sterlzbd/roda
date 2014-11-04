@@ -691,17 +691,17 @@ attempt to render the template inside the default layout template, where
     end
   end
 
-You can override the default rendering options by passing a hash to the plugin,
-or modifying the +render_opts+ hash after loading the plugin:
+You can override the default rendering options by passing a hash to the plugin:
 
   class App < Roda
-    plugin :render, :escape => true # Automatically escape output in erb templates
-    render_opts[:views] = 'admin_views' # Default views directory
-    render_opts[:layout] = "admin_layout" # Default layout template
-    render_opts[:layout_opts] = {:engine=>'haml'} # Default layout template options
-    render_opts[:opts] = {:default_encoding=>'UTF-8'} # Default template options
-    render_opts[:cache] = false # Disable template caching
-    render_opts[:engine] = 'slim' # Tilt engine/template file extension to use
+    plugin :render,
+      :cache => false,  # Disable template caching, useful in development
+      :engine => 'erb', # Tilt engine/template file extension to use
+      :escape => true,  # Automatically escape output in erb templates
+      :layout => "admin_layout",             # Default layout template
+      :layout_opts => {:ext=>'html.erb'},    # Default layout template options
+      :opts => {:default_encoding=>'UTF-8'}, # Default template options
+      :views => 'admin_views'                # Default views directory
   end
 
 == Sessions
@@ -754,10 +754,6 @@ default, so that in your templates:
 
   <%= '<>' %>  # outputs &lt;&gt; 
   <%== '<>' %> # outputs <>
-
-Note that unlike most other render options, the :escape option
-must be passed to the <tt>plugin :render</tt> call, it won't be
-respected if added later.
 
 This support requires {Erubis}[http://www.kuwata-lab.com/erubis/].
 
