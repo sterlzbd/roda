@@ -31,8 +31,6 @@ describe "default_headers plugin" do
   end
 
   it "should allow modifying the default headers at a later point" do
-    h = {'Content-Type'=>'text/json', 'Foo'=>'bar'}
-
     app(:bare) do
       plugin :default_headers
       default_headers['Content-Type'] = 'text/json'
