@@ -1,0 +1,588 @@
+class Roda
+  module RodaPlugins
+    # The assets plugin adds support for rendering your CSS and javascript
+    # asset files on the fly in development, and compiling them
+    # to a single, compressed file in production.
+    #
+    # This uses the render plugin for rendering the assets, and the render
+    # plugin uses tilt internally, so you can use any template engine
+    # supported by tilt for you assets.  Tilt ships with support for
+    # the following asset template engines, assuming the necessary libaries
+    # are installed:
+    #
+    # css :: Less, Sass, Scss
+    # js :: CoffeeScript
+    #
+    # == Usage
+    #
+    # When loading the plugin, use the :css and :js options
+    # to set the source file(s) to use for CSS and javascript assets:
+    #
+    #   plugin :assets, :css => 'some_file.scss', :js => 'some_file.coffee'
+    #
+    # This will look for the following files:
+    #
+    #   assets/css/some_file.scss
+    #   assets/js/some_file.coffee
+    #
+    # If you want to change the paths where asset files are stored, see the
+    # Options section below.
+    #
+    # === Serving
+    #
+    # In your routes, call the r.assets method to add a route to your assets,
+    # which will make your app serve the rendered assets:
+    #
+    #   route do |r|
+    #     r.assets
+    #   end
+    #
+    # You should generally call +r.assets+ inside the route block itself, and not
+    # under any branches of the routing tree.
+    #
+    # === Views
+    #
+    # In your layout view, use the assets method to add links to your CSS and
+    # javascript assets:
+    #
+    #   <%= assets(:css) %>
+    #   <%= assets(:js) %>
+    #
+    # You can add attributes to the tags by using an options hash:
+    #
+    #   <%= assets(:css, :media => 'print') %>
+    #
+    # == Asset Groups
+    #
+    # The asset plugin supports groups for the cases where you have different
+    # css/js files for your front end and back end.  To use asset groups, you
+    # pass a hash for the :css and/or :js options:
+    #
+    #   plugin :assets, :css => {:frontend => 'some_frontend_file.scss',
+    #                            :backend => 'some_backend_file.scss'}
+    #
+    # This expects the following directory structure for your assets:
+    #
+    #   assets/css/frontend/some_frontend_file.scss
+    #   assets/css/backend/some_backend_file.scss
+    #
+    # If you want do not want to force that directory structure when using
+    # asset groups, you can use the <tt>:group_subdirs => false</tt> option.
+    #
+    # In your view code use an array argument in your call to assets:
+    #
+    #   <%= assets([:css, :frontend]) %>
+    #
+    # === Nesting
+    #
+    # Asset groups also supporting nesting, though that should only be needed
+    # in fairly large applications.  You can use a nested hash when loading
+    # the plugin:
+    #
+    #   plugin :assets,
+    #     :css => {:frontend => {:dashboard => 'some_frontend_file.scss'}}
+    #
+    # and an extra entry per nesting level when creating the tags.
+    #
+    #   <%= assets([:css, :frontend, :dashboard]) %>
+    #
+    # == Caching
+    #
+    # The assets plugin uses the caching plugin internally, and will set the
+    # Last-Modified header to the modified timestamp of the asset source file
+    # when rendering the asset.
+    #
+    # If you have assets that include other asset files, such as using @import
+    # in a sass file, you need to specify the dependencies for your assets so
+    # that the assets plugin will correctly pick up changes.  You can do this
+    # using the :dependencies option to the plugin, which takes a hash where
+    # the keys are paths to asset files, and values are arrays of paths to
+    # dependencies of those asset files:
+    #
+    #   app.plugin :assets,
+    #     :dependencies=>{'assets/css/bootstrap.scss'=>Dir['assets/css/bootstrap/' '**/*.scss']}
+    #
+    # == Asset Compilation
+    #
+    # In production, you are generally going to want to compile your assets
+    # into a single file, with you can do by calling compile_assets after
+    # loading the plugin:
+    #
+    #   plugin :assets, :css => 'some_file.scss', :js => 'some_file.coffee'
+    #   compile_assets
+    #
+    # After calling compile_assets, calls to assets in your views will default
+    # to a using a single link each to your CSS and javascript compiled asset
+    # files.  By default the compiled files are written to the public directory,
+    # so that they can be served by the webserver.
+    #
+    # === Asset Compression
+    #
+    # If you have the yuicompressor gem installed and working, it will be used
+    # automatically to compress your javascript and css assets.  Otherwise,
+    # the assets will just be concatenated together and not compressed during
+    # compilation.
+    #
+    # === With Asset Groups
+    #
+    # When using asset groups, a separate compiled file will be produced per
+    # asset group.
+    #
+    # === Unique Asset Names
+    #
+    # When compiling assets, a unique name is given to each asset file, using the
+    # a SHA1 hash of the content of the file.  This is done so that clients do
+    # not attempt to use cached versions of the assets if the asset has changed.
+    #
+    # === Serving
+    #
+    # If you call +r.assets+ when compiling assets, will serve the compiled asset
+    # files.  However, it is recommended to have the main webserver (e.g. nginx)
+    # serve the compiled files, instead of relying on the application.
+    #
+    # Assuming you are using compiled assets in production mode that are served
+    # by the webserver, you can remove the serving of them by the application:
+    #
+    #   route do |r|
+    #     r.assets unless ENV['RACK_ENV'] == 'production'
+    #   end
+    #
+    # If you do have the application serve the compiled assets, it will use the
+    # Last-Modified header to make sure that clients do not redownload compiled
+    # assets that haven't changed.
+    #
+    # === Asset Precompilation
+    #
+    # If you want to precompile your assets, so they do not need to be compiled
+    # every time you boot the application, you can take the return value of
+    # +compile_assets+, and use it as the value of the :compiled option when
+    # loading the plugin.
+    #
+    # For example, let's say you want to store the compilation metadata in a JSON file.
+    # You would load your application and call +compile_assets+, saving the result as JSON:
+    #
+    #   require 'json'
+    #   File.write('compiled_assets.json', compile_assets.to_json)
+    #
+    # Then have your application load the compilation metadata from the JSON file when
+    # booting:
+    #
+    #   require 'json'
+    #   plugin :assets, :compiled=>JSON.parse(File.read('compiled_assets.json'))
+    #
+    # When using the :compiled option, Roda will assume you already the precompiled
+    # asset files that were created when you called +compile_assets+ already exist.
+    #
+    # == Plugin Options
+    #
+    # :add_suffix :: Whether to append a .css or .js extension to asset routes in non-compiled mode
+    #                (default: false)
+    # :compiled :: A hash mapping asset identifiers to the unique id for the compiled asset file,
+    #              used when precompilng your assets before application startup
+    # :compiled_css_dir :: Directory name in which to store the compiled css file,
+    #                      inside :compiled_path (default: :css_dir)
+    # :compiled_css_route :: Route under :prefix for compiled css assets (default: :compiled_css_dir)
+    # :compiled_js_dir :: Directory name in which to store the compiled javascript file,
+    #                     inside :compiled_path (default: :js_dir)
+    # :compiled_js_route :: Route under :prefix for compiled javscript assets (default: :compiled_js_dir)
+    # :compiled_name :: Compiled file name prefix (default: 'app')
+    # :compiled_path:: Path inside public folder in which compiled files are stored (default: :prefix)
+    # :concat_only :: Whether to just concatenate instead of concatentating
+    #                 and compressing files (default: false)
+    # :css_dir :: Directory name containing your css source, inside :path (default: 'css')
+    # :css_headers :: A hash of additional headers for your rendered css files
+    # :css_opts :: Options to pass to the render plugin when rendering css assets
+    # :css_route :: Route under :prefix for css assets (default: :css_dir)
+    # :dependencies :: A hash of dependencies for your asset files.  Keys should be paths to asset files,
+    #                  values should be arrays of paths your asset files depends on.  This is used to
+    #                  detect changes in your asset files.
+    # :group_subdirs :: Whether a hash used in :css and :js options requires the assets for the
+    #                   related group are contained in a subdirectory with the same name (default: true)
+    # :headers :: A hash of additional headers for both js and css rendered files
+    # :js_dir :: Directory name containing your javascript source, inside :path (default: 'js')
+    # :js_headers :: A hash of additional headers for your rendered javascript files
+    # :js_opts :: Options to pass to the render plugin when rendering javascript assets
+    # :js_route :: Route under :prefix for javascript assets (default: :js_dir)
+    # :path :: Path to your asset source directory (default: 'assets')
+    # :prefix :: Prefix for assets path in your URL/routes (default: 'assets')
+    # :public :: Path to your public folder, in which compiled files are placed (default: 'public')
+    module Assets
+      DEFAULTS = {
+        :compiled_name => 'app'.freeze,
+        :js_dir        => 'js'.freeze,
+        :css_dir       => 'css'.freeze,
+        :path          => 'assets'.freeze,
+        :prefix        => 'assets'.freeze,
+        :public        => 'public'.freeze,
+        :concat_only   => false,
+        :compiled      => false,
+        :add_suffix    => false,
+        :group_subdirs  => true,
+      }.freeze
+      JS_END = "\"></script>".freeze
+      CSS_END = "\" />".freeze
+      SPACE = ' '.freeze
+      DOT = '.'.freeze
+      SLASH = '/'.freeze
+      NEWLINE = "\n".freeze
+      EMPTY_STRING = ''.freeze
+      JS_SUFFIX = '.js'.freeze
+      CSS_SUFFIX = '.css'.freeze
+
+      # Load the render and caching plugins plugins, since the assets plugin
+      # depends on them.
+      def self.load_dependencies(app, _opts = {})
+        app.plugin :render
+        app.plugin :caching
+      end
+
+      # Setup the options for the plugin.  See the Assets module RDoc
+      # for a description of the supported options.
+      def self.configure(app, opts = {})
+        if app.assets_opts
+          prev_opts = app.assets_opts[:orig_opts]
+          orig_opts = app.assets_opts[:orig_opts].merge(opts)
+          [:headers, :css_headers, :js_headers, :css_opts, :js_opts, :dependencies].each do |s|
+            if prev_opts[s]
+              if opts[s]
+                orig_opts[s] = prev_opts[s].merge(opts[s])
+              else
+                orig_opts[s] = prev_opts[s].dup
+              end
+            end
+          end
+          app.opts[:assets] = orig_opts.dup
+          app.opts[:assets][:orig_opts] = orig_opts
+        else
+          app.opts[:assets] = opts.dup
+          app.opts[:assets][:orig_opts] = opts
+        end
+        opts = app.opts[:assets]
+
+        # Combine multiple values into a path, ignoring trailing slashes
+        j = lambda do |*v|
+          opts.values_at(*v).
+            reject{|s| s.to_s.empty?}.
+            map{|s| s.chomp('/')}.
+            join('/').freeze
+        end
+
+        # Same as j, but add a trailing slash if not empty
+        sj = lambda do |*v|
+          s = j.call(*v)
+          s.empty? ? s : (s + '/').freeze
+        end
+
+        DEFAULTS.each do |k, v|
+          opts[k] = v unless opts.has_key?(k)
+        end
+        [
+         [:compiled_js_dir, :js_dir],
+         [:compiled_css_dir, :css_dir],
+         [:compiled_path, :prefix],
+         [:js_route, :js_dir],
+         [:css_route, :css_dir],
+         [:compiled_js_route, :compiled_js_dir],
+         [:compiled_css_route, :compiled_css_dir]
+        ].each do |k, v|
+          opts[k]  = opts[v] unless opts.has_key?(k)
+        end
+        [:css_headers, :js_headers, :css_opts, :js_opts, :dependencies].each do |s|
+          opts[s] ||= {} 
+        end
+
+        if headers = opts[:headers]
+          opts[:css_headers] = headers.merge(opts[:css_headers])
+          opts[:js_headers]  = headers.merge(opts[:js_headers])
+        end
+        opts[:css_headers]['Content-Type'] ||= "text/css; charset=UTF-8".freeze
+        opts[:js_headers]['Content-Type']  ||= "application/javascript; charset=UTF-8".freeze
+
+        [:css_headers, :js_headers, :css_opts, :js_opts, :dependencies].each do |s|
+          opts[s].freeze
+        end
+        [:headers, :css, :js].each do |s|
+          opts[s].freeze if opts[s]
+        end
+
+        # Used for reading/writing files
+        opts[:js_path]           = sj.call(:path, :js_dir)
+        opts[:css_path]          = sj.call(:path, :css_dir)
+        opts[:compiled_js_path]  = j.call(:public, :compiled_path, :compiled_js_dir, :compiled_name)
+        opts[:compiled_css_path] = j.call(:public, :compiled_path, :compiled_css_dir, :compiled_name)
+
+        # Used for URLs/routes
+        opts[:js_prefix]           = sj.call(:prefix, :js_route)
+        opts[:css_prefix]          = sj.call(:prefix, :css_route)
+        opts[:compiled_js_prefix]  = j.call(:prefix, :compiled_js_route, :compiled_name)
+        opts[:compiled_css_prefix] = j.call(:prefix, :compiled_css_route, :compiled_name)
+        opts[:js_suffix]           = opts[:add_suffix] ? JS_SUFFIX : EMPTY_STRING
+        opts[:css_suffix]          = opts[:add_suffix] ? CSS_SUFFIX : EMPTY_STRING
+
+        opts.freeze
+      end
+
+      module ClassMethods
+        # Return the assets options for this class.
+        def assets_opts
+          opts[:assets]
+        end
+
+        # Compile options for the given asset type.  If no asset_type
+        # is given, compile both the :css and :js asset types.  You
+        # can specify an array of types (e.g. [:css, :frontend]) to
+        # compile assets for the given asset group.
+        def compile_assets(type=nil)
+          unless assets_opts[:compiled]
+            opts[:assets] = assets_opts.merge(:compiled => {})
+          end
+
+          if type == nil
+            _compile_assets(:css)
+            _compile_assets(:js)
+          else
+            _compile_assets(type)
+          end
+
+          assets_opts[:compiled]
+        end
+
+        private
+
+        # Internals of compile_assets, handling recursive calls for loading
+        # all asset groups under the given type.
+        def _compile_assets(type)
+          type, *dirs = type if type.is_a?(Array)
+          dirs ||= []
+          files = assets_opts[type]
+          dirs.each{|d| files = files[d]}
+
+          case files
+          when Hash
+            files.each_key{|dir| _compile_assets([type] + dirs + [dir])}
+          else
+            files = Array(files)
+            compile_assets_files(files, type, dirs) unless files.empty?
+          end
+        end
+
+        # Compile each array of files for the given type into a single
+        # file.  Dirs should be an array of asset group names, if these
+        # are files in an asset group.
+        def compile_assets_files(files, type, dirs)
+          dirs = nil if dirs && dirs.empty?
+          o = assets_opts
+          app = new
+
+          content = files.map do |file|
+            file = "#{dirs.join('/')}/#{file}" if dirs && o[:group_subdirs]
+            file = "#{o[:"#{type}_path"]}#{file}"
+            app.read_asset_file(file, type)
+          end.join
+
+          unless o[:concat_only]
+            content = compress_asset(content, type)
+          end
+
+          suffix = ".#{dirs.join('.')}" if dirs
+          key = "#{type}#{suffix}"
+          unique_id = o[:compiled][key] = asset_digest(content)
+          path = "#{o[:"compiled_#{type}_path"]}#{suffix}.#{unique_id}.#{type}"
+          File.open(path, 'wb'){|f| f.write(content)}
+          nil
+        end
+
+        # Compress the given content for the given type using yuicompressor,
+        # but handle cases where yuicompressor isn't installed or can't find
+        # a java runtime.  This method can be overridden by the application
+        # to use a different compressor.
+        def compress_asset(content, type)
+          require 'yuicompressor'
+          # :nocov:
+          content = YUICompressor.send("compress_#{type}", content, :munge => true)
+          # :nocov:
+        rescue LoadError, Errno::ENOENT
+          # yuicompressor or java not available, just use concatenated, uncompressed output
+          content
+        end
+
+        # Return a unique id for the given content.  By default, uses the
+        # SHA1 hash of the content.  This method can be overridden to use
+        # a different digest type or to return a static string if you don't
+        # want to use a unique value.
+        def asset_digest(content)
+          require 'digest/sha1'
+          Digest::SHA1.hexdigest(content)
+        end
+      end
+
+      module InstanceMethods
+        # Return a string containing html tags for the given asset type.
+        # This will use a script tag for the :js type and a link tag for
+        # the :css type.
+        #
+        # To return the tags for a specific asset group, use an array for
+        # the type, such as [:css, :frontend].
+        #
+        # When the assets are not compiled, this will result in a separate
+        # tag for each asset file.  When the assets are compiled, this will
+        # result in a single tag to the compiled asset file.
+        def assets(type, attrs = nil)
+          o = self.class.assets_opts
+          type, *dirs = type if type.is_a?(Array)
+          stype = type.to_s
+
+          attrs = if attrs
+            ru = Rack::Utils
+            attrs.map{|k,v| "#{k}=\"#{ru.escape_html(v.to_s)}\""}.join(SPACE)
+          else
+            EMPTY_STRING
+          end
+
+          if type == :js
+            tag_start = "<script type=\"text/javascript\" #{attrs} src=\"/"
+            tag_end = JS_END
+          else
+            tag_start = "<link rel=\"stylesheet\" #{attrs} href=\"/"
+            tag_end = CSS_END
+          end
+
+          # Create a tag for each individual file
+          if compiled = o[:compiled]
+            if dirs && !dirs.empty?
+              key = dirs.join(DOT)
+              ckey = "#{stype}.#{key}"
+              if ukey = compiled[ckey]
+                "#{tag_start}#{o[:"compiled_#{stype}_prefix"]}.#{key}.#{ukey}.#{stype}#{tag_end}"
+              end
+            elsif ukey = compiled[stype]
+              "#{tag_start}#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{tag_end}"
+            end
+          else
+            asset_dir = o[type]
+            if dirs && !dirs.empty?
+              dirs.each{|f| asset_dir = asset_dir[f]}
+              prefix = "#{dirs.join(SLASH)}/" if o[:group_subdirs]
+            end
+            Array(asset_dir).map{|f| "#{tag_start}#{o[:"#{stype}_prefix"]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}#{tag_end}"}.join(NEWLINE)
+          end
+        end
+
+        # Render the asset with the given filename.  When assets are compiled,
+        # or when the file is already of the given type (no rendering necessary),
+        # this returns the contents of the compiled file.
+        # When assets are not compiled and the file is not already of the correct,
+        # this will render the asset using the render plugin.
+        # In both cases, if the file has not been modified since the last request,
+        # this will return a 304 response.
+        def render_asset(file, type)
+          o = self.class.assets_opts
+          if o[:compiled]
+            file = "#{o[:"compiled_#{type}_path"]}#{file}"
+            check_asset_request(file, type, File.stat(file).mtime)
+            File.read(file)
+          else
+            file = "#{o[:"#{type}_path"]}#{file}"
+            check_asset_request(file, type, asset_last_modified(file))
+            read_asset_file(file, type)
+          end
+        end
+
+        # Return the content of the file if it is already of the correct type.
+        # Otherwise, render the file using the render plugin.  +file+ should be
+        # the relative path to the file from the current directory.
+        def read_asset_file(file, type)
+          if file.end_with?(".#{type}")
+            File.read(file)
+          else
+            render_asset_file(file, self.class.assets_opts[:"#{type}_opts"])
+          end
+        end
+
+        private
+
+        # Return when the file was last modified.  If the file depends on any
+        # other files, check the modification times of all dependencies and
+        # return the maximum.
+        def asset_last_modified(file)
+          if deps = self.class.assets_opts[:dependencies][file]
+            ([file] + Array(deps)).map{|f| File.stat(f).mtime}.max
+          else
+            File.stat(file).mtime
+          end
+        end
+
+        # If the asset hasn't been modified since the last request, return
+        # a 304 response immediately.  Otherwise, add the appropriate
+        # type-specific headers.
+        def check_asset_request(file, type, mtime)
+          request.last_modified(mtime)
+          response.headers.merge!(self.class.assets_opts[:"#{type}_headers"])
+        end
+
+        # Render the given asset file using the render plugin, with the given options.
+        # +file+ should be the relative path to the file from the current directory.
+        def render_asset_file(file, options)
+          render({:path => file}, options)
+        end
+      end
+
+      module RequestClassMethods
+        # An array of asset type strings and regexps for that type, for all asset types
+        # handled.
+        def assets_matchers
+          @assets_matchers ||= [:css, :js].map do |t|
+            [t.to_s.freeze, assets_regexp(t)].freeze if roda_class.assets_opts[t]
+          end.compact.freeze
+        end
+
+        private
+
+        # The regexp matcher to use for the given type.  This handles any asset groups
+        # for the asset types.
+        def assets_regexp(type)
+          o = roda_class.assets_opts
+          if compiled = o[:compiled]
+            assets = compiled.select{|k,_| k =~ /\A#{type}/}.map do |k, md|
+              "#{k.sub(/\A#{type}/, '')}.#{md}.#{type}"
+            end
+            /#{o[:"compiled_#{type}_prefix"]}(#{Regexp.union(assets)})/
+          else
+            assets = unnest_assets_hash(o[type])
+            /#{o[:"#{type}_prefix"]}(#{Regexp.union(assets.uniq)})#{o[:"#{type}_suffix"]}/
+          end
+        end
+
+        # Recursively unnested the given assets hash, returning a single array of asset
+        # files for the given.
+        def unnest_assets_hash(h)
+          case h
+          when Hash
+            h.map do |k,v|
+              assets = unnest_assets_hash(v)
+              assets = assets.map{|x| "#{k}/#{x}"} if roda_class.assets_opts[:group_subdirs]
+              assets
+            end.flatten(1)
+          else
+            Array(h)
+          end
+        end
+      end
+
+      module RequestMethods
+        # Render the matching asset if this is a GET request for a supported asset.
+        def assets
+          if is_get?
+            self.class.assets_matchers.each do |type, matcher|
+              is matcher do |file|
+                scope.render_asset(file, type)
+              end
+            end
+          end
+        end
+      end
+    end
+
+    register_plugin(:assets, Assets)
+  end
+end

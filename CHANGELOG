@@ -1,5 +1,7 @@
 = HEAD
 
+* Add assets plugin, for rendering assets on the fly, or compiling them to a single compressed file (cj, jeremyevans) (#5)
+
 * Make InstanceMethods in plugins not include constants, as they would pollute the constant namespace (jeremyevans)
 
 * Make response.finish add the Content-Length header, not response.write (jeremyevans)
