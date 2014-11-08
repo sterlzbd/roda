@@ -10,6 +10,7 @@ rescue LoadError
 end
 
 if run_tests
+  metadata_file = 'precompiled.json'
   js_file = 'spec/assets/js/head/app.js'
   css_file = 'spec/assets/css/no_access.css'
   js_mtime = File.mtime(js_file)
@@ -38,6 +39,7 @@ if run_tests
     after do
       File.utime(js_atime, js_mtime, js_file)
       File.utime(css_atime, css_mtime, css_file)
+      File.delete(metadata_file) if File.file?(metadata_file)
     end
 
     it 'assets_opts should use correct paths given options' do
@@ -370,6 +372,22 @@ if run_tests
     it 'should not add routes if no asset types' do
       app.plugin :assets, :js=>nil, :css=>nil
       app::RodaRequest.assets_matchers.should == []
+    end
+
+    it 'should support :precompiled option' do
+      app.plugin :assets, :precompiled=>metadata_file
+      File.exist?(metadata_file).should == false
+      app.new.assets([:js, :head]).should == '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
+
+      app.compile_assets
+      File.exist?(metadata_file).should == true
+      app.new.assets([:js, :head]).should =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+
+      app.plugin :assets, :compiled=>false, :precompiled=>false
+      app.new.assets([:js, :head]).should == '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
+
+      app.plugin :assets, :precompiled=>metadata_file
+      app.new.assets([:js, :head]).should =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
     end
   end
 end

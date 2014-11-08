@@ -154,24 +154,32 @@ class Roda
     # === Asset Precompilation
     #
     # If you want to precompile your assets, so they do not need to be compiled
-    # every time you boot the application, you can take the return value of
-    # +compile_assets+, and use it as the value of the :compiled option when
-    # loading the plugin.
+    # every time you boot the application, you can provide a :precompiled option
+    # when loading the plugin.  The value of this option should be the filename
+    # where the compiled asset metadata is stored.  
     #
-    # For example, let's say you want to store the compilation metadata in a JSON file.
-    # You would load your application and call +compile_assets+, saving the result as JSON:
+    # If the compiled assset metadata file does not exist when the assets plugin
+    # is loaded, the plugin will run in non-compiled mode.  However, when you call
+    # compile_assets, it will write the compiled asset metadata file after
+    # compiling the assets.
     #
-    #   require 'json'
-    #   File.write('compiled_assets.json', compile_assets.to_json)
+    # If the compiled asset metadata file already exists when the assets plugin
+    # is loaded, the plugin will read the file to get the compiled asset metadata,
+    # and it will run in compiled mode, assuming that the compiled asset files
+    # already exist.
     #
-    # Then have your application load the compilation metadata from the JSON file when
-    # booting:
+    # ==== On Heroku
     #
-    #   require 'json'
-    #   plugin :assets, :compiled=>JSON.parse(File.read('compiled_assets.json'))
+    # Heroku supports precompiling the assets when using Roda.  You just need to
+    # add an assets:precompile task, similar to this:
     #
-    # When using the :compiled option, Roda will assume you already the precompiled
-    # asset files that were created when you called +compile_assets+ already exist.
+    #   namespace :assets do
+    #     desc "Precompile the assets"
+    #     task :precompile do
+    #       require './app'
+    #       App.compile_assets
+    #     end
+    #   end
     #
     # == Plugin Options
     #
@@ -205,6 +213,9 @@ class Roda
     # :js_route :: Route under :prefix for javascript assets (default: :js_dir)
     # :path :: Path to your asset source directory (default: 'assets')
     # :prefix :: Prefix for assets path in your URL/routes (default: 'assets')
+    # :precompiled :: Path to the compiled asset metadata file.  If the file exists, will use compiled
+    #                 mode using the metadata in the file.  If the file does not exist, will use
+    #                 non-compiled mode, but will write the metadata to the file if compile_assets is called.
     # :public :: Path to your public folder, in which compiled files are placed (default: 'public')
     module Assets
       DEFAULTS = {
@@ -217,7 +228,7 @@ class Roda
         :concat_only   => false,
         :compiled      => false,
         :add_suffix    => false,
-        :group_subdirs  => true,
+        :group_subdirs => true,
       }.freeze
       JS_END = "\"></script>".freeze
       CSS_END = "\" />".freeze
@@ -273,9 +284,15 @@ class Roda
           s.empty? ? s : (s + '/').freeze
         end
 
+        if opts[:precompiled] && !opts[:compiled] && ::File.exist?(opts[:precompiled])
+          require 'json'
+          opts[:compiled] = ::JSON.parse(::File.read(opts[:precompiled]))
+        end
+
         DEFAULTS.each do |k, v|
           opts[k] = v unless opts.has_key?(k)
         end
+
         [
          [:compiled_js_dir, :js_dir],
          [:compiled_css_dir, :css_dir],
@@ -287,6 +304,7 @@ class Roda
         ].each do |k, v|
           opts[k]  = opts[v] unless opts.has_key?(k)
         end
+
         [:css_headers, :js_headers, :css_opts, :js_opts, :dependencies].each do |s|
           opts[s] ||= {} 
         end
@@ -344,6 +362,11 @@ class Roda
             _compile_assets(type)
           end
 
+          if assets_opts[:precompiled]
+            require 'json'
+            ::File.open(assets_opts[:precompiled], 'wb'){|f| f.write(assets_opts[:compiled].to_json)}
+          end
+
           assets_opts[:compiled]
         end
 
@@ -388,7 +411,7 @@ class Roda
           key = "#{type}#{suffix}"
           unique_id = o[:compiled][key] = asset_digest(content)
           path = "#{o[:"compiled_#{type}_path"]}#{suffix}.#{unique_id}.#{type}"
-          File.open(path, 'wb'){|f| f.write(content)}
+          ::File.open(path, 'wb'){|f| f.write(content)}
           nil
         end
 
@@ -479,8 +502,8 @@ class Roda
           o = self.class.assets_opts
           if o[:compiled]
             file = "#{o[:"compiled_#{type}_path"]}#{file}"
-            check_asset_request(file, type, File.stat(file).mtime)
-            File.read(file)
+            check_asset_request(file, type, ::File.stat(file).mtime)
+            ::File.read(file)
           else
             file = "#{o[:"#{type}_path"]}#{file}"
             check_asset_request(file, type, asset_last_modified(file))
@@ -493,7 +516,7 @@ class Roda
         # the relative path to the file from the current directory.
         def read_asset_file(file, type)
           if file.end_with?(".#{type}")
-            File.read(file)
+            ::File.read(file)
           else
             render_asset_file(file, self.class.assets_opts[:"#{type}_opts"])
           end
@@ -506,9 +529,9 @@ class Roda
         # return the maximum.
         def asset_last_modified(file)
           if deps = self.class.assets_opts[:dependencies][file]
-            ([file] + Array(deps)).map{|f| File.stat(f).mtime}.max
+            ([file] + Array(deps)).map{|f| ::File.stat(f).mtime}.max
           else
-            File.stat(file).mtime
+            ::File.stat(file).mtime
           end
         end
 
