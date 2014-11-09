@@ -185,8 +185,6 @@ class Roda
     #
     # :add_suffix :: Whether to append a .css or .js extension to asset routes in non-compiled mode
     #                (default: false)
-    # :compiled :: A hash mapping asset identifiers to the unique id for the compiled asset file,
-    #              used when precompilng your assets before application startup
     # :compiled_css_dir :: Directory name in which to store the compiled css file,
     #                      inside :compiled_path (default: :css_dir)
     # :compiled_css_route :: Route under :prefix for compiled css assets (default: :compiled_css_dir)
@@ -351,6 +349,8 @@ class Roda
         # can specify an array of types (e.g. [:css, :frontend]) to
         # compile assets for the given asset group.
         def compile_assets(type=nil)
+          require 'fileutils'
+
           unless assets_opts[:compiled]
             opts[:assets] = assets_opts.merge(:compiled => {})
           end
@@ -364,6 +364,7 @@ class Roda
 
           if assets_opts[:precompiled]
             require 'json'
+            ::FileUtils.mkdir_p(File.dirname(assets_opts[:precompiled]))
             ::File.open(assets_opts[:precompiled], 'wb'){|f| f.write(assets_opts[:compiled].to_json)}
           end
 
@@ -411,6 +412,7 @@ class Roda
           key = "#{type}#{suffix}"
           unique_id = o[:compiled][key] = asset_digest(content)
           path = "#{o[:"compiled_#{type}_path"]}#{suffix}.#{unique_id}.#{type}"
+          ::FileUtils.mkdir_p(File.dirname(path))
           ::File.open(path, 'wb'){|f| f.write(content)}
           nil
         end
