@@ -49,13 +49,13 @@ if run_tests
 
     it 'assets_opts should use correct paths given options' do
       keys = [:js_path, :css_path, :compiled_js_path, :compiled_css_path, :js_prefix, :css_prefix, :compiled_js_prefix, :compiled_css_prefix]
-      app.assets_opts.values_at(*keys).should == %w"spec/assets/js/ spec/assets/css/ spec/assets/js/app spec/assets/css/app assets/js/ assets/css/ assets/js/app assets/css/app"
+      app.assets_opts.values_at(*keys).should == %w"spec/assets/js/ spec/assets/css/ spec/assets/app spec/assets/app assets/js/ assets/css/ assets/app assets/app"
 
       app.plugin :assets, :path=>'bar/', :public=>'foo/', :prefix=>'as/', :js_dir=>'j/', :css_dir=>'c/', :compiled_name=>'a'
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/as/j/a foo/as/c/a as/j/ as/c/ as/j/a as/c/a"
+      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/as/a foo/as/a as/j/ as/c/ as/a as/a"
 
       app.plugin :assets, :path=>'bar', :public=>'foo', :prefix=>'as', :js_dir=>'j', :css_dir=>'c', :compiled_name=>'a'
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/as/j/a foo/as/c/a as/j/ as/c/ as/j/a as/c/a"
+      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/as/a foo/as/a as/j/ as/c/ as/a as/a"
 
       app.plugin :assets, :compiled_js_dir=>'cj', :compiled_css_dir=>'cs', :compiled_path=>'cp'
       app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a as/j/ as/c/ as/cj/a as/cs/a"
@@ -193,10 +193,10 @@ if run_tests
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.should == 1
-      html =~ %r{href="(/assets/css/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
       css = body($1)
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       css.should =~ /color: ?red/
       css.should =~ /color: ?blue/
@@ -205,7 +205,7 @@ if run_tests
 
     it 'should handle compiling assets, linking to them, and accepting requests for them, with different options' do
       app.plugin :assets, :compiled_path=>nil, :js_dir=>'assets/js', :css_dir=>'assets/css', :prefix=>'a',
-        :public=>'spec', :path=>'spec', :compiled_js_route=>'foo', :compiled_css_route=>'bar'
+        :public=>'spec/assets', :path=>'spec', :compiled_js_route=>'foo', :compiled_css_route=>'bar'
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.should == 1
@@ -220,7 +220,7 @@ if run_tests
     end
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash' do
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>'js', :compiled_css_dir=>'css',
+      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
         :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.compile_assets
       app.route do |r|
@@ -231,10 +231,10 @@ if run_tests
       end
       html = body('/test')
       html.scan(/<link/).length.should == 1
-      html =~ %r{href="(/assets/css/app\.assets\.css\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.assets\.css\.[a-f0-9]{40}\.css)"}
       css = body($1)
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       css.should =~ /color: ?red/
       css.should =~ /color: ?blue/
@@ -242,7 +242,7 @@ if run_tests
     end
 
     it 'should handle :group_subdirs => false when compiling' do
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>'js', :compiled_css_dir=>'css', :group_subdirs=>false,
+      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil, :group_subdirs=>false,
         :css=>{:assets=>{:css=>%w'assets/css/app.scss assets/css/raw.css'}}, :js=>{:assets=>{:js=>{:head=>'assets/js/head/app.js'}}}
       app.compile_assets
       app.route do |r|
@@ -253,10 +253,10 @@ if run_tests
       end
       html = body('/test')
       html.scan(/<link/).length.should == 1
-      html =~ %r{href="(/assets/css/app\.assets\.css\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.assets\.css\.[a-f0-9]{40}\.css)"}
       css = body($1)
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       css.should =~ /color: ?red/
       css.should =~ /color: ?blue/
@@ -268,10 +268,10 @@ if run_tests
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.should == 1
-      html =~ %r{href="(/assets/css/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
       css = body($1)
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       css.should =~ /color: ?red/
       css.should =~ /color: ?blue/
@@ -282,7 +282,7 @@ if run_tests
       app.compile_assets(:css)
       html = body('/test')
       html.scan(/<link/).length.should == 1
-      html =~ %r{href="(/assets/css/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
       css = body($1)
       html.scan(/<script/).length.should == 0
       css.should =~ /color: ?red/
@@ -294,7 +294,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.should == 0
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       js.should include('console.log')
     end
@@ -304,7 +304,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.should == 0
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       js.should include('console.log')
     end
@@ -315,7 +315,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.should == 0
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       js.should include('console.log')
     end
@@ -326,7 +326,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.should == 0
       html.scan(/<script/).length.should == 1
-      html =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       js.should include('console.log')
     end
@@ -401,13 +401,13 @@ if run_tests
 
       app.compile_assets
       File.exist?(metadata_file).should == true
-      app.new.assets([:js, :head]).should =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      app.new.assets([:js, :head]).should =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
 
       app.plugin :assets, :compiled=>false, :precompiled=>false
       app.new.assets([:js, :head]).should == '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
 
       app.plugin :assets, :precompiled=>metadata_file
-      app.new.assets([:js, :head]).should =~ %r{src="(/assets/js/app\.head\.[a-f0-9]{40}\.js)"}
+      app.new.assets([:js, :head]).should =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
     end
   end
 end

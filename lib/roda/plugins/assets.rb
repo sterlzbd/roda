@@ -186,10 +186,10 @@ class Roda
     # :add_suffix :: Whether to append a .css or .js extension to asset routes in non-compiled mode
     #                (default: false)
     # :compiled_css_dir :: Directory name in which to store the compiled css file,
-    #                      inside :compiled_path (default: :css_dir)
+    #                      inside :compiled_path (default: nil)
     # :compiled_css_route :: Route under :prefix for compiled css assets (default: :compiled_css_dir)
     # :compiled_js_dir :: Directory name in which to store the compiled javascript file,
-    #                     inside :compiled_path (default: :js_dir)
+    #                     inside :compiled_path (default: nil)
     # :compiled_js_route :: Route under :prefix for compiled javscript assets (default: :compiled_js_dir)
     # :compiled_name :: Compiled file name prefix (default: 'app')
     # :compiled_path:: Path inside public folder in which compiled files are stored (default: :prefix)
@@ -217,16 +217,18 @@ class Roda
     # :public :: Path to your public folder, in which compiled files are placed (default: 'public')
     module Assets
       DEFAULTS = {
-        :compiled_name => 'app'.freeze,
-        :js_dir        => 'js'.freeze,
-        :css_dir       => 'css'.freeze,
-        :path          => 'assets'.freeze,
-        :prefix        => 'assets'.freeze,
-        :public        => 'public'.freeze,
-        :concat_only   => false,
-        :compiled      => false,
-        :add_suffix    => false,
-        :group_subdirs => true,
+        :compiled_name    => 'app'.freeze,
+        :js_dir           => 'js'.freeze,
+        :css_dir          => 'css'.freeze,
+        :path             => 'assets'.freeze,
+        :prefix           => 'assets'.freeze,
+        :public           => 'public'.freeze,
+        :concat_only      => false,
+        :compiled         => false,
+        :add_suffix       => false,
+        :group_subdirs    => true,
+        :compiled_css_dir => nil,
+        :compiled_js_dir  => nil,
       }.freeze
       JS_END = "\"></script>".freeze
       CSS_END = "\" />".freeze
@@ -292,8 +294,6 @@ class Roda
         end
 
         [
-         [:compiled_js_dir, :js_dir],
-         [:compiled_css_dir, :css_dir],
          [:compiled_path, :prefix],
          [:js_route, :js_dir],
          [:css_route, :css_dir],
