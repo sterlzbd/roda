@@ -55,6 +55,7 @@
               <li><a target="docwin" href="#method-i-delete_cookie">delete_cookie</a></li>
               <li><a target="docwin" href="#method-i-empty-3F">empty?</a></li>
               <li><a target="docwin" href="#method-i-finish">finish</a></li>
+              <li><a target="docwin" href="#method-i-finish_with_body">finish_with_body</a></li>
               <li><a target="docwin" href="#attribute-i-headers">headers</a></li>
               <li><a target="docwin" href="#method-i-inspect">inspect</a></li>
               <li><a target="docwin" href="#method-i-redirect">redirect</a></li>
@@ -145,7 +146,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 879</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-ivar">@status</span>  = <span class="ruby-keyword">nil</span>&#x000A;  <span class="ruby-ivar">@headers</span> = <span class="ruby-identifier">default_headers</span>&#x000A;  <span class="ruby-ivar">@body</span>    = []&#x000A;  <span class="ruby-ivar">@length</span>  = <span class="ruby-value">0</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 894</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-ivar">@status</span>  = <span class="ruby-keyword">nil</span>&#x000A;  <span class="ruby-ivar">@headers</span> = <span class="ruby-identifier">default_headers</span>&#x000A;  <span class="ruby-ivar">@body</span>    = []&#x000A;  <span class="ruby-ivar">@length</span>  = <span class="ruby-value">0</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -165,7 +166,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-5B-5D-source'><span class="ruby-comment"># File lib/roda.rb, line 889</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-ivar">@headers</span>[<span class="ruby-identifier">key</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-5B-5D-source'><span class="ruby-comment"># File lib/roda.rb, line 904</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-ivar">@headers</span>[<span class="ruby-identifier">key</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-5B-5D-3D'>
@@ -184,7 +185,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-3D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-5B-5D-3D-source'><span class="ruby-comment"># File lib/roda.rb, line 896</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-ivar">@headers</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-5B-5D-3D-source'><span class="ruby-comment"># File lib/roda.rb, line 911</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-ivar">@headers</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-default_headers'>
@@ -201,7 +202,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-default_headers-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-default_headers-source'><span class="ruby-comment"># File lib/roda.rb, line 906</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">default_headers</span>&#x000A;  {<span class="ruby-constant">CONTENT_TYPE</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DEFAULT_CONTENT_TYPE</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-default_headers-source'><span class="ruby-comment"># File lib/roda.rb, line 921</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">default_headers</span>&#x000A;  {<span class="ruby-constant">CONTENT_TYPE</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">DEFAULT_CONTENT_TYPE</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-delete_cookie'>
@@ -222,7 +223,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-delete_cookie-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-delete_cookie-source'><span class="ruby-comment"># File lib/roda.rb, line 917</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_cookie</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span> = {})&#x000A;  <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">delete_cookie_header!</span>(<span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-delete_cookie-source'><span class="ruby-comment"># File lib/roda.rb, line 932</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">delete_cookie</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span> = {})&#x000A;  <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">delete_cookie_header!</span>(<span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-empty-3F'>
@@ -242,7 +243,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-empty-3F-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-empty-3F-source'><span class="ruby-comment"># File lib/roda.rb, line 928</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">empty?</span>&#x000A;  <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-empty-3F-source'><span class="ruby-comment"># File lib/roda.rb, line 943</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">empty?</span>&#x000A;  <span class="ruby-ivar">@body</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-finish'>
@@ -254,15 +255,38 @@
                 <div class='description'>
                   
                   <p>Return the rack response array of status, headers, and body for the current
-                  response. Example:</p>
+                  response.  If the status has not been set, uses a 200 status if the body
+                  has been written to, otherwise uses a 404 status.  Adds the Content-Length
+                  header to the size of the response body.</p>
                   
-                  <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span> <span class="ruby-comment"># =&gt; [200, {&#39;Content-Type&#39;=&gt;&#39;text/html&#39;}, []]</span></pre>
+                  <p>Example:</p>
+                  
+                  <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="ruby-comment">#  =&gt; [200,</span>&#x000A;<span class="ruby-comment">#      {&#39;Content-Type&#39;=&gt;&#39;text/html&#39;, &#39;Content-Length&#39;=&gt;&#39;0&#39;},</span>&#x000A;<span class="ruby-comment">#      []]</span></pre>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-finish-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-finish-source'><span class="ruby-comment"># File lib/roda.rb, line 936</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">finish</span>&#x000A;  <span class="ruby-identifier">b</span> = <span class="ruby-ivar">@body</span>&#x000A;  <span class="ruby-identifier">s</span> = (<span class="ruby-ivar">@status</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-value">404</span> <span class="ruby-operator">:</span> <span class="ruby-value">200</span>)&#x000A;  [<span class="ruby-identifier">s</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">b</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-finish-source'><span class="ruby-comment"># File lib/roda.rb, line 959</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">finish</span>&#x000A;  <span class="ruby-identifier">b</span> = <span class="ruby-ivar">@body</span>&#x000A;  <span class="ruby-identifier">s</span> = (<span class="ruby-ivar">@status</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-value">404</span> <span class="ruby-operator">:</span> <span class="ruby-value">200</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@headers</span>&#x000A;  <span class="ruby-identifier">h</span>[<span class="ruby-constant">CONTENT_LENGTH</span>] = <span class="ruby-ivar">@length</span>.<span class="ruby-identifier">to_s</span>&#x000A;  [<span class="ruby-identifier">s</span>, <span class="ruby-identifier">h</span>, <span class="ruby-identifier">b</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-finish_with_body'>
+                <a name='method-i-finish_with_body'></a>
+                <div class='synopsis'>
+                  <span class='name'>finish_with_body</span>
+                  <span class='arguments'>(body)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return the rack response array using a given body.  Assumes a 200 response
+                  status unless status has been explicitly set, and doesn&#39;t add the
+                  Content-Length header or use the existing body.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-finish_with_body-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-finish_with_body-source'><span class="ruby-comment"># File lib/roda.rb, line 971</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">finish_with_body</span>(<span class="ruby-identifier">body</span>)&#x000A;  [<span class="ruby-ivar">@status</span> <span class="ruby-operator">||</span> <span class="ruby-value">200</span>, <span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">body</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-inspect'>
@@ -279,7 +303,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-inspect-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 901</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#&lt;#{self.class.inspect} #{@status.inspect} #{@headers.inspect} #{@body.inspect}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 916</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#&lt;#{self.class.inspect} #{@status.inspect} #{@headers.inspect} #{@body.inspect}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-redirect'>
@@ -299,7 +323,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-redirect-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-redirect-source'><span class="ruby-comment"># File lib/roda.rb, line 947</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span> = <span class="ruby-value">302</span>)&#x000A;  <span class="ruby-ivar">@headers</span>[<span class="ruby-constant">LOCATION</span>] = <span class="ruby-identifier">path</span>&#x000A;  <span class="ruby-ivar">@status</span>  = <span class="ruby-identifier">status</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-redirect-source'><span class="ruby-comment"># File lib/roda.rb, line 980</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span> = <span class="ruby-value">302</span>)&#x000A;  <span class="ruby-ivar">@headers</span>[<span class="ruby-constant">LOCATION</span>] = <span class="ruby-identifier">path</span>&#x000A;  <span class="ruby-ivar">@status</span>  = <span class="ruby-identifier">status</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-set_cookie'>
@@ -318,7 +342,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-set_cookie-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-set_cookie-source'><span class="ruby-comment"># File lib/roda.rb, line 956</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_cookie</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">set_cookie_header!</span>(<span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-set_cookie-source'><span class="ruby-comment"># File lib/roda.rb, line 989</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_cookie</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">set_cookie_header!</span>(<span class="ruby-ivar">@headers</span>, <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-write'>
@@ -329,16 +353,15 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Write to the response body.  Updates Content-Length header with the size of
-                  the string written.  Returns nil. Example:</p>
+                  <p>Write to the response body.  Returns nil.</p>
                   
-                  <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">write</span>(<span class="ruby-string">&#39;foo&#39;</span>)&#x000A;<span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Length&#39;</span>] <span class="ruby-comment"># =&gt;&#39;3&#39;</span></pre>
+                  <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">write</span>(<span class="ruby-string">&#39;foo&#39;</span>)</pre>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-write-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-write-source'><span class="ruby-comment"># File lib/roda.rb, line 965</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">write</span>(<span class="ruby-identifier">str</span>)&#x000A;  <span class="ruby-identifier">s</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">to_s</span>&#x000A;&#x000A;  <span class="ruby-ivar">@length</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">bytesize</span>&#x000A;  <span class="ruby-ivar">@headers</span>[<span class="ruby-constant">CONTENT_LENGTH</span>] = <span class="ruby-ivar">@length</span>.<span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-ivar">@body</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-write-source'><span class="ruby-comment"># File lib/roda.rb, line 996</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">write</span>(<span class="ruby-identifier">str</span>)&#x000A;  <span class="ruby-identifier">s</span> = <span class="ruby-identifier">str</span>.<span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-ivar">@length</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">bytesize</span>&#x000A;  <span class="ruby-ivar">@body</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

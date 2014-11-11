@@ -40,7 +40,16 @@
             <a target="docwin" href="../../files/lib/roda/plugins/all_verbs_rb.html">lib/roda/plugins/all_verbs.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/assets_rb.html">lib/roda/plugins/assets.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/backtracking_array_rb.html">lib/roda/plugins/backtracking_array.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/caching_rb.html">lib/roda/plugins/caching.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/chunked_rb.html">lib/roda/plugins/chunked.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/content_for_rb.html">lib/roda/plugins/content_for.rb</a>
@@ -50,6 +59,9 @@
           </li>
           <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/default_headers_rb.html">lib/roda/plugins/default_headers.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/error_email_rb.html">lib/roda/plugins/error_email.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/error_handler_rb.html">lib/roda/plugins/error_handler.rb</a>
@@ -92,6 +104,9 @@
           </li>
           <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/pass_rb.html">lib/roda/plugins/pass.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/path_rb.html">lib/roda/plugins/path.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/per_thread_caching_rb.html">lib/roda/plugins/per_thread_caching.rb</a>
@@ -140,11 +155,15 @@
             <h2>Classes and Modules</h2>
             <ol>
               <li><a target="docwin" href="RodaPlugins/AllVerbs.html">Roda::RodaPlugins::AllVerbs</a></li>
+              <li><a target="docwin" href="RodaPlugins/Assets.html">Roda::RodaPlugins::Assets</a></li>
               <li><a target="docwin" href="RodaPlugins/BacktrackingArray.html">Roda::RodaPlugins::BacktrackingArray</a></li>
               <li><a target="docwin" href="RodaPlugins/Base.html">Roda::RodaPlugins::Base</a></li>
+              <li><a target="docwin" href="RodaPlugins/Caching.html">Roda::RodaPlugins::Caching</a></li>
+              <li><a target="docwin" href="RodaPlugins/Chunked.html">Roda::RodaPlugins::Chunked</a></li>
               <li><a target="docwin" href="RodaPlugins/ContentFor.html">Roda::RodaPlugins::ContentFor</a></li>
               <li><a target="docwin" href="RodaPlugins/Csrf.html">Roda::RodaPlugins::Csrf</a></li>
               <li><a target="docwin" href="RodaPlugins/DefaultHeaders.html">Roda::RodaPlugins::DefaultHeaders</a></li>
+              <li><a target="docwin" href="RodaPlugins/ErrorEmail.html">Roda::RodaPlugins::ErrorEmail</a></li>
               <li><a target="docwin" href="RodaPlugins/ErrorHandler.html">Roda::RodaPlugins::ErrorHandler</a></li>
               <li><a target="docwin" href="RodaPlugins/ErubisEscaping.html">Roda::RodaPlugins::ErubisEscaping</a></li>
               <li><a target="docwin" href="RodaPlugins/Flash.html">Roda::RodaPlugins::Flash</a></li>
@@ -160,6 +179,7 @@
               <li><a target="docwin" href="RodaPlugins/NotAllowed.html">Roda::RodaPlugins::NotAllowed</a></li>
               <li><a target="docwin" href="RodaPlugins/NotFound.html">Roda::RodaPlugins::NotFound</a></li>
               <li><a target="docwin" href="RodaPlugins/Pass.html">Roda::RodaPlugins::Pass</a></li>
+              <li><a target="docwin" href="RodaPlugins/Path.html">Roda::RodaPlugins::Path</a></li>
               <li><a target="docwin" href="RodaPlugins/PerThreadCaching.html">Roda::RodaPlugins::PerThreadCaching</a></li>
               <li><a target="docwin" href="RodaPlugins/Render.html">Roda::RodaPlugins::Render</a></li>
               <li><a target="docwin" href="RodaPlugins/RenderEach.html">Roda::RodaPlugins::RenderEach</a></li>
@@ -189,7 +209,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 68</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 71</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-register_plugin'>
@@ -210,7 +230,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-register_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 81</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 84</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

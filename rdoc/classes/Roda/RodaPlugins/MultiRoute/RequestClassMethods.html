@@ -42,6 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
+              <li><a target="docwin" href="#method-i-clear_named_route_regexp-21">clear_named_route_regexp!</a></li>
               <li><a target="docwin" href="#method-i-named_route_regexp">named_route_regexp</a></li>
             </ol>
           </div>
@@ -50,11 +51,33 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-clear_named_route_regexp-21'>
+                <a name='method-i-clear_named_route_regexp-21'></a>
+                <div class='synopsis'>
+                  <span class='name'>clear_named_route_regexp!</span>
+                  <span class='arguments'>(namespace=nil)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Clear cached regexp for named routes, it will be regenerated the next time
+                  it is needed.</p>
+                  
+                  <p>This shouldn&#39;t be an issue in production applications, but during
+                  development it&#39;s useful to support new named routes being added while
+                  the application is running.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-clear_named_route_regexp-21-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-clear_named_route_regexp-21-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 174</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">clear_named_route_regexp!</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@namespaced_route_regexps</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">namespace</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
               <div class='method public-instance' id='method-method-i-named_route_regexp'>
                 <a name='method-i-named_route_regexp'></a>
                 <div class='synopsis'>
                   <span class='name'>named_route_regexp</span>
-                  <span class='arguments'>()</span>
+                  <span class='arguments'>(namespace=nil)</span>
                 </div>
                 <div class='description'>
                   
@@ -64,7 +87,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-named_route_regexp-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-named_route_regexp-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 91</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_route_regexp</span>&#x000A;  <span class="ruby-ivar">@named_route_regexp</span> <span class="ruby-operator">||=</span> <span class="ruby-node">/(#{Regexp.union(roda_class.named_routes)})/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-named_route_regexp-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 179</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_route_regexp</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@namespaced_route_regexps</span>[<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> <span class="ruby-node">/(#{Regexp.union(roda_class.named_routes(namespace).select{|s| s.is_a?(String)}.sort.reverse)})/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

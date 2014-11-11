@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::Caching::RequestMethods</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::Caching::RequestMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/caching_rb.html">lib/roda/plugins/caching.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-etag">etag</a></li>
+              <li><a target="docwin" href="#method-i-last_modified">last_modified</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ETAG</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'ETag'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>HTTP_IF_MATCH</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'HTTP_IF_MATCH'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>HTTP_IF_MODIFIED_SINCE</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'HTTP_IF_MODIFIED_SINCE'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>HTTP_IF_NONE_MATCH</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'HTTP_IF_NONE_MATCH'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>HTTP_IF_UNMODIFIED_SINCE</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'HTTP_IF_UNMODIFIED_SINCE'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>LAST_MODIFIED</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'Last-Modified'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>STAR</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'*'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-etag'>
+                <a name='method-i-etag'></a>
+                <div class='synopsis'>
+                  <span class='name'>etag</span>
+                  <span class='arguments'>(value, opts={})</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the response entity tag using the ETag header.</p>
+                  
+                  <p>The <code>value</code> argument is an identifier that uniquely identifies
+                  the current version of the resource. Options:</p>
+                  <table class="rdoc-list note-list"><tbody><tr><td class='label'>:weak </td><td>
+                  <p>Use a weak cache validator (a strong cache validator is the default)</p>
+                  </td></tr><tr><td class='label'>:new_resource </td><td>
+                  <p>Whether this etag should match an etag of * (true for POST, false
+                  otherwise)</p>
+                  </td></tr></tbody></table>
+                  
+                  <p>When the current request includes an If-None-Match header with a matching
+                  etag, immediately returns a response with a 304 or 412 status, depending on
+                  the request method.</p>
+                  
+                  <p>When the current request includes an If-Match header with a etag that
+                  doesn&#39;t match, immediately returns a response with a 412 status.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-etag-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-etag-source'><span class="ruby-comment"># File lib/roda/plugins/caching.rb, line 120</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">etag</span>(<span class="ruby-identifier">value</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-comment"># Before touching this code, please double check RFC 2616 14.24 and 14.26.</span>&#x000A;  <span class="ruby-identifier">weak</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:weak</span>]&#x000A;  <span class="ruby-identifier">new_resource</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:new_resource</span>){<span class="ruby-identifier">post?</span>}&#x000A;&#x000A;  <span class="ruby-identifier">response</span>[<span class="ruby-constant">ETAG</span>] = <span class="ruby-identifier">etag</span> = <span class="ruby-node">&quot;#{&#39;W/&#39; if weak}\&quot;#{value}\&quot;&quot;</span>&#x000A;  <span class="ruby-identifier">status</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span>&#x000A;  <span class="ruby-identifier">e</span> = <span class="ruby-identifier">env</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">status</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">status</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">200</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">300</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">304</span>)&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">etag_matches?</span>(<span class="ruby-identifier">e</span>[<span class="ruby-constant">HTTP_IF_NONE_MATCH</span>], <span class="ruby-identifier">etag</span>, <span class="ruby-identifier">new_resource</span>)&#x000A;      <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = (<span class="ruby-identifier">request_method</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/\AGET|HEAD|OPTIONS|TRACE\z/i</span> <span class="ruby-operator">?</span> <span class="ruby-value">304</span> <span class="ruby-operator">:</span> <span class="ruby-value">412</span>)&#x000A;      <span class="ruby-identifier">halt</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">ifm</span> = <span class="ruby-identifier">e</span>[<span class="ruby-constant">HTTP_IF_MATCH</span>]&#x000A;      <span class="ruby-keyword">unless</span> <span class="ruby-identifier">etag_matches?</span>(<span class="ruby-identifier">ifm</span>, <span class="ruby-identifier">etag</span>, <span class="ruby-identifier">new_resource</span>)&#x000A;        <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">412</span>&#x000A;        <span class="ruby-identifier">halt</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-last_modified'>
+                <a name='method-i-last_modified'></a>
+                <div class='synopsis'>
+                  <span class='name'>last_modified</span>
+                  <span class='arguments'>(time)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Set the last modified time of the resource using the Last-Modified header.
+                  The <code>time</code> argument should be a Time instance.</p>
+                  
+                  <p>If the current request includes an If-Modified-Since header that is equal
+                  or later than the time specified, immediately returns a response with a 304
+                  status.</p>
+                  
+                  <p>If the current request includes an If-Unmodified-Since header that is
+                  before than the time specified, immediately returns a response with a 412
+                  status.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-last_modified-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-last_modified-source'><span class="ruby-comment"># File lib/roda/plugins/caching.rb, line 88</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">last_modified</span>(<span class="ruby-identifier">time</span>)&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">time</span>&#x000A;  <span class="ruby-identifier">response</span>[<span class="ruby-constant">LAST_MODIFIED</span>] = <span class="ruby-identifier">time</span>.<span class="ruby-identifier">httpdate</span>&#x000A;  <span class="ruby-identifier">e</span> = <span class="ruby-identifier">env</span>&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">e</span>[<span class="ruby-constant">HTTP_IF_NONE_MATCH</span>]&#x000A;  <span class="ruby-identifier">status</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">status</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">200</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">ims</span> = <span class="ruby-identifier">time_from_header</span>(<span class="ruby-identifier">e</span>[<span class="ruby-constant">HTTP_IF_MODIFIED_SINCE</span>])) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">ims</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">time</span>.<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">304</span>&#x000A;    <span class="ruby-identifier">halt</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> (<span class="ruby-operator">!</span><span class="ruby-identifier">status</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">status</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">200</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">300</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">status</span> <span class="ruby-operator">==</span> <span class="ruby-value">412</span>) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">ius</span> = <span class="ruby-identifier">time_from_header</span>(<span class="ruby-identifier">e</span>[<span class="ruby-constant">HTTP_IF_UNMODIFIED_SINCE</span>])) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">ius</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">time</span>.<span class="ruby-identifier">to_i</span>&#x000A;    <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">412</span>&#x000A;    <span class="ruby-identifier">halt</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

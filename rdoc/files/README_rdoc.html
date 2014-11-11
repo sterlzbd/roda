@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2014-08-17 21:50:27 -0700</span>
+          <span class='datetime'>2014-11-07 09:20:04 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -544,10 +544,9 @@
             <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-ivar">@var</span> = <span class="ruby-string">&#39;1&#39;</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;render&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># Renders the views/home.erb template, which will have access to the</span>&#x000A;      <span class="ruby-comment"># instance variable @var, as well as local variable content</span>&#x000A;      <span class="ruby-identifier">render</span>(<span class="ruby-string">&quot;home&quot;</span>, :<span class="ruby-identifier">locals=</span><span class="ruby-operator">&gt;</span>{:<span class="ruby-identifier">content</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;hello, world&quot;</span>})&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;view&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-ivar">@var2</span> = <span class="ruby-string">&#39;1&#39;</span>&#x000A;&#x000A;      <span class="ruby-comment"># Renders the views/home.erb template, which will have access to the</span>&#x000A;      <span class="ruby-comment"># instance variables @var and @var2, and takes the output of that and</span>&#x000A;      <span class="ruby-comment"># renders it inside views/layout.erb (which should yield where the</span>&#x000A;      <span class="ruby-comment"># content should be inserted).</span>&#x000A;      <span class="ruby-identifier">view</span>(<span class="ruby-string">&quot;home&quot;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>You can override the default rendering options by passing a hash to the
-            plugin, or modifying the <code>render_opts</code> hash after loading the
             plugin:</p>
             
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>, :<span class="ruby-identifier">escape</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span> <span class="ruby-comment"># Automatically escape output in erb templates</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">views</span>] = <span class="ruby-string">&#39;admin_views&#39;</span> <span class="ruby-comment"># Default views directory</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;admin_layout&quot;</span> <span class="ruby-comment"># Default layout template</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">layout_opts</span>] = {:<span class="ruby-identifier">engine=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;haml&#39;</span>} <span class="ruby-comment"># Default layout template options</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">opts</span>] = {:<span class="ruby-identifier">default_encoding=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;UTF-8&#39;</span>} <span class="ruby-comment"># Default template options</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">cache</span>] = <span class="ruby-keyword">false</span> <span class="ruby-comment"># Disable template caching</span>&#x000A;  <span class="ruby-identifier">render_opts</span>[:<span class="ruby-identifier">engine</span>] = <span class="ruby-string">&#39;slim&#39;</span> <span class="ruby-comment"># Tilt engine/template file extension to use</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>,&#x000A;    :<span class="ruby-identifier">cache</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">false</span>,  <span class="ruby-comment"># Disable template caching, useful in development</span>&#x000A;    :<span class="ruby-identifier">engine</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;erb&#39;</span>, <span class="ruby-comment"># Tilt engine/template file extension to use</span>&#x000A;    :<span class="ruby-identifier">escape</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,  <span class="ruby-comment"># Automatically escape output in erb templates</span>&#x000A;    :<span class="ruby-identifier">layout</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&quot;admin_layout&quot;</span>,             <span class="ruby-comment"># Default layout template</span>&#x000A;    :<span class="ruby-identifier">layout_opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">ext=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;html.erb&#39;</span>},    <span class="ruby-comment"># Default layout template options</span>&#x000A;    :<span class="ruby-identifier">opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">default_encoding=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;UTF-8&#39;</span>}, <span class="ruby-comment"># Default template options</span>&#x000A;    :<span class="ruby-identifier">views</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;admin_views&#39;</span>                <span class="ruby-comment"># Default views directory</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <h2 id="label-Sessions">Sessions<span><a href="#label-Sessions">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
             
@@ -595,10 +594,6 @@
             
             <pre>&lt;%= &#39;&lt;&gt;&#39; %&gt;  # outputs &amp;lt;&amp;gt; &#x000A;&lt;%== &#39;&lt;&gt;&#39; %&gt; # outputs &lt;&gt;</pre>
             
-            <p>Note that unlike most other render options, the :escape option must be
-            passed to the <code>plugin :render</code> call, it won&#39;t be respected
-            if added later.</p>
-            
             <p>This support requires <a
             href="http://www.kuwata-lab.com/erubis/">Erubis</a>.</p>
             
@@ -623,8 +618,16 @@
             <p>These plugins ship with roda:</p>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>all_verbs </td><td>
             <p>Adds routing methods to the request for all http verbs.</p>
+            </td></tr><tr><td class='label'>assets </td><td>
+            <p>Adds support for rendering CSS/JS javascript assets on the fly in
+            development, or compiling them into a single compressed file in production.</p>
             </td></tr><tr><td class='label'>backtracking_array </td><td>
             <p>Allows array matchers to backtrack if later matchers do not match.</p>
+            </td></tr><tr><td class='label'>caching </td><td>
+            <p>Adds request and response methods related to http caching.</p>
+            </td></tr><tr><td class='label'>chunked </td><td>
+            <p>Adds support for streaming template responses using Transfer-Encoding:
+            chunked.</p>
             </td></tr><tr><td class='label'>content_for </td><td>
             <p>Allows storage of content in one template and retrieval of that content in
             a different template.</p>
@@ -633,6 +636,9 @@
             href="https://github.com/baldowl/rack_csrf">rack_csrf</a>.</p>
             </td></tr><tr><td class='label'>default_headers </td><td>
             <p>Override the default response headers used.</p>
+            </td></tr><tr><td class='label'>error_email </td><td>
+            <p>Adds an <code>error_email</code> method that can be used to email when an
+            exception is raised.</p>
             </td></tr><tr><td class='label'>error_handler </td><td>
             <p>Adds a <code>error</code> block that is called for all responses that raise
             exceptions.</p>
@@ -669,6 +675,8 @@
             </td></tr><tr><td class='label'>pass </td><td>
             <p>Adds a pass method allowing you to skip the current <code>r.on</code> block
             as if it did not match.</p>
+            </td></tr><tr><td class='label'>path </td><td>
+            <p>Adds support for named paths.</p>
             </td></tr><tr><td class='label'>per_thread_caching </td><td>
             <p>Switches the thread-safe cache from a shared cache to a per-thread cache.</p>
             </td></tr><tr><td class='label'>render </td><td>

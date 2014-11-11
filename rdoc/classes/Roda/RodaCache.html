@@ -43,7 +43,7 @@
         <div id='text'>
           <div id='description'>
             
-            <p>A thread safe cache class, offering only <a
+            <p>:nocov:  A thread safe cache class, offering only <a
             href="RodaCache.html#method-i-5B-5D">[]</a> and <a
             href="RodaCache.html#method-i-5B-5D-3D">[]=</a> methods, each protected by
             a mutex.  Used on non-MRI where Hash is not thread safe.</p>
@@ -79,7 +79,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 18</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>&#x000A;  <span class="ruby-ivar">@hash</span> = {}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 19</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>&#x000A;  <span class="ruby-ivar">@hash</span> = {}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -97,7 +97,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-5B-5D-source'><span class="ruby-comment"># File lib/roda.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">key</span>]}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-5B-5D-source'><span class="ruby-comment"># File lib/roda.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">key</span>]}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-5B-5D-3D'>
@@ -114,7 +114,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-3D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-5B-5D-3D-source'><span class="ruby-comment"># File lib/roda.rb, line 29</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-5B-5D-3D-source'><span class="ruby-comment"># File lib/roda.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
