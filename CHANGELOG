@@ -1,4 +1,4 @@
-= HEAD
+= 1.1.0 (2014-11-11)
 
 * Add assets plugin, for rendering assets on the fly, or compiling them to a single compressed file (cj, jeremyevans) (#5)
 
