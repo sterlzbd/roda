@@ -165,10 +165,10 @@ may make things easier.
 However, in general routing first by the path and last by the
 request method is likely to lead to simpler and DRYer code. This
 is because at any point during the routing, you can act on the
-request.  For example, if all requests in the +/a+ branch need
-need access permission +A+ and all requests in the +/a/b+ branch
-need access permission +B+, you can easily handle this in the
-routing tree:
+request.  For example, if all requests in the +/a+ branch need 
+access permission +A+ and all requests in the +/a/b+ branch need
+access permission +B+, you can easily handle this in the routing
+tree:
 
   r.on "a" do           # /a branch
     check_perm(:A)  
