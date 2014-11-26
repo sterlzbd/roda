@@ -4,5 +4,5 @@ gem 'rake', '<10.0.0'
 gemspec
 
 if RUBY_VERSION < '1.9'
-  gem 'json'
+  gem 'mime_types', '< 2'
 end
