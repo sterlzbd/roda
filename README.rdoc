@@ -809,6 +809,7 @@ indifferent_params :: Adds params method with indifferent access to params,
                       allowing use of symbol keys for accessing params.
 json :: Allows match blocks to return arrays and hashes, using a json
         representation as the response body.
+mailer :: Adds support for sending emails using the routing tree.
 middleware :: Allows the Roda app to be used as a rack middleware, calling the
               next middleware if no route matches.
 multi_route :: Adds the ability for multiple named route blocks, with the

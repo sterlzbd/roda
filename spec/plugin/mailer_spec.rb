@@ -1,0 +1,155 @@
+require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+
+begin
+  require 'mail'
+rescue LoadError
+  warn "mail not installed, skipping mail plugin test"  
+else
+Mail.defaults do
+  delivery_method :test
+end
+
+describe "mailer plugin" do 
+  def deliveries
+    Mail::TestMailer.deliveries
+  end
+
+  after do
+    deliveries.clear
+  end
+
+  setup_email = lambda do 
+    from "f@example.com"
+    to "t@example.com"
+    subject 's'
+  end
+
+  it "supports sending emails via the routing tree" do
+    app(:mailer) do |r|
+      r.mail do
+        instance_exec(&setup_email)
+        cc "c@example.com"
+        bcc "b@example.com"
+        response['X-Foo'] = 'Bar'
+        "b"
+      end
+    end
+
+    m = app.mail('/foo')
+    deliveries.should == []
+    m.from.should == ['f@example.com']
+    m.to.should == ['t@example.com']
+    m.cc.should == ['c@example.com']
+    m.bcc.should == ['b@example.com']
+    m.subject.should == 's'
+    m.body.should == 'b'
+    m.header['X-Foo'].to_s.should == 'Bar'
+    m.header['Content-Type'].to_s.should =~ /\Atext\/plain/
+
+    m.deliver!
+    deliveries.should == [m]
+
+    deliveries.clear
+    m = app.sendmail('/foo')
+    deliveries.should == [m]
+    m.from.should == ['f@example.com']
+    m.to.should == ['t@example.com']
+    m.cc.should == ['c@example.com']
+    m.bcc.should == ['b@example.com']
+    m.subject.should == 's'
+    m.body.should == 'b'
+    m.header['X-Foo'].to_s.should == 'Bar'
+    m.header['Content-Type'].to_s.should =~ /\Atext\/plain/
+  end
+
+  it "supports arguments to mail/sendmail methods, yielding them to the route blocks" do
+    app(:mailer) do |r|
+      instance_exec(&setup_email)
+      r.mail "foo" do |*args|
+        "foo#{args.inspect}"
+      end
+      r.mail :d do |*args|
+        args.inspect
+      end
+    end
+
+    app.mail('/foo', 1, 2).body.should == 'foo[1, 2]'
+    app.sendmail('/bar', 1, 2).body.should == '["bar", 1, 2]'
+  end
+
+  it "supports attachments" do
+    app(:mailer) do |r|
+      r.mail do
+        instance_exec(&setup_email)
+        add_file __FILE__
+      end
+    end
+
+    m = app.mail('foo')
+    m.attachments.length.should == 1
+    m.attachments.first.content_type.should =~ /mailer_spec\.rb/
+  end
+
+  it "supports regular web requests in same application" do
+    app(:mailer) do |r|
+      r.get "foo", :param=>'bar' do |bar|
+        "foo#{bar}"
+      end
+      r.mail "bar" do
+        instance_exec(&setup_email)
+        "b"
+      end
+    end
+
+    body("/foo", 'QUERY_STRING'=>'bar=baz', 'rack.input'=>StringIO.new).should == 'foobaz'
+    app.mail('/bar').body.should == 'b'
+  end
+
+  it "supports multipart email using text_part/html_pat" do
+    app(:mailer) do |r|
+      r.mail do
+        instance_exec(&setup_email)
+        text_part "t"
+        html_part "h"
+      end
+    end
+
+    app.mail('/foo').text_part.body.should == 't'
+    app.mail('/foo').html_part.body.should == 'h'
+  end
+
+  it "supports setting arbitrary email headers for multipart emails" do
+    app(:mailer) do |r|
+      r.mail do
+        instance_exec(&setup_email)
+        text_part "t", "X-Text"=>'T'
+        html_part "h", "X-HTML"=>'H'
+      end
+    end
+
+    app.mail('/foo').text_part.body.should == 't'
+    app.mail('/foo').text_part.header['X-Text'].to_s.should == 'T'
+    app.mail('/foo').html_part.body.should == 'h'
+    app.mail('/foo').html_part.header['X-HTML'].to_s.should == 'H'
+  end
+
+  it "raises error if mail object is not returned" do
+    app(:mailer){}
+    proc{app.mail('/')}.should raise_error(Roda::RodaPlugins::Mailer::Error)
+  end
+
+  it "does not raise an error when using an explicitly empty body" do
+    app(:mailer){""}
+    proc{app.mail('/')}.should_not raise_error
+  end
+
+  it "supports overridding the default content-type for emails when loading the plugin" do
+    app(:bare) do
+      plugin :mailer, :content_type=>'text/html'
+      route{""}
+    end
+    app.mail('/').content_type.should =~ /\Atext\/html/
+  end
+
+end
+end
