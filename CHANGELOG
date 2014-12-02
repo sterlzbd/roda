@@ -1,5 +1,7 @@
 = HEAD
 
+* Add delegate plugin, for easily creating methods that delegate to request or response (jeremyevans)
+
 * Add mailer plugin, allowing use of a routing tree for email instead of web responses (jeremyevans)
 
 = 1.1.0 (2014-11-11)
