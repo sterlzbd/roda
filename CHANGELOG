@@ -1,3 +1,7 @@
+= HEAD
+
+* Add mailer plugin, allowing use of a routing tree for email instead of web responses (jeremyevans)
+
 = 1.1.0 (2014-11-11)
 
 * Add assets plugin, for rendering assets on the fly, or compiling them to a single compressed file (cj, jeremyevans) (#5)
