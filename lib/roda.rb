@@ -765,16 +765,11 @@ class Roda
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
-          env = @env
-          return unless matchdata = env[PATH_INFO].match(pattern)
-
-          vars = matchdata.captures
-
-          # Don't mutate SCRIPT_NAME, breaks try
-          env[SCRIPT_NAME] += vars.shift
-          env[PATH_INFO] = matchdata.post_match
-
-          captures.concat(vars)
+          if matchdata = path_to_match.match(pattern)
+            vars = matchdata.captures
+            update_path_to_match(vars.shift, matchdata.post_match)
+            captures.concat(vars)
+          end
         end
 
         # The default path to use for redirects when a path is not given.
@@ -794,22 +789,29 @@ class Roda
         # returns the rack response when the block returns.  If any of
         # the match arguments doesn't match, does nothing.
         def if_match(args)
-          env = @env
-          script = env[SCRIPT_NAME]
-          path = env[PATH_INFO]
+          keep_path_to_match do
+            # For every block, we make sure to reset captures so that
+            # nesting matchers won't mess with each other's captures.
+            captures.clear
 
-          # For every block, we make sure to reset captures so that
-          # nesting matchers won't mess with each other's captures.
-          captures.clear
-
-          return unless match_all(args)
-          block_result(yield(*captures))
-          throw :halt, response.finish
-        ensure
-          env[SCRIPT_NAME] = script
-          env[PATH_INFO] = path
+            return unless match_all(args)
+            block_result(yield(*captures))
+            throw :halt, response.finish
+          end
         end
         
+        # Yield to the block, restoring SCRIPT_NAME and PATH_INFO to
+        # their initial values before returning from the block.
+        def keep_path_to_match
+          env = @env
+          script = env[sn = SCRIPT_NAME]
+          path = env[pi = PATH_INFO]
+          yield
+        ensure
+          env[sn] = script
+          env[pi] = path
+        end
+
         # Attempt to match the argument to the given request, handling
         # common ruby types.
         def match(matcher)
@@ -868,6 +870,21 @@ class Roda
           if (v = self[key]) && !v.empty?
             captures << v
           end
+        end
+
+        # The current path to match requests against.  This is the same as PATH_INFO
+        # in the environment, which gets updated as the request is being routed.
+        def path_to_match
+          @env[PATH_INFO]
+        end
+
+        # Update PATH_INFO and SCRIPT_NAME based on the matchend and remaining variables.
+        def update_path_to_match(matched, remaining)
+          e = @env
+
+          # Don't mutate SCRIPT_NAME, breaks try
+          e[SCRIPT_NAME] += matched
+          e[PATH_INFO] = remaining
         end
       end
 
