@@ -26,7 +26,7 @@ class Roda
         attr_reader :path_to_match
 
         # Update path_to_match with the remaining characters
-        def update_path_to_match(_, remaining)
+        def update_path_to_match(remaining)
           @path_to_match = remaining
         end
 

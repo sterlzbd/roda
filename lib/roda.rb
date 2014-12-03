@@ -404,7 +404,7 @@ class Roda
         # pattern requires the path starts with a string and does not match partial
         # segments.
         def consume_pattern(pattern)
-          /\A(\/(?:#{pattern}))(?=\/|\z)/
+          /\A\/(?:#{pattern})(?=\/|\z)/
         end
       end
 
@@ -766,9 +766,8 @@ class Roda
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
           if matchdata = path_to_match.match(pattern)
-            vars = matchdata.captures
-            update_path_to_match(vars.shift, matchdata.post_match)
-            @captures.concat(vars)
+            update_path_to_match(matchdata.post_match)
+            @captures.concat(matchdata.captures)
           end
         end
 
@@ -879,12 +878,12 @@ class Roda
         end
 
         # Update PATH_INFO and SCRIPT_NAME based on the matchend and remaining variables.
-        def update_path_to_match(matched, remaining)
+        def update_path_to_match(remaining)
           e = @env
 
           # Don't mutate SCRIPT_NAME, breaks try
-          e[SCRIPT_NAME] += matched
-          e[PATH_INFO] = remaining
+          e[SCRIPT_NAME] += e[pi = PATH_INFO].chomp(remaining)
+          e[pi] = remaining
         end
       end
 
