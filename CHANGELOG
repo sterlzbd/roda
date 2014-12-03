@@ -1,5 +1,7 @@
 = HEAD
 
+* Use local/instance variable lookups instead of method calls to improve performance (jeremyevans)
+
 * Add RodaRequest#session, and have #session delegate to that (jeremyevans)
 
 * Add delegate plugin, for easily creating methods that delegate to request or response (jeremyevans)

@@ -28,7 +28,7 @@ class Roda
         # content length of 0.
         def call(*)
           res = super
-          if request.head?
+          if @_request.head?
             res[2] = []
           end
           res

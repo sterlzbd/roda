@@ -154,7 +154,7 @@ class Roda
             end
           end
 
-          throw :halt, response.finish_with_body(Stream.new(opts, &block))
+          throw :halt, @_response.finish_with_body(Stream.new(opts, &block))
         end
       end
     end

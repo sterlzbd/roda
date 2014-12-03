@@ -195,8 +195,9 @@ class Roda
         # as the default content_type for the email.
         def _route
           if mail = env[RODA_MAIL]
-            response.mail = mail
-            response.headers[CONTENT_TYPE] = opts[:mailer][:content_type] || TEXT_PLAIN
+            res = @_response
+            res.mail = mail
+            res.headers[CONTENT_TYPE] = opts[:mailer][:content_type] || TEXT_PLAIN
           end
           super
         end

@@ -541,8 +541,8 @@ class Roda
         # a 304 response immediately.  Otherwise, add the appropriate
         # type-specific headers.
         def check_asset_request(file, type, mtime)
-          request.last_modified(mtime)
-          response.headers.merge!(self.class.assets_opts[:"#{type}_headers"])
+          @_request.last_modified(mtime)
+          @_response.headers.merge!(self.class.assets_opts[:"#{type}_headers"])
         end
 
         # Render the given asset file using the render plugin, with the given options.

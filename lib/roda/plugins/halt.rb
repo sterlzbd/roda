@@ -53,12 +53,14 @@ class Roda
               raise Roda::RodaError, "singular argument to #halt must be Integer, String, or Array"
             end
           when 2
-            response.status = res[0]
-            response.write res[1]
+            resp = response
+            resp.status = res[0]
+            resp.write res[1]
           when 3
-            response.status = res[0]
-            response.headers.merge!(res[1])
-            response.write res[2]
+            resp = response
+            resp.status = res[0]
+            resp.headers.merge!(res[1])
+            resp.write res[2]
           else
             raise Roda::RodaError, "too many arguments given to #halt (accepts 0-3, received #{res.length})"
           end

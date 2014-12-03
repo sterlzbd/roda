@@ -313,7 +313,7 @@ class Roda
         #
         #   env['REQUEST_METHOD'] # => 'GET'
         def env
-          request.env
+          @_request.env
         end
 
         # The class-level options hash.  This should probably not be
@@ -352,8 +352,9 @@ class Roda
         # behavior after the request and response have been setup.
         def _route(&block)
           catch(:halt) do
-            request.block_result(instance_exec(@_request, &block))
-            response.finish
+            r = @_request
+            r.block_result(instance_exec(r, &block))
+            @_response.finish
           end
         end
       end

@@ -87,18 +87,19 @@ class Roda
         # with a 412 status.
         def last_modified(time)
           return unless time
-          response[LAST_MODIFIED] = time.httpdate
+          res = response
           e = env
+          res[LAST_MODIFIED] = time.httpdate
           return if e[HTTP_IF_NONE_MATCH]
-          status = response.status
+          status = res.status
 
           if (!status || status == 200) && (ims = time_from_header(e[HTTP_IF_MODIFIED_SINCE])) && ims >= time.to_i
-            response.status = 304
+            res.status = 304
             halt
           end
 
           if (!status || (status >= 200 && status < 300) || status == 412) && (ius = time_from_header(e[HTTP_IF_UNMODIFIED_SINCE])) && ius < time.to_i
-            response.status = 412
+            res.status = 412
             halt
           end
         end
@@ -122,19 +123,20 @@ class Roda
           weak = opts[:weak]
           new_resource = opts.fetch(:new_resource){post?}
 
-          response[ETAG] = etag = "#{'W/' if weak}\"#{value}\""
-          status = response.status
+          res = response
           e = env
+          res[ETAG] = etag = "#{'W/' if weak}\"#{value}\""
+          status = res.status
 
           if (!status || (status >= 200 && status < 300) || status == 304)
             if etag_matches?(e[HTTP_IF_NONE_MATCH], etag, new_resource)
-              response.status = (request_method =~ /\AGET|HEAD|OPTIONS|TRACE\z/i ? 304 : 412)
+              res.status = (request_method =~ /\AGET|HEAD|OPTIONS|TRACE\z/i ? 304 : 412)
               halt
             end
 
             if ifm = e[HTTP_IF_MATCH]
               unless etag_matches?(ifm, etag, new_resource)
-                response.status = 412
+                res.status = 412
                 halt
               end
             end
