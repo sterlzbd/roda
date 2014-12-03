@@ -698,7 +698,7 @@ class Roda
           matcher.any? do |m|
             if matched = match(m)
               if m.is_a?(String)
-                captures.push(m)
+                @captures.push(m)
               end
             end
 
@@ -768,7 +768,7 @@ class Roda
           if matchdata = path_to_match.match(pattern)
             vars = matchdata.captures
             update_path_to_match(vars.shift, matchdata.post_match)
-            captures.concat(vars)
+            @captures.concat(vars)
           end
         end
 
@@ -792,7 +792,7 @@ class Roda
           keep_path_to_match do
             # For every block, we make sure to reset captures so that
             # nesting matchers won't mess with each other's captures.
-            captures.clear
+            @captures.clear
 
             return unless match_all(args)
             block_result(yield(*captures))
@@ -860,7 +860,7 @@ class Roda
         # Adds any match to the captures.
         def match_param(key)
           if v = self[key]
-            captures << v
+            @captures << v
           end
         end
 
@@ -868,7 +868,7 @@ class Roda
         # Adds any match to the captures.
         def match_param!(key)
           if (v = self[key]) && !v.empty?
-            captures << v
+            @captures << v
           end
         end
 

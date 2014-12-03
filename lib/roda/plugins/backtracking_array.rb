@@ -39,6 +39,7 @@ class Roda
 
           script = env[SCRIPT_NAME]
           path = env[PATH_INFO]
+          captures = @captures
           caps = captures.dup
           arg.each do |v|
             if match(v, rest)
