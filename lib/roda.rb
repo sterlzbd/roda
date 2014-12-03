@@ -537,7 +537,7 @@ class Roda
         #   end
         def is(*args, &block)
           if args.empty?
-            if @env[PATH_INFO] == EMPTY_STRING
+            if path_to_match == EMPTY_STRING
               always(&block)
             end
           else
@@ -667,7 +667,7 @@ class Roda
         # Use <tt>r.get true</tt> to handle +GET+ requests where the current
         # path is empty.
         def root(&block)
-          if @env[PATH_INFO] == SLASH && is_get?
+          if path_to_match == SLASH && is_get?
             always(&block)
           end
         end
@@ -822,7 +822,7 @@ class Roda
           when Symbol
             _match_symbol(matcher)
           when TERM
-            @env[PATH_INFO] == EMPTY_STRING
+            path_to_match == EMPTY_STRING
           when Hash
             _match_hash(matcher)
           when Array

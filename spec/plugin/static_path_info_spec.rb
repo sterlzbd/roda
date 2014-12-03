@@ -9,12 +9,12 @@ describe "static_path_info plugin" do
       route do |r|
         r.on "foo" do
           r.is "bar" do
-            "#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
+            "bar|#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
           end
           r.is "baz" do
-            pass
+            r.pass
           end
-          "#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
+          "foo|#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
         end
         "#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
       end
@@ -22,11 +22,11 @@ describe "static_path_info plugin" do
 
     body.should == '|/'
     body('SCRIPT_NAME'=>'/a').should == '/a|/'
-    body('/foo').should == '|/foo'
-    body('/foo', 'SCRIPT_NAME'=>'/a').should == '/a|/foo'
-    body('/foo/bar').should == '|/foo/bar'
-    body('/foo/bar', 'SCRIPT_NAME'=>'/a').should == '/a|/foo/bar'
-    body('/foo/baz').should == '|/foo/baz'
-    body('/foo/baz', 'SCRIPT_NAME'=>'/a').should == '/a|/foo/baz'
+    body('/foo').should == 'foo||/foo'
+    body('/foo', 'SCRIPT_NAME'=>'/a').should == 'foo|/a|/foo'
+    body('/foo/bar').should == 'bar||/foo/bar'
+    body('/foo/bar', 'SCRIPT_NAME'=>'/a').should == 'bar|/a|/foo/bar'
+    body('/foo/baz').should == 'foo||/foo/baz'
+    body('/foo/baz', 'SCRIPT_NAME'=>'/a').should == 'foo|/a|/foo/baz'
   end
 end
