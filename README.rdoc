@@ -789,6 +789,8 @@ backtracking_array :: Allows array matchers to backtrack if later matchers
 caching :: Adds request and response methods related to http caching.
 chunked :: Adds support for streaming template responses using
            Transfer-Encoding: chunked.
+class_level_routing :: Adds support for class level routing methods, for a
+                       DSL similar to {sinatra}[https://github.com/sinatra/sinatra].
 content_for :: Allows storage of content in one template and retrieval of
                that content in a different template.
 csrf :: Adds CSRF protection and helper methods using
