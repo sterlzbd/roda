@@ -16,23 +16,29 @@ describe "backtracking_array plugin" do
       end
     end
 
-    status.should == 404
+    tests = lambda do
+      status.should == 404
 
-    body("/a").should == 'a'
-    body("/a/b").should == 'a/b'
-    status("/a/b/").should == 404
+      body("/a").should == 'a'
+      body("/a/b").should == 'a/b'
+      status("/a/b/").should == 404
 
-    body("/c/d").should == 'c-d'
-    body("/c/e").should == 'c-e'
-    body("/c/d/d").should == 'c/d-d'
-    body("/c/d/e").should == 'c/d-e'
-    status("/c/d/").should == 404
+      body("/c/d").should == 'c-d'
+      body("/c/e").should == 'c-e'
+      body("/c/d/d").should == 'c/d-d'
+      body("/c/d/e").should == 'c/d-e'
+      status("/c/d/").should == 404
 
-    body("/f").should == 'f'
-    body("/f/g").should == 'f/g'
-    body("/g").should == 'g'
-    body("/g/h").should == 'g/h'
-    status("/f/g/").should == 404
-    status("/g/h/").should == 404
+      body("/f").should == 'f'
+      body("/f/g").should == 'f/g'
+      body("/g").should == 'g'
+      body("/g/h").should == 'g/h'
+      status("/f/g/").should == 404
+      status("/g/h/").should == 404
+    end
+
+    tests.call
+    app.plugin(:static_path_info)
+    tests.call
   end
 end

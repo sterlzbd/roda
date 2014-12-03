@@ -35,10 +35,12 @@ class Roda
         # entry in the array.
         def _match_array(arg, rest=nil)
           return super unless rest
-          env = @env
 
-          script = env[SCRIPT_NAME]
-          path = env[PATH_INFO]
+          unless path = @path_to_match
+            e = @env
+            script = e[SCRIPT_NAME]
+            path = e[PATH_INFO]
+          end
           captures = @captures
           caps = captures.dup
           arg.each do |v|
@@ -53,8 +55,12 @@ class Roda
 
               # Matching all remaining elements failed, reset state
               captures.replace(caps)
-              env[SCRIPT_NAME] = script
-              env[PATH_INFO] = path
+              if @path_to_match
+                @path_to_match = path
+              else
+                e[SCRIPT_NAME] = script
+                e[PATH_INFO] = path
+              end
             end
           end
           false
