@@ -89,8 +89,6 @@ class Roda
     # Methods are put into a plugin so future plugins can easily override
     # them and call super to get the default behavior.
     module Base
-      SESSION_KEY = 'rack.session'.freeze
-
       # Class methods for the Roda class.
       module ClassMethods
         # The rack application that this class uses.
@@ -340,10 +338,12 @@ class Roda
           @_response
         end
 
-        # The session for the current request.  Raises a RodaError if
-        # a session handler has not been loaded.
+        # The session hash for the current request. Raises RodaError
+        # if no session existsExample:
+        #
+        #   session # => {}
         def session
-          env[SESSION_KEY] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
+          @_request.session
         end
 
         private
@@ -418,6 +418,7 @@ class Roda
         SEGMENT = "([^\\/]+)".freeze
         TERM_INSPECT = "TERM".freeze
         GET_REQUEST_METHOD = 'GET'.freeze
+        SESSION_KEY = 'rack.session'.freeze
 
         TERM = Object.new
         def TERM.inspect
@@ -679,6 +680,12 @@ class Roda
         #   response.status = 404 # not reached
         def run(app)
           throw :halt, app.call(@env)
+        end
+
+        # The session for the current request.  Raises a RodaError if
+        # a session handler has not been loaded.
+        def session
+          @env[SESSION_KEY] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
         end
 
         private

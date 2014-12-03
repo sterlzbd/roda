@@ -1,5 +1,7 @@
 = HEAD
 
+* Add RodaRequest#session, and have #session delegate to that (jeremyevans)
+
 * Add delegate plugin, for easily creating methods that delegate to request or response (jeremyevans)
 
 * Add mailer plugin, allowing use of a routing tree for email instead of web responses (jeremyevans)
