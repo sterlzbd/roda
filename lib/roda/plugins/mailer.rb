@@ -164,8 +164,22 @@ class Roda
         # that the routing tree did not handle the request.
         def finish
           if m = mail
+            header_content_type = @headers.delete(CONTENT_TYPE)
             m.headers(@headers)
             m.body(@body.join) unless @body.empty?
+
+            if content_type = header_content_type || self.class.roda_class.opts[:mailer][:content_type]
+              if mail.multipart?
+                if mail.content_type =~ /multipart\/mixed/ &&
+                   mail.parts.length >= 2 &&
+                   (part = mail.parts.find{|p| !p.attachment && p.content_type == TEXT_PLAIN})
+                  part.content_type = content_type
+                end
+              else
+                mail.content_type = content_type
+              end
+            end
+
             unless m.body.to_s.empty? && m.parts.empty? && @body.empty?
               m
             end
@@ -197,7 +211,7 @@ class Roda
           if mail = env[RODA_MAIL]
             res = @_response
             res.mail = mail
-            res.headers[CONTENT_TYPE] = opts[:mailer][:content_type] || TEXT_PLAIN
+            res.headers.delete(CONTENT_TYPE)
           end
           super
         end

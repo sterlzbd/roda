@@ -44,7 +44,6 @@ describe "mailer plugin" do
     m.subject.should == 's'
     m.body.should == 'b'
     m.header['X-Foo'].to_s.should == 'Bar'
-    m.header['Content-Type'].to_s.should =~ /\Atext\/plain/
 
     m.deliver!
     deliveries.should == [m]
@@ -59,7 +58,6 @@ describe "mailer plugin" do
     m.subject.should == 's'
     m.body.should == 'b'
     m.header['X-Foo'].to_s.should == 'Bar'
-    m.header['Content-Type'].to_s.should =~ /\Atext\/plain/
   end
 
   it "supports arguments to mail/sendmail methods, yielding them to the route blocks" do
@@ -88,6 +86,7 @@ describe "mailer plugin" do
     m = app.mail('foo')
     m.attachments.length.should == 1
     m.attachments.first.content_type.should =~ /mailer_spec\.rb/
+    m.content_type.should =~ /\Amultipart\/mixed/
   end
 
   it "supports regular web requests in same application" do
@@ -114,8 +113,10 @@ describe "mailer plugin" do
       end
     end
 
-    app.mail('/foo').text_part.body.should == 't'
-    app.mail('/foo').html_part.body.should == 'h'
+    m = app.mail('/foo')
+    m.text_part.body.should == 't'
+    m.html_part.body.should == 'h'
+    m.content_type.should =~ /\Amultipart\/alternative/
   end
 
   it "supports setting arbitrary email headers for multipart emails" do
@@ -127,10 +128,12 @@ describe "mailer plugin" do
       end
     end
 
-    app.mail('/foo').text_part.body.should == 't'
-    app.mail('/foo').text_part.header['X-Text'].to_s.should == 'T'
-    app.mail('/foo').html_part.body.should == 'h'
-    app.mail('/foo').html_part.header['X-HTML'].to_s.should == 'H'
+    m = app.mail('/foo')
+    m.text_part.body.should == 't'
+    m.text_part.header['X-Text'].to_s.should == 'T'
+    m.html_part.body.should == 'h'
+    m.html_part.header['X-HTML'].to_s.should == 'H'
+    m.content_type.should =~ /\Amultipart\/alternative/
   end
 
   it "raises error if mail object is not returned" do
@@ -143,7 +146,7 @@ describe "mailer plugin" do
     proc{app.mail('/')}.should_not raise_error
   end
 
-  it "supports overridding the default content-type for emails when loading the plugin" do
+  it "supports setting the default content-type for emails when loading the plugin" do
     app(:bare) do
       plugin :mailer, :content_type=>'text/html'
       route{""}
@@ -151,5 +154,29 @@ describe "mailer plugin" do
     app.mail('/').content_type.should =~ /\Atext\/html/
   end
 
+  it "supports manually overridding the default content-type for emails" do
+    app(:bare) do
+      plugin :mailer, :content_type=>'text/html'
+      route do
+        response['Content-Type'] = 'text/foo'
+        ""
+      end
+    end
+    app.mail('/').content_type.should =~ /\Atext\/foo/
+  end
+
+  it "supports handle setting the default content type when attachments are used" do
+    app(:bare) do
+      plugin :mailer, :content_type=>'text/html'
+      route do
+        add_file 'spec/assets/css/raw.css'
+        "a"
+      end
+    end
+    m = app.mail('/')
+    m.content_type.should =~ /\Amultipart\/mixed/
+    m.parts.first.content_type.should =~ /\Atext\/css/
+    m.parts.last.content_type.should =~ /\Atext\/html/
+  end
 end
 end
