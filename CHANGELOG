@@ -1,5 +1,7 @@
 = HEAD
 
+* Add named_templates plugin, for creating inline templates by name, instead of storing them in the file system (jeremyevans)
+
 * Support :template option in for render/view to specify template to use, instead of requiring separate argument (jeremyevans)
 
 * Add class_level_routing plugin, for a DSL similar to Sinatra (jeremyevans)
