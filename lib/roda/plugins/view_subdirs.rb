@@ -23,15 +23,18 @@ class Roda
     #     end
     #   end
     #
-    # This plugin should be loaded after the render plugin, since
-    # it works by overriding parts of the render plugin.
-    # 
     # Note that when a view subdirectory is set, the layout will
     # also be looked up in the subdirectory unless it contains
     # a slash.  So if you want to use a view subdirectory for
     # templates but have a shared layout, you should make sure your
     # layout contains a slash, similar to the example above.
     module ViewSubdirs
+      # Load the render plugin before this plugin, since this plugin
+      # works by overriding a method in the render plugin.
+      def self.load_dependencies(app)
+        app.plugin :render
+      end
+
       module InstanceMethods
         # Set the view subdirectory to use.  This can be set to nil
         # to not use a view subdirectory.
