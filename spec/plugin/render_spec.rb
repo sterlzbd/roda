@@ -119,6 +119,14 @@ describe "render plugin" do
     body.strip.should == '<%= bar %>'
   end
 
+  it "template renders with :template opts" do
+    app(:render) do
+      render_opts[:views] = "./spec/views"
+      render(:template=>"about", :locals=>{:title => "About Roda"})
+    end
+    body.strip.should == "<h1>About Roda</h1>"
+  end
+
   it "render_opts inheritance" do
     c = Class.new(Roda)
     c.plugin :render

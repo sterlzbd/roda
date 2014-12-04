@@ -58,6 +58,9 @@ class Roda
     # :path :: Use the value given as the full pathname for the file, instead
     #          of using the :views and :ext option in combination with the
     #          template name.
+    # :template :: Provides the name of the template to use.  This allows you
+    #              pass a single options hash to the render/view method, while
+    #              still allowing you to specify the template name.
     #
     # Here's how those options are used:
     #
@@ -127,19 +130,10 @@ class Roda
             else
               opts = opts.merge(template)
             end
+            template = opts[:template]
           end
-          render_opts = render_opts()
 
-          if content = opts[:inline]
-            path = content
-            template_block = Proc.new{content}
-            template_class = ::Tilt[opts[:engine] || render_opts[:engine]]
-          else
-            template_class = ::Tilt
-            unless path = opts[:path]
-              path = template_path(template, opts)
-            end
-          end
+          template_class, path, template_block = find_template(template, opts)
 
           cached_template(path) do
             template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
@@ -163,6 +157,7 @@ class Roda
             else
               opts = opts.merge(template)
             end
+            template = opts[:template]
           end
 
           content = opts[:content] || render(template, opts)
@@ -193,10 +188,32 @@ class Roda
           end
         end
 
+        # Given the template name and options, return the template class, template path/content,
+        # and template block to use for the render.
+        def find_template(template, opts)
+          if content = opts[:inline]
+            path = content
+            template_block = Proc.new{content}
+            template_class = ::Tilt[opts[:engine] || render_opts[:engine]]
+          else
+            template_class = ::Tilt
+            unless path = opts[:path]
+              path = template_path(template, opts)
+            end
+          end
+
+          return template_class, path, template_block
+        end
+
+        # The name to use for the template.  By default, just converts the argument to a string.
+        def template_name(template)
+          template.to_s
+        end
+
         # The path for the given template.
         def template_path(template, opts)
           render_opts = render_opts()
-          "#{opts[:views] || render_opts[:views]}/#{template}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
+          "#{opts[:views] || render_opts[:views]}/#{template_name(template)}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
         end
       end
     end

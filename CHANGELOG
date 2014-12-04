@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :template option in for render/view to specify template to use, instead of requiring separate argument (jeremyevans)
+
 * Add class_level_routing plugin, for a DSL similar to Sinatra (jeremyevans)
 
 * Make RodaRequest.consume_pattern not capture pattern by default (jeremyevans)
