@@ -20,11 +20,9 @@ describe "hooks plugin" do
       end
 
       route do |r|
-        r.is "" do
-          f = response['foo']
-          response['foo'] = 'baz'
-          f
-        end
+        f = response['foo']
+        response['foo'] = 'baz'
+        f
       end
     end
   end
