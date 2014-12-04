@@ -23,6 +23,12 @@ class Roda
     # the template will be +bar+.  You can use <tt>:local=>nil</tt> to
     # not set a local variable inside the template.
     module RenderEach
+      # Load the render plugin before this plugin, since this plugin
+      # calls the render method.
+      def self.load_dependencies(app)
+        app.plugin :render
+      end
+
       module InstanceMethods
         # For each value in enum, render the given template using the
         # given opts.  The template and options hash are passed to +render+.

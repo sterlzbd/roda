@@ -21,6 +21,12 @@ class Roda
     #
     #   <%= content_for :foo %>
     module ContentFor
+      # Depend on the render plugin, since this plugin only makes
+      # sense when the render plugin is used.
+      def self.load_dependencies(app)
+        app.plugin :render
+      end
+
       module InstanceMethods
         # If called with a block, store content enclosed by block
         # under the given key.  If called without a block, retrieve
