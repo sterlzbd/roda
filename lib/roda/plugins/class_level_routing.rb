@@ -50,27 +50,22 @@ class Roda
       # currently have a routing block, setup an empty routing block so that things will still work if
       # a routing block isn't added.
       def self.configure(app)
-        app.instance_eval do
-          route{} unless @route_block
-          @class_level_routes ||= []
-        end
+        app.route{} unless app.route_block
+        app.opts[:class_level_routes] ||= []
       end
 
       module ClassMethods
-        # The array of class level routes for this application.
-        attr_reader :class_level_routes
-
         # Define routing methods that will store class level routes.
         [:root, :on, :is, :get, :post, :delete, :head, :options, :link, :patch, :put, :trace, :unlink].each do |meth|
           define_method(meth) do |*args, &block|
-            @class_level_routes << [meth, args, block]
+            opts[:class_level_routes] << [meth, args, block]
           end
         end
 
         # Copy the class level routes into the subclass.
         def inherited(subclass)
           super
-          @subclass.instance_variable_set(:@class_level_routes, @class_level_routes.dup)
+          subclass.opts[:class_level_routes] = opts[:class_level_routes].dup
         end
       end
 
@@ -87,7 +82,7 @@ class Roda
             # the original response.
             @_response = self.class::RodaResponse.new
             super do |r|
-              self.class.class_level_routes.each do |meth, args, blk|
+              opts[:class_level_routes].each do |meth, args, blk|
                 r.send(meth, *args) do |*a|
                   instance_exec(*a, &blk)
                 end

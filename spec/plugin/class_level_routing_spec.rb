@@ -59,6 +59,21 @@ describe "class_level_routing plugin" do
 
     status.should == 200
     status("/asdfa/asdf").should == 404
+
+    @app = Class.new(app)
+    body.should == 'root'
+    body('/foo').should == 'foo'
+    body('/foo/bar').should == 'foobar'
+    body('/dgo').should == 'bazgetgo'
+    body('/dgo', 'REQUEST_METHOD'=>'POST').should == 'bazpostgo'
+    body('/bar').should == "x-get-bar"
+    body('/bar', 'REQUEST_METHOD'=>'POST').should == "x-post-bar"
+    body('/bar', 'REQUEST_METHOD'=>'DELETE').should == "x-delete-bar"
+    body('/bar', 'REQUEST_METHOD'=>'HEAD').should == "x-head-bar"
+    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').should == "x-options-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PATCH').should == "x-patch-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PUT').should == "x-put-bar"
+    body('/bar', 'REQUEST_METHOD'=>'TRACE').should == "x-trace-bar"
   end
 
   it "only calls class level routes if routing tree doesn't handle request" do
