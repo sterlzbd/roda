@@ -36,19 +36,19 @@ class Roda
     module Json
       # Set the classes to automatically convert to JSON
       def self.configure(app)
-        app.instance_eval do
-          @json_result_classes ||= [Array, Hash]
-        end
+        app.opts[:json_result_classes] ||= [Array, Hash]
       end
 
       module ClassMethods
         # The classes that should be automatically converted to json
-        attr_reader :json_result_classes
+        def json_result_classes
+          opts[:json_result_classes]
+        end
 
         # Copy the json_result_classes into the subclass
         def inherited(subclass)
           super
-          subclass.instance_variable_set(:@json_result_classes, json_result_classes.dup)
+          subclass.opts[:json_result_classes] = json_result_classes.dup
         end
       end
 

@@ -20,20 +20,19 @@ class Roda
     module DefaultHeaders
       # Merge the given headers into the existing default headers, if any.
       def self.configure(app, headers={})
-        app.instance_eval do
-          @default_headers ||= {}
-          @default_headers.merge!(headers)
-        end
+        (app.opts[:default_headers] ||= {}).merge!(headers)
       end 
 
       module ClassMethods
         # The default response headers to use for the current class.
-        attr_reader :default_headers
+        def default_headers
+          opts[:default_headers]
+        end
 
         # Copy the default headers into the subclass when inheriting.
         def inherited(subclass)
           super
-          subclass.instance_variable_set(:@default_headers, default_headers.dup)
+          subclass.opts[:@default_headers] = default_headers.dup
         end
       end
 

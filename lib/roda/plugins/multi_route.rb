@@ -125,29 +125,27 @@ class Roda
     module MultiRoute
       # Initialize storage for the named routes.
       def self.configure(app)
-        app.instance_exec do
-          @namespaced_routes ||= {}
-          app::RodaRequest.instance_variable_set(:@namespaced_route_regexps, {})
-        end
+        app.opts[:namespaced_routes] ||= {}
+        app::RodaRequest.instance_variable_set(:@namespaced_route_regexps, {})
       end
 
       module ClassMethods
         # Copy the named routes into the subclass when inheriting.
         def inherited(subclass)
           super
-          nsr = subclass.instance_variable_set(:@namespaced_routes, {})
-          @namespaced_routes.each{|k, v| nsr[k] = v.dup}
+          nsr = subclass.opts[:namespaced_routes] = opts[:namespaced_routes].dup
+          opts[:namespaced_routes].each{|k, v| nsr[k] = v.dup}
           subclass::RodaRequest.instance_variable_set(:@namespaced_route_regexps, {})
         end
 
         # The names for the currently stored named routes
         def named_routes(namespace=nil)
-          @namespaced_routes[namespace].keys
+          opts[:namespaced_routes][namespace].keys
         end
 
         # Return the named route with the given name.
         def named_route(name, namespace=nil)
-          @namespaced_routes[namespace][name]
+          opts[:namespaced_routes][namespace][name]
         end
 
         # If the given route has a name, treat it as a named route and
@@ -155,8 +153,8 @@ class Roda
         # call super.
         def route(name=nil, namespace=nil, &block)
           if name
-            @namespaced_routes[namespace] ||= {}
-            @namespaced_routes[namespace][name] = block
+            opts[:namespaced_routes][namespace] ||= {}
+            opts[:namespaced_routes][namespace][name] = block
             self::RodaRequest.clear_named_route_regexp!(namespace)
           else
             super(&block)
