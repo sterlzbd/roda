@@ -30,10 +30,8 @@ class Roda
     # handle cases where before hooks are added after the route block.
     module Hooks
       def self.configure(app)
-        app.instance_exec do
-          @after ||= nil
-          @before ||= nil
-        end
+        app.opts[:before_hook] ||= nil
+        app.opts[:after_hook] ||= nil
       end
 
       module ClassMethods
@@ -42,17 +40,14 @@ class Roda
         # then instance_execs the given after proc, so that the given
         # after proc always executes after the previous one.
         def after(&block)
-          if block
-            @after = if b = @after
-              @after = proc do |res|
-                instance_exec(res, &b)
-                instance_exec(res, &block)
-              end
-            else
-              block
+          opts[:after_hook] = if b = opts[:after_hook]
+            proc do |res|
+              instance_exec(res, &b)
+              instance_exec(res, &block)
             end
+          else
+            block
           end
-          @after
         end
 
         # Add a before hook.  If there is already a before hook defined,
@@ -60,25 +55,14 @@ class Roda
         # then instance_execs the existing before proc, so that the given
         # before proc always executes before the previous one.
         def before(&block)
-          if block
-            @before = if b = @before
-              @before = proc do
-                instance_exec(&block)
-                instance_exec(&b)
-              end
-            else
-              block
+          opts[:before_hook] = if b = opts[:before_hook]
+            proc do
+              instance_exec(&block)
+              instance_exec(&b)
             end
+          else
+            block
           end
-          @before
-        end
-
-        # Copy the before and after hooks into the subclasses
-        # when inheriting
-        def inherited(subclass)
-          super
-          subclass.instance_variable_set(:@before, @before)
-          subclass.instance_variable_set(:@after, @after)
         end
       end
 
@@ -88,13 +72,13 @@ class Roda
         # Before routing, execute the before hooks, and
         # execute the after hooks before returning.
         def _route(*, &block)
-          if b = self.class.before
+          if b = opts[:before_hook]
             instance_exec(&b)
           end
 
           res = super
         ensure
-          if b = self.class.after
+          if b = opts[:after_hook]
             instance_exec(res, &b)
           end
         end
