@@ -59,3 +59,17 @@ describe "host matcher" do
     body("HTTP_HOST" => "example.com").should == '0'
   end
 end
+
+describe "user_agent matcher" do
+  it "should accept pattern and match against user-agent" do
+    app(:header_matchers) do |r|
+      r.on :user_agent=>/(chrome)(\d+)/ do |agent, num|
+        "a-#{agent}-#{num}"
+      end
+    end
+
+    body("HTTP_USER_AGENT" => "chrome31").should ==  "a-chrome-31"
+    status.should == 404
+  end
+end
+

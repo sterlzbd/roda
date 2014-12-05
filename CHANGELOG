@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :user_agent hash matcher to the header_matchers plugin (jeremyevans)
+
 * Fix caching of templates in the render plugin when :opts or :template_class is used (jeremyevans)
 
 * Require loading the render plugin again if you want to change the default layout (jeremyevans)

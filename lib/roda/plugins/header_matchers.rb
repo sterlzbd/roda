@@ -8,23 +8,23 @@ class Roda
     # It adds a +:header+ matcher for matching on arbitrary headers, which matches
     # if the header is present:
     #
-    #   route do |r|
-    #     r.on :header=>'X-App-Token' do
-    #     end
+    #   r.on :header=>'X-App-Token' do
     #   end
     #
     # It adds a +:host+ matcher for matching by the host of the request:
     #
-    #   route do |r|
-    #     r.on :host=>'foo.example.com' do
-    #     end
+    #   r.on :host=>'foo.example.com' do
+    #   end
+    #
+    # It adds a +:user_agent+ matcher for matching on a user agent patterns, which
+    # yields the regexp captures to the block:
+    #
+    #   r.on :user_agent=>/Chrome\/([.\d]+)/ do |chrome_version|
     #   end
     #
     # It adds an +:accept+ matcher for matching based on the Accept header:
     #
-    #   route do |r|
-    #     r.on :accept=>'text/csv' do
-    #     end
+    #   r.on :accept=>'text/csv' do
     #   end
     #
     # Note that the accept matcher is very simple and cannot handle wildcards,
@@ -48,6 +48,14 @@ class Roda
         # Match if the host of the request is the same as the hostname.
         def match_host(hostname)
           hostname === host
+        end
+
+        # Match the submitted user agent to the given pattern, capturing any
+        # regexp match groups.
+        def match_user_agent(pattern)
+          if (user_agent = @env["HTTP_USER_AGENT"]) && user_agent.to_s =~ pattern
+            @captures.concat($~[1..-1])
+          end
         end
       end
     end
