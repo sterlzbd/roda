@@ -2,7 +2,8 @@ require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 describe "environments plugin" do 
   before do
-    app(:environments)
+    app
+    app.plugin :environments, :development
   end
 
   it "adds environment accessor for getting/setting the environment" do
