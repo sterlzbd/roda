@@ -1,6 +1,6 @@
 = Roda
 
-Roda is a routing tree web framework.
+Roda is a routing tree web framework toolkit.
 
 = Installation
 
@@ -120,8 +120,8 @@ off, but which saves a few methods call for every response.
 Roda is called a routing tree web framework because the way most
 sites are structured, routing takes the form of a tree based on the
 URL structure of the site.  In general, +r.on+ is used to split the
-tree into different branches, and +r.is+ is finalizes the routing,
-where the request is actually handled.
+tree into different branches, +r.is+ is finalizes the routing
+path, and +r.get+ and +r.post+ handle specific request methods.
 
 So a simple routing tree may look something like this:
 
@@ -773,8 +773,13 @@ a rack middleware that can be added the usual way:
 
 == Plugins
 
-Roda provides a way to extend its functionality with plugins.  Plugins can
-override any Roda method and call +super+ to get the default behavior.
+By design, Roda has a very small core, providing only the essentials. All
+nonessential features are added via plugins.  This is why Roda is referred
+to as a routing tree web framework toolkit.  Using a combination of Roda
+plugins, you can build the routing tree web framework that needs your needs.
+
+Roda's plugins can override any Roda method and call +super+ to get the
+default behavior, which makes Roda very extensible.
 
 === Included Plugins
 

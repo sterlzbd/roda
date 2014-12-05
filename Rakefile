@@ -17,7 +17,7 @@ end
 
 ### RDoc
 
-RDOC_DEFAULT_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web framework']
+RDOC_DEFAULT_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web framework toolkit']
 
 begin
   gem 'hanna-nouveau'

@@ -3,11 +3,10 @@ require File.expand_path("../lib/roda/version", __FILE__)
 Gem::Specification.new do |s|
   s.name              = "roda"
   s.version           = Roda::RodaVersion.dup
-  s.summary           = "Routing tree web framework"
-  s.description       = "Routing tree web framework, inspired by Sinatra and Cuba"
+  s.summary           = "Routing tree web framework toolkit"
   s.authors           = ["Jeremy Evans"]
   s.email             = ["code@jeremyevans.net"]
-  s.homepage          = "https://github.com/jeremyevans/roda"
+  s.homepage          = "http://roda.jeremyevans.net"
   s.license           = "MIT"
 
   s.files = %w'README.rdoc MIT-LICENSE CHANGELOG Rakefile' + Dir['doc/*.rdoc'] + Dir['doc/release_notes/*.txt'] + Dir['{lib,spec}/**/*.rb'] + Dir['spec/views/*'] + Dir['spec/assets/{css/{app.scss,raw.css,no_access.css},js/head/app.js}']
