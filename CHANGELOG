@@ -1,5 +1,13 @@
 = HEAD
 
+* Require loading the render plugin again if you want to change the default layout (jeremyevans)
+
+* Pass :css_opts and :js_opts as template options (via :opts) instead of render options when rendering (jeremyevans)
+
+* Only pass :opts hash to template class during rendering, instead of all render/view options (jeremyevans)
+
+* Support :template_class option in the render plugin for overriding template class to use (jeremyevans)
+
 * Automatically dup unfrozen Array/Hash opts values when subclassing (jeremyevans)
 
 * Add named_templates plugin, for creating inline templates by name, instead of storing them in the file system (jeremyevans)

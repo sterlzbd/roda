@@ -70,8 +70,8 @@ class Roda
 
         # If a template name is given and it matches a named template, call
         # the named template block to get the inline template to use.
-        def find_template(template, options)
-          if template && (template_opts, block = opts[:named_templates][template_name(template)]; block)
+        def find_template(options)
+          if options[:template] && (template_opts, block = opts[:named_templates][template_name(options)]; block)
             if template_opts
               options = template_opts.merge(options)
             else
@@ -80,7 +80,7 @@ class Roda
 
             options[:inline] = instance_exec(&block)
 
-            super(nil, options)
+            super(options)
           else
             super
           end

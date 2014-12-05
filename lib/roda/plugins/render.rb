@@ -61,6 +61,8 @@ class Roda
     # :template :: Provides the name of the template to use.  This allows you
     #              pass a single options hash to the render/view method, while
     #              still allowing you to specify the template name.
+    # :template_class :: Provides the template class to use, inside of using
+    #                    Tilt or a Tilt[:engine].
     #
     # Here's how those options are used:
     #
@@ -92,6 +94,7 @@ class Roda
         opts[:views] ||= File.expand_path("views", Dir.pwd)
         opts[:layout] = "layout" unless opts.has_key?(:layout)
         opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
+        opts[:layout_opts][:template] = opts[:layout]
         opts[:opts] ||= (opts[:opts] || {}).dup
         opts[:opts][:outvar] ||= '@_out_buf'
         if RUBY_VERSION >= "1.9"
@@ -124,19 +127,11 @@ class Roda
       module InstanceMethods
         # Render the given template. See Render for details.
         def render(template, opts = OPTS, &block)
-          if template.is_a?(Hash)
-            if opts.empty?
-              opts = template
-            else
-              opts = opts.merge(template)
-            end
-            template = opts[:template]
-          end
-
-          template_class, path, template_block = find_template(template, opts)
-
-          cached_template(path) do
-            template_class.new(path, 1, render_opts[:opts].merge(opts), &template_block)
+          opts = find_template(parse_template_opts(template, opts))
+          cached_template(opts) do
+            template_opts = render_opts[:opts]
+            template_opts = template_opts.merge(opts[:opts]) if opts[:opts]
+            opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
           end.render(self, (opts[:locals]||OPTS), &block)
         end
 
@@ -151,23 +146,16 @@ class Roda
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
         def view(template, opts=OPTS)
-          if template.is_a?(Hash)
-            if opts.empty?
-              opts = template
-            else
-              opts = opts.merge(template)
-            end
-            template = opts[:template]
-          end
+          opts = parse_template_opts(template, opts)
+          content = opts[:content] || render(opts)
 
-          content = opts[:content] || render(template, opts)
-
-          if layout = opts.fetch(:layout, render_opts[:layout])
-            if layout_opts = opts[:layout_opts]
-              layout_opts = render_opts[:layout_opts].merge(layout_opts)
+          if layout = opts.fetch(:layout, (OPTS if render_opts[:layout]))
+            layout_opts = render_opts[:layout_opts] 
+            if opts[:layout_opts]
+              layout_opts = opts[:layout_opts].merge(layout_opts)
             end
 
-            content = render(layout, layout_opts||OPTS){content}
+            content = render(layout, layout_opts){content}
           end
 
           content
@@ -177,8 +165,9 @@ class Roda
 
         # If caching templates, attempt to retrieve the template from the cache.  Otherwise, just yield
         # to get the template.
-        def cached_template(path, &block)
+        def cached_template(opts, &block)
           if cache = render_opts[:cache]
+            path = opts[:path]
             unless template = cache[path]
               template = cache[path] = yield
             end
@@ -190,30 +179,34 @@ class Roda
 
         # Given the template name and options, return the template class, template path/content,
         # and template block to use for the render.
-        def find_template(template, opts)
+        def find_template(opts)
           if content = opts[:inline]
-            path = content
-            template_block = Proc.new{content}
-            template_class = ::Tilt[opts[:engine] || render_opts[:engine]]
+            opts[:path] = content
+            opts[:template_class] ||= ::Tilt[opts[:engine] || render_opts[:engine]]
+            opts[:template_block] = Proc.new{content}
           else
-            template_class = ::Tilt
-            unless path = opts[:path]
-              path = template_path(template, opts)
-            end
+            opts[:path] ||= template_path(opts)
+            opts[:template_class] ||= ::Tilt
           end
 
-          return template_class, path, template_block
+          opts
         end
 
-        # The name to use for the template.  By default, just converts the argument to a string.
-        def template_name(template)
-          template.to_s
+        # Return a single hash combining the template and opts arguments.
+        def parse_template_opts(template, opts)
+          template = {:template=>template} unless template.is_a?(Hash)
+          opts.merge(template)
+        end
+
+        # The name to use for the template.  By default, just converts the :template option to a string.
+        def template_name(opts)
+          opts[:template].to_s
         end
 
         # The path for the given template.
-        def template_path(template, opts)
+        def template_path(opts)
           render_opts = render_opts()
-          "#{opts[:views] || render_opts[:views]}/#{template_name(template)}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
+          "#{opts[:views] || render_opts[:views]}/#{template_name(opts)}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
         end
       end
     end

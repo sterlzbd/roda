@@ -47,11 +47,12 @@ class Roda
         # Override the template name to use the view subdirectory if the
         # there is a view subdirectory and the template name does not
         # contain a slash.
-        def template_name(template)
-          if (v = @_view_subdir) && (t = template.to_s) !~ /\//
-            "#{v}/#{t}"
+        def template_name(opts)
+          name = super
+          if (v = @_view_subdir) && name !~ /\//
+            "#{v}/#{name}"
           else
-            super
+            name
           end
         end
       end

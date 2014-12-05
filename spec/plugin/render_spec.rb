@@ -59,7 +59,7 @@ describe "render plugin" do
   end
 
   it "custom default layout support" do
-    app.render_opts[:layout] = "layout-alternative"
+    app.plugin :render, :layout => "layout-alternative"
     body("/home").strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 end
@@ -125,6 +125,14 @@ describe "render plugin" do
       render(:template=>"about", :locals=>{:title => "About Roda"})
     end
     body.strip.should == "<h1>About Roda</h1>"
+  end
+
+  it "template renders with :template_class opts" do
+    app(:render) do
+      @a = 1
+      render(:inline=>'i#{@a}', :template_class=>::Tilt[:str])
+    end
+    body.should == "i1"
   end
 
   it "render_opts inheritance" do
