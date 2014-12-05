@@ -25,7 +25,8 @@ class Roda
     # The following options are supported:
     #
     # :cache :: nil/false to not cache templates (useful for development), defaults
-    #           to true to automatically use the default template cache.
+    #           to true unless RACK_ENV is development to automatically use the
+    #           default template cache.
     # :engine :: The tilt engine to use for rendering, defaults to 'erb'.
     # :escape :: Use Roda's Erubis escaping support, which makes <%= %> escape output,
     #            <%== %> not escape output, and handles postfix conditions inside
@@ -103,7 +104,7 @@ class Roda
         if opts[:escape]
           opts[:opts][:engine_class] = ErubisEscaping::Eruby
         end
-        opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, true)
+        opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
       end
 
       module ClassMethods

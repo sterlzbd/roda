@@ -1,5 +1,7 @@
 = HEAD
 
+* Do not cache templates by default if RACK_ENV is development (jeremyevans)
+
 * Add delay_build plugin, to delay building the rack app until Roda.app is called (jeremyevans)
 
 * Add :user_agent hash matcher to the header_matchers plugin (jeremyevans)
