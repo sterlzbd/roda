@@ -1,5 +1,7 @@
 = HEAD
 
+* Add delay_build plugin, to delay building the rack app until Roda.app is called (jeremyevans)
+
 * Add :user_agent hash matcher to the header_matchers plugin (jeremyevans)
 
 * Fix caching of templates in the render plugin when :opts or :template_class is used (jeremyevans)

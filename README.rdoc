@@ -796,6 +796,7 @@ content_for :: Allows storage of content in one template and retrieval of
 csrf :: Adds CSRF protection and helper methods using
         {rack_csrf}[https://github.com/baldowl/rack_csrf].
 default_headers :: Override the default response headers used.
+delay_build :: Delay building the rack app until Roda.app is called.
 delegate :: Adds class methods for creating instance methods that delegate
             to the request or response.
 error_email :: Adds an +error_email+ method that can be used to email when
