@@ -799,6 +799,8 @@ default_headers :: Override the default response headers used.
 delay_build :: Delay building the rack app until Roda.app is called.
 delegate :: Adds class methods for creating instance methods that delegate
             to the request or response.
+environments :: Adds support for handling different execution environments
+                (development/test/production).
 error_email :: Adds an +error_email+ method that can be used to email when
                an exception is raised.
 error_handler :: Adds a +error+ block that is called for all responses that

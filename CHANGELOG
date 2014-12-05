@@ -1,5 +1,7 @@
 = HEAD
 
+* Add environments plugin, for handling development/test/production environments (jeremyevans)
+
 * Do not cache templates by default if RACK_ENV is development (jeremyevans)
 
 * Add delay_build plugin, to delay building the rack app until Roda.app is called (jeremyevans)
