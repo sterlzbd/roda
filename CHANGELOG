@@ -1,5 +1,7 @@
 = HEAD
 
+* Fix caching of templates in the render plugin when :opts or :template_class is used (jeremyevans)
+
 * Require loading the render plugin again if you want to change the default layout (jeremyevans)
 
 * Pass :css_opts and :js_opts as template options (via :opts) instead of render options when rendering (jeremyevans)

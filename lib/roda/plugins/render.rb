@@ -167,9 +167,9 @@ class Roda
         # to get the template.
         def cached_template(opts, &block)
           if cache = render_opts[:cache]
-            path = opts[:path]
-            unless template = cache[path]
-              template = cache[path] = yield
+            key = opts[:key]
+            unless template = cache[key]
+              template = cache[key] = yield
             end
             template
           else
@@ -181,12 +181,22 @@ class Roda
         # and template block to use for the render.
         def find_template(opts)
           if content = opts[:inline]
-            opts[:path] = content
-            opts[:template_class] ||= ::Tilt[opts[:engine] || render_opts[:engine]]
+            path = opts[:path] = content
+            template_class = opts[:template_class] ||= ::Tilt[opts[:engine] || render_opts[:engine]]
             opts[:template_block] = Proc.new{content}
           else
-            opts[:path] ||= template_path(opts)
+            path = opts[:path] ||= template_path(opts)
+            template_class = opts[:template_class]
             opts[:template_class] ||= ::Tilt
+          end
+
+          if render_opts[:cache]
+            key = path
+            template_opts = opts[:opts]
+            if template_class || template_opts
+              key = [path, template_class, template_opts]
+            end
+            opts[:key] = key
           end
 
           opts

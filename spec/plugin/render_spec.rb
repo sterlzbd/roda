@@ -135,6 +135,30 @@ describe "render plugin" do
     body.should == "i1"
   end
 
+  it "template cache respects :opts" do
+    c = Class.new do 
+      def initialize(path, _, opts)
+        @path = path
+        @opts = opts
+      end
+      def render(*)
+        "#{@path}-#{@opts[:foo]}"
+      end
+    end
+
+    app(:render) do |r|
+      r.is "a" do
+        render(:inline=>"i", :template_class=>c, :opts=>{:foo=>'a'})
+      end
+      r.is "b" do
+        render(:inline=>"i", :template_class=>c, :opts=>{:foo=>'b'})
+      end
+    end
+
+    body('/a').should == "i-a"
+    body('/b').should == "i-b"
+  end
+
   it "render_opts inheritance" do
     c = Class.new(Roda)
     c.plugin :render
