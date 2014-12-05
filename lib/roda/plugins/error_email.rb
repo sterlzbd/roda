@@ -41,7 +41,7 @@ class Roda
           format = lambda{|h| h.map{|k, v| "#{k.inspect} => #{v.inspect}"}.sort.join("\n")}
 
           message = <<END
-Path: #{s.request.full_path_info}
+Path: #{s.request.path}
 
 Backtrace:
 

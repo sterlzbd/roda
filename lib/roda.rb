@@ -447,16 +447,16 @@ class Roda
           super(env)
         end
 
-        # As request routing modifies SCRIPT_NAME and PATH_INFO, this exists
-        # as a helper method to get the full path of the request.
+        # This an an optimized version of Rack::Request#path.
         #
         #   r.env['SCRIPT_NAME'] = '/foo'
         #   r.env['PATH_INFO'] = '/bar'
-        #   r.full_path_info
+        #   r.path
         #   # => '/foo/bar'
-        def full_path_info
+        def path
           "#{@env[SCRIPT_NAME]}#{@env[PATH_INFO]}"
         end
+        alias full_path_info path
 
         # Immediately stop execution of the route block and return the given
         # rack response array of status, headers, and body.  If no argument
@@ -494,7 +494,7 @@ class Roda
         #   r.inspect
         #   # => '#<Roda::RodaRequest GET /foo/bar>'
         def inspect
-          "#<#{self.class.inspect} #{@env[REQUEST_METHOD]} #{full_path_info}>"
+          "#<#{self.class.inspect} #{@env[REQUEST_METHOD]} #{path}>"
         end
 
         # Does a terminal match on the current path, matching only if the arguments
@@ -786,7 +786,7 @@ class Roda
         # it is easy to create an infinite redirect.
         def default_redirect_path
           raise RodaError, "must provide path argument to redirect for get requests" if is_get?
-          full_path_info
+          path
         end
 
         # If all of the arguments match, yields to the match block and
