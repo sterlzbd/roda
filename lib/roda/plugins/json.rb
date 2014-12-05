@@ -44,12 +44,6 @@ class Roda
         def json_result_classes
           opts[:json_result_classes]
         end
-
-        # Copy the json_result_classes into the subclass
-        def inherited(subclass)
-          super
-          subclass.opts[:json_result_classes] = json_result_classes.dup
-        end
       end
 
       module RequestMethods

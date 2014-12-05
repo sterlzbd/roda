@@ -1,5 +1,7 @@
 = HEAD
 
+* Automatically dup unfrozen Array/Hash opts values when subclassing (jeremyevans)
+
 * Add named_templates plugin, for creating inline templates by name, instead of storing them in the file system (jeremyevans)
 
 * Support :template option in for render/view to specify template to use, instead of requiring separate argument (jeremyevans)

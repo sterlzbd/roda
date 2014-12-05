@@ -109,7 +109,7 @@ class Roda
         # affecting the parent class.
         def inherited(subclass)
           super
-          opts = subclass.opts[:render] = render_opts.dup
+          opts = subclass.opts[:render]
           opts[:layout_opts] = opts[:layout_opts].dup
           opts[:opts] = opts[:opts].dup
           opts[:cache] = thread_safe_cache if opts[:cache]

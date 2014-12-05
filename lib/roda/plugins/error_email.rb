@@ -88,7 +88,6 @@ END
         # the superclass.
         def inherited(subclass)
           super
-          subclass.opts[:error_email] = subclass.opts[:error_email].dup
           subclass.opts[:error_email][:headers] = subclass.opts[:error_email][:headers].dup
         end
       end

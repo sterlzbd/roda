@@ -134,6 +134,11 @@ class Roda
           super
           subclass.instance_variable_set(:@middleware, @middleware.dup)
           subclass.instance_variable_set(:@opts, opts.dup)
+          subclass.opts.to_a.each do |k,v|
+            if (v.is_a?(Array) || v.is_a?(Hash)) && !v.frozen?
+              subclass.opts[k] = v.dup
+            end
+          end
           subclass.instance_variable_set(:@route_block, @route_block)
           subclass.send(:build_rack_app)
           

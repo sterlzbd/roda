@@ -133,7 +133,7 @@ class Roda
         # Copy the named routes into the subclass when inheriting.
         def inherited(subclass)
           super
-          nsr = subclass.opts[:namespaced_routes] = opts[:namespaced_routes].dup
+          nsr = subclass.opts[:namespaced_routes]
           opts[:namespaced_routes].each{|k, v| nsr[k] = v.dup}
           subclass::RodaRequest.instance_variable_set(:@namespaced_route_regexps, {})
         end

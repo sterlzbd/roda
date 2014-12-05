@@ -61,12 +61,6 @@ class Roda
             opts[:class_level_routes] << [meth, args, block]
           end
         end
-
-        # Copy the class level routes into the subclass.
-        def inherited(subclass)
-          super
-          subclass.opts[:class_level_routes] = opts[:class_level_routes].dup
-        end
       end
 
       module InstanceMethods

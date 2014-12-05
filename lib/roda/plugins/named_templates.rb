@@ -63,14 +63,6 @@ class Roda
           opts[:named_templates][name.to_s] = [options, block]
           nil
         end
-
-        # Dup the named templates into the subclass, so that adding named
-        # templates to the subclass doesn't affect the parent class and
-        # vice versa.
-        def inherited(subclass)
-          super
-          subclass.opts[:named_templates] = opts[:named_templates].dup
-        end
       end
 
       module InstanceMethods

@@ -28,12 +28,6 @@ class Roda
         def default_headers
           opts[:default_headers]
         end
-
-        # Copy the default headers into the subclass when inheriting.
-        def inherited(subclass)
-          super
-          subclass.opts[:@default_headers] = default_headers.dup
-        end
       end
 
       module ResponseMethods
