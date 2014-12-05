@@ -154,6 +154,15 @@ describe "mailer plugin" do
     app.mail('/').content_type.should =~ /\Atext\/html/
   end
 
+  it "supports loading the plugin multiple times" do
+    app(:bare) do
+      plugin :mailer, :content_type=>'text/html'
+      plugin :mailer
+      route{""}
+    end
+    app.mail('/').content_type.should =~ /\Atext\/html/
+  end
+
   it "supports manually overridding the default content-type for emails" do
     app(:bare) do
       plugin :mailer, :content_type=>'text/html'

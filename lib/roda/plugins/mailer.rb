@@ -118,7 +118,7 @@ class Roda
       # Set the options for the mailer.  Options:
       # :content_type :: The default content type for emails (default: text/plain)
       def self.configure(app, opts={})
-        app.opts[:mailer] = opts.dup.freeze
+        app.opts[:mailer] = (app.opts[:mailer]||{}).merge(opts).freeze
       end
 
       module ClassMethods
