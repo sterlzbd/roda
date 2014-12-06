@@ -898,7 +898,7 @@ then have the file register it as a plugin via
 <tt>Roda::RodaPlugins.register_plugin</tt>.  It's recommended but not required
 that you store your plugin module in the <tt>Roda::RodaPlugins</tt> namespace:
 
-  module Roda
+  class Roda
     module RodaPlugins
       module Markdown
         module InstanceMethods
