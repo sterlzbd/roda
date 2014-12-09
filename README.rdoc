@@ -781,74 +781,8 @@ plugins, you can build the routing tree web framework that needs your needs.
 Roda's plugins can override any Roda method and call +super+ to get the
 default behavior, which makes Roda very extensible.
 
-=== Included Plugins
-
-These plugins ship with roda:
-
-all_verbs :: Adds routing methods to the request for all http verbs.
-assets :: Adds support for rendering CSS/JS javascript assets on the fly
-          in development, or compiling them into a single compressed file
-          in production.
-backtracking_array :: Allows array matchers to backtrack if later matchers
-                      do not match.
-caching :: Adds request and response methods related to http caching.
-chunked :: Adds support for streaming template responses using
-           Transfer-Encoding: chunked.
-class_level_routing :: Adds support for class level routing methods, for a
-                       DSL similar to {sinatra}[https://github.com/sinatra/sinatra].
-content_for :: Allows storage of content in one template and retrieval of
-               that content in a different template.
-csrf :: Adds CSRF protection and helper methods using
-        {rack_csrf}[https://github.com/baldowl/rack_csrf].
-default_headers :: Override the default response headers used.
-delay_build :: Delay building the rack app until Roda.app is called.
-delegate :: Adds class methods for creating instance methods that delegate
-            to the request or response.
-environments :: Adds support for handling different execution environments
-                (development/test/production).
-error_email :: Adds an +error_email+ method that can be used to email when
-               an exception is raised.
-error_handler :: Adds a +error+ block that is called for all responses that
-                 raise exceptions.
-flash :: Adds a flash handler.
-h :: Adds h method for html escaping.
-halt :: Augments request#halt method to take status and/or body or status,
-        headers, and body.
-head :: Treat HEAD requests like GET requests with an empty response body.
-header_matchers :: Adds host, header, and accept hash matchers.
-hooks :: Adds before and after methods to run code before and after requests.
-indifferent_params :: Adds params method with indifferent access to params,
-                      allowing use of symbol keys for accessing params.
-json :: Allows match blocks to return arrays and hashes, using a json
-        representation as the response body.
-mailer :: Adds support for sending emails using the routing tree.
-middleware :: Allows the Roda app to be used as a rack middleware, calling the
-              next middleware if no route matches.
-multi_route :: Adds the ability for multiple named route blocks, with the
-               ability to dispatch to them add any point in the main route block.
-multi_run :: Adds the ability to dispatch to multiple rack applications based
-             on the request path prefix.
-named_templates :: Adds the ability to create inline templates by name, instead
-                   of storing them in the file system.
-not_allowed :: Adds support for automatically returning 405 Method Not Allowed
-               responses.
-not_found :: Adds a +not_found+ block that is called for all 404 responses
-             without bodies.
-pass :: Adds a pass method allowing you to skip the current +r.on+ block as if
-        it did not match.
-path :: Adds support for named paths.
-per_thread_caching :: Switches the thread-safe cache from a shared cache to a
-                      per-thread cache.
-render :: Adds support for rendering templates via tilt, as described above.
-render_each :: Render a template for each value in an enumerable.
-static_path_info :: Makes the Roda app not modify PATH_INFO or SCRIPT_NAME during
-                    routing.
-streaming :: Adds support for streaming responses.
-symbol_matchers :: Adds support for symbol-specific matching regexps.
-symbol_views :: Allows match blocks to return template name symbols, uses the
-                template view as the response body.
-view_subdirs :: Allows for setting a view subdirectory to use on a per-request
-                basis.
+{Roda ships with a large number of plugins}[http://roda.jeremyevans.net/documentation.html#included-plugins],
+and {some other libraries ship with support for Roda}[http://roda.jeremyevans.net/documentation.html#external].
 
 === External Plugins
 
