@@ -7,11 +7,6 @@ describe "multi_run plugin" do
       "c"
     end
 
-    body("/a").should == 'c'
-    body("/b").should == 'c'
-    body("/b/a").should == 'c'
-    body.should == 'c'
-
     app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}
 
     body("/a").should == 'a1'
