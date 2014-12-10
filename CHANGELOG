@@ -1,5 +1,7 @@
 = HEAD
 
+* Add drop_body plugin, for automatically dropping body and Content-{Length,Type} headers based on response status (jeremyevans)
+
 * Add clear_middleware! class method, for clearing the current middleware (jeremyevans)
 
 * Add inherit_middleware class accessor, allowing users to turn off middleware inheritance (jeremyevans)
