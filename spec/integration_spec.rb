@@ -64,6 +64,20 @@ describe "integration" do
     body('/hello').should == 'D 1 2 3'
   end
 
+  it "should not inherit middleware in subclass if inhert_middleware = false" do
+    c = @c
+    app(:bare){use(c, '1', '2'){"3"}}
+    @app.inherit_middleware = false
+    @app = Class.new(@app)
+    @app.route do  |r|
+      r.get "hello" do
+        "D #{r.env['m.first']} #{r.env['m.second']} #{r.env['m.block']}"
+      end
+    end
+
+    body('/hello').should == 'D   '
+  end
+
   it "should inherit route in subclass" do
     c = @c
     app(:bare) do

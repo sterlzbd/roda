@@ -54,6 +54,7 @@ class Roda
   end
 
   @app = nil
+  @inherit_middleware = true
   @middleware = []
   @opts = {}
   @route_block = nil
@@ -100,6 +101,11 @@ class Roda
         # The route block that this class uses.
         attr_reader :route_block
 
+        # Whether middleware from the current class should be inherited by subclasses.
+        # True by default, should be set to false when using a design where the parent
+        # class accepts requests and uses run to dispatch the request to a subclass.
+        attr_accessor :inherit_middleware
+
         # Call the internal rack application with the given environment.
         # This allows the class itself to be used as a rack application.
         # However, for performance, it's better to use #app to get direct
@@ -132,7 +138,8 @@ class Roda
         # and setup the request and response subclasses.
         def inherited(subclass)
           super
-          subclass.instance_variable_set(:@middleware, @middleware.dup)
+          subclass.instance_variable_set(:@inherit_middleware, @inherit_middleware)
+          subclass.instance_variable_set(:@middleware, @inherit_middleware ? @middleware.dup : [])
           subclass.instance_variable_set(:@opts, opts.dup)
           subclass.opts.to_a.each do |k,v|
             if (v.is_a?(Array) || v.is_a?(Hash)) && !v.frozen?
