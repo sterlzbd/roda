@@ -114,6 +114,12 @@ class Roda
           app.call(env)
         end
 
+        # Clear the middleware stack
+        def clear_middleware!
+          @middleware.clear
+          build_rack_app
+        end
+
         # Create a match_#{key} method in the request class using the given
         # block, so that using a hash key in a request match method will
         # call the block.  The block should return nil or false to not

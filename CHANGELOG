@@ -1,5 +1,7 @@
 = HEAD
 
+* Add clear_middleware! class method, for clearing the current middleware (jeremyevans)
+
 * Add inherit_middleware class accessor, allowing users to turn off middleware inheritance (jeremyevans)
 
 * Add multi_run plugin, for dispatching to multiple rack applications based on the request path prefix (jeremyevans)

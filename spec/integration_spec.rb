@@ -35,6 +35,25 @@ describe "integration" do
     body('/hello').should == 'D First Second Block'
   end
 
+  it "should clear middleware when clear_middleware! is called" do
+    c = @c
+    app(:bare) do 
+      use c, "First", "Second" do
+        "Block"
+      end
+
+      route do |r|
+        r.get "hello" do
+          "D #{r.env['m.first']} #{r.env['m.second']} #{r.env['m.block']}"
+        end
+      end
+
+      clear_middleware!
+    end
+
+    body('/hello').should == 'D   '
+  end
+
   it "should support adding middleware using use after route block setup" do
     c = @c
     app(:bare) do 
