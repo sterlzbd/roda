@@ -632,7 +632,7 @@ class Roda
         #       r.redirect
         #     end
         #   end
-        def redirect(path=default_redirect_path, status=302)
+        def redirect(path=default_redirect_path, status=default_redirect_status)
           response.redirect(path, status)
           throw :halt, response.finish
         end
@@ -800,6 +800,12 @@ class Roda
         def default_redirect_path
           raise RodaError, "must provide path argument to redirect for get requests" if is_get?
           path
+        end
+
+        # The default status to use for redirects if a status is not provided,
+        # 302 by default.
+        def default_redirect_status
+          302
         end
 
         # If all of the arguments match, yields to the match block and
