@@ -173,6 +173,6 @@ describe "response #inspect" do
       end
     end
 
-    body.should == '#<Foo::RodaResponse 200 {"Content-Type"=>"text/html"} []>'
+    body.should == '#<Foo::RodaResponse 200 {} []>'
   end
 end

@@ -927,8 +927,7 @@ class Roda
       # Instance methods for RodaResponse
       module ResponseMethods
         CONTENT_LENGTH = "Content-Length".freeze
-        CONTENT_TYPE = "Content-Type".freeze
-        DEFAULT_CONTENT_TYPE = "text/html".freeze
+        DEFAULT_HEADERS = {"Content-Type" => "text/html".freeze}.freeze
         LOCATION = "Location".freeze
 
         # The status code to use for the response.  If none is given, will use 200
@@ -941,7 +940,7 @@ class Roda
         # Set the default headers when creating a response.
         def initialize
           @status  = nil
-          @headers = default_headers
+          @headers = {}
           @body    = []
           @length  = 0
         end
@@ -967,7 +966,7 @@ class Roda
 
         # The default headers to use for responses.
         def default_headers
-          {CONTENT_TYPE => DEFAULT_CONTENT_TYPE}
+          DEFAULT_HEADERS
         end
 
         # Modify the headers to include a Set-Cookie value that
@@ -1007,8 +1006,9 @@ class Roda
         def finish
           b = @body
           s = (@status ||= b.empty? ? 404 : 200)
+          set_default_headers
           h = @headers
-          h[CONTENT_LENGTH] = @length.to_s
+          h[CONTENT_LENGTH] ||= @length.to_s
           [s, h, b]
         end
 
@@ -1017,6 +1017,7 @@ class Roda
         # and doesn't add the Content-Length header or use the existing
         # body.
         def finish_with_body(body)
+          set_default_headers
           [@status || 200, @headers, body]
         end
 
@@ -1046,6 +1047,15 @@ class Roda
           @length += s.bytesize
           @body << s
           nil
+        end
+
+        private
+
+        def set_default_headers
+          h = @headers
+          default_headers.each do |k,v|
+            h[k] ||= v
+          end
         end
       end
     end

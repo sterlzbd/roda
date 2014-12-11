@@ -1,5 +1,7 @@
 = HEAD
 
+* Don't set the default headers until the response is finished (jeremyevans)
+
 * Add RodaRequest#default_redirect_status, so plugins can override the default status used for redirects (jeremyevans)
 
 * Add drop_body plugin, for automatically dropping body and Content-{Length,Type} headers based on response status (jeremyevans)
