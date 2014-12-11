@@ -23,13 +23,15 @@ class Roda
     # HEAD requests for +/+, +/a+, and +/b+ will all return 200 status
     # with an empty body.
     module Head
+      EMPTY_ARRAY = [].freeze
+
       module InstanceMethods
         # Always use an empty response body for head requests, with a
         # content length of 0.
         def call(*)
           res = super
           if @_request.head?
-            res[2] = []
+            res[2] = EMPTY_ARRAY
           end
           res
         end
