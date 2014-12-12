@@ -171,36 +171,36 @@ class Roda
         #
         #   Roda.plugin PluginModule
         #   Roda.plugin :csrf
-        def plugin(mixin, *args, &block)
-          if mixin.is_a?(Symbol)
-            mixin = RodaPlugins.load_plugin(mixin)
+        def plugin(plugin, *args, &block)
+          if plugin.is_a?(Symbol)
+            plugin = RodaPlugins.load_plugin(plugin)
           end
 
-          if mixin.respond_to?(:load_dependencies)
-            mixin.load_dependencies(self, *args, &block)
+          if plugin.respond_to?(:load_dependencies)
+            plugin.load_dependencies(self, *args, &block)
           end
 
-          if defined?(mixin::InstanceMethods)
-            include mixin::InstanceMethods
+          if defined?(plugin::InstanceMethods)
+            include(plugin::InstanceMethods)
           end
-          if defined?(mixin::ClassMethods)
-            extend mixin::ClassMethods
+          if defined?(plugin::ClassMethods)
+            extend(plugin::ClassMethods)
           end
-          if defined?(mixin::RequestMethods)
-            self::RodaRequest.send(:include, mixin::RequestMethods)
+          if defined?(plugin::RequestMethods)
+            self::RodaRequest.send(:include, plugin::RequestMethods)
           end
-          if defined?(mixin::RequestClassMethods)
-            self::RodaRequest.extend mixin::RequestClassMethods
+          if defined?(plugin::RequestClassMethods)
+            self::RodaRequest.extend(plugin::RequestClassMethods)
           end
-          if defined?(mixin::ResponseMethods)
-            self::RodaResponse.send(:include, mixin::ResponseMethods)
+          if defined?(plugin::ResponseMethods)
+            self::RodaResponse.send(:include, plugin::ResponseMethods)
           end
-          if defined?(mixin::ResponseClassMethods)
-            self::RodaResponse.extend mixin::ResponseClassMethods
+          if defined?(plugin::ResponseClassMethods)
+            self::RodaResponse.extend(plugin::ResponseClassMethods)
           end
           
-          if mixin.respond_to?(:configure)
-            mixin.configure(self, *args, &block)
+          if plugin.respond_to?(:configure)
+            plugin.configure(self, *args, &block)
           end
         end
 
