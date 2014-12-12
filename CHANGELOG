@@ -1,5 +1,7 @@
 = HEAD
 
+* Add slash_path_emty plugin, for considering a path of "/" as empty when doing a terminal match (jeremyevans)
+
 * Remove def_verb_method request class method (jeremyevans)
 
 * Support :add_script_name, :name, :url, and :url_only options when creating named paths in the path plugin (jeremyevans)

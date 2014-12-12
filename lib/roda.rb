@@ -533,7 +533,7 @@ class Roda
         #   end
         def is(*args, &block)
           if args.empty?
-            if path_to_match == EMPTY_STRING
+            if empty_path?
               always(&block)
             end
           else
@@ -817,6 +817,11 @@ class Roda
           302
         end
 
+        # Whether the current path is considered empty.
+        def empty_path?
+          path_to_match == EMPTY_STRING
+        end
+
         # If all of the arguments match, yields to the match block and
         # returns the rack response when the block returns.  If any of
         # the match arguments doesn't match, does nothing.
@@ -855,7 +860,7 @@ class Roda
           when Symbol
             _match_symbol(matcher)
           when TERM
-            path_to_match == EMPTY_STRING
+            empty_path?
           when Hash
             _match_hash(matcher)
           when Array
