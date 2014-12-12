@@ -2,21 +2,33 @@ class Roda
   module RodaPlugins
     # The static_path_info plugin changes Roda's behavior so that the
     # SCRIPT_NAME/PATH_INFO environment settings are not modified
-    # while the request is beind routed.  This is faster, but it means
-    # that the Roda app will not be usable as a URL mapper anymore.  If
-    # you aren't calling RodaRequest#run to send the request to another
-    # rack application, you can probably get a performance improvement
-    # by using this plugin.  Additionally, if you have any helpers that
-    # operate on PATH_INFO or SCRIPT_NAME, their behavior will not change
-    # depending on where they are called in the routing tree.
+    # while the request is beind routed, improving performance.  If
+    # you have any helpers that operate on PATH_INFO or SCRIPT_NAME,
+    # their behavior will not change depending on where they are
+    # called in the routing tree.
+    #
+    # This still updates SCRIPT_NAME/PATH_INFO before dispatching to
+    # another rack app via +r.run+.
     module StaticPathInfo
       module RequestMethods
         PATH_INFO = "PATH_INFO".freeze
+        SCRIPT_NAME = "SCRIPT_NAME".freeze
 
         # Set path_to_match when initializing.
         def initialize(*)
           super
           @path_to_match = @env[PATH_INFO]
+        end
+
+        # Update SCRIPT_NAME/PATH_INFO based on the current path_to_match
+        # before dispatching to another rack app, so the app still works as
+        # a URL mapper.
+        def run(_)
+          e = @env
+          path = @path_to_match
+          e[SCRIPT_NAME] += e[PATH_INFO].chomp(path)
+          e[PATH_INFO] = path
+          super
         end
 
         private

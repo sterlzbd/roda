@@ -29,4 +29,10 @@ describe "static_path_info plugin" do
     body('/foo/baz').should == 'foo||/foo/baz'
     body('/foo/baz', 'SCRIPT_NAME'=>'/a').should == 'foo|/a|/foo/baz'
   end
+
+  it "modifies SCRIPT_NAME/PATH_INFO when calling run" do
+    a = app{|r| "#{r.script_name}|#{r.path_info}"}
+    app(:static_path_info){|r| r.on("a"){r.run a}}
+    body("/a/b").should == "/a|/b"
+  end
 end
