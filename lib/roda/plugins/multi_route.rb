@@ -197,7 +197,7 @@ class Roda
 
         # Dispatch to the named route with the given name.
         def route(name, namespace=nil)
-          scope.instance_exec(self, &self.class.roda_class.named_route(name, namespace))
+          scope.instance_exec(self, &roda_class.named_route(name, namespace))
         end
       end
     end

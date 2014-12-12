@@ -308,7 +308,7 @@ class Roda
         # If the absolute_redirects or :prefixed_redirects roda class options has been set, respect those
         # and update the path.
         def redirect(path=(no_add_script_name = true; default_redirect_path), status=default_redirect_status)
-          opts = self.class.roda_class.opts
+          opts = roda_class.opts
           absolute_redirects = opts[:absolute_redirects]
           prefixed_redirects = no_add_script_name ? false : opts[:prefixed_redirects]
           path = uri(path, absolute_redirects, prefixed_redirects) if absolute_redirects || prefixed_redirects
@@ -418,7 +418,7 @@ class Roda
 
         # Look up a media type by file extension in Rack's mime registry.
         def mime_type(type)
-          self.class.roda_class.mime_type(type)
+          roda_class.mime_type(type)
         end
 
         # Set the Content-Type of the response body given a media type or file

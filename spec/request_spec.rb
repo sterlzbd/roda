@@ -72,3 +72,14 @@ describe "TERM.inspect" do
     body.should ==  "TERM"
   end
 end
+
+describe "roda_class" do
+  it "should return the related roda subclass" do
+    app do |r|
+      self.class.opts[:a] = 'a'
+      r.class.roda_class.opts[:a] + r.roda_class.opts[:a]
+    end
+
+    body.should ==  "aa"
+  end
+end

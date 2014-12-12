@@ -168,7 +168,7 @@ class Roda
             m.headers(@headers)
             m.body(@body.join) unless @body.empty?
 
-            if content_type = header_content_type || self.class.roda_class.opts[:mailer][:content_type]
+            if content_type = header_content_type || roda_class.opts[:mailer][:content_type]
               if mail.multipart?
                 if mail.content_type =~ /multipart\/mixed/ &&
                    mail.parts.length >= 2 &&

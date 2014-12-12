@@ -57,7 +57,7 @@ class Roda
         # application/json content-type.
         def block_result_body(result)
           case result
-          when *self.class.roda_class.json_result_classes
+          when *roda_class.json_result_classes
             response[CONTENT_TYPE] = APPLICATION_JSON
             convert_to_json(result)
           else

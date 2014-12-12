@@ -637,6 +637,11 @@ class Roda
           throw :halt, response.finish
         end
 
+        # Return the Roda class related to this request.
+        def roda_class
+          self.class.roda_class
+        end
+
         # Routing matches that only matches +GET+ requests where the current
         # path is +/+.  If it matches, the match block is executed, and when
         # the match block returns, the rack response is returned.
@@ -1029,6 +1034,11 @@ class Roda
         def redirect(path, status = 302)
           @headers[LOCATION] = path
           @status  = status
+        end
+
+        # Return the Roda class related to this response.
+        def roda_class
+          self.class.roda_class
         end
 
         # Set the cookie with the given key in the headers.

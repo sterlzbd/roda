@@ -176,3 +176,14 @@ describe "response #inspect" do
     body.should == '#<Foo::RodaResponse 200 {} []>'
   end
 end
+
+describe "roda_class" do
+  it "should return the related roda subclass" do
+    app do |r|
+      self.class.opts[:a] = 'a'
+      response.class.roda_class.opts[:a] + response.roda_class.opts[:a]
+    end
+
+    body.should ==  "aa"
+  end
+end
