@@ -95,16 +95,16 @@ class Roda
         # The rack application that this class uses.
         attr_reader :app
 
+        # Whether middleware from the current class should be inherited by subclasses.
+        # True by default, should be set to false when using a design where the parent
+        # class accepts requests and uses run to dispatch the request to a subclass.
+        attr_accessor :inherit_middleware
+
         # The settings/options hash for the current class.
         attr_reader :opts
 
         # The route block that this class uses.
         attr_reader :route_block
-
-        # Whether middleware from the current class should be inherited by subclasses.
-        # True by default, should be set to false when using a design where the parent
-        # class accepts requests and uses run to dispatch the request to a subclass.
-        attr_accessor :inherit_middleware
 
         # Call the internal rack application with the given environment.
         # This allows the class itself to be used as a rack application.
@@ -449,17 +449,14 @@ class Roda
           super(env)
         end
 
-        # This an an optimized version of Rack::Request#path.
-        #
-        #   r.env['SCRIPT_NAME'] = '/foo'
-        #   r.env['PATH_INFO'] = '/bar'
-        #   r.path
-        #   # => '/foo/bar'
-        def path
-          e = @env
-          "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
+        # Handle match block return values.  By default, if a string is given
+        # and the response is empty, use the string as the response body.
+        def block_result(result)
+          res = response
+          if res.empty? && (body = block_result_body(result))
+            res.write(body)
+          end
         end
-        alias full_path_info path
 
         # Match GET requests.  If no arguments are provided, matches all GET
         # requests, otherwise, matches only GET requests where the arguments
@@ -480,22 +477,6 @@ class Roda
         #   r.halt
         def halt(res=response.finish)
           throw :halt, res
-        end
-
-        # Optimized method for whether this request is a +GET+ request.
-        # Similar to the default Rack::Request get? method, but can be
-        # overridden without changing rack's behavior.
-        def is_get?
-          @env[REQUEST_METHOD] == GET_REQUEST_METHOD
-        end
-
-        # Handle match block return values.  By default, if a string is given
-        # and the response is empty, use the string as the response body.
-        def block_result(result)
-          res = response
-          if res.empty? && (body = block_result_body(result))
-            res.write(body)
-          end
         end
 
         # Show information about current request, including request class,
@@ -561,6 +542,13 @@ class Roda
           end
         end
 
+        # Optimized method for whether this request is a +GET+ request.
+        # Similar to the default Rack::Request get? method, but can be
+        # overridden without changing rack's behavior.
+        def is_get?
+          @env[REQUEST_METHOD] == GET_REQUEST_METHOD
+        end
+
         # Does a match on the path, matching only if the arguments
         # have matched the path.  Because this doesn't fully match the
         # path, this is usually used to setup branches of the routing tree,
@@ -596,21 +584,23 @@ class Roda
           end
         end
 
+        # This an an optimized version of Rack::Request#path.
+        #
+        #   r.env['SCRIPT_NAME'] = '/foo'
+        #   r.env['PATH_INFO'] = '/bar'
+        #   r.path
+        #   # => '/foo/bar'
+        def path
+          e = @env
+          "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
+        end
+        alias full_path_info path
+
         # Match POST requests.  If no arguments are provided, matches all POST
         # requests, otherwise, matches only POST requests where the arguments
         # given fully consume the path.
         def post(*args, &block)
           _verb(args, &block) if post?
-        end
-
-        # The response related to the current request.  See ResponseMethods for
-        # instance methods for the response, but in general the most common usage
-        # is to override the response status and headers:
-        #
-        #   response.status = 200
-        #   response['Header-Name'] = 'Header value'
-        def response
-          scope.response
         end
 
         # Immediately redirect to the path using the status code.  This ends
@@ -639,6 +629,16 @@ class Roda
         def redirect(path=default_redirect_path, status=default_redirect_status)
           response.redirect(path, status)
           throw :halt, response.finish
+        end
+
+        # The response related to the current request.  See ResponseMethods for
+        # instance methods for the response, but in general the most common usage
+        # is to override the response status and headers:
+        #
+        #   response.status = 200
+        #   response['Header-Name'] = 'Header value'
+        def response
+          scope.response
         end
 
         # Return the Roda class related to this request.
@@ -733,14 +733,14 @@ class Roda
           end
         end
 
-        # Match the given regexp exactly if it matches a full segment.
-        def _match_regexp(re)
-          consume(self.class.cached_matcher(re){re})
-        end
-
         # Match the given hash if all hash matchers match.
         def _match_hash(hash)
           hash.all?{|k,v| send("match_#{k}", v)}
+        end
+
+        # Match the given regexp exactly if it matches a full segment.
+        def _match_regexp(re)
+          consume(self.class.cached_matcher(re){re})
         end
 
         # Match the given string to the request path.  Regexp escapes the
@@ -939,12 +939,12 @@ class Roda
         DEFAULT_HEADERS = {"Content-Type" => "text/html".freeze}.freeze
         LOCATION = "Location".freeze
 
+        # The hash of response headers for the current response.
+        attr_reader :headers
+
         # The status code to use for the response.  If none is given, will use 200
         # code for non-empty responses and a 404 code for empty responses.
         attr_accessor :status
-
-        # The hash of response headers for the current response.
-        attr_reader :headers
 
         # Set the default headers when creating a response.
         def initialize
@@ -966,11 +966,6 @@ class Roda
         #   response['Content-Type'] = 'application/json'
         def []=(key, value)
           @headers[key] = value
-        end
-
-        # Show response class, status code, response headers, and response body
-        def inspect
-          "#<#{self.class.inspect} #{@status.inspect} #{@headers.inspect} #{@body.inspect}>"
         end
 
         # The default headers to use for responses.
@@ -1030,6 +1025,11 @@ class Roda
           [@status || 200, @headers, body]
         end
 
+        # Show response class, status code, response headers, and response body
+        def inspect
+          "#<#{self.class.inspect} #{@status.inspect} #{@headers.inspect} #{@body.inspect}>"
+        end
+
         # Set the Location header to the given path, and the status
         # to the given status.  Example:
         #
@@ -1065,6 +1065,8 @@ class Roda
 
         private
 
+        # For each default header, if a header has not already been set for the
+        # response, set the header in the response.
         def set_default_headers
           h = @headers
           default_headers.each do |k,v|
