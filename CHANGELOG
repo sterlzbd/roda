@@ -1,5 +1,7 @@
 = HEAD
 
+* Add sinatra_helpers plugin, porting Sinatra::Helpers methods not covered by other plugins (jeremyevans)
+
 * Don't set the default headers until the response is finished (jeremyevans)
 
 * Add RodaRequest#default_redirect_status, so plugins can override the default status used for redirects (jeremyevans)
