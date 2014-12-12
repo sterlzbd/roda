@@ -1,6 +1,6 @@
 <h1>Why <span class="roda">Roda</span>?</h1>
 
-<p>There are already plenty of ruby web frameworks. Why another one? Well, Roda has a very useful combination of features that make web development easy.  It's designed to be fast, <acronym title="Don't Repeat Yourself">DRY</acronym>, and correct.  It's probably easiest to explain the advantages by comparing it with <a href="http://www.sinatrarb.com">Sinatra</a>, which it tries to emulate in many respects.</p>
+<p>There are already plenty of Ruby web frameworks. Why another one? Well, Roda has a very useful combination of features that make web development easy.  It's designed to be fast, <acronym title="Don't Repeat Yourself">DRY</acronym>, and correct.  It's probably easiest to explain the advantages by comparing it with <a href="http://www.sinatrarb.com">Sinatra</a>, which it tries to emulate in many respects.</p>
 
 <h2>Differences with Sinatra</h2>
 
@@ -76,7 +76,7 @@ end
 </code></pre>
 </div>
 
-<p style="clear: both;">While the Roda code is slightly more lines, it should be apparent that it is actually simpler.  Instead of setting the <span class="code">@artist</span> variable and checking that access is allowed in all three of the sinatra routes, the variables are set as soon as that branch of the tree is taken, and can be used in all routes under that branch.  This is why Roda is called a routing tree web framework.  This is a very simplified example, but if you see this type of duplication in a lot of the Sinatra code you write, your app could probably be made simpler by converting to Roda.</p>
+<p style="clear: both;">While the Roda code is slightly longer, it should be apparent that it is actually simpler.  Instead of setting the <span class="code">@artist</span> variable and checking that access is allowed in all three of the sinatra routes, the variables are set as soon as that branch of the tree is taken, and can be used in all routes under that branch.  This is why Roda is called a routing tree web framework.  This is a very simplified example, but if you see this type of duplication in a lot of the Sinatra code you write, your app could probably be made simpler by converting to Roda.</p>
 
 <h3>Faster</h3>
 
@@ -130,7 +130,7 @@ end
 
 <h3>Canonical Routes</h3>
 
-<p>Roda has built in support for canonical routes using <span class="code">r.is</span>. Canonical in this case means no further entries are in the path.  In Cuba, if you want a canonical route, you have to manually use a regexp or string ending with <span class="code">\z</span>.  Using this example:</p>
+<p>Roda has built in support for canonical routes, using <span class="code">r.is</span>. Canonical, in this case, means no further entries are in the path.  In Cuba, if you want a canonical route, you have to manually use a regexp or string ending with <span class="code">\z</span>.  Using this example:</p>
 
 <div class="col-md-6">
 Roda:
