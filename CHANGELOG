@@ -1,5 +1,7 @@
 = HEAD
 
+* Add empty_root plugin, for making root matcher also match empty string (jeremyevans)
+
 * Add roda_class instance methods to RodaRequest and RodaResponse, to DRY up plugin code (jeremyevans)
 
 * Add sinatra_helpers plugin, porting Sinatra::Helpers methods not covered by other plugins (jeremyevans)
