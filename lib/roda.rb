@@ -467,7 +467,8 @@ class Roda
         #   r.path
         #   # => '/foo/bar'
         def path
-          "#{@env[SCRIPT_NAME]}#{@env[PATH_INFO]}"
+          e = @env
+          "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
         end
         alias full_path_info path
 
