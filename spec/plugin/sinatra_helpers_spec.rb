@@ -438,6 +438,11 @@ describe "sinatra_helpers plugin" do
         body('/bar', 'HTTP_HOST'=>'example.org', "SCRIPT_NAME" => '/foo').should == 'http://example.org/foo/bar'
       end
 
+      it 'handles standard HTTP and HTTPS ports' do
+        body('SERVER_NAME'=>'example.org', 'SERVER_PORT' => '80').should == 'http://example.org/'
+        body('SERVER_NAME'=>'example.org', 'SERVER_PORT' => '443', 'HTTPS'=>'on').should == 'https://example.org/'
+      end
+
       it 'handles non-standard HTTP port' do
         body('SERVER_NAME'=>'example.org', 'SERVER_PORT' => '81').should == 'http://example.org:81/'
         body('SERVER_NAME'=>'example.org', 'SERVER_PORT' => '443').should == 'http://example.org:443/'
