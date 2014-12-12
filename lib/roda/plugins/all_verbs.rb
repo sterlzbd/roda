@@ -6,10 +6,9 @@ class Roda
     # trace, unlink.
     #
     # These methods operate just like Roda's default get and post
-    # methods other that the http verb used, so using them without
-    # any arguments just checks for the request method, while
-    # using them with any arguments also checks that the arguments
-    # match the full path.
+    # methods, so using them without any arguments just checks for
+    # the request method, while using them with any arguments also
+    # checks that the arguments match the full path.
     #
     # Example:
     #
@@ -30,12 +29,14 @@ class Roda
     # The verb methods are defined via metaprogramming, so there
     # isn't documentation for the individual methods created.
     module AllVerbs
-      def self.configure(app)
-        %w'delete head options link patch put trace unlink'.each do |v|
-          if ::Rack::Request.method_defined?("#{v}?")
-            app.request_module do
-              app::RodaRequest.def_verb_method(self, v)
-            end
+      module RequestMethods
+        %w'delete head options link patch put trace unlink'.each do |verb|
+          if ::Rack::Request.method_defined?("#{verb}?")
+            class_eval(<<-END, __FILE__, __LINE__+1)
+              def #{verb}(*args, &block)
+                _verb(args, &block) if #{verb}?
+              end
+            END
           end
         end
       end

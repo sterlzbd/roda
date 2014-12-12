@@ -1,5 +1,7 @@
 = HEAD
 
+* Remove def_verb_method request class method (jeremyevans)
+
 * Support :add_script_name, :name, :url, and :url_only options when creating named paths in the path plugin (jeremyevans)
 
 * Add match_affix plugin, for overriding default prefix/suffix used in match patterns (jeremyevans)

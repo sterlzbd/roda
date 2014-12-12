@@ -59,49 +59,15 @@ class Roda
     #
     # In all cases where it uses a 405 response, it also sets the +Allow+
     # header in the response to contain the request methods supported.
-    # 
-    # To make this affect the verb methods added by the all_verbs plugin,
-    # load this plugin first.
+    #
+    # This plugin depends on the all_verbs plugin.  It works by overriding
+    # the verb methods, so it wouldn't work if loaded after the all_verbs
+    # plugin.
     module NotAllowed
-      # Redefine the +r.get+ and +r.post+ methods when loading the plugin.
-      def self.configure(app)
-        app.request_module do
-          app::RodaRequest.def_verb_method(self, :get)
-          app::RodaRequest.def_verb_method(self, :post)
-        end
-      end
-
-      module RequestClassMethods
-        # Define a method named +verb+ in the given module which will
-        # return a 405 response if the method is called with any
-        # arguments and the arguments terminally match but the
-        # request method does not.
-        #
-        # If called without any arguments, check to see if the call
-        # is inside a terminal match, and in that case record the
-        # request method used.
-        def def_verb_method(mod, verb)
-          mod.class_eval(<<-END, __FILE__, __LINE__+1)
-            def #{verb}(*args, &block)
-              if args.empty?
-                @_is_verbs << "#{verb.to_s.upcase}" if defined?(@_is_verbs)
-                always(&block) if #{verb == :get ? :is_get : verb}?
-              else
-                args << ::Roda::RodaPlugins::Base::RequestMethods::TERM
-                if_match(args) do |*a|
-                  res = response
-                  if #{verb == :get ? :is_get : verb}?
-                    block_result(yield(*a))
-                    throw :halt, res.finish
-                  end
-                  res.status = 405
-                  res['Allow'] = '#{verb.to_s.upcase}'
-                  nil
-                end
-              end
-            end
-          END
-        end
+      # Depend on the all_verbs plugin, as this plugin overrides methods
+      # defined by it and calls super.
+      def self.load_dependencies(app)
+        app.plugin :all_verbs
       end
 
       module RequestMethods
@@ -111,21 +77,19 @@ class Roda
         # since there was already a successful terminal match, the
         # request method must not be allowed, so return a 405
         # response in that case.
-        def is(*verbs)
-          super(*verbs) do
+        def is(*args)
+          super(*args) do
             begin
-              @_is_verbs = []
+              is_verbs = @_is_verbs = []
 
-              ret = if verbs.empty?
+              ret = if args.empty?
                 yield
               else
                 yield(*captures)
               end
 
-              unless @_is_verbs.empty?
-                res = response
-                res.status = 405
-                res['Allow'] = @_is_verbs.join(', ')
+              unless is_verbs.empty?
+                method_not_allowed(is_verbs.join(', '))
               end
 
               ret
@@ -133,6 +97,35 @@ class Roda
               @_is_verbs = nil
             end
           end
+        end
+
+        # Setup methods for all verbs.  If inside an is block and not given
+        # arguments, record the verb used.  If given an argument, add an is
+        # check with the argu
+        %w'get post delete head options link patch put trace unlink'.each do |verb|
+          if ::Rack::Request.method_defined?("#{verb}?")
+            class_eval(<<-END, __FILE__, __LINE__+1)
+              def #{verb}(*args, &block)
+                if (empty = args.empty?) && @_is_verbs
+                  @_is_verbs << "#{verb.to_s.upcase}"
+                end
+                super
+                unless empty
+                  is(*args){method_not_allowed("#{verb.to_s.upcase}")}
+                end
+              end
+            END
+          end
+        end
+
+        private
+
+        # Set the response status to 405 (Method Not Allowed), and set the Allow header
+        # to the given string of allowed request methods.
+        def method_not_allowed(verbs)
+          res = response
+          res.status = 405
+          res['Allow'] = verbs
         end
       end
     end
