@@ -29,15 +29,15 @@ class Roda
     #           default template cache.
     # :engine :: The tilt engine to use for rendering, defaults to 'erb'.
     # :escape :: Use Roda's Erubis escaping support, which makes <%= %> escape output,
-    #            <%== %> not escape output, and handles postfix conditions inside
-    #            <%= %> tags.
+    #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
+    #            <tt><%= %></tt> tags.
     # :ext :: The file extension to assume for view files, defaults to the :engine
     #         option.
     # :layout :: The base name of the layout file, defaults to 'layout'.
     # :layout_opts :: The options to use when rendering the layout, if different
     #                 from the default options.
     # :opts :: The tilt options used when rendering templates, defaults to
-    #          {:outvar=>'@_out_buf'}.
+    #          <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
     # :views :: The directory holding the view files, defaults to 'views' in the
     #           current directory.
     #
@@ -62,6 +62,8 @@ class Roda
     # :template :: Provides the name of the template to use.  This allows you
     #              pass a single options hash to the render/view method, while
     #              still allowing you to specify the template name.
+    # :template_block :: Pass this block when creating the underlying template,
+    #                    ignored when using :inline.
     # :template_class :: Provides the template class to use, inside of using
     #                    Tilt or a Tilt[:engine].
     #
@@ -192,10 +194,13 @@ class Roda
           end
 
           if render_opts[:cache]
-            key = path
             template_opts = opts[:opts]
-            if template_class || template_opts
-              key = [path, template_class, template_opts]
+            template_block = opts[:template_block] if !content
+
+            key = if template_class || template_opts || template_block
+              [path, template_class, template_opts, template_block]
+            else
+              path
             end
             opts[:key] = key
           end
