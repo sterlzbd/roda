@@ -36,3 +36,15 @@ describe "static_path_info plugin" do
     body("/a/b").should == "/a|/b"
   end
 end
+
+describe "static_path_info request.path, .path_to_match, and .matched_path" do
+  it "should return the script name and path_info as a string" do
+    app(:static_path_info) do |r|
+      r.on "foo" do
+        "#{r.path}:#{r.matched_path}:#{r.path_to_match}"
+      end
+    end
+
+    body("/foo/bar").should ==  "/foo/bar:/foo:/bar"
+  end
+end

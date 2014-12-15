@@ -584,6 +584,11 @@ class Roda
           end
         end
 
+        # The already matched part of the path, including the original SCRIPT_NAME.
+        def matched_path
+          @env[SCRIPT_NAME]
+        end
+
         # This an an optimized version of Rack::Request#path.
         #
         #   r.env['SCRIPT_NAME'] = '/foo'
@@ -595,6 +600,12 @@ class Roda
           "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
         end
         alias full_path_info path
+
+        # The current path to match requests against.  This is the same as PATH_INFO
+        # in the environment, which gets updated as the request is being routed.
+        def path_to_match
+          @env[PATH_INFO]
+        end
 
         # Match POST requests.  If no arguments are provided, matches all POST
         # requests, otherwise, matches only POST requests where the arguments
@@ -907,12 +918,6 @@ class Roda
           if (v = self[key]) && !v.empty?
             @captures << v
           end
-        end
-
-        # The current path to match requests against.  This is the same as PATH_INFO
-        # in the environment, which gets updated as the request is being routed.
-        def path_to_match
-          @env[PATH_INFO]
         end
 
         # Update PATH_INFO and SCRIPT_NAME based on the matchend and remaining variables.
