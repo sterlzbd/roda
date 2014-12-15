@@ -105,8 +105,8 @@ class Roda
 
         opts[:opts] ||= (opts[:opts] || {}).dup
         opts[:opts][:outvar] ||= '@_out_buf'
-        if RUBY_VERSION >= "1.9"
-          opts[:opts][:default_encoding] ||= Encoding.default_external
+        if RUBY_VERSION >= "1.9" && !opts[:opts].has_key?(:default_encoding)
+          opts[:opts][:default_encoding] = Encoding.default_external
         end
         if opts[:escape]
           opts[:opts][:engine_class] = ErubisEscaping::Eruby

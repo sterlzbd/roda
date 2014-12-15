@@ -1,5 +1,7 @@
 = HEAD
 
+* Don't override explicit nil :default_encoding template option in the render plugin (jeremyevans)
+
 * Add remaining_path and matched_path request methods (jeremyevans)
 
 * Add slash_path_emty plugin, for considering a path of "/" as empty when doing a terminal match (jeremyevans)
