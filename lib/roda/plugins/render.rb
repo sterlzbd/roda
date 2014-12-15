@@ -97,7 +97,12 @@ class Roda
         opts[:views] ||= File.expand_path("views", Dir.pwd)
         opts[:layout] = "layout" unless opts.has_key?(:layout)
         opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
-        opts[:layout_opts][:template] = opts[:layout]
+
+        if layout = opts[:layout]
+          layout = {:template=>layout} unless layout.is_a?(Hash)
+          opts[:layout_opts] = opts[:layout_opts].merge(layout)
+        end
+
         opts[:opts] ||= (opts[:opts] || {}).dup
         opts[:opts][:outvar] ||= '@_out_buf'
         if RUBY_VERSION >= "1.9"

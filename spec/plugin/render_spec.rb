@@ -62,6 +62,11 @@ describe "render plugin" do
     app.plugin :render, :layout => "layout-alternative"
     body("/home").strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
+
+  it "using hash for :layout" do
+    app.plugin :render, :layout => {:inline=> 'a<%= yield %>b'}
+    body("/home").strip.should == "a<h1>Home</h1>\n<p>Hello Agent Smith</p>\nb"
+  end
 end
 
 describe "render plugin" do
