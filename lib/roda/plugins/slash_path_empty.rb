@@ -15,7 +15,7 @@ class Roda
 
         # Consider the path empty if it is "/".
         def empty_path?
-          super || path_to_match == SLASH
+          super || remaining_path == SLASH
         end
       end
     end

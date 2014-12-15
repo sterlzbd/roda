@@ -31,12 +31,12 @@ class Roda
       EMPTY_STRING = ''.freeze
 
       module RequestMethods
-        # Match when the path to match is the empty string,
+        # Match when the remaining path is the empty string,
         # in addition to the default behavior of matching when
-        # the path to match is +/+.
+        # the remaining path is +/+.
         def root(&block)
           super
-          if path_to_match == EMPTY_STRING && is_get?
+          if remaining_path == EMPTY_STRING && is_get?
             always(&block)
           end
         end

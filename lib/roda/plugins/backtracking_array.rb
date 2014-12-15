@@ -36,7 +36,7 @@ class Roda
         def _match_array(arg, rest=nil)
           return super unless rest
 
-          unless path = @path_to_match
+          unless path = @remaining_path
             e = @env
             script = e[SCRIPT_NAME]
             path = e[PATH_INFO]
@@ -55,8 +55,8 @@ class Roda
 
               # Matching all remaining elements failed, reset state
               captures.replace(caps)
-              if @path_to_match
-                @path_to_match = path
+              if @remaining_path
+                @remaining_path = path
               else
                 e[SCRIPT_NAME] = script
                 e[PATH_INFO] = path

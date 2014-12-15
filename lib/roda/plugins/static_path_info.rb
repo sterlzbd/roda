@@ -16,26 +16,26 @@ class Roda
 
         # The current path to match requests against.  This is initialized
         # to PATH_INFO when the request is created.
-        attr_reader :path_to_match
+        attr_reader :remaining_path
 
-        # Set path_to_match when initializing.
+        # Set remaining_path when initializing.
         def initialize(*)
           super
-          @path_to_match = @env[PATH_INFO]
+          @remaining_path = @env[PATH_INFO]
         end
 
         # The already matched part of the path, including the original SCRIPT_NAME.
         def matched_path
           e = @env
-          e[SCRIPT_NAME] + e[PATH_INFO].chomp(@path_to_match)
+          e[SCRIPT_NAME] + e[PATH_INFO].chomp(@remaining_path)
         end
 
-        # Update SCRIPT_NAME/PATH_INFO based on the current path_to_match
+        # Update SCRIPT_NAME/PATH_INFO based on the current remaining_path
         # before dispatching to another rack app, so the app still works as
         # a URL mapper.
         def run(_)
           e = @env
-          path = @path_to_match
+          path = @remaining_path
           e[SCRIPT_NAME] += e[PATH_INFO].chomp(path)
           e[PATH_INFO] = path
           super
@@ -43,18 +43,18 @@ class Roda
 
         private
 
-        # Update path_to_match with the remaining characters
-        def update_path_to_match(remaining)
-          @path_to_match = remaining
+        # Update remaining_path with the remaining characters
+        def update_remaining_path(remaining)
+          @remaining_path = remaining
         end
 
-        # Yield to the block, restoring the path_to_match before
+        # Yield to the block, restoring the remaining_path before
         # the method returns.
-        def keep_path_to_match
-          path = @path_to_match
+        def keep_remaining_path
+          path = @remaining_path
           yield
         ensure
-          @path_to_match = path
+          @remaining_path = path
         end
       end
     end

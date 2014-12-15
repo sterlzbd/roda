@@ -12,11 +12,11 @@ describe "request.full_path_info" do
   end
 end
 
-describe "request.path, .path_to_match, and .matched_path" do
+describe "request.path, .remaining_path, and .matched_path" do
   it "should return the script name and path_info as a string" do
     app do |r|
       r.on "foo" do
-        "#{r.path}:#{r.matched_path}:#{r.path_to_match}"
+        "#{r.path}:#{r.matched_path}:#{r.remaining_path}"
       end
     end
 

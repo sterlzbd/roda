@@ -603,7 +603,7 @@ class Roda
 
         # The current path to match requests against.  This is the same as PATH_INFO
         # in the environment, which gets updated as the request is being routed.
-        def path_to_match
+        def remaining_path
           @env[PATH_INFO]
         end
 
@@ -705,7 +705,7 @@ class Roda
         # Use <tt>r.get true</tt> to handle +GET+ requests where the current
         # path is empty.
         def root(&block)
-          if path_to_match == SLASH && is_get?
+          if remaining_path == SLASH && is_get?
             always(&block)
           end
         end
@@ -803,8 +803,8 @@ class Roda
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
-          if matchdata = path_to_match.match(pattern)
-            update_path_to_match(matchdata.post_match)
+          if matchdata = remaining_path.match(pattern)
+            update_remaining_path(matchdata.post_match)
             @captures.concat(matchdata.captures)
           end
         end
@@ -830,14 +830,14 @@ class Roda
 
         # Whether the current path is considered empty.
         def empty_path?
-          path_to_match == EMPTY_STRING
+          remaining_path == EMPTY_STRING
         end
 
         # If all of the arguments match, yields to the match block and
         # returns the rack response when the block returns.  If any of
         # the match arguments doesn't match, does nothing.
         def if_match(args)
-          keep_path_to_match do
+          keep_remaining_path do
             # For every block, we make sure to reset captures so that
             # nesting matchers won't mess with each other's captures.
             @captures.clear
@@ -850,7 +850,7 @@ class Roda
         
         # Yield to the block, restoring SCRIPT_NAME and PATH_INFO to
         # their initial values before returning from the block.
-        def keep_path_to_match
+        def keep_remaining_path
           env = @env
           script = env[sn = SCRIPT_NAME]
           path = env[pi = PATH_INFO]
@@ -921,7 +921,7 @@ class Roda
         end
 
         # Update PATH_INFO and SCRIPT_NAME based on the matchend and remaining variables.
-        def update_path_to_match(remaining)
+        def update_remaining_path(remaining)
           e = @env
 
           # Don't mutate SCRIPT_NAME, breaks try
