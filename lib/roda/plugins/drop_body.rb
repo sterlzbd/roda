@@ -3,11 +3,11 @@ class Roda
     # The drop_body plugin automatically drops the body and
     # Content-Type/Content-Length headers from the response if
     # the response status indicates that the response should
-    # not include a body (response statuses 101, 102, 204, 205,
+    # not include a body (response statuses 100, 101, 102, 204, 205,
     # and 304).
     module DropBody
       module ResponseMethods
-        DROP_BODY_STATUSES = [101, 102, 204, 205, 304].freeze
+        DROP_BODY_STATUSES = [100, 101, 102, 204, 205, 304].freeze
         EMPTY_BODY = [].freeze
         CONTENT_LENGTH = "Content-Length".freeze
         CONTENT_TYPE = "Content-Type".freeze
