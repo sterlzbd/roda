@@ -8,7 +8,7 @@ class Roda
     # current environment.
     #
     # The default environment for the application is based on
-    # ENV['RACK_ENV'].
+    # <tt>ENV['RACK_ENV']</tt>.
     #
     # Example:
     #
