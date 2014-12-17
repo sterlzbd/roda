@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::Delegate</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::Delegate
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/delegate_rb.html">lib/roda/plugins/delegate.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The delegate plugin allows you to easily setup instance methods in the
+            scope of the route block that call methods on the related request or
+            response, which may offer a simpler API in some cases. <a
+            href="../../Roda.html">Roda</a> doesn&#39;t automatically setup such
+            delegate methods because it pollutes the application&#39;s method
+            namespace, but this plugin allows the user to do so.</p>
+            
+            <p>Here&#39;s an example based on the README&#39;s initial example, using the
+            request_delegate method to simplify the DSL:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">delegate</span>&#x000A;<span class="ruby-identifier">request_delegate</span> :<span class="ruby-identifier">root</span>, :<span class="ruby-identifier">on</span>, :<span class="ruby-identifier">is</span>, :<span class="ruby-identifier">get</span>, :<span class="ruby-identifier">post</span>, :<span class="ruby-identifier">redirect</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># GET / request</span>&#x000A;  <span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># /hello branch</span>&#x000A;  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># GET /hello/world request</span>&#x000A;    <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># /hello request</span>&#x000A;    <span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># GET /hello request</span>&#x000A;      <span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># POST /hello request</span>&#x000A;      <span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Someone said hello!&quot;</span>&#x000A;        <span class="ruby-identifier">redirect</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="Delegate/ClassMethods.html">Roda::RodaPlugins::Delegate::ClassMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

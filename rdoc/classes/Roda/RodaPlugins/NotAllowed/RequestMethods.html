@@ -47,6 +47,12 @@
           </div>
           <div id='context'>
           </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="RequestMethods/Rack.html">Roda::RodaPlugins::NotAllowed::RequestMethods::Rack</a></li>
+            </ol>
+          </div>
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
@@ -54,7 +60,7 @@
                 <a name='method-i-is'></a>
                 <div class='synopsis'>
                   <span class='name'>is</span>
-                  <span class='arguments'>(*verbs)</span>
+                  <span class='arguments'>(*args)</span>
                 </div>
                 <div class='description'>
                   
@@ -68,7 +74,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-is-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-is-source'><span class="ruby-comment"># File lib/roda/plugins/not_allowed.rb, line 113</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">verbs</span>)&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">verbs</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">begin</span>&#x000A;      <span class="ruby-ivar">@_is_verbs</span> = []&#x000A;&#x000A;      <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">verbs</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-keyword">yield</span>&#x000A;      <span class="ruby-keyword">else</span>&#x000A;        <span class="ruby-keyword">yield</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">captures</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@_is_verbs</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">405</span>&#x000A;        <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Allow&#39;</span>] = <span class="ruby-ivar">@_is_verbs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;, &#39;</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-identifier">ret</span>&#x000A;    <span class="ruby-keyword">ensure</span>&#x000A;      <span class="ruby-ivar">@_is_verbs</span> = <span class="ruby-keyword">nil</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-is-source'><span class="ruby-comment"># File lib/roda/plugins/not_allowed.rb, line 80</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">begin</span>&#x000A;      <span class="ruby-identifier">is_verbs</span> = <span class="ruby-ivar">@_is_verbs</span> = []&#x000A;&#x000A;      <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-keyword">yield</span>&#x000A;      <span class="ruby-keyword">else</span>&#x000A;        <span class="ruby-keyword">yield</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">captures</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-keyword">unless</span> <span class="ruby-identifier">is_verbs</span>.<span class="ruby-identifier">empty?</span>&#x000A;        <span class="ruby-identifier">method_not_allowed</span>(<span class="ruby-identifier">is_verbs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;, &#39;</span>))&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-identifier">ret</span>&#x000A;    <span class="ruby-keyword">ensure</span>&#x000A;      <span class="ruby-ivar">@_is_verbs</span> = <span class="ruby-keyword">nil</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -42,47 +42,29 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#attribute-i-default_headers">default_headers</a></li>
-              <li><a target="docwin" href="#method-i-inherited">inherited</a></li>
+              <li><a target="docwin" href="#method-i-default_headers">default_headers</a></li>
             </ol>
           </div>
           <div id='context'>
           </div>
           <div id='section'>
-            <div id='attribute-list'>
-              <h2 class='section-bar'>Attributes</h2>
-              <div class='name-list'>
-                <table>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-default_headers'>default_headers</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The default response headers to use for the current class.</p>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-inherited'>
-                <a name='method-i-inherited'></a>
+              <div class='method public-instance' id='method-method-i-default_headers'>
+                <a name='method-i-default_headers'></a>
                 <div class='synopsis'>
-                  <span class='name'>inherited</span>
-                  <span class='arguments'>(subclass)</span>
+                  <span class='name'>default_headers</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Copy the default headers into the subclass when inheriting.</p>
+                  <p>The default response headers to use for the current class.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inherited-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-default_headers-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/default_headers.rb, line 34</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value">:@default_headers</span>, <span class="ruby-identifier">default_headers</span>.<span class="ruby-identifier">dup</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-default_headers-source'><span class="ruby-comment"># File lib/roda/plugins/default_headers.rb, line 28</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">default_headers</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_headers</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

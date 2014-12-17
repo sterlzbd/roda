@@ -47,17 +47,22 @@
             <p>It adds a <code>:header</code> matcher for matching on arbitrary headers,
             which matches if the header is present:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">header=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;X-App-Token&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">header=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;X-App-Token&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>It adds a <code>:host</code> matcher for matching by the host of the
             request:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo.example.com&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo.example.com&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>It adds a <code>:user_agent</code> matcher for matching on a user agent
+            patterns, which yields the regexp captures to the block:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">user_agent=</span><span class="ruby-operator">&gt;</span><span class="ruby-regexp">/Chrome\/([.\d]+)/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chrome_version</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>It adds an <code>:accept</code> matcher for matching based on the Accept
             header:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">accept=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/csv&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">accept=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/csv&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>Note that the accept matcher is very simple and cannot handle wildcards,
             priorities, or anything but a simple comma separated list of mime types.</p>

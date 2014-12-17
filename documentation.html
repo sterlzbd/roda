@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Roda: Routing Tree Web Framework - Documentation</title>
+    <title>Roda: Routing Tree Web Framework Toolkit - Documentation</title>
     <link href='http://fonts.googleapis.com/css?family=Italianno|Open+Sans|PT+Mono' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/default.min.css">
@@ -32,16 +32,16 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v1.1.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v1.2.0)</h1>
 
-<h2><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
+<h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
-<h2>Guides</h2>
+<h2 id="guides">Guides</h2>
 <ul>
   <li><a href="rdoc/files/doc/conventions_rdoc.html">Conventions</a></li>
 </ul>
 
-<h2><a href="rdoc/index.html">RDoc</a> (frames)</h2>
+<h2 id="rdoc"><a href="rdoc/index.html">RDoc</a> (frames)</h2>
 
 <p>Here are direct links to the most important pages:</p>
 
@@ -52,77 +52,128 @@
   <li><a href="rdoc/classes/Roda/RodaPlugins/Base/ResponseMethods.html">Roda ResponseMethods</a> (methods for maniputing the response directly)</li>
 </ul>
 
-<h2>Plugins</h2>
+<h2 id="plugins">Plugins</h2>
 
 <p>Plugins are a very important part of Roda, since by design Roda has a very small core.</p>
 
-<h3>Plugins that Ship with Roda</h3>
+<h3 id="included-plugins">Plugins that Ship with Roda</h3>
 
 <ul>
-<li><a href="rdoc/classes/Roda/RodaPlugins/AllVerbs.html">all_verbs</a>: Adds request routing methods for all http verbs.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Assets.html">assets</a>: Adds support for rendering CSS/JS javascript assets on the fly in development, or compiling them into a single compressed file in production.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/BacktrackingArray.html">backtracking_array</a>: Allows array matchers to backtrack if later matchers do not match.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Caching.html">caching</a>: Adds request and response methods related to http caching.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Chunked.html">chunked</a>: Adds support for streaming template responses using Transfer-Encoding: chunked.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/ContentFor.html">content_for</a>: Allows storage of content in one template and retrieval of that content in a different template.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Csrf.html">csrf</a>: Adds CSRF protection and helper methods using <a href="https://github.com/baldowl/rack_csrf">rack_csrf</a>.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/DefaultHeaders.html">default_headers</a>: Allows modifying the default headers for responses.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/ErrorEmail.html">error_email</a>: Adds ability to easily email a notification when an error is raised by the application.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling</a>.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/H.html">h</a>: Adds h method for html escaping.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Head.html">head</a>: Treat HEAD requests like GET requests with an empty response body.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/HeaderMatchers.html">header_matchers</a>: Adds matchers for hostname, accept, or presence of arbitrary headers.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/IndifferentParams.html">indifferent_params</a>: Adds params method for indifferent parameters.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Json.html">json</a>: Allows match blocks to return arrays and hashes, using a json representation as the response body.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Middleware.html">middleware</a>: Allows the Roda app to be used as middleware by another app.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows for multiple named route blocks that can be dispatched to inside main route block.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/NotAllowed.html">not_allowed</a>: Adds support for automatically returning 405 Method Not Allowed responses.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/NotFound.html">not_found</a>: Adds not_found method for handling responses not otherwise handled by a route.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Path.html">path</a>: Adds support for named paths.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/PerThreadCaching.html">per_thread_caching</a>: Switches the thread-safe cache from a shared cache to a per-thread cache.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/RenderEach.html">render_each</a>: Render a template for each value in an enumerable.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/SymbolMatchers.html">symbol_matchers</a>: Adds support for symbol-specific matching regexps.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/SymbolViews.html">symbol_views</a>: Allows match blocks to return template name symbols, uses the template view as the response body.</li>
-<li><a href="rdoc/classes/Roda/RodaPlugins/ViewSubdirs.html">view_subdirs</a>: Allows for setting a view subdirectory to use on a per-request basis.</li>
+  <li>Core Routing: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/AllVerbs.html">all_verbs</a>: Adds request routing methods for all http verbs.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/BacktrackingArray.html">backtracking_array</a>: Allows array matchers to backtrack if later matchers do not match.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ClassLevelRouting.html">class_level_routing</a>: Adds class level routing methods, for a DSL similar to <a href="https://github.com/sinatra/sinatra">sinatra</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Head.html">head</a>: Treat HEAD requests like GET requests with an empty response body.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows for multiple named route blocks that can be dispatched to inside main route block.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRun.html">multi_run</a>: Adds the ability to dispatch to multiple rack applications based on the request path prefix.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/NotAllowed.html">not_allowed</a>: Adds support for automatically returning 405 Method Not Allowed responses.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/StaticPathInfo.html">static_path_info</a>: Makes the Roda app not modify PATH_INFO or SCRIPT_NAME during routing.</li>
+  </ul></li>
+  <li>Rendering: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Assets.html">assets</a>: Adds support for rendering CSS/JS javascript assets on the fly in development, or compiling them into a single compressed file in production.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Chunked.html">chunked</a>: Adds support for streaming template responses using Transfer-Encoding: chunked.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Json.html">json</a>: Allows match blocks to return arrays and hashes, using a json representation as the response body.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/NamedTemplates.html">named_templates</a>: Adds the ability to create inline templates by name, instead of storing them in the file system.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ViewSubdirs.html">view_subdirs</a>: Allows for setting a view subdirectory to use on a per-request basis.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolViews.html">symbol_views</a>: Allows match blocks to return template name symbols, uses the template view as the response body.</li>
+  </ul></li>
+  <li>View Helpers: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ContentFor.html">content_for</a>: Allows storage of content in one template and retrieval of that content in a different template.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Csrf.html">csrf</a>: Adds CSRF protection and helper methods using <a href="https://github.com/baldowl/rack_csrf">rack_csrf</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/H.html">h</a>: Adds h method for html escaping.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/RenderEach.html">render_each</a>: Render a template for each value in an enumerable.</li>
+  </ul></li>
+  <li>Request/Response Helpers: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Caching.html">caching</a>: Adds request and response methods related to http caching.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/DefaultHeaders.html">default_headers</a>: Allows modifying the default headers for responses.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Delegate.html">delegate</a>: Adds class methods for creating instance methods that delegate to the request or response.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/DropBody.html">drop_body</a>: Automatically drops response body and Content-Type/Content-Length headers for response statuses indicating no body.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/SinatraHelpers.html">sinatra_helpers</a>: Port of Sinatra::Helpers methods not covered by other plugins.</li>
+  </ul></li>
+  <li>Routing Helpers: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/NotFound.html">not_found</a>: Adds not_found method for handling responses not otherwise handled by a route.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
+  </ul></li>
+  <li>Matchers: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/EmptyRoot.html">empty_root</a>: Makes root matcher match empty string in addition to single slash.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/HeaderMatchers.html">header_matchers</a>: Adds matchers for hostname, accept, or presence of arbitrary headers.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/MatchAffix.html">match_affix</a>: Adds support for overriding default prefix/suffix used in match patterns.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/SlashPathEmpty.html">slash_path_empty</a>: Considers a path of &quot;/&quot; as an empty path when doing a terminal match.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolMatchers.html">symbol_matchers</a>: Adds support for symbol-specific matching regexps.</li>
+  </ul></li>
+  <li>Other: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/DelayBuild.html">delay_build</a>: Delay building the rack app until Roda.app is called.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Environments.html">environments</a>: Adds support for handling different execution environments (development/test/production).</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorEmail.html">error_email</a>: Adds ability to easily email a notification when an error is raised by the application.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/IndifferentParams.html">indifferent_params</a>: Adds params method for indifferent parameters.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Mailer.html">mailer</a>: Adds support for sending emails using the routing tree.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Middleware.html">middleware</a>: Allows the Roda app to be used as middleware by another app.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Path.html">path</a>: Adds support for named paths.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/PerThreadCaching.html">per_thread_caching</a>: Switches the thread-safe cache from a shared cache to a per-thread cache.</li>
+  </ul></li>
 </ul>
 
-<h3>External Plugins</h3>
+<h3 id="external">External</h3>
+
+<h4>Plugins</h4>
 
 <p>These projects ship external plugins for Roda:</p>
 
 <ul>
 <li><a href="https://github.com/jeremyevans/autoforme">autoforme</a>: Adds autoforme method for automatic creation of administrative front-end for Sequel models.</li>
 <li><a href="https://github.com/jeremyevans/forme">forme</a>: Adds form method for simple creation of html forms inside erb templates.</li>
+<li><a href="https://github.com/cj/roda-component">roda-component</a>: Adds realtime components using faye and opal.</li>
+<li><a href="https://github.com/beno/roda-rest-api">roda-rest-api</a>: Adds support for easily creating RESTful APIs.</li>
+</ul>
+
+<h4>Libraries</h4>
+
+<p>These external projects are related to Roda:</p>
+
+<ul>
+<li><a href="https://github.com/mikz/newrelic-roda">newrelic-roda</a>: Adds newrelic instrument for Roda.</li>
+<li><a href="https://github.com/cj/roda-bin">roda-bin</a>: Add bin/roda binary for a simple development server that reloads on changes.</li>
 </ul>
 
 <h2><a href="rdoc/files/CHANGELOG.html">Change Log</a></h2>
 
-<h2>Release Notes</h2>
+<h2 id="release-notes">Release Notes</h2>
 <ul>
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/1_1_0_txt.html'>1.1</a> | <a href='rdoc/files/doc/release_notes/1_0_0_txt.html'>1.0</a>
+          <a href='rdoc/files/doc/release_notes/1_2_0_txt.html'>1.2</a> | <a href='rdoc/files/doc/release_notes/1_1_0_txt.html'>1.1</a> | <a href='rdoc/files/doc/release_notes/1_0_0_txt.html'>1.0</a>
         </li>
       
   
 </ul>
 
-<h2><a href="rdoc/files/MIT-LICENSE.html">License</a></h2>
+<h2 id="license"><a href="rdoc/files/MIT-LICENSE.html">License</a></h2>
 
-
-<h2>Presentations</h2>
+<h2 id="presentations">Presentations</h2>
 
 <ul>
-<li><a href="http://code.jeremyevans.net/presentations/rubyconf2014/index.html">&quot;Roda: The Routing Tree Web Framework&quot; Presentation at RubyConf 2014</a> (<a href="http://code.jeremyevans.net/presentations/sacruby201411/index.html">4x3 Version</a>) (<a href="http://www.confreaks.com/videos/4833-RubyConf2014-roda-the-routing-tree-web-framework">Video</a>)</li>
+  <li><a href="http://code.jeremyevans.net/presentations/rubyconf2014/index.html">&quot;Roda: The Routing Tree Web Framework&quot; Presentation at RubyConf 2014</a> (<a href="http://code.jeremyevans.net/presentations/sacruby201411/index.html">4x3 Version</a>) (<a href="http://www.confreaks.com/videos/4833-RubyConf2014-roda-the-routing-tree-web-framework">Video</a>)</li>
 </ul>
 
+<h2 id="apps">Applications Using Roda</h2>
+
+<p>Here are some open source applications that use Roda:</p>
+
+<ul>
+  <li><a href="https://github.com/enebo/alienist_viewer">Alienist Viewer</a> (JRuby Memory Dump Viewer)</li>
+  <li><a href="https://github.com/jeremyevans/spam">SPAM</a> (Simple Personal Accounting Manager)</li>
+  <li><a href="https://github.com/jeremyevans/giftsmas">Giftsmas</a> (Gift Tracking)</li>
+  <li><a href="https://github.com/jeremyevans/kaeruera">KaeruEra</a> (Exception Tracking)</li>
+  <li><a href="https://github.com/jeremyevans/forme/tree/master/demo-site">Forme Demo</a> (Demo Site for Forme)</li>
+  <li><a href="https://github.com/jeremyevans/autoforme/tree/master/demo-site">AutoForme Demo</a> (Demo Site for AutoForme)</li>
+</ul>
 
     </div>
   </body>

@@ -46,13 +46,17 @@
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>, :<span class="ruby-identifier">layout=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;./layout&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">view_subdirs</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">set_view_subdir</span> <span class="ruby-string">&#39;users&#39;</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> :<span class="ruby-identifier">id</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;profile&#39;</span> <span class="ruby-comment"># uses ./views/users/profile.erb</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;list&#39;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;lists/users&#39;</span> <span class="ruby-comment"># uses ./views/lists/users.erb</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
-            <p>This plugin should be loaded after the render plugin, since it works by
-            overriding parts of the render plugin.</p>
-            
             <p>Note that when a view subdirectory is set, the layout will also be looked
             up in the subdirectory unless it contains a slash.  So if you want to use a
             view subdirectory for templates but have a shared layout, you should make
             sure your layout contains a slash, similar to the example above.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-load_dependencies">load_dependencies</a></li>
+            </ol>
           </div>
           <div id='context'>
           </div>
@@ -63,6 +67,27 @@
             </ol>
           </div>
           <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-load_dependencies'>
+                <a name='method-c-load_dependencies'></a>
+                <div class='synopsis'>
+                  <span class='name'>load_dependencies</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Load the render plugin before this plugin, since this plugin works by
+                  overriding a method in the render plugin.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/view_subdirs.rb, line 34</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

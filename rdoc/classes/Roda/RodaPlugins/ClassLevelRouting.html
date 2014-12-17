@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::ClassLevelRouting</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::ClassLevelRouting
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/class_level_routing_rb.html">lib/roda/plugins/class_level_routing.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The class_level_routing plugin adds routing methods at the class level,
+            which can be used instead of or in addition to using the normal
+            <code>route</code> method to start the routing tree.  If a request is not
+            matched by the normal routing tree, the class level routes will be tried. 
+            This offers a more Sinatra-like API, while still allowing you to use a
+            routing tree inside individual actions.</p>
+            
+            <p>Here&#39;s the first example from the <a
+            href="../../../files/README_rdoc.html">README</a>, modified to use the
+            class_level_routing plugin:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">class_level_routing</span>&#x000A;&#x000A;  <span class="ruby-comment"># GET / request</span>&#x000A;  <span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># GET /hello/world request</span>&#x000A;  <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;hello/world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># /hello request</span>&#x000A;  <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># GET /hello request</span>&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># POST /hello request</span>&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Someone said hello!&quot;</span>&#x000A;      <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>When using the the class_level_routing plugin with nested routes, you may
+            also want to use the delegate plugin to delegate certain instance methods
+            to the request object, so you don&#39;t have to continually use
+            <code>request.</code> in your routing blocks.</p>
+            
+            <p>Note that class level routing is implemented via a simple array of routes,
+            so routing performance will degrade linearly as the number of routes
+            increases.  For best performance, you should use the normal
+            <code>route</code> class method to define your routing tree.  This plugin
+            does make it simpler to add additional routes after the routing tree has
+            already been defined, though.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-configure">configure</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="ClassLevelRouting/ClassMethods.html">Roda::RodaPlugins::ClassLevelRouting::ClassMethods</a></li>
+              <li><a target="docwin" href="ClassLevelRouting/InstanceMethods.html">Roda::RodaPlugins::ClassLevelRouting::InstanceMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Initialize the class_routes array when the plugin is loaded.  Also, if the
+                  application doesn&#39;t currently have a routing block, setup an empty
+                  routing block so that things will still work if a routing block isn&#39;t
+                  added.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/class_level_routing.rb, line 52</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">route</span>{} <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">route_block</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:class_level_routes</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

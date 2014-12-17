@@ -42,49 +42,29 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-inherited">inherited</a></li>
-              <li><a target="docwin" href="#attribute-i-json_result_classes">json_result_classes</a></li>
+              <li><a target="docwin" href="#method-i-json_result_classes">json_result_classes</a></li>
             </ol>
           </div>
           <div id='context'>
           </div>
           <div id='section'>
-            <div id='attribute-list'>
-              <h2 class='section-bar'>Attributes</h2>
-              <div class='name-list'>
-                <table>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>
-                      <a name='attribute-i-json_result_classes'>json_result_classes</a>
-                    </td>
-                    <td class='context-item-value'>[R]</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>The classes that should be automatically converted to json</p>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-inherited'>
-                <a name='method-i-inherited'></a>
+              <div class='method public-instance' id='method-method-i-json_result_classes'>
+                <a name='method-i-json_result_classes'></a>
                 <div class='synopsis'>
-                  <span class='name'>inherited</span>
-                  <span class='arguments'>(subclass)</span>
+                  <span class='name'>json_result_classes</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Copy the <a
-                  href="ClassMethods.html#attribute-i-json_result_classes">#json_result_classes</a>
-                  into the subclass</p>
+                  <p>The classes that should be automatically converted to json</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inherited-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-json_result_classes-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 49</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value">:@json_result_classes</span>, <span class="ruby-identifier">json_result_classes</span>.<span class="ruby-identifier">dup</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-json_result_classes-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">json_result_classes</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

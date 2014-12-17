@@ -46,6 +46,26 @@
             Example:</p>
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">path</span>&#x000A;<span class="ruby-identifier">path</span> :<span class="ruby-identifier">foo</span>, <span class="ruby-string">&#39;/foo&#39;</span>&#x000A;<span class="ruby-identifier">path</span> :<span class="ruby-identifier">bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-node">&quot;/bar/#{bar.id}&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">bar</span> = <span class="ruby-constant">Bar</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;bar&#39;</span>])&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">bar_path</span>(<span class="ruby-identifier">bar</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>The path method accepts the following options:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_script_name </td><td>
+            <p>Prefix the path generated with SCRIPT_NAME.</p>
+            </td></tr><tr><td class='label'>:name </td><td>
+            <p>Provide a different name for the method, instead of using
+            <code>*_path</code>.</p>
+            </td></tr><tr><td class='label'>:url </td><td>
+            <p>Create a url method in addition to the path method, which will prefix the
+            string generated with the appropriate scheme, host, and port.  If true,
+            creates a <code>*_url</code> method.  If a Symbol or String, uses the value
+            as the url method name.</p>
+            </td></tr><tr><td class='label'>:url_only </td><td>
+            <p>Do not create a path method, just a url method.</p>
+            </td></tr></tbody></table>
+            
+            <p>Note that if :add_script_name, :url, or :url_only is used, this will also
+            create a <code>_*_path</code> method.  This is necessary in order to
+            support path methods that accept blocks, as you can&#39;t pass a block to a
+            block that is instance_execed.</p>
           </div>
           <div id='context'>
           </div>
@@ -56,6 +76,20 @@
             </ol>
           </div>
           <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>DEFAULT_PORTS</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{'http' => 80, 'https' => 443}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

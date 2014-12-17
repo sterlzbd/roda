@@ -43,10 +43,10 @@
             The following verbs are added, assuming rack handles them: delete, head,
             options, link, patch, put, trace, unlink.</p>
             
-            <p>These methods operate just like Roda&#39;s default get and post methods
-            other that the http verb used, so using them without any arguments just
-            checks for the request method, while using them with any arguments also
-            checks that the arguments match the full path.</p>
+            <p>These methods operate just like Roda&#39;s default get and post methods, so
+            using them without any arguments just checks for the request method, while
+            using them with any arguments also checks that the arguments match the full
+            path.</p>
             
             <p>Example:</p>
             
@@ -55,35 +55,15 @@
             <p>The verb methods are defined via metaprogramming, so there isn&#39;t
             documentation for the individual methods created.</p>
           </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a target="docwin" href="#method-c-configure">configure</a></li>
-            </ol>
-          </div>
           <div id='context'>
           </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="AllVerbs/RequestMethods.html">Roda::RodaPlugins::AllVerbs::RequestMethods</a></li>
+            </ol>
+          </div>
           <div id='section'>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-configure'>
-                <a name='method-c-configure'></a>
-                <div class='synopsis'>
-                  <span class='name'>configure</span>
-                  <span class='arguments'>(app)</span>
-                </div>
-                <div class='description'>
-                  
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/all_verbs.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-node">%wdelete head options link patch put trace unlink&#39;</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Request</span>.<span class="ruby-identifier">method_defined?</span>(<span class="ruby-node">&quot;#{v}?&quot;</span>)&#x000A;      <span class="ruby-identifier">app</span>.<span class="ruby-identifier">request_module</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">def_verb_method</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">v</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

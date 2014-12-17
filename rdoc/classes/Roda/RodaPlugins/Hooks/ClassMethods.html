@@ -44,7 +44,6 @@
             <ol>
               <li><a target="docwin" href="#method-i-after">after</a></li>
               <li><a target="docwin" href="#method-i-before">before</a></li>
-              <li><a target="docwin" href="#method-i-inherited">inherited</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -69,7 +68,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-after-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-after-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">after</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-ivar">@after</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">b</span> = <span class="ruby-ivar">@after</span>&#x000A;      <span class="ruby-ivar">@after</span> = <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">res</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)&#x000A;        <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">res</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-ivar">@after</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-after-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 42</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">after</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hook</span>] = <span class="ruby-keyword">if</span> <span class="ruby-identifier">b</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hook</span>]&#x000A;    <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">res</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)&#x000A;      <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">res</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-before'>
@@ -89,24 +88,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-before-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-before-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 62</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">before</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-ivar">@before</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">b</span> = <span class="ruby-ivar">@before</span>&#x000A;      <span class="ruby-ivar">@before</span> = <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;        <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-ivar">@before</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-inherited'>
-                <a name='method-i-inherited'></a>
-                <div class='synopsis'>
-                  <span class='name'>inherited</span>
-                  <span class='arguments'>(subclass)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Copy the before and after hooks into the subclasses when inheriting</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inherited-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 78</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value">:@before</span>, <span class="ruby-ivar">@before</span>)&#x000A;  <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value">:@after</span>, <span class="ruby-ivar">@after</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-before-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 57</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">before</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hook</span>] = <span class="ruby-keyword">if</span> <span class="ruby-identifier">b</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hook</span>]&#x000A;    <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;      <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
