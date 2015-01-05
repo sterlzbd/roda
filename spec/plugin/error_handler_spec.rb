@@ -39,6 +39,37 @@ describe "error_handler plugin" do
     status.should == 501
   end
 
+  it "calculates correct Content-Length" do
+    app(:bare) do
+      plugin :error_handler do |e|
+        "a"
+      end
+
+      route do |r|
+        raise ArgumentError, "bad idea"
+      end
+    end
+
+    header('Content-Length').should == "1"
+  end
+
+  it "clears existing headers" do
+    app(:bare) do
+      plugin :error_handler do |e|
+        "a"
+      end
+
+      route do |r|
+        response['Content-Type'] = 'text/pdf'
+        response['Foo'] = 'bar'
+        raise ArgumentError, "bad idea"
+      end
+    end
+
+    header('Content-Type').should == 'text/html'
+    header('Foo').should == nil
+  end
+
   it "can set error via the plugin block" do
     app(:bare) do
       plugin :error_handler do |e|

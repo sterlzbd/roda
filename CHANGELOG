@@ -1,5 +1,7 @@
 = HEAD
 
+* Make error_handler plugin use a new response instead of reusing existing response (jeremyevans)
+
 * Make RodaResponse a subclass of Object instead of Rack::Response (jeremyevans)
 
 = 1.2.0 (2014-12-17)

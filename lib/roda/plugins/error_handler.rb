@@ -21,9 +21,11 @@ class Roda
     # In both cases, the exception instance is passed into the block,
     # and the block can return the request body via a string.
     #
-    # If an exception is raised, the response status will be set to 500
-    # before executing the error handler.  The error handler can change
-    # the response status if necessary.
+    # If an exception is raised, a new response will be used, with the
+    # default status set to 500, before executing the error handler.
+    # The error handler can change the response status if necessary,
+    # as well set headers and/or write to the body, just like a regular
+    # request.
     module ErrorHandler
       # If a block is given, automatically call the +error+ method on
       # the Roda class with it.
@@ -51,7 +53,8 @@ class Roda
         def _route
           super
         rescue => e
-          @_response.status = 500
+          res = @_response = self.class::RodaResponse.new
+          res.status = 500
           super{handle_error(e)}
         end
 
