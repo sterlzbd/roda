@@ -36,6 +36,18 @@ describe "response #[] and #[]=" do
   end
 end
 
+describe "response #headers and #body" do
+  it "should return headers and body" do
+    app do |r|
+      response.headers['foo'] = 'bar'
+      response.write response.body.is_a?(Array)
+    end
+
+    header('foo').should == "bar"
+    body.should == 'true'
+  end
+end
+
 describe "response #write" do
   it "should add to body" do
     app do |r|

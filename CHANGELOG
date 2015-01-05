@@ -1,3 +1,7 @@
+= HEAD
+
+* Make RodaResponse a subclass of Object instead of Rack::Response (jeremyevans)
+
 = 1.2.0 (2014-12-17)
 
 * Don't override explicit nil :default_encoding template option in the render plugin (jeremyevans)

@@ -41,7 +41,7 @@ class Roda
   # Base class used for Roda requests.  The instance methods for this
   # class are added by Roda::RodaPlugins::Base::RequestMethods, the
   # class methods are added by Roda::RodaPlugins::Base::RequestClassMethods.
-  class RodaRequest < ::Rack::Request;
+  class RodaRequest < ::Rack::Request
     @roda_class = ::Roda
     @match_pattern_cache = ::Roda::RodaCache.new
   end
@@ -49,7 +49,7 @@ class Roda
   # Base class used for Roda responses.  The instance methods for this
   # class are added by Roda::RodaPlugins::Base::ResponseMethods, the class
   # methods are added by Roda::RodaPlugins::Base::ResponseClassMethods.
-  class RodaResponse < ::Rack::Response;
+  class RodaResponse
     @roda_class = ::Roda
   end
 
@@ -948,6 +948,9 @@ class Roda
         CONTENT_LENGTH = "Content-Length".freeze
         DEFAULT_HEADERS = {"Content-Type" => "text/html".freeze}.freeze
         LOCATION = "Location".freeze
+
+        # The body for the current response.
+        attr_reader :body
 
         # The hash of response headers for the current response.
         attr_reader :headers
