@@ -38,6 +38,35 @@ describe "not_found plugin" do
     status.should == 403
   end
 
+  it "calculates correct Content-Length" do
+    app(:bare) do
+      plugin :not_found do
+        "a"
+      end
+
+      route{}
+    end
+
+    header('Content-Length').should == "1"
+  end
+
+  it "clears existing headers" do
+    app(:bare) do
+      plugin :not_found do ||
+        "a"
+      end
+
+      route do |r|
+        response['Content-Type'] = 'text/pdf'
+        response['Foo'] = 'bar'
+        nil
+      end
+    end
+
+    header('Content-Type').should == 'text/html'
+    header('Foo').should == nil
+  end
+
   it "does not modify behavior if not_found is not called" do
     app(:not_found) do |r|
       r.on "a" do

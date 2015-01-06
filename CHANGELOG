@@ -1,5 +1,7 @@
 = HEAD
 
+* Make not_found plugin clear headers for response if it is not found (jeremyevans)
+
 * Make error_handler plugin use a new response instead of reusing existing response (jeremyevans)
 
 * Make RodaResponse a subclass of Object instead of Rack::Response (jeremyevans)

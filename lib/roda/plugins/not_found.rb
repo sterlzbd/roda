@@ -18,6 +18,11 @@ class Roda
     #   not_found do
     #     "Where did it go?"
     #   end
+    #
+    # Before not_found is called, any existing headers on the response
+    # will be cleared.  So if you want to be sure the headers are set
+    # even in a not_found block, you need to reset them in the
+    # not_found block.
     module NotFound
       # If a block is given, install the block as the not_found handler.
       def self.configure(app, &block)
@@ -43,6 +48,7 @@ class Roda
           result = super
 
           if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
+            @_response.headers.clear
             super{not_found}
           else
             result
