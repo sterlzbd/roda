@@ -15,6 +15,8 @@ class Roda
     #
     #   r.on :host=>'foo.example.com' do
     #   end
+    #   r.on :host=>/\A\w+.example.com/ do
+    #   end
     #
     # It adds a +:user_agent+ matcher for matching on a user agent patterns, which
     # yields the regexp captures to the block:
@@ -45,7 +47,8 @@ class Roda
           @env[key.upcase.tr("-","_")]
         end
 
-        # Match if the host of the request is the same as the hostname.
+        # Match if the host of the request is the same as the hostname.  +hostname+
+        # can be a regexp or a string.
         def match_host(hostname)
           hostname === host
         end
