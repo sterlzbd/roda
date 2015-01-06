@@ -91,7 +91,7 @@ describe "mailer plugin" do
 
   it "supports regular web requests in same application" do
     app(:mailer) do |r|
-      r.get "foo", :param=>'bar' do |bar|
+      r.get "foo/:bar" do |bar|
         "foo#{bar}"
       end
       r.mail "bar" do
@@ -100,7 +100,7 @@ describe "mailer plugin" do
       end
     end
 
-    body("/foo", 'QUERY_STRING'=>'bar=baz', 'rack.input'=>StringIO.new).should == 'foobaz'
+    body("/foo/baz", 'rack.input'=>StringIO.new).should == 'foobaz'
     app.mail('/bar').body.should == 'b'
   end
 
