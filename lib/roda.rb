@@ -605,7 +605,11 @@ class Roda
           e = @env
           "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
         end
-        alias full_path_info path
+
+        def full_path_info
+          RodaPlugins.deprecate("RodaRequest#full_path_info is deprecated and will be removed in Roda 2.  Switch to using #path.")
+          path
+        end
 
         # The current path to match requests against.  This is the same as PATH_INFO
         # in the environment, which gets updated as the request is being routed.

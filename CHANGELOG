@@ -1,5 +1,7 @@
 = HEAD
 
+* Deprecate RodaRequest#full_path_info, use #path instead (jeremyevans)
+
 * Add class_delegate to the delegate plugin (jeremyevans)
 
 * Make not_found plugin clear headers for response if it is not found (jeremyevans)
