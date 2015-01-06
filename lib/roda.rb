@@ -205,6 +205,7 @@ class Roda
         #     r.description
         #   end
         def request_module(mod = nil, &block)
+          RodaPlugins.deprecate("Roda.request_module is deprecated and will be removed in Roda 2.  It has been moved to the module_include plugin.")
           module_include(:request, mod, &block)
         end
     
@@ -224,6 +225,7 @@ class Roda
         #     response.error!
         #   end
         def response_module(mod = nil, &block)
+          RodaPlugins.deprecate("Roda.response_module is deprecated and will be removed in Roda 2.  It has been moved to the module_include plugin.")
           module_include(:response, mod, &block)
         end
 
@@ -272,7 +274,7 @@ class Roda
           end
         end
 
-        # Backbone of the request_module and response_module support.
+        # REMOVE20
         def module_include(type, mod)
           if type == :response
             klass = self::RodaResponse

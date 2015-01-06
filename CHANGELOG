@@ -1,5 +1,7 @@
 = HEAD
 
+* Move Roda.request_module and .response_module to module_include plugin (jeremyevans)
+
 * Move RodaResponse#set_cookie and #delete_cookie to cookies plugin (jeremyevans)
 
 * Deprecate RodaRequest#full_path_info, use #path instead (jeremyevans)
