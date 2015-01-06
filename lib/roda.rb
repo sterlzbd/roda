@@ -126,24 +126,9 @@ class Roda
           build_rack_app
         end
 
-        # Create a match_#{key} method in the request class using the given
-        # block, so that using a hash key in a request match method will
-        # call the block.  The block should return nil or false to not
-        # match, and anything else to match.
-        #
-        #   class App < Roda
-        #     hash_matcher(:foo) do |v|
-        #       self['foo'] == v
-        #     end
-        #
-        #     route do
-        #       r.on :foo=>'bar' do
-        #         # matches when param foo has value bar
-        #       end
-        #     end
-        #   end
         def hash_matcher(key, &block)
-          request_module{define_method(:"match_#{key}", &block)}
+          RodaPlugins.deprecate("Roda.hash_matcher is deprecated and will be removed in Roda 2.  It has been moved to the hash_matcher plugin.")
+          self::RodaRequest.class_eval{define_method(:"match_#{key}", &block)}
         end
 
         # When inheriting Roda, copy the shared data into the subclass,
