@@ -22,7 +22,7 @@ class Roda
         # match, and anything else to match.  See the HashMatcher module
         # documentation for an example.
         def hash_matcher(key, &block)
-          self::RodaRequest.class_eval{define_method(:"match_#{key}", &block)}
+          self::RodaRequest.send(:define_method, :"match_#{key}", &block)
         end
       end
     end

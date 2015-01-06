@@ -128,7 +128,7 @@ class Roda
 
         def hash_matcher(key, &block)
           RodaPlugins.deprecate("Roda.hash_matcher is deprecated and will be removed in Roda 2.  It has been moved to the hash_matcher plugin.")
-          self::RodaRequest.class_eval{define_method(:"match_#{key}", &block)}
+          self::RodaRequest.send(:define_method, :"match_#{key}", &block)
         end
 
         # When inheriting Roda, copy the shared data into the subclass,
