@@ -7,9 +7,12 @@ describe "delegate plugin" do
       request_delegate :root
       response_delegate :headers
 
+      def self.a; 'foo'; end
+      class_delegate :a
+
       route do
         root do
-          headers['Content-Type'] = 'foo'
+          headers['Content-Type'] = a
         end
       end
     end

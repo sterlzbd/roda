@@ -1,5 +1,7 @@
 = HEAD
 
+* Add class_delegate to the delegate plugin (jeremyevans)
+
 * Make not_found plugin clear headers for response if it is not found (jeremyevans)
 
 * Make error_handler plugin use a new response instead of reusing existing response (jeremyevans)
