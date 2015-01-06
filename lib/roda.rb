@@ -189,41 +189,11 @@ class Roda
           plugin.configure(self, *args, &block) if plugin.respond_to?(:configure)
         end
 
-        # Include the given module in the request class. If a block
-        # is provided instead of a module, create a module using the
-        # the block. Example:
-        #
-        #   Roda.request_module SomeModule
-        #
-        #   Roda.request_module do
-        #     def description
-        #       "#{request_method} #{path_info}"
-        #     end
-        #   end
-        #
-        #   Roda.route do |r|
-        #     r.description
-        #   end
         def request_module(mod = nil, &block)
           RodaPlugins.deprecate("Roda.request_module is deprecated and will be removed in Roda 2.  It has been moved to the module_include plugin.")
           module_include(:request, mod, &block)
         end
     
-        # Include the given module in the response class. If a block
-        # is provided instead of a module, create a module using the
-        # the block. Example:
-        #
-        #   Roda.response_module SomeModule
-        #
-        #   Roda.response_module do
-        #     def error!
-        #       self.status = 500
-        #     end
-        #   end
-        #
-        #   Roda.route do |r|
-        #     response.error!
-        #   end
         def response_module(mod = nil, &block)
           RodaPlugins.deprecate("Roda.response_module is deprecated and will be removed in Roda 2.  It has been moved to the module_include plugin.")
           module_include(:response, mod, &block)
@@ -977,13 +947,6 @@ class Roda
           DEFAULT_HEADERS
         end
 
-        # Modify the headers to include a Set-Cookie value that
-        # deletes the cookie.  A value hash can be provided to
-        # override the default one used to delete the cookie.
-        # Example:
-        #
-        #   response.delete_cookie('foo')
-        #   response.delete_cookie('foo', :domain=>'example.org')
         def delete_cookie(key, value = {})
           RodaPlugins.deprecate("RodaResponse#delete_cookie is deprecated and will be removed in Roda 2.  It has been moved to the cookies plugin.")
           ::Rack::Utils.delete_cookie_header!(@headers, key, value)
@@ -1050,10 +1013,6 @@ class Roda
           self.class.roda_class
         end
 
-        # Set the cookie with the given key in the headers.
-        #
-        #   response.set_cookie('foo', 'bar')
-        #   response.set_cookie('foo', :value=>'bar', :domain=>'example.org')
         def set_cookie(key, value)
           RodaPlugins.deprecate("RodaResponse#set_cookie is deprecated and will be removed in Roda 2.  It has been moved to the cookies plugin.")
           ::Rack::Utils.set_cookie_header!(@headers, key, value)
