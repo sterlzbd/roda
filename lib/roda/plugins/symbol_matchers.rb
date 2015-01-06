@@ -54,7 +54,7 @@ class Roda
       module ClassMethods
         # Set the regexp to use for the given symbol, instead of the default.
         def symbol_matcher(s, re)
-          request_module{define_method(:"match_symbol_#{s}"){re}}
+          self::RodaRequest.send(:define_method, :"match_symbol_#{s}"){re}
         end
       end
 
