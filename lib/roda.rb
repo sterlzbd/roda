@@ -86,6 +86,12 @@ class Roda
       @plugins[name] = mod
     end
 
+    # Emit a deprecation message.  By default this just calls warn.  You can override this
+    # method to log deprecation messages to a file or include backtraces (or something else).
+    def self.deprecate(msg)
+      warn(msg)
+    end
+
     # The base plugin for Roda, implementing all default functionality.
     # Methods are put into a plugin so future plugins can easily override
     # them and call super to get the default behavior.
