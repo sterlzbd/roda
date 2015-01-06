@@ -24,6 +24,21 @@ describe "header matcher" do
     body("HTTP_ACCEPT" => "application/xml").should ==  "bar"
     status.should == 404
   end
+
+  it "should yield the header value if :match_header_yield option is present" do
+    app(:bare) do
+      plugin :header_matchers
+      opts[:match_header_yield] = true
+      route do |r|
+        r.on :header=>"http-accept" do |v|
+          "bar-#{v}"
+        end
+      end
+    end
+
+    body("HTTP_ACCEPT" => "application/xml").should ==  "bar-application/xml"
+    status.should == 404
+  end
 end
 
 describe "host matcher" do

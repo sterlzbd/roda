@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :match_header_yield Roda option in the header_matchers plugin, causing the :header match to yield the value (jeremyevans)
+
 * Move :param and :param! hash matchers to the param_matchers plugin (jeremyevans)
 
 * Add path_matchers plugin, for :extension, :prefix, and :suffix hash matchers (jeremyevans)
