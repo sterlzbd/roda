@@ -1,5 +1,7 @@
 = HEAD
 
+* Move :param and :param! hash matchers to the param_matchers plugin (jeremyevans)
+
 * Add path_matchers plugin, for :extension, :prefix, and :suffix hash matchers (jeremyevans)
 
 * Move Roda.hash_matcher to hash_matcher plugin (jeremyevans)

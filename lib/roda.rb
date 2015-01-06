@@ -849,17 +849,15 @@ class Roda
           end
         end
 
-        # Match the given parameter if present, even if the parameter is empty.
-        # Adds any match to the captures.
         def match_param(key)
+          RodaPlugins.deprecate("The :param matcher is deprecated and will be removed in Roda 2.  It has been moved to the param_matchers plugin.")
           if v = self[key]
             @captures << v
           end
         end
 
-        # Match the given parameter if present and not empty.
-        # Adds any match to the captures.
         def match_param!(key)
+          RodaPlugins.deprecate("The :param! matcher is deprecated and will be removed in Roda 2.  It has been moved to the param_matchers plugin.")
           if (v = self[key]) && !v.empty?
             @captures << v
           end
