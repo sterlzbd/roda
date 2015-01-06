@@ -834,9 +834,8 @@ class Roda
           args.all?{|arg| match(arg)}
         end
 
-        # Match files with the given extension.  Requires that the
-        # request path end with the extension.
         def match_extension(ext)
+          RodaPlugins.deprecate("The :extension matcher is deprecated and will be removed in Roda 2.  It has been moved to the path_matchers plugin.")
           consume(self.class.cached_matcher([:extension, ext]){/([^\\\/]+)\.#{ext}/})
         end
 
