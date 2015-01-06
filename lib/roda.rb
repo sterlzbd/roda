@@ -1004,6 +1004,7 @@ class Roda
         #   response.delete_cookie('foo')
         #   response.delete_cookie('foo', :domain=>'example.org')
         def delete_cookie(key, value = {})
+          RodaPlugins.deprecate("RodaResponse#delete_cookie is deprecated and will be removed in Roda 2.  It has been moved to the cookies plugin.")
           ::Rack::Utils.delete_cookie_header!(@headers, key, value)
         end
 
@@ -1073,6 +1074,7 @@ class Roda
         #   response.set_cookie('foo', 'bar')
         #   response.set_cookie('foo', :value=>'bar', :domain=>'example.org')
         def set_cookie(key, value)
+          RodaPlugins.deprecate("RodaResponse#set_cookie is deprecated and will be removed in Roda 2.  It has been moved to the cookies plugin.")
           ::Rack::Utils.set_cookie_header!(@headers, key, value)
         end
 
