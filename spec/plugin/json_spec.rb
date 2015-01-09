@@ -9,8 +9,7 @@ describe "json plugin" do
     end
 
     app(:bare) do
-      plugin :json
-      json_result_classes << c
+      plugin :json, :classes=>[Array, Hash, c]
 
       route do |r|
         r.is 'array' do

@@ -28,15 +28,17 @@ class Roda
     #   end
     #
     # By default, only arrays and hashes are handled, but you
-    # can automatically convert other types to json by adding
-    # them to json_result_classes:
+    # can specifically set the allowed classes to json by adding
+    # using the :classes option when loading the plugin:
     #
-    #   plugin :json
-    #   json_result_classes << Sequel::Model
+    #   plugin :json, :classes=>[Array, Hash, Sequel::Model]
     module Json
       # Set the classes to automatically convert to JSON
-      def self.configure(app)
-        app.opts[:json_result_classes] ||= [Array, Hash]
+      def self.configure(app, opts={})
+        classes = opts[:classes] || [Array, Hash]
+        app.opts[:json_result_classes] ||= []
+        app.opts[:json_result_classes] += classes
+        app.opts[:json_result_classes].uniq!
       end
 
       module ClassMethods

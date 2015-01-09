@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :classes option in json plugin to set the classes to use (jeremyevans)
+
 * Improve performance in default_headers plugin by not duping the headers (jeremyevans)
 
 * Use :template_opts instead of :opts for providing options to the template in the render plugin (jeremyevans)
