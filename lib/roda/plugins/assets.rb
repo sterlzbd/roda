@@ -242,7 +242,7 @@ class Roda
 
       # Load the render and caching plugins plugins, since the assets plugin
       # depends on them.
-      def self.load_dependencies(app, _opts = {})
+      def self.load_dependencies(app, _opts = nil)
         app.plugin :render
         app.plugin :caching
       end
