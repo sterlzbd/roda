@@ -33,7 +33,7 @@ class Roda
       module ResponseMethods
         # Get the default headers from the related roda class.
         def default_headers
-          roda_class.default_headers.dup
+          roda_class.default_headers
         end
       end
     end
