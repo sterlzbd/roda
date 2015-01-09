@@ -36,8 +36,8 @@ class Roda
     # :layout :: The base name of the layout file, defaults to 'layout'.
     # :layout_opts :: The options to use when rendering the layout, if different
     #                 from the default options.
-    # :opts :: The tilt options used when rendering templates, defaults to
-    #          <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
+    # :template_opts :: The tilt options used when rendering templates, defaults to
+    #                   <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
     # :views :: The directory holding the view files, defaults to 'views' in the
     #           current directory.
     #
@@ -91,6 +91,11 @@ class Roda
           app.opts[:render] = opts.dup
         end
 
+        if opts[:opts] && !opts[:template_opts]
+          RodaPlugins.deprecate("The render plugin :opts option is deprecated and will be removed in Roda 2.  Switch to using the :template_opts option")
+          app.opts[:render][:template_opts] = opts[:opts]
+        end
+
         opts = app.opts[:render]
         opts[:engine] ||= "erb"
         opts[:ext] = nil unless opts.has_key?(:ext)
@@ -103,13 +108,13 @@ class Roda
           opts[:layout_opts] = opts[:layout_opts].merge(layout)
         end
 
-        opts[:opts] ||= (opts[:opts] || {}).dup
-        opts[:opts][:outvar] ||= '@_out_buf'
-        if RUBY_VERSION >= "1.9" && !opts[:opts].has_key?(:default_encoding)
-          opts[:opts][:default_encoding] = Encoding.default_external
+        template_opts = opts[:template_opts] = (opts[:template_opts] || {}).dup
+        template_opts[:outvar] ||= '@_out_buf'
+        if RUBY_VERSION >= "1.9" && !template_opts.has_key?(:default_encoding)
+          template_opts[:default_encoding] = Encoding.default_external
         end
         if opts[:escape]
-          opts[:opts][:engine_class] = ErubisEscaping::Eruby
+          template_opts[:engine_class] = ErubisEscaping::Eruby
         end
         opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
       end
@@ -122,7 +127,7 @@ class Roda
           super
           opts = subclass.opts[:render]
           opts[:layout_opts] = opts[:layout_opts].dup
-          opts[:opts] = opts[:opts].dup
+          opts[:template_opts] = opts[:template_opts].dup
           opts[:cache] = thread_safe_cache if opts[:cache]
         end
 
@@ -137,8 +142,13 @@ class Roda
         def render(template, opts = OPTS, &block)
           opts = find_template(parse_template_opts(template, opts))
           cached_template(opts) do
-            template_opts = render_opts[:opts]
-            template_opts = template_opts.merge(opts[:opts]) if opts[:opts]
+            template_opts = render_opts[:template_opts]
+            current_template_opts = opts[:template_opts]
+            if opts[:opts] && !current_template_opts
+              RodaPlugins.deprecate("The render method :opts option is deprecated and will be removed in Roda 2.  Switch to using the :template_opts option")
+              current_template_opts = opts[:opts]
+            end
+            template_opts = template_opts.merge(current_template_opts) if current_template_opts
             opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
           end.render(self, (opts[:locals]||OPTS), &block)
         end
@@ -199,7 +209,11 @@ class Roda
           end
 
           if render_opts[:cache]
-            template_opts = opts[:opts]
+            template_opts = opts[:template_opts]
+            if opts[:opts] && !template_opts
+              RodaPlugins.deprecate("The render method :opts option is deprecated and will be removed in Roda 2.  Switch to using the :template_opts option")
+              template_opts = opts[:opts]
+            end
             template_block = opts[:template_block] if !content
 
             key = if template_class || template_opts || template_block

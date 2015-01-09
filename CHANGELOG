@@ -1,5 +1,7 @@
 = HEAD
 
+* Use :template_opts instead of :opts for providing options to the template in the render plugin (jeremyevans)
+
 * Support :match_header_yield Roda option in the header_matchers plugin, causing the :header match to yield the value (jeremyevans)
 
 * Move :param and :param! hash matchers to the param_matchers plugin (jeremyevans)

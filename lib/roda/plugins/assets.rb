@@ -197,7 +197,7 @@ class Roda
     #                 and compressing files (default: false)
     # :css_dir :: Directory name containing your css source, inside :path (default: 'css')
     # :css_headers :: A hash of additional headers for your rendered css files
-    # :css_opts :: Template options to pass to the render plugin (via :opts) when rendering css assets
+    # :css_opts :: Template options to pass to the render plugin (via :template_opts) when rendering css assets
     # :css_route :: Route under :prefix for css assets (default: :css_dir)
     # :dependencies :: A hash of dependencies for your asset files.  Keys should be paths to asset files,
     #                  values should be arrays of paths your asset files depends on.  This is used to
@@ -207,7 +207,7 @@ class Roda
     # :headers :: A hash of additional headers for both js and css rendered files
     # :js_dir :: Directory name containing your javascript source, inside :path (default: 'js')
     # :js_headers :: A hash of additional headers for your rendered javascript files
-    # :js_opts :: Template options to pass to the render plugin (via :opts) when rendering javascript assets
+    # :js_opts :: Template options to pass to the render plugin (via :template_opts) when rendering javascript assets
     # :js_route :: Route under :prefix for javascript assets (default: :js_dir)
     # :path :: Path to your asset source directory (default: 'assets')
     # :prefix :: Prefix for assets path in your URL/routes (default: 'assets')
@@ -520,7 +520,7 @@ class Roda
           if file.end_with?(".#{type}")
             ::File.read(file)
           else
-            render_asset_file(file, :opts=>self.class.assets_opts[:"#{type}_opts"])
+            render_asset_file(file, :template_opts=>self.class.assets_opts[:"#{type}_opts"])
           end
         end
 
