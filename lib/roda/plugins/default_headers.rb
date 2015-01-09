@@ -12,15 +12,15 @@ class Roda
     #
     #   plugin :default_headers, 'Content-Type'=>'text/csv'
     #
-    # You can also modify the default headers later:
+    # You can modify the default headers later by loading the
+    # plugin again:
     #
-    #   plugin :default_headers
-    #   default_headers['Foo'] = 'bar'
-    #   default_headers.merge!('Bar'=>'baz')
+    #   plugin :default_headers, 'Foo'=>'bar'
+    #   plugin :default_headers, 'Bar'=>'baz'
     module DefaultHeaders
       # Merge the given headers into the existing default headers, if any.
       def self.configure(app, headers={})
-        (app.opts[:default_headers] ||= {}).merge!(headers)
+        app.opts[:default_headers] = (app.opts[:default_headers] || {}).merge(headers)
       end 
 
       module ClassMethods
