@@ -1,5 +1,7 @@
 = HEAD
 
+* Add delete_empty_headers plugin for deleting response headers that are empty before return response (jeremyevans)
+
 * Make freeze class method freeze internal data structures to avoid thread safety issues (jeremyevans)
 
 * Deprecate mutating plugin option hashes for chunked, default_headers, error_email, json, and render plugins (jeremyevans)
