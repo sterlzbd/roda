@@ -299,7 +299,7 @@ class Roda
         end
 
         # The session hash for the current request. Raises RodaError
-        # if no session existsExample:
+        # if no session exists. Example:
         #
         #   session # => {}
         def session
