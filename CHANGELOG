@@ -1,5 +1,7 @@
 = HEAD
 
+* Fix subclassing app and using r.multi_run in subclass in multi_run plugin (jeremyevans)
+
 * Support :classes option in json plugin to set the classes to use (jeremyevans)
 
 * Improve performance in default_headers plugin by not duping the headers (jeremyevans)

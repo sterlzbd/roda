@@ -34,20 +34,20 @@ class Roda
     module MultiRun
       # Initialize the storage for the dispatched applications
       def self.configure(app)
-        app.instance_eval do
-          @multi_run_apps ||= {}
-        end
+        app.opts[:multi_run_apps] ||= {}
       end
 
       module ClassMethods
         # Hash storing rack applications to dispatch to, keyed by the prefix
         # for the application.
-        attr_reader :multi_run_apps
+        def multi_run_apps
+          opts[:multi_run_apps]
+        end
 
         # Add a rack application to dispatch to for the given prefix when
         # r.multi_run is called.
         def run(prefix, app)
-          @multi_run_apps[prefix.to_s] = app
+          multi_run_apps[prefix.to_s] = app
           self::RodaRequest.refresh_multi_run_regexp!
         end
       end
