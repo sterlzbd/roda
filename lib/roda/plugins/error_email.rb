@@ -77,10 +77,13 @@ END
       def self.configure(app, opts={})
         email_opts = app.opts[:error_email] ||= DEFAULTS
         email_opts = email_opts.merge(opts)
+        email_opts[:headers] = email_opts[:headers].dup
         unless email_opts[:to] && email_opts[:from]
           raise RodaError, "must provide :to and :from options to error_email plugin"
         end
         app.opts[:error_email] = email_opts
+        app.opts[:error_email].extend(RodaDeprecateMutation)
+        app.opts[:error_email][:headers].extend(RodaDeprecateMutation)
       end
 
       module ClassMethods

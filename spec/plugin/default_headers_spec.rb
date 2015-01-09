@@ -43,27 +43,11 @@ describe "default_headers plugin" do
     req[1].should == {'Content-Type'=>'text/json', 'Foo'=>'baz'}
   end
 
-  it "should allow modifying the default headers at a later point" do
-    app(:bare) do
-      plugin :default_headers
-      default_headers['Content-Type'] = 'text/json'
-      default_headers['Foo'] = 'baz'
-
-      route do |r|
-        r.halt response.finish_with_body([])
-      end
-    end
-
-    req[1].should == {'Content-Type'=>'text/json', 'Foo'=>'baz'}
-  end
-
   it "should work correctly in subclasses" do
     h = {'Content-Type'=>'text/json', 'Foo'=>'bar'}
 
     app(:bare) do
-      plugin :default_headers
-      default_headers['Content-Type'] = 'text/json'
-      default_headers['Foo'] = 'bar'
+      plugin :default_headers, h
 
       route do |r|
         r.halt response.finish_with_body([])

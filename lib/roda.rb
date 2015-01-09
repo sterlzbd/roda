@@ -59,6 +59,18 @@ class Roda
   @opts = {}
   @route_block = nil
 
+  module RodaDeprecateMutation
+    [:[]=, :clear, :compare_by_identity, :default=, :default_proc=, :delete, :delete_if,
+     :keep_if, :merge!, :reject!, :replace, :select!, :shift, :store, :update].each do |m|
+      class_eval(<<-END, __FILE__, __LINE__+1)
+        def #{m}(*)
+          RodaPlugins.deprecate("Mutating this hash (\#{inspect}) via the #{m} method is deprecated, this hash will be frozen in Roda 2.")
+          super
+        end
+      END
+    end
+  end
+
   # Module in which all Roda plugins should be stored. Also contains logic for
   # registering and loading plugins.
   module RodaPlugins

@@ -21,6 +21,7 @@ class Roda
       # Merge the given headers into the existing default headers, if any.
       def self.configure(app, headers={})
         app.opts[:default_headers] = (app.opts[:default_headers] || {}).merge(headers)
+        app.opts[:default_headers].extend(RodaDeprecateMutation)
       end 
 
       module ClassMethods

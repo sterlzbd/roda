@@ -141,7 +141,10 @@ class Roda
       # :headers :: Set default additional headers to use when calling view
       def self.configure(app, opts=OPTS)
         app.opts[:chunk_by_default] = opts[:chunk_by_default]
-        app.opts[:chunk_headers] = opts[:headers]
+        if opts[:headers]
+          app.opts[:chunk_headers] = (app.opts[:chunk_headers] || {}).merge(opts[:headers])
+          app.opts[:chunk_headers].extend(RodaDeprecateMutation)
+        end
       end
 
       # Rack response body instance for chunked responses

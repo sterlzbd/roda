@@ -8,8 +8,7 @@ else
 describe "content_for plugin" do
   before do
     app(:bare) do
-      plugin :render
-      render_opts[:views] = "./spec/views"
+      plugin :render, :views=>'./spec/views'
       plugin :content_for
 
       route do |r|

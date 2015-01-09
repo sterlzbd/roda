@@ -86,7 +86,7 @@ class Roda
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=OPTS)
         if app.opts[:render]
-          app.opts[:render].merge!(opts)
+          app.opts[:render] = app.opts[:render].merge(opts)
         else
           app.opts[:render] = opts.dup
         end
@@ -117,6 +117,9 @@ class Roda
           template_opts[:engine_class] = ErubisEscaping::Eruby
         end
         opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
+        opts.extend(RodaDeprecateMutation)
+        opts[:layout_opts].extend(RodaDeprecateMutation)
+        opts[:template_opts].extend(RodaDeprecateMutation)
       end
 
       module ClassMethods

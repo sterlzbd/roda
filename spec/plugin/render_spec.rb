@@ -9,8 +9,7 @@ else
 describe "render plugin" do
   before do
     app(:bare) do
-      plugin :render
-      render_opts[:views] = "./spec/views"
+      plugin :render, :views=>"./spec/views"
 
       route do |r|
         r.on "home" do
@@ -45,14 +44,14 @@ describe "render plugin" do
   end
 
   it "with str as engine" do
-    app.render_opts[:engine] = "str"
+    app.plugin :render, :engine => "str"
     body("/about").strip.should == "<h1>About Roda</h1>"
     body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
     body("/inline").strip.should == "Hello <%= name %>"
   end
 
   it "with str as ext" do
-    app.render_opts[:ext] = "str"
+    app.plugin :render, :ext => "str"
     body("/about").strip.should == "<h1>About Roda</h1>"
     body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
     body("/inline").strip.should == "Hello Agent Smith"
@@ -125,9 +124,11 @@ describe "render plugin" do
   end
 
   it "template renders with :template opts" do
-    app(:render) do
-      render_opts[:views] = "./spec/views"
-      render(:template=>"about", :locals=>{:title => "About Roda"})
+    app(:bare) do
+      plugin :render, :views => "./spec/views"
+      route do
+        render(:template=>"about", :locals=>{:title => "About Roda"})
+      end
     end
     body.strip.should == "<h1>About Roda</h1>"
   end

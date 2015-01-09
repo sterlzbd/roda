@@ -8,8 +8,7 @@ else
 describe "view_subdirs plugin" do
   before do
     app(:bare) do
-      plugin :render
-      render_opts[:views] = "./spec"
+      plugin :render, :views=>"./spec"
       plugin :view_subdirs
 
       route do |r|
