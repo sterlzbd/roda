@@ -29,6 +29,25 @@ describe "multi_run plugin" do
     body.should == 'c'
   end
 
+  it "works when freezing the app" do
+    app(:multi_run) do |r|
+      r.multi_run
+      "c"
+    end
+
+    app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}
+    app.run "b", Class.new(Roda).class_eval{route{"b1"}; app}
+    app.run "b/a", Class.new(Roda).class_eval{route{"b2"}; app}
+    app.freeze
+
+    body("/a").should == 'a1'
+    body("/b").should == 'b1'
+    body("/b/a").should == 'b2'
+    body.should == 'c'
+
+    proc{app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}}.should raise_error
+  end
+
   it "works when subclassing" do
     app(:multi_run) do |r|
       r.multi_run

@@ -38,6 +38,12 @@ class Roda
       end
 
       module ClassMethods
+        # Freeze the multi_run apps so that there can be no thread safety issues at runtime.
+        def freeze
+          opts[:multi_run_apps].freeze
+          super
+        end
+
         # Hash storing rack applications to dispatch to, keyed by the prefix
         # for the application.
         def multi_run_apps

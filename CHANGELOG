@@ -1,5 +1,7 @@
 = HEAD
 
+* Make freeze class method freeze internal data structures to avoid thread safety issues (jeremyevans)
+
 * Deprecate mutating plugin option hashes for chunked, default_headers, error_email, json, and render plugins (jeremyevans)
 
 * Fix subclassing app and using r.multi_run in subclass in multi_run plugin (jeremyevans)

@@ -66,7 +66,7 @@ Here's a simple application, showing how the routing tree works:
     end
   end
 
-  run App.app
+  run App.freeze.app
 
 Here's a breakdown of what is going on in the block above:
 
@@ -111,8 +111,10 @@ allowing for code such as <tt>r.redirect(path) if some_condition</tt>.
 If +r.redirect+ is called without arguments
 and the current request method is not +GET+, it redirects to the current path.
 
-The +.app+ at the end is an (optional) optimization.
-It saves a few method calls for every response.
+The +.freeze.app+ at the end is optional.  Freezing the app avoids any possible
+thread safety issues inside the application at runtime, which shouldn't be possible
+anyway.  The +.app+ is an optimization, which saves a few method calls for every
+request.
 
 == The Routing Tree
 

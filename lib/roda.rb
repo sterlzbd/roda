@@ -138,6 +138,20 @@ class Roda
           build_rack_app
         end
 
+        # Freeze the internal state of the class, to avoid thread safety issues at runtime.
+        # It's optional to call this method, as nothing should be modifying the
+        # internal state at runtime anyway, but this makes sure an exception will
+        # be raised if you try to modify the internal state after calling this.
+        #
+        # Note that freezing the class prevents you from subclassing it, mostly because
+        # it would cause some plugins to break.
+        def freeze
+          @opts.freeze
+          @middleware.freeze
+          @app.freeze
+          super
+        end
+
         def hash_matcher(key, &block)
           RodaPlugins.deprecate("Roda.hash_matcher is deprecated and will be removed in Roda 2.  It has been moved to the hash_matcher plugin.")
           self::RodaRequest.send(:define_method, :"match_#{key}", &block)
@@ -146,6 +160,7 @@ class Roda
         # When inheriting Roda, copy the shared data into the subclass,
         # and setup the request and response subclasses.
         def inherited(subclass)
+          raise RodaError, "Cannot subclass a frozen Roda class" if frozen?
           super
           subclass.instance_variable_set(:@inherit_middleware, @inherit_middleware)
           subclass.instance_variable_set(:@middleware, @inherit_middleware ? @middleware.dup : [])
@@ -175,6 +190,7 @@ class Roda
         #   Roda.plugin PluginModule
         #   Roda.plugin :csrf
         def plugin(plugin, *args, &block)
+          raise RodaError, "Cannot subclass a frozen Roda class" if frozen?
           plugin = RodaPlugins.load_plugin(plugin) if plugin.is_a?(Symbol)
           plugin.load_dependencies(self, *args, &block) if plugin.respond_to?(:load_dependencies)
           include(plugin::InstanceMethods) if defined?(plugin::InstanceMethods)
@@ -225,7 +241,7 @@ class Roda
         #
         #   Roda.use Rack::Session::Cookie, :secret=>ENV['secret']
         def use(*args, &block)
-          @middleware << [args, block]
+          @middleware << [args, block].freeze
           build_rack_app
         end
 

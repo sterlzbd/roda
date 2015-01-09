@@ -76,6 +76,20 @@ describe "multi_route plugin" do
     status('/c', 'REQUEST_METHOD'=>'POST').should == 404
   end
 
+  it "works when freezing the app" do
+    app.freeze
+    body.should == 'get'
+    body('REQUEST_METHOD'=>'POST').should == 'post'
+    body('/a').should == 'geta'
+    body('/a', 'REQUEST_METHOD'=>'POST').should == 'posta'
+    body('/b').should == 'getb'
+    body('/b', 'REQUEST_METHOD'=>'POST').should == 'postb'
+    status('/c').should == 404
+    status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+
+    proc{app.route("foo"){}}.should raise_error
+  end
+
   it "uses multi_route to dispatch to any named route" do
     status('/foo').should == 404
     body('/foo/get/').should == 'get'

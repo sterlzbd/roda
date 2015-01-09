@@ -58,9 +58,15 @@ class Roda
       end
 
       module ClassMethods
+        # Freeze the named templates so that there can be no thread safety issues at runtime.
+        def freeze
+          opts[:named_templates].freeze
+          super
+        end
+
         # Store a new template block and options for the given template name.
         def template(name, options=nil, &block)
-          opts[:named_templates][name.to_s] = [options, block]
+          opts[:named_templates][name.to_s] = [options, block].freeze
           nil
         end
       end

@@ -25,6 +25,31 @@ describe "named_templates plugin" do
     body.should == 'bar13-foo12-baz'
   end
 
+  it "works when freezing the app" do
+    app(:bare) do
+      plugin :named_templates
+
+      template :foo do
+        @b = 2
+        "foo<%= @a %><%= @b %>"
+      end
+      template :layout, :engine=>:str do
+        @c = 3
+        'bar#{@a}#{@c}-#{yield}-baz'
+      end
+
+      route do |r|
+        @a = 1
+        view(:foo)
+      end
+    end
+
+    app.freeze
+    body.should == 'bar13-foo12-baz'
+
+    proc{app.template(:b){"a"}}.should raise_error
+  end
+
   it "works with the view_subdirs plugin" do
     app(:bare) do
       plugin :render

@@ -135,4 +135,30 @@ describe "class_level_routing plugin" do
     status("/asdfa/asdf").should == 404
     body("/asdfa/asdf").should == "nf"
   end
+
+  it "works when freezing the app" do
+    app.freeze
+    body.should == 'root'
+    body('/foo').should == 'foo'
+    body('/foo/bar').should == 'foobar'
+    body('/dgo').should == 'bazgetgo'
+    body('/dgo', 'REQUEST_METHOD'=>'POST').should == 'bazpostgo'
+    body('/bar').should == "x-get-bar"
+    body('/bar', 'REQUEST_METHOD'=>'POST').should == "x-post-bar"
+    body('/bar', 'REQUEST_METHOD'=>'DELETE').should == "x-delete-bar"
+    body('/bar', 'REQUEST_METHOD'=>'HEAD').should == "x-head-bar"
+    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').should == "x-options-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PATCH').should == "x-patch-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PUT').should == "x-put-bar"
+    body('/bar', 'REQUEST_METHOD'=>'TRACE').should == "x-trace-bar"
+    if ::Rack::Request.method_defined?("link?")
+      body('/bar', 'REQUEST_METHOD'=>'LINK').should == "x-link-bar"
+      body('/bar', 'REQUEST_METHOD'=>'UNLINK').should == "x-unlink-bar"
+    end
+
+    status.should == 200
+    status("/asdfa/asdf").should == 404
+
+    proc{app.on{}}.should raise_error
+  end
 end

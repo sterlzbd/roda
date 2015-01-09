@@ -130,6 +130,13 @@ class Roda
       end
 
       module ClassMethods
+        # Freeze the namespaced routes so that there can be no thread safety issues at runtime.
+        def freeze
+          opts[:namespaced_routes].freeze
+          opts[:namespaced_routes].each_value{|v| v.freeze}
+          super
+        end
+
         # Copy the named routes into the subclass when inheriting.
         def inherited(subclass)
           super
