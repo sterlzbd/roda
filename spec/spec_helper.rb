@@ -41,6 +41,8 @@ unless defined?(RSPEC_EXAMPLE_GROUP)
   end
 end
 
+#def (Roda::RodaPlugins).warn(s); end
+
 class RSPEC_EXAMPLE_GROUP
   def app(type=nil, &block)
     case type
