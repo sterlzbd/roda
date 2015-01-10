@@ -1,8 +1,8 @@
 = Conventions
 
 This guide goes over conventions for directory layout and file layout for Roda applications.
-You are free to ignore these conventions, but following them will make your code similar
-to other Roda applications.
+You are free to ignore these conventions, they mostly exist to help users who are unsure how
+to structure their Roda applications.
 
 == Directory Layout
 
@@ -78,14 +78,16 @@ Large applications generally need more structure:
 
 For larger apps, the +Rakefile+, +assets/+, +migrate+, +models.rb+, +models/+, +public/+, remain the same.
 
-+app_name.rb+ should use the +multi_route+ and +view_subdirs+ plugins.  The routes used by the +multi_route+
-plugin should be stored in routing files in the +routes/+ directory, with one file per prefix.
++app_name.rb+ should use the +multi_route+ and +view_subdirs+ plugin, or the +multi_run+ plugin.
+The routes used by the +multi_route+ or +multi_run+ should be stored in routing files in the +routes/+
+directory, with one file per prefix.
 
 For specs/tests, you should have +spec/models/+ and +spec/web/+, with one file per model in +spec/models/+
 and one file per prefix in +spec/web/+.
 
-You should have a separate view subdirectory per prefix, and use +set_view_subdir+ in your routing files
-to specify the subdirectory to use, so it doesn't need to be specified on every call to view.
+You should have a separate view subdirectory per prefix. If you are using +multi_route+ and +view_subdirs+,
+use +set_view_subdir+ in your routing files to specify the subdirectory to use, so it doesn't need to be
+specified on every call to view.
 
 +helpers/+ should be used to store helper methods for your application, that you call in your routing files
 and views.  In a small application, these methods should just be specified in +app_name.rb+
@@ -93,8 +95,8 @@ and views.  In a small application, these methods should just be specified in +a
 === Really Large Applications
 
 For very large applications, it's expected that there will be deviations from these conventions. However,
-it is recommended to use namespaces in the +multi_route+ plugin, and have subdirectories in the +routes/+
-directory, and nested subdirectories in the +views/+ directory.
+it is recommended to use the +multi_route+ or +multi_run+ plugins to organize your application, and have
+subdirectories in the +routes/+ directory, and nested subdirectories in the +views/+ directory.
 
 == Roda Application File Layout
 

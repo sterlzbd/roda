@@ -113,8 +113,8 @@ and the current request method is not +GET+, it redirects to the current path.
 
 The +.freeze.app+ at the end is optional.  Freezing the app avoids any possible
 thread safety issues inside the application at runtime, which shouldn't be possible
-anyway.  The +.app+ is an optimization, which saves a few method calls for every
-request.
+anyway.  This generally should only be done in production mode.
+The +.app+ is an optimization, which saves a few method calls for every request.
 
 == The Routing Tree
 
@@ -197,63 +197,51 @@ Here's an example showcasing how different matchers work:
 
   class App < Roda
     route do |r|
-      # only GET requests
-      r.get do
+      # GET /
+      r.root do
+        "Home"
+      end
 
-        # /
-        r.root do
-          "Home"
+      # GET /about
+      r.get "about" do
+        "About"
+      end
+
+      # GET /post/2011/02/16/hello
+      r.get "post/:y/:m/:d/:slug" do |y, m, d, slug|
+        "#{y}-#{m}-#{d} #{slug}" #=> "2011-02-16 hello"
+      end
+
+      # GET /username/foobar branch
+      r.on "username/:username", :method=>:get do |username|
+        user = User.find_by_username(username)
+
+        # GET /username/foobar/posts
+        r.is "posts" do
+          # You can access user here, because the blocks are closures.
+          "Total Posts: #{user.posts.size}" #=> "Total Posts: 6"
         end
 
-        # /about
-        r.is "about" do
-          "About"
-        end
-
-        # /styles/basic.css
-        r.is "styles", :extension => "css" do |file|
-          "Filename: #{file}" #=> "Filename: basic"
-        end
-
-        # /post/2011/02/16/hello
-        r.is "post/:y/:m/:d/:slug" do |y, m, d, slug|
-          "#{y}-#{m}-#{d} #{slug}" #=> "2011-02-16 hello"
-        end
-
-        # /username/foobar
-        r.on "username/:username" do |username|
-          user = User.find_by_username(username) # username == "foobar"
-
-          # /username/foobar/posts
-          r.is "posts" do
-            # You can access user here, because the blocks are closures.
-            "Total Posts: #{user.posts.size}" #=> "Total Posts: 6"
-          end
-
-          # /username/foobar/following
-          r.is "following" do
-            user.following.size.to_s #=> "1301"
-          end
-        end
-
-        # /search?q=barbaz
-        r.is "search", :param=>"q" do |query|
-          "Searched for #{query}" #=> "Searched for barbaz"
+        # GET /username/foobar/following
+        r.is "following" do
+          user.following.size.to_s #=> "1301"
         end
       end
 
-      # only POST requests
-      r.post do
-        r.is "login" do
+      # /search?q=barbaz
+      r.get "search" do
+        "Searched for #{r['q']}" #=> "Searched for barbaz"
+      end
 
-          # POST /login, user: foo, pass: baz
-          r.on({:param=>"user"}, {:param=>"pass"}) do |user, pass|
-            "#{user}:#{pass}" #=> "foo:baz"
-          end
+      r.is "login" do
+        # GET /login
+        r.get do
+          "Login"
+        end
 
-          # If the params user and pass are not provided, this
-          # will get executed.
-          "You need to provide user and pass!"
+        # POST /login?user=foo&password=baz
+        r.post do
+          "#{r['user']}:#{r['password']}" #=> "foo:baz"
         end
       end
     end
@@ -357,11 +345,12 @@ This makes it easy to handle multiple strings without a Regexp:
 
 Hashes allow easily calling specialized match methods on the request.
 The default registered matchers included with Roda are documented below.
-You can add your own hash matchers using the +hash_matcher+ class method,
-which creates an appropriate request match method.  The +hash_matcher+
-block will be called with the value of the hash.
+Some plugins add additional hash matchers, and the hash_matcher plugin
+allows for easily defining your own:
 
   class App < Roda
+    plugin :hash_matcher
+
     hash_matcher(:foo) do |v|
       # ...
     end
@@ -395,15 +384,6 @@ is so you can use it inside an array matcher, so:
 
 would match +/foo+ and +/foos/10+, but not +/foos+.
 
-==== :extension
-
-The +:extension+ matcher matches any nonempty path ending with the given extension:
-
-  {:extension => "css"} # matches "/foo.css", "/bar.css"
-  {:extension => "css"} # does not match "/foo.css/x", "/foo.bar", "/.css"
-
-This matcher yields the part found before the period and extension (e.g., +foo+).
-
 ==== :method
 
 The +:method+ matcher matches the method of the request.
@@ -411,20 +391,6 @@ You can provide an array to specify multiple request methods and match on any of
 
   {:method => :post}             # matches POST
   {:method => ['post', 'patch']} # matches POST and PATCH
-
-==== :param
-
-The +:param+ matcher matches if the given parameter is present (even if it is empty).
-
-  {:param => "user"} # matches "/foo?user=bar", "/foo?user="
-  {:param => "user"} # does not matches "/foo"
-
-==== :param!
-
-The +:param!+ matcher matches if the given parameter is present and not empty.
-
-  {:param! => "user"} # matches "/foo?user=bar"
-  {:param! => "user"} # does not matches "/foo", "/foo?user="
 
 === false, nil
 
@@ -454,8 +420,11 @@ via the +status+ attribute for the response.
 
 == Verb Methods
 
-The main match method is +r.on+, but as displayed above,
-you can also use +r.get+ or +r.post+.
+As displayed above, Roda has +r.get+ and +r.post+ methods
+for matching based on the HTTP request method.  If you want
+to match on other HTTP request methods, use the all_verbs
+plugin.
+
 When called without any arguments, these match as long
 as the request has the appropriate method, so:
 
@@ -469,7 +438,7 @@ matches any +POST+ request
 
 If any arguments are given to the method, these match only
 if the request method matches, all arguments match, and
-only the path has been fully matched by the arguments, so:
+the path has been fully matched by the arguments, so:
 
   r.post "" do end
 
@@ -508,7 +477,8 @@ Unlike the other matching methods, +r.root+ takes no arguments.
 Note that +r.root+ does not match if the path is empty;
 you should use <tt>r.get true</tt> for that.
 If you want to match either the the empty path or +/+,
-you can use <tt>r.get ["", true]</tt>.
+you can use <tt>r.get ["", true]</tt>, or use the slash_path_empty
+plugin.
 
 Note that +r.root+ only matches +GET+ requests.
 So, to handle <tt>POST /</tt> requests, use <tt>r.post ''</tt>.
@@ -521,17 +491,15 @@ Likewise, the response object is available via the +response+ method.
 
 The request object is an instance of a subclass of <tt>Rack::Request</tt>,
 with some additional methods.
-The response object is an instance of a subclass of <tt>Rack::Response</tt>,
-with some additional methods.
 
 If you want to extend the request and response objects with additional modules,
-you can do so via the +request_module+ or +response_module+ methods, or via plugins.
+you can use the module_include plugin.
 
 == Pollution
 
 Roda tries very hard to avoid polluting the scope of the +route+ block.
 This should make it unlikely that Roda will cause namespace issues
-with your application code:
+with your application code.  Some of the things Roda does
 
 - The only instance variables defined by default in the scope of the +route+ block
   are <tt>@_request</tt> and <tt>@_response</tt>.
@@ -540,40 +508,12 @@ with your application code:
 - Constants inside the Roda namespace are all prefixed with +Roda+
   (e.g., <tt>Roda::RodaRequest</tt>).
 
-== Captures
-
-You may have noticed that some matchers yield a value to the block.
-The rules for determining if a matcher will yield a value are simple:
-
-1. Regexp captures: <tt>/posts\/(\d+)-(.*)/</tt> will yield two values, corresponding to each capture.
-2. String placeholders: <tt>"users/:id"</tt> will yield the value in the position of +:id+.
-3. Symbols: +:foobar+ will yield if a segment is available.
-4. File extensions: <tt>:extension=>"css"</tt> will yield the basename of the matched file.
-5. Parameters: <tt>:param=>"user"</tt> will yield the value of the parameter +user+, if present.
-
-The first case is important because it shows the underlying effect of Regexp captures.
-
-In the second case, the substring +:id+ gets replaced by <tt>([^\\/]+)</tt>
-and the Regexp becomes <tt>/users\/([^\/]+)/</tt> before performing the match.
-Thus, it reverts to the first form we saw.
-
-In the third case, the symbol, no matter what it says,
-gets replaced by <tt>/([^\\/]+)/</tt>, and again we are in presence of case 1.
-
-The fourth case, again, reverts to the basic matcher: it generates the string
-<tt>/([^\/]+?)\.#{ext}\z/</tt> before performing the match.
-
-The fifth case is different: it checks if the parameter supplied is present
-in the request (via POST or QUERY_STRING) and it pushes the value as a capture.
-
 == Composition
 
 You can mount any Rack app (including another Roda app), with its own middlewares,
 inside a Roda app, using +r.run+:
 
   class API < Roda
-    use SomeMiddleware
-
     route do |r|
       r.is do
         # ...
@@ -598,6 +538,10 @@ a Sinatra, Rails, or other Rack app.
 When you use +r.run+, Roda calls the given Rack app (+API+ in this case);
 whatever the Rack app returns will be returned
 as the response for the current application.
+
+If you have a lot of rack applications that you want to dispatch to, and
+which one to dispatch to is based on the request path prefix, look into the
++multi_run+ plugin.
 
 === multi_route plugin
 
@@ -653,9 +597,14 @@ Note that when subclassing, Roda only does a shallow clone of the settings.
 If you store nested structures and plan to mutate them in subclasses,
 it is your responsibility to dup the nested structures inside +Roda.inherited+
 (making sure to call +super+).
+
 The plugins that ship with Roda all handle this.
 Also, note that this means that modifications to the parent class
 made after subclassing do _not_ affect the subclass.
+
+The plugins that ship with Roda freeze their settings and only allow modification
+to their settings by reloading the plugin, and external plugins are encouraged
+to follow this approach.
 
 == Rendering
 
@@ -677,13 +626,13 @@ By default, +view+ will render the template inside the default layout template;
     route do |r|
       @var = '1'
 
-      r.is "render" do
+      r.get "render" do
         # Renders the views/home.erb template, which will have access to
         # the instance variable @var, as well as local variable content.
         render("home", :locals=>{:content => "hello, world"})
       end
 
-      r.is "view" do
+      r.get "view" do
         @var2 = '1'
 
         # Renders the views/home.erb template, which will have access to the
@@ -699,13 +648,11 @@ You can override the default rendering options by passing a hash to the plugin:
 
   class App < Roda
     plugin :render,
-      :cache => false,  # Disable template caching, useful in development
-      :engine => 'erb', # Tilt engine/template file extension to use
-      :escape => true,  # Automatically escape output in erb templates
-      :layout => "admin_layout",             # Default layout template
-      :layout_opts => {:ext=>'html.erb'},    # Default layout template options
-      :opts => {:default_encoding=>'UTF-8'}, # Default template options
-      :views => 'admin_views'                # Default views directory
+      :escape => true,        # Automatically escape output in erb templates
+      :views => 'admin_views' # Default views directory
+      :layout_opts => {:template=>'admin_layout',
+                       :ext=>'html.erb'},    # Default layout template options
+      :template_opts => {:default_encoding=>'UTF-8'}, # Default template options
   end
 
 == Sessions
@@ -762,20 +709,6 @@ to escape by default, so that in your templates:
 
 This support requires {Erubis}[http://www.kuwata-lab.com/erubis/].
 
-=== Other
-
-For prevention of some other vulnerabilities,
-such as click-jacking, directory traversal, session hijacking, and IP spoofing,
-consider using {Rack::Protection}[https://github.com/rkh/rack-protection].
-This is a Rack middleware that can be added in the usual way:
-
-  require 'roda'
-  require 'rack/protection'
-
-  class App < Roda
-    use Rack::Protection
-  end
-
 == Plugins
 
 By design, Roda has a very small core, providing only the essentials.
@@ -789,14 +722,6 @@ to get the default behavior, which makes Roda very extensible.
 
 {Roda ships with a large number of plugins}[http://roda.jeremyevans.net/documentation.html#included-plugins],
 and {some other libraries ship with support for Roda}[http://roda.jeremyevans.net/documentation.html#external].
-
-=== External Plugins
-
-The following libraries include Roda plugins:
-
-forme :: Adds support for easy HTML form creation in erb templates.
-autoforme :: Adds support for easily creating a simple administrative front
-             end for Sequel models.
 
 === How to create plugins
 
@@ -859,7 +784,9 @@ To avoid namespace pollution,
 you should avoid creating your module directly in the +Roda+ namespace.
 Additionally, any instance variables created inside +InstanceMethods+
 should be prefixed with an underscore (e.g., <tt>@_variable</tt>)
-to avoid polluting the scope.
+to avoid polluting the scope.  Finally, do not add any constants inside
+the InstanceMethods module, add constants to the plugin module itself
+(+Markdown+ in the above example).
 
 == License
 
