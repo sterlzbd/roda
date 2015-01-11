@@ -148,7 +148,6 @@ class Roda
         def freeze
           @opts.freeze
           @middleware.freeze
-          @app.freeze
           super
         end
 

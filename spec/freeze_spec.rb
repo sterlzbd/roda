@@ -24,6 +24,5 @@ describe "Roda.freeze" do
 
   it "should freeze app" do
     app.frozen?.should == true
-    app.app.frozen?.should == true
   end
 end
