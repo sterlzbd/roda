@@ -622,7 +622,7 @@ class Roda
         #   response.status = 200
         #   response['Header-Name'] = 'Header value'
         def response
-          scope.response
+          @scope.response
         end
 
         # Return the Roda class related to this request.
