@@ -36,9 +36,16 @@ class Roda
         def run(_)
           e = @env
           path = @remaining_path
-          e[SCRIPT_NAME] += e[PATH_INFO].chomp(path)
-          e[PATH_INFO] = path
-          super
+          begin
+            script_name = e[SCRIPT_NAME]
+            path_info = e[PATH_INFO]
+            e[SCRIPT_NAME] += path_info.chomp(path)
+            e[PATH_INFO] = path
+            super
+          ensure
+            e[SCRIPT_NAME] = script_name
+            e[PATH_INFO] = path_info
+          end
         end
 
         private

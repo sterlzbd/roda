@@ -35,6 +35,12 @@ describe "static_path_info plugin" do
     app(:static_path_info){|r| r.on("a"){r.run a}}
     body("/a/b").should == "/a|/b"
   end
+
+  it "restores SCRIPT_NAME/PATH_INFO before returning from run" do
+    a = app{|r| "#{r.script_name}|#{r.path_info}"}
+    app(:static_path_info){|r| s = catch(:halt){r.on("a"){r.run a}}; "#{s[2].join}%#{r.script_name}|#{r.path_info}"}
+    body("/a/b").should == "/a|/b%|/a/b"
+  end
 end
 
 describe "static_path_info request.path, .remaining_path, and .matched_path" do

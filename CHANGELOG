@@ -1,5 +1,7 @@
 = HEAD
 
+* Make static_path_info plugin restore original SCRIPT_NAME/PATH_INFO before returning from r.run (jeremyevans)
+
 * Add RodaMajorVersion, RodaMinorVersion, and RodaPatchVersion (jeremyevans)
 
 * Add delete_empty_headers plugin for deleting response headers that are empty before return response (jeremyevans)
