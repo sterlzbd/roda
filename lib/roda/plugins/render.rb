@@ -128,10 +128,11 @@ class Roda
         # affecting the parent class.
         def inherited(subclass)
           super
-          opts = subclass.opts[:render]
-          opts[:layout_opts] = opts[:layout_opts].dup
-          opts[:template_opts] = opts[:template_opts].dup
+          opts = subclass.opts[:render].dup
+          opts[:layout_opts] = opts[:layout_opts].dup.extend(RodaDeprecateMutation)
+          opts[:template_opts] = opts[:template_opts].dup.extend(RodaDeprecateMutation)
           opts[:cache] = thread_safe_cache if opts[:cache]
+          subclass.opts[:render] = opts.extend(RodaDeprecateMutation)
         end
 
         # Return the render options for this class.

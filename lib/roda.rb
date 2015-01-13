@@ -167,6 +167,9 @@ class Roda
           subclass.opts.to_a.each do |k,v|
             if (v.is_a?(Array) || v.is_a?(Hash)) && !v.frozen?
               subclass.opts[k] = v.dup
+              if v.is_a?(RodaDeprecateMutation)
+                subclass.opts[k].extend(RodaDeprecateMutation)
+              end
             end
           end
           subclass.instance_variable_set(:@route_block, @route_block)

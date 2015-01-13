@@ -91,7 +91,9 @@ END
         # the superclass.
         def inherited(subclass)
           super
-          subclass.opts[:error_email][:headers] = subclass.opts[:error_email][:headers].dup
+          opts = subclass.opts[:error_email].dup
+          opts[:headers] = opts[:headers].dup.extend(RodaDeprecateMutation)
+          subclass.opts[:error_email] = opts.extend(RodaDeprecateMutation)
         end
       end
 
