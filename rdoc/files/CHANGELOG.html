@@ -31,14 +31,74 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2014-12-17 09:22:57 -0800</span>
+          <span class='datetime'>2015-01-13 14:29:30 -0800</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             
-            <h1 id="label-1.2.0+%282014-12-17%29">1.2.0 (2014-12-17)<span><a href="#label-1.2.0+%282014-12-17%29">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-1.3.0+-282015-01-13-29">1.3.0 (2015-01-13)<span><a href="#label-1.3.0+-282015-01-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Make static_path_info plugin restore original SCRIPT_NAME/PATH_INFO before
+            returning from r.run (jeremyevans)</p>
+            </li><li>
+            <p>Add RodaMajorVersion, RodaMinorVersion, and RodaPatchVersion (jeremyevans)</p>
+            </li><li>
+            <p>Add delete_empty_headers plugin for deleting response headers that are
+            empty before return response (jeremyevans)</p>
+            </li><li>
+            <p>Make freeze class method freeze internal data structures to avoid thread
+            safety issues (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate mutating plugin option hashes for chunked, default_headers,
+            error_email, json, and render plugins (jeremyevans)</p>
+            </li><li>
+            <p>Fix subclassing app and using r.multi_run in subclass in multi_run plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Support :classes option in json plugin to set the classes to use
+            (jeremyevans)</p>
+            </li><li>
+            <p>Improve performance in default_headers plugin by not duping the headers
+            (jeremyevans)</p>
+            </li><li>
+            <p>Use :template_opts instead of :opts for providing options to the template
+            in the render plugin (jeremyevans)</p>
+            </li><li>
+            <p>Support :match_header_yield <a href="../classes/Roda.html">Roda</a> option
+            in the header_matchers plugin, causing the :header match to yield the value
+            (jeremyevans)</p>
+            </li><li>
+            <p>Move :param and :param! hash matchers to the param_matchers plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add path_matchers plugin, for :extension, :prefix, and :suffix hash
+            matchers (jeremyevans)</p>
+            </li><li>
+            <p>Move Roda.hash_matcher to hash_matcher plugin (jeremyevans)</p>
+            </li><li>
+            <p>Move Roda.request_module and .response_module to module_include plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Move RodaResponse#set_cookie and delete_cookie to cookies plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate RodaRequest#full_path_info, use path instead (jeremyevans)</p>
+            </li><li>
+            <p>Add class_delegate to the delegate plugin (jeremyevans)</p>
+            </li><li>
+            <p>Make not_found plugin clear headers for response if it is not found
+            (jeremyevans)</p>
+            </li><li>
+            <p>Make error_handler plugin use a new response instead of reusing existing
+            response (jeremyevans)</p>
+            </li><li>
+            <p>Make RodaResponse a subclass of Object instead of Rack::Response
+            (jeremyevans)</p>
+            </li></ul>
+            
+            <h1 id="label-1.2.0+-282014-12-17-29">1.2.0 (2014-12-17)<span><a href="#label-1.2.0+-282014-12-17-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>Don&#39;t override explicit nil :default_encoding template option in the
             render plugin (jeremyevans)</p>
@@ -137,7 +197,7 @@
             responses (jeremyevans)</p>
             </li></ul>
             
-            <h1 id="label-1.1.0+%282014-11-11%29">1.1.0 (2014-11-11)<span><a href="#label-1.1.0+%282014-11-11%29">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-1.1.0+-282014-11-11-29">1.1.0 (2014-11-11)<span><a href="#label-1.1.0+-282014-11-11-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>Add assets plugin, for rendering assets on the fly, or compiling them to a
             single compressed file (cj, jeremyevans) (#5)</p>
@@ -183,7 +243,7 @@
             exception (jeremyevans)</p>
             </li></ul>
             
-            <h1 id="label-1.0.0+%282014-08-19%29">1.0.0 (2014-08-19)<span><a href="#label-1.0.0+%282014-08-19%29">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-1.0.0+-282014-08-19-29">1.0.0 (2014-08-19)<span><a href="#label-1.0.0+-282014-08-19-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>Don&#39;t have :extension hash matcher force a terminal match (jeremyevans)</p>
             </li><li>
@@ -272,7 +332,7 @@
             loading dependencies (jeremyevans)</p>
             </li></ul>
             
-            <h1 id="label-0.9.0+%282014-07-30%29">0.9.0 (2014-07-30)<span><a href="#label-0.9.0+%282014-07-30%29">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-0.9.0+-282014-07-30-29">0.9.0 (2014-07-30)<span><a href="#label-0.9.0+-282014-07-30-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>Initial public release</p>
             </li></ul>

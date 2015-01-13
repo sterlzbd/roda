@@ -42,6 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
+              <li><a target="docwin" href="#method-i-freeze">freeze</a></li>
               <li><a target="docwin" href="#method-i-inherited">inherited</a></li>
               <li><a target="docwin" href="#method-i-named_route">named_route</a></li>
               <li><a target="docwin" href="#method-i-named_routes">named_routes</a></li>
@@ -53,6 +54,24 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-freeze'>
+                <a name='method-i-freeze'></a>
+                <div class='synopsis'>
+                  <span class='name'>freeze</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Freeze the namespaced routes so that there can be no thread safety issues
+                  at runtime.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-freeze-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-freeze-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 134</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>].<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>].<span class="ruby-identifier">each_value</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">freeze</span>}&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
               <div class='method public-instance' id='method-method-i-inherited'>
                 <a name='method-i-inherited'></a>
                 <div class='synopsis'>
@@ -67,7 +86,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-inherited-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 134</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">nsr</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>]&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">nsr</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">dup</span>}&#x000A;  <span class="ruby-identifier">subclass</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value">:@namespaced_route_regexps</span>, {})&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 141</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">nsr</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>]&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">nsr</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">dup</span>}&#x000A;  <span class="ruby-identifier">subclass</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-value">:@namespaced_route_regexps</span>, {})&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-named_route'>
@@ -84,7 +103,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-named_route-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-named_route-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 147</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_route</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>][<span class="ruby-identifier">name</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-named_route-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 154</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_route</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>][<span class="ruby-identifier">name</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-named_routes'>
@@ -101,7 +120,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-named_routes-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-named_routes-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 142</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_routes</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>].<span class="ruby-identifier">keys</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-named_routes-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 149</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_routes</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>].<span class="ruby-identifier">keys</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-route'>
@@ -119,7 +138,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-route-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-route-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 154</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">route</span>(<span class="ruby-identifier">name</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>][<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">clear_named_route_regexp!</span>(<span class="ruby-identifier">namespace</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-route-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 161</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">route</span>(<span class="ruby-identifier">name</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>][<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">clear_named_route_regexp!</span>(<span class="ruby-identifier">namespace</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

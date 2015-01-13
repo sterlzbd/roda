@@ -64,7 +64,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-symbol_matcher-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-symbol_matcher-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">re</span>)&#x000A;  <span class="ruby-identifier">request_module</span>{<span class="ruby-identifier">define_method</span>(<span class="ruby-value">:&quot;match_symbol_#{s}&quot;</span>){<span class="ruby-identifier">re</span>}}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-symbol_matcher-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">re</span>)&#x000A;  <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-value">:&quot;match_symbol_#{s}&quot;</span>){<span class="ruby-identifier">re</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

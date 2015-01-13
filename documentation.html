@@ -32,7 +32,7 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v1.2.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v1.3.0)</h1>
 
 <h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
@@ -87,10 +87,13 @@
   </ul></li>
   <li>Request/Response Helpers: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Caching.html">caching</a>: Adds request and response methods related to http caching.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Cookies.html">cookies</a>: Adds response methods for handling cookies.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/DefaultHeaders.html">default_headers</a>: Allows modifying the default headers for responses.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/Delegate.html">delegate</a>: Adds class methods for creating instance methods that delegate to the request or response.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Delegate.html">delegate</a>: Adds class methods for creating instance methods that delegate to the request, response, or class.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/DeleteEmptyHeaders.html">delete_empty_headers</a>: Automatically delete response headers with empty values.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/DropBody.html">drop_body</a>: Automatically drops response body and Content-Type/Content-Length headers for response statuses indicating no body.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ModuleInclude.html">module_include</a>: Adds request_module and response_module class methods for adding modules/methods to request/response classes.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/SinatraHelpers.html">sinatra_helpers</a>: Port of Sinatra::Helpers methods not covered by other plugins.</li>
   </ul></li>
   <li>Routing Helpers: <ul>
@@ -101,8 +104,11 @@
   </ul></li>
   <li>Matchers: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/EmptyRoot.html">empty_root</a>: Makes root matcher match empty string in addition to single slash.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/HeaderMatchers.html">header_matchers</a>: Adds matchers for hostname, accept, or presence of arbitrary headers.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/HashMatcher.html">hash_matcher</a>: Adds hash_matcher class method for easily defining hash matchers.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/HeaderMatchers.html">header_matchers</a>: Adds matchers using information from the request headers.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/MatchAffix.html">match_affix</a>: Adds support for overriding default prefix/suffix used in match patterns.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ParamMatchers.html">param_matchers</a>: Adds matchers using information from the request params.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/PathMatchers.html">path_matchers</a>: Adds matchers using information from the request path.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/SlashPathEmpty.html">slash_path_empty</a>: Considers a path of &quot;/&quot; as an empty path when doing a terminal match.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolMatchers.html">symbol_matchers</a>: Adds support for symbol-specific matching regexps.</li>
   </ul></li>
@@ -128,6 +134,7 @@
 <ul>
 <li><a href="https://github.com/jeremyevans/autoforme">autoforme</a>: Adds autoforme method for automatic creation of administrative front-end for Sequel models.</li>
 <li><a href="https://github.com/jeremyevans/forme">forme</a>: Adds form method for simple creation of html forms inside erb templates.</li>
+<li><a href="https://github.com/beno/roda-auth">roda-auth</a>: Adds authentication support for Roda.</li>
 <li><a href="https://github.com/cj/roda-component">roda-component</a>: Adds realtime components using faye and opal.</li>
 <li><a href="https://github.com/beno/roda-rest-api">roda-rest-api</a>: Adds support for easily creating RESTful APIs.</li>
 </ul>
@@ -148,7 +155,7 @@
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/1_2_0_txt.html'>1.2</a> | <a href='rdoc/files/doc/release_notes/1_1_0_txt.html'>1.1</a> | <a href='rdoc/files/doc/release_notes/1_0_0_txt.html'>1.0</a>
+          <a href='rdoc/files/doc/release_notes/1_3_0_txt.html'>1.3</a> | <a href='rdoc/files/doc/release_notes/1_2_0_txt.html'>1.2</a> | <a href='rdoc/files/doc/release_notes/1_1_0_txt.html'>1.1</a> | <a href='rdoc/files/doc/release_notes/1_0_0_txt.html'>1.0</a>
         </li>
       
   

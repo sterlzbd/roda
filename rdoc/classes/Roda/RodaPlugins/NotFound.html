@@ -51,6 +51,10 @@
             <p>Or later via a separate call to <code>not_found</code>:</p>
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">not_found</span>&#x000A;&#x000A;<span class="ruby-identifier">not_found</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;Where did it go?&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Before not_found is called, any existing headers on the response will be
+            cleared.  So if you want to be sure the headers are set even in a not_found
+            block, you need to reset them in the not_found block.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -85,7 +89,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/not_found.rb, line 23</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">not_found</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/not_found.rb, line 28</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">not_found</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

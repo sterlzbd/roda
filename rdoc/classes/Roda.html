@@ -58,6 +58,9 @@
             <a target="docwin" href="../files/lib/roda/plugins/content_for_rb.html">lib/roda/plugins/content_for.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/cookies_rb.html">lib/roda/plugins/cookies.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/csrf_rb.html">lib/roda/plugins/csrf.rb</a>
           </li>
           <li class='other'>
@@ -68,6 +71,12 @@
           </li>
           <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/delegate_rb.html">lib/roda/plugins/delegate.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/delete_empty_headers_rb.html">lib/roda/plugins/delete_empty_headers.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/delete_nil_headers_rb.html">lib/roda/plugins/delete_nil_headers.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/drop_body_rb.html">lib/roda/plugins/drop_body.rb</a>
@@ -94,6 +103,9 @@
             <a target="docwin" href="../files/lib/roda/plugins/halt_rb.html">lib/roda/plugins/halt.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/hash_matcher_rb.html">lib/roda/plugins/hash_matcher.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/head_rb.html">lib/roda/plugins/head.rb</a>
           </li>
           <li class='other'>
@@ -118,6 +130,9 @@
             <a target="docwin" href="../files/lib/roda/plugins/middleware_rb.html">lib/roda/plugins/middleware.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/module_include_rb.html">lib/roda/plugins/module_include.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/multi_route_rb.html">lib/roda/plugins/multi_route.rb</a>
           </li>
           <li class='other'>
@@ -133,10 +148,16 @@
             <a target="docwin" href="../files/lib/roda/plugins/not_found_rb.html">lib/roda/plugins/not_found.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/param_matchers_rb.html">lib/roda/plugins/param_matchers.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/pass_rb.html">lib/roda/plugins/pass.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/path_rb.html">lib/roda/plugins/path.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/roda/plugins/path_matchers_rb.html">lib/roda/plugins/path_matchers.rb</a>
           </li>
           <li class='other'>
             <a target="docwin" href="../files/lib/roda/plugins/per_thread_caching_rb.html">lib/roda/plugins/per_thread_caching.rb</a>
@@ -195,6 +216,7 @@
           <div id='class-list'>
             <h2>Classes and Modules</h2>
             <ol>
+              <li><a target="docwin" href="Roda/RodaDeprecateMutation.html">Roda::RodaDeprecateMutation</a></li>
               <li><a target="docwin" href="Roda/RodaPlugins.html">Roda::RodaPlugins</a></li>
               <li><a target="docwin" href="Roda/RodaCache.html">Roda::RodaCache</a></li>
               <li><a target="docwin" href="Roda/RodaError.html">Roda::RodaError</a></li>
@@ -219,11 +241,48 @@
                     </td>
                   </tr>
                   <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>RodaMajorVersion</td>
+                    <td>=</td>
+                    <td class='context-item-value'>1</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The major version of <a href="Roda.html">Roda</a>, updated only for major
+                      changes that are likely to require modification to <a
+                      href="Roda.html">Roda</a> apps.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>RodaMinorVersion</td>
+                    <td>=</td>
+                    <td class='context-item-value'>3</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The minor version of <a href="Roda.html">Roda</a>, updated for new feature
+                      releases of <a href="Roda.html">Roda</a>.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>RodaPatchVersion</td>
+                    <td>=</td>
+                    <td class='context-item-value'>0</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The patch version of <a href="Roda.html">Roda</a>, updated only for bug
+                      fixes from the last feature release.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>RodaVersion</td>
                     <td>=</td>
-                    <td class='context-item-value'>'1.2.0'.freeze</td>
+                    <td class='context-item-value'>"#{RodaMajorVersion}.#{RodaMinorVersion}.#{RodaPatchVersion}".freeze</td>
                     <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The full version of <a href="Roda.html">Roda</a> as a string.</p>
+                    </td>
                   </tr>
                 </table>
               </div>

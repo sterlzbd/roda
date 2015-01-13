@@ -49,9 +49,9 @@
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_headers</span>, <span class="ruby-string">&#39;Content-Type&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/csv&#39;</span></pre>
             
-            <p>You can also modify the default headers later:</p>
+            <p>You can modify the default headers later by loading the plugin again:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_headers</span>&#x000A;<span class="ruby-identifier">default_headers</span>[<span class="ruby-string">&#39;Foo&#39;</span>] = <span class="ruby-string">&#39;bar&#39;</span>&#x000A;<span class="ruby-identifier">default_headers</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-string">&#39;Bar&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;baz&#39;</span>)</pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_headers</span>, <span class="ruby-string">&#39;Foo&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_headers</span>, <span class="ruby-string">&#39;Bar&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;baz&#39;</span></pre>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -86,7 +86,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/default_headers.rb, line 22</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">headers</span>={})&#x000A;  (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_headers</span>] <span class="ruby-operator">||=</span> {}).<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">headers</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/default_headers.rb, line 22</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">headers</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_headers</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_headers</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">headers</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_headers</span>].<span class="ruby-identifier">extend</span>(<span class="ruby-constant">RodaDeprecateMutation</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

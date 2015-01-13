@@ -38,7 +38,7 @@
         <div id='text'>
           <div id='description'>
             
-            <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>An assets plugin has been added, for rendering your CSS and javascript
             asset files on the fly in development, and compiling them to a single,
@@ -119,7 +119,7 @@
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">error_email</span>, :<span class="ruby-identifier">to=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;to@example.com&#39;</span>,&#x000A;                     :<span class="ruby-identifier">from=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;from@example.com&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">error_email</span>(<span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-string">&#39;Internal Server Error&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             </li></ul>
             
-            <h1 id="label-multi_route+Plugin+Improvements">multi_route Plugin Improvements<span><a href="#label-multi_route+Plugin+Improvements">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-multi_route+Plugin+Improvements">multi_route Plugin Improvements<span><a href="#label-multi_route+Plugin+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>The multi_route plugin now supports namespaces, allowing it to support
             routing trees of arbitrary complexity.  Previously, only a single namespace
@@ -149,7 +149,7 @@
             returning nil.</p>
             </li></ul>
             
-            <h1 id="label-Optimizations">Optimizations<span><a href="#label-Optimizations">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-Optimizations">Optimizations<span><a href="#label-Optimizations">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>Dispatch speed is slightly improved by using allocate instead of new to
             create new instances.</p>
@@ -157,7 +157,7 @@
             <p>Hash allocations in the render plugin have been reduced.</p>
             </li></ul>
             
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>The Roda.route block is now inherited when subclassing, making it possible
             to subclass a <a href="../../../classes/Roda.html">Roda</a> application and
@@ -187,7 +187,7 @@
             plugins violated that policy.</p>
             </li></ul>
             
-            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
             <p>response.write no longer sets a Content-Length header.  Instead,
             response.finish sets it.  This is faster if you call response.write

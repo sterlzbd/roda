@@ -31,25 +31,26 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2014-11-09 12:24:04 -0800</span>
+          <span class='datetime'>2015-01-10 15:40:37 -0800</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
             
-            <h1 id="label-Conventions">Conventions<span><a href="#label-Conventions">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+            <h1 id="label-Conventions">Conventions<span><a href="#label-Conventions">&para;</a> <a href="#top">&uarr;</a></span></h1>
             
             <p>This guide goes over conventions for directory layout and file layout for
             <a href="../../classes/Roda.html">Roda</a> applications. You are free to
-            ignore these conventions, but following them will make your code similar to
-            other <a href="../../classes/Roda.html">Roda</a> applications.</p>
+            ignore these conventions, they mostly exist to help users who are unsure
+            how to structure their <a href="../../classes/Roda.html">Roda</a>
+            applications.</p>
             
-            <h2 id="label-Directory+Layout">Directory Layout<span><a href="#label-Directory+Layout">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <h2 id="label-Directory+Layout">Directory Layout<span><a href="#label-Directory+Layout">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>Which directory layout to use should reflect the size of your application.</p>
             
-            <h3 id="label-Small+Applications">Small Applications<span><a href="#label-Small+Applications">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="label-Small+Applications">Small Applications<span><a href="#label-Small+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>For a small application, the following directory layout is recommended:</p>
             
@@ -97,7 +98,7 @@
             plugin, you should have an <code>assets:precompile</code> task for
             precompiling assets.</p>
             
-            <h3 id="label-Large+Applications">Large Applications<span><a href="#label-Large+Applications">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="label-Large+Applications">Large Applications<span><a href="#label-Large+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>Large applications generally need more structure:</p>
             
@@ -108,16 +109,18 @@
             <code>public/</code>, remain the same.</p>
             
             <p><code>app_name.rb</code> should use the <code>multi_route</code> and
-            <code>view_subdirs</code> plugins.  The routes used by the
-            <code>multi_route</code> plugin should be stored in routing files in the
-            <code>routes/</code> directory, with one file per prefix.</p>
+            <code>view_subdirs</code> plugin, or the <code>multi_run</code> plugin. The
+            routes used by the <code>multi_route</code> or <code>multi_run</code>
+            should be stored in routing files in the <code>routes/</code> directory,
+            with one file per prefix.</p>
             
             <p>For specs/tests, you should have <code>spec/models/</code> and
             <code>spec/web/</code>, with one file per model in
             <code>spec/models/</code> and one file per prefix in
             <code>spec/web/</code>.</p>
             
-            <p>You should have a separate view subdirectory per prefix, and use
+            <p>You should have a separate view subdirectory per prefix. If you are using
+            <code>multi_route</code> and <code>view_subdirs</code>, use
             <code>set_view_subdir</code> in your routing files to specify the
             subdirectory to use, so it doesn&#39;t need to be specified on every call
             to view.</p>
@@ -127,17 +130,17 @@
             application, these methods should just be specified in
             <code>app_name.rb</code></p>
             
-            <h3 id="label-Really+Large+Applications">Really Large Applications<span><a href="#label-Really+Large+Applications">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="label-Really+Large+Applications">Really Large Applications<span><a href="#label-Really+Large+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>For very large applications, it&#39;s expected that there will be
-            deviations from these conventions. However, it is recommended to use
-            namespaces in the <code>multi_route</code> plugin, and have subdirectories
-            in the <code>routes/</code> directory, and nested subdirectories in the
-            <code>views/</code> directory.</p>
+            deviations from these conventions. However, it is recommended to use the
+            <code>multi_route</code> or <code>multi_run</code> plugins to organize your
+            application, and have subdirectories in the <code>routes/</code> directory,
+            and nested subdirectories in the <code>views/</code> directory.</p>
             
-            <h2 id="label-Roda+Application+File+Layout"><a href="../../classes/Roda.html">Roda</a> Application File Layout<span><a href="#label-Roda+Application+File+Layout">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <h2 id="label-Roda+Application+File+Layout"><a href="../../classes/Roda.html">Roda</a> Application File Layout<span><a href="#label-Roda+Application+File+Layout">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
-            <h3 id="label-Small+Applications">Small Applications<span><a href="#label-Small+Applications">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="label-Small+Applications">Small Applications<span><a href="#label-Small+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>For a small application, the convention in <a
             href="../../classes/Roda.html">Roda</a> is to layout your <a
@@ -158,7 +161,7 @@
             the route block, define the instance methods used in your route block or
             views.</p>
             
-            <h3 id="label-Large+Applications">Large Applications<span><a href="#label-Large+Applications">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="label-Large+Applications">Large Applications<span><a href="#label-Large+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>For larger applications, there are some slight changes to the <a
             href="../../classes/Roda.html">Roda</a> application file layout:</p>

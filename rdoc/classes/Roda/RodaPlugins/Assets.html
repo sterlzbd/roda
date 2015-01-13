@@ -53,7 +53,7 @@
             <p>CoffeeScript</p>
             </td></tr></tbody></table>
             
-            <h2 id="module-Roda::RodaPlugins::Assets-label-Usage">Usage<span><a href="#module-Roda::RodaPlugins::Assets-label-Usage">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <h2 id="module-Roda::RodaPlugins::Assets-label-Usage">Usage<span><a href="#module-Roda::RodaPlugins::Assets-label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>When loading the plugin, use the :css and :js options to set the source
             file(s) to use for CSS and javascript assets:</p>
@@ -67,7 +67,7 @@
             <p>If you want to change the paths where asset files are stored, see the
             Options section below.</p>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-Serving">Serving<span><a href="#module-Roda::RodaPlugins::Assets-label-Serving">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-Serving">Serving<span><a href="#module-Roda::RodaPlugins::Assets-label-Serving">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>In your routes, call the r.assets method to add a route to your assets,
             which will make your app serve the rendered assets:</p>
@@ -77,7 +77,7 @@
             <p>You should generally call <code>r.assets</code> inside the route block
             itself, and not under any branches of the routing tree.</p>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-Views">Views<span><a href="#module-Roda::RodaPlugins::Assets-label-Views">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-Views">Views<span><a href="#module-Roda::RodaPlugins::Assets-label-Views">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>In your layout view, use the assets method to add links to your CSS and
             javascript assets:</p>
@@ -88,7 +88,7 @@
             
             <pre>&lt;%= assets(:css, :media =&gt; &#39;print&#39;) %&gt;</pre>
             
-            <h2 id="module-Roda::RodaPlugins::Assets-label-Asset+Groups">Asset Groups<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Groups">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <h2 id="module-Roda::RodaPlugins::Assets-label-Asset+Groups">Asset Groups<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Groups">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>The asset plugin supports groups for the cases where you have different
             css/js files for your front end and back end.  To use asset groups, you
@@ -107,7 +107,7 @@
             
             <pre>&lt;%= assets([:css, :frontend]) %&gt;</pre>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-Nesting">Nesting<span><a href="#module-Roda::RodaPlugins::Assets-label-Nesting">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-Nesting">Nesting<span><a href="#module-Roda::RodaPlugins::Assets-label-Nesting">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>Asset groups also supporting nesting, though that should only be needed in
             fairly large applications.  You can use a nested hash when loading the
@@ -119,7 +119,7 @@
             
             <pre>&lt;%= assets([:css, :frontend, :dashboard]) %&gt;</pre>
             
-            <h2 id="module-Roda::RodaPlugins::Assets-label-Caching"><a href="Caching.html">Caching</a><span><a href="#module-Roda::RodaPlugins::Assets-label-Caching">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <h2 id="module-Roda::RodaPlugins::Assets-label-Caching"><a href="Caching.html">Caching</a><span><a href="#module-Roda::RodaPlugins::Assets-label-Caching">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>The assets plugin uses the caching plugin internally, and will set the
             Last-Modified header to the modified timestamp of the asset source file
@@ -134,7 +134,7 @@
             
             <pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">assets</span>,&#x000A;  :<span class="ruby-identifier">dependencies=</span><span class="ruby-operator">&gt;</span>{<span class="ruby-string">&#39;assets/css/bootstrap.scss&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;assets/css/bootstrap/&#39;</span> <span class="ruby-string">&#39;**/*.scss&#39;</span>]}</pre>
             
-            <h2 id="module-Roda::RodaPlugins::Assets-label-Asset+Compilation">Asset Compilation<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Compilation">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <h2 id="module-Roda::RodaPlugins::Assets-label-Asset+Compilation">Asset Compilation<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Compilation">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>In production, you are generally going to want to compile your assets into
             a single file, with you can do by calling compile_assets after loading the
@@ -147,25 +147,25 @@
             By default the compiled files are written to the public directory, so that
             they can be served by the webserver.</p>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-Asset+Compression">Asset Compression<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Compression">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-Asset+Compression">Asset Compression<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Compression">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>If you have the yuicompressor gem installed and working, it will be used
             automatically to compress your javascript and css assets.  Otherwise, the
             assets will just be concatenated together and not compressed during
             compilation.</p>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-With+Asset+Groups">With Asset Groups<span><a href="#module-Roda::RodaPlugins::Assets-label-With+Asset+Groups">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-With+Asset+Groups">With Asset Groups<span><a href="#module-Roda::RodaPlugins::Assets-label-With+Asset+Groups">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>When using asset groups, a separate compiled file will be produced per
             asset group.</p>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-Unique+Asset+Names">Unique Asset Names<span><a href="#module-Roda::RodaPlugins::Assets-label-Unique+Asset+Names">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-Unique+Asset+Names">Unique Asset Names<span><a href="#module-Roda::RodaPlugins::Assets-label-Unique+Asset+Names">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>When compiling assets, a unique name is given to each asset file, using the
             a SHA1 hash of the content of the file.  This is done so that clients do
             not attempt to use cached versions of the assets if the asset has changed.</p>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-Serving">Serving<span><a href="#module-Roda::RodaPlugins::Assets-label-Serving">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-Serving">Serving<span><a href="#module-Roda::RodaPlugins::Assets-label-Serving">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>If you call <code>r.assets</code> when compiling assets, will serve the
             compiled asset files.  However, it is recommended to have the main
@@ -181,7 +181,7 @@
             Last-Modified header to make sure that clients do not redownload compiled
             assets that haven&#39;t changed.</p>
             
-            <h3 id="module-Roda::RodaPlugins::Assets-label-Asset+Precompilation">Asset Precompilation<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Precompilation">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+            <h3 id="module-Roda::RodaPlugins::Assets-label-Asset+Precompilation">Asset Precompilation<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Precompilation">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>If you want to precompile your assets, so they do not need to be compiled
             every time you boot the application, you can provide a :precompiled option
@@ -198,7 +198,7 @@
             metadata, and it will run in compiled mode, assuming that the compiled
             asset files already exist.</p>
             
-            <h4 id="module-Roda::RodaPlugins::Assets-label-On+Heroku">On Heroku<span><a href="#module-Roda::RodaPlugins::Assets-label-On+Heroku">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+            <h4 id="module-Roda::RodaPlugins::Assets-label-On+Heroku">On Heroku<span><a href="#module-Roda::RodaPlugins::Assets-label-On+Heroku">&para;</a> <a href="#top">&uarr;</a></span></h4>
             
             <p>Heroku supports precompiling the assets when using <a
             href="../../Roda.html">Roda</a>.  You just need to add an assets:precompile
@@ -206,7 +206,7 @@
             
             <pre class="ruby"><span class="ruby-identifier">namespace</span> :<span class="ruby-identifier">assets</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">desc</span> <span class="ruby-string">&quot;Precompile the assets&quot;</span>&#x000A;  <span class="ruby-identifier">task</span> :<span class="ruby-identifier">precompile</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;./app&#39;</span>&#x000A;    <span class="ruby-constant">App</span>.<span class="ruby-identifier">compile_assets</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
-            <h2 id="module-Roda::RodaPlugins::Assets-label-Plugin+Options">Plugin Options<span><a href="#module-Roda::RodaPlugins::Assets-label-Plugin+Options">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+            <h2 id="module-Roda::RodaPlugins::Assets-label-Plugin+Options">Plugin Options<span><a href="#module-Roda::RodaPlugins::Assets-label-Plugin+Options">&para;</a> <a href="#top">&uarr;</a></span></h2>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_suffix </td><td>
             <p>Whether to append a .css or .js extension to asset routes in non-compiled
             mode (default: false)</p>
@@ -235,8 +235,8 @@
             </td></tr><tr><td class='label'>:css_headers </td><td>
             <p>A hash of additional headers for your rendered css files</p>
             </td></tr><tr><td class='label'>:css_opts </td><td>
-            <p>Template options to pass to the render plugin (via :opts) when rendering
-            css assets</p>
+            <p>Template options to pass to the render plugin (via :template_opts) when
+            rendering css assets</p>
             </td></tr><tr><td class='label'>:css_route </td><td>
             <p>Route under :prefix for css assets (default: :css_dir)</p>
             </td></tr><tr><td class='label'>:dependencies </td><td>
@@ -255,8 +255,8 @@
             </td></tr><tr><td class='label'>:js_headers </td><td>
             <p>A hash of additional headers for your rendered javascript files</p>
             </td></tr><tr><td class='label'>:js_opts </td><td>
-            <p>Template options to pass to the render plugin (via :opts) when rendering
-            javascript assets</p>
+            <p>Template options to pass to the render plugin (via :template_opts) when
+            rendering javascript assets</p>
             </td></tr><tr><td class='label'>:js_route </td><td>
             <p>Route under :prefix for javascript assets (default: :js_dir)</p>
             </td></tr><tr><td class='label'>:path </td><td>
@@ -410,7 +410,7 @@
                 <a name='method-c-load_dependencies'></a>
                 <div class='synopsis'>
                   <span class='name'>load_dependencies</span>
-                  <span class='arguments'>(app, _opts = {})</span>
+                  <span class='arguments'>(app, _opts = nil)</span>
                 </div>
                 <div class='description'>
                   
@@ -421,7 +421,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 245</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = {})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:caching</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 245</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:caching</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

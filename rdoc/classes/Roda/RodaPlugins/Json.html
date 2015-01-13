@@ -50,10 +50,11 @@
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">json</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;  [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>]&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  {<span class="ruby-string">&#39;a&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;b&#39;</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
             
-            <p>By default, only arrays and hashes are handled, but you can automatically
-            convert other types to json by adding them to json_result_classes:</p>
+            <p>By default, only arrays and hashes are handled, but you can specifically
+            set the allowed classes to json by adding using the :classes option when
+            loading the plugin:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">json</span>&#x000A;<span class="ruby-identifier">json_result_classes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">json</span>, :<span class="ruby-identifier">classes=</span><span class="ruby-operator">&gt;</span>[<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>, <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>]</pre>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -78,7 +79,7 @@
                 <a name='method-c-configure'></a>
                 <div class='synopsis'>
                   <span class='name'>configure</span>
-                  <span class='arguments'>(app)</span>
+                  <span class='arguments'>(app, opts={})</span>
                 </div>
                 <div class='description'>
                   
@@ -88,7 +89,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 38</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 37</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">classes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">classes</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">uniq!</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">extend</span>(<span class="ruby-constant">RodaDeprecateMutation</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
