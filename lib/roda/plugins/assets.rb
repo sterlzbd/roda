@@ -396,7 +396,7 @@ class Roda
         def compile_assets_files(files, type, dirs)
           dirs = nil if dirs && dirs.empty?
           o = assets_opts
-          app = new
+          app = allocate
 
           content = files.map do |file|
             file = "#{dirs.join('/')}/#{file}" if dirs && o[:group_subdirs]

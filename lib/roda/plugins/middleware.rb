@@ -62,9 +62,13 @@ class Roda
       end
 
       module ClassMethods
-        # Create a Forwarder instead of a new instance.
+        # Create a Forwarder instead of a new instance if a non-Hash is given.
         def new(app)
-          Forwarder.new(self, app)
+          if app.is_a?(Hash)
+            super
+          else
+            Forwarder.new(self, app)
+          end
         end
 
         # Override the route block so that if no route matches, we throw so

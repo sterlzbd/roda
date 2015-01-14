@@ -127,7 +127,7 @@ class Roda
         # calling +deliver+ to send the mail.
         def mail(path, *args)
           mail = ::Mail.new
-          unless mail.equal?(allocate.call(PATH_INFO=>path, SCRIPT_NAME=>EMPTY_STRING, REQUEST_METHOD=>MAIL, RACK_INPUT=>StringIO.new, RODA_MAIL=>mail, RODA_MAIL_ARGS=>args, &route_block))
+          unless mail.equal?(new(PATH_INFO=>path, SCRIPT_NAME=>EMPTY_STRING, REQUEST_METHOD=>MAIL, RACK_INPUT=>StringIO.new, RODA_MAIL=>mail, RODA_MAIL_ARGS=>args).call(&route_block))
             raise Error, "route did not return mail instance for #{path.inspect}, #{args.inspect}"
           end
           mail
@@ -203,18 +203,18 @@ class Roda
           end
         end
 
-        private
-
         # If this is an email request, set the mail object in the response, as well
         # as the default content_type for the email.
-        def _route
+        def initialize(env)
+          super
           if mail = env[RODA_MAIL]
             res = @_response
             res.mail = mail
             res.headers.delete(CONTENT_TYPE)
           end
-          super
         end
+
+        private
 
         # Set the text_part or html_part (depending on the method) in the related email,
         # using the given body and optional headers.

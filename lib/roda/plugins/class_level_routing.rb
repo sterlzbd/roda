@@ -70,11 +70,9 @@ class Roda
       end
 
       module InstanceMethods
-        private
-
         # If the normal routing tree doesn't handle an action, try each class level route
         # to see if it matches.
-        def _route(&block)
+        def call
           result = super
 
           if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?

@@ -46,17 +46,17 @@ class Roda
       end
 
       module InstanceMethods
-        private
-
         # If an error occurs, set the response status to 500 and call
         # the error handler.
-        def _route
+        def call
           super
         rescue => e
           res = @_response = self.class::RodaResponse.new
           res.status = 500
           super{handle_error(e)}
         end
+
+        private
 
         # By default, have the error handler reraise the error, so using
         # the plugin without installing an error handler doesn't change

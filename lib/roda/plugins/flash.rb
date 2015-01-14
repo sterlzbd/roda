@@ -87,11 +87,9 @@ class Roda
           @_flash ||= FlashHash.new(session[KEY])
         end
 
-        private
-
         # If the routing doesn't raise an error, rotate the flash
         # hash in the session so the next request has access to it.
-        def _route
+        def call
           res = super
 
           if f = @_flash

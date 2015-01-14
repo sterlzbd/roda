@@ -332,11 +332,11 @@ if run_tests
     end
 
     it '#assets should include attributes given' do
-      app.new.assets([:js, :head], 'a'=>'b').should == '<script type="text/javascript" a="b" src="/assets/js/head/app.js"></script>'
+      app.allocate.assets([:js, :head], 'a'=>'b').should == '<script type="text/javascript" a="b" src="/assets/js/head/app.js"></script>'
     end
 
     it '#assets should escape attribute values given' do
-      app.new.assets([:js, :head], 'a'=>'b"e').should == '<script type="text/javascript" a="b&quot;e" src="/assets/js/head/app.js"></script>'
+      app.allocate.assets([:js, :head], 'a'=>'b"e').should == '<script type="text/javascript" a="b&quot;e" src="/assets/js/head/app.js"></script>'
     end
 
     it 'requests for assets should return 304 if the asset has not been modified' do
@@ -397,17 +397,17 @@ if run_tests
     it 'should support :precompiled option' do
       app.plugin :assets, :precompiled=>metadata_file
       File.exist?(metadata_file).should == false
-      app.new.assets([:js, :head]).should == '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
+      app.allocate.assets([:js, :head]).should == '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
 
       app.compile_assets
       File.exist?(metadata_file).should == true
-      app.new.assets([:js, :head]).should =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      app.allocate.assets([:js, :head]).should =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
 
       app.plugin :assets, :compiled=>false, :precompiled=>false
-      app.new.assets([:js, :head]).should == '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
+      app.allocate.assets([:js, :head]).should == '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
 
       app.plugin :assets, :precompiled=>metadata_file
-      app.new.assets([:js, :head]).should =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      app.allocate.assets([:js, :head]).should =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
     end
   end
 end

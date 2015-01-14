@@ -1,5 +1,7 @@
 = HEAD
 
+* Make Roda#initialize take env hash, #call take route_block, remove private #_route (jeremyevans)
+
 * Remove keep_remaining_path/update_remaining_path private request methods (jeremyevans)
 
 * Don't modify SCRIPT_NAME/PATH_INFO during routing, merging static_path_info plugin into core (jeremyevans)

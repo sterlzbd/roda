@@ -218,7 +218,7 @@ class Roda
           if block = @route_block
             builder = Rack::Builder.new
             @middleware.each{|a, b| builder.use(*a, &b)}
-            builder.run lambda{|env| allocate.call(env, &block)}
+            builder.run lambda{|env| new(env).call(&block)}
             @app = builder.to_app
           end
         end
@@ -230,10 +230,20 @@ class Roda
         # class, the instance_exec the route block with
         # the request, handling any halts.  This is not usually
         # called directly.
-        def call(env, &block)
-          @_request = self.class::RodaRequest.new(self, env)
-          @_response = self.class::RodaResponse.new
-          _route(&block)
+        def initialize(env)
+          klass = self.class
+          @_request = klass::RodaRequest.new(self, env)
+          @_response = klass::RodaResponse.new
+        end
+
+        # Internals of #call, extracted so that plugins can override
+        # behavior after the request and response have been setup.
+        def call(&block)
+          catch(:halt) do
+            r = @_request
+            r.block_result(instance_exec(r, &block))
+            @_response.finish
+          end
         end
 
         # The environment hash for the current request. Example:
@@ -271,18 +281,6 @@ class Roda
         #   session # => {}
         def session
           @_request.session
-        end
-
-        private
-
-        # Internals of #call, extracted so that plugins can override
-        # behavior after the request and response have been setup.
-        def _route(&block)
-          catch(:halt) do
-            r = @_request
-            r.block_result(instance_exec(r, &block))
-            @_response.finish
-          end
         end
       end
 

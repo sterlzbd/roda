@@ -504,7 +504,7 @@ with your application code.  Some of the things Roda does
 - The only instance variables defined by default in the scope of the +route+ block
   are <tt>@_request</tt> and <tt>@_response</tt>.
 - The only methods defined (beyond the default methods for +Object+) are:
-  +env+, +opts+, +request+, +response+, +call+, +session+, and +_route+ (private).
+  +call+, +env+, +opts+, +request+, +response+, and +session+.
 - Constants inside the Roda namespace are all prefixed with +Roda+
   (e.g., <tt>Roda::RodaRequest</tt>).
 

@@ -40,11 +40,9 @@ class Roda
       end
 
       module InstanceMethods
-        private
-
         # If routing returns a 404 response with an empty body, call
         # the not_found handler.
-        def _route
+        def call
           result = super
 
           if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
@@ -54,6 +52,8 @@ class Roda
             result
           end
         end
+
+        private
 
         # Use an empty not_found_handler by default, so that loading
         # the plugin without defining a not_found handler doesn't
