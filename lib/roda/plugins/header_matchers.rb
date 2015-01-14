@@ -45,13 +45,8 @@ class Roda
         # Match if the given uppercase key is present inside the environment.
         def match_header(key)
           if v = @env[key.upcase.tr("-","_")]
-            if roda_class.opts[:match_header_yield]
-              @captures << v
-            else
-              RodaPlugins.deprecate("The :header hash matcher will yield the header value in Roda 2.  To turn on the Roda 2 behavior, set opts[:match_header_yield] to true for your Roda class.")
-            end
+            @captures << v
           end
-          v
         end
 
         # Match if the host of the request is the same as the hostname.  +hostname+

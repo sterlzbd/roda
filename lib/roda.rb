@@ -59,18 +59,6 @@ class Roda
   @opts = {}
   @route_block = nil
 
-  module RodaDeprecateMutation
-    [:[]=, :clear, :compare_by_identity, :default=, :default_proc=, :delete, :delete_if,
-     :keep_if, :merge!, :reject!, :replace, :select!, :shift, :store, :update].each do |m|
-      class_eval(<<-END, __FILE__, __LINE__+1)
-        def #{m}(*)
-          RodaPlugins.deprecate("Mutating this hash (\#{inspect}) via the #{m} method is deprecated, this hash will be frozen in Roda 2.")
-          super
-        end
-      END
-    end
-  end
-
   # Module in which all Roda plugins should be stored. Also contains logic for
   # registering and loading plugins.
   module RodaPlugins
@@ -96,12 +84,6 @@ class Roda
     #   Roda::RodaPlugins.register_plugin(:plugin_name, PluginModule)
     def self.register_plugin(name, mod)
       @plugins[name] = mod
-    end
-
-    # Emit a deprecation message.  By default this just calls warn.  You can override this
-    # method to log deprecation messages to a file or include backtraces (or something else).
-    def self.deprecate(msg)
-      warn(msg)
     end
 
     # The base plugin for Roda, implementing all default functionality.
@@ -151,11 +133,6 @@ class Roda
           super
         end
 
-        def hash_matcher(key, &block)
-          RodaPlugins.deprecate("Roda.hash_matcher is deprecated and will be removed in Roda 2.  It has been moved to the hash_matcher plugin.")
-          self::RodaRequest.send(:define_method, :"match_#{key}", &block)
-        end
-
         # When inheriting Roda, copy the shared data into the subclass,
         # and setup the request and response subclasses.
         def inherited(subclass)
@@ -167,9 +144,6 @@ class Roda
           subclass.opts.to_a.each do |k,v|
             if (v.is_a?(Array) || v.is_a?(Hash)) && !v.frozen?
               subclass.opts[k] = v.dup
-              if v.is_a?(RodaDeprecateMutation)
-                subclass.opts[k].extend(RodaDeprecateMutation)
-              end
             end
           end
           subclass.instance_variable_set(:@route_block, @route_block)
@@ -202,16 +176,6 @@ class Roda
           self::RodaResponse.send(:include, plugin::ResponseMethods) if defined?(plugin::ResponseMethods)
           self::RodaResponse.extend(plugin::ResponseClassMethods) if defined?(plugin::ResponseClassMethods)
           plugin.configure(self, *args, &block) if plugin.respond_to?(:configure)
-        end
-
-        def request_module(mod = nil, &block)
-          RodaPlugins.deprecate("Roda.request_module is deprecated and will be removed in Roda 2.  It has been moved to the module_include plugin.")
-          module_include(:request, mod, &block)
-        end
-    
-        def response_module(mod = nil, &block)
-          RodaPlugins.deprecate("Roda.response_module is deprecated and will be removed in Roda 2.  It has been moved to the module_include plugin.")
-          module_include(:response, mod, &block)
         end
 
         # Setup routing tree for the current Roda application, and build the
@@ -257,33 +221,6 @@ class Roda
             builder.run lambda{|env| allocate.call(env, &block)}
             @app = builder.to_app
           end
-        end
-
-        # REMOVE20
-        def module_include(type, mod)
-          if type == :response
-            klass = self::RodaResponse
-            iv = :@response_module
-          else
-            klass = self::RodaRequest
-            iv = :@request_module
-          end
-
-          if mod
-            raise RodaError, "can't provide both argument and block to response_module" if block_given?
-            klass.send(:include, mod)
-          else
-            if instance_variable_defined?(iv)
-              mod = instance_variable_get(iv)
-            else
-              mod = instance_variable_set(iv, Module.new)
-              klass.send(:include, mod)
-            end
-
-            mod.module_eval(&Proc.new) if block_given?
-          end
-
-          mod
         end
       end
 
@@ -570,11 +507,6 @@ class Roda
         def path
           e = @env
           "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
-        end
-
-        def full_path_info
-          RodaPlugins.deprecate("RodaRequest#full_path_info is deprecated and will be removed in Roda 2.  Switch to using #path.")
-          path
         end
 
         # The current path to match requests against.  This is the same as PATH_INFO
@@ -864,11 +796,6 @@ class Roda
           args.all?{|arg| match(arg)}
         end
 
-        def match_extension(ext)
-          RodaPlugins.deprecate("The :extension matcher is deprecated and will be removed in Roda 2.  It has been moved to the path_matchers plugin.")
-          consume(self.class.cached_matcher([:extension, ext]){/([^\\\/]+)\.#{ext}/})
-        end
-
         # Match by request method.  This can be an array if you want
         # to match on multiple methods.
         def match_method(type)
@@ -876,20 +803,6 @@ class Roda
             type.any?{|t| match_method(t)}
           else
             type.to_s.upcase == @env[REQUEST_METHOD]
-          end
-        end
-
-        def match_param(key)
-          RodaPlugins.deprecate("The :param matcher is deprecated and will be removed in Roda 2.  It has been moved to the param_matchers plugin.")
-          if v = self[key]
-            @captures << v
-          end
-        end
-
-        def match_param!(key)
-          RodaPlugins.deprecate("The :param! matcher is deprecated and will be removed in Roda 2.  It has been moved to the param_matchers plugin.")
-          if (v = self[key]) && !v.empty?
-            @captures << v
           end
         end
 
@@ -959,11 +872,6 @@ class Roda
           DEFAULT_HEADERS
         end
 
-        def delete_cookie(key, value = {})
-          RodaPlugins.deprecate("RodaResponse#delete_cookie is deprecated and will be removed in Roda 2.  It has been moved to the cookies plugin.")
-          ::Rack::Utils.delete_cookie_header!(@headers, key, value)
-        end
-
         # Whether the response body has been written to yet.  Note
         # that writing an empty string to the response body marks
         # the response as not empty. Example:
@@ -1023,11 +931,6 @@ class Roda
         # Return the Roda class related to this response.
         def roda_class
           self.class.roda_class
-        end
-
-        def set_cookie(key, value)
-          RodaPlugins.deprecate("RodaResponse#set_cookie is deprecated and will be removed in Roda 2.  It has been moved to the cookies plugin.")
-          ::Rack::Utils.set_cookie_header!(@headers, key, value)
         end
 
         # Write to the response body.  Returns nil.

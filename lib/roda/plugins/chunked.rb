@@ -142,8 +142,7 @@ class Roda
       def self.configure(app, opts=OPTS)
         app.opts[:chunk_by_default] = opts[:chunk_by_default]
         if opts[:headers]
-          app.opts[:chunk_headers] = (app.opts[:chunk_headers] || {}).merge(opts[:headers])
-          app.opts[:chunk_headers].extend(RodaDeprecateMutation)
+          app.opts[:chunk_headers] = (app.opts[:chunk_headers] || {}).merge(opts[:headers]).freeze
         end
       end
 

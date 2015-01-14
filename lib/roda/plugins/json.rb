@@ -39,7 +39,7 @@ class Roda
         app.opts[:json_result_classes] ||= []
         app.opts[:json_result_classes] += classes
         app.opts[:json_result_classes].uniq!
-        app.opts[:json_result_classes].extend(RodaDeprecateMutation)
+        app.opts[:json_result_classes].freeze
       end
 
       module ClassMethods

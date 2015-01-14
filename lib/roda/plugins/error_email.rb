@@ -82,19 +82,8 @@ END
           raise RodaError, "must provide :to and :from options to error_email plugin"
         end
         app.opts[:error_email] = email_opts
-        app.opts[:error_email].extend(RodaDeprecateMutation)
-        app.opts[:error_email][:headers].extend(RodaDeprecateMutation)
-      end
-
-      module ClassMethods
-        # Dup the error email opts in the subclass so changes to the subclass do not affect
-        # the superclass.
-        def inherited(subclass)
-          super
-          opts = subclass.opts[:error_email].dup
-          opts[:headers] = opts[:headers].dup.extend(RodaDeprecateMutation)
-          subclass.opts[:error_email] = opts.extend(RodaDeprecateMutation)
-        end
+        app.opts[:error_email][:headers].freeze
+        app.opts[:error_email].freeze
       end
 
       module InstanceMethods

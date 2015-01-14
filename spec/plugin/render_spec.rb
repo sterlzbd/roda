@@ -141,7 +141,7 @@ describe "render plugin" do
     body.should == "i1"
   end
 
-  it "template cache respects :opts" do
+  it "template cache respects :template_opts" do
     c = Class.new do 
       def initialize(path, _, opts)
         @path = path
@@ -154,10 +154,10 @@ describe "render plugin" do
 
     app(:render) do |r|
       r.is "a" do
-        render(:inline=>"i", :template_class=>c, :opts=>{:foo=>'a'})
+        render(:inline=>"i", :template_class=>c, :template_opts=>{:foo=>'a'})
       end
       r.is "b" do
-        render(:inline=>"i", :template_class=>c, :opts=>{:foo=>'b'})
+        render(:inline=>"i", :template_class=>c, :template_opts=>{:foo=>'b'})
       end
     end
 
@@ -195,8 +195,6 @@ describe "render plugin" do
     sc = Class.new(c)
 
     c.render_opts.should_not equal(sc.render_opts)
-    c.render_opts[:layout_opts].should_not equal(sc.render_opts[:layout_opts])
-    c.render_opts[:template_opts].should_not equal(sc.render_opts[:template_opts])
     c.render_opts[:cache].should_not equal(sc.render_opts[:cache])
   end
 

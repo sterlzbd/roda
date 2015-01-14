@@ -377,44 +377,6 @@ describe "r.on" do
   end
 end
 
-describe "param! matcher" do
-  it "should yield a param only if given and not empty" do
-    app do |r|
-      r.get "signup", :param! => "email" do |email|
-        email
-      end
-
-      r.on do
-        "No email"
-      end
-    end
-
-    io = StringIO.new
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").should == 'john@doe.com'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "").should == 'No email'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").should == 'No email'
-  end
-end
-
-describe "param matcher" do
-  it "should yield a param only if given" do
-    app do |r|
-      r.get "signup", :param=>"email" do |email|
-        email
-      end
-
-      r.on do
-        "No email"
-      end
-    end
-
-    io = StringIO.new
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").should == 'john@doe.com'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "").should == 'No email'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").should == ''
-  end
-end
-
 describe "path matchers" do 
   it "one level path" do
     app do |r|
@@ -644,21 +606,6 @@ describe "all matcher" do
   end
 end
 
-describe "extension matcher" do
-  it "should match given file extensions" do
-    app do |r|
-      r.on "css" do
-        r.on :extension=>"css" do |file|
-          file
-        end
-      end
-    end
-
-    body("/css/reset.css").should == 'reset'
-    status("/css/reset.bar").should == 404
-  end
-end
-
 describe "method matcher" do
   it "should match given request types" do
     app do |r|
@@ -686,29 +633,3 @@ describe "route block that returns string" do
     body.should == '+1'
   end
 end
-
-describe "hash_matcher" do
-  it "should enable the handling of arbitrary hash keys" do
-    app(:bare) do 
-      hash_matcher(:foos){|v| consume(self.class.cached_matcher(:"foos-#{v}"){/((?:foo){#{v}})/})}
-      route do |r|
-        r.is :foos=>1 do |f|
-          "1#{f}"
-        end
-        r.is :foos=>2 do |f|
-          "2#{f}"
-        end
-        r.is :foos=>3 do |f|
-          "3#{f}"
-        end
-      end
-    end
-
-    body("/foo").should == '1foo'
-    body("/foofoo").should == '2foofoo'
-    body("/foofoofoo").should == '3foofoofoo'
-    status("/foofoofoofoo").should == 404
-    status.should == 404
-  end
-end
-

@@ -91,11 +91,6 @@ class Roda
           app.opts[:render] = opts.dup
         end
 
-        if opts[:opts] && !opts[:template_opts]
-          RodaPlugins.deprecate("The render plugin :opts option is deprecated and will be removed in Roda 2.  Switch to using the :template_opts option")
-          app.opts[:render][:template_opts] = opts[:opts]
-        end
-
         opts = app.opts[:render]
         opts[:engine] ||= "erb"
         opts[:ext] = nil unless opts.has_key?(:ext)
@@ -117,9 +112,9 @@ class Roda
           template_opts[:engine_class] = ErubisEscaping::Eruby
         end
         opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
-        opts.extend(RodaDeprecateMutation)
-        opts[:layout_opts].extend(RodaDeprecateMutation)
-        opts[:template_opts].extend(RodaDeprecateMutation)
+        opts[:layout_opts].freeze
+        opts[:template_opts].freeze
+        opts.freeze
       end
 
       module ClassMethods
@@ -128,11 +123,9 @@ class Roda
         # affecting the parent class.
         def inherited(subclass)
           super
-          opts = subclass.opts[:render].dup
-          opts[:layout_opts] = opts[:layout_opts].dup.extend(RodaDeprecateMutation)
-          opts[:template_opts] = opts[:template_opts].dup.extend(RodaDeprecateMutation)
+          opts = subclass.opts[:render] = subclass.opts[:render].dup
           opts[:cache] = thread_safe_cache if opts[:cache]
-          subclass.opts[:render] = opts.extend(RodaDeprecateMutation)
+          opts.freeze
         end
 
         # Return the render options for this class.
@@ -148,10 +141,6 @@ class Roda
           cached_template(opts) do
             template_opts = render_opts[:template_opts]
             current_template_opts = opts[:template_opts]
-            if opts[:opts] && !current_template_opts
-              RodaPlugins.deprecate("The render method :opts option is deprecated and will be removed in Roda 2.  Switch to using the :template_opts option")
-              current_template_opts = opts[:opts]
-            end
             template_opts = template_opts.merge(current_template_opts) if current_template_opts
             opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
           end.render(self, (opts[:locals]||OPTS), &block)
@@ -214,10 +203,6 @@ class Roda
 
           if render_opts[:cache]
             template_opts = opts[:template_opts]
-            if opts[:opts] && !template_opts
-              RodaPlugins.deprecate("The render method :opts option is deprecated and will be removed in Roda 2.  Switch to using the :template_opts option")
-              template_opts = opts[:opts]
-            end
             template_block = opts[:template_block] if !content
 
             key = if template_class || template_opts || template_block
