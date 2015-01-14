@@ -728,7 +728,7 @@ class Roda
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
           if matchdata = remaining_path.match(pattern)
-            update_remaining_path(matchdata.post_match)
+            @remaining_path = matchdata.post_match
             @captures.concat(matchdata.captures)
           end
         end
@@ -761,26 +761,18 @@ class Roda
         # returns the rack response when the block returns.  If any of
         # the match arguments doesn't match, does nothing.
         def if_match(args)
-          keep_remaining_path do
-            # For every block, we make sure to reset captures so that
-            # nesting matchers won't mess with each other's captures.
-            @captures.clear
-
-            return unless match_all(args)
-            block_result(yield(*captures))
-            throw :halt, response.finish
-          end
-        end
-        
-        # Yield to the block, restoring remaining_path to its initial
-        # value before returning from the block.
-        def keep_remaining_path
           path = @remaining_path
-          yield
+          # For every block, we make sure to reset captures so that
+          # nesting matchers won't mess with each other's captures.
+          @captures.clear
+
+          return unless match_all(args)
+          block_result(yield(*captures))
+          throw :halt, response.finish
         ensure
           @remaining_path = path
         end
-
+        
         # Attempt to match the argument to the given request, handling
         # common ruby types.
         def match(matcher)
@@ -817,11 +809,6 @@ class Roda
           else
             type.to_s.upcase == @env[REQUEST_METHOD]
           end
-        end
-
-        # Update remaining_path with the remaining characters
-        def update_remaining_path(remaining)
-          @remaining_path = remaining
         end
       end
 
