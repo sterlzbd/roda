@@ -291,18 +291,46 @@ describe "r.on" do
     body("/123").should == '+1'
   end
 
-  it "ensures SCRIPT_NAME and PATH_INFO are reverted" do
+  it "ensures remaining_path is reverted if modified in failing matcher" do
     app do |r|
-      r.on lambda { r.env["SCRIPT_NAME"] = "/hello"; false } do
+      r.on lambda { @remaining_path = "/blah"; false } do
         "Unreachable"
       end
       
       r.on do
-        r.env["SCRIPT_NAME"] + ':' + r.env["PATH_INFO"]
+        r.matched_path + ':' + r.remaining_path
       end
     end
 
     body("/hello").should == ':/hello'
+  end
+
+  it "modifies matched_path/remaining_path during routing" do
+    app do |r|
+      r.on 'login', 'foo' do 
+        "Unreachable"
+      end
+      
+      r.on 'hello' do
+        r.matched_path + ':' + r.remaining_path
+      end
+    end
+
+    body("/hello/you").should == '/hello:/you'
+  end
+
+  it "doesn't modify SCRIPT_NAME/PATH_INFO during routing" do
+    app do |r|
+      r.on 'login', 'foo' do 
+        "Unreachable"
+      end
+      
+      r.on 'hello' do
+        r.env["SCRIPT_NAME"] + ':' + r.env["PATH_INFO"]
+      end
+    end
+
+    body("/hello/you").should == ':/hello/you'
   end
 
   it "doesn't mutate SCRIPT_NAME or PATH_INFO after request is returned" do

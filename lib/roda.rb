@@ -355,6 +355,7 @@ class Roda
         def initialize(scope, env)
           @scope = scope
           @captures = []
+          @remaining_path = env[PATH_INFO]
           super(env)
         end
 
@@ -495,7 +496,8 @@ class Roda
 
         # The already matched part of the path, including the original SCRIPT_NAME.
         def matched_path
-          @env[SCRIPT_NAME]
+          e = @env
+          e[SCRIPT_NAME] + e[PATH_INFO].chomp(@remaining_path)
         end
 
         # This an an optimized version of Rack::Request#path.
@@ -509,11 +511,8 @@ class Roda
           "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
         end
 
-        # The current path to match requests against.  This is the same as PATH_INFO
-        # in the environment, which gets updated as the request is being routed.
-        def remaining_path
-          @env[PATH_INFO]
-        end
+        # The current path to match requests against.
+        attr_reader :remaining_path
 
         # Match POST requests.  If no arguments are provided, matches all POST
         # requests, otherwise, matches only POST requests where the arguments
@@ -625,8 +624,25 @@ class Roda
         #   r.run(proc{[403, {}, []]}) unless r['letmein'] == '1'
         #   r.run(proc{[404, {}, []]})
         #   response.status = 404 # not reached
+        #
+        # This updates SCRIPT_NAME/PATH_INFO based on the current remaining_path
+        # before dispatching to another rack app, so the app still works as
+        # a URL mapper.
         def run(app)
-          throw :halt, app.call(@env)
+          e = @env
+          path = @remaining_path
+          sn = SCRIPT_NAME
+          pi = PATH_INFO
+          script_name = e[sn]
+          path_info = e[pi]
+          begin
+            e[sn] += path_info.chomp(path)
+            e[pi] = path
+            throw :halt, app.call(e)
+          ensure
+            e[sn] = script_name
+            e[pi] = path_info
+          end
         end
 
         # The session for the current request.  Raises a RodaError if
@@ -756,16 +772,13 @@ class Roda
           end
         end
         
-        # Yield to the block, restoring SCRIPT_NAME and PATH_INFO to
-        # their initial values before returning from the block.
+        # Yield to the block, restoring remaining_path to its initial
+        # value before returning from the block.
         def keep_remaining_path
-          env = @env
-          script = env[sn = SCRIPT_NAME]
-          path = env[pi = PATH_INFO]
+          path = @remaining_path
           yield
         ensure
-          env[sn] = script
-          env[pi] = path
+          @remaining_path = path
         end
 
         # Attempt to match the argument to the given request, handling
@@ -806,13 +819,9 @@ class Roda
           end
         end
 
-        # Update PATH_INFO and SCRIPT_NAME based on the matchend and remaining variables.
+        # Update remaining_path with the remaining characters
         def update_remaining_path(remaining)
-          e = @env
-
-          # Don't mutate SCRIPT_NAME, breaks try
-          e[SCRIPT_NAME] += e[pi = PATH_INFO].chomp(remaining)
-          e[pi] = remaining
+          @remaining_path = remaining
         end
       end
 

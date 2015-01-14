@@ -1,5 +1,7 @@
 = HEAD
 
+* Don't modify SCRIPT_NAME/PATH_INFO during routing, merging static_path_info plugin into core (jeremyevans)
+
 * Remove code deprecated in Roda 1.3.0 (jeremyevans)
 
 = 1.3.0 (2015-01-13)
