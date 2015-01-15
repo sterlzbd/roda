@@ -4,7 +4,7 @@ describe "render_each plugin" do
   it "calls render with each argument, returning joined string with all results" do
     app(:bare) do
       plugin :render_each
-      def render(t, opts)
+      def render_template(t, opts)
         "r#{t}#{opts[:locals][:foo] if opts[:locals]}#{opts[:bar]}#{opts[:locals][:bar] if opts[:locals]} "
       end 
 

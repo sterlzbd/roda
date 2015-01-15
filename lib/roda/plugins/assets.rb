@@ -548,7 +548,7 @@ class Roda
         # Render the given asset file using the render plugin, with the given options.
         # +file+ should be the relative path to the file from the current directory.
         def render_asset_file(file, options)
-          render({:path => file}, options)
+          render_template({:path => file}, options)
         end
       end
 

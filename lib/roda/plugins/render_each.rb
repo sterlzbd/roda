@@ -54,7 +54,7 @@ class Roda
 
           enum.map do |v|
             locals[as] = v if as
-            render(template, opts)
+            render_template(template, opts)
           end.join
         end
       end

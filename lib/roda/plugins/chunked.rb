@@ -245,10 +245,10 @@ class Roda
               layout_opts = render_opts[:layout_opts].merge(layout_opts)
             end
 
-            @_out_buf = render(layout, layout_opts||OPTS) do
+            @_out_buf = render_template(layout, layout_opts||OPTS) do
               flush
               block.call if block
-              yield opts[:content] || render(template, opts)
+              yield opts[:content] || render_template(template, opts)
               nil
             end
           else

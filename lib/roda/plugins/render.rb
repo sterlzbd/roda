@@ -158,7 +158,7 @@ class Roda
         # and render it inside the layout.  See Render for details.
         def view(template, opts=OPTS)
           opts = parse_template_opts(template, opts)
-          content = opts[:content] || render(opts)
+          content = opts[:content] || render_template(opts)
 
           if layout = opts.fetch(:layout, (OPTS if render_opts[:layout]))
             layout_opts = render_opts[:layout_opts] 
@@ -166,13 +166,17 @@ class Roda
               layout_opts = opts[:layout_opts].merge(layout_opts)
             end
 
-            content = render(layout, layout_opts){content}
+            content = render_template(layout, layout_opts){content}
           end
 
           content
         end
 
         private
+
+        # Private alias for render.  Should be used by other plugins when they want to render a template
+        # without a layout, as plugins can override render to use a layout.
+        alias render_template render
 
         # If caching templates, attempt to retrieve the template from the cache.  Otherwise, just yield
         # to get the template.
@@ -227,7 +231,7 @@ class Roda
           opts[:template].to_s
         end
 
-        # The path for the given template.
+        # The template path for the given options.
         def template_path(opts)
           render_opts = render_opts()
           "#{opts[:views] || render_opts[:views]}/#{template_name(opts)}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
