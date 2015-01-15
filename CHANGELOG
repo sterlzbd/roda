@@ -1,5 +1,7 @@
 = HEAD
 
+* Add padrino_render plugin, adding render/partial methods that work similar to Padrino (jeremyevans)
+
 * Add Roda#render_template private method for template rendering, for use by plugins (jeremyevans)
 
 * Make Roda#initialize take env hash, #call take route_block, remove private #_route (jeremyevans)
