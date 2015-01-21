@@ -33,8 +33,10 @@ class Roda
     #
     #   plugin :json, :classes=>[Array, Hash, Sequel::Model]
     module Json
+      OPTS = {}.freeze
+
       # Set the classes to automatically convert to JSON
-      def self.configure(app, opts={})
+      def self.configure(app, opts=OPTS)
         classes = opts[:classes] || [Array, Hash]
         app.opts[:json_result_classes] ||= []
         app.opts[:json_result_classes] += classes

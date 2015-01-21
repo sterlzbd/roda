@@ -28,6 +28,7 @@ class Roda
     # for low traffic web applications.  For high traffic web applications,
     # use an error reporting service instead of this plugin.
     module ErrorEmail
+      OPTS = {}.freeze
       DEFAULTS = {
         :headers=>{},
         :host=>'localhost',
@@ -74,7 +75,7 @@ END
       }
 
       # Set default opts for plugin.  See ErrorEmail module RDoc for options.
-      def self.configure(app, opts={})
+      def self.configure(app, opts=OPTS)
         email_opts = app.opts[:error_email] ||= DEFAULTS
         email_opts = email_opts.merge(opts)
         email_opts[:headers] = email_opts[:headers].dup

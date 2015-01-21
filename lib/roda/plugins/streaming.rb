@@ -50,6 +50,8 @@ class Roda
     # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     # OTHER DEALINGS IN THE SOFTWARE.
     module Streaming
+      OPTS = {}.freeze
+
       # Class of the response body in case you use #stream.
       #
       # Three things really matter: The front and back block (back being the
@@ -85,7 +87,7 @@ class Roda
         end
 
         # Handle streaming options, see Streaming for details.
-        def initialize(opts={}, &back)
+        def initialize(opts=OPTS, &back)
           @scheduler = opts[:scheduler] || Scheduler.new(self)
           @back = back.to_proc
           @keep_open = opts[:keep_open]
@@ -143,7 +145,7 @@ class Roda
         # Immediately return a streaming response using the current response
         # status and headers, calling the block to get the streaming response.
         # See Streaming for details.
-        def stream(opts={}, &block)
+        def stream(opts=OPTS, &block)
           opts = opts.merge(:scheduler=>EventMachine) if !opts.has_key?(:scheduler) && env['async.callback']
 
           if opts[:loop]

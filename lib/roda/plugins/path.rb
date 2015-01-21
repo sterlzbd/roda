@@ -32,10 +32,11 @@ class Roda
     # a block to a block that is instance_execed.
     module Path
       DEFAULT_PORTS = {'http' => 80, 'https' => 443}.freeze
+      OPTS = {}.freeze
 
       module ClassMethods
         # Create a new instance method for the named path.  See plugin module documentation for options.
-        def path(name, path=nil, opts={}, &block)
+        def path(name, path=nil, opts=OPTS, &block)
           if path.is_a?(Hash)
             raise RodaError,  "cannot provide two option hashses to Roda.path" unless opts.empty?
             opts = path

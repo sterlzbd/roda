@@ -110,6 +110,7 @@ class Roda
       MAIL = "MAIL".freeze
       CONTENT_TYPE = 'Content-Type'.freeze
       TEXT_PLAIN = "text/plain".freeze
+      OPTS = {}.freeze
 
       # Error raised when the using the mail class method, but the routing
       # tree doesn't return the mail object. 
@@ -117,7 +118,7 @@ class Roda
 
       # Set the options for the mailer.  Options:
       # :content_type :: The default content type for emails (default: text/plain)
-      def self.configure(app, opts={})
+      def self.configure(app, opts=OPTS)
         app.opts[:mailer] = (app.opts[:mailer]||{}).merge(opts).freeze
       end
 

@@ -23,6 +23,8 @@ class Roda
     # the template will be +bar+.  You can use <tt>:local=>nil</tt> to
     # not set a local variable inside the template.
     module RenderEach
+      OPTS = {}.freeze
+
       # Load the render plugin before this plugin, since this plugin
       # calls the render method.
       def self.load_dependencies(app)
@@ -36,7 +38,7 @@ class Roda
         # :local :: The local variable to use for the current enum value
         #           inside the template.  An explicit +nil+ value does not
         #           set a local variable.  If not set, uses the template name.
-        def render_each(enum, template, opts={})
+        def render_each(enum, template, opts=OPTS)
           if as = opts.has_key?(:local)
             as = opts[:local]
           else
