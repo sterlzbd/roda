@@ -8,7 +8,7 @@ class Roda
     # It adds a +:header+ matcher for matching on arbitrary headers, which matches
     # if the header is present:
     #
-    #   r.on :header=>'X-App-Token' do
+    #   r.on :header=>'X-App-Token' do |header_value|
     #   end
     #
     # It adds a +:host+ matcher for matching by the host of the request:
