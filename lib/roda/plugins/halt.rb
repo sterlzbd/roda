@@ -35,6 +35,23 @@ class Roda
     # arguments and providing them as a single rack response array.  With a rack response array,
     # the values are used directly, while with 3 arguments, the headers given are merged into
     # the existing headers and the given body is written to the existing response body.
+    #
+    # If using other plugins that recognize additional types of match block responses, such
+    # as +symbol_views+ and +json+, you can pass those additional types to +r.halt+:
+    #
+    #   plugin :halt
+    #   plugin :symbol_views
+    #   plugin :json
+    #   route do |r|
+    #     r.halt(:template)
+    #     r.halt(500, [{'error'=>'foo'}])
+    #     r.halt(500, 'header=>'value', :other_template)
+    #   end
+    #
+    # Note that when using the +json+ plugin with the +halt+ plugin, you cannot return a
+    # array as a single argument and have it be converted to json, since it would be interpreted 
+    # as a rack response.  You must use call +r.halt+ with either two or three argument forms 
+    # in that case.
     module Halt
       module RequestMethods
         # Expand default halt method to handle status codes, headers, and bodies.  See Halt.
@@ -45,22 +62,24 @@ class Roda
             case v = res[0]
             when Integer
               response.status = v
-            when String
-              response.write v
             when Array
               throw :halt, v
             else
-              raise Roda::RodaError, "singular argument to #halt must be Integer, String, or Array"
+              if result = block_result_body(v)
+                response.write(result)
+              else
+                raise Roda::RodaError, "singular argument given to #halt not handled: #{v.inspect}"
+              end
             end
           when 2
             resp = response
             resp.status = res[0]
-            resp.write res[1]
+            resp.write(block_result_body(res[1]))
           when 3
             resp = response
             resp.status = res[0]
             resp.headers.merge!(res[1])
-            resp.write res[2]
+            resp.write(block_result_body(res[2]))
           else
             raise Roda::RodaError, "too many arguments given to #halt (accepts 0-3, received #{res.length})"
           end

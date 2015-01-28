@@ -1,5 +1,7 @@
 = HEAD
 
+* Make halt plugin integrate with symbol_views, json, and similar plugins (jeremyevans)
+
 * Add padrino_render plugin, adding render/partial methods that work similar to Padrino (jeremyevans)
 
 * Add Roda#render_template private method for template rendering, for use by plugins (jeremyevans)

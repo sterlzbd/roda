@@ -25,6 +25,18 @@ describe "halt plugin" do
     status.should == 300 
   end
 
+  it "should consider other single arguments similar to block bodies" do
+    app(:bare) do
+      plugin :halt
+      plugin :json
+      route do |r|
+        r.halt({'a'=>1})
+      end
+    end
+
+    body.should ==  '{"a":1}'
+  end
+
   it "should consider 2 arguments as response status and body" do
     app(:halt) do |r|
       r.halt 300, "foo"
@@ -32,6 +44,19 @@ describe "halt plugin" do
 
     status.should == 300 
     body.should == "foo"
+  end
+
+  it "should handle 2nd of 2 arguments similar to block bodies" do
+    app(:bare) do
+      plugin :halt
+      plugin :json
+      route do |r|
+        r.halt(300, {'a'=>1})
+      end
+    end
+
+    status.should == 300 
+    body.should ==  '{"a":1}'
   end
 
   it "should consider 3 arguments as response" do
@@ -42,6 +67,20 @@ describe "halt plugin" do
     status.should == 300 
     header('a').should == 'b'
     body.should == "foo"
+  end
+
+  it "should handle 3rd of 3 arguments similar to block bodies" do
+    app(:bare) do
+      plugin :halt
+      plugin :json
+      route do |r|
+        r.halt(300, {'a'=>'b'}, {'a'=>1})
+      end
+    end
+
+    status.should == 300 
+    header('a').should == 'b'
+    body.should ==  '{"a":1}'
   end
 
   it "should raise an error for too many arguments" do
