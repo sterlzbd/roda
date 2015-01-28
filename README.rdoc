@@ -499,10 +499,12 @@ you can use the module_include plugin.
 
 Roda tries very hard to avoid polluting the scope of the +route+ block.
 This should make it unlikely that Roda will cause namespace issues
-with your application code.  Some of the things Roda does
+with your application code.  Some of the things Roda does:
 
 - The only instance variables defined by default in the scope of the +route+ block
-  are <tt>@_request</tt> and <tt>@_response</tt>.
+  are <tt>@_request</tt> and <tt>@_response</tt>.  All instance variables in the
+  scope of the +route+ block used by plugins that ship with Roda are prefixed
+  with an underscore.
 - The only methods defined (beyond the default methods for +Object+) are:
   +call+, +env+, +opts+, +request+, +response+, and +session+.
 - Constants inside the Roda namespace are all prefixed with +Roda+
