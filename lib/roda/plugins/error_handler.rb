@@ -50,7 +50,7 @@ class Roda
         # the error handler.
         def call
           super
-        rescue => e
+        rescue StandardError, SyntaxError => e
           res = @_response = self.class::RodaResponse.new
           res.status = 500
           super{handle_error(e)}

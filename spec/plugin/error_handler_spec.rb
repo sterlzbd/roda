@@ -24,6 +24,29 @@ describe "error_handler plugin" do
     status.should == 500
   end
 
+  it "executes on SyntaxError exceptions" do
+    app(:bare) do
+      plugin :error_handler
+
+      error do |e|
+        e.message
+      end
+
+      route do |r|
+        r.on "a" do
+          "found"
+        end
+
+        raise SyntaxError, 'bad idea'
+      end
+    end
+
+    body("/a").should == 'found'
+    status("/a").should == 200
+    body.should == 'bad idea'
+    status.should == 500
+  end
+
   it "can override status inside error block" do
     app(:bare) do
       plugin :error_handler do |e|
