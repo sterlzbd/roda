@@ -85,6 +85,7 @@ class Roda
 
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=OPTS)
+        orig_opts = opts
         if app.opts[:render]
           app.opts[:render] = app.opts[:render].merge(opts)
         else
@@ -95,12 +96,19 @@ class Roda
         opts[:engine] ||= "erb"
         opts[:ext] = nil unless opts.has_key?(:ext)
         opts[:views] ||= File.expand_path("views", Dir.pwd)
-        opts[:layout] = "layout" unless opts.has_key?(:layout)
-        opts[:layout_opts] ||= (opts[:layout_opts] || {}).dup
+        opts[:layout_opts] = (opts[:layout_opts] || {}).dup
 
-        if layout = opts[:layout]
-          layout = {:template=>layout} unless layout.is_a?(Hash)
-          opts[:layout_opts] = opts[:layout_opts].merge(layout)
+        if layout = orig_opts.fetch(:layout, true)
+          opts[:layout] = true unless opts.has_key?(:layout)
+
+          case layout
+          when Hash
+            opts[:layout_opts].merge!(layout)
+          when true
+            opts[:layout_opts][:template] ||= 'layout'
+          else
+            opts[:layout_opts][:template] = layout
+          end
         end
 
         template_opts = opts[:template_opts] = (opts[:template_opts] || {}).dup
@@ -160,13 +168,23 @@ class Roda
           opts = parse_template_opts(template, opts)
           content = opts[:content] || render_template(opts)
 
-          if layout = opts.fetch(:layout, (OPTS if render_opts[:layout]))
-            layout_opts = render_opts[:layout_opts] 
-            if opts[:layout_opts]
-              layout_opts = opts[:layout_opts].merge(layout_opts)
+          if layout = opts.fetch(:layout, render_opts[:layout])
+            layout_opts = if opts[:layout_opts]
+              opts[:layout_opts].merge(render_opts[:layout_opts])
+            else
+              render_opts[:layout_opts].dup
             end
 
-            content = render_template(layout, layout_opts){content}
+            case layout
+            when Hash
+              layout_opts.merge!(layout)
+            when true
+              # use default layout
+            else
+              layout_opts[:template] = layout
+            end
+
+            content = render_template(layout_opts){content}
           end
 
           content

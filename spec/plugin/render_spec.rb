@@ -107,6 +107,62 @@ describe "render plugin" do
     body.strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
+  it ":layout=>true/false/string/hash/not-present respects plugin layout switch and template" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :layout_opts=>{:template=>'layout-yield', :locals=>{:title=>'a'}}
+      
+      route do |r|
+        opts = {:content=>'bar'}
+        opts[:layout] = true if r.path == '/'
+        opts[:layout] = false if r.path == '/f'
+        opts[:layout] = 'layout' if r.path == '/s'
+        opts[:layout] = {:template=>'layout'} if r.path == '/h'
+        view(opts)
+      end
+    end
+
+    body.gsub("\n", '').should == "HeaderbarFooter"
+    body('/a').gsub("\n", '').should == "HeaderbarFooter"
+    body('/f').gsub("\n", '').should == "bar"
+    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+
+    app.plugin :render
+    body.gsub("\n", '').should == "HeaderbarFooter"
+    body('/a').gsub("\n", '').should == "HeaderbarFooter"
+    body('/f').gsub("\n", '').should == "bar"
+    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+
+    app.plugin :render, :layout=>true
+    body.gsub("\n", '').should == "HeaderbarFooter"
+    body('/a').gsub("\n", '').should == "HeaderbarFooter"
+    body('/f').gsub("\n", '').should == "bar"
+    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+
+    app.plugin :render, :layout=>'layout-alternative'
+    body.gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
+    body('/a').gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
+    body('/f').gsub("\n", '').should == "bar"
+    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+
+    app.plugin :render, :layout=>nil
+    body.gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
+    body('/a').gsub("\n", '').should == "bar"
+    body('/f').gsub("\n", '').should == "bar"
+    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+
+    app.plugin :render, :layout=>false
+    body.gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
+    body('/a').gsub("\n", '').should == "bar"
+    body('/f').gsub("\n", '').should == "bar"
+    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+  end
+
   it "inline layouts and inline views" do
     app(:render) do
       view({:inline=>'bar'}, :layout=>{:inline=>'Foo: <%= yield %>'})

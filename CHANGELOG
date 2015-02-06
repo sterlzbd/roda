@@ -1,5 +1,9 @@
 = HEAD
 
+* Make render plugin :layout option always be true or false (jeremyevans)
+
+* Make :layout=>true view option use the default layout (jeremyevans)
+
 * Make error_handler plugin rescue SyntaxError in addition to StandardError (jeremyevans)
 
 * Make halt plugin integrate with symbol_views, json, and similar plugins (jeremyevans)
