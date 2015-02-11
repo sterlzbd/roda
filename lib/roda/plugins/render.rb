@@ -168,22 +168,7 @@ class Roda
           opts = parse_template_opts(template, opts)
           content = opts[:content] || render_template(opts)
 
-          if layout = opts.fetch(:layout, render_opts[:layout])
-            layout_opts = if opts[:layout_opts]
-              opts[:layout_opts].merge(render_opts[:layout_opts])
-            else
-              render_opts[:layout_opts].dup
-            end
-
-            case layout
-            when Hash
-              layout_opts.merge!(layout)
-            when true
-              # use default layout
-            else
-              layout_opts[:template] = layout
-            end
-
+          if layout_opts  = view_layout_opts(opts)
             content = render_template(layout_opts){content}
           end
 
@@ -254,6 +239,31 @@ class Roda
           render_opts = render_opts()
           "#{opts[:views] || render_opts[:views]}/#{template_name(opts)}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
         end
+
+        # If a layout should be used, return a hash of options for
+        # rendering the layout template.  If a layout should not be
+        # used, return nil.
+        def view_layout_opts(opts)
+          if layout = opts.fetch(:layout, render_opts[:layout])
+            layout_opts = if opts[:layout_opts]
+              opts[:layout_opts].merge(render_opts[:layout_opts])
+            else
+              render_opts[:layout_opts].dup
+            end
+
+            case layout
+            when Hash
+              layout_opts.merge!(layout)
+            when true
+              # use default layout
+            else
+              layout_opts[:template] = layout
+            end
+
+            layout_opts
+          end
+        end
+
       end
     end
 
