@@ -292,7 +292,8 @@ Colons that are not followed by a <tt>\\w</tt> character are matched literally:
 
   ":/a" # matches "/:/a"
 
-Note that strings must be escaped before being used in a regular expression, so:
+Note that other than colons, strings do no handle regular expression syntax, the
+string is matched verbatim:
 
   "\\d+(/\\w+)?" # matches "/\d+(/\w+)?"
   "\\d+(/\\w+)?" # does not match "/123/abc"
