@@ -49,4 +49,11 @@ describe "middleware plugin" do
     body('/a', 'REQUEST_METHOD'=>'PATCH').should == 'a2'
     body('/b', 'REQUEST_METHOD'=>'PATCH').should == 'b1'
   end
+
+  it "makes it still possible to use the Roda app normally" do
+    app(:middleware) do
+      "a"
+    end
+    body.should == 'a'
+  end
 end

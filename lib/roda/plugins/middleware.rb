@@ -30,15 +30,14 @@ class Roda
     #
     #   run App
     #
-    # Note that once you use the middleware plugin, you can only use the
-    # Roda app as middleware, and you will get errors if you attempt to
-    # use it as a regular app.
+    # It is possible to use the Roda app as a regular app even when using
+    # the middleware plugin.
     module Middleware
       # Forward instances are what is actually used as middleware.
       class Forwarder
         # Store the current middleware and the next middleware to call.
         def initialize(mid, app)
-          @mid = mid.app
+          @mid = mid
           @app = app
         end
 
@@ -49,7 +48,9 @@ class Roda
           res = nil
 
           call_next = catch(:next) do
-            res = @mid.call(env)
+            scope = @mid.new(env)
+            scope.request.forward_next = true
+            res = scope.call(&@mid.route_block)
             false
           end
 
@@ -75,10 +76,17 @@ class Roda
         # that the next middleware is called.
         def route(&block)
           super do |r|
-            instance_exec(r, &block)
-            throw :next, true
+            res = instance_exec(r, &block)
+            throw :next, true if r.forward_next
+            res
           end
         end
+      end
+
+      module RequestMethods
+        # Whether to forward the request to the next application.  Set only if
+        # this request is being performed for middleware.
+        attr_accessor :forward_next
       end
     end
 

@@ -1,5 +1,7 @@
 = HEAD
 
+* Allow Roda app to be used as a regular rack app even when using the middleware plugin (jeremyevans)
+
 * Make render plugin :layout option always be true or false (jeremyevans)
 
 * Make :layout=>true view option use the default layout (jeremyevans)
