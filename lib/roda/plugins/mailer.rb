@@ -74,7 +74,7 @@ class Roda
     #     end
     #   end
     #
-    # When sending a mail via +mail+ or +sendmail+, an Error will be raised
+    # When sending a mail via +mail+ or +sendmail+, a RodaError will be raised
     # if the mail object does not have a body.  This is similar to the 404
     # status that Roda uses by default for web requests that don't have
     # a body. If you want to specifically send an email with an empty body, you

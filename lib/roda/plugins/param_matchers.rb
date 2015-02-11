@@ -6,15 +6,15 @@ class Roda
     # It adds a :param matcher for matching on any param with the
     # same name, yielding the value of the param.
     #
-    #   r.on :param=>'foo' do |value|
+    #   r.on :param => 'foo' do |value|
     #     # Matches '?foo=bar', '?foo='
     #     # Doesn't match '?bar=foo'
     #   end
     #
     # It adds a :param! matcher for matching on any non-empty param
-    # with the same name, yielding the value of the param
+    # with the same name, yielding the value of the param.
     #
-    #   r.on :param!=>'foo' do |value|
+    #   r.on(:param! => 'foo') do |value|
     #     # Matches '?foo=bar'
     #     # Doesn't match '?foo=', '?bar=foo'
     #   end

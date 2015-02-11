@@ -28,7 +28,7 @@ class Roda
     #           to true unless RACK_ENV is development to automatically use the
     #           default template cache.
     # :engine :: The tilt engine to use for rendering, defaults to 'erb'.
-    # :escape :: Use Roda's Erubis escaping support, which makes <%= %> escape output,
+    # :escape :: Use Roda's Erubis escaping support, which makes <tt><%= %></tt> escape output,
     #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
     #            <tt><%= %></tt> tags.
     # :ext :: The file extension to assume for view files, defaults to the :engine
@@ -65,7 +65,7 @@ class Roda
     # :template_block :: Pass this block when creating the underlying template,
     #                    ignored when using :inline.
     # :template_class :: Provides the template class to use, inside of using
-    #                    Tilt or a Tilt[:engine].
+    #                    Tilt or <tt>Tilt[:engine]</tt>.
     #
     # Here's how those options are used:
     #
@@ -73,7 +73,8 @@ class Roda
     #   render(:path=>'/path/to/template.erb')
     #
     # If you pass a hash as the first argument to +view+ or +render+, it should
-    # have either +:inline+ or +:path+ as one of the keys.
+    # have either +:template+, +:inline+, +:path+, or +:content+ (for +view+) as
+    # one of the keys.
     module Render
       OPTS={}.freeze
 

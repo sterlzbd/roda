@@ -226,18 +226,17 @@ class Roda
 
       # Instance methods for the Roda class.
       module InstanceMethods
-        # Create a request and response of the appopriate
-        # class, the instance_exec the route block with
-        # the request, handling any halts.  This is not usually
-        # called directly.
+        # Create a request and response of the appopriate class
         def initialize(env)
           klass = self.class
           @_request = klass::RodaRequest.new(self, env)
           @_response = klass::RodaResponse.new
         end
 
-        # Internals of #call, extracted so that plugins can override
-        # behavior after the request and response have been setup.
+        # instance_exec the route block in the scope of the
+        # receiver, with the related request.  Catch :halt so that
+        # the route block can throw :halt at any point with the
+        # rack response to use.
         def call(&block)
           catch(:halt) do
             r = @_request
@@ -401,7 +400,7 @@ class Roda
         # executed, and when the match block returns, the rack response is
         # returned.
         # 
-        #   r.path_info
+        #   r.remaining_path
         #   # => "/foo/bar"
         #
         #   r.is 'foo' do
@@ -423,7 +422,7 @@ class Roda
         # Note that this matches only if the path after matching the arguments
         # is empty, not if it still contains a trailing slash:
         #
-        #   r.path_info
+        #   r.remaining_path
         #   # =>  "/foo/bar/"
         #
         #   r.is 'foo/bar' do
@@ -462,7 +461,7 @@ class Roda
         # path, this is usually used to setup branches of the routing tree,
         # not for final handling of the request.
         # 
-        #   r.path_info
+        #   r.remaining_path
         #   # => "/foo/bar"
         #
         #   r.on 'foo' do
@@ -566,7 +565,7 @@ class Roda
         # path is +/+.  If it matches, the match block is executed, and when
         # the match block returns, the rack response is returned.
         #
-        #   [r.request_method, r.path_info]
+        #   [r.request_method, r.remaining_path]
         #   # => ['GET', '/']
         #
         #   r.root do
@@ -575,7 +574,7 @@ class Roda
         #
         # This is usuable inside other match blocks:
         #
-        #   [r.request_method, r.path_info]
+        #   [r.request_method, r.remaining_path]
         #   # => ['GET', '/foo/']
         #
         #   r.on 'foo' do
@@ -586,7 +585,7 @@ class Roda
         #
         # Note that this does not match non-+GET+ requests:
         #
-        #   [r.request_method, r.path_info]
+        #   [r.request_method, r.remaining_path]
         #   # => ['POST', '/']
         #
         #   r.root do
@@ -598,7 +597,7 @@ class Roda
         # 
         # Nor does it match empty paths:
         #
-        #   [r.request_method, r.path_info]
+        #   [r.request_method, r.remaining_path]
         #   # => ['GET', '/foo']
         #
         #   r.on 'foo' do
