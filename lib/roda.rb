@@ -225,6 +225,12 @@ class Roda
       end
 
       # Instance methods for the Roda class.
+      #
+      # In addition to the listed methods, the following two methods are available:
+      #
+      # request :: The instance of the request class related to this request.
+      #            This is the same object yielded by Roda.route.
+      # response :: The instance of the response class related to this request.
       module InstanceMethods
         # Create a request and response of the appopriate class
         def initialize(env)
@@ -263,16 +269,13 @@ class Roda
           self.class.opts
         end
 
-        # The instance of the request class related to this request.
-        # This is the same object yielded by Roda.route.
-        def request
-          @_request
-        end
+        attr_reader :_request # :nodoc:
+        alias request _request
+        remove_method :_request
 
-        # The instance of the response class related to this request.
-        def response
-          @_response
-        end
+        attr_reader :_response # :nodoc:
+        alias response _response
+        remove_method :_response
 
         # The session hash for the current request. Raises RodaError
         # if no session exists. Example:
