@@ -73,13 +73,27 @@
             </ol>
           </div>
           <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>OPTS</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-configure'>
                 <a name='method-c-configure'></a>
                 <div class='synopsis'>
                   <span class='name'>configure</span>
-                  <span class='arguments'>(app, opts={})</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
@@ -89,7 +103,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 37</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">classes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">classes</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">uniq!</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">extend</span>(<span class="ruby-constant">RodaDeprecateMutation</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 39</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">classes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">classes</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">uniq!</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

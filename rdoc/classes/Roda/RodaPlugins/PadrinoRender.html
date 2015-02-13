@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::RenderEach</title>
+    <title>Roda::RodaPlugins::PadrinoRender</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::RenderEach
+          Roda::RodaPlugins::PadrinoRender
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/roda/plugins/render_each_rb.html">lib/roda/plugins/render_each.rb</a>
+            <a target="docwin" href="../../../files/lib/roda/plugins/padrino_render_rb.html">lib/roda/plugins/padrino_render.rb</a>
           </li>
         </ol>
       </div>
@@ -39,29 +39,23 @@
         <div id='text'>
           <div id='description'>
             
-            <p>The render_each plugin allows you to render a template for each value in an
-            enumerable, returning the concatention of all of the template renderings. 
-            For example:</p>
+            <p>The padrino_render plugin adds rendering support that is similar to
+            Padrino&#39;s.  While not everything Padrino&#39;s rendering supports is
+            supported by this plugin (yet), it currently handles enough to be a drop in
+            replacement for some applications.</p>
             
-            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>)</pre>
+            <p>Most notably, this makes the <code>render</code> method default to using
+            the layout, similar to how the <code>view</code> method works in the render
+            plugin.  If you want to call render and not use a layout, you can use the
+            <code>:layout=&gt;false</code> option:</p>
             
-            <p>will render the <code>foo</code> template 3 times.  Each time the template
-            is rendered, the local variable <code>foo</code> will contain the given
-            value (e.g. on the first rendering <code>foo</code> is 1).</p>
+            <pre class="ruby"><span class="ruby-identifier">render</span>(<span class="ruby-string">&#39;test&#39;</span>)                 <span class="ruby-comment"># layout</span>&#x000A;<span class="ruby-identifier">render</span>(<span class="ruby-string">&#39;test&#39;</span>, :<span class="ruby-identifier">layout=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">false</span>) <span class="ruby-comment"># no layout</span></pre>
             
-            <p>You can pass additional render options via an options hash:</p>
+            <p>This also adds a <code>partial</code> method, which renders templates
+            without the layout, but prefixes the template filename to use with an
+            underscore:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">views=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;partials&#39;</span>)</pre>
-            
-            <p>One additional option supported by is <code>:local</code>, which sets the
-            local variable containing the current value to use.  So:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">local=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">bar</span>)</pre>
-            
-            <p>Will render the <code>foo</code> template, but the local variable used
-            inside the template will be <code>bar</code>.  You can use
-            <code>:local=&gt;nil</code> to not set a local variable inside the
-            template.</p>
+            <pre class="ruby"><span class="ruby-identifier">partial</span>(<span class="ruby-string">&#39;test&#39;</span>)     <span class="ruby-comment"># uses _test.erb</span>&#x000A;<span class="ruby-identifier">partial</span>(<span class="ruby-string">&#39;dir/test&#39;</span>) <span class="ruby-comment"># uses dir/_test.erb</span></pre>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -75,7 +69,7 @@
           <div id='class-list'>
             <h2>Classes and Modules</h2>
             <ol>
-              <li><a target="docwin" href="RenderEach/InstanceMethods.html">Roda::RodaPlugins::RenderEach::InstanceMethods</a></li>
+              <li><a target="docwin" href="PadrinoRender/InstanceMethods.html">Roda::RodaPlugins::PadrinoRender::InstanceMethods</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -90,6 +84,13 @@
                     <td>&nbsp;</td>
                     <td class='context-item-desc'></td>
                   </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>SLASH</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'/'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
                 </table>
               </div>
             </div>
@@ -99,18 +100,17 @@
                 <a name='method-c-load_dependencies'></a>
                 <div class='synopsis'>
                   <span class='name'>load_dependencies</span>
-                  <span class='arguments'>(app)</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Load the render plugin before this plugin, since this plugin calls the
-                  render method.</p>
+                  <p>Depend on the render plugin, since this overrides some of its methods.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/render_each.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/padrino_render.rb, line 32</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

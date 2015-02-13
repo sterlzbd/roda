@@ -70,9 +70,9 @@
             
             <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;albums/:d&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-identifier">album_id</span>.<span class="ruby-identifier">to_i</span>]&#x000A;  <span class="ruby-identifier">from</span> <span class="ruby-string">&#39;from@example.com&#39;</span>&#x000A;  <span class="ruby-identifier">to</span> <span class="ruby-string">&#39;to@example.com&#39;</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-string">&quot;added&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;Album Added&#39;</span>&#x000A;    <span class="ruby-identifier">render</span>(:<span class="ruby-identifier">albums_added_email</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-string">&quot;deleted&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;Album Deleted&#39;</span>&#x000A;    <span class="ruby-identifier">render</span>(:<span class="ruby-identifier">albums_deleted_email</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
-            <p>When sending a mail via <code>mail</code> or <code>sendmail</code>, an <a
-            href="Mailer/Error.html">Error</a> will be raised if the mail object does
-            not have a body.  This is similar to the 404 status that <a
+            <p>When sending a mail via <code>mail</code> or <code>sendmail</code>, a <a
+            href="../RodaError.html">RodaError</a> will be raised if the mail object
+            does not have a body.  This is similar to the 404 status that <a
             href="../../Roda.html">Roda</a> uses by default for web requests that
             don&#39;t have a body. If you want to specifically send an email with an
             empty body, you can use the explicit empty string:</p>
@@ -139,6 +139,13 @@
                     <td class='context-item-desc'></td>
                   </tr>
                   <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>OPTS</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>PATH_INFO</td>
                     <td>=</td>
                     <td class='context-item-value'>"PATH_INFO".freeze</td>
@@ -196,7 +203,7 @@
                 <a name='method-c-configure'></a>
                 <div class='synopsis'>
                   <span class='name'>configure</span>
-                  <span class='arguments'>(app, opts={})</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
@@ -209,7 +216,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 120</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 121</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

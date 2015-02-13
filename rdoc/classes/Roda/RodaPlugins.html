@@ -76,9 +76,6 @@
             <a target="docwin" href="../../files/lib/roda/plugins/delete_empty_headers_rb.html">lib/roda/plugins/delete_empty_headers.rb</a>
           </li>
           <li class='other'>
-            <a target="docwin" href="../../files/lib/roda/plugins/delete_nil_headers_rb.html">lib/roda/plugins/delete_nil_headers.rb</a>
-          </li>
-          <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/drop_body_rb.html">lib/roda/plugins/drop_body.rb</a>
           </li>
           <li class='other'>
@@ -148,6 +145,9 @@
             <a target="docwin" href="../../files/lib/roda/plugins/not_found_rb.html">lib/roda/plugins/not_found.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/padrino_render_rb.html">lib/roda/plugins/padrino_render.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/param_matchers_rb.html">lib/roda/plugins/param_matchers.rb</a>
           </li>
           <li class='other'>
@@ -205,7 +205,6 @@
             <h2>Methods</h2>
             <h3>Public Class</h3>
             <ol>
-              <li><a target="docwin" href="#method-c-deprecate">deprecate</a></li>
               <li><a target="docwin" href="#method-c-load_plugin">load_plugin</a></li>
               <li><a target="docwin" href="#method-c-register_plugin">register_plugin</a></li>
             </ol>
@@ -229,7 +228,6 @@
               <li><a target="docwin" href="RodaPlugins/DelayBuild.html">Roda::RodaPlugins::DelayBuild</a></li>
               <li><a target="docwin" href="RodaPlugins/Delegate.html">Roda::RodaPlugins::Delegate</a></li>
               <li><a target="docwin" href="RodaPlugins/DeleteEmptyHeaders.html">Roda::RodaPlugins::DeleteEmptyHeaders</a></li>
-              <li><a target="docwin" href="RodaPlugins/DeleteHeaders.html">Roda::RodaPlugins::DeleteHeaders</a></li>
               <li><a target="docwin" href="RodaPlugins/DropBody.html">Roda::RodaPlugins::DropBody</a></li>
               <li><a target="docwin" href="RodaPlugins/EmptyRoot.html">Roda::RodaPlugins::EmptyRoot</a></li>
               <li><a target="docwin" href="RodaPlugins/Environments.html">Roda::RodaPlugins::Environments</a></li>
@@ -254,6 +252,7 @@
               <li><a target="docwin" href="RodaPlugins/NamedTemplates.html">Roda::RodaPlugins::NamedTemplates</a></li>
               <li><a target="docwin" href="RodaPlugins/NotAllowed.html">Roda::RodaPlugins::NotAllowed</a></li>
               <li><a target="docwin" href="RodaPlugins/NotFound.html">Roda::RodaPlugins::NotFound</a></li>
+              <li><a target="docwin" href="RodaPlugins/PadrinoRender.html">Roda::RodaPlugins::PadrinoRender</a></li>
               <li><a target="docwin" href="RodaPlugins/ParamMatchers.html">Roda::RodaPlugins::ParamMatchers</a></li>
               <li><a target="docwin" href="RodaPlugins/Pass.html">Roda::RodaPlugins::Pass</a></li>
               <li><a target="docwin" href="RodaPlugins/Path.html">Roda::RodaPlugins::Path</a></li>
@@ -273,25 +272,6 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-deprecate'>
-                <a name='method-c-deprecate'></a>
-                <div class='synopsis'>
-                  <span class='name'>deprecate</span>
-                  <span class='arguments'>(msg)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Emit a deprecation message.  By default this just calls warn.  You can
-                  override this method to log deprecation messages to a file or include
-                  backtraces (or something else).</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-deprecate-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-deprecate-source'><span class="ruby-comment"># File lib/roda.rb, line 103</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">deprecate</span>(<span class="ruby-identifier">msg</span>)&#x000A;  <span class="ruby-identifier">warn</span>(<span class="ruby-identifier">msg</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
               <div class='method public-class' id='method-method-c-load_plugin'>
                 <a name='method-c-load_plugin'></a>
                 <div class='synopsis'>
@@ -309,7 +289,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 84</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 72</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-register_plugin'>
@@ -330,7 +310,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-register_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 97</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 85</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

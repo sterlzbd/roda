@@ -68,6 +68,18 @@
             With a rack response array, the values are used directly, while with 3
             arguments, the headers given are merged into the existing headers and the
             given body is written to the existing response body.</p>
+            
+            <p>If using other plugins that recognize additional types of match block
+            responses, such as <code>symbol_views</code> and <code>json</code>, you can
+            pass those additional types to <code>r.halt</code>:</p>
+            
+            <pre>plugin :halt&#x000A;plugin :symbol_views&#x000A;plugin :json&#x000A;route do |r|&#x000A;  r.halt(:template)&#x000A;  r.halt(500, [{&#39;error&#39;=&gt;&#39;foo&#39;}])&#x000A;  r.halt(500, &#39;header=&gt;&#39;value&#39;, :other_template)&#x000A;end</pre>
+            
+            <p>Note that when using the <code>json</code> plugin with the
+            <code>halt</code> plugin, you cannot return a array as a single argument
+            and have it be converted to json, since it would be interpreted  as a rack
+            response.  You must use call <code>r.halt</code> with either two or three
+            argument forms  in that case.</p>
           </div>
           <div id='context'>
           </div>

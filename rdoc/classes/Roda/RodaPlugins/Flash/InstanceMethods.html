@@ -42,6 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
+              <li><a target="docwin" href="#method-i-call">call</a></li>
               <li><a target="docwin" href="#method-i-flash">flash</a></li>
             </ol>
           </div>
@@ -50,6 +51,24 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-call'>
+                <a name='method-i-call'></a>
+                <div class='synopsis'>
+                  <span class='name'>call</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>If the routing doesn&#39;t raise an error, rotate the flash hash in the
+                  session so the next request has access to it.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/flash.rb, line 92</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">f</span> = <span class="ruby-ivar">@_flash</span>&#x000A;    <span class="ruby-identifier">session</span>[<span class="ruby-constant">KEY</span>] = <span class="ruby-identifier">f</span>.<span class="ruby-identifier">next</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
               <div class='method public-instance' id='method-method-i-flash'>
                 <a name='method-i-flash'></a>
                 <div class='synopsis'>

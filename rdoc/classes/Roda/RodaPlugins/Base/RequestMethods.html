@@ -52,7 +52,6 @@
             <ol>
               <li><a target="docwin" href="#method-i-block_result">block_result</a></li>
               <li><a target="docwin" href="#attribute-i-captures">captures</a></li>
-              <li><a target="docwin" href="#method-i-full_path_info">full_path_info</a></li>
               <li><a target="docwin" href="#method-i-get">get</a></li>
               <li><a target="docwin" href="#method-i-halt">halt</a></li>
               <li><a target="docwin" href="#method-i-inspect">inspect</a></li>
@@ -63,7 +62,7 @@
               <li><a target="docwin" href="#method-i-path">path</a></li>
               <li><a target="docwin" href="#method-i-post">post</a></li>
               <li><a target="docwin" href="#method-i-redirect">redirect</a></li>
-              <li><a target="docwin" href="#method-i-remaining_path">remaining_path</a></li>
+              <li><a target="docwin" href="#attribute-i-remaining_path">remaining_path</a></li>
               <li><a target="docwin" href="#method-i-response">response</a></li>
               <li><a target="docwin" href="#method-i-roda_class">roda_class</a></li>
               <li><a target="docwin" href="#method-i-root">root</a></li>
@@ -169,6 +168,16 @@
                   </tr>
                   <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>
+                      <a name='attribute-i-remaining_path'>remaining_path</a>
+                    </td>
+                    <td class='context-item-value'>[R]</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>The current path to match requests against.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>
                       <a name='attribute-i-scope'>scope</a>
                     </td>
                     <td class='context-item-value'>[R]</td>
@@ -198,7 +207,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 418</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;  <span class="ruby-ivar">@captures</span> = []&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 355</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;  <span class="ruby-ivar">@captures</span> = []&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-identifier">env</span>[<span class="ruby-constant">PATH_INFO</span>]&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -217,23 +226,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-block_result-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-block_result-source'><span class="ruby-comment"># File lib/roda.rb, line 426</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">block_result</span>(<span class="ruby-identifier">result</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">response</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">body</span> = <span class="ruby-identifier">block_result_body</span>(<span class="ruby-identifier">result</span>))&#x000A;    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">body</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-full_path_info'>
-                <a name='method-i-full_path_info'></a>
-                <div class='synopsis'>
-                  <span class='name'>full_path_info</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-full_path_info-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-full_path_info-source'><span class="ruby-comment"># File lib/roda.rb, line 575</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">full_path_info</span>&#x000A;  <span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">deprecate</span>(<span class="ruby-node">&quot;RodaRequest#full_path_info is deprecated and will be removed in Roda 2.  Switch to using #path.&quot;</span>)&#x000A;  <span class="ruby-identifier">path</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-block_result-source'><span class="ruby-comment"># File lib/roda.rb, line 364</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">block_result</span>(<span class="ruby-identifier">result</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">response</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">body</span> = <span class="ruby-identifier">block_result_body</span>(<span class="ruby-identifier">result</span>))&#x000A;    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">body</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-get'>
@@ -252,7 +245,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-get-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-get-source'><span class="ruby-comment"># File lib/roda.rb, line 436</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_get?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-get-source'><span class="ruby-comment"># File lib/roda.rb, line 374</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">get</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_get?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-halt'>
@@ -273,7 +266,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-halt-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-halt-source'><span class="ruby-comment"># File lib/roda.rb, line 450</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">halt</span>(<span class="ruby-identifier">res</span>=<span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>)&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-halt-source'><span class="ruby-comment"># File lib/roda.rb, line 388</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">halt</span>(<span class="ruby-identifier">res</span>=<span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>)&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-inspect'>
@@ -293,7 +286,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-inspect-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 459</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#&lt;#{self.class.inspect} #{@env[REQUEST_METHOD]} #{path}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 397</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#&lt;#{self.class.inspect} #{@env[REQUEST_METHOD]} #{path}&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-is'>
@@ -308,7 +301,7 @@
                   have fully matched the path.  If it matches, the match block is executed,
                   and when the match block returns, the rack response is returned.</p>
                   
-                  <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>&#x000A;<span class="ruby-comment"># =&gt; &quot;/foo/bar&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match, as path isn&#39;t fully matched (/bar remaining)</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo/bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches as path is empty after matching</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">remaining_path</span>&#x000A;<span class="ruby-comment"># =&gt; &quot;/foo/bar&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match, as path isn&#39;t fully matched (/bar remaining)</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo/bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches as path is empty after matching</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                   
                   <p>If no arguments are given, matches if the path is already fully matched.</p>
                   
@@ -317,13 +310,13 @@
                   <p>Note that this matches only if the path after matching the arguments is
                   empty, not if it still contains a trailing slash:</p>
                   
-                  <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>&#x000A;<span class="ruby-comment"># =&gt;  &quot;/foo/bar/&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo/bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match, as path isn&#39;t fully matched (/ remaining)</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo/bar/&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches as path is empty after matching</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo/bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches as path is empty after matching</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">remaining_path</span>&#x000A;<span class="ruby-comment"># =&gt;  &quot;/foo/bar/&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo/bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match, as path isn&#39;t fully matched (/ remaining)</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo/bar/&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches as path is empty after matching</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo/bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches as path is empty after matching</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-is-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-is-source'><span class="ruby-comment"># File lib/roda.rb, line 506</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">empty_path?</span>&#x000A;      <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">TERM</span>&#x000A;    <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-is-source'><span class="ruby-comment"># File lib/roda.rb, line 444</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">empty_path?</span>&#x000A;      <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">args</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">TERM</span>&#x000A;    <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-is_get-3F'>
@@ -342,7 +335,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-is_get-3F-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-is_get-3F-source'><span class="ruby-comment"># File lib/roda.rb, line 520</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_get?</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-constant">REQUEST_METHOD</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">GET_REQUEST_METHOD</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-is_get-3F-source'><span class="ruby-comment"># File lib/roda.rb, line 458</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_get?</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-constant">REQUEST_METHOD</span>] <span class="ruby-operator">==</span> <span class="ruby-constant">GET_REQUEST_METHOD</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-matched_path'>
@@ -360,7 +353,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-matched_path-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-matched_path-source'><span class="ruby-comment"># File lib/roda.rb, line 560</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">matched_path</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-constant">SCRIPT_NAME</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-matched_path-source'><span class="ruby-comment"># File lib/roda.rb, line 498</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">matched_path</span>&#x000A;  <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>&#x000A;  <span class="ruby-identifier">e</span>[<span class="ruby-constant">SCRIPT_NAME</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">e</span>[<span class="ruby-constant">PATH_INFO</span>].<span class="ruby-identifier">chomp</span>(<span class="ruby-ivar">@remaining_path</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-on'>
@@ -376,7 +369,7 @@
                   to setup branches of the routing tree, not for final handling of the
                   request.</p>
                   
-                  <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>&#x000A;<span class="ruby-comment"># =&gt; &quot;/foo/bar&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches, path is /bar after matching</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">remaining_path</span>&#x000A;<span class="ruby-comment"># =&gt; &quot;/foo/bar&quot;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches, path is /bar after matching</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                   
                   <p>Like other routing methods, If it matches, the match block is executed, and
                   when the match block returns, the rack response is returned.  However, in
@@ -389,7 +382,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-on-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-on-source'><span class="ruby-comment"># File lib/roda.rb, line 551</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-on-source'><span class="ruby-comment"># File lib/roda.rb, line 489</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">on</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">if_match</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-path'>
@@ -408,7 +401,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-path-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-path-source'><span class="ruby-comment"># File lib/roda.rb, line 570</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">path</span>&#x000A;  <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>&#x000A;  <span class="ruby-node">&quot;#{e[SCRIPT_NAME]}#{e[PATH_INFO]}&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-path-source'><span class="ruby-comment"># File lib/roda.rb, line 509</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">path</span>&#x000A;  <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>&#x000A;  <span class="ruby-node">&quot;#{e[SCRIPT_NAME]}#{e[PATH_INFO]}&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-post'>
@@ -427,7 +420,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-post-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-post-source'><span class="ruby-comment"># File lib/roda.rb, line 589</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">post</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">post?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-post-source'><span class="ruby-comment"># File lib/roda.rb, line 520</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">post</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">_verb</span>(<span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">post?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-redirect'>
@@ -455,26 +448,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-redirect-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-redirect-source'><span class="ruby-comment"># File lib/roda.rb, line 616</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>=<span class="ruby-identifier">default_redirect_path</span>, <span class="ruby-identifier">status</span>=<span class="ruby-identifier">default_redirect_status</span>)&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span>)&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-remaining_path'>
-                <a name='method-i-remaining_path'></a>
-                <div class='synopsis'>
-                  <span class='name'>remaining_path</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>The current path to match requests against.  This is the same as <a
-                  href="RequestMethods.html#PATH_INFO">PATH_INFO</a> in the environment,
-                  which gets updated as the request is being routed.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-remaining_path-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-remaining_path-source'><span class="ruby-comment"># File lib/roda.rb, line 582</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">remaining_path</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-constant">PATH_INFO</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-redirect-source'><span class="ruby-comment"># File lib/roda.rb, line 547</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>=<span class="ruby-identifier">default_redirect_path</span>, <span class="ruby-identifier">status</span>=<span class="ruby-identifier">default_redirect_status</span>)&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">status</span>)&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-response'>
@@ -496,7 +470,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-response-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-response-source'><span class="ruby-comment"># File lib/roda.rb, line 627</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">response</span>&#x000A;  <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">response</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-response-source'><span class="ruby-comment"># File lib/roda.rb, line 558</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">response</span>&#x000A;  <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">response</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-roda_class'>
@@ -514,7 +488,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-roda_class-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-roda_class-source'><span class="ruby-comment"># File lib/roda.rb, line 632</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">roda_class</span>&#x000A;  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">roda_class</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-roda_class-source'><span class="ruby-comment"># File lib/roda.rb, line 563</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">roda_class</span>&#x000A;  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">roda_class</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-root'>
@@ -529,22 +503,22 @@
                   current path is <code>/</code>.  If it matches, the match block is
                   executed, and when the match block returns, the rack response is returned.</p>
                   
-                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;GET&#39;, &#39;/&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">remaining_path</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;GET&#39;, &#39;/&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># matches</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                   
                   <p>This is usuable inside other match blocks:</p>
                   
-                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;GET&#39;, &#39;/foo/&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">remaining_path</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;GET&#39;, &#39;/foo/&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                   
                   <p>Note that this does not match non-<code>GET</code> requests:</p>
                   
-                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;POST&#39;, &#39;/&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">remaining_path</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;POST&#39;, &#39;/&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># does not match</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                   
                   <p>Use <code>r.post &quot;&quot;</code> for <code>POST</code> requests where
                   the current path is <code>/</code>.</p>
                   
                   <p>Nor does it match empty paths:</p>
                   
-                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;GET&#39;, &#39;/foo&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># does not match</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre class="ruby">[<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">remaining_path</span>]&#x000A;<span class="ruby-comment"># =&gt; [&#39;GET&#39;, &#39;/foo&#39;]</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># does not match</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                   
                   <p>Use <code>r.get true</code> to handle <code>GET</code> requests where the
                   current path is empty.</p>
@@ -553,7 +527,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-root-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-root-source'><span class="ruby-comment"># File lib/roda.rb, line 683</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">root</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">remaining_path</span> <span class="ruby-operator">==</span> <span class="ruby-constant">SLASH</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">is_get?</span>&#x000A;    <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-root-source'><span class="ruby-comment"># File lib/roda.rb, line 614</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">root</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">remaining_path</span> <span class="ruby-operator">==</span> <span class="ruby-constant">SLASH</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">is_get?</span>&#x000A;    <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-run'>
@@ -569,12 +543,17 @@
                   the request:</p>
                   
                   <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">proc</span>{[<span class="ruby-value">403</span>, {}, []]}) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;letmein&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;1&#39;</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">proc</span>{[<span class="ruby-value">404</span>, {}, []]})&#x000A;<span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">404</span> <span class="ruby-comment"># not reached</span></pre>
+                  
+                  <p>This updates SCRIPT_NAME/PATH_INFO based on the current <a
+                  href="RequestMethods.html#attribute-i-remaining_path">#remaining_path</a>
+                  before dispatching to another rack app, so the app still works as a URL
+                  mapper.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda.rb, line 696</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-ivar">@env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda.rb, line 631</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">e</span> = <span class="ruby-ivar">@env</span>&#x000A;  <span class="ruby-identifier">path</span> = <span class="ruby-ivar">@remaining_path</span>&#x000A;  <span class="ruby-identifier">sn</span> = <span class="ruby-constant">SCRIPT_NAME</span>&#x000A;  <span class="ruby-identifier">pi</span> = <span class="ruby-constant">PATH_INFO</span>&#x000A;  <span class="ruby-identifier">script_name</span> = <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>]&#x000A;  <span class="ruby-identifier">path_info</span> = <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>]&#x000A;  <span class="ruby-keyword">begin</span>&#x000A;    <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">path_info</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-identifier">path</span>)&#x000A;    <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>] = <span class="ruby-identifier">path</span>&#x000A;    <span class="ruby-identifier">throw</span> <span class="ruby-value">:halt</span>, <span class="ruby-identifier">app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-keyword">ensure</span>&#x000A;    <span class="ruby-identifier">e</span>[<span class="ruby-identifier">sn</span>] = <span class="ruby-identifier">script_name</span>&#x000A;    <span class="ruby-identifier">e</span>[<span class="ruby-identifier">pi</span>] = <span class="ruby-identifier">path_info</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-session'>
@@ -593,7 +572,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-session-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-session-source'><span class="ruby-comment"># File lib/roda.rb, line 702</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">session</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-constant">SESSION_KEY</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;You&#39;re missing a session handler. You can get started by adding use Rack::Session::Cookie&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-session-source'><span class="ruby-comment"># File lib/roda.rb, line 650</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">session</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-constant">SESSION_KEY</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;You&#39;re missing a session handler. You can get started by adding use Rack::Session::Cookie&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

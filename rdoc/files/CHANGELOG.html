@@ -31,12 +31,46 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-01-13 14:29:30 -0800</span>
+          <span class='datetime'>2015-02-12 10:34:31 -0800</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-2.0.0+-282015-02-13-29">2.0.0 (2015-02-13)<span><a href="#label-2.0.0+-282015-02-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Allow <a href="../classes/Roda.html">Roda</a> app to be used as a regular
+            rack app even when using the middleware plugin (jeremyevans)</p>
+            </li><li>
+            <p>Make render plugin :layout option always be true or false (jeremyevans)</p>
+            </li><li>
+            <p>Make :layout=&gt;true view option use the default layout (jeremyevans)</p>
+            </li><li>
+            <p>Make error_handler plugin rescue ScriptError in addition to StandardError
+            (jeremyevans)</p>
+            </li><li>
+            <p>Make halt plugin integrate with symbol_views, json, and similar plugins
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add padrino_render plugin, adding render/partial methods that work similar
+            to Padrino (jeremyevans)</p>
+            </li><li>
+            <p>Add Roda#render_template private method for template rendering, for use by
+            plugins (jeremyevans)</p>
+            </li><li>
+            <p>Make Roda#initialize take env hash, call take route_block, remove private
+            #_route (jeremyevans)</p>
+            </li><li>
+            <p>Remove keep_remaining_path/update_remaining_path private request methods
+            (jeremyevans)</p>
+            </li><li>
+            <p>Don&#39;t modify SCRIPT_NAME/PATH_INFO during routing, merging
+            static_path_info plugin into core (jeremyevans)</p>
+            </li><li>
+            <p>Remove code deprecated in <a href="../classes/Roda.html">Roda</a> 1.3.0
+            (jeremyevans)</p>
+            </li></ul>
             
             <h1 id="label-1.3.0+-282015-01-13-29">1.3.0 (2015-01-13)<span><a href="#label-1.3.0+-282015-01-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>

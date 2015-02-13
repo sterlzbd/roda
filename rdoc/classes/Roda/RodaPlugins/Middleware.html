@@ -48,9 +48,8 @@
             
             <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Mid</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">middleware</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;mid&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-string">&quot;Mid&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Mid</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;app&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-string">&quot;App&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span></pre>
             
-            <p>Note that once you use the middleware plugin, you can only use the <a
-            href="../../Roda.html">Roda</a> app as middleware, and you will get errors
-            if you attempt to use it as a regular app.</p>
+            <p>It is possible to use the <a href="../../Roda.html">Roda</a> app as a
+            regular app even when using the middleware plugin.</p>
           </div>
           <div id='context'>
           </div>
@@ -58,6 +57,7 @@
             <h2>Classes and Modules</h2>
             <ol>
               <li><a target="docwin" href="Middleware/ClassMethods.html">Roda::RodaPlugins::Middleware::ClassMethods</a></li>
+              <li><a target="docwin" href="Middleware/RequestMethods.html">Roda::RodaPlugins::Middleware::RequestMethods</a></li>
               <li><a target="docwin" href="Middleware/Forwarder.html">Roda::RodaPlugins::Middleware::Forwarder</a></li>
             </ol>
           </div>

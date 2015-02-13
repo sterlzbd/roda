@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-01-10 15:36:26 -0800</span>
+          <span class='datetime'>2015-02-11 11:38:01 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -232,8 +232,8 @@
             
             <pre class="ruby"><span class="ruby-string">&quot;:/a&quot;</span> <span class="ruby-comment"># matches &quot;/:/a&quot;</span></pre>
             
-            <p>Note that strings must be escaped before being used in a regular
-            expression, so:</p>
+            <p>Note that other than colons, strings do no handle regular expression
+            syntax, the string is matched verbatim:</p>
             
             <pre class="ruby"><span class="ruby-string">&quot;\\d+(/\\w+)?&quot;</span> <span class="ruby-comment"># matches &quot;/\d+(/\w+)?&quot;</span>&#x000A;<span class="ruby-string">&quot;\\d+(/\\w+)?&quot;</span> <span class="ruby-comment"># does not match &quot;/123/abc&quot;</span></pre>
             
@@ -414,16 +414,18 @@
             the scope of the <code>route</code> block. This should make it unlikely
             that <a href="../classes/Roda.html">Roda</a> will cause namespace issues
             with your application code.  Some of the things <a
-            href="../classes/Roda.html">Roda</a> does</p>
+            href="../classes/Roda.html">Roda</a> does:</p>
             <ul><li>
             <p>The only instance variables defined by default in the scope of the
             <code>route</code> block are <code>@_request</code> and
-            <code>@_response</code>.</p>
+            <code>@_response</code>.  All instance variables in the scope of the
+            <code>route</code> block used by plugins that ship with <a
+            href="../classes/Roda.html">Roda</a> are prefixed with an underscore.</p>
             </li><li>
             <p>The only methods defined (beyond the default methods for
-            <code>Object</code>) are: <code>env</code>, <code>opts</code>,
-            <code>request</code>, <code>response</code>, <code>call</code>,
-            <code>session</code>, and <code>_route</code> (private).</p>
+            <code>Object</code>) are: <code>call</code>, <code>env</code>,
+            <code>opts</code>, <code>request</code>, <code>response</code>, and
+            <code>session</code>.</p>
             </li><li>
             <p>Constants inside the <a href="../classes/Roda.html">Roda</a> namespace are
             all prefixed with <code>Roda</code> (e.g., <code>Roda::RodaRequest</code>).</p>
