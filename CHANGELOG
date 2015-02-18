@@ -1,6 +1,8 @@
 = HEAD
 
-* add_file in the mailer plugin now adds the files after the email body instead of before (jeremyevans)
+* Make :layout=>false option in render plugin override previous layout template (jeremyevans)
+
+* Make add_file in the mailer plugin add the files after the email body instead of before (jeremyevans)
 
 = 2.0.0 (2015-02-13)
 

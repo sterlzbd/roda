@@ -149,13 +149,20 @@ describe "render plugin" do
     body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>nil
-    body.gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
+    body.gsub("\n", '').should == "HeaderbarFooter"
     body('/a').gsub("\n", '').should == "bar"
     body('/f').gsub("\n", '').should == "bar"
     body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
     body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>false
+    body.gsub("\n", '').should == "HeaderbarFooter"
+    body('/a').gsub("\n", '').should == "bar"
+    body('/f').gsub("\n", '').should == "bar"
+    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+
+    app.plugin :render, :layout_opts=>{:template=>'layout-alternative', :locals=>{:title=>'a'}}
     body.gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
     body('/a').gsub("\n", '').should == "bar"
     body('/f').gsub("\n", '').should == "bar"
