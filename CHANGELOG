@@ -1,3 +1,7 @@
+= HEAD
+
+* add_file in the mailer plugin now adds the files after the email body instead of before (jeremyevans)
+
 = 2.0.0 (2015-02-13)
 
 * Allow Roda app to be used as a regular rack app even when using the middleware plugin (jeremyevans)

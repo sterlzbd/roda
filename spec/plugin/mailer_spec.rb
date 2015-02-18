@@ -87,6 +87,28 @@ describe "mailer plugin" do
     m.attachments.length.should == 1
     m.attachments.first.content_type.should =~ /mailer_spec\.rb/
     m.content_type.should =~ /\Amultipart\/mixed/
+    m.parts.length.should == 1
+    m.parts.first.body.should == File.read(__FILE__)
+  end
+
+  it "supports plain-text attachments with an email body" do
+    app(:mailer) do |r|
+      r.mail do
+        instance_exec(&setup_email)
+        add_file :filename=>'a.txt', :content=>'b'
+        'c'
+      end
+    end
+
+    m = app.mail('foo')
+    m.parts.length.should == 2
+    m.parts.first.content_type.should =~ /text\/plain/
+    m.parts.first.body.should == 'c'
+    m.parts.last.content_type.should =~ /text\/plain/
+    m.parts.last.body.should == 'b'
+    m.attachments.length.should == 1
+    m.attachments.first.content_type.should =~ /a\.txt/
+    m.content_type.should =~ /\Amultipart\/mixed/
   end
 
   it "supports regular web requests in same application" do
@@ -174,7 +196,7 @@ describe "mailer plugin" do
     app.mail('/').content_type.should =~ /\Atext\/foo/
   end
 
-  it "supports handle setting the default content type when attachments are used" do
+  it "supports setting the default content type when attachments are used" do
     app(:bare) do
       plugin :mailer, :content_type=>'text/html'
       route do
@@ -184,8 +206,11 @@ describe "mailer plugin" do
     end
     m = app.mail('/')
     m.content_type.should =~ /\Amultipart\/mixed/
-    m.parts.first.content_type.should =~ /\Atext\/css/
-    m.parts.last.content_type.should =~ /\Atext\/html/
+    m.parts.length.should == 2
+    m.parts.first.content_type.should =~ /\Atext\/html/
+    m.parts.first.body.should == "a"
+    m.parts.last.content_type.should =~ /\Atext\/css/
+    m.parts.last.body.should == File.read('spec/assets/css/raw.css')
   end
 end
 end

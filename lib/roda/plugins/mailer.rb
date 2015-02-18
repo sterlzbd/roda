@@ -168,6 +168,9 @@ class Roda
             header_content_type = @headers.delete(CONTENT_TYPE)
             m.headers(@headers)
             m.body(@body.join) unless @body.empty?
+            mail_attachments.each do |a|
+              m.add_file(*a)
+            end
 
             if content_type = header_content_type || roda_class.opts[:mailer][:content_type]
               if mail.multipart?
@@ -188,11 +191,16 @@ class Roda
             super
           end
         end
+
+        # The attachments related to the current mail.
+        def mail_attachments
+          @mail_attachments ||= []
+        end
       end
 
       module InstanceMethods
         # Add delegates for common email methods.
-        [:from, :to, :cc, :bcc, :subject, :add_file].each do |meth|
+        [:from, :to, :cc, :bcc, :subject].each do |meth|
           define_method(meth) do |*args|
             env[RODA_MAIL].send(meth, *args)
             nil
@@ -213,6 +221,12 @@ class Roda
             res.mail = mail
             res.headers.delete(CONTENT_TYPE)
           end
+        end
+
+        # Delay adding a file to the message until after the message body has been set.
+        def add_file(*a)
+          response.mail_attachments << a
+          nil
         end
 
         private
