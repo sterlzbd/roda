@@ -597,17 +597,24 @@ The settings are inherited if you happen to subclass +Roda+.
 
 Feel free to store whatever you find convenient.
 Note that when subclassing, Roda only does a shallow clone of the settings.
+
 If you store nested structures and plan to mutate them in subclasses,
 it is your responsibility to dup the nested structures inside +Roda.inherited+
-(making sure to call +super+).
-
-The plugins that ship with Roda all handle this.
-Also, note that this means that modifications to the parent class
-made after subclassing do _not_ affect the subclass.
+(making sure to call +super+).  This should be is done so that that modifications
+to the parent class made after subclassing do _not_ affect the subclass, and
+vice-versa.
 
 The plugins that ship with Roda freeze their settings and only allow modification
 to their settings by reloading the plugin, and external plugins are encouraged
 to follow this approach.
+
+The following options are respected by multiple plugins:
+
+:root :: Set the root path for the app.  This defaults to the current working
+         directory of the process.
+
+There may be other options supported by individual plugins, if so it will be
+mentioned in the documentation for the plugin.
 
 == Rendering
 

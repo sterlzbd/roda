@@ -11,9 +11,9 @@ rescue LoadError
 end
 
 if run_tests
-  metadata_file = 'spec/assets/tmp/precompiled.json'
-  js_file = 'spec/assets/js/head/app.js'
-  css_file = 'spec/assets/css/no_access.css'
+  metadata_file = File.expand_path('spec/assets/tmp/precompiled.json')
+  js_file = File.expand_path('spec/assets/js/head/app.js')
+  css_file = File.expand_path('spec/assets/css/no_access.css')
   js_mtime = File.mtime(js_file)
   js_atime = File.atime(js_file)
   css_mtime = File.mtime(css_file)
@@ -48,44 +48,58 @@ if run_tests
     end
 
     it 'assets_opts should use correct paths given options' do
-      keys = [:js_path, :css_path, :compiled_js_path, :compiled_css_path, :js_prefix, :css_prefix, :compiled_js_prefix, :compiled_css_prefix]
-      app.assets_opts.values_at(*keys).should == %w"spec/assets/js/ spec/assets/css/ spec/assets/app spec/assets/app assets/js/ assets/css/ assets/app assets/app"
+      fpaths = [:js_path, :css_path, :compiled_js_path, :compiled_css_path]
+      rpaths = [:js_prefix, :css_prefix, :compiled_js_prefix, :compiled_css_prefix]
+      app.assets_opts.values_at(*fpaths).should == %w"spec/assets/js/ spec/assets/css/ spec/assets/app spec/assets/app".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"assets/js/ assets/css/ assets/app assets/app"
 
       app.plugin :assets, :path=>'bar/', :public=>'foo/', :prefix=>'as/', :js_dir=>'j/', :css_dir=>'c/', :compiled_name=>'a'
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/as/a foo/as/a as/j/ as/c/ as/a as/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/j/ bar/c/ foo/as/a foo/as/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/j/ as/c/ as/a as/a"
 
       app.plugin :assets, :path=>'bar', :public=>'foo', :prefix=>'as', :js_dir=>'j', :css_dir=>'c', :compiled_name=>'a'
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/as/a foo/as/a as/j/ as/c/ as/a as/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/j/ bar/c/ foo/as/a foo/as/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/j/ as/c/ as/a as/a"
 
       app.plugin :assets, :compiled_js_dir=>'cj', :compiled_css_dir=>'cs', :compiled_path=>'cp'
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a as/j/ as/c/ as/cj/a as/cs/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/j/ as/c/ as/cj/a as/cs/a"
 
       app.plugin :assets, :compiled_js_route=>'cjr', :compiled_css_route=>'ccr', :js_route=>'jr', :css_route=>'cr'
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a as/jr/ as/cr/ as/cjr/a as/ccr/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/jr/ as/cr/ as/cjr/a as/ccr/a"
 
       app.plugin :assets, :compiled_js_route=>'cj', :compiled_css_route=>'cs', :js_route=>'j', :css_route=>'c'
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a as/j/ as/c/ as/cj/a as/cs/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/j/ as/c/ as/cj/a as/cs/a"
 
       app.plugin :assets
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a as/j/ as/c/ as/cj/a as/cs/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/j/ bar/c/ foo/cp/cj/a foo/cp/cs/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/j/ as/c/ as/cj/a as/cs/a"
 
       app.plugin :assets, :compiled_js_dir=>'', :compiled_css_dir=>nil, :compiled_js_route=>nil, :compiled_css_route=>nil
-      app.assets_opts.values_at(*keys).should == %w"bar/j/ bar/c/ foo/cp/a foo/cp/a as/j/ as/c/ as/a as/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/j/ bar/c/ foo/cp/a foo/cp/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/j/ as/c/ as/a as/a"
 
       app.plugin :assets, :js_dir=>'', :css_dir=>nil, :js_route=>nil, :css_route=>nil
-      app.assets_opts.values_at(*keys).should == %w"bar/ bar/ foo/cp/a foo/cp/a as/ as/ as/a as/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/ bar/ foo/cp/a foo/cp/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/ as/ as/a as/a"
 
       app.plugin :assets, :public=>''
-      app.assets_opts.values_at(*keys).should == %w"bar/ bar/ cp/a cp/a as/ as/ as/a as/a"
+      app.assets_opts.values_at(*fpaths).should == %w"bar/ bar/ cp/a cp/a".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == %w"as/ as/ as/a as/a"
 
       app.plugin :assets, :path=>'', :compiled_path=>nil
-      app.assets_opts.values_at(*keys).should == ['', '', 'a', 'a', 'as/', 'as/', 'as/a', 'as/a']
+      app.assets_opts.values_at(*fpaths).should == ['', '', 'a', 'a'].map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == ['as/', 'as/', 'as/a', 'as/a']
 
       app.plugin :assets, :prefix=>''
-      app.assets_opts.values_at(*keys).should == ['', '', 'a', 'a', '', '', 'a', 'a']
+      app.assets_opts.values_at(*fpaths).should == ['', '', 'a', 'a'].map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*rpaths).should == ['', '', 'a', 'a']
 
       app.plugin :assets, :compiled_name=>nil
-      app.assets_opts.values_at(*keys).should == ['', '', '', '', '', '', '', '']
+      app.assets_opts.values_at(*fpaths).should == ['', ''].map{|s| File.join(Dir.pwd, s)} + ['', ''].map{|s| File.join(Dir.pwd, s).chop}
+      app.assets_opts.values_at(*rpaths).should == ['', '', '', '']
     end
 
     it 'assets_opts should use headers and dependencies given options' do
@@ -408,6 +422,33 @@ if run_tests
 
       app.plugin :assets, :precompiled=>metadata_file
       app.allocate.assets([:js, :head]).should =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+    end
+  end
+
+  describe 'assets plugin' do
+    it "app :root option affects :views default" do
+      app.plugin :assets
+      app.assets_opts[:path].should == File.join(Dir.pwd, 'assets')
+      app.assets_opts[:js_path].should == File.join(Dir.pwd, 'assets/js/')
+      app.assets_opts[:css_path].should == File.join(Dir.pwd, 'assets/css/')
+
+      app.opts[:root] = '/foo'
+      app.plugin :assets
+      app.assets_opts[:path].should == '/foo/assets'
+      app.assets_opts[:js_path].should == '/foo/assets/js/'
+      app.assets_opts[:css_path].should == '/foo/assets/css/'
+
+      app.opts[:root] = '/foo/bar'
+      app.plugin :assets
+      app.assets_opts[:path].should == '/foo/bar/assets'
+      app.assets_opts[:js_path].should == '/foo/bar/assets/js/'
+      app.assets_opts[:css_path].should == '/foo/bar/assets/css/'
+
+      app.opts[:root] = nil
+      app.plugin :assets
+      app.assets_opts[:path].should == File.join(Dir.pwd, 'assets')
+      app.assets_opts[:js_path].should == File.join(Dir.pwd, 'assets/js/')
+      app.assets_opts[:css_path].should == File.join(Dir.pwd, 'assets/css/')
     end
   end
 end

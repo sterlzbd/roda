@@ -209,20 +209,20 @@ class Roda
     # :js_headers :: A hash of additional headers for your rendered javascript files
     # :js_opts :: Template options to pass to the render plugin (via :template_opts) when rendering javascript assets
     # :js_route :: Route under :prefix for javascript assets (default: :js_dir)
-    # :path :: Path to your asset source directory (default: 'assets')
+    # :path :: Path to your asset source directory (default: 'assets').   Relative
+    #            paths will be considered relative to the application's :root option.
     # :prefix :: Prefix for assets path in your URL/routes (default: 'assets')
     # :precompiled :: Path to the compiled asset metadata file.  If the file exists, will use compiled
     #                 mode using the metadata in the file.  If the file does not exist, will use
     #                 non-compiled mode, but will write the metadata to the file if compile_assets is called.
-    # :public :: Path to your public folder, in which compiled files are placed (default: 'public')
+    # :public :: Path to your public folder, in which compiled files are placed (default: 'public').  Relative
+    #            paths will be considered relative to the application's :root option.
     module Assets
       DEFAULTS = {
         :compiled_name    => 'app'.freeze,
         :js_dir           => 'js'.freeze,
         :css_dir          => 'css'.freeze,
-        :path             => 'assets'.freeze,
         :prefix           => 'assets'.freeze,
-        :public           => 'public'.freeze,
         :concat_only      => false,
         :compiled         => false,
         :add_suffix       => false,
@@ -269,6 +269,8 @@ class Roda
           app.opts[:assets][:orig_opts] = opts
         end
         opts = app.opts[:assets]
+        opts[:path] = File.expand_path(opts[:path]||"assets", app.opts[:root]).freeze
+        opts[:public] = File.expand_path(opts[:public]||"public", app.opts[:root]).freeze
 
         # Combine multiple values into a path, ignoring trailing slashes
         j = lambda do |*v|

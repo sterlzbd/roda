@@ -170,6 +170,26 @@ describe "render plugin" do
     body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
   end
 
+  it "app :root option affects :views default" do
+    app
+    app.plugin :render
+    app.render_opts[:views].should == File.join(Dir.pwd, 'views')
+
+    app.opts[:root] = '/foo'
+    app.plugin :render
+    app.render_opts[:views].should == '/foo/views'
+
+    app.opts[:root] = '/foo/bar'
+    app.plugin :render
+    app.render_opts[:views].should == '/foo/bar/views'
+
+    app.opts[:root] = nil
+    app.plugin :render
+    app.render_opts[:views].should == File.join(Dir.pwd, 'views')
+    app.plugin :render, :views=>'bar'
+    app.render_opts[:views].should == File.join(Dir.pwd, 'bar')
+  end
+
   it "inline layouts and inline views" do
     app(:render) do
       view({:inline=>'bar'}, :layout=>{:inline=>'Foo: <%= yield %>'})

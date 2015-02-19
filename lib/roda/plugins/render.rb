@@ -38,8 +38,8 @@ class Roda
     #                 from the default options.
     # :template_opts :: The tilt options used when rendering templates, defaults to
     #                   <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
-    # :views :: The directory holding the view files, defaults to 'views' in the
-    #           current directory.
+    # :views :: The directory holding the view files, defaults to the 'views' subdirectory of the
+    #           application's :root option (the process's working directory by default).
     #
     # Most of these options can be overridden at runtime by passing options
     # to the +view+ or +render+ methods:
@@ -95,7 +95,7 @@ class Roda
         opts = app.opts[:render]
         opts[:engine] ||= "erb"
         opts[:ext] = nil unless opts.has_key?(:ext)
-        opts[:views] ||= File.expand_path("views", Dir.pwd)
+        opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root])
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
 
         if layout = opts.fetch(:layout, true)
