@@ -80,7 +80,11 @@ class RSPEC_EXAMPLE_GROUP
   end
 
   def body(path='/', env={})
-    req(path, env)[2].join
+    s = ''
+    b = req(path, env)[2]
+    b.each{|x| s << x}
+    b.close if b.respond_to?(:close)
+    s
   end
 
   def _app(&block)

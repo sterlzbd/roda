@@ -102,7 +102,7 @@ describe "not_found plugin" do
       end
 
       o = Object.new
-      def o.join() '' end
+      def o.each; end
       route do |r|
         r.halt [404, {}, o]
       end
