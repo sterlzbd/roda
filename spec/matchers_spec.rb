@@ -291,6 +291,40 @@ describe "r.on" do
     body("/123").should == '+1'
   end
 
+  it "does not modify SCRIPT_NAME/PATH_INFO during routing" do
+    app(:pass) do |r|
+      r.on "foo" do
+        r.is "bar" do
+          "bar|#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
+        end
+        r.is "baz" do
+          r.pass
+        end
+        "foo|#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
+      end
+      "#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
+    end
+
+    body.should == '|/'
+    body('SCRIPT_NAME'=>'/a').should == '/a|/'
+    body('/foo').should == 'foo||/foo'
+    body('/foo', 'SCRIPT_NAME'=>'/a').should == 'foo|/a|/foo'
+    body('/foo/bar').should == 'bar||/foo/bar'
+    body('/foo/bar', 'SCRIPT_NAME'=>'/a').should == 'bar|/a|/foo/bar'
+    body('/foo/baz').should == 'foo||/foo/baz'
+    body('/foo/baz', 'SCRIPT_NAME'=>'/a').should == 'foo|/a|/foo/baz'
+  end
+
+  it "should have path/matched_path/remaining_path work correctly" do
+    app do |r|
+      r.on "foo" do
+        "#{r.path}:#{r.matched_path}:#{r.remaining_path}"
+      end
+    end
+
+    body("/foo/bar").should ==  "/foo/bar:/foo:/bar"
+  end
+
   it "ensures remaining_path is reverted if modified in failing matcher" do
     app do |r|
       r.on lambda { @remaining_path = "/blah"; false } do
