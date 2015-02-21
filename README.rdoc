@@ -588,9 +588,9 @@ The settings are inherited if you happen to subclass +Roda+.
   Roda.opts[:layout] = "guest"
 
   class Users < Roda; end
-  class Admin < Roda; end
-
-  Admin.opts[:layout] = "admin"
+  class Admin < Roda
+    opts[:layout] = "admin"
+  end
 
   Users.opts[:layout] # => 'guest'
   Admin.opts[:layout] # => 'admin'
