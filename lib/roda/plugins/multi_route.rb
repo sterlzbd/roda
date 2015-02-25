@@ -147,7 +147,8 @@ class Roda
 
         # The names for the currently stored named routes
         def named_routes(namespace=nil)
-          opts[:namespaced_routes][namespace].keys
+          routes = opts[:namespaced_routes][namespace]
+          routes ? routes.keys : []
         end
 
         # Return the named route with the given name.

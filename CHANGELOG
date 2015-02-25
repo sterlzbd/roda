@@ -1,5 +1,7 @@
 = HEAD
 
+* Make r.multi_route in multi_route plugin work without any named routes defined (jeremyevans)
+
 * Add :static plugin, for more easily serving static files (jeremyevans)
 
 * Recognize Roda :root option in render and assets plugins (jeremyevans)

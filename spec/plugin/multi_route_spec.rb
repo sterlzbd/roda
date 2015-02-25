@@ -170,6 +170,16 @@ describe "multi_route plugin" do
   end
 end
 
+describe "multi_route plugin" do
+  it "r.multi_route works even without routes defined" do
+    app(:multi_route) do |r|
+      r.multi_route
+      'a'
+    end
+    body.should == 'a'
+  end
+end
+
 describe "multi_route plugin" do 
   before do
     app(:bare) do
