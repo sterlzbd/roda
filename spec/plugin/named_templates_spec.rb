@@ -1,5 +1,10 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
+begin
+  require 'tilt/erb'
+rescue LoadError
+  warn "tilt not installed, skipping named_templates plugin test"  
+else
 describe "named_templates plugin" do 
   it "adds template method method for naming templates, and have render recognize it" do
     app(:bare) do
@@ -87,4 +92,5 @@ describe "named_templates plugin" do
     body('/foo').should == 'foo13-foobar12-baz'
     body('/bar').should == 'bar43-barfoo42-baz'
   end
+end
 end

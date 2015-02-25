@@ -1,5 +1,10 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
+begin
+  require 'tilt/erb'
+rescue LoadError
+  warn "tilt not installed, skipping render_each plugin test"  
+else
 describe "render_each plugin" do 
   it "calls render with each argument, returning joined string with all results" do
     app(:bare) do
@@ -32,4 +37,5 @@ describe "render_each plugin" do
     body("/b").should == 'rbar rbar rbar '
     body("/c").should == 'rbar41 rbar42 rbar43 '
   end
+end
 end
