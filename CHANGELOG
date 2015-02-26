@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :script_name option in assets plugin, to prefix URLs with SCRIPT_NAME (jeremyevans)
+
 * Make r.multi_route in multi_route plugin work without any named routes defined (jeremyevans)
 
 * Add :static plugin, for more easily serving static files (jeremyevans)

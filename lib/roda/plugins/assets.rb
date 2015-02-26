@@ -217,6 +217,7 @@ class Roda
     #                 non-compiled mode, but will write the metadata to the file if compile_assets is called.
     # :public :: Path to your public folder, in which compiled files are placed (default: 'public').  Relative
     #            paths will be considered relative to the application's :root option.
+    # :script_name :: Whether to preceed asset URLs by the SCRIPT_NAME (default: false)
     module Assets
       DEFAULTS = {
         :compiled_name    => 'app'.freeze,
@@ -229,6 +230,7 @@ class Roda
         :group_subdirs    => true,
         :compiled_css_dir => nil,
         :compiled_js_dir  => nil,
+        :script_name      =>false,
       }.freeze
       JS_END = "\"></script>".freeze
       CSS_END = "\" />".freeze
@@ -467,12 +469,14 @@ class Roda
           end
 
           if type == :js
-            tag_start = "<script type=\"text/javascript\" #{attrs} src=\"/"
+            tag_start = "<script type=\"text/javascript\" #{attrs} src=\""
             tag_end = JS_END
           else
-            tag_start = "<link rel=\"stylesheet\" #{attrs} href=\"/"
+            tag_start = "<link rel=\"stylesheet\" #{attrs} href=\""
             tag_end = CSS_END
           end
+
+          url_prefix = request.script_name if o[:script_name]
 
           # Create a tag for each individual file
           if compiled = o[:compiled]
@@ -480,10 +484,10 @@ class Roda
               key = dirs.join(DOT)
               ckey = "#{stype}.#{key}"
               if ukey = compiled[ckey]
-                "#{tag_start}#{o[:"compiled_#{stype}_prefix"]}.#{key}.#{ukey}.#{stype}#{tag_end}"
+                "#{tag_start}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{key}.#{ukey}.#{stype}#{tag_end}"
               end
             elsif ukey = compiled[stype]
-              "#{tag_start}#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{tag_end}"
+              "#{tag_start}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{tag_end}"
             end
           else
             asset_dir = o[type]
@@ -491,7 +495,7 @@ class Roda
               dirs.each{|f| asset_dir = asset_dir[f]}
               prefix = "#{dirs.join(SLASH)}/" if o[:group_subdirs]
             end
-            Array(asset_dir).map{|f| "#{tag_start}#{o[:"#{stype}_prefix"]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}#{tag_end}"}.join(NEWLINE)
+            Array(asset_dir).map{|f| "#{tag_start}#{url_prefix}/#{o[:"#{stype}_prefix"]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}#{tag_end}"}.join(NEWLINE)
           end
         end
 

@@ -140,6 +140,21 @@ if run_tests
       js.should include('console.log')
     end
 
+    it 'should handle rendering assets, linking to them, and accepting requests for them  when :script_name option is ued' do
+      app.plugin :assets, :script_name=>true
+      html = body('/test', 'SCRIPT_NAME'=>'/foo')
+      html.scan(/<link/).length.should == 2
+      html =~ %r{href="/foo(/assets/css/app\.scss)"}
+      css = body($1)
+      html =~ %r{href="/foo(/assets/css/raw\.css)"}
+      css2 = body($1)
+      html.scan(/<script/).length.should == 1
+      html =~ %r{src="/foo(/assets/js/head/app\.js)"}
+      js = body($1)
+      css.should =~ /color: red;/
+      css2.should =~ /color: blue;/
+    end
+
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling, with different options' do
       app.plugin :assets, :path=>'spec/', :js_dir=>'assets/js', :css_dir=>'assets/css', :prefix=>'a',
         :js_route=>'foo', :css_route=>'bar', :add_suffix=>true, :css_opts=>{:style=>:compressed}
@@ -217,6 +232,20 @@ if run_tests
       js.should include('console.log')
     end
 
+    it 'should handle compiling assets, linking to them, and accepting requests for them when :script_name option is given' do
+      app.plugin :assets, :script_name=>true
+      app.compile_assets
+      html = body('/test', 'SCRIPT_NAME'=>'/foo')
+      html =~ %r{href="/foo(/assets/app\.[a-f0-9]{40}\.css)"}
+      css = body($1)
+      html.scan(/<script/).length.should == 1
+      html =~ %r{src="/foo(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      js = body($1)
+      css.should =~ /color: ?red/
+      css.should =~ /color: ?blue/
+      js.should include('console.log')
+    end
+
     it 'should handle compiling assets, linking to them, and accepting requests for them, with different options' do
       app.plugin :assets, :compiled_path=>nil, :js_dir=>'assets/js', :css_dir=>'assets/css', :prefix=>'a',
         :public=>'spec/assets', :path=>'spec', :compiled_js_route=>'foo', :compiled_css_route=>'bar'
@@ -249,6 +278,28 @@ if run_tests
       css = body($1)
       html.scan(/<script/).length.should == 1
       html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
+      js = body($1)
+      css.should =~ /color: ?red/
+      css.should =~ /color: ?blue/
+      js.should include('console.log')
+    end
+
+    it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash when :script_name option is used' do
+      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
+        :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}, :script_name=>true
+      app.compile_assets
+      app.route do |r|
+        r.assets
+        r.is 'test' do
+          "#{assets([:css, :assets, :css])}\n#{assets([:js, :assets, :js, :head])}"
+        end
+      end
+      html = body('/test', 'SCRIPT_NAME'=>'/foo')
+      html.scan(/<link/).length.should == 1
+      html =~ %r{href="/foo(/assets/app\.assets\.css\.[a-f0-9]{40}\.css)"}
+      css = body($1)
+      html.scan(/<script/).length.should == 1
+      html =~ %r{src="/foo(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
       css.should =~ /color: ?red/
       css.should =~ /color: ?blue/
