@@ -1,5 +1,7 @@
 = HEAD
 
+* Add support for registering classes in the path plugin for use with Roda#path (jeremyevans)
+
 * Use :add_script_name app option as default for path method :add_script_name option in path plugin (jeremyevans)
 
 * Support :add_script_name app option in assets plugin, to prefix URLs with SCRIPT_NAME (jeremyevans)

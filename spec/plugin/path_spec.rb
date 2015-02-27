@@ -110,3 +110,55 @@ describe "path plugin" do
     body("foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>81).should == "http://example.org:81/bar/foo"
   end
 end
+
+describe "path plugin" do 
+  before do
+    app(:bare) do
+      plugin :path
+      route{|r| path(*env['path'])}
+    end
+
+
+    c = Class.new{attr_accessor :a}
+    app.path(c){|obj, *args| "/d/#{obj.a}/#{File.join(*args)}"}
+    @obj = c.new
+    @obj.a = 1
+  end
+
+  it "Roda#path respects classes and symbols registered via Roda.path" do
+    # Strings
+    body('path'=>'/foo/bar').should == '/foo/bar'
+
+    # Classes
+    body('path'=>@obj).should == '/d/1/'
+    body('path'=>[@obj, 'foo']).should == '/d/1/foo'
+    body('path'=>[@obj, 'foo', 'bar']).should == '/d/1/foo/bar'
+  end
+
+  it "Roda#path respects :add_script_name app option" do
+    app.opts[:add_script_name] = true
+
+    # Strings
+    body('path'=>'/foo/bar', 'SCRIPT_NAME'=>'/baz').should == '/baz/foo/bar'
+
+    # Classes
+    body('path'=>@obj, 'SCRIPT_NAME'=>'/baz').should == '/baz/d/1/'
+    body('path'=>[@obj, 'foo'], 'SCRIPT_NAME'=>'/baz').should == '/baz/d/1/foo'
+    body('path'=>[@obj, 'foo', 'bar'], 'SCRIPT_NAME'=>'/baz').should == '/baz/d/1/foo/bar'
+  end
+
+  it "Roda.path doesn't work with classes without blocks" do
+    proc{app.path(Class.new)}.should raise_error(Roda::RodaError)
+  end
+
+  it "Roda.path doesn't work with classes with paths or options" do
+    proc{app.path(Class.new, '/a'){}}.should raise_error(Roda::RodaError)
+    proc{app.path(Class.new, nil, :a=>1){}}.should raise_error(Roda::RodaError)
+  end
+
+  it "Roda.path doesn't work after freezing the app" do
+    app.freeze
+    proc{app.path(Class.new){|obj| ''}}.should raise_error
+  end
+end
+
