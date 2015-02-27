@@ -20,7 +20,8 @@ class Roda
     #
     # The path method accepts the following options:
     #
-    # :add_script_name :: Prefix the path generated with SCRIPT_NAME.
+    # :add_script_name :: Prefix the path generated with SCRIPT_NAME. This defaults to the app's
+    #                     :add_script_name option.
     # :name :: Provide a different name for the method, instead of using <tt>*_path</tt>.
     # :url :: Create a url method in addition to the path method, which will prefix the string generated
     #         with the appropriate scheme, host, and port.  If true, creates a <tt>*_url</tt>
@@ -53,7 +54,7 @@ class Roda
 
           meth = opts[:name] || "#{name}_path"
           url = opts[:url]
-          add_script_name = opts[:add_script_name]
+          add_script_name = opts.fetch(:add_script_name, self.opts[:add_script_name])
 
           if add_script_name || url || opts[:url_only]
             _meth = "_#{meth}"

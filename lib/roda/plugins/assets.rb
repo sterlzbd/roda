@@ -52,6 +52,10 @@ class Roda
     #
     #   <%= assets(:css, :media => 'print') %>
     #
+    # The assets method will respect the application's :add_script_name option,
+    # if it set it will automatically prefix the path with the SCRIPT_NAME for
+    # the request.
+    #
     # == Asset Groups
     #
     # The asset plugin supports groups for the cases where you have different
@@ -217,7 +221,6 @@ class Roda
     #                 non-compiled mode, but will write the metadata to the file if compile_assets is called.
     # :public :: Path to your public folder, in which compiled files are placed (default: 'public').  Relative
     #            paths will be considered relative to the application's :root option.
-    # :script_name :: Whether to preceed asset URLs by the SCRIPT_NAME (default: false)
     module Assets
       DEFAULTS = {
         :compiled_name    => 'app'.freeze,
@@ -230,7 +233,6 @@ class Roda
         :group_subdirs    => true,
         :compiled_css_dir => nil,
         :compiled_js_dir  => nil,
-        :script_name      =>false,
       }.freeze
       JS_END = "\"></script>".freeze
       CSS_END = "\" />".freeze
@@ -476,7 +478,7 @@ class Roda
             tag_end = CSS_END
           end
 
-          url_prefix = request.script_name if o[:script_name]
+          url_prefix = request.script_name if self.class.opts[:add_script_name]
 
           # Create a tag for each individual file
           if compiled = o[:compiled]

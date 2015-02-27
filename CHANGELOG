@@ -1,6 +1,8 @@
 = HEAD
 
-* Support :script_name option in assets plugin, to prefix URLs with SCRIPT_NAME (jeremyevans)
+* Use :add_script_name app option as default for path method :add_script_name option in path plugin (jeremyevans)
+
+* Support :add_script_name app option in assets plugin, to prefix URLs with SCRIPT_NAME (jeremyevans)
 
 * Make r.multi_route in multi_route plugin work without any named routes defined (jeremyevans)
 

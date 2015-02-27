@@ -9,6 +9,15 @@ describe "path plugin" do
     end
   end
 
+  def path_script_name_app(*args, &block)
+    app(:bare) do
+      opts[:add_script_name] = true
+      plugin :path
+      path *args, &block
+      route{|r| send(r.path_info)}
+    end
+  end
+
   def path_block_app(b, *args, &block)
     path_app(*args, &block)
     app.route{|r| send(r.path_info, &b)}
@@ -56,6 +65,16 @@ describe "path plugin" do
   it "supports :add_script_name option for automatically adding the script name" do
     path_app(:foo, :add_script_name=>true){"/bar/foo"}
     body("foo_path", 'SCRIPT_NAME'=>'/baz').should == "/baz/bar/foo"
+  end
+
+  it "respects :add_script_name app option for automatically adding the script name" do
+    path_script_name_app(:foo){"/bar/foo"}
+    body("foo_path", 'SCRIPT_NAME'=>'/baz').should == "/baz/bar/foo"
+  end
+
+  it "supports :add_script_name=>false option for not automatically adding the script name" do
+    path_script_name_app(:foo, :add_script_name=>false){"/bar/foo"}
+    body("foo_path", 'SCRIPT_NAME'=>'/baz').should == "/bar/foo"
   end
 
   it "supports path method accepting a block when using :add_script_name" do

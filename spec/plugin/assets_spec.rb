@@ -140,8 +140,9 @@ if run_tests
       js.should include('console.log')
     end
 
-    it 'should handle rendering assets, linking to them, and accepting requests for them  when :script_name option is ued' do
-      app.plugin :assets, :script_name=>true
+    it 'should handle rendering assets, linking to them, and accepting requests for them  when :add_script_name app option is used' do
+      app.opts[:add_script_name] = true
+      app.plugin :assets
       html = body('/test', 'SCRIPT_NAME'=>'/foo')
       html.scan(/<link/).length.should == 2
       html =~ %r{href="/foo(/assets/css/app\.scss)"}
@@ -232,8 +233,9 @@ if run_tests
       js.should include('console.log')
     end
 
-    it 'should handle compiling assets, linking to them, and accepting requests for them when :script_name option is given' do
-      app.plugin :assets, :script_name=>true
+    it 'should handle compiling assets, linking to them, and accepting requests for them when :add_script_name app option is used' do
+      app.opts[:add_script_name] = true
+      app.plugin :assets
       app.compile_assets
       html = body('/test', 'SCRIPT_NAME'=>'/foo')
       html =~ %r{href="/foo(/assets/app\.[a-f0-9]{40}\.css)"}
@@ -284,9 +286,10 @@ if run_tests
       js.should include('console.log')
     end
 
-    it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash when :script_name option is used' do
+    it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash when :add_script_name app option is used' do
+      app.opts[:add_script_name] = true
       app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
-        :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}, :script_name=>true
+        :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.compile_assets
       app.route do |r|
         r.assets
