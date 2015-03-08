@@ -800,6 +800,10 @@ to avoid polluting the scope.  Finally, do not add any constants inside
 the InstanceMethods module, add constants to the plugin module itself
 (+Markdown+ in the above example).
 
+If you are planning on shipping your plugin in an external gem, it is recommended that you follow 
+{standard gem naming conventions for extensions}[http://guides.rubygems.org/name-your-gem/].
+So if your plugin module is named +FooBar+, your gem name should be <tt>roda-foo_bar</tt>.
+
 == License
 
 MIT
