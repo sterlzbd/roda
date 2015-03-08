@@ -14,6 +14,13 @@ class Roda
     # The params hash is initialized lazily, so you only pay
     # the penalty of copying the request params if you call
     # the +params+ method.
+    #
+    # Note that there is a rack-indifferent gem that
+    # automatically makes rack use indifferent params. Using
+    # rack-indifferent is faster and has some other minor
+    # advantages over the indifferent_params plugin, though
+    # it affects rack itself instead of just the Roda app that
+    # you load the plugin into.
     module IndifferentParams
       module InstanceMethods
         # A copy of the request params that will automatically
