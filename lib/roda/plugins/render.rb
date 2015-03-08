@@ -97,6 +97,7 @@ class Roda
         opts[:ext] = nil unless opts.has_key?(:ext)
         opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root])
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
+        opts[:layout_opts][:_is_layout] = true
 
         if layout = opts.fetch(:layout, true)
           opts[:layout] = true unless opts.has_key?(:layout)
@@ -195,8 +196,8 @@ class Roda
           end
         end
 
-        # Given the template name and options, return the template class, template path/content,
-        # and template block to use for the render.
+        # Given the template name and options, set the template class, template path/content,
+        # template block, and locals to use for the render in the passed options.
         def find_template(opts)
           if content = opts[:inline]
             path = opts[:path] = content
@@ -220,6 +221,14 @@ class Roda
             opts[:key] = key
           end
 
+          if !opts[:_is_layout] && (r_locals = render_opts[:locals])
+            opts[:locals] = if locals = opts[:locals]
+              r_locals.merge(locals)
+            else
+              r_locals
+            end
+          end
+
           opts
         end
 
@@ -227,6 +236,12 @@ class Roda
         def parse_template_opts(template, opts)
           template = {:template=>template} unless template.is_a?(Hash)
           opts.merge(template)
+        end
+
+        # The default render options to use.  These set defaults that can be overridden by
+        # providing a :layout_opts option to the view/render method.
+        def render_layout_opts
+          render_opts[:layout_opts].dup
         end
 
         # The name to use for the template.  By default, just converts the :template option to a string.
@@ -245,10 +260,15 @@ class Roda
         # used, return nil.
         def view_layout_opts(opts)
           if layout = opts.fetch(:layout, render_opts[:layout])
-            layout_opts = if opts[:layout_opts]
-              opts[:layout_opts].merge(render_opts[:layout_opts])
-            else
-              render_opts[:layout_opts].dup
+            layout_opts = render_layout_opts
+            if l_opts = opts[:layout_opts]
+              if (l_locals = l_opts[:locals]) && (layout_locals = layout_opts[:locals])
+                set_locals = layout_locals.merge(l_locals)
+              end
+              layout_opts.merge!(l_opts)
+              if set_locals
+                layout_opts[:locals] = set_locals
+              end
             end
 
             case layout

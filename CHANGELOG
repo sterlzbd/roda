@@ -1,5 +1,7 @@
 = HEAD
 
+* Merge :locals set in the render plugin options into :locals provided in call to view/render (jeremyevans)
+
 * Add support for registering classes in the path plugin for use with Roda#path (jeremyevans)
 
 * Use :add_script_name app option as default for path method :add_script_name option in path plugin (jeremyevans)

@@ -107,6 +107,18 @@ describe "render plugin" do
     body.strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
+  it "locals overrides" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :locals=>{:title=>'Home', :b=>'B'}, :layout_opts=>{:template=>'multiple-layout', :locals=>{:title=>'Roda', :a=>'A'}}
+      
+      route do |r|
+        view("multiple", :locals=>{:b=>"BB"}, :layout_opts=>{:locals=>{:a=>'AA'}})
+      end
+    end
+
+    body.strip.should == "Roda:AA::Home:BB"
+  end
+
   it ":layout=>true/false/string/hash/not-present respects plugin layout switch and template" do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :layout_opts=>{:template=>'layout-yield', :locals=>{:title=>'a'}}
