@@ -1,5 +1,7 @@
 = HEAD
 
+* Rename view_subdirs plugin to view_options, add support for branch/route specific view/layout options/locals (jeremyevans)
+ 
 * Merge :locals set in the render plugin options into :locals provided in call to view/render (jeremyevans)
 
 * Add support for registering classes in the path plugin for use with Roda#path (jeremyevans)
