@@ -35,7 +35,8 @@ class Roda
     #       set_view_subdir 'users'
     #       
     #       r.get :id do
-    #         view 'profile' # uses ./views/users/profile.erb
+    #         append_view_subdir 'profile'
+    #         view 'index' # uses ./views/users/profile/index.erb
     #       end
     #
     #       r.get 'list' do
@@ -74,6 +75,19 @@ class Roda
                 end
               end
             END
+          end
+        end
+
+        # Append a view subdirectory to use.  If there hasn't already
+        # been a view subdirectory set, this just sets it to the argument.
+        # If there has already been a view subdirectory set, this sets
+        # the view subdirectory to a subdirectory of the existing
+        # view subdirectory.
+        def append_view_subdir(v)
+          if subdir = @_view_subdir
+            set_view_subdir("#{subdir}/#{v}")
+          else
+            set_view_subdir(v)
           end
         end
 

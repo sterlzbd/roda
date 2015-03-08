@@ -1,5 +1,7 @@
 = HEAD
 
+* Add append_view_subdir to view_options, for appending to an existing view subdirectory (jeremyevans)
+
 * Rename view_subdirs plugin to view_options, add support for branch/route specific view/layout options/locals (jeremyevans)
  
 * Merge :locals set in the render plugin options into :locals provided in call to view/render (jeremyevans)

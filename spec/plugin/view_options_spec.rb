@@ -5,25 +5,27 @@ begin
 rescue LoadError
   warn "tilt not installed, skipping view_options plugin test"  
 else
-describe "view_options plugin set_view_subdir" do
+describe "view_options plugin view subdirs" do
   before do
     app(:bare) do
-      plugin :render, :views=>"spec"
+      plugin :render, :views=>"."
       plugin :view_options
 
       route do |r|
+        append_view_subdir 'spec' 
+
         r.on "home" do
-          set_view_subdir 'views'
+          set_view_subdir 'spec/views'
           view("home", :locals=>{:name => "Agent Smith", :title => "Home"}, :layout_opts=>{:locals=>{:title=>"Home"}})
         end
 
         r.on "about" do
-          set_view_subdir 'views'
-          render("views/about", :locals=>{:title => "About Roda"})
+          append_view_subdir 'views'
+          render("about", :locals=>{:title => "About Roda"})
         end
 
         r.on "path" do
-          render('views/about', :locals=>{:title => "Path"}, :layout_opts=>{:locals=>{:title=>"Home"}})
+          render('spec/views/about', :locals=>{:title => "Path"}, :layout_opts=>{:locals=>{:title=>"Home"}})
         end
       end
     end
