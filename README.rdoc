@@ -811,7 +811,7 @@ directly executes the routing tree block, you cannot introspect the routes
 when using a routing tree.
 
 If you would like to introspect your routes when using Roda, there is an
-external plugin named [roda-route_list]{https://github.com/jeremyevans/roda-route_list},
+external plugin named {roda-route_list}[https://github.com/jeremyevans/roda-route_list],
 which allows you to add appropriate comments to your routing files, and
 has a parser that will parse those comments into routing metadata that
 you can then introspect.
