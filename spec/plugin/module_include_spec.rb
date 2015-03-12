@@ -28,4 +28,21 @@ describe "module_include plugin" do
 
     req.should == [1, {}, []]
   end
+
+  it "should work if called multiple times with a block" do
+    app(:bare) do
+      plugin :module_include
+      request_module{def h; halt response.f end}
+      request_module{def i; h end}
+      response_module{def f; finish end}
+      response_module{def finish; [1, {}, []] end}
+
+      route do |r|
+        r.i
+      end
+    end
+
+    req.should == [1, {}, []]
+  end
+
 end

@@ -12,4 +12,16 @@ describe "delete_empty_headers plugin" do
 
     req[1].should == {'Bar'=>'1'}
   end
+
+  it "is called when finishing with a body" do
+    app(:delete_empty_headers) do |r|
+      response['Foo'] = ''
+      response['Content-Type'] = ''
+      response['Content-Length'] = ''
+      response['Bar'] = '1'
+      r.halt response.finish_with_body(['a'])
+    end
+
+    req[1].should == {'Bar'=>'1'}
+  end
 end

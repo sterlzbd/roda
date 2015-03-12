@@ -135,6 +135,11 @@ describe "path plugin" do
     body('path'=>[@obj, 'foo', 'bar']).should == '/d/1/foo/bar'
   end
 
+  it "Roda#path raises an error for an unrecognized class" do
+    # Strings
+    proc{body('path'=>:foo)}.should raise_error(Roda::RodaError)
+  end
+
   it "Roda#path respects :add_script_name app option" do
     app.opts[:add_script_name] = true
 

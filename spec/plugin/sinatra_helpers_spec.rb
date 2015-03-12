@@ -83,6 +83,11 @@ describe "sinatra_helpers plugin" do
       header('Content-Length').should == '11'
     end
 
+    it 'supports #join' do
+      sin_app{body{'Hello World'}; nil}
+      req[2].join.should == 'Hello World'
+    end
+
     it 'takes a String, Array, or other object responding to #each' do
       sin_app{body 'Hello World'; nil}
       body.should == 'Hello World'
