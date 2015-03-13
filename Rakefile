@@ -52,7 +52,7 @@ end
 
 desc "Make local version of website"
 task :website_base do
-  sh %{#{FileUtils::RUBY} www/make_www.rb}
+  sh %{#{FileUtils::RUBY} -I lib www/make_www.rb}
 end
 
 desc "Make local version of website, with rdoc"
