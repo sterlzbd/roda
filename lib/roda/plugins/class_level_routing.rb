@@ -24,14 +24,17 @@ class Roda
     #
     #     # /hello request
     #     is "hello" do
+    #       # Set variable for both GET and POST requests
+    #       @greeting = 'Hello'
+    #
     #       # GET /hello request
     #       request.get do
-    #         "Hello!"
+    #         "#{@greeting}!"
     #       end
     #
     #       # POST /hello request
     #       request.post do
-    #         puts "Someone said hello!"
+    #         puts "Someone said #{@greeting}!"
     #         request.redirect
     #       end
     #     end

@@ -21,21 +21,24 @@ class Roda
     #
     #     # /hello branch
     #     on "hello" do
+    #       # Set variable for all routes in /hello branch
+    #       @greeting = 'Hello'
+    #
     #       # GET /hello/world request
     #       get "world" do
-    #         "Hello world!"
+    #         "#{@greeting} world!"
     #       end
     #
     #       # /hello request
     #       is do
     #         # GET /hello request
     #         get do
-    #           "Hello!"
+    #           "#{@greeting}!"
     #         end
     #
     #         # POST /hello request
     #         post do
-    #           puts "Someone said hello!"
+    #           puts "Someone said #{@greeting}!"
     #           redirect
     #         end
     #       end
