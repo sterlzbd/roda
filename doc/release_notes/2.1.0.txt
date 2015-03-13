@@ -80,7 +80,7 @@
       path(Track){|track| "/albums/#{track.album_id}/tracks/#{track.number}"}
 
       route do
-        r.get 'tracks/:id' |track_id|
+        r.get 'tracks/:id' do |track_id|
           r.redirect(path(Track[track_id]))
         end
       end
