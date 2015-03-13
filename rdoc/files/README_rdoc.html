@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-02-11 11:38:01 -0800</span>
+          <span class='datetime'>2015-03-13 10:33:12 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -63,24 +63,51 @@
             <p><a href="irc://chat.freenode.net/#roda">chat.freenode.net/#roda</a></p>
             </td></tr></tbody></table>
             
-            <h2 id="label-Inspiration">Inspiration<span><a href="#label-Inspiration">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            <h2 id="label-Goals">Goals<span><a href="#label-Goals">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            <ul><li>
+            <p>Simplicity</p>
+            </li><li>
+            <p>Reliability</p>
+            </li><li>
+            <p>Extensibility</p>
+            </li><li>
+            <p>Performance</p>
+            </li></ul>
             
-            <p><a href="../classes/Roda.html">Roda</a> was inspired by <a
-            href="http://www.sinatrarb.com">Sinatra</a> and <a
-            href="http://cuba.is">Cuba</a>, two other Ruby web frameworks. It started
-            out as a fork of Cuba, from which it borrows the idea of using a routing
-            tree (which Cuba in turn took from <a
-            href="https://github.com/chneukirchen/rum">Rum</a>). From Sinatra, it takes
-            the ideas that route blocks should return the request bodies and that
-            routes should be canonical. It pilfers the idea for an extensible plugin
-            system from the Ruby database library <a
-            href="http://sequel.jeremyevans.net">Sequel</a>.</p>
+            <h3 id="label-Simplicity">Simplicity<span><a href="#label-Simplicity">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p><a href="../classes/Roda.html">Roda</a> is designed to be simple, both
+            internally and externally. It uses a routing tree to enable you to write
+            simpler and DRYer code.</p>
+            
+            <h3 id="label-Reliability">Reliability<span><a href="#label-Reliability">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p><a href="../classes/Roda.html">Roda</a> is one of the first ruby web
+            frameworks where immutability is supported and encouraged.  <a
+            href="../classes/Roda.html">Roda</a> apps are designed to be frozen in
+            production, which eliminates possible thread safety issues. Additionally,
+            <a href="../classes/Roda.html">Roda</a> limits the instance variables,
+            constants, and methods that it uses, so that they do not conflict with the
+            ones you use for your application.</p>
+            
+            <h3 id="label-Extensibility">Extensibility<span><a href="#label-Extensibility">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p><a href="../classes/Roda.html">Roda</a> is built completely out of plugins,
+            which makes it very extensible.  You can override any part of <a
+            href="../classes/Roda.html">Roda</a> and call super to get the default
+            behavior.</p>
+            
+            <h3 id="label-Performance">Performance<span><a href="#label-Performance">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p><a href="../classes/Roda.html">Roda</a> has low per-request overhead, and
+            the use of a routing tree and intelligent caching of internal
+            datastructures makes it one of the fastest ruby web frameworks.</p>
             
             <h2 id="label-Usage">Usage<span><a href="#label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>Here&#39;s a simple application, showing how the routing tree works:</p>
             
-            <pre class="ruby"><span class="ruby-comment"># cat config.ru</span>&#x000A;<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;roda&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Session</span><span class="ruby-operator">::</span><span class="ruby-constant">Cookie</span>, :<span class="ruby-identifier">secret</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;SECRET&#39;</span>]&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># GET / request</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># /hello branch</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;&#x000A;      <span class="ruby-comment"># GET /hello/world request</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># /hello request</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-comment"># GET /hello request</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-comment"># POST /hello request</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Someone said hello!&quot;</span>&#x000A;          <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>.<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">app</span></pre>
+            <pre class="ruby"><span class="ruby-comment"># cat config.ru</span>&#x000A;<span class="ruby-identifier">require</span> <span class="ruby-string">&quot;roda&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Session</span><span class="ruby-operator">::</span><span class="ruby-constant">Cookie</span>, :<span class="ruby-identifier">secret</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;SECRET&#39;</span>]&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># GET / request</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># /hello branch</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># Set variable for all routes in /hello branch</span>&#x000A;      <span class="ruby-ivar">@greeting</span> = <span class="ruby-string">&#39;Hello&#39;</span>&#x000A;&#x000A;      <span class="ruby-comment"># GET /hello/world request</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-node">&quot;#{@greeting} world!&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-comment"># /hello request</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-comment"># GET /hello request</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-node">&quot;#{@greeting}!&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-comment"># POST /hello request</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;Someone said #{@greeting}!&quot;</span>&#x000A;          <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>.<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">app</span></pre>
             
             <p>Here&#39;s a breakdown of what is going on in the block above:</p>
             
@@ -479,22 +506,33 @@
             <code>opts</code> hash. The settings are inherited if you happen to
             subclass <code>Roda</code>.</p>
             
-            <pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;guest&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">Users</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>; <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">Admin</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>; <span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-constant">Admin</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;admin&quot;</span>&#x000A;&#x000A;<span class="ruby-constant">Users</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] <span class="ruby-comment"># =&gt; &#39;guest&#39;</span>&#x000A;<span class="ruby-constant">Admin</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] <span class="ruby-comment"># =&gt; &#39;admin&#39;</span></pre>
+            <pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;guest&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">Users</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>; <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">Admin</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] = <span class="ruby-string">&quot;admin&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-constant">Users</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] <span class="ruby-comment"># =&gt; &#39;guest&#39;</span>&#x000A;<span class="ruby-constant">Admin</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">layout</span>] <span class="ruby-comment"># =&gt; &#39;admin&#39;</span></pre>
             
             <p>Feel free to store whatever you find convenient. Note that when
             subclassing, <a href="../classes/Roda.html">Roda</a> only does a shallow
-            clone of the settings. If you store nested structures and plan to mutate
-            them in subclasses, it is your responsibility to dup the nested structures
-            inside <code>Roda.inherited</code> (making sure to call
-            <code>super</code>).</p>
+            clone of the settings.</p>
             
-            <p>The plugins that ship with <a href="../classes/Roda.html">Roda</a> all
-            handle this. Also, note that this means that modifications to the parent
-            class made after subclassing do <em>not</em> affect the subclass.</p>
+            <p>If you store nested structures and plan to mutate them in subclasses, it is
+            your responsibility to dup the nested structures inside
+            <code>Roda.inherited</code> (making sure to call <code>super</code>).  This
+            should be is done so that that modifications to the parent class made after
+            subclassing do <em>not</em> affect the subclass, and vice-versa.</p>
             
             <p>The plugins that ship with <a href="../classes/Roda.html">Roda</a> freeze
             their settings and only allow modification to their settings by reloading
             the plugin, and external plugins are encouraged to follow this approach.</p>
+            
+            <p>The following options are respected by multiple plugins:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_script_name </td><td>
+            <p>Prepend the SCRIPT_NAME for the request to paths.  This is useful if you
+            mount the app as a path under another app.</p>
+            </td></tr><tr><td class='label'>:root </td><td>
+            <p>Set the root path for the app.  This defaults to the current working
+            directory of the process.</p>
+            </td></tr></tbody></table>
+            
+            <p>There may be other options supported by individual plugins, if so it will
+            be mentioned in the documentation for the plugin.</p>
             
             <h2 id="label-Rendering">Rendering<span><a href="#label-Rendering">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -516,7 +554,7 @@
             <p>You can override the default rendering options by passing a hash to the
             plugin:</p>
             
-            <pre>class App &lt; Roda&#x000A;  plugin :render,&#x000A;    :escape =&gt; true,        # Automatically escape output in erb templates&#x000A;    :views =&gt; &#39;admin_views&#39; # Default views directory&#x000A;    :layout_opts =&gt; {:template=&gt;&#39;admin_layout&#39;,&#x000A;                     :ext=&gt;&#39;html.erb&#39;},    # Default layout template options&#x000A;    :template_opts =&gt; {:default_encoding=&gt;&#39;UTF-8&#39;}, # Default template options&#x000A;end</pre>
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>,&#x000A;    :<span class="ruby-identifier">escape</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,        <span class="ruby-comment"># Automatically escape output in erb templates</span>&#x000A;    :<span class="ruby-identifier">views</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;admin_views&#39;</span>, <span class="ruby-comment"># Default views directory</span>&#x000A;    :<span class="ruby-identifier">layout_opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">template=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;admin_layout&#39;</span>,&#x000A;                     :<span class="ruby-identifier">ext=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;html.erb&#39;</span>},    <span class="ruby-comment"># Default layout template options</span>&#x000A;    :<span class="ruby-identifier">template_opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">default_encoding=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;UTF-8&#39;</span>} <span class="ruby-comment"># Default template options</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <h2 id="label-Sessions">Sessions<span><a href="#label-Sessions">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -638,6 +676,38 @@
             scope.  Finally, do not add any constants inside the InstanceMethods
             module, add constants to the plugin module itself (<code>Markdown</code> in
             the above example).</p>
+            
+            <p>If you are planning on shipping your plugin in an external gem, it is
+            recommended that you follow  <a
+            href="http://guides.rubygems.org/name-your-gem/">standard gem naming
+            conventions for extensions</a>. So if your plugin module is named
+            <code>FooBar</code>, your gem name should be <code>roda-foo_bar</code>.</p>
+            
+            <h2 id="label-No+Introspection">No Introspection<span><a href="#label-No+Introspection">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            
+            <p>Because a routing tree does not store the routes in a data structure, but
+            directly executes the routing tree block, you cannot introspect the routes
+            when using a routing tree.</p>
+            
+            <p>If you would like to introspect your routes when using <a
+            href="../classes/Roda.html">Roda</a>, there is an external plugin named <a
+            href="https://github.com/jeremyevans/roda-route_list">roda-route_list</a>,
+            which allows you to add appropriate comments to your routing files, and has
+            a parser that will parse those comments into routing metadata that you can
+            then introspect.</p>
+            
+            <h2 id="label-Inspiration">Inspiration<span><a href="#label-Inspiration">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            
+            <p><a href="../classes/Roda.html">Roda</a> was inspired by <a
+            href="http://www.sinatrarb.com">Sinatra</a> and <a
+            href="http://cuba.is">Cuba</a>, two other Ruby web frameworks. It started
+            out as a fork of Cuba, from which it borrows the idea of using a routing
+            tree (which Cuba in turn took from <a
+            href="https://github.com/chneukirchen/rum">Rum</a>). From Sinatra, it takes
+            the ideas that route blocks should return the request bodies and that
+            routes should be canonical. It pilfers the idea for an extensible plugin
+            system from the Ruby database library <a
+            href="http://sequel.jeremyevans.net">Sequel</a>.</p>
             
             <h2 id="label-License">License<span><a href="#label-License">&para;</a> <a href="#top">&uarr;</a></span></h2>
             

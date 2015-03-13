@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::ViewOptions</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::ViewOptions
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/view_options_rb.html">lib/roda/plugins/view_options.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The view_options plugin allows you to override view and layout options and
+            locals for specific branches and routes.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">view_options</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">set_layout_options</span> :<span class="ruby-identifier">template=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;users_layout&#39;</span>&#x000A;    <span class="ruby-identifier">set_layout_locals</span> :<span class="ruby-identifier">title=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;Users&#39;</span>&#x000A;    <span class="ruby-identifier">set_view_options</span> :<span class="ruby-identifier">engine=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;haml&#39;</span>&#x000A;    <span class="ruby-identifier">set_view_locals</span> :<span class="ruby-identifier">footer=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;(c) Roda&#39;</span>&#x000A;&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>The options and locals you specify have higher precedence than the render
+            plugin options, but lower precedence than options you directly pass to the
+            view/render methods.</p>
+            
+            <p>The view_options plugin also has special support for sites that have
+            outgrown a flat view directory and use subdirectories for views.  It allows
+            you to set the view directory to use, and template names that do not
+            contain a slash will automatically use that view subdirectory.  Example:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>, :<span class="ruby-identifier">layout=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;./layout&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">view_options</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">set_view_subdir</span> <span class="ruby-string">&#39;users&#39;</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> :<span class="ruby-identifier">id</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">append_view_subdir</span> <span class="ruby-string">&#39;profile&#39;</span>&#x000A;      <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;index&#39;</span> <span class="ruby-comment"># uses ./views/users/profile/index.erb</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;list&#39;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;lists/users&#39;</span> <span class="ruby-comment"># uses ./views/lists/users.erb</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Note that when a view subdirectory is set, the layout will also be looked
+            up in the subdirectory unless it contains a slash.  So if you want to use a
+            view subdirectory for templates but have a shared layout, you should make
+            sure your layout contains a slash, similar to the example above.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-load_dependencies">load_dependencies</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="ViewOptions/InstanceMethods.html">Roda::RodaPlugins::ViewOptions::InstanceMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-load_dependencies'>
+                <a name='method-c-load_dependencies'></a>
+                <div class='synopsis'>
+                  <span class='name'>load_dependencies</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Load the render plugin before this plugin, since this plugin works by
+                  overriding methods in the render plugin.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/view_options.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

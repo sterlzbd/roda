@@ -32,7 +32,7 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v2.0.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v2.1.0)</h1>
 
 <h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
@@ -75,8 +75,9 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/NamedTemplates.html">named_templates</a>: Adds the ability to create inline templates by name, instead of storing them in the file system.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/PadrinoRender.html">padrino_render</a>: Adds render/partial methods that work similarly to Padrino's rendering.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Static.html">static</a>: Adds support for serving static files using Rack::Static.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/ViewSubdirs.html">view_subdirs</a>: Allows for setting a view subdirectory to use on a per-request basis.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ViewOptions.html">view_options</a>: Allows for setting view options on a per-request basis.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolViews.html">symbol_views</a>: Allows match blocks to return template name symbols, uses the template view as the response body.</li>
   </ul></li>
   <li>View Helpers: <ul>
@@ -136,7 +137,9 @@
 <li><a href="https://github.com/jeremyevans/forme">forme</a>: Adds form method for simple creation of html forms inside erb templates.</li>
 <li><a href="https://github.com/beno/roda-auth">roda-auth</a>: Adds authentication support for Roda.</li>
 <li><a href="https://github.com/cj/roda-component">roda-component</a>: Adds realtime components using faye and opal.</li>
-<li><a href="https://github.com/beno/roda-rest-api">roda-rest-api</a>: Adds support for easily creating RESTful APIs.</li>
+<li><a href="https://github.com/3scale/roda-parse-request">roda-parse-request</a>: Automatically parse JSON and URL-encoded requests.</li>
+<li><a href="https://github.com/jeremyevans/roda-route_list">roda-route_list</a>: Parses route metadata from comments in an app file, allowing introspection of routes.</li>
+<li><a href="https://github.com/beno/roda-rest_api">roda-rest_api</a>: Adds support for easily creating RESTful APIs.</li>
 </ul>
 
 <h4>Libraries</h4>
@@ -146,6 +149,7 @@
 <ul>
 <li><a href="https://github.com/mikz/newrelic-roda">newrelic-roda</a>: Adds newrelic instrument for Roda.</li>
 <li><a href="https://github.com/cj/roda-bin">roda-bin</a>: Add bin/roda binary for a simple development server that reloads on changes.</li>
+<li><a href="https://github.com/GregTemplates/roda_app">roda_app</a>: Generator for Roda apps.</li>
 </ul>
 
 <h2><a href="rdoc/files/CHANGELOG.html">Change Log</a></h2>
@@ -155,7 +159,7 @@
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
+          <a href='rdoc/files/doc/release_notes/2_1_0_txt.html'>2.1</a> | <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
         </li>
       
   
@@ -182,6 +186,7 @@
 
 <ul>
   <li><a href="https://github.com/enebo/alienist_viewer">Alienist Viewer</a> (JRuby Memory Dump Viewer)</li>
+  <li><a href="https://github.com/mmmries/golf-score-roda">golf-score-roda</a> (Backend for golf-score-frontend)</li>
   <li><a href="https://github.com/jeremyevans/spam">SPAM</a> (Simple Personal Accounting Manager)</li>
   <li><a href="https://github.com/jeremyevans/giftsmas">Giftsmas</a> (Gift Tracking)</li>
   <li><a href="https://github.com/jeremyevans/kaeruera">KaeruEra</a> (Exception Tracking)</li>

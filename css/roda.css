@@ -46,6 +46,7 @@ div#roda_tree {
   margin-top: -15px;
   color: white;
   background: url(roda.jpg);
+  background-size: cover; background-position: center center;
 }
 
 .path, .code {

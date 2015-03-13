@@ -42,14 +42,21 @@
             <p>The path plugin adds support for named paths.  Using the <code>path</code>
             class method, you can easily create <code>*_path</code> instance methods
             for each named path.  Those instance methods can then be called if you need
-            to get the path for a form action, link, redirect, or anything else. 
-            Example:</p>
+            to get the path for a form action, link, redirect, or anything else.</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">path</span>&#x000A;<span class="ruby-identifier">path</span> :<span class="ruby-identifier">foo</span>, <span class="ruby-string">&#39;/foo&#39;</span>&#x000A;<span class="ruby-identifier">path</span> :<span class="ruby-identifier">bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-node">&quot;/bar/#{bar.id}&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">bar</span> = <span class="ruby-constant">Bar</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;bar&#39;</span>])&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">bar_path</span>(<span class="ruby-identifier">bar</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <p>Additionally, you can call the <code>path</code> class method with a class
+            and a block, and it will register the class.  You can then call the
+            <code>path</code> instance method with an instance of that class, and it
+            will instance_exec the block with the arguments provided to path.</p>
             
-            <p>The path method accepts the following options:</p>
+            <p>Example:</p>
+            
+            <pre>plugin :path&#x000A;path :foo, &#39;/foo&#39;&#x000A;path :bar do |bar|&#x000A;  &quot;/bar/#{bar.id}&quot;&#x000A;end&#x000A;path Baz do |baz, *paths|&#x000A;  &quot;/baz/#{baz.id}/#{paths.join(&#39;/&#39;)}&quot;&#x000A;end&#x000A;path Quux |quux, path|&#x000A;  &quot;/quux/#{quux.id}/#{path}&quot;&#x000A;end&#x000A;route do |r|&#x000A;  r.post &#39;foo&#39; do&#x000A;    r.redirect foo_path # /foo&#x000A;  end&#x000A;&#x000A;  r.post &#39;bar&#39; do&#x000A;    bar = Bar.create(r.params[&#39;bar&#39;])&#x000A;    r.redirect bar_path(bar) # /bar/1&#x000A;  end&#x000A;&#x000A;  r.post &#39;baz&#39; do&#x000A;    bar = Baz[1]&#x000A;    r.redirect path(baz, &#39;c&#39;, &#39;d&#39;) # /baz/1/c/d&#x000A;  end&#x000A;&#x000A;  r.post &#39;quux&#39; do&#x000A;    bar = Quux[1]&#x000A;    r.redirect path(quux, &#39;/bar&#39;) # /quux/1/bar&#x000A;  end&#x000A;end</pre>
+            
+            <p>The path method accepts the following options when not called with a class:</p>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_script_name </td><td>
-            <p>Prefix the path generated with SCRIPT_NAME.</p>
+            <p>Prefix the path generated with SCRIPT_NAME. This defaults to the app&#39;s
+            :add_script_name option.</p>
             </td></tr><tr><td class='label'>:name </td><td>
             <p>Provide a different name for the method, instead of using
             <code>*_path</code>.</p>
@@ -62,10 +69,17 @@
             <p>Do not create a path method, just a url method.</p>
             </td></tr></tbody></table>
             
-            <p>Note that if :add_script_name, :url, or :url_only is used, this will also
-            create a <code>_*_path</code> method.  This is necessary in order to
-            support path methods that accept blocks, as you can&#39;t pass a block to a
-            block that is instance_execed.</p>
+            <p>Note that if :add_script_name, :url, or :url_only is used, will also create
+            a <code>_*_path</code> method.  This is necessary in order to support path
+            methods that accept blocks, as you can&#39;t pass a block to a block that
+            is instance_execed.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-configure">configure</a></li>
+            </ol>
           </div>
           <div id='context'>
           </div>
@@ -73,6 +87,7 @@
             <h2>Classes and Modules</h2>
             <ol>
               <li><a target="docwin" href="Path/ClassMethods.html">Roda::RodaPlugins::Path::ClassMethods</a></li>
+              <li><a target="docwin" href="Path/InstanceMethods.html">Roda::RodaPlugins::Path::InstanceMethods</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -95,6 +110,26 @@
                     <td class='context-item-desc'></td>
                   </tr>
                 </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Initialize the path classes when loading the plugin</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/path.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-ivar">@path_classes</span> <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@path_classes</span>[<span class="ruby-constant">String</span>]&#x000A;      <span class="ruby-identifier">path</span>(<span class="ruby-constant">String</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>}&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
               </div>
             </div>
           </div>
