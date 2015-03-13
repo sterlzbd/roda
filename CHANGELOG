@@ -1,5 +1,7 @@
 = HEAD
 
+* Have add_file in the mailer plugin support blocks, which are called after the file has been added (jeremyevans)
+
 * Add append_view_subdir to view_options, for appending to an existing view subdirectory (jeremyevans)
 
 * Rename view_subdirs plugin to view_options, add support for branch/route specific view/layout options/locals (jeremyevans)

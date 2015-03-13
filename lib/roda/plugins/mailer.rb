@@ -168,8 +168,9 @@ class Roda
             header_content_type = @headers.delete(CONTENT_TYPE)
             m.headers(@headers)
             m.body(@body.join) unless @body.empty?
-            mail_attachments.each do |a|
+            mail_attachments.each do |a, block|
               m.add_file(*a)
+              block.call if block
             end
 
             if content_type = header_content_type || roda_class.opts[:mailer][:content_type]
@@ -224,8 +225,10 @@ class Roda
         end
 
         # Delay adding a file to the message until after the message body has been set.
-        def add_file(*a)
-          response.mail_attachments << a
+        # If a block is given, the block is called after the file has been added, and you
+        # can access the attachment via <tt>response.mail.attachments.last</tt>.
+        def add_file(*a, &block)
+          response.mail_attachments << [a, block]
           nil
         end
 

@@ -91,6 +91,24 @@ describe "mailer plugin" do
     m.parts.first.body.should == File.read(__FILE__)
   end
 
+  it "supports attachments with blocks" do
+    app(:mailer) do |r|
+      r.mail do
+        instance_exec(&setup_email)
+        add_file __FILE__ do
+          response.mail.attachments.last.content_type = 'text/foo'
+        end
+      end
+    end
+
+    m = app.mail('foo')
+    m.attachments.length.should == 1
+    m.attachments.first.content_type.should == 'text/foo'
+    m.content_type.should =~ /\Amultipart\/mixed/
+    m.parts.length.should == 1
+    m.parts.first.body.should == File.read(__FILE__)
+  end
+
   it "supports plain-text attachments with an email body" do
     app(:mailer) do |r|
       r.mail do
