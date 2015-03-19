@@ -61,9 +61,13 @@ class Roda
       DEFAULT_PORTS = {'http' => 80, 'https' => 443}.freeze
       OPTS = {}.freeze
 
-      # Initialize the path classes when loading the plugin
-      def self.configure(app)
+      # Initialize the path classes when loading the plugin. Options:
+      # :by_name :: Register classes by name, which is friendlier when reloading code.
+      def self.configure(app, opts=OPTS)
         app.instance_eval do
+          if opts.has_key?(:by_name)
+            self.opts[:path_class_by_name] = opts[:by_name]
+          end
           self.opts[:path_classes] ||= {}
           unless path_block(String)
             path(String){|str| str}
@@ -88,6 +92,9 @@ class Roda
           if name.is_a?(Class)
             raise RodaError, "can't provide path or options when calling path with a class" unless path.nil? && opts.empty?
             raise RodaError, "must provide a block when calling path with a class" unless block
+            if self.opts[:path_class_by_name]
+              name = name.name
+            end
             path_classes[name] = block
             return
           end
@@ -150,6 +157,9 @@ class Roda
         
         # Return the block related to the given class, or nil if there is no block.
         def path_block(klass)
+          if opts[:path_class_by_name]
+            klass = klass.name
+          end
           path_classes[klass]
         end
       end

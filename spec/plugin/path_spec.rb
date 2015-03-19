@@ -165,6 +165,29 @@ describe "path plugin" do
     body('path'=>'/a').should == '/a'
   end
 
+  it "registers classes by reference by default" do
+    c1 = Class.new
+    def c1.name; 'C'; end
+    c2 = Class.new
+    def c2.name; 'C'; end
+    @app.path(c1){'/c'}
+    @app.route{|r| path(r.env['c'])}
+    body('c'=>c1.new).should == '/c'
+    proc{body('c'=>c2.new)}.should raise_error(Roda::RodaError)
+  end
+
+  it ":by_name => option registers classes by name" do
+    c1 = Class.new
+    def c1.name; 'C'; end
+    c2 = Class.new
+    def c2.name; 'C'; end
+    @app.plugin :path, :by_name=>true
+    @app.path(c1){'/c'}
+    @app.route{|r| path(r.env['c'])}
+    body('c'=>c1.new).should == '/c'
+    body('c'=>c2.new).should == '/c'
+  end
+
   it "Roda.path_block returns the block used" do
     c = Class.new
     b = proc{|x| x.to_s}

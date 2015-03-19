@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :by_name option to the path plugin, for registering classes by name, useful when reloading code (jeremyevans)
+
 * Add Roda.path_block to get the block related to the given class used for Road#path (jeremyevans)
 
 * Make Roda#path work correctly in subclasses (jeremyevans)
