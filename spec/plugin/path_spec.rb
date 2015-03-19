@@ -152,6 +152,19 @@ describe "path plugin" do
     body('path'=>[@obj, 'foo', 'bar'], 'SCRIPT_NAME'=>'/baz').should == '/baz/d/1/foo/bar'
   end
 
+  it "Roda#path works in subclasses" do
+    old_app = @app
+    @app = Class.new(@app)
+    @app.route{|r| path('/a')}
+    body.should == '/a'
+
+    @app.path(String){|b| "/foo#{b}"}
+    body.should == '/foo/a'
+
+    @app = old_app
+    body('path'=>'/a').should == '/a'
+  end
+
   it "Roda.path doesn't work with classes without blocks" do
     proc{app.path(Class.new)}.should raise_error(Roda::RodaError)
   end

@@ -64,8 +64,8 @@ class Roda
       # Initialize the path classes when loading the plugin
       def self.configure(app)
         app.instance_eval do
-          @path_classes ||= {}
-          unless @path_classes[String]
+          self.opts[:path_classes] ||= {}
+          unless path_classes[String]
             path(String){|str| str}
           end
         end
@@ -73,11 +73,13 @@ class Roda
 
       module ClassMethods
         # Hash of recognizes classes for path instance method.  Keys are classes, values are procs.
-        attr_reader :path_classes
+        def path_classes
+          opts[:path_classes]
+        end
 
         # Freeze the path classes when freezing the app.
         def freeze
-          @path_classes.freeze
+          path_classes.freeze
           super
         end
 
@@ -86,7 +88,7 @@ class Roda
           if name.is_a?(Class)
             raise RodaError, "can't provide path or options when calling path with a class" unless path.nil? && opts.empty?
             raise RodaError, "must provide a block when calling path with a class" unless block
-            @path_classes[name] = block
+            path_classes[name] = block
             return
           end
 
