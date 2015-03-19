@@ -65,7 +65,7 @@ class Roda
       def self.configure(app)
         app.instance_eval do
           self.opts[:path_classes] ||= {}
-          unless path_classes[String]
+          unless path_block(String)
             path(String){|str| str}
           end
         end
@@ -147,6 +147,11 @@ class Roda
 
           nil
         end
+        
+        # Return the block related to the given class, or nil if there is no block.
+        def path_block(klass)
+          path_classes[klass]
+        end
       end
 
       module InstanceMethods
@@ -155,13 +160,13 @@ class Roda
         # :add_script_name option is true, this prepends the SCRIPT_NAME to the path.
         def path(obj, *args)
           app = self.class
-          if blk = app.path_classes[obj.class]
-            path = instance_exec(obj, *args, &blk)
-            path = request.script_name.to_s + path if app.opts[:add_script_name]
-            path
-          else
+          unless blk = app.path_block(obj.class)
             raise RodaError, "unrecognized object given to Roda#path: #{obj.inspect}"
           end
+
+          path = instance_exec(obj, *args, &blk)
+          path = request.script_name.to_s + path if app.opts[:add_script_name]
+          path
         end
       end
     end

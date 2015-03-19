@@ -165,6 +165,13 @@ describe "path plugin" do
     body('path'=>'/a').should == '/a'
   end
 
+  it "Roda.path_block returns the block used" do
+    c = Class.new
+    b = proc{|x| x.to_s}
+    @app.path(c, &b)
+    @app.path_block(c).should == b
+  end
+
   it "Roda.path doesn't work with classes without blocks" do
     proc{app.path(Class.new)}.should raise_error(Roda::RodaError)
   end

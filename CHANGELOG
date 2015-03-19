@@ -1,5 +1,7 @@
 = HEAD
 
+* Add Roda.path_block to get the block related to the given class used for Road#path (jeremyevans)
+
 * Make Roda#path work correctly in subclasses (jeremyevans)
 
 = 2.1.0 (2015-03-13)
