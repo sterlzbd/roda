@@ -746,6 +746,32 @@ to escape by default, so that in your templates:
 
 This support requires {Erubis}[http://www.kuwata-lab.com/erubis/].
 
+=== Security Related HTTP Headers
+
+You may want to look into setting the following HTTP headers, which
+can be done at the web server level, but can also be done at the
+application level using using the +default_headers+ plugin:
+
+Content-Security-Policy/X-Content-Security-Policy :: Defines policy for how javascript and other
+                                                     types of content can be used on the page.
+Frame-Options/X-Frame-Options :: Provides click-jacking projection by not allowing usage inside
+                                 a frame.
+Strict-Transport-Security :: Enforces SSL/TLS Connections to the application.
+X-Content-Type-Options :: Forces some browsers to respect a declared Content-Type header.
+X-XSS-Protection :: Enables an XSS mitigation filter in some browsers.
+
+Example:
+
+  class App < Roda
+    plugin :default_headers,
+      'Content-Type'=>'text/html',
+      'Content-Security-Policy'=>"default-src 'self'",
+      'Strict-Transport-Security'=>'max-age=16070400;',
+      'X-Frame-Options'=>'deny',
+      'X-Content-Type-Options'=>'nosniff',
+      'X-XSS-Protection'=>'1; mode=block'
+  end
+
 == Plugins
 
 By design, Roda has a very small core, providing only the essentials.
