@@ -772,6 +772,16 @@ Example:
       'X-XSS-Protection'=>'1; mode=block'
   end
 
+== Reloading
+
+Most rack-based reloaders will work with Roda, including:
+
+* {rack-unreloader}[https://github.com/jeremyevans/rack-unreloader]
+* {rerun}[https://github.com/alexch/rerun]
+* {shotgun}[https://github.com/rtomayko/shotgun]
+* {Rack::Reloader}[https://github.com/rack/rack/blob/master/lib/rack/reloader.rb]
+* {pistol}[https://github.com/monk/pistol]
+
 == Plugins
 
 By design, Roda has a very small core, providing only the essentials.
