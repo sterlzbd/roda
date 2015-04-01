@@ -1,5 +1,7 @@
 = HEAD
 
+* Add shared_vars plugin, for sharing variables between multiple Roda apps (jeremyevans)
+
 * Add delay method to chunked plugin, for delaying a block execution until right before content template rendering (jeremyevans)
 
 * Have default Content-Type header when using the default_headers plugin (jeremyevans)
