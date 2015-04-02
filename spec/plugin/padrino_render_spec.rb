@@ -11,18 +11,7 @@ describe "padrino_render plugin" do
       plugin :padrino_render, :views=>"./spec/views"
 
       route do |r|
-        r.is "partial" do
-          partial("test", :locals=>{:title => "About Roda"})
-        end
-
-        r.is "partial/subdir" do
-          partial("about/test", :locals=>{:title => "About Roda"})
-        end
-
-        r.is "partial/inline" do
-          partial(:inline=>"Hello <%= name %>", :locals=>{:name => "Agent Smith"})
-        end
-
+        
         r.is "render" do
           render(:content=>'bar', :layout_opts=>{:locals=>{:title=>"Home"}})
         end
@@ -32,18 +21,6 @@ describe "padrino_render plugin" do
         end
       end
     end
-  end
-
-  it "partial renders without layout, and prepends _ to template" do
-    body("/partial").strip.should == "<h1>About Roda</h1>"
-  end
-
-  it "partial renders without layout, and prepends _ to template" do
-    body("/partial/subdir").strip.should == "<h1>Subdir: About Roda</h1>"
-  end
-
-  it "partial handles inline partials" do
-    body("/partial/inline").strip.should == "Hello Agent Smith"
   end
 
   it "render uses layout by default" do
