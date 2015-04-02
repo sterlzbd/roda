@@ -14,7 +14,7 @@ class Roda
     #   partial('dir/test') # uses dir/_test.erb
     #
     # 
-    module RenderPartials
+    module Partials
       OPTS = {}.freeze
       SLASH = '/'.freeze
 
@@ -41,6 +41,6 @@ class Roda
       end
     end
 
-    register_plugin(:partials, RenderPartials)
+    register_plugin(:partials, Partials)
   end
 end
