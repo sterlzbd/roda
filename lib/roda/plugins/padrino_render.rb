@@ -5,6 +5,10 @@ class Roda
     # rendering supports is supported by this plugin (yet), it
     # currently handles enough to be a drop in replacement for
     # some applications.
+    # 
+    #   plugin :padrino_render, :views => 'path/2/views'
+    # 
+    # Note! This plugin loads the :partials and :render plugins
     #
     # Most notably, this makes the +render+ method default to
     # using the layout, similar to how the +view+ method works
