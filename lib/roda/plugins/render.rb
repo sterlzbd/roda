@@ -31,6 +31,11 @@ class Roda
     # :escape :: Use Roda's Erubis escaping support, which makes <tt><%= %></tt> escape output,
     #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
     #            <tt><%= %></tt> tags.
+    # :escape_safe_classes :: String subclasses that should not be HTML escaped when used in
+    #            <tt><%= %></tt> tags, when :escape is used. Can be an array for multiple classes.
+    # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape is used,
+    #             overriding the default.  If given, object should respond to +escape_xml+ with
+    #             a single argument and return an output string.
     # :ext :: The file extension to assume for view files, defaults to the :engine
     #         option.
     # :layout :: The base name of the layout file, defaults to 'layout'.
@@ -119,6 +124,12 @@ class Roda
         end
         if opts[:escape]
           template_opts[:engine_class] = ErubisEscaping::Eruby
+
+          opts[:escaper] ||= if opts[:escape_safe_classes]
+            ErubisEscaping::UnsafeClassEscaper.new(opts[:escape_safe_classes])
+          else
+            ::Erubis::XmlHelper
+          end
         end
         opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
         opts[:layout_opts].freeze

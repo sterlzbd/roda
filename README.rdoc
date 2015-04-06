@@ -744,6 +744,11 @@ to escape by default, so that in your templates:
   <%= '<>' %>  # outputs &lt;&gt; 
   <%== '<>' %> # outputs <>
 
+You can also provide a +:escape_safe_classes+ option, which will
+make <tt><%= %></tt> not escape certain string subclasses, useful
+if you have helpers that already return escaped output using a
+string subclass instance.
+
 This support requires {Erubis}[http://www.kuwata-lab.com/erubis/].
 
 === Security Related HTTP Headers

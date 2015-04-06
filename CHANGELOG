@@ -1,5 +1,9 @@
 = HEAD
 
+* Add :escaper render plugin option to support custom escaping of <%= %> tags when :escape is used (jeremyevans)
+
+* Add :escape_safe_clases render plugin option, to not escape certain string subclasses when :escape is used (jeremyevans)
+
 * Split partials method from padrino_render plugin into partials plugin (kematzy) (#19)
 
 * Add shared_vars plugin, for sharing variables between multiple Roda apps (jeremyevans)

@@ -2,23 +2,50 @@ require 'erubis'
 
 class Roda
   module RodaPlugins
-    # The _erubis_escaping plugin is an internal plugin that provides a
-    # subclass of Erubis::EscapedEruby with a bugfix and an optimization.
+    # The _erubis_escaping plugin handles escaping of <tt><%= %></tt> inside
+    # ERB templates.  It is an internal plugin that should not be loaded
+    # directlyn by user code.
     module ErubisEscaping
-      # Optimized subclass that fixes escaping of postfix conditionals.
+      # Escaper which escapes by default, but does not escape instances of
+      # classes marked as safe.
+      class UnsafeClassEscaper
+        # Default escaper if the string needs to be escaped.
+        Escaper = Erubis::XmlHelper
+
+        # Record the classes to consider safe.
+        def initialize(safe_classes)
+          @safe_classes = Array(safe_classes).freeze
+          freeze
+        end
+
+        # If the string given is not an instance of one of the safe
+        # classes, escape it, otherwise return it verbatim.  If the
+        # given object is not already a string, convert it to a string first.
+        def escape_xml(string)
+          unless string.is_a?(String)
+            string = string.to_s
+          end
+
+          if @safe_classes.any?{|c| string.is_a?(c)}
+            string
+          else
+            Escaper.escape_xml(string)
+          end
+        end
+      end
+
+      # Subclass that works with specified escaper, also handling
+      # postfix conditionals inside <tt><%= %></tt> tags.
       class Eruby < Erubis::EscapedEruby
-        # Set escaping class to a local variable, so you don't need a
-        # constant lookup per escape.
+        # Set escaping object to a local variable
         def convert_input(codebuf, input)
-          codebuf << '_erubis_xml_helper = Erubis::XmlHelper;'
+          codebuf << '_erubis_escaper = render_opts[:escaper];'
           super
         end
 
-        # Fix bug in Erubis::EscapedEruby where postfix conditionals inside
-        # <%= %> are broken (e.g. <%= foo if bar %> ), and optimize by using
-        # a local variable instead of a constant lookup.
+        # Use escaping object to escape the code, and handle postfix conditionals.
         def add_expr_escaped(src, code)
-          src << " #{@bufvar} << _erubis_xml_helper.escape_xml((" << code << '));'
+          src << " " << @bufvar << " << _erubis_escaper.escape_xml((" <<  code << "));"
         end
       end
     end
