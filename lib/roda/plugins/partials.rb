@@ -10,6 +10,11 @@ class Roda
     #   partial('test')     # uses _test.erb
     #   partial('dir/test') # uses dir/_test.erb
     #
+    # This is basically equivalent to:
+    #
+    #   render('_test')
+    #   render('dir/_test')
+    #
     # Note that this plugin automatically loads the :render plugin.
     module Partials
       OPTS = {}.freeze
@@ -22,7 +27,6 @@ class Roda
       end
 
       module InstanceMethods
-
         # Renders the given template without a layout, but
         # prefixes the template filename to use with an 
         # underscore.
