@@ -32,7 +32,7 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v2.1.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v2.2.0)</h1>
 
 <h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
@@ -73,7 +73,8 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/Chunked.html">chunked</a>: Adds support for streaming template responses using Transfer-Encoding: chunked.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Json.html">json</a>: Allows match blocks to return arrays and hashes, using a json representation as the response body.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/NamedTemplates.html">named_templates</a>: Adds the ability to create inline templates by name, instead of storing them in the file system.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/PadrinoRender.html">padrino_render</a>: Adds render/partial methods that work similarly to Padrino's rendering.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/PadrinoRender.html">padrino_render</a>: Makes render method that work similarly to Padrino's rendering, using a layout by default.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Partials.html">partials</a>: Adds partial method for rendering partials (templates prefixed with an underscore).</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Static.html">static</a>: Adds support for serving static files using Rack::Static.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
@@ -123,6 +124,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/Middleware.html">middleware</a>: Allows the Roda app to be used as middleware by another app.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Path.html">path</a>: Adds support for named paths.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/PerThreadCaching.html">per_thread_caching</a>: Switches the thread-safe cache from a shared cache to a per-thread cache.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/SharedVars.html">shared_vars</a>: Stores and retrives variables shared between multiple Roda apps.</li>
   </ul></li>
 </ul>
 
@@ -159,7 +161,7 @@
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/2_1_0_txt.html'>2.1</a> | <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
+          <a href='rdoc/files/doc/release_notes/2_2_0_txt.html'>2.2</a> | <a href='rdoc/files/doc/release_notes/2_1_0_txt.html'>2.1</a> | <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
         </li>
       
   
@@ -176,7 +178,7 @@
 <h2 id="presentations">Presentations</h2>
 
 <ul>
-  <li><a href="http://code.jeremyevans.net/presentations/mwrc2015/index.html">&quot;Better Routing Through Trees&quot; Presentation at MountainWest RubyConf 2015</a> (<a href="http://code.jeremyevans.net/presentations/mwrc2015b/index.html">4x3 version</a>) (<a href="http://confreaks.tv/videos/mwrc2015-better-routing-through-trees">Video</a>)</li>
+  <li><a href="http://code.jeremyevans.net/presentations/mwrc2015/index.html">&quot;Better Routing Through Trees&quot; Presentation at MountainWest RubyConf 2015</a> (<a href="http://code.jeremyevans.net/presentations/mwrc2015b/index.html">4x3 version</a> (<a href="http://confreaks.tv/videos/mwrc2015-better-routing-through-trees">Video</a>)</li>
   <li><a href="http://code.jeremyevans.net/presentations/rubyconf2014/index.html">&quot;Roda: The Routing Tree Web Framework&quot; Presentation at RubyConf 2014</a> (<a href="http://code.jeremyevans.net/presentations/sacruby201411/index.html">4x3 Version</a>) (<a href="http://www.confreaks.com/videos/4833-RubyConf2014-roda-the-routing-tree-web-framework">Video</a>)</li>
 </ul>
 

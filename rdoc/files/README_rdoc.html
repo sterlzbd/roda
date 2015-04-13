@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-03-13 10:33:12 -0700</span>
+          <span class='datetime'>2015-04-06 10:51:56 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -603,8 +603,53 @@
             
             <pre>&lt;%= &#39;&lt;&gt;&#39; %&gt;  # outputs &amp;lt;&amp;gt; &#x000A;&lt;%== &#39;&lt;&gt;&#39; %&gt; # outputs &lt;&gt;</pre>
             
+            <p>You can also provide a <code>:escape_safe_classes</code> option, which will
+            make <code>&lt;%= %&gt;</code> not escape certain string subclasses, useful
+            if you have helpers that already return escaped output using a string
+            subclass instance.</p>
+            
             <p>This support requires <a
             href="http://www.kuwata-lab.com/erubis/">Erubis</a>.</p>
+            
+            <h3 id="label-Security+Related+HTTP+Headers">Security Related HTTP Headers<span><a href="#label-Security+Related+HTTP+Headers">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p>You may want to look into setting the following HTTP headers, which can be
+            done at the web server level, but can also be done at the application level
+            using using the <code>default_headers</code> plugin:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>Content-Security-Policy/X-Content-Security-Policy </td><td>
+            <p>Defines policy for how javascript and other types of content can be used on
+            the page.</p>
+            </td></tr><tr><td class='label'>Frame-Options/X-Frame-Options </td><td>
+            <p>Provides click-jacking projection by not allowing usage inside a frame.</p>
+            </td></tr><tr><td class='label'>Strict-Transport-Security </td><td>
+            <p>Enforces SSL/TLS Connections to the application.</p>
+            </td></tr><tr><td class='label'>X-Content-Type-Options </td><td>
+            <p>Forces some browsers to respect a declared Content-Type header.</p>
+            </td></tr><tr><td class='label'>X-XSS-Protection </td><td>
+            <p>Enables an XSS mitigation filter in some browsers.</p>
+            </td></tr></tbody></table>
+            
+            <p>Example:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_headers</span>,&#x000A;    <span class="ruby-string">&#39;Content-Type&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/html&#39;</span>,&#x000A;    <span class="ruby-string">&#39;Content-Security-Policy&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;default-src &#39;self&#39;&quot;</span>,&#x000A;    <span class="ruby-string">&#39;Strict-Transport-Security&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;max-age=16070400;&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Frame-Options&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;deny&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Content-Type-Options&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;nosniff&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-XSS-Protection&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;1; mode=block&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <h2 id="label-Reloading">Reloading<span><a href="#label-Reloading">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            
+            <p>Most rack-based reloaders will work with <a
+            href="../classes/Roda.html">Roda</a>, including:</p>
+            <ul><li>
+            <p><a
+            href="https://github.com/jeremyevans/rack-unreloader">rack-unreloader</a></p>
+            </li><li>
+            <p><a href="https://github.com/alexch/rerun">rerun</a></p>
+            </li><li>
+            <p><a href="https://github.com/rtomayko/shotgun">shotgun</a></p>
+            </li><li>
+            <p><a
+            href="https://github.com/rack/rack/blob/master/lib/rack/reloader.rb">Rack::Reloader</a></p>
+            </li><li>
+            <p><a href="https://github.com/monk/pistol">pistol</a></p>
+            </li></ul>
             
             <h2 id="label-Plugins">Plugins<span><a href="#label-Plugins">&para;</a> <a href="#top">&uarr;</a></span></h2>
             

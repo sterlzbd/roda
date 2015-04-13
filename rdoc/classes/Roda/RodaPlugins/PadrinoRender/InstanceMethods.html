@@ -42,7 +42,6 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-partial">partial</a></li>
               <li><a target="docwin" href="#method-i-render">render</a></li>
             </ol>
           </div>
@@ -51,24 +50,6 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-partial'>
-                <a name='method-i-partial'></a>
-                <div class='synopsis'>
-                  <span class='name'>partial</span>
-                  <span class='arguments'>(template, opts=OPTS)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Renders the given template without a layout, but prefixes the template
-                  filename to use with an  underscore.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-partial-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-partial-source'><span class="ruby-comment"># File lib/roda/plugins/padrino_render.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">partial</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">parse_template_opts</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>]&#x000A;    <span class="ruby-identifier">template</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>].<span class="ruby-identifier">split</span>(<span class="ruby-constant">SLASH</span>)&#x000A;    <span class="ruby-identifier">template</span>[<span class="ruby-value">-1</span>] = <span class="ruby-node">&quot;_#{template[-1]}&quot;</span>&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>] = <span class="ruby-identifier">template</span>.<span class="ruby-identifier">join</span>(<span class="ruby-constant">SLASH</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">render_template</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
               <div class='method public-instance' id='method-method-i-render'>
                 <a name='method-i-render'></a>
                 <div class='synopsis'>
@@ -84,7 +65,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-render-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-render-source'><span class="ruby-comment"># File lib/roda/plugins/padrino_render.rb, line 39</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">view</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-render-source'><span class="ruby-comment"># File lib/roda/plugins/padrino_render.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">render</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">view</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

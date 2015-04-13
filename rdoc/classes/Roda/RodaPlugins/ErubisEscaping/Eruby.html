@@ -43,7 +43,8 @@
         <div id='text'>
           <div id='description'>
             
-            <p>Optimized subclass that fixes escaping of postfix conditionals.</p>
+            <p>Subclass that works with specified escaper, also handling postfix
+            conditionals inside <code>&lt;%= %&gt;</code> tags.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -66,15 +67,13 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Fix bug in Erubis::EscapedEruby where postfix conditionals inside &lt;%=
-                  %&gt; are broken (e.g. &lt;%= foo if bar %&gt; ), and optimize by using a
-                  local variable instead of a constant lookup.</p>
+                  <p>Use escaping object to escape the code, and handle postfix conditionals.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-add_expr_escaped-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-add_expr_escaped-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 20</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_expr_escaped</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">code</span>)&#x000A;  <span class="ruby-identifier">src</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot; #{@bufvar} &lt;&lt; _erubis_xml_helper.escape_xml((&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">code</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&#39;));&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-add_expr_escaped-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 47</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_expr_escaped</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">code</span>)&#x000A;  <span class="ruby-identifier">src</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot; &quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@bufvar</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot; &lt;&lt; _erubis_escaper.escape_xml((&quot;</span> <span class="ruby-operator">&lt;&lt;</span>  <span class="ruby-identifier">code</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;));&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-convert_input'>
@@ -85,14 +84,13 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Set escaping class to a local variable, so you don&#39;t need a constant
-                  lookup per escape.</p>
+                  <p>Set escaping object to a local variable</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-convert_input-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-convert_input-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 12</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">convert_input</span>(<span class="ruby-identifier">codebuf</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">codebuf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&#39;_erubis_xml_helper = Erubis::XmlHelper;&#39;</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-convert_input-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 41</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">convert_input</span>(<span class="ruby-identifier">codebuf</span>, <span class="ruby-identifier">input</span>)&#x000A;  <span class="ruby-identifier">codebuf</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&#39;_erubis_escaper = render_opts[:escaper];&#39;</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

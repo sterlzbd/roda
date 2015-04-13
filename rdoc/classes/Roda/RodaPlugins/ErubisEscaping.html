@@ -45,8 +45,9 @@
         <div id='text'>
           <div id='description'>
             
-            <p>The _erubis_escaping plugin is an internal plugin that provides a subclass
-            of Erubis::EscapedEruby with a bugfix and an optimization.</p>
+            <p>The _erubis_escaping plugin handles escaping of <code>&lt;%= %&gt;</code>
+            inside ERB templates.  It is an internal plugin that should not be loaded
+            directlyn by user code.</p>
           </div>
           <div id='context'>
           </div>
@@ -54,6 +55,7 @@
             <h2>Classes and Modules</h2>
             <ol>
               <li><a target="docwin" href="ErubisEscaping/Eruby.html">Roda::RodaPlugins::ErubisEscaping::Eruby</a></li>
+              <li><a target="docwin" href="ErubisEscaping/UnsafeClassEscaper.html">Roda::RodaPlugins::ErubisEscaping::UnsafeClassEscaper</a></li>
             </ol>
           </div>
           <div id='section'>

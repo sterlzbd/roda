@@ -31,12 +31,41 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-03-13 10:33:12 -0700</span>
+          <span class='datetime'>2015-04-13 10:10:59 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-2.2.0+-282015-04-13-29">2.2.0 (2015-04-13)<span><a href="#label-2.2.0+-282015-04-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Add :escaper render plugin option to support custom escaping of &lt;%=
+            %&gt; tags when :escape is used (jeremyevans)</p>
+            </li><li>
+            <p>Add :escape_safe_classes render plugin option, to not escape certain string
+            subclasses when :escape is used (jeremyevans)</p>
+            </li><li>
+            <p>Split partials method from padrino_render plugin into partials plugin
+            (kematzy) (#19)</p>
+            </li><li>
+            <p>Add shared_vars plugin, for sharing variables between multiple <a
+            href="../classes/Roda.html">Roda</a> apps (jeremyevans)</p>
+            </li><li>
+            <p>Add delay method to chunked plugin, for delaying a block execution until
+            right before content template rendering (jeremyevans)</p>
+            </li><li>
+            <p>Have default Content-Type header when using the default_headers plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add :by_name option to the path plugin, for registering classes by name,
+            useful when reloading code (jeremyevans)</p>
+            </li><li>
+            <p>Add Roda.path_block to get the block related to the given class used for
+            Road#path (jeremyevans)</p>
+            </li><li>
+            <p>Make Roda#path work correctly in subclasses (jeremyevans)</p>
+            </li></ul>
             
             <h1 id="label-2.1.0+-282015-03-13-29">2.1.0 (2015-03-13)<span><a href="#label-2.1.0+-282015-03-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
