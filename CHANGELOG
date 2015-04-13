@@ -1,4 +1,4 @@
-= HEAD
+= 2.2.0 (2015-04-13)
 
 * Add :escaper render plugin option to support custom escaping of <%= %> tags when :escape is used (jeremyevans)
 
