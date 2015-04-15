@@ -46,4 +46,9 @@ describe "json plugin" do
     app.route{[1]}
     body.should == '[1]'
   end
+
+  it "should accept custom serializers" do
+    app.plugin :json, serializer: proc { |o| o.inspect }
+    body("/hash").should == '{"a"=>"b"}'
+  end
 end

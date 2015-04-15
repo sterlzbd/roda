@@ -32,6 +32,12 @@ class Roda
     # using the :classes option when loading the plugin:
     #
     #   plugin :json, :classes=>[Array, Hash, Sequel::Model]
+    #
+    # By default objects are serialized with +to_json+, but you
+    # can pass in a custom serializer, which can be any object
+    # that responds to +call(object)+.
+    #
+    #   plugin :json, serializer: proc { |o| o.to_json(root: true) }
     module Json
       OPTS = {}.freeze
 
@@ -42,6 +48,9 @@ class Roda
         app.opts[:json_result_classes] += classes
         app.opts[:json_result_classes].uniq!
         app.opts[:json_result_classes].freeze
+
+        serializer = opts[:serializer] || proc { |o| o.to_json }
+        app.opts[:json_result_serializer] = serializer
       end
 
       module ClassMethods
@@ -71,9 +80,9 @@ class Roda
         end
 
         # Convert the given object to JSON.  Uses to_json by default,
-        # but can be overridden to use a different implementation.
+        # but can use a custom serializer passed to the plugin.
         def convert_to_json(obj)
-          obj.to_json
+          roda_class.opts[:json_result_serializer].call(obj)
         end
       end
     end
