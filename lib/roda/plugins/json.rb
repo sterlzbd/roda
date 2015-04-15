@@ -37,11 +37,12 @@ class Roda
     # can pass in a custom serializer, which can be any object
     # that responds to +call(object)+.
     #
-    #   plugin :json, serializer: proc { |o| o.to_json(root: true) }
+    #   plugin :json, serializer: proc{|o| o.to_json(root: true)}
     module Json
       OPTS = {}.freeze
+      DEFAULT_SERIALIZER = lambda{|o| o.to_json}
 
-      # Set the classes to automatically convert to JSON
+      # Set the classes to automatically convert to JSON, and the serializer to use.
       def self.configure(app, opts=OPTS)
         classes = opts[:classes] || [Array, Hash]
         app.opts[:json_result_classes] ||= []
@@ -49,8 +50,7 @@ class Roda
         app.opts[:json_result_classes].uniq!
         app.opts[:json_result_classes].freeze
 
-        serializer = opts[:serializer] || proc { |o| o.to_json }
-        app.opts[:json_result_serializer] = serializer
+        app.opts[:json_result_serializer] = opts[:serializer] || app.opts[:json_result_serializer] || DEFAULT_SERIALIZER
       end
 
       module ClassMethods

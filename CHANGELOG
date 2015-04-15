@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :serializer option in json plugin (janko-m) (#21)
+
 * Add json_parser plugin, for parsing request bodies in JSON format (jeremyevans)
 
 = 2.2.0 (2015-04-13)

@@ -48,7 +48,7 @@ describe "json plugin" do
   end
 
   it "should accept custom serializers" do
-    app.plugin :json, serializer: proc { |o| o.inspect }
+    app.plugin :json, :serializer => proc{|o| o.inspect}
     body("/hash").should == '{"a"=>"b"}'
   end
 end
