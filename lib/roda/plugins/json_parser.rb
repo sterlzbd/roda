@@ -15,14 +15,19 @@ class Roda
       FORM_HASH_KEY = "rack.request.form_hash".freeze
       FORM_INPUT_KEY = "rack.request.form_input".freeze
       DEFAULT_ERROR_HANDLER = proc{|r| r.halt [400, {}, []]}
+      DEFAULT_PARSER = JSON.method(:parse)
 
       # Handle options for the json_parser plugin:
       # :error_handler :: A proc to call if an exception is raised when
       #                   parsing a JSON request body.  The proc is called
       #                   with the request object, and should probably call
       #                   halt on the request or raise an exception.
+      # :parser :: The parser to use for parsing incoming json.  Should be
+      #            an object that responds to +call(str)+ and returns the
+      #            parsed data.  The default is to call JSON.parse.
       def self.configure(app, opts=OPTS)
         app.opts[:json_parser_error_handler] = opts[:error_handler] || app.opts[:json_parser_error_handler] || DEFAULT_ERROR_HANDLER
+        app.opts[:json_parser_parser] = opts[:parser] || app.opts[:json_parser_parser] || DEFAULT_PARSER
       end
 
       module RequestMethods
@@ -37,7 +42,7 @@ class Roda
             input.rewind
             return super if str.empty?
             begin
-              json_params = env[JSON_PARAMS_KEY] = parse_json(str)
+              json_params = env[JSON_PARAMS_KEY] = roda_class.opts[:json_parser_parser].call(str)
             rescue
               roda_class.opts[:json_parser_error_handler].call(self)
             end
@@ -46,14 +51,6 @@ class Roda
           else
             super
           end
-        end
-
-        private
-
-        # Parses the given string as JSON.  Uses JSON.parse by default,
-        # but can be overridden to use a different implementation.
-        def parse_json(str)
-          JSON.parse(str)
         end
       end
     end
