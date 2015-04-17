@@ -23,27 +23,9 @@ class Roda
     # will be cleared.  So if you want to be sure the headers are set
     # even in a not_found block, you need to reset them in the
     # not_found block.
-    #
-    # The not_found plugin also handles heartbeat/status requests.  While there
-    # are rack middleware that handle heartbeat/status requests, in general they
-    # slow down every request because they check the path of the request before
-    # calling the app. By tying the heartbeat requests to the not_found handling,
-    # there is no negative performance affect for heartbeat/status handling.
-    # To enable heartbeat/status request handling, pass a :heartbeat option
-    # with the path to handle for heartbeats:
-    #
-    #   plugin :not_found, :heartbeat=>'/heartbeat'
-    #
-    # Any requests for /heartbeat will get a 200 response with text/plain Content-Type
-    # and a body of "OK".
     module NotFound
-      OPTS = {}.freeze
-      PATH_INFO = 'PATH_INFO'.freeze
-      HEARTBEAT_RESPONSE = [200, {'Content-Type'=>'text/plain'}.freeze, ['OK'].freeze].freeze
-
       # If a block is given, install the block as the not_found handler.
-      def self.configure(app, opts=OPTS, &block)
-        app.opts[:not_found_heartbeat] = opts.fetch(:heartbeat, app.opts[:not_found_heartbeat])
+      def self.configure(app, &block)
         if block
           app.not_found(&block)
         end
@@ -65,11 +47,7 @@ class Roda
 
           if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
             @_response.headers.clear
-            if env[PATH_INFO] == opts[:not_found_heartbeat]
-              HEARTBEAT_RESPONSE
-            else
-              super{not_found}
-            end
+            super{not_found}
           else
             result
           end

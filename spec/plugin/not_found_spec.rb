@@ -125,23 +125,4 @@ describe "not_found plugin" do
 
     body.should == 'a'
   end
-
-  it "Support :heartbeat option" do
-    app(:bare) do
-      plugin :not_found, :heartbeat=>'/heartbeat' do
-        "not found"
-      end
-
-      route do |r|
-        r.on "a" do
-          "found"
-        end
-      end
-    end
-
-    body('/a').should == 'found'
-    body.should == 'not found'
-    status('/heartbeat').should == 200
-    body('/heartbeat').should == 'OK'
-  end
 end

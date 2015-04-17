@@ -1,6 +1,6 @@
 = HEAD
 
-* Support :heartbeat option to not_found plugin (jeremyevans)
+* Add heartbeat plugin for heartbeat support (jeremyevans)
 
 * Support :serializer option in json plugin (janko-m) (#21)
 
