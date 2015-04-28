@@ -326,6 +326,35 @@ describe "render plugin" do
     app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].should_not == nil
   end
 
+  it "Support :cache=>true option to enable template caching when :template_block is used" do
+    c = Class.new do 
+      def initialize(path, *, &block)
+        @path = path
+        @block = block
+      end
+      def render(*)
+        "#{@path}-#{@block.call}"
+      end
+    end 
+
+    proca = proc{'a'}
+
+    app(:bare) do
+      plugin :render, :views=>"./spec/views"
+
+      route do |r|
+        @a = 'a'
+        r.is('a'){render(:path=>'iv', :template_class=>c, :template_block=>proca)}
+        render(:path=>'iv', :template_class=>c, :template_block=>proca, :cache=>true)
+      end
+    end
+
+    body('/a').strip.should == "iv-a"
+    app.render_opts[:cache][['iv', c, nil, proca]].should == nil
+    body('/b').strip.should == "iv-a"
+    app.render_opts[:cache][['iv', c, nil, proca]].should_not == nil
+  end
+
   it "render_opts inheritance" do
     c = Class.new(Roda)
     c.plugin :render

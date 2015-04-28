@@ -55,8 +55,10 @@ class Roda
     # There are additional options to +view+ and +render+ that are
     # available at runtime:
     #
-    # :cache :: Set to false to not cache this template rendering, even when
-    #           caching is on by default.
+    # :cache :: Set to false to not cache this template, even when
+    #           caching is on by default.  Set to true to force caching for
+    #           this template, even when the default is to not cache (e.g.
+    #           when using the :template_block option).
     # :content :: Only respected by +view+, provides the content to render
     #             inside the layout, instead of rendering a template to get
     #             the content.
@@ -70,7 +72,8 @@ class Roda
     #              pass a single options hash to the render/view method, while
     #              still allowing you to specify the template name.
     # :template_block :: Pass this block when creating the underlying template,
-    #                    ignored when using :inline.
+    #                    ignored when using :inline.  Disables caching of the
+    #                    template by default.
     # :template_class :: Provides the template class to use, inside of using
     #                    Tilt or <tt>Tilt[:engine]</tt>.
     #
@@ -198,8 +201,7 @@ class Roda
         # If caching templates, attempt to retrieve the template from the cache.  Otherwise, just yield
         # to get the template.
         def cached_template(opts, &block)
-          if cache = render_opts[:cache]
-            key = opts[:key]
+          if (cache = render_opts[:cache]) && (key = opts[:key])
             unless template = cache[key]
               template = cache[key] = yield
             end
@@ -222,16 +224,22 @@ class Roda
             opts[:template_class] ||= ::Tilt
           end
 
-          if opts[:cache] != false && render_opts[:cache]
-            template_opts = opts[:template_opts]
-            template_block = opts[:template_block] if !content
-
-            key = if template_class || template_opts || template_block
-              [path, template_class, template_opts, template_block]
-            else
-              path
+          if render_opts[:cache]
+            if (cache = opts[:cache]).nil?
+              cache = content || !opts[:template_block]
             end
-            opts[:key] = key
+
+            if cache
+              template_block = opts[:template_block]
+              template_opts = opts[:template_opts] unless content
+
+              key = if template_class || template_opts || template_block
+                [path, template_class, template_opts, template_block]
+              else
+                path
+              end
+              opts[:key] = key
+            end
           end
 
           if !opts[:_is_layout] && (r_locals = render_opts[:locals])

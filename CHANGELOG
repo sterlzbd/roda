@@ -1,6 +1,8 @@
 = HEAD
 
-* Add :cache => false option to render/view to not cache the template (jeremyevans)
+* Don't cache templates if :template_block is used, unless :cache=>true is used  (jeremyevans)
+
+* Add :cache option to render/view to force caching or not caching the template (jeremyevans)
 
 * Avoid rehashing hashes at runtime in plugins (jeremyevans)
 
