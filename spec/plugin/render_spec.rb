@@ -260,23 +260,26 @@ describe "render plugin" do
     body('/b').should == "i-b"
   end
 
-  it "template cache respects :template_opts" do
+  it "template cache respects :template_block" do
     c = Class.new do 
-      def initialize(path, _, opts)
+      def initialize(path, *, &block)
         @path = path
-        @opts = opts
+        @block = block
       end
       def render(*)
-        "#{@path}-#{@opts[:foo]}"
+        "#{@path}-#{@block.call}"
       end
-    end
+    end 
+
+    proca = proc{'a'}
+    procb = proc{'b'}
 
     app(:render) do |r|
       r.is "a" do
-        render(:inline=>"i", :template_class=>c, :template_opts=>{:foo=>'a'})
+        render(:path=>"i", :template_class=>c, :template_block=>proca)
       end
       r.is "b" do
-        render(:inline=>"i", :template_class=>c, :template_opts=>{:foo=>'b'})
+        render(:path=>"i", :template_class=>c, :template_block=>procb)
       end
     end
 
