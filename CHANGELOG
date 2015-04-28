@@ -1,5 +1,7 @@
 = HEAD
 
+* Add path_rewriter plugin, for rewriting paths before routing (jeremyevans)
+
 * Add :cache_key option to render/view to explicitly set the template cache key (jeremyevans)
 
 * Don't cache templates if :template_block is given to render/view, unless :cache=>true is used  (jeremyevans)
