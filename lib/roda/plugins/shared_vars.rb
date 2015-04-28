@@ -63,7 +63,7 @@ class Roda
           if block_given?
             if vars
               begin
-                env[KEY] = h.merge(vars)
+                env[KEY] = Hash[h].merge!(vars)
                 yield
               ensure
                 env[KEY] = h

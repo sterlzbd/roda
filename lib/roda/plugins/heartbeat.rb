@@ -25,7 +25,7 @@ class Roda
         def call
           if env[PATH_INFO] == opts[:heartbeat_path]
             response = HEARTBEAT_RESPONSE.dup
-            response[1] = response[1].dup
+            response[1] = Hash[response[1]]
             response
           else
             super

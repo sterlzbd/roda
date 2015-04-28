@@ -69,7 +69,7 @@ class Roda
             module_eval(<<-END, __FILE__, __LINE__+1)
               def set#{v}(opts)
                 if @#{v}
-                  @#{v} = @#{v}.merge(opts)
+                  @#{v} = Hash[@#{v}].merge!(opts)
                 else
                   @#{v} = opts
                 end
@@ -112,7 +112,7 @@ class Roda
 
             if v_locals = @_view_locals
               t_opts[:locals] = if t_locals = t_opts[:locals]
-                v_locals.merge(t_locals)
+                Hash[v_locals].merge!(t_locals)
               else
                 v_locals
               end
@@ -133,7 +133,7 @@ class Roda
 
           if l_locals = @_layout_locals
             opts[:locals] = if o_locals = opts[:locals]
-              o_locals.merge(l_locals)
+              Hash[o_locals].merge!(l_locals)
             else
               l_locals
             end

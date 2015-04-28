@@ -79,9 +79,9 @@ class Roda
         def find_template(options)
           if options[:template] && (template_opts, block = opts[:named_templates][template_name(options)]; block)
             if template_opts
-              options = template_opts.merge(options)
+              options = Hash[template_opts].merge!(options)
             else
-              options = options.dup
+              options = Hash[options]
             end
 
             options[:inline] = instance_exec(&block)

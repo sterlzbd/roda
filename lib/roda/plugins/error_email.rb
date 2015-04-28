@@ -92,7 +92,7 @@ END
         def error_email(e)
           email_opts = self.class.opts[:error_email].dup
           headers = email_opts[:default_headers].call(email_opts, e)
-          headers = headers.merge(email_opts[:headers])
+          headers = Hash[headers].merge!(email_opts[:headers])
           headers = headers.map{|k,v| "#{k}: #{v.gsub(/\r?\n/m, "\r\n ")}"}.sort.join("\r\n")
           body = email_opts[:body].call(self, e)
           email_opts[:message] = "#{headers}\r\n\r\n#{body}"

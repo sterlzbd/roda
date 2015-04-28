@@ -48,7 +48,7 @@ class Roda
           if as
             opts = opts.dup
             if locals = opts[:locals]
-              locals = opts[:locals] = locals.dup
+              locals = opts[:locals] = Hash[locals]
             else
               locals = opts[:locals] = {}
             end

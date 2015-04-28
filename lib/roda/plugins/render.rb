@@ -161,7 +161,7 @@ class Roda
           cached_template(opts) do
             template_opts = render_opts[:template_opts]
             current_template_opts = opts[:template_opts]
-            template_opts = template_opts.merge(current_template_opts) if current_template_opts
+            template_opts = Hash[template_opts].merge!(current_template_opts) if current_template_opts
             opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
           end.render(self, (opts[:locals]||OPTS), &block)
         end
@@ -234,7 +234,7 @@ class Roda
 
           if !opts[:_is_layout] && (r_locals = render_opts[:locals])
             opts[:locals] = if locals = opts[:locals]
-              r_locals.merge(locals)
+              Hash[r_locals].merge!(locals)
             else
               r_locals
             end
@@ -245,14 +245,19 @@ class Roda
 
         # Return a single hash combining the template and opts arguments.
         def parse_template_opts(template, opts)
-          template = {:template=>template} unless template.is_a?(Hash)
-          opts.merge(template)
+          opts = Hash[opts]
+          if template.is_a?(Hash)
+            opts.merge!(template)
+          else
+            opts[:template] = template
+            opts
+          end
         end
 
         # The default render options to use.  These set defaults that can be overridden by
         # providing a :layout_opts option to the view/render method.
         def render_layout_opts
-          render_opts[:layout_opts].dup
+          Hash[render_opts[:layout_opts]]
         end
 
         # The name to use for the template.  By default, just converts the :template option to a string.
@@ -274,7 +279,7 @@ class Roda
             layout_opts = render_layout_opts
             if l_opts = opts[:layout_opts]
               if (l_locals = l_opts[:locals]) && (layout_locals = layout_opts[:locals])
-                set_locals = layout_locals.merge(l_locals)
+                set_locals = Hash[layout_locals].merge!(l_locals)
               end
               layout_opts.merge!(l_opts)
               if set_locals
