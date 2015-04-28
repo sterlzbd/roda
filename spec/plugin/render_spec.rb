@@ -287,6 +287,28 @@ describe "render plugin" do
     body('/b').should == "i-b"
   end
 
+  it "template cache respects :locals" do
+    template = '<%= @a ? b : c %>'
+
+    app(:render) do |r|
+      r.is "a" do
+        @a = true
+        render(:inline=>template, :locals=>{:b=>1})
+      end
+      r.is "b" do
+        @a = true
+        render(:inline=>template, :locals=>{:b=>2, :c=>4})
+      end
+      r.is "c" do
+        render(:inline=>template, :locals=>{:c=>3})
+      end
+    end
+
+    body('/a').should == "1"
+    body('/b').should == "2"
+    body('/c').should == "3"
+  end
+
   it "render_opts inheritance" do
     c = Class.new(Roda)
     c.plugin :render
