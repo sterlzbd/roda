@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :cache => false option to render/view to not cache the template (jeremyevans)
+
 * Avoid rehashing hashes at runtime in plugins (jeremyevans)
 
 * Add heartbeat plugin for heartbeat support (jeremyevans)

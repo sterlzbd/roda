@@ -52,9 +52,11 @@ class Roda
     #   view('foo', :ext=>'html.erb')
     #   render('foo', :views=>'admin_views')
     #
-    # There are a couple of additional options to +view+ and +render+ that are
+    # There are additional options to +view+ and +render+ that are
     # available at runtime:
     #
+    # :cache :: Set to false to not cache this template rendering, even when
+    #           caching is on by default.
     # :content :: Only respected by +view+, provides the content to render
     #             inside the layout, instead of rendering a template to get
     #             the content.
@@ -220,7 +222,7 @@ class Roda
             opts[:template_class] ||= ::Tilt
           end
 
-          if render_opts[:cache]
+          if opts[:cache] != false && render_opts[:cache]
             template_opts = opts[:template_opts]
             template_block = opts[:template_block] if !content
 

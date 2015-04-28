@@ -309,6 +309,23 @@ describe "render plugin" do
     body('/c').should == "3"
   end
 
+  it "Support :cache=>false option to disable template caching" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views"
+
+      route do |r|
+        @a = 'a'
+        r.is('a'){render('iv', :cache=>false)}
+        render('iv')
+      end
+    end
+
+    body('/a').strip.should == "a"
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].should == nil
+    body('/b').strip.should == "a"
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].should_not == nil
+  end
+
   it "render_opts inheritance" do
     c = Class.new(Roda)
     c.plugin :render
