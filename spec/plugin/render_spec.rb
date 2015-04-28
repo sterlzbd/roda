@@ -355,6 +355,23 @@ describe "render plugin" do
     app.render_opts[:cache][['iv', c, nil, proca]].should_not == nil
   end
 
+  it "Support :cache_key option to force the key used when caching" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views"
+
+      route do |r|
+        @a = 'a'
+        r.is('a'){render('iv', :cache_key=>:a)}
+        r.is('about'){render('about', :cache_key=>:a, :cache=>false, :locals=>{:title=>'a'})}
+        render('about', :cache_key=>:a)
+      end
+    end
+
+    body('/a').strip.should == "a"
+    body('/b').strip.should == "a"
+    body('/about').strip.should == "<h1>a</h1>"
+  end
+
   it "render_opts inheritance" do
     c = Class.new(Roda)
     c.plugin :render

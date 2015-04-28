@@ -59,6 +59,7 @@ class Roda
     #           caching is on by default.  Set to true to force caching for
     #           this template, even when the default is to not cache (e.g.
     #           when using the :template_block option).
+    # :cache_key :: Explicitly set the hash key to use when caching.
     # :content :: Only respected by +view+, provides the content to render
     #             inside the layout, instead of rendering a template to get
     #             the content.
@@ -201,7 +202,7 @@ class Roda
         # If caching templates, attempt to retrieve the template from the cache.  Otherwise, just yield
         # to get the template.
         def cached_template(opts, &block)
-          if (cache = render_opts[:cache]) && (key = opts[:key])
+          if (cache = render_opts[:cache]) && (key = opts[:cache_key])
             unless template = cache[key]
               template = cache[key] = yield
             end
@@ -233,12 +234,13 @@ class Roda
               template_block = opts[:template_block]
               template_opts = opts[:template_opts] unless content
 
-              key = if template_class || template_opts || template_block
+              opts[:cache_key] ||= if template_class || template_opts || template_block
                 [path, template_class, template_opts, template_block]
               else
                 path
               end
-              opts[:key] = key
+            else
+              opts.delete(:cache_key)
             end
           end
 

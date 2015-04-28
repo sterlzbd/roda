@@ -1,6 +1,8 @@
 = HEAD
 
-* Don't cache templates if :template_block is used, unless :cache=>true is used  (jeremyevans)
+* Add :cache_key option to render/view to explicitly set the template cache key (jeremyevans)
+
+* Don't cache templates if :template_block is given to render/view, unless :cache=>true is used  (jeremyevans)
 
 * Add :cache option to render/view to force caching or not caching the template (jeremyevans)
 
