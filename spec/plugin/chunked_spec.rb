@@ -22,7 +22,7 @@ describe "chunked plugin" do
   it "hex encodes chunk sizes" do
     m = 'm' * 31
     app(:chunked) do |r|
-      chunked(:inline=>m, :layout=>{:inline=>'h<%= yield %>t'})
+      chunked(:inline=>m.dup, :layout=>{:inline=>'h<%= yield %>t'})
     end
 
     cbody.should == "1\r\nh\r\n1f\r\n#{m}\r\n1\r\nt\r\n0\r\n\r\n"

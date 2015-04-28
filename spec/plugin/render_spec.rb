@@ -293,14 +293,14 @@ describe "render plugin" do
     app(:render) do |r|
       r.is "a" do
         @a = true
-        render(:inline=>template, :locals=>{:b=>1})
+        render(:inline=>template.dup, :locals=>{:b=>1})
       end
       r.is "b" do
         @a = true
-        render(:inline=>template, :locals=>{:b=>2, :c=>4})
+        render(:inline=>template.dup, :locals=>{:b=>2, :c=>4})
       end
       r.is "c" do
-        render(:inline=>template, :locals=>{:c=>3})
+        render(:inline=>template.dup, :locals=>{:c=>3})
       end
     end
 
