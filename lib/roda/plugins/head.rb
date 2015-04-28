@@ -22,6 +22,12 @@ class Roda
     #
     # HEAD requests for +/+, +/a+, and +/b+ will all return 200 status
     # with an empty body.
+    #
+    # NOTE: if you have a public facing website it is recommended that
+    # you enable this plugin. Search engines and other bots may send a
+    # HEAD request prior to crawling a page with a GET request. Without
+    # this plugin those HEAD requests will return a 404 status, which
+    # may prevent search engine's from crawling your website.
     module Head
       EMPTY_ARRAY = [].freeze
 
