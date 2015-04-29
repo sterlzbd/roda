@@ -214,7 +214,7 @@ class Roda
     # :js_opts :: Template options to pass to the render plugin (via :template_opts) when rendering javascript assets
     # :js_route :: Route under :prefix for javascript assets (default: :js_dir)
     # :path :: Path to your asset source directory (default: 'assets').   Relative
-    #            paths will be considered relative to the application's :root option.
+    #          paths will be considered relative to the application's :root option.
     # :prefix :: Prefix for assets path in your URL/routes (default: 'assets')
     # :precompiled :: Path to the compiled asset metadata file.  If the file exists, will use compiled
     #                 mode using the metadata in the file.  If the file does not exist, will use
