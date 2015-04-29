@@ -54,7 +54,7 @@ describe "render plugin" do
     app.plugin :render, :ext => "str"
     body("/about").strip.should == "<h1>About Roda</h1>"
     body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
-    body("/inline").strip.should == "Hello Agent Smith"
+    body("/inline").strip.should == "Hello <%= name %>"
   end
 
   it "custom default layout support" do

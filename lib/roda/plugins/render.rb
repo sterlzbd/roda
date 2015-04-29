@@ -27,7 +27,8 @@ class Roda
     # :cache :: nil/false to not cache templates (useful for development), defaults
     #           to true unless RACK_ENV is development to automatically use the
     #           default template cache.
-    # :engine :: The tilt engine to use for rendering, defaults to 'erb'.
+    # :engine :: The tilt engine to use for rendering, also the default file extension for
+    #            templates, defaults to 'erb'.
     # :escape :: Use Roda's Erubis escaping support, which makes <tt><%= %></tt> escape output,
     #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
     #            <tt><%= %></tt> tags.
@@ -36,8 +37,6 @@ class Roda
     # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape is used,
     #             overriding the default.  If given, object should respond to +escape_xml+ with
     #             a single argument and return an output string.
-    # :ext :: The file extension to assume for view files, defaults to the :engine
-    #         option.
     # :layout :: The base name of the layout file, defaults to 'layout'.
     # :layout_opts :: The options to use when rendering the layout, if different
     #                 from the default options.
@@ -49,7 +48,7 @@ class Roda
     # Most of these options can be overridden at runtime by passing options
     # to the +view+ or +render+ methods:
     #
-    #   view('foo', :ext=>'html.erb')
+    #   view('foo', :engine=>'html.erb')
     #   render('foo', :views=>'admin_views')
     #
     # There are additional options to +view+ and +render+ that are
@@ -67,7 +66,7 @@ class Roda
     #            for template code in a file.
     # :locals :: Hash of local variables to make available inside the template.
     # :path :: Use the value given as the full pathname for the file, instead
-    #          of using the :views and :ext option in combination with the
+    #          of using the :views and :engine option in combination with the
     #          template name.
     # :template :: Provides the name of the template to use.  This allows you
     #              pass a single options hash to the render/view method, while
@@ -104,9 +103,8 @@ class Roda
         app.opts[:render][:orig_opts] = opts
 
         opts = app.opts[:render]
-        opts[:engine] ||= "erb"
-        opts[:ext] = nil unless opts.has_key?(:ext)
-        opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root])
+        opts[:engine] = (opts[:engine] || opts[:ext] || "erb").dup.freeze
+        opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root]).freeze
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
         opts[:layout_opts][:_is_layout] = true
 
@@ -215,11 +213,14 @@ class Roda
         # Given the template name and options, set the template class, template path/content,
         # template block, and locals to use for the render in the passed options.
         def find_template(opts)
+          render_opts = render_opts()
+          engine = opts[:engine] ||= opts[:ext] || render_opts[:engine]
           if content = opts[:inline]
             path = opts[:path] = content
-            template_class = opts[:template_class] ||= ::Tilt[opts[:engine] || render_opts[:engine]]
+            template_class = opts[:template_class] ||= ::Tilt[engine]
             opts[:template_block] = Proc.new{content}
           else
+            opts[:views] ||= render_opts[:views]
             path = opts[:path] ||= template_path(opts)
             template_class = opts[:template_class]
             opts[:template_class] ||= ::Tilt
@@ -279,8 +280,7 @@ class Roda
 
         # The template path for the given options.
         def template_path(opts)
-          render_opts = render_opts()
-          "#{opts[:views] || render_opts[:views]}/#{template_name(opts)}.#{opts[:ext] || render_opts[:ext] || render_opts[:engine]}"
+          "#{opts[:views]}/#{template_name(opts)}.#{opts[:engine]}"
         end
 
         # If a layout should be used, return a hash of options for
