@@ -18,10 +18,10 @@ describe "hash_matcher plugin" do
       end
     end
 
-    body("/foo").should == '1foo'
-    body("/foofoo").should == '2foofoo'
-    body("/foofoofoo").should == '3foofoofoo'
-    status("/foofoofoofoo").should == 404
-    status.should == 404
+    body("/foo").must_equal '1foo'
+    body("/foofoo").must_equal '2foofoo'
+    body("/foofoofoo").must_equal '3foofoofoo'
+    status("/foofoofoofoo").must_equal 404
+    status.must_equal 404
   end
 end

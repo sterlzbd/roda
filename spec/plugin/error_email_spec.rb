@@ -19,18 +19,18 @@ describe "error_email plugin" do
 
   it "adds error_email method for emailing exceptions" do
     app
-    body('rack.input'=>StringIO.new, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'}).should == 'e'
-    email[:to].should == 't'
-    email[:from].should == 'f'
-    email[:host].should == 'localhost'
-    email[:message].should =~ /^Subject: ArgumentError/
-    email[:message].should =~ /^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^"b" => "c"$\s+^Session:$\s+^"d" => "e"$/m
+    body('rack.input'=>StringIO.new, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'}).must_equal 'e'
+    email[:to].must_equal 't'
+    email[:from].must_equal 'f'
+    email[:host].must_equal 'localhost'
+    email[:message].must_match /^Subject: ArgumentError/
+    email[:message].must_match /^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^"b" => "c"$\s+^Session:$\s+^"d" => "e"$/m
   end
 
   it "uses :host option" do
     app(:host=>'foo.bar.com')
-    body('rack.input'=>StringIO.new).should == 'e'
-    email[:host].should == 'foo.bar.com'
+    body('rack.input'=>StringIO.new).must_equal 'e'
+    email[:host].must_equal 'foo.bar.com'
   end
 
   it "handles error messages with new lines" do
@@ -38,26 +38,26 @@ describe "error_email plugin" do
       raise "foo\nbar\nbaz" rescue error_email($!)
       'e'
     end
-    body('rack.input'=>StringIO.new).should == 'e'
-    email[:message].should =~ %r{From: f\r\nSubject: RuntimeError: foo\r\n bar\r\n baz\r\nTo: t\r\n\r\n}
+    body('rack.input'=>StringIO.new).must_equal 'e'
+    email[:message].must_match %r{From: f\r\nSubject: RuntimeError: foo\r\n bar\r\n baz\r\nTo: t\r\n\r\n}
   end
 
   it "adds :prefix option to subject line" do
     app(:prefix=>'TEST ')
-    body('rack.input'=>StringIO.new).should == 'e'
-    email[:message].should =~ /^Subject: TEST ArgumentError/
+    body('rack.input'=>StringIO.new).must_equal 'e'
+    email[:message].must_match /^Subject: TEST ArgumentError/
   end
 
   it "uses :headers option for additional headers" do
     app(:headers=>{'Foo'=>'Bar', 'Baz'=>'Quux'})
-    body('rack.input'=>StringIO.new).should == 'e'
-    email[:message].should =~ /^Foo: Bar/
-    email[:message].should =~ /^Baz: Quux/
+    body('rack.input'=>StringIO.new).must_equal 'e'
+    email[:message].must_match /^Foo: Bar/
+    email[:message].must_match /^Baz: Quux/
   end
 
   it "requires the :to and :from options" do
-    proc{app :from=>nil}.should raise_error(Roda::RodaError)
-    proc{app :to=>nil}.should raise_error(Roda::RodaError)
+    proc{app :from=>nil}.must_raise(Roda::RodaError)
+    proc{app :to=>nil}.must_raise(Roda::RodaError)
   end
 
   it "works correctly in subclasses" do
@@ -66,11 +66,11 @@ describe "error_email plugin" do
       raise ArgumentError rescue error_email($!)
       'e'
     end
-    body('rack.input'=>StringIO.new).should == 'e'
-    email[:to].should == 't'
-    email[:from].should == 'f'
-    email[:host].should == 'localhost'
-    email[:message].should =~ /^Subject: ArgumentError/
-    email[:message].should =~ /Backtrace.*ENV/m
+    body('rack.input'=>StringIO.new).must_equal 'e'
+    email[:to].must_equal 't'
+    email[:from].must_equal 'f'
+    email[:host].must_equal 'localhost'
+    email[:message].must_match /^Subject: ArgumentError/
+    email[:message].must_match /Backtrace.*ENV/m
   end
 end

@@ -10,7 +10,7 @@ describe "delete_empty_headers plugin" do
       'a'
     end
 
-    req[1].should == {'Bar'=>'1'}
+    req[1].must_equal('Bar'=>'1')
   end
 
   it "is called when finishing with a body" do
@@ -22,6 +22,6 @@ describe "delete_empty_headers plugin" do
       r.halt response.finish_with_body(['a'])
     end
 
-    req[1].should == {'Bar'=>'1'}
+    req[1].must_equal('Bar'=>'1')
   end
 end

@@ -16,12 +16,12 @@ describe "per_thread_caching plugin" do
     (0..10).map do |n|
       Thread.new do
         Thread.current[:n] = n
-        body('/a').should == '2'
-        body('/a').should == '22'
-        body('/a').should == '222'
-        body('/b').should == '2'
-        body('/b').should == '22'
-        body('/b').should == '222'
+        _(body('/a')).must_equal '2'
+        _(body('/a')).must_equal '22'
+        _(body('/a')).must_equal '222'
+        _(body('/b')).must_equal '2'
+        _(body('/b')).must_equal '22'
+        _(body('/b')).must_equal '222'
       end
     end.map{|t| t.join}
   end

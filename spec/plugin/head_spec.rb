@@ -17,19 +17,19 @@ describe "head plugin" do
     end
 
     s, h, b = req
-    s.should == 200
-    h['Content-Length'].should == '4'
-    b.should == ['root']
+    s.must_equal 200
+    h['Content-Length'].must_equal '4'
+    b.must_equal ['root']
 
     s, h, b = req('REQUEST_METHOD' => 'HEAD')
-    s.should == 200
-    h['Content-Length'].should == '4'
-    b.should == []
+    s.must_equal 200
+    h['Content-Length'].must_equal '4'
+    b.must_equal []
 
-    body('/a').should == 'a'
-    status('/a', 'REQUEST_METHOD' => 'HEAD').should == 200
+    body('/a').must_equal 'a'
+    status('/a', 'REQUEST_METHOD' => 'HEAD').must_equal 200
 
-    body('/b').should == 'b'
-    status('/b', 'REQUEST_METHOD' => 'HEAD').should == 200
+    body('/b').must_equal 'b'
+    status('/b', 'REQUEST_METHOD' => 'HEAD').must_equal 200
   end
 end

@@ -36,35 +36,35 @@ describe "render plugin" do
   end
 
   it "default actions" do
-    body("/about").strip.should == "<h1>About Roda</h1>"
-    body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
-    body("/inline").strip.should == "Hello Agent Smith"
-    body("/path").strip.should == "<h1>Path</h1>"
-    body("/content").strip.should == "<title>Roda: Home</title>\nbar"
+    body("/about").strip.must_equal "<h1>About Roda</h1>"
+    body("/home").strip.must_equal "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/inline").strip.must_equal "Hello Agent Smith"
+    body("/path").strip.must_equal "<h1>Path</h1>"
+    body("/content").strip.must_equal "<title>Roda: Home</title>\nbar"
   end
 
   it "with str as engine" do
     app.plugin :render, :engine => "str"
-    body("/about").strip.should == "<h1>About Roda</h1>"
-    body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
-    body("/inline").strip.should == "Hello <%= name %>"
+    body("/about").strip.must_equal "<h1>About Roda</h1>"
+    body("/home").strip.must_equal "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/inline").strip.must_equal "Hello <%= name %>"
   end
 
   it "with str as ext" do
     app.plugin :render, :ext => "str"
-    body("/about").strip.should == "<h1>About Roda</h1>"
-    body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
-    body("/inline").strip.should == "Hello <%= name %>"
+    body("/about").strip.must_equal "<h1>About Roda</h1>"
+    body("/home").strip.must_equal "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/inline").strip.must_equal "Hello <%= name %>" 
   end
 
   it "custom default layout support" do
     app.plugin :render, :layout => "layout-alternative"
-    body("/home").strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/home").strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
   it "using hash for :layout" do
     app.plugin :render, :layout => {:inline=> 'a<%= yield %>b'}
-    body("/home").strip.should == "a<h1>Home</h1>\n<p>Hello Agent Smith</p>\nb"
+    body("/home").strip.must_equal "a<h1>Home</h1>\n<p>Hello Agent Smith</p>\nb"
   end
 end
 
@@ -80,7 +80,7 @@ describe "render plugin" do
       end
     end
 
-    body.gsub(/\n+/, "\n").should == "Header\nThis is the actual content.\nFooter\n"
+    body.gsub(/\n+/, "\n").must_equal "Header\nThis is the actual content.\nFooter\n"
   end
 
   it "views without default layouts" do
@@ -92,7 +92,7 @@ describe "render plugin" do
       end
     end
 
-    body.strip.should == "<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body.strip.must_equal "<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
   it "layout overrides" do
@@ -104,7 +104,7 @@ describe "render plugin" do
       end
     end
 
-    body.strip.should == "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
   it "locals overrides" do
@@ -116,7 +116,7 @@ describe "render plugin" do
       end
     end
 
-    body.strip.should == "Roda:AA::Home:BB"
+    body.strip.must_equal "Roda:AA::Home:BB"
   end
 
   it ":layout=>true/false/string/hash/not-present respects plugin layout switch and template" do
@@ -133,73 +133,73 @@ describe "render plugin" do
       end
     end
 
-    body.gsub("\n", '').should == "HeaderbarFooter"
-    body('/a').gsub("\n", '').should == "HeaderbarFooter"
-    body('/f').gsub("\n", '').should == "bar"
-    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body.gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/f').gsub("\n", '').must_equal "bar"
+    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render
-    body.gsub("\n", '').should == "HeaderbarFooter"
-    body('/a').gsub("\n", '').should == "HeaderbarFooter"
-    body('/f').gsub("\n", '').should == "bar"
-    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body.gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/f').gsub("\n", '').must_equal "bar"
+    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>true
-    body.gsub("\n", '').should == "HeaderbarFooter"
-    body('/a').gsub("\n", '').should == "HeaderbarFooter"
-    body('/f').gsub("\n", '').should == "bar"
-    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body.gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/f').gsub("\n", '').must_equal "bar"
+    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>'layout-alternative'
-    body.gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
-    body('/a').gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
-    body('/f').gsub("\n", '').should == "bar"
-    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body.gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
+    body('/a').gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
+    body('/f').gsub("\n", '').must_equal "bar"
+    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>nil
-    body.gsub("\n", '').should == "HeaderbarFooter"
-    body('/a').gsub("\n", '').should == "bar"
-    body('/f').gsub("\n", '').should == "bar"
-    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body.gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/a').gsub("\n", '').must_equal "bar"
+    body('/f').gsub("\n", '').must_equal "bar"
+    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>false
-    body.gsub("\n", '').should == "HeaderbarFooter"
-    body('/a').gsub("\n", '').should == "bar"
-    body('/f').gsub("\n", '').should == "bar"
-    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body.gsub("\n", '').must_equal "HeaderbarFooter"
+    body('/a').gsub("\n", '').must_equal "bar"
+    body('/f').gsub("\n", '').must_equal "bar"
+    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout_opts=>{:template=>'layout-alternative', :locals=>{:title=>'a'}}
-    body.gsub("\n", '').should == "<title>Alternative Layout: a</title>bar"
-    body('/a').gsub("\n", '').should == "bar"
-    body('/f').gsub("\n", '').should == "bar"
-    body('/s').gsub("\n", '').should == "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').should == "<title>Roda: a</title>bar"
+    body.gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
+    body('/a').gsub("\n", '').must_equal "bar"
+    body('/f').gsub("\n", '').must_equal "bar"
+    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
   end
 
   it "app :root option affects :views default" do
     app
     app.plugin :render
-    app.render_opts[:views].should == File.join(Dir.pwd, 'views')
+    app.render_opts[:views].must_equal File.join(Dir.pwd, 'views')
 
     app.opts[:root] = '/foo'
     app.plugin :render
-    app.render_opts[:views].should == '/foo/views'
+    app.render_opts[:views].must_equal '/foo/views'
 
     app.opts[:root] = '/foo/bar'
     app.plugin :render
-    app.render_opts[:views].should == '/foo/bar/views'
+    app.render_opts[:views].must_equal '/foo/bar/views'
 
     app.opts[:root] = nil
     app.plugin :render
-    app.render_opts[:views].should == File.join(Dir.pwd, 'views')
+    app.render_opts[:views].must_equal File.join(Dir.pwd, 'views')
     app.plugin :render, :views=>'bar'
-    app.render_opts[:views].should == File.join(Dir.pwd, 'bar')
+    app.render_opts[:views].must_equal File.join(Dir.pwd, 'bar')
   end
 
   it "inline layouts and inline views" do
@@ -207,7 +207,7 @@ describe "render plugin" do
       view({:inline=>'bar'}, :layout=>{:inline=>'Foo: <%= yield %>'})
     end
 
-    body.strip.should == "Foo: bar"
+    body.strip.must_equal "Foo: bar"
   end
 
   it "inline renders with opts" do
@@ -215,7 +215,7 @@ describe "render plugin" do
       render({:inline=>'<%= bar %>'}, {:engine=>'str'})
     end
 
-    body.strip.should == '<%= bar %>'
+    body.strip.must_equal '<%= bar %>'
   end
 
   it "template renders with :template opts" do
@@ -225,7 +225,7 @@ describe "render plugin" do
         render(:template=>"about", :locals=>{:title => "About Roda"})
       end
     end
-    body.strip.should == "<h1>About Roda</h1>"
+    body.strip.must_equal "<h1>About Roda</h1>"
   end
 
   it "template renders with :template_class opts" do
@@ -233,7 +233,7 @@ describe "render plugin" do
       @a = 1
       render(:inline=>'i#{@a}', :template_class=>::Tilt[:str])
     end
-    body.should == "i1"
+    body.must_equal "i1"
   end
 
   it "can specify engine-specific options via :engine_opts" do
@@ -247,8 +247,8 @@ describe "render plugin" do
       end
     end
 
-    body('/a').should == "String"
-    body.should == "NilClass"
+    body('/a').must_equal "String"
+    body.must_equal "NilClass"
   end
 
   it "template cache respects :template_opts" do
@@ -271,8 +271,8 @@ describe "render plugin" do
       end
     end
 
-    body('/a').should == "i-a"
-    body('/b').should == "i-b"
+    body('/a').must_equal "i-a"
+    body('/b').must_equal "i-b"
   end
 
   it "template cache respects :template_block" do
@@ -298,8 +298,8 @@ describe "render plugin" do
       end
     end
 
-    body('/a').should == "i-a"
-    body('/b').should == "i-b"
+    body('/a').must_equal "i-a"
+    body('/b').must_equal "i-b"
   end
 
   it "template cache respects :locals" do
@@ -319,9 +319,9 @@ describe "render plugin" do
       end
     end
 
-    body('/a').should == "1"
-    body('/b').should == "2"
-    body('/c').should == "3"
+    body('/a').must_equal "1"
+    body('/b').must_equal "2"
+    body('/c').must_equal "3"
   end
 
   it "Support :cache=>false option to disable template caching" do
@@ -335,10 +335,10 @@ describe "render plugin" do
       end
     end
 
-    body('/a').strip.should == "a"
-    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].should == nil
-    body('/b').strip.should == "a"
-    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].should_not == nil
+    body('/a').strip.must_equal "a"
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_equal nil
+    body('/b').strip.must_equal "a"
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_equal nil
   end
 
   it "Support :cache=>true option to enable template caching when :template_block is used" do
@@ -364,10 +364,10 @@ describe "render plugin" do
       end
     end
 
-    body('/a').strip.should == "iv-a"
-    app.render_opts[:cache][['iv', c, nil, nil, proca]].should == nil
-    body('/b').strip.should == "iv-a"
-    app.render_opts[:cache][['iv', c, nil, nil, proca]].should_not == nil
+    body('/a').strip.must_equal "iv-a"
+    app.render_opts[:cache][['iv', c, nil, nil, proca]].must_equal nil
+    body('/b').strip.must_equal "iv-a"
+    app.render_opts[:cache][['iv', c, nil, nil, proca]].wont_equal nil
   end
 
   it "Support :cache_key option to force the key used when caching" do
@@ -382,9 +382,9 @@ describe "render plugin" do
       end
     end
 
-    body('/a').strip.should == "a"
-    body('/b').strip.should == "a"
-    body('/about').strip.should == "<h1>a</h1>"
+    body('/a').strip.must_equal "a"
+    body('/b').strip.must_equal "a"
+    body('/about').strip.must_equal "<h1>a</h1>"
   end
 
   it "render_opts inheritance" do
@@ -392,15 +392,15 @@ describe "render plugin" do
     c.plugin :render
     sc = Class.new(c)
 
-    c.render_opts.should_not equal(sc.render_opts)
-    c.render_opts[:cache].should_not equal(sc.render_opts[:cache])
+    c.render_opts.wont_be_same_as(sc.render_opts)
+    c.render_opts[:cache].wont_be_same_as(sc.render_opts[:cache])
   end
 
   it "render plugin call should not override options" do
     c = Class.new(Roda)
     c.plugin :render, :layout=>:foo
     c.plugin :render
-    c.render_opts[:layout].should == :foo
+    c.render_opts[:layout].must_equal :foo
   end
 
   it "with caching disabled" do
@@ -412,9 +412,9 @@ describe "render plugin" do
       end
     end
 
-    body("/inline").strip.should == "Hello Agent Smith: false"
+    body("/inline").strip.must_equal "Hello Agent Smith: false"
 
-    Class.new(app).render_opts[:cache].should == false
+    Class.new(app).render_opts[:cache].must_equal false
   end
 end
 end

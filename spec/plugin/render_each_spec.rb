@@ -32,10 +32,10 @@ describe "render_each plugin" do
       end
     end
 
-    body.should == 'rfoo1 rfoo2 rfoo3 '
-    body("/a").should == 'rbar14 rbar24 rbar34 '
-    body("/b").should == 'rbar rbar rbar '
-    body("/c").should == 'rbar41 rbar42 rbar43 '
+    body.must_equal 'rfoo1 rfoo2 rfoo3 '
+    body("/a").must_equal 'rbar14 rbar24 rbar34 '
+    body("/b").must_equal 'rbar rbar rbar '
+    body("/c").must_equal 'rbar41 rbar42 rbar43 '
   end
 end
 end

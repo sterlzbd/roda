@@ -29,19 +29,19 @@ describe "hooks plugin" do
 
   it "adds before and after hooks for running code before and after requests" do
     s, h, b = req
-    s.should == 201
-    h['foo'].should == 'baz'
-    b.join.should == 'bar'
-    @a.should == [[200, 'baz', ['bar']]]
+    s.must_equal 201
+    h['foo'].must_equal 'baz'
+    b.join.must_equal 'bar'
+    @a.must_equal [[200, 'baz', ['bar']]]
   end
 
   it "multiple plugin calls do not override existing hooks" do
     app.plugin :hooks
     s, h, b = req
-    s.should == 201
-    h['foo'].should == 'baz'
-    b.join.should == 'bar'
-    @a.should == [[200, 'baz', ['bar']]]
+    s.must_equal 201
+    h['foo'].must_equal 'baz'
+    b.join.must_equal 'bar'
+    @a.must_equal [[200, 'baz', ['bar']]]
   end
 
   it "after hooks are still called if an exception is raised" do
@@ -55,9 +55,9 @@ describe "hooks plugin" do
       a << $!
     end
 
-    proc{req}.should raise_error(Roda::RodaError)
-    a.pop.should be_a_kind_of(Roda::RodaError)
-    a.pop.should == nil
+    proc{req}.must_raise(Roda::RodaError)
+    a.pop.must_be_kind_of(Roda::RodaError)
+    a.pop.must_equal nil
   end
 
   it "handles multiple before and after blocks correctly" do
@@ -72,11 +72,11 @@ describe "hooks plugin" do
     end
 
     s, h, b = req
-    s.should == 402
-    h['foo'].should == 'baz'
-    h['bar'].should == 'foo'
-    b.join.should == 'bar'
-    a.should == [[200, 'baz', ['bar']], 'foo']
+    s.must_equal 402
+    h['foo'].must_equal 'baz'
+    h['bar'].must_equal 'foo'
+    b.join.must_equal 'bar'
+    a.must_equal [[200, 'baz', ['bar']], 'foo']
   end
 
   it "copies before and after blocks when subclassing" do
@@ -87,9 +87,9 @@ describe "hooks plugin" do
       end
     end
     s, h, b = req
-    s.should == 201
-    h['foo'].should == 'bar'
-    b.join.should == 'foo'
-    @a.should == [[200, 'bar', ['foo']]]
+    s.must_equal 201
+    h['foo'].must_equal 'bar'
+    b.join.must_equal 'foo'
+    @a.must_equal [[200, 'bar', ['foo']]]
   end
 end

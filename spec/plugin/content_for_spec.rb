@@ -23,11 +23,11 @@ describe "content_for plugin" do
   end
 
   it "should be able to set content in template and get that content in the layout" do
-    body.strip.should == "bar foo"
+    body.strip.must_equal "bar foo"
   end
 
   it "should work if content is not set by the template" do
-    body('/a').strip.should == "bar"
+    body('/a').strip.must_equal "bar"
   end
 end
 end

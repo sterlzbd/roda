@@ -6,6 +6,6 @@ describe "Roda#env" do
       env['PATH_INFO']
     end
 
-    body("/foo").should ==  "/foo"
+    body("/foo").must_equal  "/foo"
   end
 end

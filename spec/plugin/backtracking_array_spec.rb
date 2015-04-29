@@ -17,24 +17,24 @@ describe "backtracking_array plugin" do
     end
 
     tests = lambda do
-      status.should == 404
+      status.must_equal 404
 
-      body("/a").should == 'a'
-      body("/a/b").should == 'a/b'
-      status("/a/b/").should == 404
+      body("/a").must_equal 'a'
+      body("/a/b").must_equal 'a/b'
+      status("/a/b/").must_equal 404
 
-      body("/c/d").should == 'c-d'
-      body("/c/e").should == 'c-e'
-      body("/c/d/d").should == 'c/d-d'
-      body("/c/d/e").should == 'c/d-e'
-      status("/c/d/").should == 404
+      body("/c/d").must_equal 'c-d'
+      body("/c/e").must_equal 'c-e'
+      body("/c/d/d").must_equal 'c/d-d'
+      body("/c/d/e").must_equal 'c/d-e'
+      status("/c/d/").must_equal 404
 
-      body("/f").should == 'f'
-      body("/f/g").should == 'f/g'
-      body("/g").should == 'g'
-      body("/g/h").should == 'g/h'
-      status("/f/g/").should == 404
-      status("/g/h/").should == 404
+      body("/f").must_equal 'f'
+      body("/f/g").must_equal 'f/g'
+      body("/g").must_equal 'g'
+      body("/g/h").must_equal 'g/h'
+      status("/f/g/").must_equal 404
+      status("/g/h/").must_equal 404
     end
 
     tests.call

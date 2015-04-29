@@ -15,15 +15,15 @@ describe "all_verbs plugin" do
       end
     end
 
-    body('REQUEST_METHOD'=>'DELETE').should == 'd'
-    body('REQUEST_METHOD'=>'HEAD').should == 'h'
-    body('REQUEST_METHOD'=>'OPTIONS').should == 'o'
-    body('REQUEST_METHOD'=>'PATCH').should == 'pa'
-    body('REQUEST_METHOD'=>'PUT').should == 'pu'
-    body('REQUEST_METHOD'=>'TRACE').should == 't'
+    body('REQUEST_METHOD'=>'DELETE').must_equal 'd'
+    body('REQUEST_METHOD'=>'HEAD').must_equal 'h'
+    body('REQUEST_METHOD'=>'OPTIONS').must_equal 'o'
+    body('REQUEST_METHOD'=>'PATCH').must_equal 'pa'
+    body('REQUEST_METHOD'=>'PUT').must_equal 'pu'
+    body('REQUEST_METHOD'=>'TRACE').must_equal 't'
     if Rack::Request.method_defined?(:link?)
-      body('REQUEST_METHOD'=>'LINK').should == 'l'
-      body('REQUEST_METHOD'=>'UNLINK').should == 'u'
+      body('REQUEST_METHOD'=>'LINK').must_equal 'l'
+      body('REQUEST_METHOD'=>'UNLINK').must_equal 'u'
     end
   end
 end

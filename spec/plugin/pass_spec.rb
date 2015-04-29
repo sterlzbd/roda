@@ -18,12 +18,12 @@ describe "pass plugin" do
       end
     end
 
-    body.should == 'root'
-    status('FOO'=>true).should == 404
-    body("/a").should == 'a'
-    body("/a/b").should == 'a'
-    body("/foo/a").should == 'fooa'
-    body("/foo/a/b").should == 'fooa'
-    status("/foo").should == 404
+    body.must_equal 'root'
+    status('FOO'=>true).must_equal 404
+    body("/a").must_equal 'a'
+    body("/a/b").must_equal 'a'
+    body("/foo/a").must_equal 'fooa'
+    body("/foo/a/b").must_equal 'fooa'
+    status("/foo").must_equal 404
   end
 end

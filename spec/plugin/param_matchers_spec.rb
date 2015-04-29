@@ -13,9 +13,9 @@ describe "param_matchers plugin" do
     end
 
     io = StringIO.new
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").should == 'john@doe.com'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "").should == 'No email'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").should == 'No email'
+    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").must_equal 'john@doe.com'
+    body("/signup", "rack.input" => io, "QUERY_STRING" => "").must_equal 'No email'
+    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").must_equal 'No email'
   end
 
   it "param matcheshould yield a param only if given" do
@@ -30,8 +30,8 @@ describe "param_matchers plugin" do
     end
 
     io = StringIO.new
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").should == 'john@doe.com'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "").should == 'No email'
-    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").should == ''
+    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").must_equal 'john@doe.com'
+    body("/signup", "rack.input" => io, "QUERY_STRING" => "").must_equal 'No email'
+    body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").must_equal ''
   end
 end

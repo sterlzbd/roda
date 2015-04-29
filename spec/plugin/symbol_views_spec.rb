@@ -22,11 +22,11 @@ describe "symbol_views plugin" do
   end
 
   it "should call view with the symbol" do
-    body.should == "vsym"
+    body.must_equal "vsym"
   end
 
   it "should not affect other return types" do
-    body("/string").should == 'string'
-    body("/foo").should == ''
+    body("/string").must_equal 'string'
+    body("/foo").must_equal ''
   end
 end

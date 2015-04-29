@@ -7,8 +7,8 @@ describe "response #[] and #[]=" do
       response['foo'] + response.headers['foo']
     end
 
-    header('foo').should == "bar"
-    body.should == 'barbar'
+    header('foo').must_equal "bar"
+    body.must_equal 'barbar'
   end
 end
 
@@ -19,8 +19,8 @@ describe "response #headers and #body" do
       response.write response.body.is_a?(Array)
     end
 
-    header('foo').should == "bar"
-    body.should == 'true'
+    header('foo').must_equal "bar"
+    body.must_equal 'true'
   end
 end
 
@@ -31,7 +31,7 @@ describe "response #write" do
       response.write 'b'
     end
 
-    body.should == 'ab'
+    body.must_equal 'ab'
   end
 end
 
@@ -42,7 +42,7 @@ describe "response #finish" do
       "#{s}#{h['Content-Type']}#{b.length}"
     end
 
-    body.should == '404text/html0'
+    body.must_equal '404text/html0'
   end
 
   it "should set status to 200 if body has been written to" do
@@ -52,17 +52,17 @@ describe "response #finish" do
       response.write "#{s}#{h['Content-Type']}#{b.length}"
     end
 
-    body.should == 'a200text/html1'
+    body.must_equal 'a200text/html1'
   end
 
   it "should set Content-Length header" do
     app do |r|
       response.write 'a'
-      response['Content-Length'].should == nil
+      response['Content-Length'].must_equal nil
       throw :halt, response.finish
     end
 
-    header('Content-Length').should == '1'
+    header('Content-Length').must_equal '1'
   end
 
   it "should not overwrite existing status" do
@@ -72,7 +72,7 @@ describe "response #finish" do
       "#{s}#{h['Content-Type']}#{b.length}"
     end
 
-    body.should == '500text/html0'
+    body.must_equal '500text/html0'
   end
 end
 
@@ -82,7 +82,7 @@ describe "response #finish_with_body" do
       throw :halt, response.finish_with_body(['123'])
     end
 
-    body.should == '123'
+    body.must_equal '123'
   end
 
   it "should set status to 200 if status has not been set" do
@@ -90,17 +90,17 @@ describe "response #finish_with_body" do
       throw :halt, response.finish_with_body([])
     end
 
-    status.should == 200
+    status.must_equal 200
   end
 
   it "should not set Content-Length header" do
     app do |r|
       response.write 'a'
-      response['Content-Length'].should == nil
+      response['Content-Length'].must_equal nil
       throw :halt, response.finish_with_body(['123'])
     end
 
-    header('Content-Length').should == nil
+    header('Content-Length').must_equal nil
   end
 
   it "should not overwrite existing status" do
@@ -109,7 +109,7 @@ describe "response #finish_with_body" do
       throw :halt, response.finish_with_body(['123'])
     end
 
-    status.should == 500
+    status.must_equal 500
   end
 end
 
@@ -124,10 +124,10 @@ describe "response #redirect" do
       end
     end
 
-    status('/a').should == 303
-    status.should == 302
-    header('Location', '/a').should == '/foo'
-    header('Location').should == '/bar'
+    status('/a').must_equal 303
+    status.must_equal 302
+    header('Location', '/a').must_equal '/foo'
+    header('Location').must_equal '/bar'
   end
 end
 
@@ -143,8 +143,8 @@ describe "response #empty?" do
       end
     end
 
-    header('foo', '/a').should == 'true'
-    header('foo').should == 'false'
+    header('foo', '/a').must_equal 'true'
+    header('foo').must_equal 'false'
   end
 end
 
@@ -161,7 +161,7 @@ describe "response #inspect" do
       end
     end
 
-    body.should == '#<Foo::RodaResponse 200 {} []>'
+    body.must_equal '#<Foo::RodaResponse 200 {} []>'
   end
 end
 
@@ -172,6 +172,6 @@ describe "roda_class" do
       response.class.roda_class.opts[:a] + response.roda_class.opts[:a]
     end
 
-    body.should ==  "aa"
+    body.must_equal  "aa"
   end
 end

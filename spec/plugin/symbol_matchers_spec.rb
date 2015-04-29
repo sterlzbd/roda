@@ -45,29 +45,29 @@ describe "symbol_matchers plugin" do
       end
     end
 
-    status.should == 404
-    body("/1").should == 'd1'
-    body("/11232135").should == 'd11232135'
-    body("/a").should == 'wa'
-    body("/1az0").should == 'w1az0'
-    body("/f").should == 'ff'
-    body("/foo").should == 'foonil'
-    body("/foo/123").should == 'foo"123"'
-    status("/foo/bar").should == 404
-    status("/foo/123/a").should == 404
-    body("/bar").should == 'barnil'
-    body("/bar/foo").should == 'bar"foo"'
-    status("/bar/foo/baz").should == 404
-    body("/format").should == 'formatnil'
-    body("/format.json").should == 'format"json"'
-    status("/format.").should == 404
-    body("/ffffffffffffffff").should == 'fffffffffffffffff'
-    status("/-").should == 404
-    body("/1/1a/f").should == 'dwf11af'
-    body("/12/1azy/fffff").should == 'dwf121azyfffff'
-    status("/1/f/a").should == 404
-    body("/qa/b/c/d//f/g").should == 'resta/b/c/d//f/g'
-    body('/q').should == 'rest'
-    body('/thing/q').should == 'thingq'
+    status.must_equal 404
+    body("/1").must_equal 'd1'
+    body("/11232135").must_equal 'd11232135'
+    body("/a").must_equal 'wa'
+    body("/1az0").must_equal 'w1az0'
+    body("/f").must_equal 'ff'
+    body("/foo").must_equal 'foonil'
+    body("/foo/123").must_equal 'foo"123"'
+    status("/foo/bar").must_equal 404
+    status("/foo/123/a").must_equal 404
+    body("/bar").must_equal 'barnil'
+    body("/bar/foo").must_equal 'bar"foo"'
+    status("/bar/foo/baz").must_equal 404
+    body("/format").must_equal 'formatnil'
+    body("/format.json").must_equal 'format"json"'
+    status("/format.").must_equal 404
+    body("/ffffffffffffffff").must_equal 'fffffffffffffffff'
+    status("/-").must_equal 404
+    body("/1/1a/f").must_equal 'dwf11af'
+    body("/12/1azy/fffff").must_equal 'dwf121azyfffff'
+    status("/1/f/a").must_equal 404
+    body("/qa/b/c/d//f/g").must_equal 'resta/b/c/d//f/g'
+    body('/q').must_equal 'rest'
+    body('/thing/q').must_equal 'thingq'
   end
 end

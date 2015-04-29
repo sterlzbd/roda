@@ -6,6 +6,6 @@ describe "h plugin" do
       h("<form>") + h(:form)
     end
 
-    body.should == '&lt;form&gt;form'
+    body.must_equal '&lt;form&gt;form'
   end
 end

@@ -1,5 +1,6 @@
 require "rake"
 require "rake/clean"
+require 'rake/testtask'
 
 NAME = 'roda'
 VERS = lambda do
@@ -66,53 +67,29 @@ end
 
 ### Specs
 
-begin
-  begin
-    raise LoadError if ENV['RSPEC1']
-    # RSpec 2
-    require "rspec/core/rake_task"
-    spec_class = RSpec::Core::RakeTask
-    spec_files_meth = :pattern=
-  rescue LoadError
-    # RSpec 1
-    require "spec/rake/spectask"
-    spec_class = Spec::Rake::SpecTask
-    spec_files_meth = :spec_files=
-  end
+spec = proc do |env|
+  env.each{|k,v| ENV[k] = v}
+  sh "#{FileUtils::RUBY} -rubygems -I lib -e 'ARGV.each{|f| require f}' ./spec/*_spec.rb ./spec/plugin/*_spec.rb"
+  env.each{|k,v| ENV.delete(k)}
+end
 
-  spec = lambda do |name, files, d|
-    lib_dir = File.join(File.dirname(File.expand_path(__FILE__)), 'lib')
-    ENV['RUBYLIB'] ? (ENV['RUBYLIB'] += ":#{lib_dir}") : (ENV['RUBYLIB'] = lib_dir)
+desc "Run specs"
+task "spec" do
+  spec.call({})
+end
 
-    desc "#{d} with -w, some warnings filtered"
-    task "#{name}_w" do
-      ENV['RUBYOPT'] ? (ENV['RUBYOPT'] += " -w") : (ENV['RUBYOPT'] = '-w')
-      rake = ENV['RAKE'] || "#{FileUtils::RUBY} -S rake"
-      sh "#{rake} #{name} 2>&1 | egrep -v \"(spec/.*: warning: (possibly )?useless use of == in void context|: warning: instance variable @.* not initialized|: warning: method redefined; discarding old|: warning: previous definition of)|rspec\""
-    end
+task :default=>:spec
 
-    desc d
-    spec_class.new(name) do |t|
-      t.send spec_files_meth, files
-      t.spec_opts = ENV["#{NAME.upcase}_SPEC_OPTS"].split if ENV["#{NAME.upcase}_SPEC_OPTS"]
-    end
-  end
-
-  spec_with_cov = lambda do |name, files, d|
-    spec.call(name, files, d)
-    desc "#{d} with coverage"
-    task "#{name}_cov" do
-      ENV['COVERAGE'] = '1'
-      Rake::Task[name].invoke
-    end
-  end
+desc "Run specs with coverage"
+task "spec_cov" do
+  spec.call('COVERAGE'=>'1')
+end
   
-  task :default => [:spec]
-  spec_with_cov.call("spec", Dir["spec/*_spec.rb"] + Dir["spec/plugin/*_spec.rb"], "Run specs")
-rescue LoadError
-  task :default do
-    puts "Must install rspec to run the default task (which runs specs)"
-  end
+desc "Run specs with -w, some warnings filtered"
+task "spec_w" do
+  ENV['RUBYOPT'] ? (ENV['RUBYOPT'] += " -w") : (ENV['RUBYOPT'] = '-w')
+  rake = ENV['RAKE'] || "#{FileUtils::RUBY} -S rake"
+  sh %{#{rake} 2>&1 | egrep -v \": warning: instance variable @.* not initialized|: warning: method redefined; discarding old|: warning: previous definition of)"}
 end
 
 ### Other

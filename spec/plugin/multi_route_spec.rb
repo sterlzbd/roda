@@ -66,72 +66,72 @@ describe "multi_route plugin" do
   end
 
   it "adds named routing support" do
-    body.should == 'get'
-    body('REQUEST_METHOD'=>'POST').should == 'post'
-    body('/a').should == 'geta'
-    body('/a', 'REQUEST_METHOD'=>'POST').should == 'posta'
-    body('/b').should == 'getb'
-    body('/b', 'REQUEST_METHOD'=>'POST').should == 'postb'
-    status('/c').should == 404
-    status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+    body.must_equal 'get'
+    body('REQUEST_METHOD'=>'POST').must_equal 'post'
+    body('/a').must_equal 'geta'
+    body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'posta'
+    body('/b').must_equal 'getb'
+    body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'postb'
+    status('/c').must_equal 404
+    status('/c', 'REQUEST_METHOD'=>'POST').must_equal 404
   end
 
   it "works when freezing the app" do
     app.freeze
-    body.should == 'get'
-    body('REQUEST_METHOD'=>'POST').should == 'post'
-    body('/a').should == 'geta'
-    body('/a', 'REQUEST_METHOD'=>'POST').should == 'posta'
-    body('/b').should == 'getb'
-    body('/b', 'REQUEST_METHOD'=>'POST').should == 'postb'
-    status('/c').should == 404
-    status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+    body.must_equal 'get'
+    body('REQUEST_METHOD'=>'POST').must_equal 'post'
+    body('/a').must_equal 'geta'
+    body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'posta'
+    body('/b').must_equal 'getb'
+    body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'postb'
+    status('/c').must_equal 404
+    status('/c', 'REQUEST_METHOD'=>'POST').must_equal 404
 
-    proc{app.route("foo"){}}.should raise_error
+    proc{app.route("foo"){}}.must_raise FrozenError
   end
 
   it "uses multi_route to dispatch to any named route" do
-    status('/foo').should == 404
-    body('/foo/get/').should == 'get'
-    body('/foo/get/a').should == 'geta'
-    body('/foo/post/').should == 'post'
-    body('/foo/post/a').should == 'posta'
-    body('/foo/post/b').should == 'foo'
+    status('/foo').must_equal 404
+    body('/foo/get/').must_equal 'get'
+    body('/foo/get/a').must_equal 'geta'
+    body('/foo/post/').must_equal 'post'
+    body('/foo/post/a').must_equal 'posta'
+    body('/foo/post/b').must_equal 'foo'
   end
 
   it "does not have multi_route match non-String named routes" do
-    body('/foo/p').should == 'p'
-    status('/foo/p/2').should == 404
+    body('/foo/p').must_equal 'p'
+    status('/foo/p/2').must_equal 404
   end
 
   it "has multi_route pick up routes newly added" do
-    body('/foo/get/').should == 'get'
-    status('/foo/delete').should == 404
+    body('/foo/get/').must_equal 'get'
+    status('/foo/delete').must_equal 404
     app.route('delete'){|r| r.on{'delete'}}
-    body('/foo/delete').should == 'delete'
+    body('/foo/delete').must_equal 'delete'
   end
 
   it "makes multi_route match longest route if multiple routes have the same prefix" do
     app.route("post/a"){|r| r.on{"pa2"}}
     app.route("get/a"){|r| r.on{"ga2"}}
-    status('/foo').should == 404
-    body('/foo/get/').should == 'get'
-    body('/foo/get/a').should == 'ga2'
-    body('/foo/post/').should == 'post'
-    body('/foo/post/a').should == 'pa2'
-    body('/foo/post/b').should == 'foo'
+    status('/foo').must_equal 404
+    body('/foo/get/').must_equal 'get'
+    body('/foo/get/a').must_equal 'ga2'
+    body('/foo/post/').must_equal 'post'
+    body('/foo/post/a').must_equal 'pa2'
+    body('/foo/post/b').must_equal 'foo'
   end
 
   it "handles loading the plugin multiple times correctly" do
     app.plugin :multi_route
-    body.should == 'get'
-    body('REQUEST_METHOD'=>'POST').should == 'post'
-    body('/a').should == 'geta'
-    body('/a', 'REQUEST_METHOD'=>'POST').should == 'posta'
-    body('/b').should == 'getb'
-    body('/b', 'REQUEST_METHOD'=>'POST').should == 'postb'
-    status('/c').should == 404
-    status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+    body.must_equal 'get'
+    body('REQUEST_METHOD'=>'POST').must_equal 'post'
+    body('/a').must_equal 'geta'
+    body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'posta'
+    body('/b').must_equal 'getb'
+    body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'postb'
+    status('/c').must_equal 404
+    status('/c', 'REQUEST_METHOD'=>'POST').must_equal 404
   end
 
   it "handles subclassing correctly" do
@@ -153,20 +153,20 @@ describe "multi_route plugin" do
       end
     end
 
-    body.should == 'post'
-    body('REQUEST_METHOD'=>'POST').should == 'get'
-    body('/a').should == 'posta'
-    body('/a', 'REQUEST_METHOD'=>'POST').should == 'geta'
-    body('/b').should == '1b'
-    body('/b', 'REQUEST_METHOD'=>'POST').should == '2b'
-    status('/c').should == 404
-    status('/c', 'REQUEST_METHOD'=>'POST').should == 404
+    body.must_equal 'post'
+    body('REQUEST_METHOD'=>'POST').must_equal 'get'
+    body('/a').must_equal 'posta'
+    body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'geta'
+    body('/b').must_equal '1b'
+    body('/b', 'REQUEST_METHOD'=>'POST').must_equal '2b'
+    status('/c').must_equal 404
+    status('/c', 'REQUEST_METHOD'=>'POST').must_equal 404
   end
 
   it "uses the named route return value in multi_route if no block is given" do
     app.route{|r| r.multi_route}
-    body('/get').should == 'getd'
-    body('/post').should == 'postd'
+    body('/get').must_equal 'getd'
+    body('/post').must_equal 'postd'
   end
 end
 
@@ -176,7 +176,7 @@ describe "multi_route plugin" do
       r.multi_route
       'a'
     end
-    body.should == 'a'
+    body.must_equal 'a'
   end
 end
 
@@ -223,12 +223,12 @@ describe "multi_route plugin" do
       r.on("bar"){r.route("bar")}
     end
 
-    body('/foo').should == 'f'
-    body('/foo/foo').should == 'fff'
-    body('/foo/bar').should == 'ffb'
-    body('/bar').should == 'b'
-    body('/bar/foo').should == 'bbf'
-    body('/bar/bar').should == 'bbb'
+    body('/foo').must_equal 'f'
+    body('/foo/foo').must_equal 'fff'
+    body('/foo/bar').must_equal 'ffb'
+    body('/bar').must_equal 'b'
+    body('/bar/foo').must_equal 'bbf'
+    body('/bar/bar').must_equal 'bbb'
   end
 
   it "handles namespaces in r.multi_route" do
@@ -248,11 +248,11 @@ describe "multi_route plugin" do
       r.multi_route
     end
 
-    body('/foo').should == 'f'
-    body('/foo/foo').should == 'fff'
-    body('/foo/bar').should == 'ffb'
-    body('/bar').should == 'b'
-    body('/bar/foo').should == 'bbf'
-    body('/bar/bar').should == 'bbb'
+    body('/foo').must_equal 'f'
+    body('/foo/foo').must_equal 'fff'
+    body('/foo/bar').must_equal 'ffb'
+    body('/bar').must_equal 'b'
+    body('/bar/foo').must_equal 'bbf'
+    body('/bar/bar').must_equal 'bbb'
   end
 end

@@ -16,22 +16,22 @@ describe "path_rewriter plugin" do
       end
     end
 
-    body('/a').should == '/a:/b'
-    body('/a/f').should == '/a/f:/b/f'
-    body('/b').should == '/b:/b'
-    body('/c').should == '/d:/d'
-    body('/c/f').should == '/d/f:/d/f'
-    body('/d').should == '/d:/d'
-    body('/e').should == '/e:/f'
-    body('/e/g').should == '/e/g:/e/g'
-    body('/1').should == '/1:/b'
-    body('/1/f').should == '/1/f:/b/f'
-    body('/2').should == '/1:/b'
-    body('/2/f').should == '/1/f:/b/f'
-    body('/3').should == '/g:/g'
+    body('/a').must_equal '/a:/b'
+    body('/a/f').must_equal '/a/f:/b/f'
+    body('/b').must_equal '/b:/b'
+    body('/c').must_equal '/d:/d'
+    body('/c/f').must_equal '/d/f:/d/f'
+    body('/d').must_equal '/d:/d'
+    body('/e').must_equal '/e:/f'
+    body('/e/g').must_equal '/e/g:/e/g'
+    body('/1').must_equal '/1:/b'
+    body('/1/f').must_equal '/1/f:/b/f'
+    body('/2').must_equal '/1:/b'
+    body('/2/f').must_equal '/1/f:/b/f'
+    body('/3').must_equal '/g:/g'
     
     app.freeze
-    body('/a').should == '/a:/b'
-    proc{app.rewrite_path '/a', '/b'}.should raise_error
+    body('/a').must_equal '/a:/b'
+    proc{app.rewrite_path '/a', '/b'}.must_raise FrozenError
   end
 end

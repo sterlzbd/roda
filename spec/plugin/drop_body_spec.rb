@@ -8,13 +8,13 @@ describe "drop_body plugin" do
     end
 
     [101, 102, 204, 205, 304].each do  |i|
-      body(i.to_s).should == ''
-      header('Content-Type', i.to_s).should == nil
-      header('Content-Length', i.to_s).should == nil
+      body(i.to_s).must_equal ''
+      header('Content-Type', i.to_s).must_equal nil
+      header('Content-Length', i.to_s).must_equal nil
     end
 
-    body('200').should == 'a'
-    header('Content-Type', '200').should == 'text/html'
-    header('Content-Length', '200').should == '1'
+    body('200').must_equal 'a'
+    header('Content-Type', '200').must_equal 'text/html'
+    header('Content-Length', '200').must_equal '1'
   end
 end

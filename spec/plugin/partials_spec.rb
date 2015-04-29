@@ -28,15 +28,15 @@ else
     end
 
     it "partial renders without layout, and prepends _ to template" do
-      body("/partial").strip.should == "<h1>About Roda</h1>"
+      body("/partial").strip.must_equal "<h1>About Roda</h1>"
     end
 
     it "partial renders without layout, and prepends _ to template" do
-      body("/partial/subdir").strip.should == "<h1>Subdir: About Roda</h1>"
+      body("/partial/subdir").strip.must_equal "<h1>Subdir: About Roda</h1>"
     end
 
     it "partial handles inline partials" do
-      body("/partial/inline").strip.should == "Hello Agent Smith"
+      body("/partial/inline").strip.must_equal "Hello Agent Smith"
     end
 
   end

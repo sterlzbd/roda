@@ -11,8 +11,8 @@ describe "default_headers plugin" do
       end
     end
 
-    req[1].should == h
-    req[1].should_not equal(h)
+    req[1].must_equal h
+    req[1].wont_be_same_as h 
   end
 
   it "should not override existing default headers" do
@@ -27,7 +27,7 @@ describe "default_headers plugin" do
       end
     end
 
-    req[1].should == h
+    req[1].must_equal h
   end
 
   it "should allow modifying the default headers by reloading the plugin" do
@@ -40,7 +40,7 @@ describe "default_headers plugin" do
       end
     end
 
-    req[1].should == {'Content-Type'=>'text/json', 'Foo'=>'baz'}
+    req[1].must_equal('Content-Type'=>'text/json', 'Foo'=>'baz')
   end
 
   it "should have a default Content-Type header" do
@@ -54,7 +54,7 @@ describe "default_headers plugin" do
       end
     end
 
-    req[1].should == {'Content-Type'=>'text/html', 'Foo'=>'bar'}
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar')
   end
 
   it "should work correctly in subclasses" do
@@ -70,6 +70,6 @@ describe "default_headers plugin" do
 
     @app = Class.new(@app)
 
-    req[1].should == h
+    req[1].must_equal h
   end
 end

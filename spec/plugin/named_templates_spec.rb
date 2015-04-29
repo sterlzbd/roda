@@ -25,9 +25,9 @@ describe "named_templates plugin" do
       end
     end
 
-    body.should == 'bar13-foo12-baz'
+    body.must_equal 'bar13-foo12-baz'
     @app = Class.new(@app)
-    body.should == 'bar13-foo12-baz'
+    body.must_equal 'bar13-foo12-baz'
   end
 
   it "works when freezing the app" do
@@ -50,9 +50,9 @@ describe "named_templates plugin" do
     end
 
     app.freeze
-    body.should == 'bar13-foo12-baz'
+    body.must_equal 'bar13-foo12-baz'
 
-    proc{app.template(:b){"a"}}.should raise_error
+    proc{app.template(:b){"a"}}.must_raise FrozenError
   end
 
   it "works with the view_subdirs plugin" do
@@ -89,8 +89,8 @@ describe "named_templates plugin" do
       end
     end
 
-    body('/foo').should == 'foo13-foobar12-baz'
-    body('/bar').should == 'bar43-barfoo42-baz'
+    body('/foo').must_equal 'foo13-foobar12-baz'
+    body('/bar').must_equal 'bar43-barfoo42-baz'
   end
 end
 end

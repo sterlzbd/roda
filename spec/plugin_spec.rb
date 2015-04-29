@@ -57,7 +57,7 @@ describe "plugins" do
       end
     end
 
-    body('/hello').should == 'Foo aDefault'
+    body('/hello').must_equal 'Foo aDefault'
   end
 
   it "should support registering plugins and loading them by symbol" do
@@ -66,6 +66,6 @@ describe "plugins" do
       a
     end
 
-    body.should == '1'
+    body.must_equal '1'
   end
 end

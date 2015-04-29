@@ -9,7 +9,7 @@ describe "shared_vars plugin" do
       r.run old_app
     end
 
-    body.should == 'c'
+    body.must_equal 'c'
   end
 
   it "adds shared with hash merges the hash into the shared vars" do
@@ -18,7 +18,7 @@ describe "shared_vars plugin" do
       shared[:c]
     end
 
-    body.should == 'c'
+    body.must_equal 'c'
   end
 
   it "calling shared with hash and a block sets shared variables only for that block" do
@@ -33,13 +33,13 @@ describe "shared_vars plugin" do
       "#{shared[:c]}:#{shared[:d]}:#{c}:#{d}"
     end
 
-    body.should == 'b::c:d'
+    body.must_equal 'b::c:d'
   end
 
   it "calling shared with no arguments and a block raises an error" do
     app(:shared_vars) do |r|
       shared{}
     end
-    proc{body}.should raise_error(Roda::RodaError)
+    proc{body}.must_raise(Roda::RodaError)
   end
 end

@@ -16,7 +16,7 @@ describe "match_affix plugin" do
       end
     end
 
-    body("/albums/a/1").should == 'albums-/'
-    body("/albums/b/1").should == 'b-/-1-""'
+    body("/albums/a/1").must_equal 'albums-/'
+    body("/albums/b/1").must_equal 'b-/-1-""'
   end
 end

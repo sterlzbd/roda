@@ -11,10 +11,10 @@ describe "heartbeat plugin" do
       end
     end
 
-    body('/a').should == 'a'
-    status.should == 404
-    status('/heartbeat').should == 200
-    body('/heartbeat').should == 'OK'
+    body('/a').must_equal 'a'
+    status.must_equal 404
+    status('/heartbeat').must_equal 200
+    body('/heartbeat').must_equal 'OK'
   end
 
   it "should support custom heartbeat paths" do
@@ -27,11 +27,11 @@ describe "heartbeat plugin" do
       end
     end
 
-    body('/a').should == 'a'
-    status.should == 404
-    status('/heartbeat').should == 404
-    status('/heartbeat2').should == 200
-    body('/heartbeat2').should == 'OK'
+    body('/a').must_equal 'a'
+    status.must_equal 404
+    status('/heartbeat').must_equal 404
+    status('/heartbeat2').must_equal 200
+    body('/heartbeat2').must_equal 'OK'
   end
 
   it "should work when using sessions" do
@@ -47,10 +47,10 @@ describe "heartbeat plugin" do
       end
     end
 
-    body('/a').should == 'a'
-    status.should == 404
-    status('/heartbeat').should == 200
-    body('/heartbeat').should == 'OK'
+    body('/a').must_equal 'a'
+    status.must_equal 404
+    status('/heartbeat').must_equal 200
+    body('/heartbeat').must_equal 'OK'
   end
 
   it "should work when redirecting" do
@@ -65,10 +65,10 @@ describe "heartbeat plugin" do
       end
     end
 
-    body('/a').should == 'a'
-    status.should == 302
-    status('/heartbeat').should == 200
-    body('/heartbeat').should == 'OK'
+    body('/a').must_equal 'a'
+    status.must_equal 302
+    status('/heartbeat').must_equal 200
+    body('/heartbeat').must_equal 'OK'
   end
 end
 

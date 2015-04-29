@@ -18,10 +18,10 @@ describe "error_handler plugin" do
       end
     end
 
-    body("/a").should == 'found'
-    status("/a").should == 200
-    body.should == 'bad idea'
-    status.should == 500
+    body("/a").must_equal 'found'
+    status("/a").must_equal 200
+    body.must_equal 'bad idea'
+    status.must_equal 500
   end
 
   it "executes on SyntaxError exceptions" do
@@ -41,10 +41,10 @@ describe "error_handler plugin" do
       end
     end
 
-    body("/a").should == 'found'
-    status("/a").should == 200
-    body.should == 'bad idea'
-    status.should == 500
+    body("/a").must_equal 'found'
+    status("/a").must_equal 200
+    body.must_equal 'bad idea'
+    status.must_equal 500
   end
 
   it "can override status inside error block" do
@@ -59,7 +59,7 @@ describe "error_handler plugin" do
       end
     end
 
-    status.should == 501
+    status.must_equal 501
   end
 
   it "calculates correct Content-Length" do
@@ -73,7 +73,7 @@ describe "error_handler plugin" do
       end
     end
 
-    header('Content-Length').should == "1"
+    header('Content-Length').must_equal "1"
   end
 
   it "clears existing headers" do
@@ -89,8 +89,8 @@ describe "error_handler plugin" do
       end
     end
 
-    header('Content-Type').should == 'text/html'
-    header('Foo').should == nil
+    header('Content-Type').must_equal 'text/html'
+    header('Foo').must_equal nil
   end
 
   it "can set error via the plugin block" do
@@ -104,7 +104,7 @@ describe "error_handler plugin" do
       end
     end
 
-    body.should == 'bad idea'
+    body.must_equal 'bad idea'
   end
 
   it "has default error handler also raise" do
@@ -116,6 +116,6 @@ describe "error_handler plugin" do
       end
     end
 
-    proc{req}.should raise_error(ArgumentError)
+    proc{req}.must_raise(ArgumentError)
   end
 end

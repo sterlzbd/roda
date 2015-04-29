@@ -7,18 +7,18 @@ describe "environments plugin" do
   end
 
   it "adds environment accessor for getting/setting the environment" do
-    app.environment.should == :development
+    app.environment.must_equal :development
     app.environment = :test
-    app.environment.should == :test
+    app.environment.must_equal :test
     
     app.plugin :environments, :production
-    app.environment.should == :production
+    app.environment.must_equal :production
   end
 
   it "adds predicates for testing the environment" do
-    app.development?.should == true
-    app.test?.should == false
-    app.production?.should == false
+    app.development?.must_equal true
+    app.test?.must_equal false
+    app.production?.must_equal false
   end
 
   it "adds configure method which yields if no arguments are given or an environment matches" do
@@ -26,6 +26,6 @@ describe "environments plugin" do
     app.configure{a << 1}
     app.configure(:development){|ap| a << ap}
     app.configure(:test, :production){a << 2}
-    a.should == [1, app]
+    a.must_equal [1, app]
   end
 end

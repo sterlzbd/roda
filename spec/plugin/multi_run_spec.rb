@@ -9,24 +9,24 @@ describe "multi_run plugin" do
 
     app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}
 
-    body("/a").should == 'a1'
-    body("/b").should == 'c'
-    body("/b/a").should == 'c'
-    body.should == 'c'
+    body("/a").must_equal 'a1'
+    body("/b").must_equal 'c'
+    body("/b/a").must_equal 'c'
+    body.must_equal 'c'
 
     app.run "b", Class.new(Roda).class_eval{route{"b1"}; app}
 
-    body("/a").should == 'a1'
-    body("/b").should == 'b1'
-    body("/b/a").should == 'b1'
-    body.should == 'c'
+    body("/a").must_equal 'a1'
+    body("/b").must_equal 'b1'
+    body("/b/a").must_equal 'b1'
+    body.must_equal 'c'
 
     app.run "b/a", Class.new(Roda).class_eval{route{"b2"}; app}
 
-    body("/a").should == 'a1'
-    body("/b").should == 'b1'
-    body("/b/a").should == 'b2'
-    body.should == 'c'
+    body("/a").must_equal 'a1'
+    body("/b").must_equal 'b1'
+    body("/b/a").must_equal 'b2'
+    body.must_equal 'c'
   end
 
   it "works when freezing the app" do
@@ -40,12 +40,12 @@ describe "multi_run plugin" do
     app.run "b/a", Class.new(Roda).class_eval{route{"b2"}; app}
     app.freeze
 
-    body("/a").should == 'a1'
-    body("/b").should == 'b1'
-    body("/b/a").should == 'b2'
-    body.should == 'c'
+    body("/a").must_equal 'a1'
+    body("/b").must_equal 'b1'
+    body("/b/a").must_equal 'b2'
+    body.must_equal 'c'
 
-    proc{app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}}.should raise_error
+    proc{app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}}.must_raise FrozenError
   end
 
   it "works when subclassing" do
@@ -55,7 +55,7 @@ describe "multi_run plugin" do
     end
 
     app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}
-    body("/a").should == 'a1'
+    body("/a").must_equal 'a1'
 
     a = app
     @app = Class.new(a)
@@ -63,10 +63,10 @@ describe "multi_run plugin" do
     a.run "b", Class.new(Roda).class_eval{route{"b2"}; app}
     app.run "b", Class.new(Roda).class_eval{route{"b1"}; app}
 
-    body("/a").should == 'a1'
-    body("/b").should == 'b1'
+    body("/a").must_equal 'a1'
+    body("/b").must_equal 'b1'
 
     @app = a
-    body("/b").should == 'b2'
+    body("/b").must_equal 'b2'
   end
 end

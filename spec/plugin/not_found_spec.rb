@@ -16,10 +16,10 @@ describe "not_found plugin" do
       end
     end
 
-    body.should == 'not found'
-    status.should == 404
-    body("/a").should == 'found'
-    status("/a").should == 200
+    body.must_equal 'not found'
+    status.must_equal 404
+    body("/a").must_equal 'found'
+    status("/a").must_equal 200
   end
 
   it "allows overriding status inside not_found" do
@@ -35,7 +35,7 @@ describe "not_found plugin" do
       end
     end
 
-    status.should == 403
+    status.must_equal 403
   end
 
   it "calculates correct Content-Length" do
@@ -47,7 +47,7 @@ describe "not_found plugin" do
       route{}
     end
 
-    header('Content-Length').should == "1"
+    header('Content-Length').must_equal "1"
   end
 
   it "clears existing headers" do
@@ -63,8 +63,8 @@ describe "not_found plugin" do
       end
     end
 
-    header('Content-Type').should == 'text/html'
-    header('Foo').should == nil
+    header('Content-Type').must_equal 'text/html'
+    header('Foo').must_equal nil
   end
 
   it "does not modify behavior if not_found is not called" do
@@ -74,8 +74,8 @@ describe "not_found plugin" do
       end
     end
 
-    body.should == ''
-    body("/a").should == 'found'
+    body.must_equal ''
+    body("/a").must_equal 'found'
   end
 
   it "can set not_found via the plugin block" do
@@ -91,8 +91,8 @@ describe "not_found plugin" do
       end
     end
 
-    body.should == 'not found'
-    body("/a").should == 'found'
+    body.must_equal 'not found'
+    body("/a").must_equal 'found'
   end
 
   it "does not modify behavior if body is not an array" do
@@ -108,7 +108,7 @@ describe "not_found plugin" do
       end
     end
 
-    body.should == ''
+    body.must_equal ''
   end
 
   it "does not modify behavior if body is not an empty array" do
@@ -123,6 +123,6 @@ describe "not_found plugin" do
       end
     end
 
-    body.should == 'a'
+    body.must_equal 'a'
   end
 end

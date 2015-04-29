@@ -30,20 +30,20 @@ describe "csrf plugin" do
     end
 
     io = StringIO.new
-    status('REQUEST_METHOD'=>'POST', 'rack.input'=>io).should == 403
-    body('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).should == 'bar'
+    status('REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 403
+    body('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 'bar'
 
     env = proc{|h| h['Set-Cookie'] ? {'HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", '')} : {}}
     s, h, b = req
-    s.should == 200
+    s.must_equal 200
     field = h['FIELD']
     token = Regexp.escape(h['TOKEN'])
-    h['TAG'].should =~ /\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/
-    h['METATAG'].should =~ /\A<meta name="#{field}" content="#{token}" \/>\z/
-    b.should == ['g']
+    h['TAG'].must_match /\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/
+    h['METATAG'].must_match /\A<meta name="#{field}" content="#{token}" \/>\z/
+    b.must_equal ['g']
     s, _, b = req('/', env[h].merge('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN']))
-    s.should == 200
-    b.should == ['p']
+    s.must_equal 200
+    b.must_equal ['p']
   end
 end
 end

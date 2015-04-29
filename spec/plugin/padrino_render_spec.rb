@@ -24,11 +24,11 @@ describe "padrino_render plugin" do
   end
 
   it "render uses layout by default" do
-    body("/render").strip.should == "<title>Roda: Home</title>\nbar"
+    body("/render").strip.must_equal "<title>Roda: Home</title>\nbar"
   end
 
   it "render doesn't use layout if layout is nil" do
-    body("/render/nolayout").strip.should == "<h1>No Layout</h1>"
+    body("/render/nolayout").strip.must_equal "<h1>No Layout</h1>"
   end
 end
 end

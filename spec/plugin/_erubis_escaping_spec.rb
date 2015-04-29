@@ -21,7 +21,7 @@ describe "_erubis_escaping plugin" do
       end
     end
 
-    body.should == '&lt;&gt; <>'
+    body.must_equal '&lt;&gt; <>'
   end
 
   it "should consider classes in :escape_safe_classes as safe" do
@@ -36,7 +36,7 @@ describe "_erubis_escaping plugin" do
       end
     end
 
-    body.should == '&lt;&gt; <>'
+    body.must_equal '&lt;&gt; <>'
   end
 
   it "should allow use of custom :escaper" do
@@ -52,7 +52,7 @@ describe "_erubis_escaping plugin" do
       end
     end
 
-    body.should == "ab''1 ab'1"
+    body.must_equal "ab''1 ab'1"
   end
 
   it "should allow for per-branch escaping via set_view options" do
@@ -70,8 +70,8 @@ describe "_erubis_escaping plugin" do
       end
     end
 
-    body('/a').should == '&lt;&gt;'
-    body.should == '<>'
+    body('/a').must_equal '&lt;&gt;'
+    body.must_equal '<>'
   end
 end
 end

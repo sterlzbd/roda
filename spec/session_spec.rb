@@ -10,7 +10,7 @@ describe "session handling" do
       end
     end
 
-    body.should =~ /use Rack::Session::Cookie/
+    body.must_match /use Rack::Session::Cookie/
   end
 
   it "should return session if available" do
@@ -26,10 +26,10 @@ describe "session handling" do
     end
 
     _, h, b = req
-    b.join.should == 'ab'
+    b.join.must_equal 'ab'
     _, h, b = req('HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", ''))
-    b.join.should == 'abb'
+    b.join.must_equal 'abb'
     _, h, b = req('HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", ''))
-    b.join.should == 'abbb'
+    b.join.must_equal 'abbb'
   end
 end

@@ -10,8 +10,8 @@ describe "path_matchers plugin" do
       end
     end
 
-    body("/css/reset.css").should == 'reset'
-    status("/css/reset.bar").should == 404
+    body("/css/reset.css").must_equal 'reset'
+    status("/css/reset.bar").must_equal 404
   end
 
   it ":suffix matcher should match given suffix" do
@@ -23,8 +23,8 @@ describe "path_matchers plugin" do
       end
     end
 
-    body("/css/reset.css").should == 'reset'
-    status("/css/reset.bar").should == 404
+    body("/css/reset.css").must_equal 'reset'
+    status("/css/reset.bar").must_equal 404
   end
 
   it ":prefix matcher should match given prefix" do
@@ -36,7 +36,7 @@ describe "path_matchers plugin" do
       end
     end
 
-    body("/css/reset.css").should == '.css'
-    status("/css/foo.bar").should == 404
+    body("/css/reset.css").must_equal '.css'
+    status("/css/foo.bar").must_equal 404
   end
 end

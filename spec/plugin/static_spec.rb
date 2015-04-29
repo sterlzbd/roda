@@ -10,8 +10,8 @@ describe "static plugin" do
       end
     end
 
-    body.should == 'a'
-    body('/about/_test.erb').should == File.read('spec/views/about/_test.erb')
+    body.must_equal 'a'
+    body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
   end
 
   it "respects the application's :root option" do
@@ -24,7 +24,7 @@ describe "static plugin" do
       end
     end
 
-    body.should == 'a'
-    body('/about/_test.erb').should == File.read('spec/views/about/_test.erb')
+    body.must_equal 'a'
+    body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
   end
 end

@@ -17,7 +17,7 @@ describe "delegate plugin" do
       end
     end
     
-    header('Content-Type').should == 'foo'
-    status('/foo').should == 404
+    header('Content-Type').must_equal 'foo'
+    status('/foo').must_equal 404
   end
 end

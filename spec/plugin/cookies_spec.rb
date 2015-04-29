@@ -8,8 +8,8 @@ describe "cookies plugin" do
       "Hello"
     end
 
-    header('Set-Cookie').should == "foo=bar\nbar=baz"
-    body.should == 'Hello'
+    header('Set-Cookie').must_equal "foo=bar\nbar=baz"
+    body.must_equal 'Hello'
   end
 
   it "should delete cookies on response" do
@@ -19,7 +19,7 @@ describe "cookies plugin" do
       "Hello"
     end
 
-    header('Set-Cookie').should =~ /foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/
-    body.should == 'Hello'
+    header('Set-Cookie').must_match /foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/
+    body.must_equal 'Hello'
   end
 end

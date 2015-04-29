@@ -40,27 +40,27 @@ describe "not_allowed plugin" do
       end
     end
 
-    body.should == 'a'
-    status('REQUEST_METHOD'=>'POST').should == 405
-    header('Allow', 'REQUEST_METHOD'=>'POST').should == 'GET'
+    body.must_equal 'a'
+    status('REQUEST_METHOD'=>'POST').must_equal 405
+    header('Allow', 'REQUEST_METHOD'=>'POST').must_equal 'GET'
 
-    body('/b').should == 'b'
-    status('/b', 'REQUEST_METHOD'=>'POST').should == 404
+    body('/b').must_equal 'b'
+    status('/b', 'REQUEST_METHOD'=>'POST').must_equal 404
 
-    body('/d').should == 'd'
-    status('/d', 'REQUEST_METHOD'=>'POST').should == 404
+    body('/d').must_equal 'd'
+    status('/d', 'REQUEST_METHOD'=>'POST').must_equal 404
 
-    body('/e').should == 'e'
-    status('/e', 'REQUEST_METHOD'=>'POST').should == 404
+    body('/e').must_equal 'e'
+    status('/e', 'REQUEST_METHOD'=>'POST').must_equal 404
 
-    body('/q').should == 'q'
-    status('/q', 'REQUEST_METHOD'=>'POST').should == 405
+    body('/q').must_equal 'q'
+    status('/q', 'REQUEST_METHOD'=>'POST').must_equal 405
 
-    body('/c').should == 'cg'
-    body('/c').should == 'cg'
-    body('/c', 'REQUEST_METHOD'=>'POST').should == 'cp'
-    body('/c', 'REQUEST_METHOD'=>'PATCH').should == 'c'
-    status('/c', 'REQUEST_METHOD'=>'PATCH').should == 405
-    header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').should == 'GET, POST'
+    body('/c').must_equal 'cg'
+    body('/c').must_equal 'cg'
+    body('/c', 'REQUEST_METHOD'=>'POST').must_equal 'cp'
+    body('/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'c'
+    status('/c', 'REQUEST_METHOD'=>'PATCH').must_equal 405
+    header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'GET, POST'
   end
 end

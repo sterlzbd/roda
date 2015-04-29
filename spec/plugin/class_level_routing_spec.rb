@@ -39,41 +39,41 @@ describe "class_level_routing plugin" do
   end
 
   it "adds class methods for setting up routes" do
-    body.should == 'root'
-    body('/foo').should == 'foo'
-    body('/foo/bar').should == 'foobar'
-    body('/dgo').should == 'bazgetgo'
-    body('/dgo', 'REQUEST_METHOD'=>'POST').should == 'bazpostgo'
-    body('/bar').should == "x-get-bar"
-    body('/bar', 'REQUEST_METHOD'=>'POST').should == "x-post-bar"
-    body('/bar', 'REQUEST_METHOD'=>'DELETE').should == "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').should == "x-head-bar"
-    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').should == "x-options-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PATCH').should == "x-patch-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PUT').should == "x-put-bar"
-    body('/bar', 'REQUEST_METHOD'=>'TRACE').should == "x-trace-bar"
+    body.must_equal 'root'
+    body('/foo').must_equal 'foo'
+    body('/foo/bar').must_equal 'foobar'
+    body('/dgo').must_equal 'bazgetgo'
+    body('/dgo', 'REQUEST_METHOD'=>'POST').must_equal 'bazpostgo'
+    body('/bar').must_equal "x-get-bar"
+    body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
+    body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
+    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
+    body('/bar', 'REQUEST_METHOD'=>'TRACE').must_equal "x-trace-bar"
     if ::Rack::Request.method_defined?("link?")
-      body('/bar', 'REQUEST_METHOD'=>'LINK').should == "x-link-bar"
-      body('/bar', 'REQUEST_METHOD'=>'UNLINK').should == "x-unlink-bar"
+      body('/bar', 'REQUEST_METHOD'=>'LINK').must_equal "x-link-bar"
+      body('/bar', 'REQUEST_METHOD'=>'UNLINK').must_equal "x-unlink-bar"
     end
 
-    status.should == 200
-    status("/asdfa/asdf").should == 404
+    status.must_equal 200
+    status("/asdfa/asdf").must_equal 404
 
     @app = Class.new(app)
-    body.should == 'root'
-    body('/foo').should == 'foo'
-    body('/foo/bar').should == 'foobar'
-    body('/dgo').should == 'bazgetgo'
-    body('/dgo', 'REQUEST_METHOD'=>'POST').should == 'bazpostgo'
-    body('/bar').should == "x-get-bar"
-    body('/bar', 'REQUEST_METHOD'=>'POST').should == "x-post-bar"
-    body('/bar', 'REQUEST_METHOD'=>'DELETE').should == "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').should == "x-head-bar"
-    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').should == "x-options-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PATCH').should == "x-patch-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PUT').should == "x-put-bar"
-    body('/bar', 'REQUEST_METHOD'=>'TRACE').should == "x-trace-bar"
+    body.must_equal 'root'
+    body('/foo').must_equal 'foo'
+    body('/foo/bar').must_equal 'foobar'
+    body('/dgo').must_equal 'bazgetgo'
+    body('/dgo', 'REQUEST_METHOD'=>'POST').must_equal 'bazpostgo'
+    body('/bar').must_equal "x-get-bar"
+    body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
+    body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
+    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
+    body('/bar', 'REQUEST_METHOD'=>'TRACE').must_equal "x-trace-bar"
   end
 
   it "only calls class level routes if routing tree doesn't handle request" do
@@ -97,19 +97,19 @@ describe "class_level_routing plugin" do
       end
     end
 
-    body.should == 'iroot'
-    body('/foo').should == 'ifoo'
-    body('/foo/bar').should == 'foobar'
-    body('/dgo').should == 'bazgetgo'
-    body('/dgo', 'REQUEST_METHOD'=>'POST').should == 'bazpostgo'
-    body('/bar').should == ""
-    body('/bar', 'REQUEST_METHOD'=>'POST').should == "ibar"
-    body('/bar', 'REQUEST_METHOD'=>'DELETE').should == "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').should == "x-head-bar"
-    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').should == "x-options-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PATCH').should == "x-patch-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PUT').should == "x-put-bar"
-    body('/bar', 'REQUEST_METHOD'=>'TRACE').should == "x-trace-bar"
+    body.must_equal 'iroot'
+    body('/foo').must_equal 'ifoo'
+    body('/foo/bar').must_equal 'foobar'
+    body('/dgo').must_equal 'bazgetgo'
+    body('/dgo', 'REQUEST_METHOD'=>'POST').must_equal 'bazpostgo'
+    body('/bar').must_equal ""
+    body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "ibar"
+    body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
+    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
+    body('/bar', 'REQUEST_METHOD'=>'TRACE').must_equal "x-trace-bar"
   end
 
   it "works with the not_found plugin if loaded before" do
@@ -117,48 +117,48 @@ describe "class_level_routing plugin" do
       "nf"
     end
 
-    body.should == 'root'
-    body('/foo').should == 'foo'
-    body('/foo/bar').should == 'foobar'
-    body('/dgo').should == 'bazgetgo'
-    body('/dgo', 'REQUEST_METHOD'=>'POST').should == 'bazpostgo'
-    body('/bar').should == "x-get-bar"
-    body('/bar', 'REQUEST_METHOD'=>'POST').should == "x-post-bar"
-    body('/bar', 'REQUEST_METHOD'=>'DELETE').should == "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').should == "x-head-bar"
-    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').should == "x-options-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PATCH').should == "x-patch-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PUT').should == "x-put-bar"
-    body('/bar', 'REQUEST_METHOD'=>'TRACE').should == "x-trace-bar"
+    body.must_equal 'root'
+    body('/foo').must_equal 'foo'
+    body('/foo/bar').must_equal 'foobar'
+    body('/dgo').must_equal 'bazgetgo'
+    body('/dgo', 'REQUEST_METHOD'=>'POST').must_equal 'bazpostgo'
+    body('/bar').must_equal "x-get-bar"
+    body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
+    body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
+    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
+    body('/bar', 'REQUEST_METHOD'=>'TRACE').must_equal "x-trace-bar"
 
-    status.should == 200
-    status("/asdfa/asdf").should == 404
-    body("/asdfa/asdf").should == "nf"
+    status.must_equal 200
+    status("/asdfa/asdf").must_equal 404
+    body("/asdfa/asdf").must_equal "nf"
   end
 
   it "works when freezing the app" do
     app.freeze
-    body.should == 'root'
-    body('/foo').should == 'foo'
-    body('/foo/bar').should == 'foobar'
-    body('/dgo').should == 'bazgetgo'
-    body('/dgo', 'REQUEST_METHOD'=>'POST').should == 'bazpostgo'
-    body('/bar').should == "x-get-bar"
-    body('/bar', 'REQUEST_METHOD'=>'POST').should == "x-post-bar"
-    body('/bar', 'REQUEST_METHOD'=>'DELETE').should == "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').should == "x-head-bar"
-    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').should == "x-options-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PATCH').should == "x-patch-bar"
-    body('/bar', 'REQUEST_METHOD'=>'PUT').should == "x-put-bar"
-    body('/bar', 'REQUEST_METHOD'=>'TRACE').should == "x-trace-bar"
+    body.must_equal 'root'
+    body('/foo').must_equal 'foo'
+    body('/foo/bar').must_equal 'foobar'
+    body('/dgo').must_equal 'bazgetgo'
+    body('/dgo', 'REQUEST_METHOD'=>'POST').must_equal 'bazpostgo'
+    body('/bar').must_equal "x-get-bar"
+    body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
+    body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
+    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
+    body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
+    body('/bar', 'REQUEST_METHOD'=>'TRACE').must_equal "x-trace-bar"
     if ::Rack::Request.method_defined?("link?")
-      body('/bar', 'REQUEST_METHOD'=>'LINK').should == "x-link-bar"
-      body('/bar', 'REQUEST_METHOD'=>'UNLINK').should == "x-unlink-bar"
+      body('/bar', 'REQUEST_METHOD'=>'LINK').must_equal "x-link-bar"
+      body('/bar', 'REQUEST_METHOD'=>'UNLINK').must_equal "x-unlink-bar"
     end
 
-    status.should == 200
-    status("/asdfa/asdf").should == 404
+    status.must_equal 200
+    status("/asdfa/asdf").must_equal 404
 
-    proc{app.on{}}.should raise_error
+    proc{app.on{}}.must_raise FrozenError
   end
 end

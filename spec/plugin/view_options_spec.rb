@@ -32,15 +32,15 @@ describe "view_options plugin view subdirs" do
   end
 
   it "should use set subdir if template name does not contain a slash" do
-    body("/home").strip.should == "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    body("/home").strip.must_equal "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
   it "should not use set subdir if template name contains a slash" do
-    body("/about").strip.should == "<h1>About Roda</h1>"
+    body("/about").strip.must_equal "<h1>About Roda</h1>"
   end
 
   it "should not change behavior when subdir is not set" do
-    body("/path").strip.should == "<h1>Path</h1>"
+    body("/path").strip.must_equal "<h1>Path</h1>"
   end
 end
 
@@ -54,7 +54,7 @@ describe "view_options plugin" do
       view('about')
     end
 
-    body.strip.should == "<title>Alternative Layout: Home</title>\n<h1>About Roda</h1>"
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>About Roda</h1>"
   end
 
   it "should merge multiple calls to set view and layout options and locals" do
@@ -72,7 +72,7 @@ describe "view_options plugin" do
       view('multiple')
     end
 
-    body.strip.should == "About Roda:A::Home:B"
+    body.strip.must_equal "About Roda:A::Home:B"
   end
 
   it "should have set_view_locals have more precedence than plugin options, but less than view/render method options" do
@@ -107,11 +107,11 @@ describe "view_options plugin" do
       end
     end
 
-    body('/c').strip.should == "About Roda:A::Home:B"
-    body('/b/a').strip.should == "Roda:AA::About:BB"
-    body('/b').strip.should == "Roda:AAA::About:BBB"
-    body('/a').strip.should == "About Roda:AA::Home:BB"
-    body.strip.should == "About Roda:AAA::Home:BBB"
+    body('/c').strip.must_equal "About Roda:A::Home:B"
+    body('/b/a').strip.must_equal "Roda:AA::About:BB"
+    body('/b').strip.must_equal "Roda:AAA::About:BBB"
+    body('/a').strip.must_equal "About Roda:AA::Home:BB"
+    body.strip.must_equal "About Roda:AAA::Home:BBB"
   end
 end
 end

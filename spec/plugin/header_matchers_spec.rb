@@ -8,8 +8,8 @@ describe "accept matcher" do
       end
     end
 
-    body("HTTP_ACCEPT" => "application/xml").should ==  "application/xml"
-    status.should == 404
+    body("HTTP_ACCEPT" => "application/xml").must_equal  "application/xml"
+    status.must_equal 404
   end
 end
 
@@ -21,8 +21,8 @@ describe "header matcher" do
       end
     end
 
-    body("HTTP_ACCEPT" => "application/xml").should ==  "bar"
-    status.should == 404
+    body("HTTP_ACCEPT" => "application/xml").must_equal  "bar"
+    status.must_equal 404
   end
 
   it "should yield the header value if :match_header_yield option is present" do
@@ -36,8 +36,8 @@ describe "header matcher" do
       end
     end
 
-    body("HTTP_ACCEPT" => "application/xml").should ==  "bar-application/xml"
-    status.should == 404
+    body("HTTP_ACCEPT" => "application/xml").must_equal  "bar-application/xml"
+    status.must_equal 404
   end
 end
 
@@ -49,8 +49,8 @@ describe "host matcher" do
       end
     end
 
-    body("HTTP_HOST" => "example.com").should == 'worked'
-    status("HTTP_HOST" => "foo.com").should == 404
+    body("HTTP_HOST" => "example.com").must_equal 'worked'
+    status("HTTP_HOST" => "foo.com").must_equal 404
   end
 
   it "should match a host with a regexp" do
@@ -60,8 +60,8 @@ describe "host matcher" do
       end
     end
 
-    body("HTTP_HOST" => "example.com").should == 'worked'
-    status("HTTP_HOST" => "foo.com").should == 404
+    body("HTTP_HOST" => "example.com").must_equal 'worked'
+    status("HTTP_HOST" => "foo.com").must_equal 404
   end
 
   it "doesn't yield HOST" do
@@ -71,7 +71,7 @@ describe "host matcher" do
       end
     end
 
-    body("HTTP_HOST" => "example.com").should == '0'
+    body("HTTP_HOST" => "example.com").must_equal '0'
   end
 end
 
@@ -83,8 +83,8 @@ describe "user_agent matcher" do
       end
     end
 
-    body("HTTP_USER_AGENT" => "chrome31").should ==  "a-chrome-31"
-    status.should == 404
+    body("HTTP_USER_AGENT" => "chrome31").must_equal  "a-chrome-31"
+    status.must_equal 404
   end
 end
 

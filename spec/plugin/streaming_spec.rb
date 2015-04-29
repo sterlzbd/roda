@@ -9,9 +9,9 @@ describe "streaming plugin" do
     end
 
     s, h, b = req
-    s.should == 200
-    h.should == {'Content-Type'=>'text/html'}
-    b.to_a.should == %w'a b c'
+    s.must_equal 200
+    h.must_equal('Content-Type'=>'text/html')
+    b.to_a.must_equal %w'a b c'
   end
 
   it "should handle errors when streaming, and run callbacks" do
@@ -25,11 +25,11 @@ describe "streaming plugin" do
     end
 
     s, h, b = req
-    s.should == 200
-    h.should == {'Content-Type'=>'text/html'}
+    s.must_equal 200
+    h.must_equal('Content-Type'=>'text/html')
     b.callback{a << 'd'}
-    proc{b.each{|v| a << v}}.should raise_error(Roda::RodaError)
-    a.should == %w'a b e d'
+    proc{b.each{|v| a << v}}.must_raise(Roda::RodaError)
+    a.must_equal %w'a b e d'
   end
 
   it "should handle :loop option to loop" do
@@ -43,10 +43,10 @@ describe "streaming plugin" do
     end
 
     s, h, b = req
-    s.should == 200
-    h.should == {'Content-Type'=>'text/html'}
+    s.must_equal 200
+    h.must_equal('Content-Type'=>'text/html')
     b.callback{a << 'd'}
-    proc{b.each{|v| a << v}}.should raise_error(Roda::RodaError)
-    a.should == %w'a b e d'
+    proc{b.each{|v| a << v}}.must_raise(Roda::RodaError)
+    a.must_equal %w'a b e d'
   end
 end

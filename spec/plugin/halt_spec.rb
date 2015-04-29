@@ -6,7 +6,7 @@ describe "halt plugin" do
       r.halt [200, {}, ['foo']]
     end
 
-    body.should ==  "foo"
+    body.must_equal  "foo"
   end
 
   it "should consider string argument as response body" do
@@ -14,7 +14,7 @@ describe "halt plugin" do
       r.halt "foo"
     end
 
-    body.should ==  "foo"
+    body.must_equal  "foo"
   end
 
   it "should consider integer argument as response status" do
@@ -22,7 +22,7 @@ describe "halt plugin" do
       r.halt 300
     end
 
-    status.should == 300 
+    status.must_equal 300 
   end
 
   it "should consider other single arguments similar to block bodies" do
@@ -34,7 +34,7 @@ describe "halt plugin" do
       end
     end
 
-    body.should ==  '{"a":1}'
+    body.must_equal  '{"a":1}'
   end
 
   it "should consider 2 arguments as response status and body" do
@@ -42,8 +42,8 @@ describe "halt plugin" do
       r.halt 300, "foo"
     end
 
-    status.should == 300 
-    body.should == "foo"
+    status.must_equal 300 
+    body.must_equal "foo"
   end
 
   it "should handle 2nd of 2 arguments similar to block bodies" do
@@ -55,8 +55,8 @@ describe "halt plugin" do
       end
     end
 
-    status.should == 300 
-    body.should ==  '{"a":1}'
+    status.must_equal 300 
+    body.must_equal  '{"a":1}'
   end
 
   it "should consider 3 arguments as response" do
@@ -64,9 +64,9 @@ describe "halt plugin" do
       r.halt 300, {'a'=>'b'}, "foo"
     end
 
-    status.should == 300 
-    header('a').should == 'b'
-    body.should == "foo"
+    status.must_equal 300 
+    header('a').must_equal 'b'
+    body.must_equal "foo"
   end
 
   it "should handle 3rd of 3 arguments similar to block bodies" do
@@ -78,9 +78,9 @@ describe "halt plugin" do
       end
     end
 
-    status.should == 300 
-    header('a').should == 'b'
-    body.should ==  '{"a":1}'
+    status.must_equal 300 
+    header('a').must_equal 'b'
+    body.must_equal  '{"a":1}'
   end
 
   it "should raise an error for too many arguments" do
@@ -88,7 +88,7 @@ describe "halt plugin" do
       r.halt 300, {'a'=>'b'}, "foo", 1
     end
 
-    proc{req}.should raise_error(Roda::RodaError)
+    proc{req}.must_raise(Roda::RodaError)
   end
 
   it "should raise an error for single argument not integer, String, or Array" do
@@ -96,6 +96,6 @@ describe "halt plugin" do
       r.halt('a'=>'b')
     end
 
-    proc{req}.should raise_error(Roda::RodaError)
+    proc{req}.must_raise(Roda::RodaError)
   end
 end

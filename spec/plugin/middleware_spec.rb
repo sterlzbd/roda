@@ -42,18 +42,18 @@ describe "middleware plugin" do
       end
     end
 
-    body('/a').should == 'a3'
-    body('/b').should == 'b3'
-    body('/a', 'REQUEST_METHOD'=>'POST').should == 'a2'
-    body('/b', 'REQUEST_METHOD'=>'POST').should == 'b2'
-    body('/a', 'REQUEST_METHOD'=>'PATCH').should == 'a2'
-    body('/b', 'REQUEST_METHOD'=>'PATCH').should == 'b1'
+    body('/a').must_equal 'a3'
+    body('/b').must_equal 'b3'
+    body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'a2'
+    body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'b2'
+    body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
+    body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
   end
 
   it "makes it still possible to use the Roda app normally" do
     app(:middleware) do
       "a"
     end
-    body.should == 'a'
+    body.must_equal 'a'
   end
 end

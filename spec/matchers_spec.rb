@@ -8,7 +8,7 @@ describe "capturing" do
       end
     end
 
-    body.should == '0'
+    body.must_equal '0'
   end
 
   it "doesn't yield the path" do
@@ -18,7 +18,7 @@ describe "capturing" do
       end
     end
 
-    body('/home').should == '0'
+    body('/home').must_equal '0'
   end
 
   it "yields the segment" do
@@ -28,7 +28,7 @@ describe "capturing" do
       end
     end
 
-    body("/user/johndoe").should == 'johndoe'
+    body("/user/johndoe").must_equal 'johndoe'
   end
 
   it "yields a number" do
@@ -38,7 +38,7 @@ describe "capturing" do
       end
     end
 
-    body("/user/101").should == '101'
+    body("/user/101").must_equal '101'
   end
 
   it "yields a segment per nested block" do
@@ -52,7 +52,7 @@ describe "capturing" do
       end
     end
 
-    body("/one/two/three").should == "onetwothree"
+    body("/one/two/three").must_equal "onetwothree"
   end
 
   it "regex captures in regex format" do
@@ -62,7 +62,7 @@ describe "capturing" do
       end
     end
 
-    body("/posts/123-postal-service").should == "123postal-service"
+    body("/posts/123-postal-service").must_equal "123postal-service"
   end
 end
 
@@ -74,8 +74,8 @@ describe "r.is" do
       end
     end
 
-    body.should == '+1'
-    status('//').should == 404
+    body.must_equal '+1'
+    status('//').must_equal 404
   end
 
   it "handles no arguments" do
@@ -87,8 +87,8 @@ describe "r.is" do
       end
     end
 
-    body.should == '+1'
-    status('//').should == 404
+    body.must_equal '+1'
+    status('//').must_equal 404
   end
 
   it "matches strings" do
@@ -98,8 +98,8 @@ describe "r.is" do
       end
     end
 
-    body("/123").should == '+1'
-    status("/123/").should == 404
+    body("/123").must_equal '+1'
+    status("/123/").must_equal 404
   end
 
   it "matches regexps" do
@@ -109,8 +109,8 @@ describe "r.is" do
       end
     end
 
-    body("/123").should == '123'
-    status("/123/").should == 404
+    body("/123").must_equal '123'
+    status("/123/").must_equal 404
   end
 
   it "matches segments" do
@@ -120,8 +120,8 @@ describe "r.is" do
       end
     end
 
-    body("/123").should == '123'
-    status("/123/").should == 404
+    body("/123").must_equal '123'
+    status("/123/").must_equal 404
   end
 end
 
@@ -133,8 +133,8 @@ describe "matchers" do
       end
     end
 
-    body('/posts/123').should == '123'
-    status('/post/123').should == 404
+    body('/posts/123').must_equal '123'
+    status('/post/123').must_equal 404
   end
 
   it "should handle multiple params in single string" do
@@ -144,8 +144,8 @@ describe "matchers" do
       end
     end
 
-    body("/u/jdoe/posts/123").should == 'jdoe123'
-    status("/u/jdoe/pots/123").should == 404
+    body("/u/jdoe/posts/123").must_equal 'jdoe123'
+    status("/u/jdoe/pots/123").must_equal 404
   end
 
   it "should escape regexp metacharaters in string" do
@@ -155,8 +155,8 @@ describe "matchers" do
       end
     end
 
-    body("/u/jdoe/posts?/123").should == 'jdoe123'
-    status("/u/jdoe/post/123").should == 404
+    body("/u/jdoe/posts?/123").must_equal 'jdoe123'
+    status("/u/jdoe/post/123").must_equal 404
   end
 
   it "should handle colons by themselves" do
@@ -166,8 +166,8 @@ describe "matchers" do
       end
     end
 
-    body("/u/:/jdoe/posts/:123").should == 'jdoe123'
-    status("/u/a/jdoe/post/b123").should == 404
+    body("/u/:/jdoe/posts/:123").must_equal 'jdoe123'
+    status("/u/a/jdoe/post/b123").must_equal 404
   end
 
   it "should handle regexes and nesting" do
@@ -179,8 +179,8 @@ describe "matchers" do
       end
     end
 
-    body("/u/jdoe/posts/123").should == 'jdoe123'
-    status("/u/jdoe/pots/123").should == 404
+    body("/u/jdoe/posts/123").must_equal 'jdoe123'
+    status("/u/jdoe/pots/123").must_equal 404
   end
 
   it "should handle regex nesting colon param style" do
@@ -192,8 +192,8 @@ describe "matchers" do
       end
     end
 
-    body("/u:jdoe/posts:123").should == 'jdoe123'
-    status("/u:jdoe/poss:123").should == 404
+    body("/u:jdoe/posts:123").must_equal 'jdoe123'
+    status("/u:jdoe/poss:123").must_equal 404
   end
 
   it "symbol matching" do
@@ -205,8 +205,8 @@ describe "matchers" do
       end
     end
 
-    body("/user/jdoe/posts/123").should == 'jdoe123'
-    status("/user/jdoe/pots/123").should == 404
+    body("/user/jdoe/posts/123").must_equal 'jdoe123'
+    status("/user/jdoe/pots/123").must_equal 404
   end
 
   it "paths and numbers" do
@@ -218,8 +218,8 @@ describe "matchers" do
       end
     end
 
-    body("/about/1/2").should == '12'
-    status("/about/1").should == 404
+    body("/about/1/2").must_equal '12'
+    status("/about/1").must_equal 404
   end
 
   it "paths and decimals" do
@@ -231,8 +231,8 @@ describe "matchers" do
       end
     end
 
-    body("/about/1").should == '1'
-    status("/about/1.2").should == 404
+    body("/about/1").must_equal '1'
+    status("/about/1.2").must_equal 404
   end
 
   it "should allow arrays to match any value" do
@@ -242,9 +242,9 @@ describe "matchers" do
       end
     end
 
-    body('/123').should == '123'
-    body('/123bar').should == 'bar'
-    status('/123bard').should == 404
+    body('/123').must_equal '123'
+    body('/123bar').must_equal 'bar'
+    status('/123bard').must_equal 404
   end
 
   it "should have array capture match string if match" do
@@ -254,9 +254,9 @@ describe "matchers" do
       end
     end
 
-    body('/p').should == 'p'
-    body('/q').should == 'q'
-    status('/r').should == 404
+    body('/p').must_equal 'p'
+    body('/q').must_equal 'q'
+    status('/r').must_equal 404
   end
 end
 
@@ -268,7 +268,7 @@ describe "r.on" do
       end
     end
 
-    body.should == '+1'
+    body.must_equal '+1'
   end
 
   it "executes on true" do
@@ -278,7 +278,7 @@ describe "r.on" do
       end
     end
 
-    body.should == '+1'
+    body.must_equal '+1'
   end
 
   it "executes on non-false" do
@@ -288,7 +288,7 @@ describe "r.on" do
       end
     end
 
-    body("/123").should == '+1'
+    body("/123").must_equal '+1'
   end
 
   it "does not modify SCRIPT_NAME/PATH_INFO during routing" do
@@ -305,14 +305,14 @@ describe "r.on" do
       "#{env['SCRIPT_NAME']}|#{env['PATH_INFO']}"
     end
 
-    body.should == '|/'
-    body('SCRIPT_NAME'=>'/a').should == '/a|/'
-    body('/foo').should == 'foo||/foo'
-    body('/foo', 'SCRIPT_NAME'=>'/a').should == 'foo|/a|/foo'
-    body('/foo/bar').should == 'bar||/foo/bar'
-    body('/foo/bar', 'SCRIPT_NAME'=>'/a').should == 'bar|/a|/foo/bar'
-    body('/foo/baz').should == 'foo||/foo/baz'
-    body('/foo/baz', 'SCRIPT_NAME'=>'/a').should == 'foo|/a|/foo/baz'
+    body.must_equal '|/'
+    body('SCRIPT_NAME'=>'/a').must_equal '/a|/'
+    body('/foo').must_equal 'foo||/foo'
+    body('/foo', 'SCRIPT_NAME'=>'/a').must_equal 'foo|/a|/foo'
+    body('/foo/bar').must_equal 'bar||/foo/bar'
+    body('/foo/bar', 'SCRIPT_NAME'=>'/a').must_equal 'bar|/a|/foo/bar'
+    body('/foo/baz').must_equal 'foo||/foo/baz'
+    body('/foo/baz', 'SCRIPT_NAME'=>'/a').must_equal 'foo|/a|/foo/baz'
   end
 
   it "should have path/matched_path/remaining_path work correctly" do
@@ -322,7 +322,7 @@ describe "r.on" do
       end
     end
 
-    body("/foo/bar").should ==  "/foo/bar:/foo:/bar"
+    body("/foo/bar").must_equal  "/foo/bar:/foo:/bar"
   end
 
   it "ensures remaining_path is reverted if modified in failing matcher" do
@@ -336,7 +336,7 @@ describe "r.on" do
       end
     end
 
-    body("/hello").should == ':/hello'
+    body("/hello").must_equal ':/hello'
   end
 
   it "modifies matched_path/remaining_path during routing" do
@@ -350,7 +350,7 @@ describe "r.on" do
       end
     end
 
-    body("/hello/you").should == '/hello:/you'
+    body("/hello/you").must_equal '/hello:/you'
   end
 
   it "doesn't modify SCRIPT_NAME/PATH_INFO during routing" do
@@ -364,7 +364,7 @@ describe "r.on" do
       end
     end
 
-    body("/hello/you").should == ':/hello/you'
+    body("/hello/you").must_equal ':/hello/you'
   end
 
   it "doesn't mutate SCRIPT_NAME or PATH_INFO after request is returned" do
@@ -380,9 +380,9 @@ describe "r.on" do
 
     pi, sn = '/login', ''
     env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => pi, "SCRIPT_NAME" => sn}
-    app.call(env)[2].join.should == ":/login"
-    env["PATH_INFO"].should equal(pi)
-    env["SCRIPT_NAME"].should equal(sn)
+    app.call(env)[2].join.must_equal ":/login"
+    env["PATH_INFO"].must_equal pi 
+    env["SCRIPT_NAME"].must_equal sn
   end
 
   it "skips consecutive matches" do
@@ -396,7 +396,7 @@ describe "r.on" do
       end
     end
 
-    body.should == "foo"
+    body.must_equal "foo"
   end
 
   it "finds first match available" do
@@ -410,7 +410,7 @@ describe "r.on" do
       end
     end
 
-    body.should == "bar"
+    body.must_equal "bar"
   end
 
   it "reverts a half-met matcher" do
@@ -424,7 +424,7 @@ describe "r.on" do
       end
     end
 
-    body("/hello").should == ':/hello'
+    body("/hello").must_equal ':/hello'
   end
 
   it "doesn't write to body if body already written to" do
@@ -435,7 +435,7 @@ describe "r.on" do
       end
     end
 
-    body.should == 'a'
+    body.must_equal 'a'
   end
 end
 
@@ -447,8 +447,8 @@ describe "path matchers" do
       end
     end
 
-    body('/about').should == "About"
-    status("/abot").should == 404
+    body('/about').must_equal "About"
+    status("/abot").must_equal 404
   end
 
   it "two level nested paths" do
@@ -464,9 +464,9 @@ describe "path matchers" do
       end
     end
 
-    body('/about/1').should == "+1"
-    body('/about/2').should == "+2"
-    status('/about/3').should == 404
+    body('/about/1').must_equal "+1"
+    body('/about/2').must_equal "+2"
+    status('/about/3').must_equal 404
   end
 
   it "two level inlined paths" do
@@ -476,8 +476,8 @@ describe "path matchers" do
       end
     end
 
-    body('/a/b').should == "ab"
-    status('/a/d').should == 404
+    body('/a/b').must_equal "ab"
+    status('/a/d').must_equal 404
   end
 
   it "a path with some regex captures" do
@@ -487,8 +487,8 @@ describe "path matchers" do
       end
     end
 
-    body('/user123').should == "123"
-    status('/useradf').should == 404
+    body('/user123').must_equal "123"
+    status('/useradf').must_equal 404
   end
 
   it "matching the root with a string" do
@@ -498,9 +498,9 @@ describe "path matchers" do
       end
     end
 
-    body.should == 'Home'
-    status("//").should == 404
-    status("/foo").should == 404
+    body.must_equal 'Home'
+    status("//").must_equal 404
+    status("/foo").must_equal 404
   end
 
   it "matching the root with the root method" do
@@ -510,10 +510,10 @@ describe "path matchers" do
       end
     end
 
-    body.should == 'Home'
-    status('REQUEST_METHOD'=>'POST').should == 404
-    status("//").should == 404
-    status("/foo").should == 404
+    body.must_equal 'Home'
+    status('REQUEST_METHOD'=>'POST').must_equal 404
+    status("//").must_equal 404
+    status("/foo").must_equal 404
   end
 end
 
@@ -525,8 +525,8 @@ describe "root/empty segment matching" do
       end
     end
 
-    body.should == '/'
-    status("/foo").should == 404
+    body.must_equal '/'
+    status("/foo").must_equal 404
   end
 
   it "nested empty segments" do
@@ -540,9 +540,9 @@ describe "root/empty segment matching" do
       end
     end
 
-    body("///1").should == '///1'
-    status("/1").should == 404
-    status("//1").should == 404
+    body("///1").must_equal '///1'
+    status("/1").must_equal 404
+    status("//1").must_equal 404
   end
 
   it "/events/? scenario" do
@@ -562,9 +562,9 @@ describe "root/empty segment matching" do
       end
     end
 
-    body("/events").should == 'Foo'
-    body("/events/").should == 'Hooray'
-    status("/events/foo").should == 404
+    body("/events").must_equal 'Foo'
+    body("/events/").must_equal 'Hooray'
+    status("/events/foo").must_equal 404
   end
 end
 
@@ -580,19 +580,19 @@ describe "segment handling" do
   end
 
   it "matches numeric ids" do
-    body('/post/1').should == '1'
+    body('/post/1').must_equal '1'
   end
 
   it "matches decimal numbers" do
-    body('/post/1.1').should == '1.1'
+    body('/post/1.1').must_equal '1.1'
   end
 
   it "matches slugs" do
-    body('/post/my-blog-post-about-cuba').should == 'my-blog-post-about-cuba'
+    body('/post/my-blog-post-about-cuba').must_equal 'my-blog-post-about-cuba'
   end
 
   it "matches only the first segment available" do
-    body('/post/one/two/three').should == 'one'
+    body('/post/one/two/three').must_equal 'one'
   end
 end
 
@@ -607,8 +607,8 @@ describe "request verb methods" do
       end
     end
 
-    body.should == 'g'
-    body('REQUEST_METHOD'=>'POST').should == 'p'
+    body.must_equal 'g'
+    body('REQUEST_METHOD'=>'POST').must_equal 'p'
   end
 
   it "requires exact match if given arguments" do
@@ -621,10 +621,10 @@ describe "request verb methods" do
       end
     end
 
-    body.should == 'g'
-    body('REQUEST_METHOD'=>'POST').should == 'p'
-    status("/a").should == 404
-    status("/a", 'REQUEST_METHOD'=>'POST').should == 404
+    body.must_equal 'g'
+    body('REQUEST_METHOD'=>'POST').must_equal 'p'
+    status("/a").must_equal 404
+    status("/a", 'REQUEST_METHOD'=>'POST').must_equal 404
   end
 
   it "does not require exact match if given arguments" do
@@ -645,10 +645,10 @@ describe "request verb methods" do
       end
     end
 
-    body.should == 'g'
-    body('REQUEST_METHOD'=>'POST').should == 'p'
-    body("/a").should == 'get'
-    body("/a", 'REQUEST_METHOD'=>'POST').should == 'post'
+    body.must_equal 'g'
+    body('REQUEST_METHOD'=>'POST').must_equal 'p'
+    body("/a").must_equal 'get'
+    body("/a", 'REQUEST_METHOD'=>'POST').must_equal 'post'
   end
 end
 
@@ -660,11 +660,11 @@ describe "all matcher" do
       end
     end
 
-    body("/foo/bar").should == 'bar'
-    status.should == 404
-    status("/foo").should == 404
-    status("/foo/").should == 404
-    status("/foo/bar/baz").should == 404
+    body("/foo/bar").must_equal 'bar'
+    status.must_equal 404
+    status("/foo").must_equal 404
+    status("/foo/").must_equal 404
+    status("/foo/bar/baz").must_equal 404
   end
 end
 
@@ -679,10 +679,10 @@ describe "method matcher" do
       end
     end
 
-    body("REQUEST_METHOD"=>"GET").should == 'foo'
-    body("REQUEST_METHOD"=>"PATCH").should == 'bar'
-    body("REQUEST_METHOD"=>"POST").should == 'bar'
-    status("REQUEST_METHOD"=>"DELETE").should == 404
+    body("REQUEST_METHOD"=>"GET").must_equal 'foo'
+    body("REQUEST_METHOD"=>"PATCH").must_equal 'bar'
+    body("REQUEST_METHOD"=>"POST").must_equal 'bar'
+    status("REQUEST_METHOD"=>"DELETE").must_equal 404
   end
 end
 
@@ -692,6 +692,6 @@ describe "route block that returns string" do
       "+1"
     end
 
-    body.should == '+1'
+    body.must_equal '+1'
   end
 end

@@ -32,7 +32,7 @@ describe "integration" do
       end
     end
 
-    body('/hello').should == 'D First Second Block'
+    body('/hello').must_equal 'D First Second Block'
   end
 
   it "should clear middleware when clear_middleware! is called" do
@@ -51,7 +51,7 @@ describe "integration" do
       clear_middleware!
     end
 
-    body('/hello').should == 'D   '
+    body('/hello').must_equal 'D   '
   end
 
   it "should support adding middleware using use after route block setup" do
@@ -68,7 +68,7 @@ describe "integration" do
       end
     end
 
-    body('/hello').should == 'D First Second Block'
+    body('/hello').must_equal 'D First Second Block'
   end
 
   it "should inherit middleware in subclass" do
@@ -80,7 +80,7 @@ describe "integration" do
       end
     end
 
-    body('/hello').should == 'D 1 2 3'
+    body('/hello').must_equal 'D 1 2 3'
   end
 
   it "should not inherit middleware in subclass if inhert_middleware = false" do
@@ -94,7 +94,7 @@ describe "integration" do
       end
     end
 
-    body('/hello').should == 'D   '
+    body('/hello').must_equal 'D   '
   end
 
   it "should inherit route in subclass" do
@@ -109,7 +109,7 @@ describe "integration" do
     end
     @app = Class.new(app)
 
-    body('/hello').should == 'D 1 2 3'
+    body('/hello').must_equal 'D 1 2 3'
   end
 
   it "should use instance of subclass when inheriting routes" do
@@ -126,8 +126,8 @@ describe "integration" do
     end
     @app = Class.new(app)
 
-    body('/hello').should == 'D 1 2 3'
-    obj.should be_a_kind_of(@app)
+    body('/hello').must_equal 'D 1 2 3'
+    obj.must_be_kind_of(@app)
   end
 
   it "should handle middleware added to subclass using superclass route" do
@@ -142,7 +142,7 @@ describe "integration" do
     @app = Class.new(app)
     @app.use(c, '1', '2'){"3"}
 
-    body('/hello').should == 'D 1 2 3'
+    body('/hello').must_equal 'D 1 2 3'
   end
 
   it "should not have future middleware additions to superclass affect subclass" do
@@ -156,7 +156,7 @@ describe "integration" do
     end
     a.use(c, '1', '2'){"3"}
 
-    body('/hello').should == 'D   '
+    body('/hello').must_equal 'D   '
   end
 
   it "should not have future middleware additions to subclass affect superclass" do
@@ -170,19 +170,20 @@ describe "integration" do
     @app.use(c, '1', '2'){"3"}
     @app = a
 
-    body('/hello').should == 'D   '
+    body('/hello').must_equal 'D   '
   end
 
   it "should have app return the rack application to call" do
-    app(:bare){}.app.should == nil
+    app(:bare){}.app.must_equal nil
     app.route{|r|}
-    app.app.should be_a_kind_of(Proc)
+    # Work around minitest bug
+    assert_kind_of Proc, app.app
     c = Class.new{def initialize(app) @app = app end; def call(env) @app.call(env) end} 
     app.use c
-    app.app.should be_a_kind_of(c)
+    app.app.must_be_kind_of(c)
   end
 
   it "should have route_block return the route block" do
-    app{|r| 1}.route_block.call(nil).should == 1
+    app{|r| 1}.route_block.call(nil).must_equal 1
   end
 end

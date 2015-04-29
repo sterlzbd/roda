@@ -7,8 +7,8 @@ describe "empty_root plugin" do
       "notroot"
     end
 
-    body.should == 'root'
-    body("").should == 'root'
-    body("a").should == 'notroot'
+    body.must_equal 'root'
+    body("").must_equal 'root'
+    body("a").must_equal 'notroot'
   end
 end
