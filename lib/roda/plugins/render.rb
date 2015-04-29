@@ -232,8 +232,8 @@ class Roda
             end
 
             if cache
-              template_block = opts[:template_block]
-              template_opts = opts[:template_opts] unless content
+              template_block = opts[:template_block] unless content
+              template_opts = opts[:template_opts]
 
               opts[:cache_key] ||= if template_class || template_opts || template_block
                 [path, template_class, template_opts, template_block]
