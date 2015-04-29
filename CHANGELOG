@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :engine_opts option to render plugin, for specifying per-template engine options (jeremyevans)
+
 * The render plugin and render/view :ext option is now replaced by the :engine option (jeremyevans)
 
 * Add path_rewriter plugin, for rewriting paths before routing (jeremyevans)

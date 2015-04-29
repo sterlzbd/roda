@@ -40,8 +40,10 @@ class Roda
     # :layout :: The base name of the layout file, defaults to 'layout'.
     # :layout_opts :: The options to use when rendering the layout, if different
     #                 from the default options.
-    # :template_opts :: The tilt options used when rendering templates, defaults to
-    #                   <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
+    # :template_opts :: The tilt options used when rendering all templates. defaults to:
+    #                 <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
+    # :engine_opts :: The tilt options to use per template engine.  Keys are
+    #                 engine strings, values are hashes of template options.
     # :views :: The directory holding the view files, defaults to the 'views' subdirectory of the
     #           application's :root option (the process's working directory by default).
     #
@@ -105,9 +107,10 @@ class Roda
         opts = app.opts[:render]
         opts[:engine] = (opts[:engine] || opts[:ext] || "erb").dup.freeze
         opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root]).freeze
+        opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
+
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
         opts[:layout_opts][:_is_layout] = true
-
         if layout = opts.fetch(:layout, true)
           opts[:layout] = true unless opts.has_key?(:layout)
 
@@ -120,6 +123,7 @@ class Roda
             opts[:layout_opts][:template] = layout
           end
         end
+        opts[:layout_opts].freeze
 
         template_opts = opts[:template_opts] = (opts[:template_opts] || {}).dup
         template_opts[:outvar] ||= '@_out_buf'
@@ -135,9 +139,14 @@ class Roda
             ::Erubis::XmlHelper
           end
         end
-        opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
-        opts[:layout_opts].freeze
-        opts[:template_opts].freeze
+        template_opts.freeze
+
+        engine_opts = opts[:engine_opts] = (opts[:engine_opts] || {}).dup
+        engine_opts.to_a.each do |k,v|
+          engine_opts[k] = v.dup.freeze
+        end
+        engine_opts.freeze
+
         opts.freeze
       end
 
@@ -164,8 +173,12 @@ class Roda
           opts = find_template(parse_template_opts(template, opts))
           cached_template(opts) do
             template_opts = render_opts[:template_opts]
-            current_template_opts = opts[:template_opts]
-            template_opts = Hash[template_opts].merge!(current_template_opts) if current_template_opts
+            if engine_opts = render_opts[:engine_opts][opts[:engine]]
+              template_opts = Hash[template_opts].merge!(engine_opts)
+            end
+            if current_template_opts = opts[:template_opts]
+              template_opts = Hash[template_opts].merge!(current_template_opts)
+            end
             opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
           end.render(self, (opts[:locals]||OPTS), &block)
         end
@@ -214,7 +227,8 @@ class Roda
         # template block, and locals to use for the render in the passed options.
         def find_template(opts)
           render_opts = render_opts()
-          engine = opts[:engine] ||= opts[:ext] || render_opts[:engine]
+          engine_override = opts[:engine] ||= opts[:ext]
+          engine = opts[:engine] ||= render_opts[:engine]
           if content = opts[:inline]
             path = opts[:path] = content
             template_class = opts[:template_class] ||= ::Tilt[engine]
@@ -234,9 +248,10 @@ class Roda
             if cache
               template_block = opts[:template_block] unless content
               template_opts = opts[:template_opts]
+              template_engine = opts[:engine]
 
-              opts[:cache_key] ||= if template_class || template_opts || template_block
-                [path, template_class, template_opts, template_block]
+              opts[:cache_key] ||= if template_class || engine_override || template_opts || template_block
+                [path, template_class, engine_override, template_opts, template_block]
               else
                 path
               end

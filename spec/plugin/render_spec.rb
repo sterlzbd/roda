@@ -236,6 +236,21 @@ describe "render plugin" do
     body.should == "i1"
   end
 
+  it "can specify engine-specific options via :engine_opts" do
+    app(:bare) do
+      plugin :render, :engine_opts=>{'a.erb'=>{:outvar=>'@a'}}
+      route do |r|
+        r.is('a') do
+          render(:inline=>'<%= @a.class.name %>', :engine=>'a.erb')
+        end
+        render(:inline=>'<%= @a.class.name %>')
+      end
+    end
+
+    body('/a').should == "String"
+    body.should == "NilClass"
+  end
+
   it "template cache respects :template_opts" do
     c = Class.new do 
       def initialize(path, _, opts)
@@ -350,9 +365,9 @@ describe "render plugin" do
     end
 
     body('/a').strip.should == "iv-a"
-    app.render_opts[:cache][['iv', c, nil, proca]].should == nil
+    app.render_opts[:cache][['iv', c, nil, nil, proca]].should == nil
     body('/b').strip.should == "iv-a"
-    app.render_opts[:cache][['iv', c, nil, proca]].should_not == nil
+    app.render_opts[:cache][['iv', c, nil, nil, proca]].should_not == nil
   end
 
   it "Support :cache_key option to force the key used when caching" do
