@@ -1,5 +1,7 @@
 = HEAD
 
+* Optimize template cache lookup in render plugin when :cache_key is given (jeremyevans)
+
 * Add :engine_opts option to render plugin, for specifying per-template engine options (jeremyevans)
 
 * The render plugin and render/view :ext option is now replaced by the :engine option (jeremyevans)

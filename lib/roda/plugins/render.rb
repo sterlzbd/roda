@@ -22,7 +22,9 @@ class Roda
     #
     #   plugin :render, :engine=>'haml', :views=>'admin_views'
     #
-    # The following options are supported:
+    # = Plugin Options
+    #
+    # The following plugin options are supported:
     #
     # :cache :: nil/false to not cache templates (useful for development), defaults
     #           to true unless RACK_ENV is development to automatically use the
@@ -46,6 +48,8 @@ class Roda
     #                 engine strings, values are hashes of template options.
     # :views :: The directory holding the view files, defaults to the 'views' subdirectory of the
     #           application's :root option (the process's working directory by default).
+    #
+    # = Render/View Method Options
     #
     # Most of these options can be overridden at runtime by passing options
     # to the +view+ or +render+ methods:
@@ -87,6 +91,27 @@ class Roda
     # If you pass a hash as the first argument to +view+ or +render+, it should
     # have either +:template+, +:inline+, +:path+, or +:content+ (for +view+) as
     # one of the keys.
+    #
+    # = Speeding Up Template Rendering
+    #
+    # By default, determining the cache key to use for the template can be a lot
+    # of work.  If you specify the +:cache_key+ option, you can save Roda from
+    # having to do that work, which will make your application faster.  However,
+    # if you do this, you need to make sure you choose a correct key.
+    #
+    # If your application uses a unique template per path, in that the same
+    # path never uses more than one template, you can use the +view_options+ plugin
+    # and do:
+    #
+    #   set_view_options :cache_key=>r.path_info
+    #
+    # at the top of your route block.  You can even do this if you do have paths
+    # that use more than one template, as long as you specify +:cache_key+
+    # specifically when rendering in those paths.
+    #
+    # If you use a single layout in your application, you can also make layout
+    # rendering faster by specifying +:cache_key+ inside the +:layout_opts+
+    # plugin option.
     module Render
       OPTS={}.freeze
 
@@ -170,17 +195,9 @@ class Roda
       module InstanceMethods
         # Render the given template. See Render for details.
         def render(template, opts = OPTS, &block)
-          opts = find_template(parse_template_opts(template, opts))
-          cached_template(opts) do
-            template_opts = render_opts[:template_opts]
-            if engine_opts = render_opts[:engine_opts][opts[:engine]]
-              template_opts = Hash[template_opts].merge!(engine_opts)
-            end
-            if current_template_opts = opts[:template_opts]
-              template_opts = Hash[template_opts].merge!(current_template_opts)
-            end
-            opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
-          end.render(self, (opts[:locals]||OPTS), &block)
+          opts = parse_template_opts(template, opts)
+          merge_render_locals(opts)
+          retrieve_template(opts).render(self, (opts[:locals]||OPTS), &block)
         end
 
         # Return the render options for the instance's class. While this
@@ -260,6 +277,11 @@ class Roda
             end
           end
 
+          opts
+        end
+
+        # Merge any :locals specified in the render_opts into the :locals option given.
+        def merge_render_locals(opts)
           if !opts[:_is_layout] && (r_locals = render_opts[:locals])
             opts[:locals] = if locals = opts[:locals]
               Hash[r_locals].merge!(locals)
@@ -267,8 +289,6 @@ class Roda
               r_locals
             end
           end
-
-          opts
         end
 
         # Return a single hash combining the template and opts arguments.
@@ -286,6 +306,24 @@ class Roda
         # providing a :layout_opts option to the view/render method.
         def render_layout_opts
           Hash[render_opts[:layout_opts]]
+        end
+
+        # Retrieve the Tilt::Template object for the given template and opts.
+        def retrieve_template(opts)
+          unless opts[:cache_key] && opts[:cache] != false
+            found_template_opts = opts = find_template(opts)
+          end
+          cached_template(opts) do
+            opts = found_template_opts || find_template(opts)
+            template_opts = render_opts[:template_opts]
+            if engine_opts = render_opts[:engine_opts][opts[:engine]]
+              template_opts = Hash[template_opts].merge!(engine_opts)
+            end
+            if current_template_opts = opts[:template_opts]
+              template_opts = Hash[template_opts].merge!(current_template_opts)
+            end
+            opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+          end
         end
 
         # The name to use for the template.  By default, just converts the :template option to a string.
@@ -326,7 +364,6 @@ class Roda
             layout_opts
           end
         end
-
       end
     end
 
