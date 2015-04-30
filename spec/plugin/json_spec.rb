@@ -51,4 +51,12 @@ describe "json plugin" do
     app.plugin :json, :serializer => proc{|o| o.inspect}
     body("/hash").should == '{"a"=>"b"}'
   end
+
+  it "should give serializer the request if :include_request is set" do
+    app.plugin :json,
+      :include_request => true,
+      :serializer => lambda{|o,r| "request given"}
+
+    body("/hash").should == 'request given'
+  end
 end

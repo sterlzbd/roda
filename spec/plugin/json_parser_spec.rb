@@ -47,4 +47,16 @@ describe "json_parser plugin" do
     end
     body('rack.input'=>StringIO.new("{'a'=>{'b'=>1}}"), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').should == '1'
   end
+
+  it "supports :include_request option" do
+    app(:bare) do
+      plugin(:json_parser,
+        :include_request => true,
+        :parser => lambda{|s,r| {"request" => "given"}})
+      route do |r|
+        r.params.to_s
+      end
+    end
+    body('rack.input'=>StringIO.new('{}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').should == '{"request"=>"given"}'
+  end
 end

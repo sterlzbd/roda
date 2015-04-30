@@ -25,9 +25,13 @@ class Roda
       # :parser :: The parser to use for parsing incoming json.  Should be
       #            an object that responds to +call(str)+ and returns the
       #            parsed data.  The default is to call JSON.parse.
+      # :include_request :: If true, the parser will be called with the request
+      #                     object as the second argument, so the parser needs
+      #                     to respond to +call(str, request)+.
       def self.configure(app, opts=OPTS)
         app.opts[:json_parser_error_handler] = opts[:error_handler] || app.opts[:json_parser_error_handler] || DEFAULT_ERROR_HANDLER
         app.opts[:json_parser_parser] = opts[:parser] || app.opts[:json_parser_parser] || DEFAULT_PARSER
+        app.opts[:json_parser_include_request] = opts[:include_request] || app.opts[:json_parser_include_request]
       end
 
       module RequestMethods
@@ -42,7 +46,7 @@ class Roda
             input.rewind
             return super if str.empty?
             begin
-              json_params = env[JSON_PARAMS_KEY] = roda_class.opts[:json_parser_parser].call(str)
+              json_params = env[JSON_PARAMS_KEY] = parse_json(str)
             rescue
               roda_class.opts[:json_parser_error_handler].call(self)
             end
@@ -51,6 +55,14 @@ class Roda
           else
             super
           end
+        end
+
+        private
+
+        def parse_json(str)
+          args = [str]
+          args << self if roda_class.opts[:json_parser_include_request]
+          roda_class.opts[:json_parser_parser].call(*args)
         end
       end
     end

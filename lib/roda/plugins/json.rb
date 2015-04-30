@@ -37,7 +37,14 @@ class Roda
     # can pass in a custom serializer, which can be any object
     # that responds to +call(object)+.
     #
-    #   plugin :json, serializer: proc{|o| o.to_json(root: true)}
+    #   plugin :json, :serializer=>proc{|o| o.to_json(root: true)}
+    #
+    # If you need the request information during serialization, such
+    # as HTTP headers or query parameters, you can pass in the
+    # +:include_request+ option, which will pass in the request
+    # object as the second argument when calling the serializer.
+    #
+    #   plugin :json, include_request=>true, serializer=>proc{|o, request| ...}
     module Json
       OPTS = {}.freeze
       DEFAULT_SERIALIZER = lambda{|o| o.to_json}
@@ -51,6 +58,8 @@ class Roda
         app.opts[:json_result_classes].freeze
 
         app.opts[:json_result_serializer] = opts[:serializer] || app.opts[:json_result_serializer] || DEFAULT_SERIALIZER
+
+        app.opts[:json_result_include_request] = opts[:include_request] || app.opts[:json_result_include_request]
       end
 
       module ClassMethods
@@ -82,7 +91,9 @@ class Roda
         # Convert the given object to JSON.  Uses to_json by default,
         # but can use a custom serializer passed to the plugin.
         def convert_to_json(obj)
-          roda_class.opts[:json_result_serializer].call(obj)
+          args = [obj]
+          args << self if roda_class.opts[:json_result_include_request]
+          roda_class.opts[:json_result_serializer].call(*args)
         end
       end
     end
