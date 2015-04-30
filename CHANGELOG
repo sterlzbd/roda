@@ -1,6 +1,6 @@
 = HEAD
 
-* Add precompiled_templates plugin, for saving memory when using a forking webserver (jeremyevans)
+* Add precompile_templates plugin, for saving memory when using a forking webserver (jeremyevans)
 
 * Document how to allow per-branch HTML escaping of <%= %> in the view_options plugin (jeremyevans)
 
