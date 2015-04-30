@@ -52,11 +52,11 @@ describe "json_parser plugin" do
     app(:bare) do
       plugin(:json_parser,
         :include_request => true,
-        :parser => lambda{|s,r| {"request" => "given"}})
+        :parser => lambda{|s,r| {'a'=>s, 'b'=>r.path_info}})
       route do |r|
-        r.params.to_s
+        "#{r.params['a']}:#{r.params['b']}"
       end
     end
-    body('rack.input'=>StringIO.new('{}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').should == '{"request"=>"given"}'
+    body('rack.input'=>StringIO.new('{}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').should == '{}:/'
   end
 end

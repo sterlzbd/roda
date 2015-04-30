@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :include_request option to json and json_parser plugins to include request in :serializer/:parser call (janko-m) (#26)
+
 * Optimize template cache lookup in render plugin when :cache_key is given (jeremyevans)
 
 * Add :engine_opts option to render plugin, for specifying per-template engine options (jeremyevans)

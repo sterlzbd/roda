@@ -55,8 +55,8 @@ describe "json plugin" do
   it "should give serializer the request if :include_request is set" do
     app.plugin :json,
       :include_request => true,
-      :serializer => lambda{|o,r| "request given"}
+      :serializer => lambda{|o,r| "#{o['a']}:#{r.path_info}"}
 
-    body("/hash").should == 'request given'
+    body("/hash").should == 'b:/hash'
   end
 end
