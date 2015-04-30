@@ -21,6 +21,8 @@ class Roda
     # the render plugin options, but lower precedence than options
     # you directly pass to the view/render methods.
     #
+    # = View Subdirectories
+    #
     # The view_options plugin also has special support for sites
     # that have outgrown a flat view directory and use subdirectories
     # for views.  It allows you to set the view directory to
@@ -50,6 +52,29 @@ class Roda
     # a slash.  So if you want to use a view subdirectory for
     # templates but have a shared layout, you should make sure your
     # layout contains a slash, similar to the example above.
+    #
+    # = Per-branch HTML escaping
+    #
+    # If you have an existing Roda application that doesn't use
+    # automatic HTML escaping for <tt><%= %></tt> tags via the
+    # :render plugin's :escape option, but you want to switch to
+    # using the :escape option, you can now do so without making
+    # all changes at once.  With set_view_options, you can now
+    # specify escaping or not on a per branch basis in the routing
+    # tree:
+    #
+    #   plugin :render, :escape=>true
+    #   plugin :view_options
+    #
+    #   route do |r|
+    #     # Don't escape <%= %> by default
+    #     set_view_options :template_opts=>{:engine_class=>nil}
+    #
+    #     r.on "users" do
+    #       # Escape <%= %> in this branch
+    #       set_view_options :template_opts=>{:engine_class=>render_opts[:template_opts][:engine_class]}
+    #     end
+    #   end
     module ViewOptions
       # Load the render plugin before this plugin, since this plugin
       # works by overriding methods in the render plugin.

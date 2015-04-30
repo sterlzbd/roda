@@ -54,5 +54,24 @@ describe "_erubis_escaping plugin" do
 
     body.should == "ab''1 ab'1"
   end
+
+  it "should allow for per-branch escaping via set_view options" do
+    app(:bare) do
+      plugin :render, :escape=>true
+      plugin :view_options
+
+      route do |r|
+        set_view_options :template_opts=>{:engine_class=>nil}
+        r.is 'a' do
+          set_view_options :template_opts=>{:engine_class=>render_opts[:template_opts][:engine_class]}
+          render(:inline=>'<%= "<>" %>')
+        end
+        render(:inline=>'<%= "<>" %>')
+      end
+    end
+
+    body('/a').should == '&lt;&gt;'
+    body.should == '<>'
+  end
 end
 end
