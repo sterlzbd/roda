@@ -2,12 +2,16 @@ require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 require 'fileutils'
 
 begin
-  for lib in %w'tilt sass'
-    require lib
+  begin
+  require 'tilt/sass'
+  rescue LoadError
+    for lib in %w'tilt sass'
+      require lib
+    end
+    run_tests = true
+  rescue LoadError
+    warn "#{lib} not installed, skipping assets plugin test"
   end
-  run_tests = true
-rescue LoadError
-  warn "#{lib} not installed, skipping assets plugin test"
 end
 
 if run_tests
