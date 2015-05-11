@@ -39,6 +39,18 @@ describe "_erubis_escaping plugin" do
     body.must_equal '&lt;&gt; <>'
   end
 
+  it "should covnert arguments to strings when escaping with safe classes" do
+    app(:bare) do
+      plugin :render, :escape=>true, :escape_safe_classes=>[]
+
+      route do |r|
+        render(:inline=>'<%= :"<>" %> <%== :"<>" %><%= :"<>" if false %>')
+      end
+    end
+
+    body.must_equal '&lt;&gt; <>'
+  end
+
   it "should allow use of custom :escaper" do
     escaper = Object.new
     def escaper.escape_xml(s)

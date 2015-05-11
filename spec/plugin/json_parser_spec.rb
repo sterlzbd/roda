@@ -38,6 +38,16 @@ describe "json_parser plugin" do
     req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [401, {}, ['bad']]
   end
 
+  it "works with bare POST" do
+    app(:bare) do
+      plugin(:json_parser, :error_handler=>proc{|r| r.halt [401, {}, ['bad']]})
+      route do |r|
+        (r.POST['a']['b'] + r.POST['a']['c']).to_s
+      end
+    end
+    body('rack.input'=>StringIO.new('{"a":{"b":1,"c":2}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '3'
+  end
+
   it "supports :parser option" do
     app(:bare) do
       plugin(:json_parser, :parser=>method(:eval))
