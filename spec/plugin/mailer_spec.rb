@@ -75,6 +75,20 @@ describe "mailer plugin" do
     app.sendmail('/bar', 1, 2).body.must_be :==, '["bar", 1, 2]'
   end
 
+  it "supports no_mail! method for skipping mailing" do
+    app(:mailer) do |r|
+      instance_exec(&setup_email)
+      r.mail "foo" do |*args|
+        no_mail!
+        raise
+      end
+    end
+
+    app.mail('/foo', 1, 2).must_equal nil
+    app.sendmail('/foo', 1, 2).must_equal nil
+    deliveries.must_equal []
+  end
+
   it "supports attachments" do
     app(:mailer) do |r|
       r.mail do

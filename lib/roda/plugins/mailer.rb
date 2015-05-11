@@ -87,6 +87,14 @@ class Roda
     #     ""
     #   end
     #
+    # If while preparing the email you figure out you don't want to send an
+    # email, call +no_mail!+:
+    #
+    #  r.mail '/welcome/:d' do |id| 
+    #    no_mail! unless user = User[id]
+    #    # ...
+    #  end
+    #
     # By default, the mailer uses text/plain as the Content-Type for emails.
     # You can override the default by specifying a :content_type option when
     # loading the plugin:
@@ -128,15 +136,19 @@ class Roda
         # calling +deliver+ to send the mail.
         def mail(path, *args)
           mail = ::Mail.new
-          unless mail.equal?(new(PATH_INFO=>path, SCRIPT_NAME=>EMPTY_STRING, REQUEST_METHOD=>MAIL, RACK_INPUT=>StringIO.new, RODA_MAIL=>mail, RODA_MAIL_ARGS=>args).call(&route_block))
-            raise Error, "route did not return mail instance for #{path.inspect}, #{args.inspect}"
+          catch(:no_mail) do
+            unless mail.equal?(new(PATH_INFO=>path, SCRIPT_NAME=>EMPTY_STRING, REQUEST_METHOD=>MAIL, RACK_INPUT=>StringIO.new, RODA_MAIL=>mail, RODA_MAIL_ARGS=>args).call(&route_block))
+              raise Error, "route did not return mail instance for #{path.inspect}, #{args.inspect}"
+            end
+            mail
           end
-          mail
         end
 
         # Calls +mail+ and immediately sends the resulting mail.
         def sendmail(*args)
-          mail(*args).deliver
+          if m = mail(*args)
+            m.deliver
+          end
         end
       end
 
@@ -230,6 +242,11 @@ class Roda
         def add_file(*a, &block)
           response.mail_attachments << [a, block]
           nil
+        end
+
+        # Signal that no mail should be sent for this request.
+        def no_mail!
+          throw :no_mail
         end
 
         private
