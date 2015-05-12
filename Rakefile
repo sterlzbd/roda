@@ -1,6 +1,5 @@
 require "rake"
 require "rake/clean"
-require 'rake/testtask'
 
 NAME = 'roda'
 VERS = lambda do
