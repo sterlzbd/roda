@@ -4,7 +4,7 @@ describe "path plugin" do
   def path_app(*args, &block)
     app(:bare) do
       plugin :path
-      path *args, &block
+      path(*args, &block)
       route{|r| send(r.path_info)}
     end
   end
@@ -13,7 +13,7 @@ describe "path plugin" do
     app(:bare) do
       opts[:add_script_name] = true
       plugin :path
-      path *args, &block
+      path(*args, &block)
       route{|r| send(r.path_info)}
     end
   end

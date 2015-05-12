@@ -161,7 +161,7 @@ class Roda
         def mail(*args)
           if @env[REQUEST_METHOD] == MAIL
             if_match(args) do |*vs|
-              yield *(vs + @env[RODA_MAIL_ARGS])
+              yield(*(vs + @env[RODA_MAIL_ARGS]))
             end
           end
         end

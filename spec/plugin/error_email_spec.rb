@@ -23,8 +23,8 @@ describe "error_email plugin" do
     email[:to].must_equal 't'
     email[:from].must_equal 'f'
     email[:host].must_equal 'localhost'
-    email[:message].must_match /^Subject: ArgumentError/
-    email[:message].must_match /^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^"b" => "c"$\s+^Session:$\s+^"d" => "e"$/m
+    email[:message].must_match(/^Subject: ArgumentError/)
+    email[:message].must_match(/^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^"b" => "c"$\s+^Session:$\s+^"d" => "e"$/m)
   end
 
   it "uses :host option" do
@@ -45,14 +45,14 @@ describe "error_email plugin" do
   it "adds :prefix option to subject line" do
     app(:prefix=>'TEST ')
     body('rack.input'=>StringIO.new).must_equal 'e'
-    email[:message].must_match /^Subject: TEST ArgumentError/
+    email[:message].must_match(/^Subject: TEST ArgumentError/)
   end
 
   it "uses :headers option for additional headers" do
     app(:headers=>{'Foo'=>'Bar', 'Baz'=>'Quux'})
     body('rack.input'=>StringIO.new).must_equal 'e'
-    email[:message].must_match /^Foo: Bar/
-    email[:message].must_match /^Baz: Quux/
+    email[:message].must_match(/^Foo: Bar/)
+    email[:message].must_match(/^Baz: Quux/)
   end
 
   it "requires the :to and :from options" do
@@ -70,7 +70,7 @@ describe "error_email plugin" do
     email[:to].must_equal 't'
     email[:from].must_equal 'f'
     email[:host].must_equal 'localhost'
-    email[:message].must_match /^Subject: ArgumentError/
-    email[:message].must_match /Backtrace.*ENV/m
+    email[:message].must_match(/^Subject: ArgumentError/)
+    email[:message].must_match(/Backtrace.*ENV/m)
   end
 end

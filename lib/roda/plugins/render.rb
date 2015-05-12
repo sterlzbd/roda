@@ -265,7 +265,6 @@ class Roda
             if cache
               template_block = opts[:template_block] unless content
               template_opts = opts[:template_opts]
-              template_engine = opts[:engine]
 
               opts[:cache_key] ||= if template_class || engine_override || template_opts || template_block
                 [path, template_class, engine_override, template_opts, template_block]

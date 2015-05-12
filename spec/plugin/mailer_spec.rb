@@ -99,8 +99,8 @@ describe "mailer plugin" do
 
     m = app.mail('foo')
     m.attachments.length.must_equal 1
-    m.attachments.first.content_type.must_match /mailer_spec\.rb/
-    m.content_type.must_match /\Amultipart\/mixed/
+    m.attachments.first.content_type.must_match(/mailer_spec\.rb/)
+    m.content_type.must_match(/\Amultipart\/mixed/)
     m.parts.length.must_equal 1
     m.parts.first.body.must_be :==, File.read(__FILE__)
   end
@@ -118,7 +118,7 @@ describe "mailer plugin" do
     m = app.mail('foo')
     m.attachments.length.must_equal 1
     m.attachments.first.content_type.must_equal 'text/foo'
-    m.content_type.must_match /\Amultipart\/mixed/
+    m.content_type.must_match(/\Amultipart\/mixed/)
     m.parts.length.must_equal 1
     m.parts.first.body.must_be :==, File.read(__FILE__)
   end
@@ -134,13 +134,13 @@ describe "mailer plugin" do
 
     m = app.mail('foo')
     m.parts.length.must_equal 2
-    m.parts.first.content_type.must_match /text\/plain/
+    m.parts.first.content_type.must_match(/text\/plain/)
     m.parts.first.body.must_be :==, 'c'
-    m.parts.last.content_type.must_match /text\/plain/
+    m.parts.last.content_type.must_match(/text\/plain/)
     m.parts.last.body.must_be :==, 'b'
     m.attachments.length.must_equal 1
-    m.attachments.first.content_type.must_match /a\.txt/
-    m.content_type.must_match /\Amultipart\/mixed/
+    m.attachments.first.content_type.must_match(/a\.txt/)
+    m.content_type.must_match(/\Amultipart\/mixed/)
   end
 
   it "supports regular web requests in same application" do
@@ -170,7 +170,7 @@ describe "mailer plugin" do
     m = app.mail('/foo')
     m.text_part.body.must_be :==, 't'
     m.html_part.body.must_be :==, 'h'
-    m.content_type.must_match /\Amultipart\/alternative/
+    m.content_type.must_match(/\Amultipart\/alternative/)
   end
 
   it "supports setting arbitrary email headers for multipart emails" do
@@ -187,7 +187,7 @@ describe "mailer plugin" do
     m.text_part.header['X-Text'].to_s.must_equal 'T'
     m.html_part.body.must_be :==, 'h'
     m.html_part.header['X-HTML'].to_s.must_equal 'H'
-    m.content_type.must_match /\Amultipart\/alternative/
+    m.content_type.must_match(/\Amultipart\/alternative/)
   end
 
   it "raises error if mail object is not returned" do
@@ -205,7 +205,7 @@ describe "mailer plugin" do
       plugin :mailer, :content_type=>'text/html'
       route{""}
     end
-    app.mail('/').content_type.must_match /\Atext\/html/
+    app.mail('/').content_type.must_match(/\Atext\/html/)
   end
 
   it "supports loading the plugin multiple times" do
@@ -214,7 +214,7 @@ describe "mailer plugin" do
       plugin :mailer
       route{""}
     end
-    app.mail('/').content_type.must_match /\Atext\/html/
+    app.mail('/').content_type.must_match(/\Atext\/html/)
   end
 
   it "supports manually overridding the default content-type for emails" do
@@ -225,7 +225,7 @@ describe "mailer plugin" do
         ""
       end
     end
-    app.mail('/').content_type.must_match /\Atext\/foo/
+    app.mail('/').content_type.must_match(/\Atext\/foo/)
   end
 
   it "supports setting the default content type when attachments are used" do
@@ -237,11 +237,11 @@ describe "mailer plugin" do
       end
     end
     m = app.mail('/')
-    m.content_type.must_match /\Amultipart\/mixed/
+    m.content_type.must_match(/\Amultipart\/mixed/)
     m.parts.length.must_equal 2
-    m.parts.first.content_type.must_match /\Atext\/html/
+    m.parts.first.content_type.must_match(/\Atext\/html/)
     m.parts.first.body.must_be :==, "a"
-    m.parts.last.content_type.must_match /\Atext\/css/
+    m.parts.last.content_type.must_match(/\Atext\/css/)
     m.parts.last.body.must_be :==, File.read('spec/assets/css/raw.css')
   end
 end

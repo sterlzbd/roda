@@ -10,7 +10,7 @@ describe "path_rewriter plugin" do
       rewrite_path '/2', '/1', :path_info=>true
       rewrite_path '/3', '/h'
       rewrite_path '/3', '/g', :path_info=>true
-      rewrite_path /\A\/e\z/, '/f'
+      rewrite_path(/\A\/e\z/, '/f')
       route do |r|
         "#{r.path_info}:#{r.remaining_path}"
       end

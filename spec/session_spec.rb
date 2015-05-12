@@ -10,7 +10,7 @@ describe "session handling" do
       end
     end
 
-    body.must_match /use Rack::Session::Cookie/
+    body.must_match(/use Rack::Session::Cookie/)
   end
 
   it "should return session if available" do

@@ -38,8 +38,8 @@ describe "csrf plugin" do
     s.must_equal 200
     field = h['FIELD']
     token = Regexp.escape(h['TOKEN'])
-    h['TAG'].must_match /\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/
-    h['METATAG'].must_match /\A<meta name="#{field}" content="#{token}" \/>\z/
+    h['TAG'].must_match(/\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/)
+    h['METATAG'].must_match(/\A<meta name="#{field}" content="#{token}" \/>\z/)
     b.must_equal ['g']
     s, _, b = req('/', env[h].merge('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN']))
     s.must_equal 200

@@ -139,8 +139,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/js/head/app\.js)"}
       js = body($1)
-      css.must_match /color: red;/
-      css2.must_match /color: blue;/
+      css.must_match(/color: red;/)
+      css2.must_match(/color: blue;/)
       js.must_include('console.log')
     end
 
@@ -156,8 +156,9 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="/foo(/assets/js/head/app\.js)"}
       js = body($1)
-      css.must_match /color: red;/
-      css2.must_match /color: blue;/
+      css.must_match(/color: red;/)
+      css2.must_match(/color: blue;/)
+      js.must_include('console.log')
     end
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling, with different options' do
@@ -172,8 +173,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/a/foo/head/app\.js.js)"}
       js = body($1)
-      css.must_match /color:red\}/
-      css2.must_match /color: blue;/
+      css.must_match(/color:red\}/)
+      css2.must_match(/color: blue;/)
       js.must_include('console.log')
     end
 
@@ -195,8 +196,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/js/head/app\.js)"}
       js = body($1)
-      css.must_match /color: red;/
-      css2.must_match /color: blue;/
+      css.must_match(/color: red;/)
+      css2.must_match(/color: blue;/)
       js.must_include('console.log')
     end
 
@@ -218,8 +219,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/js/head/app\.js)"}
       js = body($1)
-      css.must_match /color: red;/
-      css2.must_match /color: blue;/
+      css.must_match(/color: red;/)
+      css2.must_match(/color: blue;/)
       js.must_include('console.log')
     end
 
@@ -232,8 +233,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
       js.must_include('console.log')
     end
 
@@ -247,8 +248,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="/foo(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
       js.must_include('console.log')
     end
 
@@ -263,8 +264,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/a/foo/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
       js.must_include('console.log')
     end
 
@@ -285,8 +286,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
       js.must_include('console.log')
     end
 
@@ -308,8 +309,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="/foo(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
       js.must_include('console.log')
     end
 
@@ -330,8 +331,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
       js.must_include('console.log')
     end
 
@@ -345,8 +346,8 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
       js.must_include('console.log')
     end
 
@@ -357,8 +358,8 @@ if run_tests
       html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 0
-      css.must_match /color: ?red/
-      css.must_match /color: ?blue/
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
     end
 
     it 'should handle compiling only js assets' do
