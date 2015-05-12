@@ -1,5 +1,7 @@
 = HEAD
 
+* Make assets plugin work better with json plugin when r.assets is the last method called in a route block (jeremyevans) (#27)
+
 * Support no_mail! method in the mailer plugin, for skipping an email (jeremyevans)
 
 * Add precompile_templates plugin, for saving memory when using a forking webserver (jeremyevans)

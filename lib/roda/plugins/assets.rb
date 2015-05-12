@@ -611,6 +611,7 @@ class Roda
                 scope.render_asset(file, type)
               end
             end
+            nil
           end
         end
       end

@@ -482,6 +482,15 @@ if run_tests
       app.plugin :assets, :precompiled=>metadata_file
       app.allocate.assets([:js, :head]).must_match %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
     end
+
+    it 'should work correctly with json plugin when r.assets is the last method called' do
+      app.plugin :assets
+      app.plugin :json
+      app.route do |r|
+        r.assets
+      end
+      status.must_equal 404
+    end
   end
 
   describe 'assets plugin' do
