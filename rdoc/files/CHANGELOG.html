@@ -31,12 +31,59 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-04-13 10:10:59 -0700</span>
+          <span class='datetime'>2015-05-13 09:40:57 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-2.3.0+-282015-05-13-29">2.3.0 (2015-05-13)<span><a href="#label-2.3.0+-282015-05-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Make assets plugin work better with json plugin when r.assets is the last
+            method called in a route block (jeremyevans) (#27)</p>
+            </li><li>
+            <p>Support no_mail! method in the mailer plugin, for skipping an email
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add precompile_templates plugin, for saving memory when using a forking
+            webserver (jeremyevans)</p>
+            </li><li>
+            <p>Document how to allow per-branch HTML escaping of &lt;%= %&gt; in the
+            view_options plugin (jeremyevans)</p>
+            </li><li>
+            <p>Add :include_request option to json and json_parser plugins to include
+            request in :serializer/:parser call (janko-m) (#26)</p>
+            </li><li>
+            <p>Optimize template cache lookup in render plugin when :cache_key is given
+            (jeremyevans)</p>
+            </li><li>
+            <p>Add :engine_opts option to render plugin, for specifying per-template
+            engine options (jeremyevans)</p>
+            </li><li>
+            <p>The render plugin and render/view :ext option is now replaced by the
+            :engine option (jeremyevans)</p>
+            </li><li>
+            <p>Add path_rewriter plugin, for rewriting paths before routing (jeremyevans)</p>
+            </li><li>
+            <p>Add :cache_key option to render/view to explicitly set the template cache
+            key (jeremyevans)</p>
+            </li><li>
+            <p>Don&#39;t cache templates if :template_block is given to render/view,
+            unless :cache=&gt;true is used  (jeremyevans)</p>
+            </li><li>
+            <p>Add :cache option to render/view to force caching or not caching the
+            template (jeremyevans)</p>
+            </li><li>
+            <p>Avoid rehashing hashes at runtime in plugins (jeremyevans)</p>
+            </li><li>
+            <p>Add heartbeat plugin for heartbeat support (jeremyevans)</p>
+            </li><li>
+            <p>Support :serializer option in json plugin (janko-m) (#21)</p>
+            </li><li>
+            <p>Add json_parser plugin, for parsing request bodies in JSON format
+            (jeremyevans)</p>
+            </li></ul>
             
             <h1 id="label-2.2.0+-282015-04-13-29">2.2.0 (2015-04-13)<span><a href="#label-2.2.0+-282015-04-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>

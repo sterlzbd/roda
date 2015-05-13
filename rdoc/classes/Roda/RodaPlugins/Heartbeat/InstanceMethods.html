@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::Head::InstanceMethods</title>
+    <title>Roda::RodaPlugins::Heartbeat::InstanceMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::Head::InstanceMethods
+          Roda::RodaPlugins::Heartbeat::InstanceMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/head_rb.html">lib/roda/plugins/head.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/heartbeat_rb.html">lib/roda/plugins/heartbeat.rb</a>
           </li>
         </ol>
       </div>
@@ -54,18 +54,17 @@
                 <a name='method-i-call'></a>
                 <div class='synopsis'>
                   <span class='name'>call</span>
-                  <span class='arguments'>(*)</span>
+                  <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Always use an empty response body for head requests, with a content length
-                  of 0.</p>
+                  <p>If the request is for a heartbeat path, return the heartbeat response.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/head.rb, line 37</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">head?</span>&#x000A;    <span class="ruby-identifier">res</span>[<span class="ruby-value">2</span>] = <span class="ruby-constant">EMPTY_ARRAY</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/heartbeat.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">env</span>[<span class="ruby-constant">PATH_INFO</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>]&#x000A;    <span class="ruby-identifier">response</span> = <span class="ruby-constant">HEARTBEAT_RESPONSE</span>.<span class="ruby-identifier">dup</span>&#x000A;    <span class="ruby-identifier">response</span>[<span class="ruby-value">1</span>] = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">response</span>[<span class="ruby-value">1</span>]]&#x000A;    <span class="ruby-identifier">response</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

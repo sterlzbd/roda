@@ -47,6 +47,7 @@
             <h3>Public Instance</h3>
             <ol>
               <li><a target="docwin" href="#method-i-add_file">add_file</a></li>
+              <li><a target="docwin" href="#method-i-no_mail-21">no_mail!</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -69,7 +70,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 218</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">mail</span> = <span class="ruby-identifier">env</span>[<span class="ruby-constant">RODA_MAIL</span>]&#x000A;    <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@_response</span>&#x000A;    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">mail</span> = <span class="ruby-identifier">mail</span>&#x000A;    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">headers</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">CONTENT_TYPE</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 230</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">mail</span> = <span class="ruby-identifier">env</span>[<span class="ruby-constant">RODA_MAIL</span>]&#x000A;    <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@_response</span>&#x000A;    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">mail</span> = <span class="ruby-identifier">mail</span>&#x000A;    <span class="ruby-identifier">res</span>.<span class="ruby-identifier">headers</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">CONTENT_TYPE</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -90,7 +91,24 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-add_file-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-add_file-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 230</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_file</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">mail_attachments</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">a</span>, <span class="ruby-identifier">block</span>]&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-add_file-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 242</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">add_file</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">mail_attachments</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">a</span>, <span class="ruby-identifier">block</span>]&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-no_mail-21'>
+                <a name='method-i-no_mail-21'></a>
+                <div class='synopsis'>
+                  <span class='name'>no_mail!</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Signal that no mail should be sent for this request.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-no_mail-21-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-no_mail-21-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 248</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">no_mail!</span>&#x000A;  <span class="ruby-identifier">throw</span> <span class="ruby-value">:no_mail</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

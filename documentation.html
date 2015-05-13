@@ -32,7 +32,7 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v2.2.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v2.3.0)</h1>
 
 <h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
@@ -75,6 +75,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/NamedTemplates.html">named_templates</a>: Adds the ability to create inline templates by name, instead of storing them in the file system.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/PadrinoRender.html">padrino_render</a>: Makes render method that work similarly to Padrino's rendering, using a layout by default.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Partials.html">partials</a>: Adds partial method for rendering partials (templates prefixed with an underscore).</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/PrecompileTemplates.html">precompile_templates</a>: Adds support for precompiling templates, saving memory when using a forking webserver.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Static.html">static</a>: Adds support for serving static files using Rack::Static.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
@@ -103,6 +104,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/NotFound.html">not_found</a>: Adds not_found method for handling responses not otherwise handled by a route.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/PathRewriter.html">path_rewriter</a>: Adds support for rewriting paths before routing.</li>
   </ul></li>
   <li>Matchers: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/EmptyRoot.html">empty_root</a>: Makes root matcher match empty string in addition to single slash.</li>
@@ -118,8 +120,10 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/DelayBuild.html">delay_build</a>: Delay building the rack app until Roda.app is called.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Environments.html">environments</a>: Adds support for handling different execution environments (development/test/production).</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorEmail.html">error_email</a>: Adds ability to easily email a notification when an error is raised by the application.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Heartbeat.html">heartbeat</a>: Adds support for heartbeats.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/IndifferentParams.html">indifferent_params</a>: Adds params method for indifferent parameters.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/JsonParser.html">json_parser</a>: Parses request bodies in JSON format.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Mailer.html">mailer</a>: Adds support for sending emails using the routing tree.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Middleware.html">middleware</a>: Allows the Roda app to be used as middleware by another app.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Path.html">path</a>: Adds support for named paths.</li>
@@ -130,6 +134,11 @@
 
 <h3 id="external">External</h3>
 
+<h4 id="guides">Guides</h4>
+<ul>
+  <li><a href="https://github.com/badosu/Yogurt/wiki/Example:-Adding-authentication">Adding Authentication</a></li>
+</ul>
+
 <h4>Plugins</h4>
 
 <p>These projects ship external plugins for Roda:</p>
@@ -137,11 +146,15 @@
 <ul>
 <li><a href="https://github.com/jeremyevans/autoforme">autoforme</a>: Adds autoforme method for automatic creation of administrative front-end for Sequel models.</li>
 <li><a href="https://github.com/jeremyevans/forme">forme</a>: Adds form method for simple creation of html forms inside erb templates.</li>
+<li><a href="https://github.com/AMHOL/roda-action">roda-action</a>: Resolves actions stored in roda-container.</li>
 <li><a href="https://github.com/beno/roda-auth">roda-auth</a>: Adds authentication support for Roda.</li>
 <li><a href="https://github.com/cj/roda-component">roda-component</a>: Adds realtime components using faye and opal.</li>
+<li><a href="https://github.com/AMHOL/roda-container">roda-container</a>: Turns application into an inversion of control (IoC) container.</li>
 <li><a href="https://github.com/3scale/roda-parse-request">roda-parse-request</a>: Automatically parse JSON and URL-encoded requests.</li>
 <li><a href="https://github.com/jeremyevans/roda-route_list">roda-route_list</a>: Parses route metadata from comments in an app file, allowing introspection of routes.</li>
 <li><a href="https://github.com/beno/roda-rest_api">roda-rest_api</a>: Adds support for easily creating RESTful APIs.</li>
+<li><a href="https://github.com/janko-m/roda-symbolized_params">roda-symbolized_params</a>: Adds params method for symbolized params.</li>
+<li><a href="https://github.com/rom-rb/rom-roda">rom-roda</a>: Adds integration with Ruby Object Mapper.</li>
 </ul>
 
 <h4>Libraries</h4>
@@ -161,7 +174,7 @@
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/2_2_0_txt.html'>2.2</a> | <a href='rdoc/files/doc/release_notes/2_1_0_txt.html'>2.1</a> | <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
+          <a href='rdoc/files/doc/release_notes/2_3_0_txt.html'>2.3</a> | <a href='rdoc/files/doc/release_notes/2_2_0_txt.html'>2.2</a> | <a href='rdoc/files/doc/release_notes/2_1_0_txt.html'>2.1</a> | <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
         </li>
       
   

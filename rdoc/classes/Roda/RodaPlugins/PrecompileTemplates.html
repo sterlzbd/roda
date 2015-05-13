@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::PrecompileTemplates</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::PrecompileTemplates
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/precompile_templates_rb.html">lib/roda/plugins/precompile_templates.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The precompile_templates plugin adds support for precompiling template
+            code. This can result in a large memory savings for applications that have
+            large templates or a large number of small templates if the application
+            uses a forking webserver.  By default, template compilation is lazy, so all
+            the child processes in a forking webserver will have their own copy of the
+            compiled template.  By using the precompile_templates plugin, you can
+            precompile the templates in the parent process before forking, and then all
+            of the child processes can use the same precompiled templates, which saves
+            memory.</p>
+            
+            <p>After loading the plugin, you can call <code>precompile_templates</code>
+            with the pattern of templates you would like to precompile:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">precompile_templates</span>&#x000A;<span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/\*\*/*.erb&quot;</span></pre>
+            
+            <p>That will precompile all erb template files in the views directory or any
+            subdirectory.</p>
+            
+            <p>If the templates use local variables, you need to specify which local
+            variables to precompile, which should be an array of symbols:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&#39;views/users/_*.erb&#39;</span>, :<span class="ruby-identifier">locals=</span><span class="ruby-operator">&gt;</span>[:<span class="ruby-identifier">user</span>]</pre>
+            
+            <p>Note that if you have multiple local variables and are not using a Tilt
+            version greater than 2.0.1, you should specify the :locals option in the
+            same order as the keys in the :locals hash you pass to render/view.  Since
+            hashes are not ordered in ruby 1.8, you should not attempt to precompile
+            templates that use :locals on ruby 1.8 unless you are using a Tilt version
+            greater than 2.0.1.  If you are running the Tilt master branch, you can
+            force sorting of locals using the <code>:sort_locals</code> option when
+            loading the plugin.</p>
+            
+            <p>You can specify other render options when calling
+            <code>precompile_templates</code>, including <code>:cache_key</code>,
+            <code>:template_class</code>, and <code>:template_opts</code>.  If you are
+            passing any of those options to render/view for the template, you should
+            pass the same options when precompiling the template.</p>
+            
+            <p>To compile inline templates, just pass a single hash containing an :inline
+            to <code>precompile_templates</code>:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">precompile_templates</span> :<span class="ruby-identifier">inline=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">some_template_string</span></pre>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-load_dependencies">load_dependencies</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="PrecompileTemplates/ClassMethods.html">Roda::RodaPlugins::PrecompileTemplates::ClassMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>OPTS</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-load_dependencies'>
+                <a name='method-c-load_dependencies'></a>
+                <div class='synopsis'>
+                  <span class='name'>load_dependencies</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Load the render plugin as precompile_templates depends on it. Default to
+                  sorting the locals if the Tilt version is greater than 2.0.1.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb, line 50</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:precompile_templates_sort</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:sort_locals</span>, <span class="ruby-constant">Tilt</span><span class="ruby-operator">::</span><span class="ruby-constant">VERSION</span> <span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;2.0.1&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

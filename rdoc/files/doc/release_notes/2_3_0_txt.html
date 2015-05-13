@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>2.3.0.txt</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>2.3.0.txt</h1>
+        <div class='paths'>
+          doc/release_notes/2.3.0.txt
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2015-05-13 09:40:57 -0700</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>A json_parser plugin has been added, for parsing request bodies in JSON
+            format.  This is faster than using a middleware to perform the same task. 
+            This plugin supports a :parser option to use a custom JSON parser, an
+            :include_request option to include the request when calling the parser, and
+            a :error_handler option for a proc to call with the request if there is an
+            error when parsing. Example:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">json_parser</span>,&#x000A;  :<span class="ruby-identifier">parser=</span><span class="ruby-operator">&gt;</span><span class="ruby-constant">JSON</span>.<span class="ruby-identifier">method</span>(:<span class="ruby-identifier">parse</span>),&#x000A;  :<span class="ruby-identifier">include_request=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">false</span>,&#x000A;  :<span class="ruby-identifier">error_handler=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span> [<span class="ruby-value">400</span>, {}, []]}</pre>
+            </li><li>
+            <p>A path_rewriter plugin has been added, allowing for the rewriting of paths
+            before routing.  This allows you to rewrite just the routing path (the
+            default), or PATH_INFO as well as the routing path (if the :path_info
+            option is used).  This is useful if you want to internally treat one path
+            exactly the same as another path.</p>
+            
+            <p>By default, path rewriting is done on prefixes, so any path that starts
+            with the prefix will be rewritten.  You can pass a Regexp when rewriting
+            the path for more complete control.</p>
+            
+            <p>Examples:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">path_rewriter</span>&#x000A;<span class="ruby-identifier">rewrite_path</span> <span class="ruby-string">&#39;/a&#39;</span>, <span class="ruby-string">&#39;/b&#39;</span>&#x000A;<span class="ruby-comment"># GET /a treated as GET /b</span>&#x000A;<span class="ruby-comment"># GET /a/c treated as GET /b/c</span>&#x000A;&#x000A;<span class="ruby-identifier">rewrite_path</span> <span class="ruby-regexp">/\A\/c\z/</span>, <span class="ruby-string">&#39;/d&#39;</span>&#x000A;<span class="ruby-comment"># GET /c treated as GET /d</span>&#x000A;<span class="ruby-comment"># GET /c/e no change</span></pre>
+            </li><li>
+            <p>A precompiled_templates plugin has been added, for precompiling templates
+            before starting the application.  This can save a substantial amount of
+            memory if you are using large templates or a large number of small
+            templates in conjunction when using application preloading with a forking
+            webserver.  Example:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">precompile_templates</span>&#x000A;<span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/\*\*/*.erb&quot;</span>&#x000A;<span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/users/_*.erb&quot;</span>, :<span class="ruby-identifier">locals=</span><span class="ruby-operator">&gt;</span>[:<span class="ruby-identifier">user</span>]</pre>
+            </li><li>
+            <p>A heartbeat plugin has been added, for easily handling heartbeat/status
+            requests.  If a heartbeat/status request comes in, it will get a 200
+            response with a body of “OK”.  This is designed for automated systems that
+            check if the application is functioning. The default heartbeat path is
+            /heartbeat, but you can choose a different one using the :path option.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">heartbeat</span>, :<span class="ruby-identifier">path=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/heartbeat&#39;</span></pre>
+            </li></ul>
+            
+            <h1 id="label-Other+New+Features">Other New Features<span><a href="#label-Other+New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>The json plugin now supports a :serializer option to use a custom
+            serializer.  Additionally, it now supports a :include_request option to
+            include the request when calling the serializer.</p>
+            </li><li>
+            <p>In the render plugin, the render/view methods now support a
+            :cache=&gt;false option to not cache the template.  This can be useful for
+            large but rarely used templates, or where a new template object is created
+            for every render/view call.</p>
+            </li><li>
+            <p>In the render plugin, the render/view methods now support a :cache_key
+            option to force a specific cache key.  Manually setting cache keys can
+            result in improved performance, as automatically determining the cache key
+            can be a relatively expensive operation.</p>
+            </li><li>
+            <p>The render plugin now supports a :engine_opts option, to specify
+            per-template engine options.  :engine options should be a hash keyed by
+            render engine strings, with values being hashes of template options.</p>
+            </li><li>
+            <p>In the mailer plugin, a no_mail! method is now supported when mailing,
+            which will skip the current mail.  This makes it easier to delay the
+            decision about actually sending the email till it is time to send the
+            email, which makes it easier to avoid race conditions if you are using a
+            job queue for mailing.</p>
+            </li></ul>
+            
+            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p><a href="../../../classes/Roda.html">Roda</a> avoids rehashing hashes at
+            runtime in some places, for a minor speedup.</p>
+            </li><li>
+            <p>If the :template_block is given to render/view, default to not caching the
+            template, since it is likely the template block is specific to the request.
+            Allow for the :cache=&gt;true option to be used to force the caching of the
+            template.</p>
+            </li><li>
+            <p><a href="../../../classes/Roda.html">Roda</a> now returns a 404 response
+            for unmatched GET requests when using the assets and json plugins where
+            r.assets is the last method called in a route block.</p>
+            </li></ul>
+            
+            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>In the render plugin, the :ext option to the plugin and to the render/view
+            methods is now replaced by the :engine option. Previously, :engine was used
+            by default if :ext was not given. In general, there is no need for two
+            separate options, the engine is used as the extension by Tilt.</p>
+            
+            <p>In general, this is a backwards compatible change, except when both :ext
+            and :engine were specified differently as plugin options, and an inline
+            template is used with render or view without either the :ext or :engine
+            options being specified.</p>
+            </li></ul>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

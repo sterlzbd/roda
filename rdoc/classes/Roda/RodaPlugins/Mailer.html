@@ -79,6 +79,11 @@
             
             <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">from</span> <span class="ruby-string">&#39;from@example.com&#39;</span>&#x000A;  <span class="ruby-identifier">to</span> <span class="ruby-string">&#39;to@example.com&#39;</span>&#x000A;  <span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;No Body Here&#39;</span>&#x000A;  <span class="ruby-string">&quot;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
+            <p>If while preparing the email you figure out you don&#39;t want to send an
+            email, call <code>no_mail!</code>:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-string">&#39;/welcome/:d&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> &#x000A;  <span class="ruby-identifier">no_mail!</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">user</span> = <span class="ruby-constant">User</span>[<span class="ruby-identifier">id</span>]&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
             <p>By default, the mailer uses text/plain as the Content-Type for emails. You
             can override the default by specifying a :content_type option when loading
             the plugin:</p>
@@ -216,7 +221,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 121</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/mailer.rb, line 129</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:mailer</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
