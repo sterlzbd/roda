@@ -161,7 +161,7 @@ class Roda
 
         # Load a new plugin into the current class.  A plugin can be a module
         # which is used directly, or a symbol represented a registered plugin
-        # which will be required and then used.
+        # which will be required and then used. Returns nil.
         #
         #   Roda.plugin PluginModule
         #   Roda.plugin :csrf
@@ -176,6 +176,7 @@ class Roda
           self::RodaResponse.send(:include, plugin::ResponseMethods) if defined?(plugin::ResponseMethods)
           self::RodaResponse.extend(plugin::ResponseClassMethods) if defined?(plugin::ResponseClassMethods)
           plugin.configure(self, *args, &block) if plugin.respond_to?(:configure)
+          nil
         end
 
         # Setup routing tree for the current Roda application, and build the

@@ -48,7 +48,7 @@ describe "plugins" do
     end
 
     app(:bare) do
-      plugin c, "Foo "
+      plugin(c, "Foo ").must_equal nil
 
       route do |r|
         r.hello do
