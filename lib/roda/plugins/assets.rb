@@ -208,6 +208,7 @@ class Roda
     #                  detect changes in your asset files.
     # :group_subdirs :: Whether a hash used in :css and :js options requires the assets for the
     #                   related group are contained in a subdirectory with the same name (default: true)
+    # :gzip :: Store gzipped compiled assets files, and serve those to clients who accept gzip encoding.
     # :headers :: A hash of additional headers for both js and css rendered files
     # :js_dir :: Directory name containing your javascript source, inside :path (default: 'js')
     # :js_headers :: A hash of additional headers for your rendered javascript files
@@ -243,6 +244,10 @@ class Roda
       EMPTY_STRING = ''.freeze
       JS_SUFFIX = '.js'.freeze
       CSS_SUFFIX = '.css'.freeze
+      HTTP_ACCEPT_ENCODING = 'HTTP_ACCEPT_ENCODING'.freeze
+      CONTENT_ENCODING = 'Content-Encoding'.freeze
+      GZIP = 'gzip'.freeze
+      DOTGZ = '.gz'.freeze
 
       # Load the render and caching plugins plugins, since the assets plugin
       # depends on them.
@@ -288,6 +293,10 @@ class Roda
         sj = lambda do |*v|
           s = j.call(*v)
           s.empty? ? s : (s + '/').freeze
+        end
+
+        if opts[:gzip]
+          require 'zlib'
         end
 
         if opts[:precompiled] && !opts[:compiled] && ::File.exist?(opts[:precompiled])
@@ -420,6 +429,13 @@ class Roda
           path = "#{o[:"compiled_#{type}_path"]}#{suffix}.#{unique_id}.#{type}"
           ::FileUtils.mkdir_p(File.dirname(path))
           ::File.open(path, 'wb'){|f| f.write(content)}
+
+          if o[:gzip]
+            Zlib::GzipWriter.open("#{path}.gz") do |gz|
+              gz.write(content)
+            end
+          end
+
           nil
         end
 
@@ -512,6 +528,12 @@ class Roda
           o = self.class.assets_opts
           if o[:compiled]
             file = "#{o[:"compiled_#{type}_path"]}#{file}"
+
+            if o[:gzip] && env[HTTP_ACCEPT_ENCODING] =~ /\bgzip\b/
+              @_response[CONTENT_ENCODING] = GZIP
+              file << DOTGZ
+            end
+
             check_asset_request(file, type, ::File.stat(file).mtime)
             ::File.read(file)
           else

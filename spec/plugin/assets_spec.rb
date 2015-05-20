@@ -51,6 +51,10 @@ if run_tests
       FileUtils.rm_r('spec/public') if File.directory?('spec/public')
     end
 
+    def gunzip(body)
+      Zlib::GzipReader.wrap(StringIO.new(body), &:read)
+    end
+
     it 'assets_opts should use correct paths given options' do
       fpaths = [:js_path, :css_path, :compiled_js_path, :compiled_css_path]
       rpaths = [:js_prefix, :css_prefix, :compiled_js_prefix, :compiled_css_prefix]
@@ -233,6 +237,30 @@ if run_tests
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
       js = body($1)
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
+      js.must_include('console.log')
+    end
+
+    it 'should handle compiling assets, linking to them, and accepting requests for them when :gzip is set' do
+      app.plugin :assets, :gzip=>true
+      app.compile_assets
+      html = body('/test')
+      html.scan(/<link/).length.must_equal 1
+      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
+      css_path = $1
+      html.scan(/<script/).length.must_equal 1
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      js_path = $1
+
+      css = body(css_path)
+      js = body(js_path)
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
+      js.must_include('console.log')
+
+      css = gunzip(body(css_path, 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip'))
+      js = gunzip(body(js_path, 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip'))
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
       js.must_include('console.log')

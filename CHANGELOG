@@ -1,3 +1,7 @@
+= HEAD
+
+* Add :gzip option to assets plugin (jeremyevans)
+
 = 2.3.0 (2015-05-13)
 
 * Make assets plugin work better with json plugin when r.assets is the last method called in a route block (jeremyevans) (#27)
