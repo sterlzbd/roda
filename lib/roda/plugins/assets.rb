@@ -295,10 +295,6 @@ class Roda
           s.empty? ? s : (s + '/').freeze
         end
 
-        if opts[:gzip]
-          require 'zlib'
-        end
-
         if opts[:precompiled] && !opts[:compiled] && ::File.exist?(opts[:precompiled])
           require 'json'
           opts[:compiled] = ::JSON.parse(::File.read(opts[:precompiled]))
@@ -431,6 +427,7 @@ class Roda
           ::File.open(path, 'wb'){|f| f.write(content)}
 
           if o[:gzip]
+            require 'zlib'
             Zlib::GzipWriter.open("#{path}.gz") do |gz|
               gz.write(content)
             end
