@@ -199,6 +199,8 @@ class Roda
     # :compiled_path:: Path inside public folder in which compiled files are stored (default: :prefix)
     # :concat_only :: Whether to just concatenate instead of concatentating
     #                 and compressing files (default: false)
+    # :css_compressor :: Compressor to use for compressing CSS, either :yui, :none, or nil (the default, which will try
+    #                    :yui if available, but not fail if it is not available)
     # :css_dir :: Directory name containing your css source, inside :path (default: 'css')
     # :css_headers :: A hash of additional headers for your rendered css files
     # :css_opts :: Template options to pass to the render plugin (via :template_opts) when rendering css assets
@@ -210,6 +212,9 @@ class Roda
     #                   related group are contained in a subdirectory with the same name (default: true)
     # :gzip :: Store gzipped compiled assets files, and serve those to clients who accept gzip encoding.
     # :headers :: A hash of additional headers for both js and css rendered files
+    # :js_compressor :: Compressor to use for compressing javascript, either :yui, :closure, :uglifier, :minjs,
+    #                   :none, or nil (the default, which will try :yui, :closure, :uglifier, then :minjs, but
+    #                   not fail if any of them is not available)
     # :js_dir :: Directory name containing your javascript source, inside :path (default: 'js')
     # :js_headers :: A hash of additional headers for your rendered javascript files
     # :js_opts :: Template options to pass to the render plugin (via :template_opts) when rendering javascript assets
@@ -248,6 +253,9 @@ class Roda
       CONTENT_ENCODING = 'Content-Encoding'.freeze
       GZIP = 'gzip'.freeze
       DOTGZ = '.gz'.freeze
+
+      # Internal exception raised when a compressor cannot be found
+      CompressorNotFound = Class.new(RodaError)
 
       # Load the render and caching plugins plugins, since the assets plugin
       # depends on them.
@@ -441,13 +449,72 @@ class Roda
         # a java runtime.  This method can be overridden by the application
         # to use a different compressor.
         def compress_asset(content, type)
-          require 'yuicompressor'
-          # :nocov:
-          content = YUICompressor.send("compress_#{type}", content, :munge => true)
-          # :nocov:
-        rescue LoadError, Errno::ENOENT
-          # yuicompressor or java not available, just use concatenated, uncompressed output
+          case compressor = assets_opts[:"#{type}_compressor"]
+          when :none
+            return content
+          when nil
+            # default, try different compressors
+          else
+            return send("compress_#{type}_#{compressor}", content)
+          end
+
+          compressors = if type == :js
+            [:yui, :closure, :uglifier, :minjs]
+          else
+            [:yui]
+          end
+
+          compressors.each do |comp|
+            begin
+              if c = send("compress_#{type}_#{comp}", content)
+                return c
+              end
+            rescue LoadError, CompressorNotFound
+            end
+          end
+
           content
+        end
+
+        # Compress the CSS using YUI Compressor, requires java runtime
+        def compress_css_yui(content)
+          compress_yui(content, :compress_css)
+        end
+
+        # Compress the JS using Google Closure Compiler, requires java runtime
+        def compress_js_closure(content)
+          require 'closure-compiler'
+
+          begin
+            ::Closure::Compiler.new.compile(content)
+          rescue ::Closure::Error => e
+            raise CompressorNotFound, "#{e.class}: #{e.message}", e.backtrace
+          end
+        end
+
+        # Compress the JS using MinJS, a pure ruby compressor
+        def compress_js_minjs(content)
+          require 'minjs'
+          ::Minjs::Compressor.new(:debug => false).compress(content)
+        end
+
+        # Compress the JS using Uglifier, requires javascript runtime
+        def compress_js_uglifier(content)
+          require 'uglifier'
+          Uglifier.compile(content)
+        end
+
+        # Compress the CSS using YUI Compressor, requires java runtime
+        def compress_js_yui(content)
+          compress_yui(content, :compress_js)
+        end
+
+        # Compress the CSS/JS using YUI Compressor, requires java runtime
+        def compress_yui(content, meth)
+          require 'yuicompressor'
+          ::YUICompressor.send(meth, content, :munge => true)
+        rescue ::Errno::ENOENT => e
+          raise CompressorNotFound, "#{e.class}: #{e.message}", e.backtrace
         end
 
         # Return a unique id for the given content.  By default, uses the
@@ -456,7 +523,7 @@ class Roda
         # want to use a unique value.
         def asset_digest(content)
           require 'digest/sha1'
-          Digest::SHA1.hexdigest(content)
+          ::Digest::SHA1.hexdigest(content)
         end
       end
 

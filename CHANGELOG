@@ -1,5 +1,7 @@
 = HEAD
 
+* Support Closure Compiler, Uglifier, and MinJS for compressing javascript in the assets plugin (jeremyevans)
+
 * Make Roda.plugin always return nil (jeremyevans)
 
 * Add :gzip option to assets plugin (jeremyevans)

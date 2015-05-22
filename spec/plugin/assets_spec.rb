@@ -30,7 +30,9 @@ if run_tests
           :js => { :head => ['app.js'] },
           :path => 'spec/assets',
           :public => 'spec',
-          :css_opts => {:cache=>false}
+          :css_opts => {:cache=>false},
+          :css_compressor => :none,
+          :js_compressor => :none
 
         route do |r|
           r.assets
@@ -226,6 +228,25 @@ if run_tests
       css.must_match(/color: red;/)
       css2.must_match(/color: blue;/)
       js.must_include('console.log')
+    end
+
+    it 'should handle compressing using different libraries' do
+      try_compressor = proc do |css, js|
+        app.plugin :assets, :css_compressor=>css, :js_compressor=>js
+        begin
+          app.compile_assets
+        rescue LoadError, Roda::RodaPlugins::Assets::CompressorNotFound
+          next
+        end
+        File.read("spec/assets/app.#{app.assets_opts[:compiled]['css']}.css").must_match(/color: ?blue/)
+        File.read("spec/assets/app.head.#{app.assets_opts[:compiled]['js.head']}.js").must_include('console.log')
+      end
+
+      try_compressor.call(nil, nil)
+      try_compressor.call(:yui, :yui)
+      try_compressor.call(:none, :closure)
+      try_compressor.call(:none, :uglifier)
+      try_compressor.call(:none, :minjs)
     end
 
     it 'should handle compiling assets, linking to them, and accepting requests for them' do
