@@ -6,7 +6,7 @@ VERS = lambda do
   require File.expand_path("../lib/roda/version.rb", __FILE__)
   Roda::RodaVersion
 end
-CLEAN.include ["#{NAME}-*.gem", "rdoc", "coverage", "www/public/*.html", "www/public/rdoc"]
+CLEAN.include ["#{NAME}-*.gem", "rdoc", "coverage", "www/public/*.html", "www/public/rdoc", "spec/assets/app.*.css", "spec/assets/app.*.js", "spec/assets/app.*.css.gz", "spec/assets/app.*.js.gz"]
 
 # Gem Packaging and Release
 
