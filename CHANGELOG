@@ -1,5 +1,7 @@
 = HEAD
 
+* Add websockets plugin, for integration with faye-websocket (jeremyevans)
+
 * Add status_handler plugin, similar to not_found but for any status code (celsworth) (#29)
 
 * Support Closure Compiler, Uglifier, and MinJS for compressing javascript in the assets plugin (jeremyevans)
