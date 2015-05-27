@@ -27,7 +27,7 @@ class Roda
     # This plugin is now a wrapper around the +status_handler+ plugin and
     # still exists mainly for backward compatibility.
     module NotFound
-
+      # Require the status_handler plugin
       def self.load_dependencies(app)
         app.plugin :status_handler
       end
@@ -35,7 +35,7 @@ class Roda
       # If a block is given, install the block as the not_found handler.
       def self.configure(app, &block)
         if block
-          app.status_handler(404, &block)
+          app.not_found(&block)
         end
       end
 

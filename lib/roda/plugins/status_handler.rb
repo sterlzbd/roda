@@ -19,9 +19,7 @@ class Roda
     # Before a block is called, any existing headers on the response will be
     # cleared.  So if you want to be sure the headers are set even in your block,
     # you need to reset them in the block.
-    #
     module StatusHandler
-
       def self.configure(app)
         app.opts[:status_handler] ||= {}
       end
@@ -32,7 +30,7 @@ class Roda
           opts[:status_handler][code] = block
         end
 
-        # Freeze our options hash so that there can be no thread safety issues at runtime.
+        # Freeze the hash of status handlers so that there can be no thread safety issues at runtime.
         def freeze
           opts[:status_handler].freeze
           super
