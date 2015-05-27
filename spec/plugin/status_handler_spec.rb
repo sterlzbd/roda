@@ -133,7 +133,7 @@ describe "status_handler plugin" do
     body.must_equal 'not found'
     status.must_equal 404
 
-    proc{app.status_handler(404) { "blah" }}.must_raise FrozenError
+    proc{app.status_handler(404) { "blah" }}.must_raise
 
     body.must_equal 'not found'
   end

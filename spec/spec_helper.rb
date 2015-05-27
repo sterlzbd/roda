@@ -24,9 +24,6 @@ require "stringio"
 gem 'minitest'
 require "minitest/autorun"
 
-# Work around minitest issue requiring specific exception class
-FrozenError = RUBY_VERSION >= '1.9' ? RuntimeError : TypeError
-
 #def (Roda::RodaPlugins).warn(s); end
 
 class Minitest::Spec

@@ -176,8 +176,7 @@ describe "integration" do
   it "should have app return the rack application to call" do
     app(:bare){}.app.must_equal nil
     app.route{|r|}
-    # Work around minitest bug
-    assert_kind_of Proc, app.app
+    app.app.must_be_kind_of(Proc)
     c = Class.new{def initialize(app) @app = app end; def call(env) @app.call(env) end} 
     app.use c
     app.app.must_be_kind_of(c)

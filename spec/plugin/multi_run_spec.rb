@@ -45,7 +45,7 @@ describe "multi_run plugin" do
     body("/b/a").must_equal 'b2'
     body.must_equal 'c'
 
-    proc{app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}}.must_raise FrozenError
+    proc{app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}}.must_raise
   end
 
   it "works when subclassing" do

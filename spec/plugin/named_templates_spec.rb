@@ -52,7 +52,7 @@ describe "named_templates plugin" do
     app.freeze
     body.must_equal 'bar13-foo12-baz'
 
-    proc{app.template(:b){"a"}}.must_raise FrozenError
+    proc{app.template(:b){"a"}}.must_raise
   end
 
   it "works with the view_subdirs plugin" do

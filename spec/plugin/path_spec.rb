@@ -193,7 +193,7 @@ describe "path plugin" do
     b = proc{|x| x.to_s}
     @app.path(c, &b)
     # Work around minitest bug
-    assert_equal @app.path_block(c), b
+    app.path_block(c).must_equal b
   end
 
   it "Roda.path doesn't work with classes without blocks" do
@@ -207,7 +207,7 @@ describe "path plugin" do
 
   it "Roda.path doesn't work after freezing the app" do
     app.freeze
-    proc{app.path(Class.new){|obj| ''}}.must_raise FrozenError
+    proc{app.path(Class.new){|obj| ''}}.must_raise
   end
 end
 

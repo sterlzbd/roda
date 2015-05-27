@@ -6,20 +6,20 @@ describe "Roda.freeze" do
   end
 
   it "should make opts not be modifiable after calling finalize!" do
-    proc{app.opts[:foo] = 'bar'}.must_raise FrozenError
+    proc{app.opts[:foo] = 'bar'}.must_raise
   end
 
   it "should make use and route raise errors" do
-    proc{app.use Class.new}.must_raise FrozenError
-    proc{app.route{}}.must_raise FrozenError
+    proc{app.use Class.new}.must_raise
+    proc{app.route{}}.must_raise
   end
 
   it "should make plugin raise errors" do
-    proc{app.plugin Module.new}.must_raise Roda::RodaError
+    proc{app.plugin Module.new}.must_raise
   end
 
   it "should make subclassing raise errors" do
-    proc{Class.new(app)}.must_raise Roda::RodaError
+    proc{Class.new(app)}.must_raise
   end
 
   it "should freeze app" do

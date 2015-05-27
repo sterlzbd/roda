@@ -32,6 +32,6 @@ describe "path_rewriter plugin" do
     
     app.freeze
     body('/a').must_equal '/a:/b'
-    proc{app.rewrite_path '/a', '/b'}.must_raise FrozenError
+    proc{app.rewrite_path '/a', '/b'}.must_raise
   end
 end

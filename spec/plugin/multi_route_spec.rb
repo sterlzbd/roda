@@ -87,7 +87,7 @@ describe "multi_route plugin" do
     status('/c').must_equal 404
     status('/c', 'REQUEST_METHOD'=>'POST').must_equal 404
 
-    proc{app.route("foo"){}}.must_raise FrozenError
+    proc{app.route("foo"){}}.must_raise
   end
 
   it "uses multi_route to dispatch to any named route" do

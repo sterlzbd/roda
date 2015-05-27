@@ -159,6 +159,6 @@ describe "class_level_routing plugin" do
     status.must_equal 200
     status("/asdfa/asdf").must_equal 404
 
-    proc{app.on{}}.must_raise FrozenError
+    proc{app.on{}}.must_raise
   end
 end
