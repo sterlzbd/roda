@@ -23,42 +23,26 @@ class Roda
     # will be cleared.  So if you want to be sure the headers are set
     # even in a not_found block, you need to reset them in the
     # not_found block.
+    #
+    # This plugin is now a wrapper around the +status_handler+ plugin and
+    # still exists mainly for backward compatibility.
     module NotFound
+
+      def self.load_dependencies(app)
+        app.plugin :status_handler
+      end
+
       # If a block is given, install the block as the not_found handler.
       def self.configure(app, &block)
         if block
-          app.not_found(&block)
+          app.status_handler(404, &block)
         end
       end
 
       module ClassMethods
         # Install the given block as the not_found handler.
         def not_found(&block)
-          define_method(:not_found, &block)
-          private :not_found
-        end
-      end
-
-      module InstanceMethods
-        # If routing returns a 404 response with an empty body, call
-        # the not_found handler.
-        def call
-          result = super
-
-          if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
-            @_response.headers.clear
-            super{not_found}
-          else
-            result
-          end
-        end
-
-        private
-
-        # Use an empty not_found_handler by default, so that loading
-        # the plugin without defining a not_found handler doesn't
-        # break things.
-        def not_found
+          status_handler(404, &block)
         end
       end
     end
