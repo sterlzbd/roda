@@ -1,5 +1,6 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
+if RUBY_VERSION >= '1.9.3'
 begin
   lib = nil
   for lib in %w'faye/websocket thin' do
@@ -59,20 +60,21 @@ describe "websockets plugin" do
     msg = nil
     ws.on(:open){|event| msg = true}
     t = Time.now
-    sleep 0.01 until msg || Time.now - t > 1
+    sleep 0.01 until msg || Time.now - t > 3
     msg.must_equal true
 
     msg = nil
     ws.on(:message){|event| msg = event.data}
     ws.send("hello")
     t = Time.now
-    sleep 0.01 until msg || Time.now - t > 1
+    sleep 0.01 until msg || Time.now - t > 3
     msg.must_equal 'olleh'
 
     ws.close
     t = Time.now
-    sleep 0.01 until @events == %w'open hello close' || Time.now - t > 2
+    sleep 0.01 until @events == %w'open hello close' || Time.now - t > 3
     @events.must_equal %w'open hello close'
   end
+end
 end
 end

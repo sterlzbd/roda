@@ -6,7 +6,9 @@ class Roda
     # Currently, only 'faye-websocket' is supported, so eventmachine
     # is required for websockets.  See the
     # {faye-websocket documentation}[https://github.com/faye/faye-websocket-ruby] 
-    # for details on the faye-websocket API.
+    # for details on the faye-websocket API. Note that faye-websocket
+    # is only supported on ruby 1.9.3+, so the websockets plugin only works
+    # on ruby 1.9.3+.
     #
     # Here's a simplified example for a basic multi-user,
     # multi-room chat server, where a message from any user in a room
