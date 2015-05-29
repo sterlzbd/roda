@@ -60,19 +60,19 @@ describe "websockets plugin" do
     msg = nil
     ws.on(:open){|event| msg = true}
     t = Time.now
-    sleep 0.01 until msg || Time.now - t > 3
+    sleep 0.01 until msg || Time.now - t > 5
     msg.must_equal true
 
     msg = nil
     ws.on(:message){|event| msg = event.data}
     ws.send("hello")
     t = Time.now
-    sleep 0.01 until msg || Time.now - t > 3
+    sleep 0.01 until msg || Time.now - t > 5
     msg.must_equal 'olleh'
 
     ws.close
     t = Time.now
-    sleep 0.01 until @events == %w'open hello close' || Time.now - t > 3
+    sleep 0.01 until @events == %w'open hello close' || Time.now - t > 5
     @events.must_equal %w'open hello close'
   end
 end
