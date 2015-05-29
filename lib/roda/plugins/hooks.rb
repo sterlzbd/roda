@@ -21,13 +21,13 @@ class Roda
     #     # ...
     #   end
     #
+    # However, this code makes it easier to write after hooks, as well as
+    # handle cases where before hooks are added after the route block.
+    #
     # Note that the after hook is called with the rack response array
     # of status, headers, and body.  If it wants to change the response,
     # it must mutate this argument, calling <tt>response.status=</tt> inside
     # an after block will not affect the returned status.
-    #
-    # However, this code makes it easier to write after hooks, as well as
-    # handle cases where before hooks are added after the route block.
     module Hooks
       def self.configure(app)
         app.opts[:before_hook] ||= nil
