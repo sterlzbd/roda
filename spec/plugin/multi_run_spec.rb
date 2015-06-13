@@ -69,4 +69,19 @@ describe "multi_run plugin" do
     @app = a
     body("/b").must_equal 'b2'
   end
+
+  it "yields prefix" do
+    yielded = false
+
+    app(:multi_run) do |r|
+      r.multi_run do |prefix|
+        yielded = prefix
+      end
+    end
+
+    app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}
+
+    body("/a").must_equal "a1"
+    yielded.must_equal "a"
+  end
 end
