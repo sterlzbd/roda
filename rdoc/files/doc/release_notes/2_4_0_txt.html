@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>2.4.0.txt</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>2.4.0.txt</h1>
+        <div class='paths'>
+          doc/release_notes/2.4.0.txt
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2015-06-15 09:41:51 -0700</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>A websocket plugin has been added, for websocket support using
+            faye-websocket.  Here&#39;s an example of a simple echo service using
+            websockets:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">websocket</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;echo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">websocket</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ws</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># Routing block taken for a websocket request to /echo</span>&#x000A;&#x000A;      <span class="ruby-comment"># ws is a Faye::WebSocket instance, so you can use the</span>&#x000A;      <span class="ruby-comment"># Faye::WebSocket API</span>&#x000A;      <span class="ruby-identifier">ws</span>.<span class="ruby-identifier">on</span>(:<span class="ruby-identifier">message</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">event</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">ws</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">event</span>.<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># View rendered if a regular GET request to /echo</span>&#x000A;    <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;echo&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li><li>
+            <p>A status_handler plugin has been added, which allows <a
+            href="../../../classes/Roda.html">Roda</a> to specially handle arbitrary
+            status codes.  Usage is similar to the not_found plugin (which now uses
+            status_handler internally):</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">status_handler</span>&#x000A;&#x000A;<span class="ruby-identifier">status_handler</span> <span class="ruby-value">403</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;You are forbidden from seeing that!&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">status_handler</span> <span class="ruby-value">404</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;Where did it go?&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            </li></ul>
+            
+            <h1 id="label-Other+New+Features">Other New Features<span><a href="#label-Other+New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>The assets plugin now supports a :gzip option, which will save gzipped
+            versions when compiling assets.  When serving compiled assets, if the
+            request accepts gzip encoding, it will serve the gzipped version.  This
+            also plays nicely with nginx&#39;s gzip_static support.</p>
+            </li><li>
+            <p>The assets plugin now supports Google Closure Compiler, Uglifier, and MinJS
+            for minifying javascript.  You can now specify which css and js compressors
+            to use via the :css_compressor and :js_compressor options.</p>
+            </li></ul>
+            
+            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Roda.plugin now always returns nil.  Previously the return value could be
+            non-nil if the plugin used a configure method.</p>
+            </li></ul>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::NotFound::InstanceMethods</title>
+    <title>Roda::RodaPlugins::StatusHandler::InstanceMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::NotFound::InstanceMethods
+          Roda::RodaPlugins::StatusHandler::InstanceMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/not_found_rb.html">lib/roda/plugins/not_found.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/status_handler_rb.html">lib/roda/plugins/status_handler.rb</a>
           </li>
         </ol>
       </div>
@@ -58,14 +58,13 @@
                 </div>
                 <div class='description'>
                   
-                  <p>If routing returns a 404 response with an empty body, call the not_found
-                  handler.</p>
+                  <p>If routing returns a response we have a handler for, call that handler.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/not_found.rb, line 45</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>&#x000A;  <span class="ruby-identifier">result</span> = <span class="ruby-keyword">super</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">404</span> <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">v</span> = <span class="ruby-identifier">result</span>[<span class="ruby-value">2</span>]).<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">headers</span>.<span class="ruby-identifier">clear</span>&#x000A;    <span class="ruby-keyword">super</span>{<span class="ruby-identifier">not_found</span>}&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">result</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/status_handler.rb, line 42</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>&#x000A;  <span class="ruby-identifier">result</span> = <span class="ruby-keyword">super</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> (<span class="ruby-identifier">block</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:status_handler</span>][<span class="ruby-identifier">result</span>[<span class="ruby-value">0</span>]]) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">v</span> = <span class="ruby-identifier">result</span>[<span class="ruby-value">2</span>]).<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">headers</span>.<span class="ruby-identifier">clear</span>&#x000A;    <span class="ruby-keyword">super</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">result</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

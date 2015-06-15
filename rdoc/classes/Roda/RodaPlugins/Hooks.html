@@ -48,13 +48,13 @@
             
             <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;/login&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
+            <p>However, this code makes it easier to write after hooks, as well as handle
+            cases where before hooks are added after the route block.</p>
+            
             <p>Note that the after hook is called with the rack response array of status,
             headers, and body.  If it wants to change the response, it must mutate this
             argument, calling <code>response.status=</code> inside an after block will
             not affect the returned status.</p>
-            
-            <p>However, this code makes it easier to write after hooks, as well as handle
-            cases where before hooks are added after the route block.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
