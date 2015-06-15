@@ -25,6 +25,14 @@ class Roda
     # starting with +/ro+ to +OtherRodaApp+, and routes starting with +/si+ to
     # SinatraApp.
     #
+    # Optionally you can pass a block to +multi_run+ that gets called with prefix.
+    #
+    #   App.route do |r|
+    #     r.multi_run do |prefix\
+    #       # do something based on prefix before the request is passed further
+    #     end
+    #   end
+    #
     # The multi_run plugin is similar to the multi_route plugin, with the difference
     # being the multi_route plugin keeps all routing subtrees in the same Roda app/class,
     # while multi_run dispatches to other rack apps.  If you want to isolate your routing
@@ -76,6 +84,7 @@ class Roda
         # dispatch the request to the stored rack application.
         def multi_run
           on self.class.multi_run_regexp do |prefix|
+            yield prefix if block_given?
             run scope.class.multi_run_apps[prefix]
           end
         end
