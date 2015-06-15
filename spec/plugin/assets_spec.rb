@@ -266,6 +266,16 @@ if run_tests
       js.must_include('console.log')
     end
 
+    it 'should handle linking to compiled assets when a compiled asset host is used' do
+      app.plugin :assets, :compiled_asset_host=>'https://cdn.example.com'
+      app.compile_assets
+      html = body('/test')
+      html.scan(/<link/).length.must_equal 1
+      html.must_match %r{href="https://cdn\.example\.com/assets/app\.[a-f0-9]{40}\.css"}
+      html.scan(/<script/).length.must_equal 1
+      html.must_match %r{src="https://cdn\.example\.com/assets/app\.head\.[a-f0-9]{40}\.js"}
+    end
+
     it 'should handle compiling assets, linking to them, and accepting requests for them when :gzip is set' do
       app.plugin :assets, :gzip=>true
       app.compile_assets

@@ -189,6 +189,8 @@ class Roda
     #
     # :add_suffix :: Whether to append a .css or .js extension to asset routes in non-compiled mode
     #                (default: false)
+    # :compiled_asset_host :: The asset host to use for compiled assets.  Should include the protocol
+    #                         as well as the host (e.g. "https://cdn.example.com", "//cdn.example.com")
     # :compiled_css_dir :: Directory name in which to store the compiled css file,
     #                      inside :compiled_path (default: nil)
     # :compiled_css_route :: Route under :prefix for compiled css assets (default: :compiled_css_dir)
@@ -562,14 +564,19 @@ class Roda
 
           # Create a tag for each individual file
           if compiled = o[:compiled]
+            asset_host = o[:compiled_asset_host]
             if dirs && !dirs.empty?
               key = dirs.join(DOT)
               ckey = "#{stype}.#{key}"
               if ukey = compiled[ckey]
-                "#{tag_start}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{key}.#{ukey}.#{stype}#{tag_end}"
+                ukey = "#{key}.#{ukey}"
               end
-            elsif ukey = compiled[stype]
-              "#{tag_start}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{tag_end}"
+            else
+              ukey = compiled[stype]
+            end
+
+            if ukey
+              "#{tag_start}#{asset_host}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{tag_end}"
             end
           else
             asset_dir = o[type]

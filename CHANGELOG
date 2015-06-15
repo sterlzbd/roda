@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :compiled_asset_host option to assets plugin, to use a host for compiled assets (jeremyevans)
+
 * Allow r.multi_run to take a block that is called with the prefix before dispatching to the rack app (mikz) (#32)
 
 = 2.4.0 (2015-06-15)
