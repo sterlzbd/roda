@@ -4,7 +4,7 @@
   faye-websocket.  Here's an example of a simple echo service using
   websockets:
 
-    plugin :websocket
+    plugin :websockets
 
     route do |r|
       r.get "echo" do
