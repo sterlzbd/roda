@@ -15,7 +15,7 @@ class Roda
     # is sent to all other users in the same room, using a websocket
     # per room:
     #
-    #   plugin :websockets, :adapter=>:thin, :opts=>{:ping=>45}
+    #   plugin :websockets, :adapter=>:thin, :ping=>45
     #
     #   MUTEX = Mutex.new
     #   ROOMS = {}
