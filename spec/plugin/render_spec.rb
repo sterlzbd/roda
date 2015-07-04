@@ -416,5 +416,30 @@ describe "render plugin" do
 
     Class.new(app).render_opts[:cache].must_equal false
   end
+  it "with a cache_class set" do
+    app(:bare) do
+      test_cache = Class.new(Roda::RodaCache) do
+        def [](key)
+          super
+        end
+        def []=(key, value)
+          super
+        end
+        def test_method
+        end
+      end
+
+      plugin :render, :views=>"./spec/views", :cache=>true, :cache_class=>test_cache
+
+      route do |r|
+        view(:inline=>"foo", :layout=>nil)
+      end
+    end
+
+    body("/inline").strip.must_equal "foo"
+
+    Class.new(app).render_opts[:cache].must_respond_to :test_method
+  end
+
 end
 end

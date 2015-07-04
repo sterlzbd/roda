@@ -29,6 +29,7 @@ class Roda
     # :cache :: nil/false to not cache templates (useful for development), defaults
     #           to true unless RACK_ENV is development to automatically use the
     #           default template cache.
+    # :cache_class :: A class to use as the template cache instead of the default.
     # :engine :: The tilt engine to use for rendering, also the default file extension for
     #            templates, defaults to 'erb'.
     # :escape :: Use Roda's Erubis escaping support, which makes <tt><%= %></tt> escape output,
@@ -132,7 +133,14 @@ class Roda
         opts = app.opts[:render]
         opts[:engine] = (opts[:engine] || opts[:ext] || "erb").dup.freeze
         opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root]).freeze
-        opts[:cache] = app.thread_safe_cache if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
+
+        if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
+          if cache_class = opts[:cache_class]
+            opts[:cache] = cache_class.new
+          else
+            opts[:cache] = app.thread_safe_cache
+          end
+        end
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
         opts[:layout_opts][:_is_layout] = true
@@ -182,7 +190,15 @@ class Roda
         def inherited(subclass)
           super
           opts = subclass.opts[:render] = subclass.opts[:render].dup
-          opts[:cache] = thread_safe_cache if opts[:cache]
+
+          if opts[:cache]
+            if cache_class = opts[:cache_class]
+              opts[:cache] = cache_class.new
+            else
+              opts[:cache] = thread_safe_cache
+            end
+          end
+
           opts.freeze
         end
 
