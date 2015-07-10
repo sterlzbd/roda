@@ -62,12 +62,11 @@ class Roda
       OPTS = {}.freeze
 
       # Initialize the path classes when loading the plugin. Options:
-      # :by_name :: Register classes by name, which is friendlier when reloading code.
+      # :by_name :: Register classes by name, which is friendlier when reloading code (defaults to
+      #             true in development mode)
       def self.configure(app, opts=OPTS)
         app.instance_eval do
-          if opts.has_key?(:by_name)
-            self.opts[:path_class_by_name] = opts[:by_name]
-          end
+          self.opts[:path_class_by_name] = opts.fetch(:by_name, ENV['RACK_ENV'] == 'development')
           self.opts[:path_classes] ||= {}
           unless path_block(String)
             path(String){|str| str}

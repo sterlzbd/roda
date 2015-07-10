@@ -1,5 +1,7 @@
 = HEAD
 
+* Make :by_name option to path plugin default to true in development (jeremyevans)
+
 * Add :cache_class option to render plugin, for customized template cache behavior (celsworth) (#34)
 
 * Add :compiled_asset_host option to assets plugin, to use a host for compiled assets (jeremyevans)

@@ -188,6 +188,15 @@ describe "path plugin" do
     body('c'=>c2.new).must_equal '/c'
   end
 
+  it ":by_name defaults to true in development" do
+    with_rack_env('development') do
+      app(:path){}
+    end
+    app.opts[:path_class_by_name].must_equal true
+    app(:path){}
+    app.opts[:path_class_by_name].must_equal false
+  end
+
   it "Roda.path_block returns the block used" do
     c = Class.new
     b = proc{|x| x.to_s}
