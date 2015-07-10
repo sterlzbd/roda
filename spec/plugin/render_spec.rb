@@ -324,6 +324,15 @@ describe "render plugin" do
     body('/c').must_equal "3"
   end
 
+  it "Default to :cache=>false in development mode" do
+    with_rack_env('development') do
+      app(:render){}
+    end
+    app.render_opts[:cache].must_equal nil
+    app(:render){}
+    app.render_opts[:cache].wont_equal nil
+  end
+
   it "Support :cache=>false option to disable template caching" do
     app(:bare) do
       plugin :render, :views=>"./spec/views"

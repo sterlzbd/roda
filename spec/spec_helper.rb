@@ -75,4 +75,11 @@ class Minitest::Spec
     c.class_eval(&block)
     c
   end
+
+  def with_rack_env(env)
+    ENV['RACK_ENV'] = env
+    yield
+  ensure
+    ENV.delete('RACK_ENV')
+  end
 end

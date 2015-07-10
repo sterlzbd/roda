@@ -28,4 +28,15 @@ describe "environments plugin" do
     app.configure(:test, :production){a << 2}
     a.must_equal [1, app]
   end
+
+  it "defaults environment to RACK_ENV" do
+    with_rack_env('test') do
+      app(:environments){}
+    end
+    app.test?.must_equal true
+    app.development?.must_equal false
+    app(:environments){}
+    app.test?.must_equal false
+    app.development?.must_equal true
+  end
 end
