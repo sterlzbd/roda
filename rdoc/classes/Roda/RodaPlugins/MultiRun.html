@@ -58,6 +58,14 @@
             <code>OtherRodaApp</code>, and routes starting with <code>/si</code> to
             SinatraApp.</p>
             
+            <p>You can pass a block to <code>multi_run</code> that will be called with the
+            prefix, before dispatching to the rack app:</p>
+            
+            <pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># do something based on prefix before the request is passed further</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>This is useful for modifying the environment before passing it to the rack
+            app.</p>
+            
             <p>The multi_run plugin is similar to the multi_route plugin, with the
             difference being the multi_route plugin keeps all routing subtrees in the
             same <a href="../../Roda.html">Roda</a> app/class, while multi_run
@@ -100,7 +108,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 36</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 47</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
