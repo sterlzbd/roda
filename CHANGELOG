@@ -1,4 +1,4 @@
-= HEAD
+= 2.5.0 (2015-07-14)
 
 * Make :by_name option to path plugin default to true in development (jeremyevans)
 
