@@ -166,7 +166,7 @@ class Roda
         #   Roda.plugin PluginModule
         #   Roda.plugin :csrf
         def plugin(plugin, *args, &block)
-          raise RodaError, "Cannot subclass a frozen Roda class" if frozen?
+          raise RodaError, "Cannot add a plugin to a frozen Roda class" if frozen?
           plugin = RodaPlugins.load_plugin(plugin) if plugin.is_a?(Symbol)
           plugin.load_dependencies(self, *args, &block) if plugin.respond_to?(:load_dependencies)
           include(plugin::InstanceMethods) if defined?(plugin::InstanceMethods)
