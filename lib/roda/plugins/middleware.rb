@@ -74,7 +74,7 @@ class Roda
 
         # Override the route block so that if no route matches, we throw so
         # that the next middleware is called.
-        def route(&block)
+        def route(*args, &block)
           super do |r|
             res = instance_exec(r, &block)
             throw :next, true if r.forward_next

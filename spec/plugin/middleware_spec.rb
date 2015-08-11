@@ -56,4 +56,23 @@ describe "middleware plugin" do
     end
     body.must_equal 'a'
   end
+
+  it "is compatible with the multi_route plugin" do
+    app(:bare) do
+      plugin :multi_route
+      plugin :middleware
+
+      route("a") do |r|
+        r.is "b" do
+          "ab"
+        end
+      end
+
+      route do |r|
+        r.multi_route
+      end
+    end
+
+    body('/a/b').must_equal 'ab'
+  end
 end
