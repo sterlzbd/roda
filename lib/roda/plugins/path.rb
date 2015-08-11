@@ -19,7 +19,7 @@ class Roda
     #   path Baz do |baz, *paths|
     #     "/baz/#{baz.id}/#{paths.join('/')}"
     #   end
-    #   path Quux |quux, path|
+    #   path Quux do |quux, path|
     #     "/quux/#{quux.id}/#{path}"
     #   end
     #
