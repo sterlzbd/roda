@@ -1,3 +1,7 @@
+= HEAD
+
+* Allow multi_route and middleware plugins to work together (janko-m) (#36)
+
 = 2.5.0 (2015-07-14)
 
 * Make :by_name option to path plugin default to true in development (jeremyevans)
