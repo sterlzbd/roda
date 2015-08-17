@@ -1,3 +1,7 @@
+= HEAD
+
+* Allow request.halt to work in before hooks in the hooks plugin (celsworth) (#38)
+
 = 2.5.1 (2015-08-13)
 
 * Allow multi_route and middleware plugins to work together (janko-m) (#36)
