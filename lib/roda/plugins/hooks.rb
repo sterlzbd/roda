@@ -69,12 +69,14 @@ class Roda
       module InstanceMethods
         # Before routing, execute the before hooks, and
         # execute the after hooks before returning.
-        def call
-          if b = opts[:before_hook]
-            instance_exec(&b)
-          end
+        def call(&block)
+          res = super do |r|
+            if b = opts[:before_hook]
+              instance_exec(&b)
+            end
 
-          res = super
+            instance_exec(r, &block)
+          end
         ensure
           if b = opts[:after_hook]
             instance_exec(res, &b)

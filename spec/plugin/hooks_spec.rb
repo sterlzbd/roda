@@ -92,4 +92,12 @@ describe "hooks plugin" do
     b.join.must_equal 'foo'
     @a.must_equal [[200, 'bar', ['foo']]]
   end
+
+  it "handles halt in before blocks" do
+    app.before do
+      response.status = 200
+      request.halt
+    end
+    status.must_equal 201
+  end
 end
