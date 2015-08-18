@@ -36,7 +36,7 @@ class Roda
     #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
     #            <tt><%= %></tt> tags.
     # :escape_safe_classes :: String subclasses that should not be HTML escaped when used in
-    #            <tt><%= %></tt> tags, when :escape is used. Can be an array for multiple classes.
+    #                         <tt><%= %></tt> tags, when :escape is used. Can be an array for multiple classes.
     # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape is used,
     #             overriding the default.  If given, object should respond to +escape_xml+ with
     #             a single argument and return an output string.
@@ -44,7 +44,7 @@ class Roda
     # :layout_opts :: The options to use when rendering the layout, if different
     #                 from the default options.
     # :template_opts :: The tilt options used when rendering all templates. defaults to:
-    #                 <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
+    #                   <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
     # :engine_opts :: The tilt options to use per template engine.  Keys are
     #                 engine strings, values are hashes of template options.
     # :views :: The directory holding the view files, defaults to the 'views' subdirectory of the
