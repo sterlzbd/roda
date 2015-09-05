@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :params and :params! matchers to param_matchers plugin (jeremyevans)
+
 * Merge options when loading csrf plugin multiple times (jeremyevans)
 
 * Allow request.halt to work in before hooks in the hooks plugin (celsworth) (#38)
