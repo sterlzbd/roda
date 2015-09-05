@@ -24,7 +24,16 @@ class Roda
 
       # Load the Rack::Csrf middleware into the app with the given options.
       def self.configure(app, opts={})
-        app.use CSRF, opts
+        app.instance_exec do
+          @middleware.each do |(mid, *rest), _|
+            if mid.equal?(CSRF)
+              rest[0].merge!(opts)
+              build_rack_app
+              return
+            end
+          end
+          use CSRF, opts
+        end
       end
 
       module InstanceMethods

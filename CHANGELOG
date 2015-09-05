@@ -1,5 +1,7 @@
 = HEAD
 
+* Merge options when loading csrf plugin multiple times (jeremyevans)
+
 * Allow request.halt to work in before hooks in the hooks plugin (celsworth) (#38)
 
 = 2.5.1 (2015-08-13)

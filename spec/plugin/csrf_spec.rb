@@ -44,6 +44,9 @@ describe "csrf plugin" do
     s, _, b = req('/', env[h].merge('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN']))
     s.must_equal 200
     b.must_equal ['p']
+
+    app.plugin :csrf
+    body('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 'bar'
   end
 end
 end
