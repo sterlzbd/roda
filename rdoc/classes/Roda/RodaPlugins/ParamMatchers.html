@@ -43,14 +43,19 @@
             request&#39;s params.</p>
             
             <p>It adds a :param matcher for matching on any param with the same name,
-            yielding the value of the param.</p>
+            yielding the value of the param:</p>
             
             <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">param</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&#39;, &#39;?foo=&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?bar=foo&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>It adds a :param! matcher for matching on any non-empty param with the same
-            name, yielding the value of the param.</p>
+            name, yielding the value of the param:</p>
             
             <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(:<span class="ruby-identifier">param!</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=&#39;, &#39;?bar=foo&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>It also adds :params and :params! matchers, for matching multiple params at
+            the same time:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">params</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&amp;baz=quuz&#39;, &#39;?foo=&amp;baz=&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=bar&#39;, &#39;?baz=&#39;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">params!</span> =<span class="ruby-operator">&gt;</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&amp;baz=quuz&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=bar&#39;, &#39;?baz=&#39;, &#39;?foo=&amp;baz=&#39;, &#39;?foo=bar&amp;baz=&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
           </div>
           <div id='context'>
           </div>

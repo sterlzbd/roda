@@ -66,11 +66,9 @@
             <p>Use Roda&#39;s Erubis escaping support, which makes <code>&lt;%=&#x000A;%&gt;</code> escape output, <code>&lt;%== %&gt;</code> not escape output,
             and handles postfix conditions inside <code>&lt;%= %&gt;</code> tags.</p>
             </td></tr><tr><td class='label'>:escape_safe_classes </td><td>
-            <p>String subclasses that should not be HTML escaped when used in</p>
-            </td></tr></tbody></table>
-            
-            <pre>&lt;tt&gt;&lt;%= %&gt;&lt;/tt&gt; tags, when :escape is used. Can be an array for multiple classes.</pre>
-            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:escaper </td><td>
+            <p>String subclasses that should not be HTML escaped when used in <code>&lt;%=&#x000A;%&gt;</code> tags, when :escape is used. Can be an array for multiple
+            classes.</p>
+            </td></tr><tr><td class='label'>:escaper </td><td>
             <p>Object used for escaping output of <code>&lt;%= %&gt;</code>, when :escape
             is used, overriding the default.  If given, object should respond to
             <code>escape_xml</code> with a single argument and return an output string.</p>
@@ -80,11 +78,9 @@
             <p>The options to use when rendering the layout, if different from the default
             options.</p>
             </td></tr><tr><td class='label'>:template_opts </td><td>
-            <p>The tilt options used when rendering all templates. defaults to:</p>
-            </td></tr></tbody></table>
-            
-            <pre>&lt;tt&gt;{:outvar=&gt;&#39;@_out_buf&#39;, :default_encoding=&gt;Encoding.default_external}&lt;/tt&gt;.</pre>
-            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:engine_opts </td><td>
+            <p>The tilt options used when rendering all templates. defaults to:
+            <code>{:outvar=&gt;&#39;@_out_buf&#39;,&#x000A;:default_encoding=&gt;Encoding.default_external}</code>.</p>
+            </td></tr><tr><td class='label'>:engine_opts </td><td>
             <p>The tilt options to use per template engine.  Keys are engine strings,
             values are hashes of template options.</p>
             </td></tr><tr><td class='label'>:views </td><td>
