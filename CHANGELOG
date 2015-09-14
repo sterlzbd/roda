@@ -1,4 +1,4 @@
-= HEAD
+= 2.6.0 (2015-09-14)
 
 * Add :params and :params! matchers to param_matchers plugin (jeremyevans)
 
