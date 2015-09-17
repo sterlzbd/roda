@@ -30,6 +30,14 @@ class Roda
     #   # PATH_INFO '/a' => remaining_path '/b'
     #   # PATH_INFO '/a/c' => remaining_path '/a/c', no change
     #
+    # Patterns can be rewritten dynamically by providing a block accepting a MatchData
+    # object and evaluating to the replacement.
+    #
+    #   rewrite_path /\A\/a/(\w+)/ { |match| match[1].capitalize }
+    #   # PATH_INFO '/a/moo' => remaining_path '/a/Moo'
+    #   rewrite_path /\A\/a/(\w+)/, :path_info => true { |match| match[1].capitalize }
+    #   # PATH_INFO '/a/moo' => PATH_INFO '/a/Moo'
+    #
     # All path rewrites are applied in order, so if a path is rewritten by one rewrite,
     # it can be rewritten again by a later rewrite.  Note that PATH_INFO rewrites are
     # processed before remaining_path rewrites.
@@ -54,7 +62,17 @@ class Roda
 
         # Record a path rewrite from path +was+ to path +is+.  Options:
         # :path_info :: Modify PATH_INFO, not just remaining path.
-        def rewrite_path(was, is, opts=OPTS)
+        def rewrite_path(was, is = nil, opts=OPTS, &block)
+          if is.is_a? Hash
+            opts = opts.merge(is)
+            is = nil
+          end
+
+          if block
+            raise ArgumentError, "both block and String replacement provided" if is
+            is = block
+          end
+
           was = /\A#{Regexp.escape(was)}/ unless was.is_a?(Regexp)
           array = @opts[opts[:path_info] ? :path_info_rewrites : :remaining_path_rewrites]
           array << [was, is.dup.freeze].freeze
@@ -65,14 +83,20 @@ class Roda
         # Rewrite remaining_path and/or PATH_INFO based on the path rewrites.
         def initialize(scope, env)
           path_info = env[PATH_INFO]
-          scope.class.opts[:path_info_rewrites].each do |was, is|
-            path_info.sub!(was, is)
+          rewrite = ->(type, what) do
+            scope.class.opts[type].each do |was, is|
+              if is.is_a? Proc
+                what.sub!(was) { is.call(Regexp.last_match) }
+              else
+                what.sub!(was, is)
+              end
+            end
           end
+
+          rewrite.call(:path_info_rewrites, path_info)
           super
           remaining_path = @remaining_path = @remaining_path.dup
-          scope.class.opts[:remaining_path_rewrites].each do |was, is|
-            remaining_path.sub!(was, is)
-          end
+          rewrite.call(:remaining_path_rewrites, remaining_path)
         end
       end
     end

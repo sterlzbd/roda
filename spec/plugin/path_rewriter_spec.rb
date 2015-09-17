@@ -11,6 +11,10 @@ describe "path_rewriter plugin" do
       rewrite_path '/3', '/h'
       rewrite_path '/3', '/g', :path_info=>true
       rewrite_path(/\A\/e\z/, '/f')
+      rewrite_path(/\A\/(dynamic1)/) { |match| "/#{match[1].capitalize}" }
+      rewrite_path(/\A\/(dynamic2)/, :path_info=>true) { |match| "/#{match[1].capitalize}" }
+      proc { rewrite_path('/a', '/z') { |match| "/x" } }.must_raise(ArgumentError)
+
       route do |r|
         "#{r.path_info}:#{r.remaining_path}"
       end
@@ -29,7 +33,9 @@ describe "path_rewriter plugin" do
     body('/2').must_equal '/1:/b'
     body('/2/f').must_equal '/1/f:/b/f'
     body('/3').must_equal '/g:/g'
-    
+    body('/dynamic1').must_equal '/dynamic1:/Dynamic1'
+    body('/dynamic2').must_equal '/Dynamic2:/Dynamic2'
+
     app.freeze
     body('/a').must_equal '/a:/b'
     proc{app.rewrite_path '/a', '/b'}.must_raise
