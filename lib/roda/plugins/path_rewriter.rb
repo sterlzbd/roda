@@ -83,20 +83,23 @@ class Roda
         # Rewrite remaining_path and/or PATH_INFO based on the path rewrites.
         def initialize(scope, env)
           path_info = env[PATH_INFO]
-          rewrite = ->(type, what) do
-            scope.class.opts[type].each do |was, is|
-              if is.is_a? Proc
-                what.sub!(was) { is.call(Regexp.last_match) }
-              else
-                what.sub!(was, is)
-              end
-            end
-          end
 
-          rewrite.call(:path_info_rewrites, path_info)
+          rewrite(scope.class.opts[:path_info_rewrites], path_info)
           super
           remaining_path = @remaining_path = @remaining_path.dup
-          rewrite.call(:remaining_path_rewrites, remaining_path)
+          rewrite(scope.class.opts[:remaining_path_rewrites], remaining_path)
+        end
+
+        private
+
+        def rewrite(replacements, path)
+          replacements.each do |was, is|
+            if is.is_a? Proc
+              path.sub!(was) { is.call(Regexp.last_match) }
+            else
+              path.sub!(was, is)
+            end
+          end
         end
       end
     end
