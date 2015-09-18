@@ -11,9 +11,11 @@ describe "path_rewriter plugin" do
       rewrite_path '/3', '/h'
       rewrite_path '/3', '/g', :path_info=>true
       rewrite_path(/\A\/e\z/, '/f')
-      rewrite_path(/\A\/(dynamic1)/) { |match| "/#{match[1].capitalize}" }
-      rewrite_path(/\A\/(dynamic2)/, :path_info=>true) { |match| "/#{match[1].capitalize}" }
-      proc { rewrite_path('/a', '/z') { |match| "/x" } }.must_raise(ArgumentError)
+      rewrite_path(/\A\/(dynamic1)/){|match| "/#{match[1].capitalize}"}
+      rewrite_path(/\A\/(dynamic2)/, :path_info=>true){|match| "/#{match[1].capitalize}"}
+      proc{rewrite_path('/a', '/z'){|match| "/x"}}.must_raise(Roda::RodaError)
+      proc{rewrite_path('/a', {:path_info=>true}, :path_info=>true)}.must_raise(Roda::RodaError)
+      proc{rewrite_path('/a', {:path_info=>true}, :path_info=>true){|match| "/x"}}.must_raise(Roda::RodaError)
 
       route do |r|
         "#{r.path_info}:#{r.remaining_path}"

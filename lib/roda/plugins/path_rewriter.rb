@@ -33,9 +33,9 @@ class Roda
     # Patterns can be rewritten dynamically by providing a block accepting a MatchData
     # object and evaluating to the replacement.
     #
-    #   rewrite_path /\A\/a/(\w+)/ { |match| match[1].capitalize }
+    #   rewrite_path(/\A\/a/(\w+)/){|match| match[1].capitalize}
     #   # PATH_INFO '/a/moo' => remaining_path '/a/Moo'
-    #   rewrite_path /\A\/a/(\w+)/, :path_info => true { |match| match[1].capitalize }
+    #   rewrite_path(/\A\/a/(\w+)/, :path_info => true){|match| match[1].capitalize}
     #   # PATH_INFO '/a/moo' => PATH_INFO '/a/Moo'
     #
     # All path rewrites are applied in order, so if a path is rewritten by one rewrite,
@@ -64,12 +64,13 @@ class Roda
         # :path_info :: Modify PATH_INFO, not just remaining path.
         def rewrite_path(was, is = nil, opts=OPTS, &block)
           if is.is_a? Hash
-            opts = opts.merge(is)
+            raise RodaError, "cannot provide two hashes to rewrite_path" unless opts.empty?
+            opts = is
             is = nil
           end
 
           if block
-            raise ArgumentError, "both block and String replacement provided" if is
+            raise RodaError, "cannot provide both block and string replacement to rewrite_path" if is
             is = block
           end
 
@@ -84,18 +85,19 @@ class Roda
         def initialize(scope, env)
           path_info = env[PATH_INFO]
 
-          rewrite(scope.class.opts[:path_info_rewrites], path_info)
+          rewrite_path(scope.class.opts[:path_info_rewrites], path_info)
           super
           remaining_path = @remaining_path = @remaining_path.dup
-          rewrite(scope.class.opts[:remaining_path_rewrites], remaining_path)
+          rewrite_path(scope.class.opts[:remaining_path_rewrites], remaining_path)
         end
 
         private
 
-        def rewrite(replacements, path)
+        # Rewrite the given path using the given replacements.
+        def rewrite_path(replacements, path)
           replacements.each do |was, is|
-            if is.is_a? Proc
-              path.sub!(was) { is.call(Regexp.last_match) }
+            if is.is_a?(Proc)
+              path.sub!(was){is.call($~)}
             else
               path.sub!(was, is)
             end

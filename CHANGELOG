@@ -1,3 +1,7 @@
+= HEAD
+
+* Allow Roda.rewrite_path to take a block in the path_rewriter plugin (Freaky) (#45)
+
 = 2.6.0 (2015-09-14)
 
 * Add :params and :params! matchers to param_matchers plugin (jeremyevans)
