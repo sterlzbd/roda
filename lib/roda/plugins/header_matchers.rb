@@ -15,7 +15,14 @@ class Roda
     #
     #   r.on :host=>'foo.example.com' do
     #   end
-    #   r.on :host=>/\A\w+.example.com/ do
+    #   r.on :host=>/\A\w+.example.com\z/ do
+    #   end
+    #
+    # By default the +:host+ matcher does not yield matchers, but if you use a regexp
+    # and set the +:host_matcher_captures+ option for the application, it will
+    # yield regexp captures:
+    # 
+    #   r.on :host=>/\A(\w+).example.com\z/ do |subdomain|
     #   end
     #
     # It adds a +:user_agent+ matcher for matching on a user agent patterns, which
@@ -52,7 +59,13 @@ class Roda
         # Match if the host of the request is the same as the hostname.  +hostname+
         # can be a regexp or a string.
         def match_host(hostname)
-          hostname === host
+          if hostname.is_a?(Regexp) && roda_class.opts[:host_matcher_captures]
+            if match = hostname.match(host)
+              @captures.concat(match.captures)
+            end
+          else
+            hostname === host
+          end
         end
 
         # Match the submitted user agent to the given pattern, capturing any

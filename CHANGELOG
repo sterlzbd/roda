@@ -1,5 +1,7 @@
 = HEAD
 
+* Support opts[:host_matcher_captures] = true to make :host=>/regexp/ matcher yield captures in the header_matchers plugin (jeremyevans)
+
 * Allow Roda.rewrite_path to take a block in the path_rewriter plugin (Freaky) (#45)
 
 = 2.6.0 (2015-09-14)
