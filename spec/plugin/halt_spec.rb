@@ -69,6 +69,16 @@ describe "halt plugin" do
     body.must_equal "foo"
   end
 
+  it "should consider an array as a rack response" do
+    app(:halt) do |r|
+      r.halt [300, {'a'=>'b'}, ["foo"]]
+    end
+
+    status.must_equal 300 
+    header('a').must_equal 'b'
+    body.must_equal "foo"
+  end
+
   it "should handle 3rd of 3 arguments similar to block bodies" do
     app(:bare) do
       plugin :halt

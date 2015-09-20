@@ -31,7 +31,13 @@ class Roda
     #     r.halt(403, {'Content-Type'=>'text/csv'}, 'body')
     #   end
     #
-    # Note that there is a difference between provide status, headers, and body as separate
+    # Finally you can pass an array which contains a rack response:
+    #
+    #   route do |r|
+    #     r.halt([403, {'Content-Type'=>'text/csv'}, ['body']])
+    #   end
+    #
+    # Note that there is a difference between providing status, headers, and body as separate
     # arguments and providing them as a single rack response array.  With a rack response array,
     # the values are used directly, while with 3 arguments, the headers given are merged into
     # the existing headers and the given body is written to the existing response body.
