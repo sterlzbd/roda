@@ -31,7 +31,7 @@ class Roda
     #     r.halt(403, {'Content-Type'=>'text/csv'}, 'body')
     #   end
     #
-    # Finally you can pass an array which contains a rack response:
+    # As supported by default, you can still pass an array which contains a rack response:
     #
     #   route do |r|
     #     r.halt([403, {'Content-Type'=>'text/csv'}, ['body']])
