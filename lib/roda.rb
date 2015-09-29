@@ -9,33 +9,24 @@ class Roda
   # Error class raised by Roda
   class RodaError < StandardError; end
 
-  if defined?(RUBY_ENGINE) && RUBY_ENGINE != 'ruby'
-  # :nocov:
-    # A thread safe cache class, offering only #[] and #[]= methods,
-    # each protected by a mutex.  Used on non-MRI where Hash is not
-    # thread safe.
-    class RodaCache
-      # Create a new thread safe cache.
-      def initialize
-        @mutex = Mutex.new
-        @hash = {}
-      end
-
-      # Make getting value from underlying hash thread safe.
-      def [](key)
-        @mutex.synchronize{@hash[key]}
-      end
-
-      # Make setting value in underlying hash thread safe.
-      def []=(key, value)
-        @mutex.synchronize{@hash[key] = value}
-      end
+  # A thread safe cache class, offering only #[] and #[]= methods,
+  # each protected by a mutex.
+  class RodaCache
+    # Create a new thread safe cache.
+    def initialize
+      @mutex = Mutex.new
+      @hash = {}
     end
-  # :nocov:
-  else
-    # Hashes are already thread-safe in MRI, due to the GVL, so they
-    # can safely be used as a cache.
-    RodaCache = Hash
+
+    # Make getting value from underlying hash thread safe.
+    def [](key)
+      @mutex.synchronize{@hash[key]}
+    end
+
+    # Make setting value in underlying hash thread safe.
+    def []=(key, value)
+      @mutex.synchronize{@hash[key] = value}
+    end
   end
 
   # Base class used for Roda requests.  The instance methods for this
