@@ -1,5 +1,7 @@
 = HEAD
 
+* Add default_status plugin for overriding the default response status (celsworth) (#47)
+
 * Make RodaCache synchronize access on MRI (jeremyevans)
 
 * Support opts[:host_matcher_captures] = true to make :host=>/regexp/ matcher yield captures in the header_matchers plugin (jeremyevans)

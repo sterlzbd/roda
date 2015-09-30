@@ -4,6 +4,8 @@ class Roda
     # return a response status integer. This integer will be used as
     # the default response status (usually 200) if the body has been
     # written to, and you have not explicitly set a response status.
+    # The block given to the block is instance_execed in the context
+    # of the response.
     #
     # Example:
     #
@@ -11,14 +13,15 @@ class Roda
     #   plugin :default_status do
     #     201
     #   end
-    #
     module DefaultStatus
       def self.configure(app, &block)
+        raise RodaError, "default_status plugin requires a block" unless block
         app.opts[:default_status] = block
       end
 
       module ResponseMethods
-        # Get the default response status from the related Roda class.
+        # instance_exec the default_status plugin block to get the response
+        # status.
         def default_status
           instance_exec(&roda_class.opts[:default_status])
         end

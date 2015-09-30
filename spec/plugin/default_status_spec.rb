@@ -11,7 +11,21 @@ describe "default_status plugin" do
       end
     end
 
-    req[0].must_equal 201
+    status.must_equal 201
+  end
+
+  it "should instance_exec the plugin block" do
+    app(:bare) do
+      plugin :default_status do
+        200 + @body[0].length
+      end
+      route do |r|
+        r.path_info
+      end
+    end
+
+    status.must_equal 201
+    status('/foo').must_equal 204
   end
 
   it "should not override existing response" do
@@ -26,7 +40,7 @@ describe "default_status plugin" do
       end
     end
 
-    req[0].must_equal 202
+    status.must_equal 202
   end
 
   it "should work correctly in subclasses" do
@@ -42,6 +56,10 @@ describe "default_status plugin" do
 
     @app = Class.new(@app)
 
-    req[0].must_equal 201
+    status.must_equal 201
+  end
+
+  it "should raise if not given a block" do
+    proc{app(:default_status)}.must_raise Roda::RodaError
   end
 end
