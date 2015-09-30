@@ -873,9 +873,9 @@ class Roda
 
         # Return the rack response array of status, headers, and body
         # for the current response.  If the status has not been set,
-        # uses a 200 status if the body has been written to, otherwise
-        # uses a 404 status.  Adds the Content-Length header to the
-        # size of the response body.
+        # uses the return value of default_response_status if the body
+        # has been written to, otherwise uses a 404 status.
+        # Adds the Content-Length header to the size of the response body.
         #
         # Example:
         #
@@ -885,7 +885,7 @@ class Roda
         #   #      []]
         def finish
           b = @body
-          s = (@status ||= b.empty? ? 404 : 200)
+          s = (@status ||= b.empty? ? 404 : default_response_status)
           set_default_headers
           h = @headers
           h[CONTENT_LENGTH] ||= @length.to_s
@@ -898,7 +898,14 @@ class Roda
         # body.
         def finish_with_body(body)
           set_default_headers
-          [@status || 200, @headers, body]
+          [@status || default_response_status, @headers, body]
+        end
+
+        # Return the default response status to be used when the body
+        # has been written to. This is split out to make overriding
+        # easier in plugins.
+        def default_response_status
+          200
         end
 
         # Show response class, status code, response headers, and response body
