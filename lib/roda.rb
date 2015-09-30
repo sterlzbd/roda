@@ -224,7 +224,7 @@ class Roda
       #            This is the same object yielded by Roda.route.
       # response :: The instance of the response class related to this request.
       module InstanceMethods
-        # Create a request and response of the appopriate class
+        # Create a request and response of the appropriate class
         def initialize(env)
           klass = self.class
           @_request = klass::RodaRequest.new(self, env)
