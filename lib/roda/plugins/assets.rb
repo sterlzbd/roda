@@ -185,6 +185,18 @@ class Roda
     #     end
     #   end
     #
+    # == External Assets/Assets from Gems
+    #
+    # The assets plugin only supports loading assets files underneath the assets
+    # path.  You cannot pass an absolute path to an asset file and have it
+    # work.  If you would like to reference asset files that are outside the assets
+    # path, you have the following options:
+    #
+    # * Copy, hard link, or symlink the external assets files into the assets path.
+    # * Use tilt-indirect or another method of indirection (such as an erb template that loads
+    #   the external asset file) so that a file inside the assets path can reference files
+    #   outside the assets path.
+    #
     # == Plugin Options
     #
     # :add_suffix :: Whether to append a .css or .js extension to asset routes in non-compiled mode
