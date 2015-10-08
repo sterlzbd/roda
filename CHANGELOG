@@ -1,5 +1,7 @@
 = HEAD
 
+* Add run_handler plugin for modifying rack response arrays when using r.run, and continuing routing for 404 responses (jeremyevans)
+
 * Add response_request plugin allowing response object access to request object (jeremyevans)
 
 * Add default_status plugin for overriding the default response status (celsworth) (#47)
