@@ -1,4 +1,4 @@
-= HEAD
+= 2.7.0 (2015-10-13)
 
 * Add run_handler plugin for modifying rack response arrays when using r.run, and continuing routing for 404 responses (jeremyevans)
 
