@@ -32,7 +32,7 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v2.6.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v2.7.0)</h1>
 
 <h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
@@ -67,6 +67,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows for multiple named route blocks that can be dispatched to inside main route block.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRun.html">multi_run</a>: Adds the ability to dispatch to multiple rack applications based on the request path prefix.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/NotAllowed.html">not_allowed</a>: Adds support for automatically returning 405 Method Not Allowed responses.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/RunHandler.html">run_handler</a>: Allows for modifying rack response arrays when using r.run, and continuing routing for 404 responses.</li>
   </ul></li>
   <li>Rendering: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Assets.html">assets</a>: Adds support for rendering CSS/JS javascript assets on the fly in development, or compiling them into a single compressed file in production.</li>
@@ -93,11 +94,13 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/Caching.html">caching</a>: Adds request and response methods related to http caching.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Cookies.html">cookies</a>: Adds response methods for handling cookies.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/DefaultHeaders.html">default_headers</a>: Allows modifying the default headers for responses.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/DefaultStatus.html">default_status</a>: Allows overriding the default status for responses.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Delegate.html">delegate</a>: Adds class methods for creating instance methods that delegate to the request, response, or class.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/DeleteEmptyHeaders.html">delete_empty_headers</a>: Automatically delete response headers with empty values.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/DropBody.html">drop_body</a>: Automatically drops response body and Content-Type/Content-Length headers for response statuses indicating no body.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ModuleInclude.html">module_include</a>: Adds request_module and response_module class methods for adding modules/methods to request/response classes.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ResponseRequest.html">response_request</a>: Gives response object access to request object.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/SinatraHelpers.html">sinatra_helpers</a>: Port of Sinatra::Helpers methods not covered by other plugins.</li>
   </ul></li>
   <li>Routing Helpers: <ul>
@@ -156,6 +159,8 @@
 <li><a href="https://github.com/beno/roda-auth">roda-auth</a>: Adds authentication support for Roda.</li>
 <li><a href="https://github.com/cj/roda-component">roda-component</a>: Adds realtime components using faye and opal.</li>
 <li><a href="https://github.com/AMHOL/roda-container">roda-container</a>: Turns application into an inversion of control (IoC) container.</li>
+<li><a href="https://github.com/AMHOL/roda-flow">roda-flow</a>: Changes routing methods to delegate to containers.</li>
+<li><a href="https://github.com/kematzy/roda-i18n">roda-i18n</a>: Adds easy internationalization and localization support.</li>
 <li><a href="https://github.com/3scale/roda-parse-request">roda-parse-request</a>: Automatically parse JSON and URL-encoded requests.</li>
 <li><a href="https://github.com/jeremyevans/roda-route_list">roda-route_list</a>: Parses route metadata from comments in an app file, allowing introspection of routes.</li>
 <li><a href="https://github.com/beno/roda-rest_api">roda-rest_api</a>: Adds support for easily creating RESTful APIs.</li>
@@ -182,7 +187,7 @@
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/2_6_0_txt.html'>2.6</a> | <a href='rdoc/files/doc/release_notes/2_5_1_txt.html'>2.5.1</a> | <a href='rdoc/files/doc/release_notes/2_5_0_txt.html'>2.5</a> | <a href='rdoc/files/doc/release_notes/2_4_0_txt.html'>2.4</a> | <a href='rdoc/files/doc/release_notes/2_3_0_txt.html'>2.3</a> | <a href='rdoc/files/doc/release_notes/2_2_0_txt.html'>2.2</a> | <a href='rdoc/files/doc/release_notes/2_1_0_txt.html'>2.1</a> | <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
+          <a href='rdoc/files/doc/release_notes/2_7_0_txt.html'>2.7</a> | <a href='rdoc/files/doc/release_notes/2_6_0_txt.html'>2.6</a> | <a href='rdoc/files/doc/release_notes/2_5_1_txt.html'>2.5.1</a> | <a href='rdoc/files/doc/release_notes/2_5_0_txt.html'>2.5</a> | <a href='rdoc/files/doc/release_notes/2_4_0_txt.html'>2.4</a> | <a href='rdoc/files/doc/release_notes/2_3_0_txt.html'>2.3</a> | <a href='rdoc/files/doc/release_notes/2_2_0_txt.html'>2.2</a> | <a href='rdoc/files/doc/release_notes/2_1_0_txt.html'>2.1</a> | <a href='rdoc/files/doc/release_notes/2_0_0_txt.html'>2.0</a>
         </li>
       
   

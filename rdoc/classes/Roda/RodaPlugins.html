@@ -67,6 +67,9 @@
             <a target="docwin" href="../../files/lib/roda/plugins/default_headers_rb.html">lib/roda/plugins/default_headers.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/default_status_rb.html">lib/roda/plugins/default_status.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/delay_build_rb.html">lib/roda/plugins/delay_build.rb</a>
           </li>
           <li class='other'>
@@ -184,6 +187,12 @@
             <a target="docwin" href="../../files/lib/roda/plugins/render_each_rb.html">lib/roda/plugins/render_each.rb</a>
           </li>
           <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/response_request_rb.html">lib/roda/plugins/response_request.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../../files/lib/roda/plugins/run_handler_rb.html">lib/roda/plugins/run_handler.rb</a>
+          </li>
+          <li class='other'>
             <a target="docwin" href="../../files/lib/roda/plugins/shared_vars_rb.html">lib/roda/plugins/shared_vars.rb</a>
           </li>
           <li class='other'>
@@ -255,6 +264,7 @@
               <li><a target="docwin" href="RodaPlugins/Cookies.html">Roda::RodaPlugins::Cookies</a></li>
               <li><a target="docwin" href="RodaPlugins/Csrf.html">Roda::RodaPlugins::Csrf</a></li>
               <li><a target="docwin" href="RodaPlugins/DefaultHeaders.html">Roda::RodaPlugins::DefaultHeaders</a></li>
+              <li><a target="docwin" href="RodaPlugins/DefaultStatus.html">Roda::RodaPlugins::DefaultStatus</a></li>
               <li><a target="docwin" href="RodaPlugins/DelayBuild.html">Roda::RodaPlugins::DelayBuild</a></li>
               <li><a target="docwin" href="RodaPlugins/Delegate.html">Roda::RodaPlugins::Delegate</a></li>
               <li><a target="docwin" href="RodaPlugins/DeleteEmptyHeaders.html">Roda::RodaPlugins::DeleteEmptyHeaders</a></li>
@@ -295,6 +305,8 @@
               <li><a target="docwin" href="RodaPlugins/PrecompileTemplates.html">Roda::RodaPlugins::PrecompileTemplates</a></li>
               <li><a target="docwin" href="RodaPlugins/Render.html">Roda::RodaPlugins::Render</a></li>
               <li><a target="docwin" href="RodaPlugins/RenderEach.html">Roda::RodaPlugins::RenderEach</a></li>
+              <li><a target="docwin" href="RodaPlugins/ResponseRequest.html">Roda::RodaPlugins::ResponseRequest</a></li>
+              <li><a target="docwin" href="RodaPlugins/RunHandler.html">Roda::RodaPlugins::RunHandler</a></li>
               <li><a target="docwin" href="RodaPlugins/SharedVars.html">Roda::RodaPlugins::SharedVars</a></li>
               <li><a target="docwin" href="RodaPlugins/SinatraHelpers.html">Roda::RodaPlugins::SinatraHelpers</a></li>
               <li><a target="docwin" href="RodaPlugins/SlashPathEmpty.html">Roda::RodaPlugins::SlashPathEmpty</a></li>
@@ -328,7 +340,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 72</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 63</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-register_plugin'>
@@ -349,7 +361,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-register_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 85</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 76</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

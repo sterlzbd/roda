@@ -63,7 +63,12 @@
             
             <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-value">403</span>, {<span class="ruby-string">&#39;Content-Type&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/csv&#39;</span>}, <span class="ruby-string">&#39;body&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
             
-            <p>Note that there is a difference between provide status, headers, and body
+            <p>As supported by default, you can still pass an array which contains a rack
+            response:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>([<span class="ruby-value">403</span>, {<span class="ruby-string">&#39;Content-Type&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/csv&#39;</span>}, [<span class="ruby-string">&#39;body&#39;</span>]])&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Note that there is a difference between providing status, headers, and body
             as separate arguments and providing them as a single rack response array. 
             With a rack response array, the values are used directly, while with 3
             arguments, the headers given are merged into the existing headers and the

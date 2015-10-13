@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::PathRewriter::RequestMethods</title>
+    <title>Roda::RodaPlugins::ResponseRequest::InstanceMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::PathRewriter::RequestMethods
+          Roda::RodaPlugins::ResponseRequest::InstanceMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/path_rewriter_rb.html">lib/roda/plugins/path_rewriter.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/response_request_rb.html">lib/roda/plugins/response_request.rb</a>
           </li>
         </ol>
       </div>
@@ -54,17 +54,17 @@
                 <a name='method-c-new'></a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
-                  <span class='arguments'>(scope, env)</span>
+                  <span class='arguments'>(env)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Rewrite remaining_path and/or PATH_INFO based on the path rewrites.</p>
+                  <p>Set the response&#39;s request to the current request.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/path_rewriter.rb, line 85</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-identifier">path_info</span> = <span class="ruby-identifier">env</span>[<span class="ruby-constant">PATH_INFO</span>]&#x000A;&#x000A;  <span class="ruby-identifier">rewrite_path</span>(<span class="ruby-identifier">scope</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_info_rewrites</span>], <span class="ruby-identifier">path_info</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">remaining_path</span> = <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-ivar">@remaining_path</span>.<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">rewrite_path</span>(<span class="ruby-identifier">scope</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:remaining_path_rewrites</span>], <span class="ruby-identifier">remaining_path</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/response_request.rb, line 12</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">request</span> = <span class="ruby-ivar">@_request</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

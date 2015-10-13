@@ -31,12 +31,33 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-09-12 13:58:02 -0700</span>
+          <span class='datetime'>2015-10-13 08:49:31 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-2.7.0+-282015-10-13-29">2.7.0 (2015-10-13)<span><a href="#label-2.7.0+-282015-10-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Add run_handler plugin for modifying rack response arrays when using r.run,
+            and continuing routing for 404 responses (jeremyevans)</p>
+            </li><li>
+            <p>Add response_request plugin allowing response object access to request
+            object (jeremyevans)</p>
+            </li><li>
+            <p>Add default_status plugin for overriding the default response status
+            (celsworth) (#47)</p>
+            </li><li>
+            <p>Make RodaCache synchronize access on MRI (jeremyevans)</p>
+            </li><li>
+            <p>Support <a href=":host_matcher_captures">opts</a> = true to make
+            :host=&gt;/regexp/ matcher yield captures in the header_matchers plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Allow Roda.rewrite_path to take a block in the path_rewriter plugin
+            (Freaky) (#45)</p>
+            </li></ul>
             
             <h1 id="label-2.6.0+-282015-09-14-29">2.6.0 (2015-09-14)<span><a href="#label-2.6.0+-282015-09-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>

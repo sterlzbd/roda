@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::RunHandler::RequestMethods</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::RunHandler::RequestMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/run_handler_rb.html">lib/roda/plugins/run_handler.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-run">run</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-run'>
+                <a name='method-i-run'></a>
+                <div class='synopsis'>
+                  <span class='name'>run</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>If a block is given, yield the rack response array to it.  The response can
+                  be modified before it is returned by the current app.</p>
+                  
+                  <p>If the <code>:not_found=&gt;:pass</code> option is given, and the rack
+                  response returned by the app is a 404 response, do not return the response,
+                  continue routing normally.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/run_handler.rb, line 34</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>){<span class="ruby-keyword">super</span>(<span class="ruby-identifier">app</span>)}&#x000A;  <span class="ruby-keyword">yield</span> <span class="ruby-identifier">res</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;  <span class="ruby-identifier">throw</span>(<span class="ruby-value">:halt</span>, <span class="ruby-identifier">res</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:not_found</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:pass</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">res</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">404</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

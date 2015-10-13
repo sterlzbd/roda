@@ -52,7 +52,13 @@
             <p>It adds a <code>:host</code> matcher for matching by the host of the
             request:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo.example.com&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-regexp">/\A\w+.example.com/</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;foo.example.com&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-regexp">/\A\w+.example.com\z/</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>By default the <code>:host</code> matcher does not yield matchers, but if
+            you use a regexp and set the <code>:host_matcher_captures</code> option for
+            the application, it will yield regexp captures:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-regexp">/\A(\w+).example.com\z/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subdomain</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>It adds a <code>:user_agent</code> matcher for matching on a user agent
             patterns, which yields the regexp captures to the block:</p>
