@@ -7,10 +7,8 @@ class Roda
     # can set content for the layout template to display outside
     # of the normal content pane.
     #
-    # The content_for template probably only works with erb
-    # templates, and requires that you don't override the
-    # +:outvar+ render option.  In the template in which you
-    # want to store content, call content_for with a block:
+    # In the template in which you want to store content, call
+    # content_for with a block:
     #
     #   <% content_for :foo do %>
     #     Some content here.
@@ -34,15 +32,40 @@ class Roda
         # is no content stored with that key.
         def content_for(key, &block)
           if block
+            # clean the output buffer for ERB-based rendering systems
+            buf_was = output_buffer
+            set_output_buffer ''
+
             @_content_for ||= {}
-            buf_was = @_out_buf
-            @_out_buf = ''
-            yield
-            @_content_for[key] = @_out_buf
-            @_out_buf = buf_was
+            @_content_for[key] = content_render(&block)
+
+            set_output_buffer buf_was
           elsif @_content_for
             @_content_for[key]
           end
+        end
+
+        private
+
+        def content_render(&block)
+          engine = template_engine.new &block
+          engine.render
+        end
+
+        def output_buffer
+          instance_variable_get(outvar_name)
+        end
+
+        def set_output_buffer(value)
+          instance_variable_set(outvar_name, value)
+        end
+
+        def outvar_name
+          render_opts[:template_opts][:outvar]
+        end
+
+        def template_engine
+          Tilt[render_opts[:engine]]
         end
       end
     end
