@@ -1,5 +1,7 @@
 = HEAD
 
+* Add multi_view plugin for easily setting up routing for rendering multiple views (jeremyevans)
+
 * Make content_for plugin work with haml and potentially other non-erb template engines (plukevdh) (#50)
 
 = 2.7.0 (2015-10-13)
