@@ -32,40 +32,18 @@ class Roda
         # is no content stored with that key.
         def content_for(key, &block)
           if block
+            outvar = render_opts[:template_opts][:outvar]
+            buf_was = instance_variable_get(outvar)
             # clean the output buffer for ERB-based rendering systems
-            buf_was = output_buffer
-            set_output_buffer ''
+            instance_variable_set(outvar, '')
 
             @_content_for ||= {}
-            @_content_for[key] = content_render(&block)
+            @_content_for[key] = Tilt[render_opts[:engine]].new(&block).render
 
-            set_output_buffer buf_was
+            instance_variable_set(outvar, buf_was)
           elsif @_content_for
             @_content_for[key]
           end
-        end
-
-        private
-
-        def content_render(&block)
-          engine = template_engine.new &block
-          engine.render
-        end
-
-        def output_buffer
-          instance_variable_get(outvar_name)
-        end
-
-        def set_output_buffer(value)
-          instance_variable_set(outvar_name, value)
-        end
-
-        def outvar_name
-          render_opts[:template_opts][:outvar]
-        end
-
-        def template_engine
-          Tilt[render_opts[:engine]]
         end
       end
     end
