@@ -1,4 +1,4 @@
-= HEAD
+= 2.8.0 (2015-11-16)
 
 * Add multi_view plugin for easily setting up routing for rendering multiple views (jeremyevans)
 
