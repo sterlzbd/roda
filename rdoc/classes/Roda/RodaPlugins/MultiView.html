@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::MultiView</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::MultiView
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/multi_view_rb.html">lib/roda/plugins/multi_view.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The multi_view plugin makes it easy to render multiple views, where the
+            view template is the same as the matched element.  It adds an
+            <code>r.multi_view</code> method, which takes an argument that is passed to
+            <code>r.get</code>, and should capture a single argument, which is treated
+            as the template name to pass to <code>view</code>.  This makes it possible
+            to pass in an array of strings, or a regexp with a single capture.</p>
+            
+            <p>The advantage of using a regexp over an array of strings is that the regexp
+            is generally faster and uses less memory.  However, constructing the
+            regexps is more cumbersome.  To make it easier, the multi_view plugin also
+            offers a <code>multi_view_compile</code> class method that will take an
+            array of view template names and construct a regexp that can be passed to
+            <code>r.multi_view</code>.</p>
+            
+            <p>Example:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_view</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_view</span>([<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>])&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># or:</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_view</span>(<span class="ruby-regexp">/(foo|bar|baz)/</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># or:</span>&#x000A;&#x000A;<span class="ruby-identifier">regexp</span> = <span class="ruby-identifier">multi_view_compile</span>([<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>])&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_view</span>(<span class="ruby-identifier">regexp</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># all are equivalent to:</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;foo&#39;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;bar&#39;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;baz&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;baz&#39;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-load_dependencies">load_dependencies</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="MultiView/ClassMethods.html">Roda::RodaPlugins::MultiView::ClassMethods</a></li>
+              <li><a target="docwin" href="MultiView/RequestMethods.html">Roda::RodaPlugins::MultiView::RequestMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-load_dependencies'>
+                <a name='method-c-load_dependencies'></a>
+                <div class='synopsis'>
+                  <span class='name'>load_dependencies</span>
+                  <span class='arguments'>(app)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Depend on the render plugin, since this plugin only makes sense when the
+                  render plugin is used.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/multi_view.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

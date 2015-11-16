@@ -1,6 +1,6 @@
-Tue, 13 Oct 2015 10:02:18 -0700
+Mon, 16 Nov 2015 08:24:45 -0800
 README.rdoc	Mon, 06 Apr 2015 10:51:56 -0700
-CHANGELOG	Tue, 13 Oct 2015 08:49:31 -0700
+CHANGELOG	Mon, 16 Nov 2015 08:16:19 -0800
 MIT-LICENSE	Tue, 31 Mar 2015 18:24:14 -0700
 lib/roda.rb	Wed, 30 Sep 2015 10:17:49 -0700
 lib/roda/plugins/_erubis_escaping.rb	Mon, 06 Apr 2015 10:51:56 -0700
@@ -10,7 +10,7 @@ lib/roda/plugins/backtracking_array.rb	Wed, 14 Jan 2015 18:50:19 -0800
 lib/roda/plugins/caching.rb	Tue, 18 Aug 2015 06:48:00 -0700
 lib/roda/plugins/chunked.rb	Mon, 27 Apr 2015 20:07:23 -0700
 lib/roda/plugins/class_level_routing.rb	Fri, 13 Mar 2015 10:33:12 -0700
-lib/roda/plugins/content_for.rb	Thu, 04 Dec 2014 16:17:52 -0800
+lib/roda/plugins/content_for.rb	Mon, 09 Nov 2015 13:08:59 -0800
 lib/roda/plugins/cookies.rb	Tue, 06 Jan 2015 15:29:10 -0800
 lib/roda/plugins/csrf.rb	Sat, 05 Sep 2015 06:57:51 -0700
 lib/roda/plugins/default_headers.rb	Tue, 31 Mar 2015 17:54:54 -0700
@@ -40,6 +40,7 @@ lib/roda/plugins/middleware.rb	Tue, 11 Aug 2015 08:11:18 -0700
 lib/roda/plugins/module_include.rb	Tue, 06 Jan 2015 15:29:10 -0800
 lib/roda/plugins/multi_route.rb	Wed, 01 Apr 2015 15:20:19 -0700
 lib/roda/plugins/multi_run.rb	Mon, 15 Jun 2015 09:59:18 -0700
+lib/roda/plugins/multi_view.rb	Mon, 09 Nov 2015 13:57:04 -0800
 lib/roda/plugins/named_templates.rb	Mon, 27 Apr 2015 20:08:23 -0700
 lib/roda/plugins/not_allowed.rb	Fri, 12 Dec 2014 15:52:57 -0800
 lib/roda/plugins/not_found.rb	Wed, 27 May 2015 10:12:16 -0700
@@ -68,7 +69,7 @@ lib/roda/plugins/symbol_views.rb	Fri, 15 Aug 2014 10:55:13 -0700
 lib/roda/plugins/view_options.rb	Sat, 02 May 2015 00:29:49 -0700
 lib/roda/plugins/view_subdirs.rb	Sun, 08 Mar 2015 14:07:21 -0700
 lib/roda/plugins/websockets.rb	Tue, 16 Jun 2015 21:47:49 -0700
-lib/roda/version.rb	Tue, 13 Oct 2015 08:49:31 -0700
+lib/roda/version.rb	Mon, 16 Nov 2015 08:16:19 -0800
 doc/conventions.rdoc	Sat, 10 Jan 2015 15:40:37 -0800
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -83,3 +84,4 @@ doc/release_notes/2.5.0.txt	Tue, 14 Jul 2015 09:03:23 -0700
 doc/release_notes/2.5.1.txt	Thu, 13 Aug 2015 08:01:16 -0700
 doc/release_notes/2.6.0.txt	Mon, 14 Sep 2015 07:35:00 -0700
 doc/release_notes/2.7.0.txt	Tue, 13 Oct 2015 08:49:31 -0700
+doc/release_notes/2.8.0.txt	Mon, 16 Nov 2015 08:16:19 -0800
