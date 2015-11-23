@@ -19,6 +19,9 @@ describe "content_for plugin with erb" do
         r.get 'a' do
           view(:inline => "bar", :layout => { :inline => '<%= content_for(:foo) %> <%= yield %>' })
         end
+        r.get 'b' do
+          view(:inline => '<% content_for(:foo, "foo") %>bar', :layout => { :inline => '<%= yield %> <%= content_for(:foo) %>' })
+        end
       end
     end
   end
@@ -29,6 +32,10 @@ describe "content_for plugin with erb" do
 
   it "should work if content is not set by the template" do
     body('/a').strip.must_equal "bar"
+  end
+
+  it "should work if a raw string is set" do
+    body('/b').strip.must_equal "bar foo"
   end
 end
 
@@ -42,12 +49,16 @@ describe "content_for plugin with haml" do
         r.root do
           view(:inline => "- content_for :foo do\n  - capture_haml do\n    foo\nbar", :layout => { :inline => "= yield\n=content_for :foo" })
         end
+        r.get 'a' do
+          view(:inline => "- content_for :foo, 'foo'\nbar", :layout => { :inline => "= yield\n=content_for :foo" })
+        end
       end
     end
   end
 
   it "should work with alternate rendering engines" do
     body.strip.must_equal "bar\nfoo"
+    body('/a').strip.must_equal "bar\nfoo"
   end
 end
 
@@ -61,12 +72,16 @@ describe "content_for plugin with mixed template engines" do
         r.root do
           view(:inline => "<% content_for :foo do %>foo<% end %>bar")
         end
+        r.get 'a' do
+          view(:inline => "<% content_for :foo, 'foo' %>bar")
+        end
       end
     end
   end
 
   it "should work with alternate rendering engines" do
     body.strip.must_equal "bar\nfoo"
+    body('/a').strip.must_equal "bar\nfoo"
   end
 end
 
@@ -80,12 +95,16 @@ describe "content_for plugin when overriding :engine" do
         r.root do
           view(:inline => "<% content_for :foo do %>foo<% end %>bar", :engine=>:erb)
         end
+        r.get 'a' do
+          view(:inline => "<% content_for :foo, 'foo' %>bar", :engine=>:erb)
+        end
       end
     end
   end
 
   it "should work with alternate rendering engines" do
     body.strip.must_equal "bar\nfoo"
+    body('/a').strip.must_equal "bar\nfoo"
   end
 end
 end

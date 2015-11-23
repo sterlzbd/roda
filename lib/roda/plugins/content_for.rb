@@ -14,6 +14,11 @@ class Roda
     #     Some content here.
     #   <% end %>
     #
+    # You can also set the raw content as the second argument,
+    # instead of passing a block:
+    #
+    #   <% content_for :foo, "Some content" %>
+    #
     # In the template in which you want to retrieve content,
     # call content_for without the block:
     #
@@ -30,7 +35,7 @@ class Roda
         # under the given key.  If called without a block, retrieve
         # stored content with the given key, or return nil if there
         # is no content stored with that key.
-        def content_for(key, &block)
+        def content_for(key, value=nil, &block)
           if block
             outvar = render_opts[:template_opts][:outvar]
             buf_was = instance_variable_get(outvar)
@@ -41,6 +46,9 @@ class Roda
             @_content_for[key] = Tilt[render_opts[:engine]].new(&block).render
 
             instance_variable_set(outvar, buf_was)
+          elsif value
+            @_content_for ||= {}
+            @_content_for[key] = value
           elsif @_content_for
             @_content_for[key]
           end
