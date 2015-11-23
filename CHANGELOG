@@ -1,3 +1,7 @@
+= HEAD
+
+* Support passing the content as a string argument instead of a block in the content_for plugin (badosu) (#52)
+
 = 2.8.0 (2015-11-16)
 
 * Add multi_view plugin for easily setting up routing for rendering multiple views (jeremyevans)
