@@ -759,7 +759,7 @@ application level using using the +default_headers+ plugin:
 
 Content-Security-Policy/X-Content-Security-Policy :: Defines policy for how javascript and other
                                                      types of content can be used on the page.
-Frame-Options/X-Frame-Options :: Provides click-jacking projection by not allowing usage inside
+Frame-Options/X-Frame-Options :: Provides click-jacking protection by not allowing usage inside
                                  a frame.
 Strict-Transport-Security :: Enforces SSL/TLS Connections to the application.
 X-Content-Type-Options :: Forces some browsers to respect a declared Content-Type header.
