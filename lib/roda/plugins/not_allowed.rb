@@ -60,9 +60,7 @@ class Roda
     # In all cases where it uses a 405 response, it also sets the +Allow+
     # header in the response to contain the request methods supported.
     #
-    # This plugin depends on the all_verbs plugin.  It works by overriding
-    # the verb methods, so it wouldn't work if loaded after the all_verbs
-    # plugin.
+    # This plugin depends on the all_verbs plugin.
     module NotAllowed
       # Depend on the all_verbs plugin, as this plugin overrides methods
       # defined by it and calls super.
