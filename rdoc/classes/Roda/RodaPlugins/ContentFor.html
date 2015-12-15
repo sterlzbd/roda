@@ -50,6 +50,11 @@
             
             <pre>&lt;% content_for :foo do %&gt;&#x000A;  Some content here.&#x000A;&lt;% end %&gt;</pre>
             
+            <p>You can also set the raw content as the second argument, instead of passing
+            a block:</p>
+            
+            <pre>&lt;% content_for :foo, &quot;Some content&quot; %&gt;</pre>
+            
             <p>In the template in which you want to retrieve content, call content_for
             without the block:</p>
             
@@ -88,7 +93,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/content_for.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/content_for.rb, line 29</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
