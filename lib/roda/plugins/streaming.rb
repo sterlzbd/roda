@@ -100,9 +100,14 @@ class Roda
         end
 
         # Add output to the streaming response body.
-        def <<(data)
+        def write(data)
           @scheduler.schedule{@front.call(data.to_s)}
           self
+        end
+
+        # Alias for +write+.
+        def <<(data)
+          write(data)
         end
 
         # Add the given block as a callback to call when the block closes.
