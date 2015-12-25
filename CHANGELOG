@@ -1,3 +1,7 @@
+= HEAD
+
+* Add Streaming::Stream#write method so that IO.copy_stream will work (janko-m) (#56)
+
 = 2.9.0 (2015-12-15)
 
 * Support passing the content as a string argument instead of a block in the content_for plugin (badosu) (#52)

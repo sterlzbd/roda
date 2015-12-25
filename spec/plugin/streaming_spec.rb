@@ -4,14 +4,14 @@ describe "streaming plugin" do
   it "adds stream method for streaming responses" do
     app(:streaming) do |r|
       stream do |out|
-        %w'a b c'.each{|v| out << v}
+        %w'a b c'.each{|v| out << v; out.write(v) }
       end
     end
 
     s, h, b = req
     s.must_equal 200
     h.must_equal('Content-Type'=>'text/html')
-    b.to_a.must_equal %w'a b c'
+    b.to_a.must_equal %w'a a b b c c'
   end
 
   it "should handle errors when streaming, and run callbacks" do
