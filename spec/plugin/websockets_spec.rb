@@ -43,6 +43,8 @@ describe "websockets plugin" do
     @port = 9791
     q = Queue.new
     Thread.new do
+      #$DEBUG=true
+      #Thin::Logging.trace = true
       Thin::Logging.silent = true
       Rack::Handler.get('thin').run(app, :Port => @port) do |s|
         @server = s
@@ -52,6 +54,7 @@ describe "websockets plugin" do
     q.pop
   end
   after do
+    #$DEBUG=nil
     @server.stop
   end
 
