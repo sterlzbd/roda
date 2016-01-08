@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The delete_empty_headers plugin deletes any headers whose

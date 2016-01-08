@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 require 'net/smtp'
 
 class Roda
@@ -41,7 +43,8 @@ class Roda
         :body=>lambda do |s, e|
           format = lambda{|h| h.map{|k, v| "#{k.inspect} => #{v.inspect}"}.sort.join("\n")}
 
-          message = <<END
+          message = String.new
+          message << <<END
 Path: #{s.request.path}
 
 Backtrace:

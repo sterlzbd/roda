@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The delay_build plugin does not build the rack app until

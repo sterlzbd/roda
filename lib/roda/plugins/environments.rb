@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The environments plugin adds a environment class accessor to get

@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 require 'delegate'
 
 class Roda

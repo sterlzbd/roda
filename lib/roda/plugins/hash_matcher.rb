@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The hash_matcher plugin adds the hash_matcher class method, which

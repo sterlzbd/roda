@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The sinatra_helpers plugin ports most of the helper methods

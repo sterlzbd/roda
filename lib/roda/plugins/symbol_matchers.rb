@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The symbol_matchers plugin allows you do define custom regexps to use

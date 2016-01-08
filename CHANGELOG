@@ -1,5 +1,7 @@
 = HEAD
 
+* Add support for running with --enable-frozen-string-literal on ruby 2.3 (jeremyevans)
+
 * Add Streaming::Stream#write method so that IO.copy_stream will work (janko-m) (#56)
 
 = 2.9.0 (2015-12-15)

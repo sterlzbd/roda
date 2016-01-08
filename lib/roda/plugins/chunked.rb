@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The chunked plugin allows you to stream responses to clients using
@@ -265,7 +267,7 @@ class Roda
           # of the response.
           @_flusher = lambda do
             yield @_out_buf
-            @_out_buf = ''
+            @_out_buf = String.new
           end
 
           if layout_opts  = view_layout_opts(opts)

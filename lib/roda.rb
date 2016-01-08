@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 require "rack"
 require "thread"
 require "roda/version"

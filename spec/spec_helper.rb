@@ -47,7 +47,7 @@ class Minitest::Spec
     if path.is_a?(Hash)
       env = path
     else
-      env['PATH_INFO'] = path
+      env['PATH_INFO'] = path.dup
     end
 
     env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge(env)
@@ -63,7 +63,7 @@ class Minitest::Spec
   end
 
   def body(path='/', env={})
-    s = ''
+    s = String.new
     b = req(path, env)[2]
     b.each{|x| s << x}
     b.close if b.respond_to?(:close)

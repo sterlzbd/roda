@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The multi_view plugin makes it easy to render multiple views, where the

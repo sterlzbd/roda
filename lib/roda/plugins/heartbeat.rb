@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The heartbeat handles heartbeat/status requests.  If a request for

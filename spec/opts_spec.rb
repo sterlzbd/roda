@@ -30,7 +30,7 @@ describe "opts" do
 
   it "should only shallow clone by default" do
     c = Class.new(Roda)
-    c.opts[:foo] = "bar"
+    c.opts[:foo] = "bar".dup
     c.opts[:foo].must_equal "bar"
 
     sc = Class.new(c)

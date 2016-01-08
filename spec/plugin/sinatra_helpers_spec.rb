@@ -235,7 +235,6 @@ describe "sinatra_helpers plugin" do
     it "looks up mime types in Rack's MIME registry" do
       Rack::Mime::MIME_TYPES['.foo'] = 'application/foo'
       body('foo').must_equal 'application/foo'
-      body(:foo).must_equal 'application/foo'
       body('.foo').must_equal 'application/foo'
     end
 
@@ -252,8 +251,8 @@ describe "sinatra_helpers plugin" do
     end
 
     it 'supports mime types registered at the class level' do
-      app.mime_type :foo, 'application/foo'
-      body(:foo).must_equal 'application/foo'
+      app.mime_type :foo, 'application/foo2'
+      body('foo').must_equal 'application/foo2'
     end
   end
 

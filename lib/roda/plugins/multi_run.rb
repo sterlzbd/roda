@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The multi_run plugin provides the ability to easily dispatch to other

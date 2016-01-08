@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The assets plugin adds support for rendering your CSS and javascript
@@ -614,7 +616,7 @@ class Roda
 
             if o[:gzip] && env[HTTP_ACCEPT_ENCODING] =~ /\bgzip\b/
               @_response[CONTENT_ENCODING] = GZIP
-              file << DOTGZ
+              file += DOTGZ
             end
 
             check_asset_request(file, type, ::File.stat(file).mtime)

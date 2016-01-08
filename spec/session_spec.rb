@@ -19,7 +19,7 @@ describe "session handling" do
 
       route do |r|
         r.on do
-          (session[1] ||= 'a') << 'b'
+          (session[1] ||= 'a'.dup) << 'b'
           session[1]
         end
       end

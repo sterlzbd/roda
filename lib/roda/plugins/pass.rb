@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The pass plugin adds a request +pass+ method to skip the current match

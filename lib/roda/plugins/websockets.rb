@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 require 'faye/websocket'
 
 class Roda

@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The class_level_routing plugin adds routing methods at the class level, which can

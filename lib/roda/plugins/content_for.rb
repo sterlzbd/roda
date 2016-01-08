@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The content_for plugin is designed to be used with the
@@ -40,7 +42,7 @@ class Roda
             outvar = render_opts[:template_opts][:outvar]
             buf_was = instance_variable_get(outvar)
             # clean the output buffer for ERB-based rendering systems
-            instance_variable_set(outvar, '')
+            instance_variable_set(outvar, String.new)
 
             @_content_for ||= {}
             @_content_for[key] = Tilt[render_opts[:engine]].new(&block).render

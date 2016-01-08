@@ -45,7 +45,7 @@ describe "chunked plugin" do
       delay do
         @h << 'i'
       end
-      @h = 'h'
+      @h = String.new('h')
       chunked(:inline=>'m<%= @h %>', :layout=>{:inline=>'<%= @h %><%= yield %>t'}) do
         @h << 'j'
       end

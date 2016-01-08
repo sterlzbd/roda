@@ -1,3 +1,5 @@
+# frozen-string-literal: true
+
 class Roda
   module RodaPlugins
     # The run_handler plugin allows r.run to take a block, which is yielded 
