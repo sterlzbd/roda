@@ -47,9 +47,12 @@ class Roda
     # object as the second argument when calling the serializer.
     #
     #   plugin :json, include_request=>true, serializer=>proc{|o, request| ...}
+    #
+    # The default content-type is 'application/json', but you can change that with `opts[:content_type]`
     module Json
       OPTS = {}.freeze
       DEFAULT_SERIALIZER = lambda{|o| o.to_json}
+      DEFAULT_CONTENT_TYPE = 'application/json'.freeze
 
       # Set the classes to automatically convert to JSON, and the serializer to use.
       def self.configure(app, opts=OPTS)
@@ -62,6 +65,8 @@ class Roda
         app.opts[:json_result_serializer] = opts[:serializer] || app.opts[:json_result_serializer] || DEFAULT_SERIALIZER
 
         app.opts[:json_result_include_request] = opts[:include_request] || app.opts[:json_result_include_request]
+
+        app.opts[:json_result_content_type] = opts[:content_type] || DEFAULT_CONTENT_TYPE
       end
 
       module ClassMethods
@@ -73,7 +78,6 @@ class Roda
 
       module RequestMethods
         CONTENT_TYPE = 'Content-Type'.freeze
-        APPLICATION_JSON = 'application/json'.freeze
 
         private
 
@@ -83,7 +87,7 @@ class Roda
         def block_result_body(result)
           case result
           when *roda_class.json_result_classes
-            response[CONTENT_TYPE] = APPLICATION_JSON
+            response[CONTENT_TYPE] = roda_class.opts[:json_result_content_type]
             convert_to_json(result)
           else
             super
