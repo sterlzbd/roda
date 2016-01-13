@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.email             = ["code@jeremyevans.net"]
   s.homepage          = "http://roda.jeremyevans.net"
   s.license           = "MIT"
+  s.required_ruby_version = ">= 1.8.7"
 
   s.files = %w'README.rdoc MIT-LICENSE CHANGELOG Rakefile' + Dir['doc/*.rdoc'] + Dir['doc/release_notes/*.txt'] + Dir['{lib,spec}/**/*.rb'] + Dir['spec/views/*'] + Dir['spec/assets/{css/{app.scss,raw.css,no_access.css},js/head/app.js}']
   s.extra_rdoc_files = %w'README.rdoc MIT-LICENSE CHANGELOG' + Dir["doc/*.rdoc"] + Dir['doc/release_notes/*.txt']
