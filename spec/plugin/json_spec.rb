@@ -23,6 +23,11 @@ describe "json plugin" do
         r.is 'c' do
           c.new
         end
+
+        r.is 'd' do
+          response['Content-Type'] = 'foo'
+          c.new
+        end
       end
     end
   end
@@ -32,6 +37,10 @@ describe "json plugin" do
     header('Content-Type', "/hash").must_equal 'application/json'
     header('Content-Type', "/c").must_equal 'application/json'
     header('Content-Type').must_equal 'text/html'
+  end
+
+  it "should not override existing content type for a json response" do
+    header('Content-Type', "/d").must_equal 'foo'
   end
 
   it "should convert objects to json" do

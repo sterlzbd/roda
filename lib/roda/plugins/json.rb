@@ -46,9 +46,12 @@ class Roda
     # +:include_request+ option, which will pass in the request
     # object as the second argument when calling the serializer.
     #
-    #   plugin :json, include_request=>true, serializer=>proc{|o, request| ...}
+    #   plugin :json, :include_request=>true, :serializer=>proc{|o, request| ...}
     #
-    # The default content-type is 'application/json', but you can change that with `opts[:content_type]`
+    # The default content-type is 'application/json', but you can change that
+    # using the +:content_type+ option:
+    #
+    #   plugin :json, :content_type=>'application/xml'
     module Json
       OPTS = {}.freeze
       DEFAULT_SERIALIZER = lambda{|o| o.to_json}
@@ -87,7 +90,7 @@ class Roda
         def block_result_body(result)
           case result
           when *roda_class.json_result_classes
-            response[CONTENT_TYPE] = roda_class.opts[:json_result_content_type]
+            response[CONTENT_TYPE] ||= roda_class.opts[:json_result_content_type]
             convert_to_json(result)
           else
             super
