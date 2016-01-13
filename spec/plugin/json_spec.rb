@@ -59,4 +59,9 @@ describe "json plugin" do
 
     body("/hash").must_equal 'b:/hash'
   end
+
+  it "should allow custom content type for a response" do
+    app.plugin :json, :content_type => "application/xml"
+    header('Content-Type', "/array").must_equal 'application/xml'
+  end
 end
