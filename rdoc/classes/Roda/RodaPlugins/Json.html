@@ -67,7 +67,12 @@
             <code>:include_request</code> option, which will pass in the request object
             as the second argument when calling the serializer.</p>
             
-            <pre>plugin :json, include_request=&gt;true, serializer=&gt;proc{|o, request| ...}</pre>
+            <pre>plugin :json, :include_request=&gt;true, :serializer=&gt;proc{|o, request| ...}</pre>
+            
+            <p>The default content-type is &#39;application/json&#39;, but you can change
+            that using the <code>:content_type</code> option:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">json</span>, :<span class="ruby-identifier">content_type=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;application/xml&#39;</span></pre>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -90,6 +95,13 @@
               <h2>Constants</h2>
               <div class='name-list'>
                 <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>DEFAULT_CONTENT_TYPE</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'application/json'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
                   <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>DEFAULT_SERIALIZER</td>
                     <td>=</td>
@@ -124,7 +136,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 53</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">classes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">classes</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">uniq!</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">freeze</span>&#x000A;&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_SERIALIZER</span>&#x000A;&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_include_request</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:include_request</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_include_request</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json.rb, line 61</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">classes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">classes</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">uniq!</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">freeze</span>&#x000A;&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_SERIALIZER</span>&#x000A;&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_include_request</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:include_request</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_include_request</span>]&#x000A;&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_content_type</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_type</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_CONTENT_TYPE</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

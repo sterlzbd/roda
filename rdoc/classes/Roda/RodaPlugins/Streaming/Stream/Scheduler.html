@@ -77,7 +77,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/streaming.rb, line 70</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">stream</span>)&#x000A;  <span class="ruby-ivar">@stream</span> = <span class="ruby-identifier">stream</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/streaming.rb, line 72</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">stream</span>)&#x000A;  <span class="ruby-ivar">@stream</span> = <span class="ruby-identifier">stream</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -95,7 +95,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-defer-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-defer-source'><span class="ruby-comment"># File lib/roda/plugins/streaming.rb, line 75</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">defer</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">yield</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-defer-source'><span class="ruby-comment"># File lib/roda/plugins/streaming.rb, line 77</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">defer</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">yield</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-schedule'>
@@ -113,7 +113,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-schedule-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-schedule-source'><span class="ruby-comment"># File lib/roda/plugins/streaming.rb, line 81</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">schedule</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">yield</span>&#x000A;<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span>&#x000A;  <span class="ruby-ivar">@stream</span>.<span class="ruby-identifier">close</span>&#x000A;  <span class="ruby-identifier">raise</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-schedule-source'><span class="ruby-comment"># File lib/roda/plugins/streaming.rb, line 83</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">schedule</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">yield</span>&#x000A;<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Exception</span>&#x000A;  <span class="ruby-ivar">@stream</span>.<span class="ruby-identifier">close</span>&#x000A;  <span class="ruby-identifier">raise</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
