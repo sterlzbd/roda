@@ -1,4 +1,4 @@
-= HEAD
+= 2.10.0 (2016-01-15)
 
 * Do not override existing Content-Type header in json plugin (jeremyevans)
 
