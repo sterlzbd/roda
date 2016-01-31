@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+#
 class Roda
   module RodaPlugins
     # The empty_root plugin makes +r.root+ match both on +/+ and

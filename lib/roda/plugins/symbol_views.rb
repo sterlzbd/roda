@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+#
 class Roda
   module RodaPlugins
     # The symbol_views plugin allows match blocks to return

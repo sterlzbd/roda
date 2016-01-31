@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+#
 class Roda
   module RodaPlugins
     # The chunked plugin allows you to stream responses to clients using

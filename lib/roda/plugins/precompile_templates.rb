@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+#
 class Roda
   module RodaPlugins
     # The precompile_templates plugin adds support for precompiling template code.

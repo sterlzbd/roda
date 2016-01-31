@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+#
 class Roda
   module RodaPlugins
     # The error_handler plugin adds an error handler to the routing,

@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+#
 class Roda
   module RodaPlugins
     # The path plugin adds support for named paths.  Using the +path+ class method, you can
