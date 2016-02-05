@@ -744,6 +744,11 @@ to escape by default, so that in your templates:
   <%= '<>' %>  # outputs &lt;&gt; 
   <%== '<>' %> # outputs <>
 
+You will need to ensure that your layouts are using the unescaped output
+helper when calling +yield+.
+
+  <%== yield %>
+
 You can also provide a +:escape_safe_classes+ option, which will
 make <tt><%= %></tt> not escape certain string subclasses, useful
 if you have helpers that already return escaped output using a
