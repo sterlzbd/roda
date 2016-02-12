@@ -1,5 +1,7 @@
 = HEAD
 
+* Make minjs compressor support in assets plugin support latest version of Minjs (jeremyevans)
+
 * Add params_capturing plugin, for storing matcher captures in the request params (jeremyevans)
 
 = 2.10.0 (2016-01-15)

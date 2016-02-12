@@ -512,7 +512,7 @@ class Roda
         # Compress the JS using MinJS, a pure ruby compressor
         def compress_js_minjs(content)
           require 'minjs'
-          ::Minjs::Compressor.new(:debug => false).compress(content)
+          Minjs::Compressor::Compressor.new(:debug => false).compress(content).to_js
         end
 
         # Compress the JS using Uglifier, requires javascript runtime
