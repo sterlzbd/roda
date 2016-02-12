@@ -79,6 +79,8 @@ class Roda
             super
           end
         else
+          # :nocov:
+
           # Ruby 1.8 doesn't support positive lookbehind, so include the
           # colon in the scan, and strip it out later.
           STRING_PARAM_CAPTURE_RANGE = 1..-1
@@ -89,6 +91,7 @@ class Roda
             end
             super
           end
+          # :nocov:
         end
 
         # Add the symbol to the list of param capture names if param capturing.
