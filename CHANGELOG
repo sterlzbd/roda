@@ -1,3 +1,7 @@
+= HEAD
+
+* Add param_capturing plugin, for storing string and symbol matcher captures in the request params (jeremyevans)
+
 = 2.10.0 (2016-01-15)
 
 * Do not override existing Content-Type header in json plugin (jeremyevans)
