@@ -4,7 +4,8 @@
 class Roda
   module RodaPlugins
     # The params_capturing plugin makes string and symbol matchers
-    # update the request params with the value of the captured segments:
+    # update the request params with the value of the captured segments,
+    # using the matcher as the key:
     #
     #   plugin :params_capturing
     #
@@ -17,20 +18,51 @@ class Roda
     #     end
     #   end
     #
-    # Note that this updating of the request params is only done if
-    # all arguments to the matcher are symbols or strings.  In all other
-    # cases, Roda will not update the params with the captures. So
-    # this will not update the request params:
+    # Note that this updating of the request params using the matcher as
+    # the key is only done if all arguments to the matcher are symbols
+    # or strings.
     #
-    #   r.on(:x, /(y)/i) do
+    # All matchers will update the request params by adding all
+    # captured segments to the +captures+ key, including
+    # symbol and string matchers:
+    #
+    #   r.on(:x, /(\d+)\/(\w+)/, ':y') do
     #     r[:x] #=> nil
+    #     r[:y] #=> nil
+    #     r[:captures] #=> ["foo", "123", "abc", "67"]
     #   end
     #
-    # Note that the param keys are actually stored in +r.params+ as
+    # Note that the request params +captures+ entry will be appended to with
+    # each nested match:
+    #
+    #   r.on(:w) do
+    #     r.on(:x) do
+    #       r.on(:y) do
+    #         r.on(:z) do
+    #           r[:captures] # => ["foo", "123", "abc", "67"]
+    #         end
+    #       end
+    #     end
+    #   end
+    #
+    # Note that any existing params captures entry will be overwritten
+    # by this plugin.  You can use +r.GET+ or +r.POST+ to get the underlying
+    # entry, depending on how it was submitted.
+    #
+    # Also note that the param keys are actually stored in +r.params+ as
     # strings and not symbols (<tt>r[]</tt> converts the argument
     # to a string before looking it up in +r.params+).
+    #
+    # Also note that this plugin will not work correctly if you are using
+    # the symbol_matchers plugin with custom symbol matching and are using
+    # symbols that capture multiple values or no values.
     module ParamsCapturing
       module RequestMethods
+        def initialize(*)
+          super
+          params['captures'] = []
+        end
+
         private
 
         if RUBY_VERSION >= '1.9'
@@ -72,18 +104,21 @@ class Roda
         # any captures to the params based on the param capture names added by
         # the matchers.
         def if_match(args)
+          params = self.params
+
           if args.all?{|x| x.is_a?(String) || x.is_a?(Symbol)}
             pc = @_params_captures = []
-            params = self.params
-            super do |*a|
+          end
+
+          super do |*a|
+            if pc
               @_params_captures = nil
               pc.zip(a).each do |k,v|
                 params[k] = v
               end
-              yield(*a)
             end
-          else
-            super
+            params['captures'].concat(a) 
+            yield(*a)
           end
         end
       end

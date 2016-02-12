@@ -1,6 +1,6 @@
 = HEAD
 
-* Add param_capturing plugin, for storing string and symbol matcher captures in the request params (jeremyevans)
+* Add params_capturing plugin, for storing matcher captures in the request params (jeremyevans)
 
 = 2.10.0 (2016-01-15)
 
