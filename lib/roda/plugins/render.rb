@@ -77,6 +77,8 @@ class Roda
     # :path :: Use the value given as the full pathname for the file, instead
     #          of using the :views and :engine option in combination with the
     #          template name.
+    # :scope :: The object in which context to evaluate the template.  By
+    #           default, this is the Roda instance.
     # :template :: Provides the name of the template to use.  This allows you
     #              pass a single options hash to the render/view method, while
     #              still allowing you to specify the template name.
@@ -215,7 +217,7 @@ class Roda
         def render(template, opts = OPTS, &block)
           opts = parse_template_opts(template, opts)
           merge_render_locals(opts)
-          retrieve_template(opts).render(self, (opts[:locals]||OPTS), &block)
+          retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
         end
 
         # Return the render options for the instance's class. While this

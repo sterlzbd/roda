@@ -396,6 +396,18 @@ describe "render plugin" do
     body('/about').strip.must_equal "<h1>a</h1>"
   end
 
+  it "Support :scope option to override object in which to evaluate the template" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views"
+
+      route do |r|
+        render(:inline=>'<%= first %>-<%= last %>', :scope=>[1,2])
+      end
+    end
+
+    body.must_equal "1-2"
+  end
+
   it "render_opts inheritance" do
     c = Class.new(Roda)
     c.plugin :render
