@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::ResponseRequest::InstanceMethods</title>
+    <title>Roda::RodaPlugins::ParamsCapturing::RequestMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::ResponseRequest::InstanceMethods
+          Roda::RodaPlugins::ParamsCapturing::RequestMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/response_request_rb.html">lib/roda/plugins/response_request.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/params_capturing_rb.html">lib/roda/plugins/params_capturing.rb</a>
           </li>
         </ol>
       </div>
@@ -48,23 +48,51 @@
           <div id='context'>
           </div>
           <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>STRING_PARAM_CAPTURE_RANGE</td>
+                    <td>=</td>
+                    <td class='context-item-value'>1..-1</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>Ruby 1.8 doesn&#39;t support positive lookbehind, so include the colon in
+                      the scan, and strip it out later.</p>
+                    </td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>STRING_PARAM_CAPTURE_REGEXP</td>
+                    <td>=</td>
+                    <td class='context-item-value'>eval("/(?<=:)\\w+/")</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'>
+                      
+                      <p>Regexp to scan for capture names. Uses positive lookbehind so it is only
+                      valid on ruby 1.9+, hence the use of eval.</p>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-new'>
                 <a name='method-c-new'></a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
-                  <span class='arguments'>(env)</span>
+                  <span class='arguments'>(*)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Set the response&#39;s request to the current request.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/response_request.rb, line 15</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">request</span> = <span class="ruby-ivar">@_request</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/params_capturing.rb, line 61</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;captures&#39;</span>] = []&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

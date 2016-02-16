@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2015-12-15 07:46:22 -0800</span>
+          <span class='datetime'>2016-02-05 09:35:59 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -602,6 +602,11 @@
             ERb template processor to escape by default, so that in your templates:</p>
             
             <pre>&lt;%= &#39;&lt;&gt;&#39; %&gt;  # outputs &amp;lt;&amp;gt; &#x000A;&lt;%== &#39;&lt;&gt;&#39; %&gt; # outputs &lt;&gt;</pre>
+            
+            <p>When using the +:escape_option, you will need to ensure that your layouts
+            are not escaping the output of the content template:</p>
+            
+            <pre>&lt;%== yield %&gt; # not &lt;%= yield %&gt;</pre>
             
             <p>You can also provide a <code>:escape_safe_classes</code> option, which will
             make <code>&lt;%= %&gt;</code> not escape certain string subclasses, useful

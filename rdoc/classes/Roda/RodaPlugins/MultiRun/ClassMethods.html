@@ -67,7 +67,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-freeze-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-freeze-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>].<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-freeze-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>].<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-multi_run_apps'>
@@ -85,7 +85,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-multi_run_apps-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-multi_run_apps-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 62</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">multi_run_apps</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-multi_run_apps-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 63</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">multi_run_apps</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-run'>
@@ -103,7 +103,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 68</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">multi_run_apps</span>[<span class="ruby-identifier">prefix</span>.<span class="ruby-identifier">to_s</span>] = <span class="ruby-identifier">app</span>&#x000A;  <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">refresh_multi_run_regexp!</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 69</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">multi_run_apps</span>[<span class="ruby-identifier">prefix</span>.<span class="ruby-identifier">to_s</span>] = <span class="ruby-identifier">app</span>&#x000A;  <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">refresh_multi_run_regexp!</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

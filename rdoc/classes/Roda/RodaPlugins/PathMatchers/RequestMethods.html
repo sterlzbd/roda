@@ -67,7 +67,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-match_extension-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-match_extension-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_extension</span>(<span class="ruby-identifier">ext</span>)&#x000A;  <span class="ruby-identifier">match_suffix</span>(<span class="ruby-node">&quot;.#{ext}&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-match_extension-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 36</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_extension</span>(<span class="ruby-identifier">ext</span>)&#x000A;  <span class="ruby-identifier">match_suffix</span>(<span class="ruby-node">&quot;.#{ext}&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-match_prefix'>
@@ -84,7 +84,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-match_prefix-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-match_prefix-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 40</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_prefix</span>(<span class="ruby-identifier">prefix</span>)&#x000A;  <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:prefix</span>, <span class="ruby-identifier">prefix</span>]){<span class="ruby-node">/#{prefix}([^\\/]+)/</span>})&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-match_prefix-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 41</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_prefix</span>(<span class="ruby-identifier">prefix</span>)&#x000A;  <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:prefix</span>, <span class="ruby-identifier">prefix</span>]){<span class="ruby-node">/#{prefix}([^\\/]+)/</span>})&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-match_suffix'>
@@ -101,7 +101,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-match_suffix-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-match_suffix-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 45</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_suffix</span>(<span class="ruby-identifier">suffix</span>)&#x000A;  <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:suffix</span>, <span class="ruby-identifier">suffix</span>]){<span class="ruby-node">/([^\\/]+)#{suffix}/</span>})&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-match_suffix-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_suffix</span>(<span class="ruby-identifier">suffix</span>)&#x000A;  <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:suffix</span>, <span class="ruby-identifier">suffix</span>]){<span class="ruby-node">/([^\\/]+)#{suffix}/</span>})&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
