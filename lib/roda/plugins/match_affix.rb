@@ -44,6 +44,15 @@ class Roda
           /\A#{roda_class.opts[:match_prefix] || PREFIX}(?:#{pattern})#{roda_class.opts[:match_suffix] || SUFFIX}/
         end
       end
+
+      module RequestMethods
+        private
+
+        # Use regexps for all string matches, so that the prefix and suffix matches work.
+        def _match_string(str)
+          consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})
+        end
+      end
     end
 
     register_plugin(:match_affix, MatchAffix)

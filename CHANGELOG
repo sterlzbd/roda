@@ -1,8 +1,10 @@
 = HEAD
 
-* Optimize default symbol matching code for up to a 60% performance increase (jeremyevans)
+* Add optimized_string_matchers plugin, containing optimized matchers for single string arguments (jeremyevans)
 
-* Add verbatim_string_matchers plugin, for faster routing with strings (jeremyevans)
+* Optimize string matching code for strings without placeholders for up to a 60% performance increase (jeremyevans)
+
+* Optimize symbol matching code for up to a 60% performance increase (jeremyevans)
 
 = 2.11.0 (2016-02-16)
 

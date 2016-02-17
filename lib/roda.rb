@@ -326,6 +326,7 @@ class Roda
         REQUEST_METHOD = "REQUEST_METHOD".freeze
         EMPTY_STRING = "".freeze
         SLASH = "/".freeze
+        COLON = ":".freeze
         SEGMENT = "([^\\/]+)".freeze
         TERM_INSPECT = "TERM".freeze
         GET_REQUEST_METHOD = 'GET'.freeze
@@ -676,7 +677,27 @@ class Roda
         # string so that regexp metacharacters are not matched, and recognizes
         # colon tokens for placeholders.
         def _match_string(str)
-          consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})
+          if str.index(COLON)
+            consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})
+          else
+            rp = @remaining_path
+            if rp.start_with?("/#{str}")
+              last = str.length + 1
+              case rp[last]
+              when SLASH
+                @remaining_path = rp[last, rp.length]
+              when nil
+                @remaining_path = EMPTY_STRING
+              when Integer
+                # :nocov:
+                # Ruby 1.8 support
+                if rp[last].chr == SLASH
+                  @remaining_path = rp[last, rp.length]
+                end
+                # :nocov:
+              end
+            end
+          end
         end
 
         # Match the given symbol if any segment matches.
