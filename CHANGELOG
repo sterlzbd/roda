@@ -1,3 +1,7 @@
+= HEAD
+
+* Add verbatim_string_matchers plugin, for faster routing with strings (jeremyevans)
+
 = 2.11.0 (2016-02-16)
 
 * Support :scope option in render plugin, for specifying object in which to evaluate the template (jeremyevans)
