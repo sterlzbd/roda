@@ -99,6 +99,13 @@ class Roda
               @remaining_path = rp[last, rp.length]
             when nil
               @remaining_path = EMPTY
+            when Integer
+              # :nocov:
+              # Ruby 1.8 support
+              if rp[last].chr == SLASH
+                @remaining_path = rp[last, rp.length]
+              end
+              # :nocov:
             end
           end
         end
