@@ -44,6 +44,9 @@ class Roda
     #   r.is "album:opt" do |id| end
     #   # matches /album (yielding nil) and /album/foo (yielding "foo")
     #   # does not match /album/ or /album/foo/bar
+    #
+    # If using this plugin with the params_capturing plugin, this plugin should
+    # be loaded first.
     module SymbolMatchers
       def self.configure(app)
         app.symbol_matcher(:d, /(\d+)/)
@@ -64,8 +67,21 @@ class Roda
       module RequestMethods
         private
 
-        # Allow for symbol specific regexps, by using match_symbol_#{s} if
-        # defined.  If not defined, calls super for the default behavior.
+        # Use regular expressions to the symbol-specific regular expression
+        # if the symbol is registered.  Otherwise, call super for the default
+        # behavior.
+        def _match_symbol(s)
+          meth = :"match_symbol_#{s}"
+          if respond_to?(meth)
+            re = send(meth)
+            consume(self.class.cached_matcher(re){re})
+          else
+            super
+          end
+        end
+
+        # Return the symbol-specific regular expression if one is registered.
+        # Otherwise, call super for the default behavior.
         def _match_symbol_regexp(s)
           meth = :"match_symbol_#{s}"
           if respond_to?(meth)

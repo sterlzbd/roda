@@ -1,5 +1,7 @@
 = HEAD
 
+* Optimize default symbol matching code for up to a 60% performance increase (jeremyevans)
+
 * Add verbatim_string_matchers plugin, for faster routing with strings (jeremyevans)
 
 = 2.11.0 (2016-02-16)

@@ -681,7 +681,18 @@ class Roda
 
         # Match the given symbol if any segment matches.
         def _match_symbol(sym)
-          consume(self.class.cached_matcher(sym){_match_symbol_regexp(sym)})
+          rp = @remaining_path
+          if rp[0, 1] == SLASH
+            if last = rp.index('/', 1)
+              if last > 1
+                @captures << rp[1, last-1]
+                @remaining_path = rp[last, rp.length]
+              end
+            elsif rp.length > 1
+              @captures << rp[1,rp.length]
+              @remaining_path = EMPTY_STRING
+            end
+          end
         end
 
         # The regular expression to use for matching symbols.  By default, any non-empty
