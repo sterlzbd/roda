@@ -79,6 +79,8 @@ class Roda
         # If the normal routing tree doesn't handle an action, try each class level route
         # to see if it matches.
         def call
+          req = @_request
+          rp = req.remaining_path
           result = super
 
           if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
@@ -87,6 +89,7 @@ class Roda
             @_response = self.class::RodaResponse.new
             super do |r|
               opts[:class_level_routes].each do |meth, args, blk|
+                req.instance_variable_set(:@remaining_path, rp)
                 r.send(meth, *args) do |*a|
                   instance_exec(*a, &blk)
                 end

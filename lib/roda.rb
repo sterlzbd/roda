@@ -792,11 +792,13 @@ class Roda
           # nesting matchers won't mess with each other's captures.
           @captures.clear
 
-          return unless match_all(args)
-          block_result(yield(*captures))
-          throw :halt, response.finish
-        ensure
-          @remaining_path = path
+          if match_all(args)
+            block_result(yield(*captures))
+            throw :halt, response.finish
+          else
+            @remaining_path = path
+            false
+          end
         end
         
         # Attempt to match the argument to the given request, handling

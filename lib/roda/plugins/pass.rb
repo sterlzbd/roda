@@ -34,7 +34,10 @@ class Roda
 
         # Handle passing inside the match block.
         def if_match(_)
-          catch(:pass){super}
+          rp = @remaining_path
+          ret = catch(:pass){super}
+          @remaining_path = rp
+          ret
         end
       end
     end

@@ -118,4 +118,25 @@ describe "error_handler plugin" do
 
     proc{req}.must_raise(ArgumentError)
   end
+
+  it "has access to current remaining_path" do
+    app(:bare) do
+      plugin :error_handler do |e|
+        request.remaining_path
+      end
+
+      route do |r|
+        r.on('a') do
+          raise ArgumentError, "bad idea"
+        end
+
+        raise ArgumentError, "bad idea"
+      end
+    end
+
+    body.must_equal '/'
+    body('/b').must_equal '/b'
+    body('/a').must_equal ''
+    body('/a/c').must_equal '/c'
+  end
 end
