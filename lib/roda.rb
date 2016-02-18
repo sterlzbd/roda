@@ -807,12 +807,12 @@ class Roda
           case matcher
           when String
             _match_string(matcher)
-          when Regexp
-            _match_regexp(matcher)
           when Symbol
             _match_symbol(matcher)
           when TERM
             empty_path?
+          when Regexp
+            _match_regexp(matcher)
           when Hash
             _match_hash(matcher)
           when Array
