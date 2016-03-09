@@ -10,7 +10,7 @@ class Roda
     #
     #   route do |r|
     #     r.on "foo/:bar" do |bar|
-    #       pass if bar == 'baz'
+    #       r.pass if bar == 'baz'
     #       "/foo/#{bar} (not baz)"
     #     end
     #
