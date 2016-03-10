@@ -5,7 +5,9 @@ gemspec
 
 if RUBY_VERSION < '1.9'
   gem 'mime-types', '< 2'
-else
+end
+
+if RUBY_VERSION >= '2.0'
   gem 'thin', :platforms=>:ruby
   gem 'faye-websocket', :platforms=>:ruby
 end
