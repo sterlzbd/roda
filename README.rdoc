@@ -782,6 +782,38 @@ Example:
       'X-XSS-Protection'=>'1; mode=block'
   end
 
+=== Rendering Templates Derived From User Input
+
+Roda's rendering plugin assumes that template paths given to it are trusted.  If you provide a path
+to the +render+/+view+ methods that is derived from user input, you are opening yourself
+for people rendering arbitrary files on the system that that have a file name ending in the
+default template extension.  For example, if you do:
+
+  class App < Roda
+    plugin :render
+    route do |r|
+      view(r['page'])
+    end
+  end
+
+Then attackers can submit a <tt>page</tt> parameter such as <tt>'../../../../tmp/upload'</tt>
+to render the <tt>/tmp/upload.erb</tt> file.  If you have another part of your system that
+allows users to create files with arbitrary extensions (even temporary files), then it may
+be possible to combine these two issues into a remote code execution exploit.
+
+If you do want to allow users to choose which template to use, you should use a whitelist:
+
+  class App < Roda
+    plugin :render
+    ALLOWED_PAGES = %w'page1 page2 page3'
+    route do |r|
+      page = r['page']
+      if ALLOWED_PAGES.include?(page)
+        view(page)
+      end
+    end
+  end
+
 == Reloading
 
 Most rack-based reloaders will work with Roda, including:
