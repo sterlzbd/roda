@@ -11,14 +11,6 @@ class Roda
     #   plugin :optimized_string_matchers
     #
     #   route do |r|
-    #     r.on "foo" do
-    #       # matches /foo and paths starting with /foo/
-    #     end
-    #
-    #     r.is "bar/:baz" do
-    #       # matches literal /bar/:baz, not /bar/something_else
-    #     end
-    #
     #     r.on_prefix "x" do
     #       # matches /x and paths starting with /x/
     #       r.is_exactly "y" do
