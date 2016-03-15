@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2016-02-05 09:35:59 -0800</span>
+          <span class='datetime'>2016-03-11 11:08:44 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -637,6 +637,29 @@
             <p>Example:</p>
             
             <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_headers</span>,&#x000A;    <span class="ruby-string">&#39;Content-Type&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;text/html&#39;</span>,&#x000A;    <span class="ruby-string">&#39;Content-Security-Policy&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;default-src &#39;self&#39;&quot;</span>,&#x000A;    <span class="ruby-string">&#39;Strict-Transport-Security&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;max-age=16070400;&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Frame-Options&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;deny&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Content-Type-Options&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;nosniff&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-XSS-Protection&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;1; mode=block&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <h3 id="label-Rendering+Templates+Derived+From+User+Input">Rendering Templates Derived From User Input<span><a href="#label-Rendering+Templates+Derived+From+User+Input">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p>Roda&#39;s rendering plugin assumes that template paths given to it are
+            trusted.  If you provide a path to the
+            <code>render</code>/<code>view</code> methods that is derived from user
+            input, you are opening yourself for people rendering arbitrary files on the
+            system that that have a file name ending in the default template extension.
+            For example, if you do:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">view</span>(<span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;page&#39;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Then attackers can submit a <code>page</code> parameter such as
+            <code>&#39;../../../../tmp/upload&#39;</code> to render the
+            <code>/tmp/upload.erb</code> file.  If you have another part of your system
+            that allows users to create files with arbitrary extensions (even temporary
+            files), then it may be possible to combine these two issues into a remote
+            code execution exploit.</p>
+            
+            <p>If you do want to allow users to choose which template to use, you should
+            use a whitelist:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;  <span class="ruby-constant">ALLOWED_PAGES</span> = <span class="ruby-node">%w&#39;page1 page2 page3&#39;</span>&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">page</span> = <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;page&#39;</span>]&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-constant">ALLOWED_PAGES</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">page</span>)&#x000A;      <span class="ruby-identifier">view</span>(<span class="ruby-identifier">page</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <h2 id="label-Reloading">Reloading<span><a href="#label-Reloading">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
