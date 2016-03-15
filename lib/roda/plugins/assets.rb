@@ -9,12 +9,15 @@ class Roda
     #
     # This uses the render plugin for rendering the assets, and the render
     # plugin uses tilt internally, so you can use any template engine
-    # supported by tilt for you assets.  Tilt ships with support for
+    # supported by tilt for your assets.  Tilt ships with support for
     # the following asset template engines, assuming the necessary libaries
     # are installed:
     #
     # css :: Less, Sass, Scss
     # js :: CoffeeScript
+    #
+    # You can also use opal as a javascript template engine, assuming it is
+    # installed.
     #
     # == Usage
     #
@@ -28,12 +31,13 @@ class Roda
     #   assets/css/some_file.scss
     #   assets/js/some_file.coffee
     #
-    # If you want to change the paths where asset files are stored, see the
+    # The values for the :css and :js options can be arrays to load multiple
+    # files. If you want to change the paths where asset files are stored, see the
     # Options section below.
     #
     # === Serving
     #
-    # In your routes, call the r.assets method to add a route to your assets,
+    # In your routes, call the +r.assets+ method to add a route to your assets,
     # which will make your app serve the rendered assets:
     #
     #   route do |r|
@@ -126,9 +130,12 @@ class Roda
     # === Asset Compression
     #
     # If you have the yuicompressor gem installed and working, it will be used
-    # automatically to compress your javascript and css assets.  Otherwise,
-    # the assets will just be concatenated together and not compressed during
-    # compilation.
+    # automatically to compress your javascript and css assets.  For javascript
+    # assets, if yuicompressor is not available, the plugin will check for
+    # closure_compiler, uglifier, and minjs and use the first one that works.
+    # If no compressors are available, the assets will just be concatenated
+    # together and not compressed during compilation.  You can use the
+    # :css_compressor and :js_compressor options to specify the compressor to use.
     #
     # === With Asset Groups
     #
@@ -143,7 +150,7 @@ class Roda
     #
     # === Serving
     #
-    # If you call +r.assets+ when compiling assets, will serve the compiled asset
+    # When compiling assets, +r.assets+ will serve the compiled asset
     # files.  However, it is recommended to have the main webserver (e.g. nginx)
     # serve the compiled files, instead of relying on the application.
     #
@@ -165,7 +172,7 @@ class Roda
     # when loading the plugin.  The value of this option should be the filename
     # where the compiled asset metadata is stored.  
     #
-    # If the compiled assset metadata file does not exist when the assets plugin
+    # If the compiled asset metadata file does not exist when the assets plugin
     # is loaded, the plugin will run in non-compiled mode.  However, when you call
     # compile_assets, it will write the compiled asset metadata file after
     # compiling the assets.
