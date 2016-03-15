@@ -1,9 +1,9 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 describe "optimized_string_matchers plugin" do 
-  it "makes string matchers only match given strings exactly" do
+  it "should support on_branch and is_exactly match methods" do
     app(:optimized_string_matchers) do |r|
-      r.on_prefix "e" do
+      r.on_branch "e" do
         r.is_exactly "f" do
           "ef"
         end
@@ -11,7 +11,7 @@ describe "optimized_string_matchers plugin" do
         "ee"
       end
 
-      r.on_prefix "a/:b" do |*b|
+      r.on_branch "a/:b" do |*b|
         r.is_exactly ":c" do |*c|
           "c-#{c.length}"
         end

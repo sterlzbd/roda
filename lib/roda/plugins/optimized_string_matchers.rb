@@ -4,14 +4,14 @@
 class Roda
   module RodaPlugins
     # The optimized_string_matchers plugin adds two optimized matcher methods,
-    # +r.on_prefix+ and +r.is_exactly+.  +r.on_prefix+ is an optimized version of
+    # +r.on_branch+ and +r.is_exactly+.  +r.on_branch+ is an optimized version of
     # +r.on+ that only accepts a single string, and +r.is_exactly+ is an
     # optimized version of +r.is+ that only accepts a single string.
     #
     #   plugin :optimized_string_matchers
     #
     #   route do |r|
-    #     r.on_prefix "x" do
+    #     r.on_branch "x" do
     #       # matches /x and paths starting with /x/
     #       r.is_exactly "y" do
     #         # matches /x/y
@@ -28,7 +28,7 @@ class Roda
 
       module RequestMethods
         # Optimized version of +on+ that only supports a single string.
-        def on_prefix(s)
+        def on_branch(s)
           always{yield} if _match_string(s)
         end
 
