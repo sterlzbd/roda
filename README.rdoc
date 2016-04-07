@@ -784,10 +784,10 @@ Example:
 
 === Rendering Templates Derived From User Input
 
-Roda's rendering plugin assumes that template paths given to it are trusted.  If you provide a path
-to the +render+/+view+ methods that is derived from user input, you are opening yourself
-for people rendering arbitrary files on the system that that have a file name ending in the
-default template extension.  For example, if you do:
+Roda's rendering plugin assumes that template paths given to it are trusted by default.
+If you provide a path to the +render+/+view+ methods that is derived from user input, you
+are opening yourself for people rendering arbitrary files on the system that that have a
+file name ending in the default template extension.  For example, if you do:
 
   class App < Roda
     plugin :render
@@ -801,18 +801,14 @@ to render the <tt>/tmp/upload.erb</tt> file.  If you have another part of your s
 allows users to create files with arbitrary extensions (even temporary files), then it may
 be possible to combine these two issues into a remote code execution exploit.
 
-If you do want to allow users to choose which template to use, you should use a whitelist:
-
-  class App < Roda
-    plugin :render
-    ALLOWED_PAGES = %w'page1 page2 page3'
-    route do |r|
-      page = r['page']
-      if ALLOWED_PAGES.include?(page)
-        view(page)
-      end
-    end
-  end
+To mitigate against this issue, you can use the <tt>:check_paths => true</tt> render
+option, which will check that the full path of the template to be rendered begins with the
++:views+ directory, and raises an exception if not.  You can also use the +:allowed_paths+
+and +:add_allowed_paths+ render options to specify which paths are allowed.  While
+<tt>:check_paths => true</tt> is not currently the default, it will become the default in
+Roda 3.  Note that when specifying the +:path+ option when rendering a template, Roda will
+not check paths, as it assumes that users and libraries that use this option will be checking
+such paths manually.
 
 == Reloading
 

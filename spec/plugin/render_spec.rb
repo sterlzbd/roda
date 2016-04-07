@@ -9,7 +9,7 @@ else
 describe "render plugin" do
   before do
     app(:bare) do
-      plugin :render, :views=>"./spec/views"
+      plugin :render, :views=>"./spec/views", :check_paths=>true
 
       route do |r|
         r.on "home" do
@@ -437,6 +437,62 @@ describe "render plugin" do
 
     Class.new(app).render_opts[:cache].must_equal false
   end
+
+  it "with :check_paths=>true" do
+    render_opts = {}
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :check_paths=>true
+      
+      route do |r|
+        r.get 'a' do
+          render("a", render_opts)
+        end
+
+        r.get 'c' do
+          render("about/_test", :locals=>{:title=>'a'})
+        end
+
+        render("b", render_opts)
+      end
+    end
+
+    body.strip.must_equal "b"
+    req("/a")
+    req("/c")
+
+    app.plugin :render, :allowed_paths=>[]
+    proc{req}.must_raise Roda::RodaError
+    proc{req("/a")}.must_raise Roda::RodaError
+    proc{req("/c")}.must_raise Roda::RodaError
+
+    app.plugin :render, :add_allowed_paths=>['spec/views/about']
+    proc{req}.must_raise Roda::RodaError
+    proc{req("/a")}.must_raise Roda::RodaError
+    req("/c")
+
+    app.plugin :render, :add_allowed_paths=>%w'spec/views/about spec/views/b'
+    body.strip.must_equal "b"
+    proc{req("/a")}.must_raise Roda::RodaError
+    req("/c")
+
+    render_opts[:check_paths] = true
+    app.plugin :render, :check_paths=>false
+    body.strip.must_equal "b"
+    proc{req("/a")}.must_raise Roda::RodaError
+    req("/c")
+
+    render_opts.delete(:check_paths)
+    app.plugin :render
+    body.strip.must_equal "b"
+    req("/a")
+    req("/c")
+
+    render_opts[:check_paths] = true
+    body.strip.must_equal "b"
+    proc{req("/a")}.must_raise Roda::RodaError
+    req("/c")
+  end
+
   it "with a cache_class set" do
     app(:bare) do
       test_cache = Class.new(Roda::RodaCache) do
