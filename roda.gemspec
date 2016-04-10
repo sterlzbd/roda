@@ -3,7 +3,7 @@ require File.expand_path("../lib/roda/version", __FILE__)
 Gem::Specification.new do |s|
   s.name              = "roda"
   s.version           = Roda::RodaVersion.dup
-  s.summary           = "Routing tree web framework toolkit"
+  s.summary           = "Routing tree web toolkit"
   s.authors           = ["Jeremy Evans"]
   s.email             = ["code@jeremyevans.net"]
   s.homepage          = "http://roda.jeremyevans.net"

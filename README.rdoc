@@ -1,6 +1,7 @@
 = Roda
 
-Roda is a routing tree web framework toolkit.
+Roda is a routing tree web toolkit, designed for building fast and
+maintainable web applications in ruby.
 
 = Installation
 
@@ -29,9 +30,8 @@ code.
 
 === Reliability
 
-Roda is one of the first ruby web frameworks where immutability
-is supported and encouraged.  Roda apps are designed to be frozen
-in production, which eliminates possible thread safety issues.
+Roda supports and encourages immutability.  Roda apps are designed
+to be frozen in production, which eliminates possible thread safety issues.
 Additionally, Roda limits the instance variables, constants, and
 methods that it uses, so that they do not conflict with the ones
 you use for your application.
@@ -45,8 +45,8 @@ to get the default behavior.
 === Performance
 
 Roda has low per-request overhead, and the use of a routing tree
-and intelligent caching of internal datastructures makes it one
-of the fastest ruby web frameworks.
+and intelligent caching of internal datastructures makes it 
+significantly faster than popular ruby web frameworks.
 
 == Usage
 
@@ -143,7 +143,7 @@ The +.app+ is an optimization, which saves a few method calls for every request.
 
 == The Routing Tree
 
-Roda is called a routing tree web framework because the way most sites are structured,
+Roda is called a routing tree web toolkit because the way most sites are structured,
 routing takes the form of a tree (based on the URL structure of the site).
 In general:
 
@@ -211,8 +211,7 @@ you can easily handle this in the routing tree:
   end
 
 Being able to operate on the request at any point during the routing
-is one of the major advantages of Roda, as compared to frameworks
-that do not use a routing tree.
+is one of the major advantages of Roda.
 
 == Matchers
 
@@ -824,9 +823,6 @@ Most rack-based reloaders will work with Roda, including:
 
 By design, Roda has a very small core, providing only the essentials.
 All nonessential features are added via plugins.
-This is why Roda is referred to as a routing tree web framework toolkit.
-Using a combination of Roda plugins,
-you can build the routing tree web framework that suits your needs.
 
 Roda's plugins can override any Roda method and call +super+
 to get the default behavior, which makes Roda very extensible.
@@ -917,8 +913,7 @@ you can then introspect.
 
 == Inspiration
 
-Roda was inspired by {Sinatra}[http://www.sinatrarb.com] and {Cuba}[http://cuba.is],
-two other Ruby web frameworks.
+Roda was inspired by {Sinatra}[http://www.sinatrarb.com] and {Cuba}[http://cuba.is].
 It started out as a fork of Cuba, from which it borrows the idea of using a routing tree
 (which Cuba in turn took from {Rum}[https://github.com/chneukirchen/rum]).
 From Sinatra, it takes the ideas that route blocks should return the request bodies
