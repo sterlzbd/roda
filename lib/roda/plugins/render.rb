@@ -28,7 +28,6 @@ class Roda
     #
     # The following plugin options are supported:
     #
-    # :add_allowed_paths :: Add template paths to +:allowed_paths+.
     # :allowed_paths :: Set the template paths to allow if +:check_paths+ is true.
     #                   Defaults to the +:views+ directory.
     # :cache :: nil/false to not cache templates (useful for development), defaults
@@ -133,26 +132,17 @@ class Roda
 
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=OPTS)
-        opts = if app.opts[:render]
+        if app.opts[:render]
           opts = app.opts[:render][:orig_opts].merge(opts)
-        else
-          opts.dup
         end
-        app.opts[:render] = {}
-
-        view_path = ::File.expand_path(opts[:views]||"views", app.opts[:root]).freeze
-        opts[:allowed_paths] ||= [view_path]
-        if allowed_paths = opts.delete(:add_allowed_paths)
-          opts[:allowed_paths] += Array(allowed_paths)
-        end
-        opts[:allowed_paths] = opts[:allowed_paths].map{|f| ::File.expand_path(f)}.uniq.freeze
-
+        app.opts[:render] = opts.dup
         app.opts[:render][:orig_opts] = opts
-        app.opts[:render].merge!(opts)
 
         opts = app.opts[:render]
         opts[:engine] = (opts[:engine] || opts[:ext] || "erb").dup.freeze
-        opts[:views] = view_path
+        opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root]).freeze
+        opts[:allowed_paths] ||= [opts[:views]].freeze
+        opts[:allowed_paths] = opts[:allowed_paths].map{|f| ::File.expand_path(f)}.uniq.freeze
 
         if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
           if cache_class = opts[:cache_class]
@@ -372,7 +362,7 @@ class Roda
           if opts.fetch(:check_paths){render_opts[:check_paths]}
             full_path = ::File.expand_path(path)
             unless render_opts[:allowed_paths].any?{|f| full_path.start_with?(f)}
-              raise RodaError, "attempt to render path not in allowed_paths: #{path}"
+              raise RodaError, "attempt to render path not in allowed_paths: #{path} (allowed: #{render_opts[:allowed_paths].join(', ')})"
             end
           end
           path

@@ -1,6 +1,6 @@
 = HEAD
 
-* Add :check_paths, :allowed_paths, and :add_allowed_paths render plugin options to avoid security issues with template rendering (jeremyevans)
+* Add :check_paths and :allowed_paths to render plugin options to avoid security issues with template rendering (jeremyevans)
 
 = 2.12.0 (2016-03-15)
 

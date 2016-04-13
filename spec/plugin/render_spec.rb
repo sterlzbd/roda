@@ -465,12 +465,12 @@ describe "render plugin" do
     proc{req("/a")}.must_raise Roda::RodaError
     proc{req("/c")}.must_raise Roda::RodaError
 
-    app.plugin :render, :add_allowed_paths=>['spec/views/about']
+    app.plugin :render, :allowed_paths=>['spec/views/about']
     proc{req}.must_raise Roda::RodaError
     proc{req("/a")}.must_raise Roda::RodaError
     req("/c")
 
-    app.plugin :render, :add_allowed_paths=>%w'spec/views/about spec/views/b'
+    app.plugin :render, :allowed_paths=>%w'spec/views/about spec/views/b'
     body.strip.must_equal "b"
     proc{req("/a")}.must_raise Roda::RodaError
     req("/c")

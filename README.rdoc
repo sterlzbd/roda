@@ -803,7 +803,7 @@ be possible to combine these two issues into a remote code execution exploit.
 To mitigate against this issue, you can use the <tt>:check_paths => true</tt> render
 option, which will check that the full path of the template to be rendered begins with the
 +:views+ directory, and raises an exception if not.  You can also use the +:allowed_paths+
-and +:add_allowed_paths+ render options to specify which paths are allowed.  While
+render option to specify which paths are allowed.  While
 <tt>:check_paths => true</tt> is not currently the default, it will become the default in
 Roda 3.  Note that when specifying the +:path+ option when rendering a template, Roda will
 not check paths, as it assumes that users and libraries that use this option will be checking
