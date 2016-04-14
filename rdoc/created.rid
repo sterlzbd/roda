@@ -1,6 +1,6 @@
-Tue, 15 Mar 2016 09:08:28 -0700
-README.rdoc	Fri, 11 Mar 2016 11:08:44 -0800
-CHANGELOG	Tue, 15 Mar 2016 08:56:37 -0700
+Thu, 14 Apr 2016 10:58:35 -0700
+README.rdoc	Wed, 13 Apr 2016 16:47:16 -0700
+CHANGELOG	Thu, 14 Apr 2016 10:50:26 -0700
 MIT-LICENSE	Wed, 13 Jan 2016 08:58:01 -0800
 lib/roda.rb	Thu, 18 Feb 2016 09:19:38 -0800
 lib/roda/plugins/_erubis_escaping.rb	Sun, 31 Jan 2016 11:52:29 -0800
@@ -55,7 +55,7 @@ lib/roda/plugins/path_matchers.rb	Sun, 31 Jan 2016 11:54:24 -0800
 lib/roda/plugins/path_rewriter.rb	Sun, 31 Jan 2016 11:54:27 -0800
 lib/roda/plugins/per_thread_caching.rb	Sun, 31 Jan 2016 11:54:30 -0800
 lib/roda/plugins/precompile_templates.rb	Sun, 31 Jan 2016 11:54:32 -0800
-lib/roda/plugins/render.rb	Sat, 13 Feb 2016 13:02:25 -0800
+lib/roda/plugins/render.rb	Wed, 13 Apr 2016 16:47:16 -0700
 lib/roda/plugins/render_each.rb	Sun, 31 Jan 2016 11:54:37 -0800
 lib/roda/plugins/response_request.rb	Sun, 31 Jan 2016 11:54:39 -0800
 lib/roda/plugins/run_handler.rb	Sun, 31 Jan 2016 11:54:42 -0800
@@ -71,7 +71,7 @@ lib/roda/plugins/symbol_views.rb	Sun, 31 Jan 2016 11:55:10 -0800
 lib/roda/plugins/view_options.rb	Sun, 31 Jan 2016 11:55:12 -0800
 lib/roda/plugins/view_subdirs.rb	Sun, 08 Mar 2015 14:07:21 -0700
 lib/roda/plugins/websockets.rb	Fri, 08 Jan 2016 15:41:05 -0800
-lib/roda/version.rb	Tue, 15 Mar 2016 08:56:37 -0700
+lib/roda/version.rb	Thu, 14 Apr 2016 10:50:26 -0700
 doc/conventions.rdoc	Sat, 10 Jan 2015 15:40:37 -0800
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -91,3 +91,4 @@ doc/release_notes/2.9.0.txt	Tue, 15 Dec 2015 07:46:22 -0800
 doc/release_notes/2.10.0.txt	Fri, 15 Jan 2016 08:53:26 -0800
 doc/release_notes/2.11.0.txt	Tue, 16 Feb 2016 10:26:52 -0800
 doc/release_notes/2.12.0.txt	Tue, 15 Mar 2016 08:56:37 -0700
+doc/release_notes/2.13.0.txt	Thu, 14 Apr 2016 10:50:26 -0700

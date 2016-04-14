@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2016-03-11 11:08:44 -0800</span>
+          <span class='datetime'>2016-04-13 16:47:16 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -40,8 +40,8 @@
             
             <h1 id="label-Roda"><a href="../classes/Roda.html">Roda</a><span><a href="#label-Roda">&para;</a> <a href="#top">&uarr;</a></span></h1>
             
-            <p><a href="../classes/Roda.html">Roda</a> is a routing tree web framework
-            toolkit.</p>
+            <p><a href="../classes/Roda.html">Roda</a> is a routing tree web toolkit,
+            designed for building fast and maintainable web applications in ruby.</p>
             
             <h1 id="label-Installation">Installation<span><a href="#label-Installation">&para;</a> <a href="#top">&uarr;</a></span></h1>
             
@@ -82,13 +82,12 @@
             
             <h3 id="label-Reliability">Reliability<span><a href="#label-Reliability">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
-            <p><a href="../classes/Roda.html">Roda</a> is one of the first ruby web
-            frameworks where immutability is supported and encouraged.  <a
-            href="../classes/Roda.html">Roda</a> apps are designed to be frozen in
-            production, which eliminates possible thread safety issues. Additionally,
-            <a href="../classes/Roda.html">Roda</a> limits the instance variables,
-            constants, and methods that it uses, so that they do not conflict with the
-            ones you use for your application.</p>
+            <p><a href="../classes/Roda.html">Roda</a> supports and encourages
+            immutability.  <a href="../classes/Roda.html">Roda</a> apps are designed to
+            be frozen in production, which eliminates possible thread safety issues.
+            Additionally, <a href="../classes/Roda.html">Roda</a> limits the instance
+            variables, constants, and methods that it uses, so that they do not
+            conflict with the ones you use for your application.</p>
             
             <h3 id="label-Extensibility">Extensibility<span><a href="#label-Extensibility">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
@@ -101,7 +100,8 @@
             
             <p><a href="../classes/Roda.html">Roda</a> has low per-request overhead, and
             the use of a routing tree and intelligent caching of internal
-            datastructures makes it one of the fastest ruby web frameworks.</p>
+            datastructures makes it  significantly faster than popular ruby web
+            frameworks.</p>
             
             <h2 id="label-Usage">Usage<span><a href="#label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -171,7 +171,7 @@
             <h2 id="label-The+Routing+Tree">The Routing Tree<span><a href="#label-The+Routing+Tree">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p><a href="../classes/Roda.html">Roda</a> is called a routing tree web
-            framework because the way most sites are structured, routing takes the form
+            toolkit because the way most sites are structured, routing takes the form
             of a tree (based on the URL structure of the site). In general:</p>
             <ul><li>
             <p><code>r.on</code> is used to split the tree into different branches.</p>
@@ -205,8 +205,7 @@
             <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>           <span class="ruby-comment"># /a branch</span>&#x000A;  <span class="ruby-identifier">check_perm</span>(:<span class="ruby-constant">A</span>)  &#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>         <span class="ruby-comment"># /a/b branch</span>&#x000A;    <span class="ruby-identifier">check_perm</span>(:<span class="ruby-constant">B</span>)  &#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>       <span class="ruby-comment"># /a/b/c request</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span> <span class="ruby-keyword">end</span>    <span class="ruby-comment"># GET  /a/b/c request</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span> <span class="ruby-keyword">end</span>   <span class="ruby-comment"># POST /a/b/c request</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;d&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-keyword">end</span>  <span class="ruby-comment"># GET  /a/b/d request</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&quot;e&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-keyword">end</span> <span class="ruby-comment"># POST /a/b/e request</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>Being able to operate on the request at any point during the routing is one
-            of the major advantages of <a href="../classes/Roda.html">Roda</a>, as
-            compared to frameworks that do not use a routing tree.</p>
+            of the major advantages of <a href="../classes/Roda.html">Roda</a>.</p>
             
             <h2 id="label-Matchers">Matchers<span><a href="#label-Matchers">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -641,7 +640,7 @@
             <h3 id="label-Rendering+Templates+Derived+From+User+Input">Rendering Templates Derived From User Input<span><a href="#label-Rendering+Templates+Derived+From+User+Input">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>Roda&#39;s rendering plugin assumes that template paths given to it are
-            trusted.  If you provide a path to the
+            trusted by default. If you provide a path to the
             <code>render</code>/<code>view</code> methods that is derived from user
             input, you are opening yourself for people rendering arbitrary files on the
             system that that have a file name ending in the default template extension.
@@ -656,10 +655,17 @@
             files), then it may be possible to combine these two issues into a remote
             code execution exploit.</p>
             
-            <p>If you do want to allow users to choose which template to use, you should
-            use a whitelist:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;  <span class="ruby-constant">ALLOWED_PAGES</span> = <span class="ruby-node">%w&#39;page1 page2 page3&#39;</span>&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">page</span> = <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;page&#39;</span>]&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-constant">ALLOWED_PAGES</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">page</span>)&#x000A;      <span class="ruby-identifier">view</span>(<span class="ruby-identifier">page</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <p>To mitigate against this issue, you can use the <code>:check_paths =&gt;&#x000A;true</code> render option, which will check that the full path of the
+            template to be rendered begins with the <code>:views</code> directory, and
+            raises an exception if not.  You can also use the
+            <code>:allowed_paths</code> render option to specify which paths are
+            allowed.  While <code>:check_paths =&gt; true</code> is not currently the
+            default, it will become the default in <a
+            href="../classes/Roda.html">Roda</a> 3.  Note that when specifying the
+            <code>:path</code> option when rendering a template, <a
+            href="../classes/Roda.html">Roda</a> will not check paths, as it assumes
+            that users and libraries that use this option will be checking such paths
+            manually.</p>
             
             <h2 id="label-Reloading">Reloading<span><a href="#label-Reloading">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -683,10 +689,7 @@
             
             <p>By design, <a href="../classes/Roda.html">Roda</a> has a very small core,
             providing only the essentials. All nonessential features are added via
-            plugins. This is why <a href="../classes/Roda.html">Roda</a> is referred to
-            as a routing tree web framework toolkit. Using a combination of <a
-            href="../classes/Roda.html">Roda</a> plugins, you can build the routing
-            tree web framework that suits your needs.</p>
+            plugins.</p>
             
             <p>Roda&#39;s plugins can override any <a href="../classes/Roda.html">Roda</a>
             method and call <code>super</code> to get the default behavior, which makes
@@ -773,13 +776,12 @@
             
             <p><a href="../classes/Roda.html">Roda</a> was inspired by <a
             href="http://www.sinatrarb.com">Sinatra</a> and <a
-            href="http://cuba.is">Cuba</a>, two other Ruby web frameworks. It started
-            out as a fork of Cuba, from which it borrows the idea of using a routing
-            tree (which Cuba in turn took from <a
-            href="https://github.com/chneukirchen/rum">Rum</a>). From Sinatra, it takes
-            the ideas that route blocks should return the request bodies and that
-            routes should be canonical. It pilfers the idea for an extensible plugin
-            system from the Ruby database library <a
+            href="http://cuba.is">Cuba</a>. It started out as a fork of Cuba, from
+            which it borrows the idea of using a routing tree (which Cuba in turn took
+            from <a href="https://github.com/chneukirchen/rum">Rum</a>). From Sinatra,
+            it takes the ideas that route blocks should return the request bodies and
+            that routes should be canonical. It pilfers the idea for an extensible
+            plugin system from the Ruby database library <a
             href="http://sequel.jeremyevans.net">Sequel</a>.</p>
             
             <h2 id="label-License">License<span><a href="#label-License">&para;</a> <a href="#top">&uarr;</a></span></h2>

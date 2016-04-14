@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Roda: Routing Tree Web Framework Toolkit - Why</title>
+    <title>Roda: Routing Tree Web Toolkit - Why</title>
     <link href='http://fonts.googleapis.com/css?family=Italianno|Open+Sans|PT+Mono' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/default.min.css">
@@ -34,7 +34,7 @@
     <div class="container" id="content">
       <h1>Why <span class="roda">Roda</span>?</h1>
 
-<p>There are already plenty of Ruby web frameworks. Why another one? Well, Roda has a very useful combination of features that make web development easy.  It's designed to be fast, <acronym title="Don't Repeat Yourself">DRY</acronym>, and correct.</p>
+<p>Roda has a very useful combination of features that make web development easy.  It's designed to be fast, <acronym title="Don't Repeat Yourself">DRY</acronym>, and correct.</p>
 
 <h2>Goals</h2>
 
@@ -52,7 +52,7 @@
 
 <h3>Reliability</h3>
 
-<p>Roda is one of the first ruby web frameworks where immutability is supported and encouraged.  Roda apps are designed to be frozen in production, which eliminates possible thread safety issues.  Additionally, Roda limits the instance variables, constants, and methods that it uses, so that they do not conflict with the ones you use for your application.  </p>
+<p>Roda supports and encourages immutability.  Roda apps are designed to be frozen in production, which eliminates possible thread safety issues.  Additionally, Roda limits the instance variables, constants, and methods that it uses, so that they do not conflict with the ones you use for your application.  </p>
 
 <h3>Extensibility</h3>
 
@@ -60,7 +60,7 @@
 
 <h3>Performance</h3>
 
-<p>Roda has low per-request overhead, and the use of a routing tree and intelligent caching of internal datastructures makes it one of the fastest ruby web frameworks.</p>
+<p>Roda has low per-request overhead, and the use of a routing tree and intelligent caching of internal datastructures makes it significantly faster than popular ruby web frameworks.</p>
 
 <h2>Comparison to <a href="http://www.sinatrarb.com">Sinatra</a></h2>
 
@@ -136,11 +136,11 @@ end
 </code></pre>
 </div>
 
-<p style="clear: both;">While the Roda code is slightly longer, it should be apparent that it is actually simpler.  Instead of setting the <span class="code">@artist</span> variable and checking that access is allowed in all three of the sinatra routes, the variables are set as soon as that branch of the tree is taken, and can be used in all routes under that branch.  This is why Roda is called a routing tree web framework.  This is a very simplified example, but if you see this type of duplication in a lot of the Sinatra code you write, your app could probably be made simpler by converting to Roda.</p>
+<p style="clear: both;">While the Roda code is slightly longer, it should be apparent that it is actually simpler.  Instead of setting the <span class="code">@artist</span> variable and checking that access is allowed in all three of the sinatra routes, the variables are set as soon as that branch of the tree is taken, and can be used in all routes under that branch.  This is why Roda is called a routing tree web toolkit.  This is a very simplified example, but if you see this type of duplication in a lot of the Sinatra code you write, your app could probably be made simpler by converting to Roda.</p>
 
 <h3>Faster</h3>
 
-<p>In addition to being more maintainable, Roda's approach is also faster in general.   Sinatra routes requests by testing each of the stored routes against the current request, in order.  With Roda, once one branch of the tree matches, only routes inside that branch are considered, not any routes after that branch.  Roda also has support for a single route that dispatches to multiple branches via the multi_route and multi_run plugins.  For large applications, routing in Sinatra is roughly O(n), where n is the number of routes, while routing in Roda can be close to O(log n), depending on how you structure your routing tree.  For small applications, because Roda has lower per-request overhead, <a href="https://github.com/luislavena/bench-micro#requestssec">Roda is about 2.5 times faster than Sinatra</a>.</p>
+<p>In addition to being more maintainable, Roda's approach is also faster in general.   Sinatra routes requests by testing each of the stored routes against the current request, in order.  With Roda, once one branch of the tree matches, only routes inside that branch are considered, not any routes after that branch.  Roda also has support for a single route that dispatches to multiple branches via the multi_route and multi_run plugins.  For large applications, routing in Sinatra is roughly O(N), where N is the number of routes, while routing in Roda can be close to O(log N), depending on how you structure your routing tree.  For small applications, because Roda has lower per-request overhead, <a href="https://github.com/luislavena/bench-micro#requestssec">Roda is about 2.5 times faster than Sinatra</a>.</p>
 
 <h3>Plugin System</h3>
 
