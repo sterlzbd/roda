@@ -36,6 +36,16 @@ class Roda
     # It is possible to use the Roda app as a regular app even when using
     # the middleware plugin.
     module Middleware
+      # Configure the middleware plugin.  Options:
+      # :env_var :: Set the environment variable to use to indicate to the roda
+      #             application that the current request is a middleware request.
+      #             You should only need to override this if you are using multiple
+      #             roda middleware in the same application.
+      def self.configure(app, opts={})
+        app.opts[:middleware_env_var] = opts[:env_var] if opts.has_key?(:env_var)
+        app.opts[:middleware_env_var] ||= 'roda.forward_next'
+      end
+
       # Forward instances are what is actually used as middleware.
       class Forwarder
         # Store the current middleware and the next middleware to call.
@@ -51,9 +61,8 @@ class Roda
           res = nil
 
           call_next = catch(:next) do
-            scope = @mid.new(env)
-            scope.request.forward_next = true
-            res = scope.call(&@mid.route_block)
+            env[@mid.opts[:middleware_env_var]] = true
+            res = @mid.call(env)
             false
           end
 
@@ -89,7 +98,9 @@ class Roda
       module RequestMethods
         # Whether to forward the request to the next application.  Set only if
         # this request is being performed for middleware.
-        attr_accessor :forward_next
+        def forward_next
+          env[roda_class.opts[:middleware_env_var]]
+        end
       end
     end
 

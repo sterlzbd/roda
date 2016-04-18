@@ -75,4 +75,24 @@ describe "middleware plugin" do
 
     body('/a/b').must_equal 'ab'
   end
+
+  it "uses the app's middleware if :include_middleware option is given" do
+    mid = Struct.new(:app) do
+      def call(env)
+        env['foo'] = 'bar'
+        app.call(env)
+      end
+    end
+    app(:bare) do
+      plugin :middleware, :include_middleware=>true
+      use mid
+      route{}
+    end
+    mid2 = app
+    app(:bare) do
+      use mid2
+      route{env['foo']}
+    end
+    body.must_equal 'bar'
+  end
 end
