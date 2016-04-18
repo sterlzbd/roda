@@ -1,5 +1,7 @@
 = HEAD
 
+* Add symbol_status plugin for using symbols as status codes (Papierkorb) (#65)
+
 * Make middleware plugin also run the application's middleware (jeremyevans)
 
 = 2.13.0 (2016-04-14)
