@@ -61,21 +61,23 @@ describe "websockets plugin" do
   it "supports websocket requests" do
     ws = Faye::WebSocket::Client.new("ws://localhost:#{@port}")
     msg = nil
+    sleep_for = 0.01
+    wait_for = 10
     ws.on(:open){|event| msg = true}
     t = Time.now
-    sleep 0.01 until msg || Time.now - t > 5
+    sleep sleep_for until msg || Time.now - t > wait_for
     msg.must_equal true
 
     msg = nil
     ws.on(:message){|event| msg = event.data}
     ws.send("hello")
     t = Time.now
-    sleep 0.01 until msg || Time.now - t > 5
+    sleep sleep_for until msg || Time.now - t > wait_for
     msg.must_equal 'olleh'
 
     ws.close
     t = Time.now
-    sleep 0.01 until @events == %w'open hello close' || Time.now - t > 5
+    sleep sleep_for until @events == %w'open hello close' || Time.now - t > wait_for
     @events.must_equal %w'open hello close'
   end
 end
