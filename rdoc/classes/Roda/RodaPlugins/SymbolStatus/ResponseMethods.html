@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::Middleware::RequestMethods</title>
+    <title>Roda::RodaPlugins::SymbolStatus::ResponseMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::Middleware::RequestMethods
+          Roda::RodaPlugins::SymbolStatus::ResponseMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/middleware_rb.html">lib/roda/plugins/middleware.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/symbol_status_rb.html">lib/roda/plugins/symbol_status.rb</a>
           </li>
         </ol>
       </div>
@@ -42,7 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-forward_next">forward_next</a></li>
+              <li><a target="docwin" href="#method-i-status-3D">status=</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -50,22 +50,21 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-forward_next'>
-                <a name='method-i-forward_next'></a>
+              <div class='method public-instance' id='method-method-i-status-3D'>
+                <a name='method-i-status-3D'></a>
                 <div class='synopsis'>
-                  <span class='name'>forward_next</span>
-                  <span class='arguments'>()</span>
+                  <span class='name'>status=</span>
+                  <span class='arguments'>(code)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Whether to forward the request to the next application.  Set only if this
-                  request is being performed for middleware.</p>
+                  <p>Sets the response status code by fixnum or symbol name</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-forward_next-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-status-3D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-forward_next-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 101</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">forward_next</span>&#x000A;  <span class="ruby-identifier">env</span>[<span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>]]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-status-3D-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_status.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">status=</span>(<span class="ruby-identifier">code</span>)&#x000A;  <span class="ruby-identifier">code</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">status_code</span>(<span class="ruby-identifier">code</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">code</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
