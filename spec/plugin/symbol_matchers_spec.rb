@@ -27,6 +27,10 @@ describe "symbol_matchers plugin" do
           "thing#{d}"
         end
 
+        r.is "thing2", :thing do |d|
+          "thing2#{d}"
+        end
+
         r.is :f do |f|
           "f#{f}"
         end
@@ -69,5 +73,6 @@ describe "symbol_matchers plugin" do
     body("/qa/b/c/d//f/g").must_equal 'resta/b/c/d//f/g'
     body('/q').must_equal 'rest'
     body('/thing/q').must_equal 'thingq'
+    body('/thing2/q').must_equal 'thing2q'
   end
 end
