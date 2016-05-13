@@ -8,10 +8,10 @@ class Roda
     #
     # Examples:
     #   r.is "needs_authorization"
-    #     response.code = :unauthorized
+    #     response.status = :unauthorized
     #   end
     #   r.is "nothing"
-    #     response.code = :no_content
+    #     response.status = :no_content
     #   end
     #
     # The conversion is done through <tt>Rack::Utils.status_code</tt>.
@@ -19,7 +19,7 @@ class Roda
       module ResponseMethods
         # Sets the response status code by fixnum or symbol name
         def status=(code)
-          code = Rack::Utils.status_code(code) if code.is_a? Symbol
+          code = Rack::Utils.status_code(code) if code.is_a?(Symbol)
           super(code)
         end
       end
