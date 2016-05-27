@@ -113,7 +113,7 @@ describe "content_for plugin with multiple calls to the same key" do
   before do
     app(:bare) do
       plugin :render, :views => './spec/views'
-      plugin :content_for, :append => true
+      plugin :content_for
 
       route do |r|
         r.root do
@@ -123,7 +123,12 @@ describe "content_for plugin with multiple calls to the same key" do
     end
   end
 
-  it "should work with multiple calls to the same key" do
+  it "should replace with multiple calls to the same key by default" do
+    body.strip.must_equal "bar baz"
+  end
+
+  it "should append with multiple calls to the same key if :append plugin option is used" do
+    app.plugin :content_for, :append => true
     body.strip.must_equal "bar foobaz"
   end
 end
