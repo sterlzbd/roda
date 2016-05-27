@@ -113,7 +113,7 @@ describe "content_for plugin with multiple calls to the same key" do
   before do
     app(:bare) do
       plugin :render, :views => './spec/views'
-      plugin :content_for
+      plugin :content_for, :append => true
 
       route do |r|
         r.root do

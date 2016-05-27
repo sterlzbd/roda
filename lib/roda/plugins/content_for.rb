@@ -29,8 +29,13 @@ class Roda
     module ContentFor
       # Depend on the render plugin, since this plugin only makes
       # sense when the render plugin is used.
-      def self.load_dependencies(app)
+      def self.load_dependencies(app, _options = {})
         app.plugin :render
+      end
+
+      # Configure wether to append or overwrite. Overwrite is default.
+      def self.configure(app, options = {})
+        app.opts[:append_content_for] = options[:append] || false
       end
 
       module InstanceMethods
@@ -42,20 +47,38 @@ class Roda
           if block
             outvar = render_opts[:template_opts][:outvar]
             buf_was = instance_variable_get(outvar)
+
             # clean the output buffer for ERB-based rendering systems
             instance_variable_set(outvar, String.new)
-
-            @_content_for ||= {}
-            @_content_for[key] ||= []
-            @_content_for[key].push Tilt[render_opts[:engine]].new(&block).render
-
+            # Render the content.
+            content = Tilt[render_opts[:engine]].new(&block).render
+            # Restore the output buffer
             instance_variable_set(outvar, buf_was)
+
+            # Store the content.
+            @_content_for ||= {}
+
+            if opts[:append_content_for]
+              @_content_for[key] ||= []
+              @_content_for[key].push content
+            else
+              @_content_for[key] = content
+            end
           elsif value
             @_content_for ||= {}
-            @_content_for[key] ||= []
-            @_content_for[key].push value
+
+            if opts[:append_content_for]
+              @_content_for[key] ||= []
+              @_content_for[key].push value
+            else
+              @_content_for[key] = value
+            end
           elsif @_content_for
-            @_content_for[key].join('') if @_content_for[key]
+            if opts[:append_content_for]
+              @_content_for[key].join('') if @_content_for[key]
+            else
+              @_content_for[key]
+            end
           end
         end
       end
