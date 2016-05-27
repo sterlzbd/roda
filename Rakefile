@@ -68,7 +68,7 @@ end
 
 spec = proc do |env|
   env.each{|k,v| ENV[k] = v}
-  sh "#{FileUtils::RUBY} -rubygems -I lib -e 'ARGV.each{|f| require f}' ./spec/*_spec.rb ./spec/plugin/*_spec.rb"
+  sh "#{FileUtils::RUBY} spec/all.rb"
   env.each{|k,v| ENV.delete(k)}
 end
 
