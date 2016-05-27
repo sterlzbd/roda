@@ -189,11 +189,12 @@ describe "render plugin" do
 
     app.opts[:root] = '/foo'
     app.plugin :render
-    app.render_opts[:views].must_equal '/foo/views'
+    # Work around for Windows
+    app.render_opts[:views].sub(/\A\w:/, '').must_equal '/foo/views'
 
     app.opts[:root] = '/foo/bar'
     app.plugin :render
-    app.render_opts[:views].must_equal '/foo/bar/views'
+    app.render_opts[:views].sub(/\A\w:/, '').must_equal '/foo/bar/views'
 
     app.opts[:root] = nil
     app.plugin :render

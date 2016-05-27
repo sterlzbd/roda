@@ -564,15 +564,16 @@ if run_tests
 
       app.opts[:root] = '/foo'
       app.plugin :assets
-      app.assets_opts[:path].must_equal '/foo/assets'
-      app.assets_opts[:js_path].must_equal '/foo/assets/js/'
-      app.assets_opts[:css_path].must_equal '/foo/assets/css/'
+      # Work around for Windows
+      app.assets_opts[:path].sub(/\A\w:/, '').must_equal '/foo/assets'
+      app.assets_opts[:js_path].sub(/\A\w:/, '').must_equal '/foo/assets/js/'
+      app.assets_opts[:css_path].sub(/\A\w:/, '').must_equal '/foo/assets/css/'
 
       app.opts[:root] = '/foo/bar'
       app.plugin :assets
-      app.assets_opts[:path].must_equal '/foo/bar/assets'
-      app.assets_opts[:js_path].must_equal '/foo/bar/assets/js/'
-      app.assets_opts[:css_path].must_equal '/foo/bar/assets/css/'
+      app.assets_opts[:path].sub(/\A\w:/, '').must_equal '/foo/bar/assets'
+      app.assets_opts[:js_path].sub(/\A\w:/, '').must_equal '/foo/bar/assets/js/'
+      app.assets_opts[:css_path].sub(/\A\w:/, '').must_equal '/foo/bar/assets/css/'
 
       app.opts[:root] = nil
       app.plugin :assets
