@@ -107,7 +107,6 @@ describe "content_for plugin when overriding :engine" do
     body('/a').strip.must_equal "bar\nfoo"
   end
 end
-end
 
 describe "content_for plugin with multiple calls to the same key" do
   before do
@@ -131,4 +130,5 @@ describe "content_for plugin with multiple calls to the same key" do
     app.plugin :content_for, :append => true
     body.strip.must_equal "bar foobaz"
   end
+end
 end
