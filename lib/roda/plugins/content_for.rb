@@ -46,14 +46,16 @@ class Roda
             instance_variable_set(outvar, String.new)
 
             @_content_for ||= {}
-            @_content_for[key] = Tilt[render_opts[:engine]].new(&block).render
+            @_content_for[key] ||= []
+            @_content_for[key].push Tilt[render_opts[:engine]].new(&block).render
 
             instance_variable_set(outvar, buf_was)
           elsif value
             @_content_for ||= {}
-            @_content_for[key] = value
+            @_content_for[key] ||= []
+            @_content_for[key].push value
           elsif @_content_for
-            @_content_for[key]
+            @_content_for[key].join('') if @_content_for[key]
           end
         end
       end

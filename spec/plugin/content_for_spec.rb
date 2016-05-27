@@ -108,3 +108,22 @@ describe "content_for plugin when overriding :engine" do
   end
 end
 end
+
+describe "content_for plugin with multiple calls to the same key" do
+  before do
+    app(:bare) do
+      plugin :render, :views => './spec/views'
+      plugin :content_for
+
+      route do |r|
+        r.root do
+          view(:inline => "<% content_for :foo do %>foo<% end %><% content_for :foo do %>baz<% end %>bar", :layout => { :inline => '<%= yield %> <%= content_for(:foo) %>' })
+        end
+      end
+    end
+  end
+
+  it "should work with multiple calls to the same key" do
+    body.strip.must_equal "bar foobaz"
+  end
+end
