@@ -2,11 +2,17 @@ require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 begin
   require 'erubis'
+  require 'tilt'
   require 'tilt/erb'
   begin
     require 'tilt/erubis'
   rescue LoadError
     # Tilt 1 support
+  end
+
+  if defined?(Tilt::ErubisTemplate) && ::Tilt['erb'] != Tilt::ErubisTemplate
+    # Work around error where erubis isn't set as erb template handler
+    Tilt.register(Tilt::ErubisTemplate, 'erb')
   end
 rescue LoadError
   warn "tilt or erubis not installed, skipping _erubis_escaping plugin test"  
