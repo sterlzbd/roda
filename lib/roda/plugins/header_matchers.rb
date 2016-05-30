@@ -54,7 +54,7 @@ class Roda
 
         # Match if the given uppercase key is present inside the environment.
         def match_header(key)
-          if v = @env[key.upcase.tr("-","_")]
+          if v = @env["HTTP_" + key.upcase.tr("-","_")]
             @captures << v
           end
         end
