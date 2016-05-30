@@ -10,7 +10,7 @@ class Roda
     # This uses the render plugin for rendering the assets, and the render
     # plugin uses tilt internally, so you can use any template engine
     # supported by tilt for your assets.  Tilt ships with support for
-    # the following asset template engines, assuming the necessary libaries
+    # the following asset template engines, assuming the necessary libraries
     # are installed:
     #
     # css :: Less, Sass, Scss
@@ -86,7 +86,7 @@ class Roda
     #
     # === Nesting
     #
-    # Asset groups also supporting nesting, though that should only be needed
+    # Asset groups also support nesting, though that should only be needed
     # in fairly large applications.  You can use a nested hash when loading
     # the plugin:
     #
@@ -221,7 +221,7 @@ class Roda
     # :compiled_js_route :: Route under :prefix for compiled javscript assets (default: :compiled_js_dir)
     # :compiled_name :: Compiled file name prefix (default: 'app')
     # :compiled_path:: Path inside public folder in which compiled files are stored (default: :prefix)
-    # :concat_only :: Whether to just concatenate instead of concatentating
+    # :concat_only :: Whether to just concatenate instead of concatenating
     #                 and compressing files (default: false)
     # :css_compressor :: Compressor to use for compressing CSS, either :yui, :none, or nil (the default, which will try
     #                    :yui if available, but not fail if it is not available)
