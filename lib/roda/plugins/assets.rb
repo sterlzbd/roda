@@ -77,7 +77,7 @@ class Roda
     #   assets/css/frontend/some_frontend_file.scss
     #   assets/css/backend/some_backend_file.scss
     #
-    # If you want do not want to force that directory structure when using
+    # If you do not want to force that directory structure when using
     # asset groups, you can use the <tt>:group_subdirs => false</tt> option.
     #
     # In your view code use an array argument in your call to assets:
