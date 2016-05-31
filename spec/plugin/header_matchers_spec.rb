@@ -25,10 +25,9 @@ describe "header matcher" do
     status.must_equal 404
   end
 
-  it "should yield the header value if :match_header_yield option is present" do
+  it "should yield the header value" do
     app(:bare) do
       plugin :header_matchers
-      opts[:match_header_yield] = true
       route do |r|
         r.on :header=>"http-accept" do |v|
           "bar-#{v}"
