@@ -11,7 +11,16 @@ class Roda
     # It adds a +:header+ matcher for matching on arbitrary headers, which matches
     # if the header is present:
     #
+    #   r.on :header=>'HTTP-X-App-Token' do |header_value|
+    #     # Looks for env['HTTP_X_APP_TOKEN']
+    #   end
+    #
+    # For backwards compatibility, the header value is not automatically prefixed
+    # with HTTP_.  You can set the +:header_matcher_prefix+ option for the application,
+    # which will automatically prefix the header with HTTP_:
+    #
     #   r.on :header=>'X-App-Token' do |header_value|
+    #     # Looks for env['HTTP_X_APP_TOKEN'] 
     #   end
     #
     # It adds a +:host+ matcher for matching by the host of the request:
@@ -54,7 +63,13 @@ class Roda
 
         # Match if the given uppercase key is present inside the environment.
         def match_header(key)
-          if v = @env["HTTP_" + key.upcase.tr("-","_")]
+          key = key.upcase.tr("-","_")
+
+          if roda_class.opts[:header_matcher_prefix]
+            key = "HTTP_#{key}"
+          end
+
+          if v = @env[key]
             @captures << v
           end
         end

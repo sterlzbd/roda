@@ -22,21 +22,34 @@ describe "header matcher" do
     end
 
     body("HTTP_ACCEPT" => "application/xml").must_equal  "bar"
+    status("HTTP_HTTP_ACCEPT" => "application/xml").must_equal 404
     status.must_equal 404
   end
 
   it "should yield the header value" do
+    app(:header_matchers) do |r|
+      r.on :header=>"http-accept" do |v|
+        "bar-#{v}"
+      end
+    end
+
+    body("HTTP_ACCEPT" => "application/xml").must_equal  "bar-application/xml"
+    status.must_equal 404
+  end
+
+  it "should automatically use HTTP prefix for headers if :header_matcher_prefix is set" do
     app(:bare) do
       plugin :header_matchers
+      opts[:header_matcher_prefix] = true
       route do |r|
-        r.on :header=>"http-accept" do |v|
+        r.on :header=>"accept" do |v|
           "bar-#{v}"
         end
       end
     end
 
     body("HTTP_ACCEPT" => "application/xml").must_equal  "bar-application/xml"
-    status.must_equal 404
+    status("ACCEPT"=>"application/xml").must_equal 404
   end
 end
 

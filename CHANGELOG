@@ -1,5 +1,7 @@
 = HEAD
 
+* Make :header matcher prefixes the env key with HTTP_ if application :header_matcher_prefix option is set (timothypage, jeremyevans) (#69)
+
 * Add content_for plugin :append option to support appending to the existing content (evanleck, jeremyevans) (#66)
 
 = 2.14.0 (2016-05-13)
