@@ -15,6 +15,8 @@ class Roda
     #
     # Since the :urls option for Rack::Static is always required, the static plugin
     # uses a separate option for it.
+    #
+    # Users of this plugin may want to consider using the public plugin instead.
     # 
     # Examples:
     #

@@ -1,5 +1,7 @@
 = HEAD
 
+* Add public plugin for r.public method for serving all files in the public directory (jeremyevans)
+
 * Make send_file in sinatra_helpers plugin work with Rack 2 (jeremyevans)
 
 * Make :header matcher prefixes the env key with HTTP_ if application :header_matcher_prefix option is set (timothypage, jeremyevans) (#69)
