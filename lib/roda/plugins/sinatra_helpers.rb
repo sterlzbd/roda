@@ -339,9 +339,15 @@ class Roda
             last_modified(lm)
           end
 
-          file      = ::Rack::File.new nil
-          file.path = path
-          s, h, b   = file.serving(@env)
+          file = ::Rack::File.new nil
+          s, h, b = if Rack.release > '2'
+            # :nocov:
+            file.serving(self, path)
+            # :nocov:
+          else
+            file.path = path
+            file.serving(@env)
+          end
 
           res.status = opts[:status] || s
           headers.delete(CONTENT_LENGTH)
