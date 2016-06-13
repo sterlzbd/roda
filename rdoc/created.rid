@@ -1,16 +1,16 @@
-Fri, 13 May 2016 10:16:37 -0700
+Mon, 13 Jun 2016 14:25:40 -0700
 README.rdoc	Wed, 13 Apr 2016 16:47:16 -0700
-CHANGELOG	Fri, 13 May 2016 10:12:52 -0700
+CHANGELOG	Mon, 13 Jun 2016 14:04:57 -0700
 MIT-LICENSE	Wed, 13 Jan 2016 08:58:01 -0800
 lib/roda.rb	Thu, 18 Feb 2016 09:19:38 -0800
 lib/roda/plugins/_erubis_escaping.rb	Sun, 31 Jan 2016 11:52:29 -0800
 lib/roda/plugins/all_verbs.rb	Sun, 31 Jan 2016 11:52:33 -0800
-lib/roda/plugins/assets.rb	Mon, 14 Mar 2016 21:21:28 -0700
+lib/roda/plugins/assets.rb	Mon, 30 May 2016 10:42:51 -0700
 lib/roda/plugins/backtracking_array.rb	Sun, 31 Jan 2016 11:52:42 -0800
 lib/roda/plugins/caching.rb	Sun, 31 Jan 2016 11:52:45 -0800
 lib/roda/plugins/chunked.rb	Sun, 31 Jan 2016 11:52:48 -0800
 lib/roda/plugins/class_level_routing.rb	Thu, 18 Feb 2016 09:19:38 -0800
-lib/roda/plugins/content_for.rb	Sun, 31 Jan 2016 11:52:53 -0800
+lib/roda/plugins/content_for.rb	Fri, 27 May 2016 13:09:54 -0700
 lib/roda/plugins/cookies.rb	Sun, 31 Jan 2016 11:52:56 -0800
 lib/roda/plugins/csrf.rb	Fri, 08 Jan 2016 15:41:05 -0800
 lib/roda/plugins/default_headers.rb	Sun, 31 Jan 2016 11:53:00 -0800
@@ -28,7 +28,7 @@ lib/roda/plugins/h.rb	Sun, 31 Jan 2016 11:53:26 -0800
 lib/roda/plugins/halt.rb	Sun, 31 Jan 2016 11:53:28 -0800
 lib/roda/plugins/hash_matcher.rb	Sun, 31 Jan 2016 11:53:31 -0800
 lib/roda/plugins/head.rb	Sun, 31 Jan 2016 11:53:33 -0800
-lib/roda/plugins/header_matchers.rb	Sun, 31 Jan 2016 11:53:36 -0800
+lib/roda/plugins/header_matchers.rb	Tue, 31 May 2016 10:24:41 -0700
 lib/roda/plugins/heartbeat.rb	Sun, 31 Jan 2016 11:53:38 -0800
 lib/roda/plugins/hooks.rb	Sun, 31 Jan 2016 11:53:41 -0800
 lib/roda/plugins/indifferent_params.rb	Sun, 31 Jan 2016 11:53:43 -0800
@@ -55,14 +55,15 @@ lib/roda/plugins/path_matchers.rb	Sun, 31 Jan 2016 11:54:24 -0800
 lib/roda/plugins/path_rewriter.rb	Sun, 31 Jan 2016 11:54:27 -0800
 lib/roda/plugins/per_thread_caching.rb	Sun, 31 Jan 2016 11:54:30 -0800
 lib/roda/plugins/precompile_templates.rb	Sun, 31 Jan 2016 11:54:32 -0800
+lib/roda/plugins/public.rb	Wed, 08 Jun 2016 15:00:19 -0700
 lib/roda/plugins/render.rb	Wed, 13 Apr 2016 16:47:16 -0700
 lib/roda/plugins/render_each.rb	Sun, 31 Jan 2016 11:54:37 -0800
 lib/roda/plugins/response_request.rb	Sun, 31 Jan 2016 11:54:39 -0800
 lib/roda/plugins/run_handler.rb	Sun, 31 Jan 2016 11:54:42 -0800
 lib/roda/plugins/shared_vars.rb	Sun, 31 Jan 2016 11:54:45 -0800
-lib/roda/plugins/sinatra_helpers.rb	Sun, 31 Jan 2016 11:54:47 -0800
+lib/roda/plugins/sinatra_helpers.rb	Wed, 08 Jun 2016 15:00:19 -0700
 lib/roda/plugins/slash_path_empty.rb	Sun, 31 Jan 2016 11:54:50 -0800
-lib/roda/plugins/static.rb	Sun, 31 Jan 2016 11:54:53 -0800
+lib/roda/plugins/static.rb	Wed, 08 Jun 2016 15:00:19 -0700
 lib/roda/plugins/static_path_info.rb	Wed, 14 Jan 2015 18:50:19 -0800
 lib/roda/plugins/status_handler.rb	Sun, 31 Jan 2016 11:55:01 -0800
 lib/roda/plugins/streaming.rb	Sun, 31 Jan 2016 11:55:04 -0800
@@ -72,7 +73,7 @@ lib/roda/plugins/symbol_views.rb	Sun, 31 Jan 2016 11:55:10 -0800
 lib/roda/plugins/view_options.rb	Sun, 31 Jan 2016 11:55:12 -0800
 lib/roda/plugins/view_subdirs.rb	Sun, 08 Mar 2015 14:07:21 -0700
 lib/roda/plugins/websockets.rb	Fri, 08 Jan 2016 15:41:05 -0800
-lib/roda/version.rb	Fri, 13 May 2016 10:12:52 -0700
+lib/roda/version.rb	Mon, 13 Jun 2016 14:04:57 -0700
 doc/conventions.rdoc	Sat, 10 Jan 2015 15:40:37 -0800
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -94,3 +95,4 @@ doc/release_notes/2.11.0.txt	Tue, 16 Feb 2016 10:26:52 -0800
 doc/release_notes/2.12.0.txt	Tue, 15 Mar 2016 08:56:37 -0700
 doc/release_notes/2.13.0.txt	Thu, 14 Apr 2016 10:50:26 -0700
 doc/release_notes/2.14.0.txt	Fri, 13 May 2016 10:12:52 -0700
+doc/release_notes/2.15.0.txt	Mon, 13 Jun 2016 14:04:57 -0700

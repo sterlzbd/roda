@@ -46,7 +46,7 @@
             <p>This uses the render plugin for rendering the assets, and the render plugin
             uses tilt internally, so you can use any template engine supported by tilt
             for your assets.  Tilt ships with support for the following asset template
-            engines, assuming the necessary libaries are installed:</p>
+            engines, assuming the necessary libraries are installed:</p>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>css </td><td>
             <p>Less, Sass, Scss</p>
             </td></tr><tr><td class='label'>js </td><td>
@@ -108,7 +108,7 @@
             
             <pre class="ruby"><span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">frontend</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_frontend_file</span>.<span class="ruby-identifier">scss</span>&#x000A;<span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">backend</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_backend_file</span>.<span class="ruby-identifier">scss</span></pre>
             
-            <p>If you want do not want to force that directory structure when using asset
+            <p>If you do not want to force that directory structure when using asset
             groups, you can use the <code>:group_subdirs =&gt; false</code> option.</p>
             
             <p>In your view code use an array argument in your call to assets:</p>
@@ -117,7 +117,7 @@
             
             <h3 id="module-Roda::RodaPlugins::Assets-label-Nesting">Nesting<span><a href="#module-Roda::RodaPlugins::Assets-label-Nesting">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
-            <p>Asset groups also supporting nesting, though that should only be needed in
+            <p>Asset groups also support nesting, though that should only be needed in
             fairly large applications.  You can use a nested hash when loading the
             plugin:</p>
             
@@ -255,7 +255,7 @@
             <p><a href="Path.html">Path</a> inside public folder in which compiled files
             are stored (default: :prefix)</p>
             </td></tr><tr><td class='label'>:concat_only </td><td>
-            <p>Whether to just concatenate instead of concatentating and compressing files
+            <p>Whether to just concatenate instead of concatenating and compressing files
             (default: false)</p>
             </td></tr><tr><td class='label'>:css_compressor </td><td>
             <p>Compressor to use for compressing CSS, either :yui, :none, or nil (the
