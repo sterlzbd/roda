@@ -36,5 +36,4 @@ describe "request_headers plugin" do
     header_app('x-my-header')
     body('/', {'HTTP_X_MY_HEADER' => 'a'}).must_equal 'a'
   end
-
 end

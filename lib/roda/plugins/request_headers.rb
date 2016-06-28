@@ -2,7 +2,6 @@
 
 require 'set'
 
-#
 class Roda
   module RodaPlugins
     # The request_headers plugin provides access to headers sent in the
@@ -28,7 +27,6 @@ class Roda
     #   plugin :request_headers
     #
     module RequestHeaders
-
       module RequestMethods
         # Provide access to the request headers while normalising indexes.
         def headers
@@ -37,6 +35,7 @@ class Roda
       end
 
       class Headers
+        # Set of environment variable names that don't need HTTP_ prepended to them.
         CGI_VARIABLES = Set.new(%w'
           AUTH_TYPE
           CONTENT_LENGTH
@@ -64,19 +63,19 @@ class Roda
 
         # Returns the value for the given key mapped to @env
         def [](key)
-          @env[env_name key]
+          @env[env_name(key)]
         end
 
         private
 
         # Convert a HTTP header name into an environment variable name
         def env_name(key)
-          key = key.to_s.upcase.tr('-', '_')
+          key = key.to_s.upcase
+          key.tr!('-', '_')
           key = 'HTTP_' + key unless CGI_VARIABLES.include?(key)
           key
         end
       end
-
     end
 
     register_plugin(:request_headers, RequestHeaders)

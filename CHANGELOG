@@ -1,3 +1,7 @@
+= HEAD
+
+* Add request_headers plugin, for simpler access to request headers (celsworth) (#72)
+
 = 2.15.0 (2016-06-13)
 
 * Add public plugin for r.public method for serving all files in the public directory (jeremyevans)
