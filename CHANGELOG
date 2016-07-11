@@ -1,5 +1,7 @@
 = HEAD
 
+* Add unescape_path plugin, for decoding URL-encoded PATH_INFO before routing (jeremyevans) (#74)
+
 * Add request_headers plugin, for simpler access to request headers (celsworth) (#72)
 
 = 2.15.0 (2016-06-13)

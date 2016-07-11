@@ -350,7 +350,7 @@ class Roda
         def initialize(scope, env)
           @scope = scope
           @captures = []
-          @remaining_path = env[PATH_INFO]
+          @remaining_path = _remaining_path(env)
           super(env)
         end
 
@@ -720,6 +720,11 @@ class Roda
         # segment matches.
         def _match_symbol_regexp(s)
           SEGMENT
+        end
+
+        # The base remaining path to use.
+        def _remaining_path(env)
+          env[PATH_INFO]
         end
 
         # Backbone of the verb method support, using a terminal match if
