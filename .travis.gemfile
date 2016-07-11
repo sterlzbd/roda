@@ -1,7 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rake', '<10.0.0'
 gemspec
+
+if RUBY_VERSION < '2.0.0'
+  gem 'json', '<2'
+  gem 'rake', '<10.0.0'
+end
 
 if RUBY_VERSION < '1.9'
   gem 'mime-types', '< 2'
