@@ -2,9 +2,9 @@
 
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
-describe "extension_response plugin" do
+describe "type_routing plugin" do
   before do
-    app(:extension_response) do |r|
+    app(:type_routing) do |r|
       r.is 'a' do
         r.html{ "HTML: #{r.requested_type}" }
         r.json{ "JSON: #{r.requested_type}" }
@@ -57,10 +57,10 @@ describe "extension_response plugin" do
   end
 end
 
-describe "extension_response plugin" do
+describe "type_routing plugin" do
   it "does not use the file extension if its disabled" do
     app(:bare) do
-      plugin :extension_response, :use_extension => false
+      plugin :type_routing, :use_extension => false
 
       route do |r|
         r.is 'a' do
@@ -78,7 +78,7 @@ describe "extension_response plugin" do
 
   it "does not use the Accept header if its disabled" do
     app(:bare) do
-      plugin :extension_response, :use_header => false
+      plugin :type_routing, :use_header => false
 
       route do |r|
         r.is 'a' do
@@ -96,7 +96,7 @@ describe "extension_response plugin" do
 
   it "only eats known file extensions" do
     app(:bare) do
-      plugin :extension_response
+      plugin :type_routing
 
       route do |r|
         r.is 'a' do
@@ -120,12 +120,12 @@ describe "extension_response plugin" do
 
   it "uses custom data types" do
     app(:bare) do
-      plugin :extension_response, :types => { :yaml => 'application/x-yaml' }
+      plugin :type_routing, :types => { :yaml => 'application/x-yaml' }
 
       route do |r|
         r.is 'a' do
           r.html{ "HTML" }
-          r.extension(:yaml){ "YAML" }
+          r.yaml{ "YAML" }
           raise "Mismatch!"
         end
       end
@@ -136,9 +136,47 @@ describe "extension_response plugin" do
     header('Content-Type', '/a.yaml').must_equal 'application/x-yaml'
   end
 
+  it "handles response-specific type information when using custom types" do
+    app(:bare) do
+      plugin :type_routing, :exclude=>:html, :default_type=>:json, :types => { :html => 'text/html; charset=utf-8' }
+
+      route do |r|
+        r.is 'a' do
+          r.json{ "JSON" }
+          r.html{ "HTML" }
+          raise "Mismatch!"
+        end
+      end
+    end
+
+    body('/a').must_equal 'JSON'
+    body('/a.html').must_equal 'HTML'
+    header('Content-Type', '/a.html').must_equal 'text/html; charset=utf-8'
+    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'text/html; charset=utf-8'
+  end
+
+  it "Handle nil content type when using custom types" do
+    app(:bare) do
+      plugin :type_routing, :exclude=>:html, :default_type=>:json, :types => { :html => nil}
+
+      route do |r|
+        r.is 'a' do
+          r.html{ "HTML" }
+          r.json{ "JSON" }
+          raise "Mismatch!"
+        end
+      end
+    end
+
+    body('/a').must_equal 'JSON'
+    body('/a.html').must_equal 'HTML'
+    header('Content-Type', '/a.html').must_equal 'text/html'
+    header('Content-Type', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'application/json'
+  end
+
   it "uses custom default value" do
     app(:bare) do
-      plugin :extension_response, :default => :json
+      plugin :type_routing, :default_type => :json
 
       route do |r|
         r.is 'a' do
@@ -156,7 +194,7 @@ describe "extension_response plugin" do
 
   it "excludes given types" do
     app(:bare) do
-      plugin :extension_response, :exclude => [ :xml ]
+      plugin :type_routing, :exclude => [ :xml ]
 
       route do |r|
         r.is 'a' do
@@ -176,5 +214,24 @@ describe "extension_response plugin" do
     body('/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'JSON'
     body('/a', 'HTTP_ACCEPT' => 'text/xml').must_equal 'HTML'
     body('/a', 'HTTP_ACCEPT' => 'application/xml').must_equal 'HTML'
+  end
+
+  it "handles loading the plugin multiple times correctly" do
+    app(:bare) do
+      plugin :type_routing, :default_type => :json
+      plugin :type_routing
+
+      route do |r|
+        r.is 'a' do
+          r.html{ "HTML" }
+          r.json{ "JSON" }
+          raise "Mismatch!"
+        end
+      end
+    end
+
+    body('/a').must_equal 'JSON'
+    body('/a.html').must_equal 'HTML'
+    body('/a.json').must_equal 'JSON'
   end
 end

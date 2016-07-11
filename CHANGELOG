@@ -1,5 +1,7 @@
 = HEAD
 
+* Add type_routing plugin, for routing based on path extensions and Accept headers (Papierkorb, jeremyevans) (#75)
+
 * Add unescape_path plugin, for decoding URL-encoded PATH_INFO before routing (jeremyevans) (#74)
 
 * Add request_headers plugin, for simpler access to request headers (celsworth) (#72)
