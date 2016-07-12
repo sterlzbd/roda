@@ -144,11 +144,10 @@ class Roda
       module RequestMethods
         # Yields if the given +type+ matches the requested data type and halts
         # the request afterwards, returning the result of the block.
-        def on_type(type)
-          on(type == requested_type) do
-            response[CONTENT_TYPE_HEADER] ||= @scope.opts[:type_routing][:types][type]
-            yield
-          end
+        def on_type(type, &block)
+          return unless type == requested_type
+          response[CONTENT_TYPE_HEADER] ||= @scope.opts[:type_routing][:types][type]
+          always(&block)
         end
 
         # Returns the data type the client requests.
@@ -156,13 +155,14 @@ class Roda
           return @requested_type if defined?(@requested_type)
 
           opts = @scope.opts[:type_routing]
-          accept_response_type if opts[:use_header]
+          @requested_type = accept_response_type if opts[:use_header]
           @requested_type ||= opts[:default_type]
         end
 
         private
 
-        # Removes a trailing file extension from the path.
+        # Removes a trailing file extension from the path, and sets
+        # the requested type if so.
         def _remaining_path(env)
           opts = scope.opts[:type_routing]
           path = super
@@ -184,7 +184,7 @@ class Roda
           @env[ACCEPT_HEADER].to_s.split(/\s*,\s*/).map do |part|
             mime, _= part.split(/\s*;\s*/, 2)
             if sym = mimes[mime]
-              return(@requested_type = sym)
+              return sym
             end
           end
 

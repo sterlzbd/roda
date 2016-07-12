@@ -174,7 +174,7 @@ describe "type_routing plugin" do
     header('Content-Type', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'application/json'
   end
 
-  it "uses custom default value" do
+  it "uses custom default type" do
     app(:bare) do
       plugin :type_routing, :default_type => :json
 
@@ -188,6 +188,24 @@ describe "type_routing plugin" do
     end
 
     body('/a').must_equal 'JSON'
+    body('/a.html').must_equal 'HTML'
+    body('/a.json').must_equal 'JSON'
+  end
+
+  it "supports nil default type" do
+    app(:bare) do
+      plugin :type_routing, :default_type => nil
+
+      route do |r|
+        r.is 'a' do
+          r.html{ "HTML" }
+          r.json{ "JSON" }
+          "None"
+        end
+      end
+    end
+
+    body('/a').must_equal 'None'
     body('/a.html').must_equal 'HTML'
     body('/a.json').must_equal 'JSON'
   end
