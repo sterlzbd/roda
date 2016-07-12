@@ -50,7 +50,7 @@ class Roda
     #
     #   plugin :type_routing, :types => {
     #     :yaml => 'application/x-yaml',
-    #     :js => 'application/javascript',
+    #     :js => 'application/javascript; charset=utf-8',
     #   }
     #
     #   route do |r|
@@ -72,11 +72,14 @@ class Roda
     # :exclude :: Exclude one or more types from the default set (default set
     #             is :html, :xml, :json).
     # :types :: Mapping from a data type to its MIME-Type. Used both to match
-    #           incoming requests and to provide +Content-Type+ values.
-    # :use_extension :: Whether to take the path extension into account. Default is
-    #                   +true+.
-    # :use_header :: Whether to take the +Accept+ header into account. Default is
-    #                +true+.
+    #           incoming requests and to provide +Content-Type+ values.  If the
+    #           value is +nil+, no +Content-Type+ will be set.  The type may
+    #           contain media type parameters, which will be sent to the client
+    #           but ignored for request matching.
+    # :use_extension :: Whether to take the path extension into account.
+    #                   Default is +true+.
+    # :use_header :: Whether to take the +Accept+ header into account.
+    #                Default is +true+.
     module TypeRouting
       ACCEPT_HEADER = 'HTTP_ACCEPT'.freeze
       CONTENT_TYPE_HEADER = 'Content-Type'.freeze
