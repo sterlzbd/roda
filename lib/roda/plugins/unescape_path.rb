@@ -12,7 +12,7 @@ class Roda
     #
     #   route do |r|
     #     # Assume /b/a URL encoded at %2f%62%2f%61
-    #     r.on :x, /(.)/ do |x, y|
+    #     r.on :x, /(.)/ do |*x|
     #       # x => ['b', 'a']
     #     end
     #   end
@@ -20,7 +20,7 @@ class Roda
       module RequestMethods
         private
 
-        # Unescape the path
+        # Unescape the path.
         def _remaining_path(env)
           Rack::Utils.unescape(super)
         end
