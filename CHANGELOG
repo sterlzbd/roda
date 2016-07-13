@@ -1,4 +1,4 @@
-= HEAD
+= 2.16.0 (2016-07-13)
 
 * Add type_routing plugin, for routing based on path extensions and Accept headers (Papierkorb, jeremyevans) (#75)
 
