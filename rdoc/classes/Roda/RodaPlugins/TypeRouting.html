@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::TypeRouting</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::TypeRouting
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../files/lib/roda/plugins/type_routing_rb.html">lib/roda/plugins/type_routing.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>Allows to respond to specific request data types. User agents can request
+            specific data types by either supplying an appropriate <code>Accept</code>
+            header or by appending it as file extension to the path.</p>
+            
+            <p>Example:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">type_routing</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">html</span>{ <span class="ruby-string">&quot;&lt;h1&gt;This is the HTML response&lt;/h1&gt;&quot;</span> }&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">json</span>{ <span class="ruby-string">&#39;{&quot;json&quot;: &quot;ok&quot;}&#39;</span> }&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">xml</span>{ <span class="ruby-string">&quot;&lt;root&gt;This is the XML response&lt;/root&gt;&quot;</span> }&#x000A;    <span class="ruby-string">&quot;Unsupported data type&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>This application will handle the following paths:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>/a.html </td><td>
+            <p>HTML response</p>
+            </td></tr><tr><td class='label'>/a.json </td><td>
+            <p>JSON response</p>
+            </td></tr><tr><td class='label'>/a.xml </td><td>
+            <p>XML response</p>
+            </td></tr><tr><td class='label'>/a </td><td>
+            <p>HTML, JSON, or XML response, depending on the Accept header</p>
+            </td></tr></tbody></table>
+            
+            <p>The response <code>Content-Type</code> header will be set to a suitable
+            value when the block is matched.</p>
+            
+            <p>Note that if no match is found, code will continue to execute, which can
+            result in unexpected behaviour.  This should only happen if you do not
+            handle all supported/configured types.  If you want to simplify handling,
+            you can just place the html handling after the other types, without using a
+            separate block:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">json</span>{ <span class="ruby-string">&#39;{&quot;json&quot;: &quot;ok&quot;}&#39;</span> }&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">xml</span>{ <span class="ruby-string">&quot;&lt;root&gt;This is the XML response&lt;/root&gt;&quot;</span> }&#x000A;&#x000A;    <span class="ruby-string">&quot;&lt;h1&gt;This is the HTML response&lt;/h1&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>This works correctly because <a href="../../Roda.html">Roda</a> assumes the
+            html type by default.</p>
+            
+            <p>To match custom extensions, use the :types option:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">type_routing</span>, :<span class="ruby-identifier">types</span> =<span class="ruby-operator">&gt;</span> {&#x000A;  :<span class="ruby-identifier">yaml</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;application/x-yaml&#39;</span>,&#x000A;  :<span class="ruby-identifier">js</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;application/javascript; charset=utf-8&#39;</span>,&#x000A;}&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">yaml</span>{ <span class="ruby-constant">YAML</span>.<span class="ruby-identifier">dump</span> <span class="ruby-string">&quot;YAML data&quot;</span> }&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">js</span>{ <span class="ruby-string">&quot;JavaScript code&quot;</span> }&#x000A;    <span class="ruby-comment"># or:</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_type</span>(:<span class="ruby-identifier">js</span>){ <span class="ruby-string">&quot;JavaScript code&quot;</span> }&#x000A;    <span class="ruby-string">&quot;Unsupported data type&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <h1 id="module-Roda::RodaPlugins::TypeRouting-label-Plugin+options">Plugin options<span><a href="#module-Roda::RodaPlugins::TypeRouting-label-Plugin+options">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            
+            <p>The following plugin options are supported:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:default_type </td><td>
+            <p>The default data type to assume if the client did not provide one. Defaults
+            to <code>:html</code>.</p>
+            </td></tr><tr><td class='label'>:exclude </td><td>
+            <p>Exclude one or more types from the default set (default set is :html, :xml,
+            :json).</p>
+            </td></tr><tr><td class='label'>:types </td><td>
+            <p>Mapping from a data type to its MIME-Type. Used both to match incoming
+            requests and to provide <code>Content-Type</code> values.  If the value is
+            <code>nil</code>, no <code>Content-Type</code> will be set.  The type may
+            contain media type parameters, which will be sent to the client but ignored
+            for request matching.</p>
+            </td></tr><tr><td class='label'>:use_extension </td><td>
+            <p>Whether to take the path extension into account. Default is
+            <code>true</code>.</p>
+            </td></tr><tr><td class='label'>:use_header </td><td>
+            <p>Whether to take the <code>Accept</code> header into account. Default is
+            <code>true</code>.</p>
+            </td></tr></tbody></table>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-configure">configure</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a target="docwin" href="TypeRouting/RequestMethods.html">Roda::RodaPlugins::TypeRouting::RequestMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>ACCEPT_HEADER</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'HTTP_ACCEPT'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>CONFIGURATION</td>
+                    <td>=</td>
+                    <td class='context-item-value'>
+                      {
+                      :mimes => {
+                      'text/json' => :json,
+                      'application/json' => :json,
+                      'text/xml' => :xml,
+                      'application/xml' => :xml,
+                      'text/html' => :html,
+                      }.freeze,
+                      :types => {
+                      :json => 'application/json'.freeze,
+                      :xml => 'application/xml'.freeze,
+                      :html => 'text/html'.freeze,
+                      }.freeze,
+                      :use_extension => true,
+                      :use_header => true,
+                      :default_type => :html
+                      }.freeze
+                    </td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>CONTENT_TYPE_HEADER</td>
+                    <td>=</td>
+                    <td class='context-item-value'>'Content-Type'.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app, opts = {})</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 105</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = {})&#x000A;  <span class="ruby-identifier">config</span> = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">CONFIGURATION</span>).<span class="ruby-identifier">dup</span>&#x000A;  [<span class="ruby-value">:use_extension</span>, <span class="ruby-value">:use_header</span>, <span class="ruby-value">:default_type</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">config</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">key</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">types</span> = <span class="ruby-identifier">config</span>[<span class="ruby-value">:types</span>] = <span class="ruby-identifier">config</span>[<span class="ruby-value">:types</span>].<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">mimes</span> = <span class="ruby-identifier">config</span>[<span class="ruby-value">:mimes</span>] = <span class="ruby-identifier">config</span>[<span class="ruby-value">:mimes</span>].<span class="ruby-identifier">dup</span>&#x000A;&#x000A;  <span class="ruby-constant">Array</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:exclude</span>]).<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">types</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">type</span>)&#x000A;    <span class="ruby-identifier">mimes</span>.<span class="ruby-identifier">reject!</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">_</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">mapping</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:types</span>]&#x000A;    <span class="ruby-identifier">types</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">mapping</span>)&#x000A;&#x000A;    <span class="ruby-identifier">mapping</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-identifier">v</span>&#x000A;        <span class="ruby-identifier">mimes</span>[<span class="ruby-identifier">v</span>.<span class="ruby-identifier">split</span>(<span class="ruby-string">&#39;;&#39;</span>, <span class="ruby-value">2</span>).<span class="ruby-identifier">first</span>] = <span class="ruby-identifier">k</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">types</span>.<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">mimes</span>.<span class="ruby-identifier">freeze</span>&#x000A;&#x000A;  <span class="ruby-identifier">type_keys</span> = <span class="ruby-identifier">config</span>[<span class="ruby-value">:types</span>].<span class="ruby-identifier">keys</span>&#x000A;  <span class="ruby-identifier">config</span>[<span class="ruby-value">:extension_regexp</span>] = <span class="ruby-node">/(.+)\.(#{Regexp.union(type_keys.map(&amp;:to_s))})\z/</span>&#x000A;&#x000A;  <span class="ruby-identifier">type_keys</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">type</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">type</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">on_type</span>(<span class="ruby-identifier">type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>] = <span class="ruby-identifier">config</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

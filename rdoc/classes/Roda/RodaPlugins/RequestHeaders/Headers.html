@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::PerThreadCaching::Cache</title>
+    <title>Roda::RodaPlugins::RequestHeaders::Headers</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>class</span>
-          Roda::RodaPlugins::PerThreadCaching::Cache
+          Roda::RodaPlugins::RequestHeaders::Headers
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/per_thread_caching_rb.html">lib/roda/plugins/per_thread_caching.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/request_headers_rb.html">lib/roda/plugins/request_headers.rb</a>
           </li>
         </ol>
         <div class='parent'>
@@ -51,7 +51,6 @@
             <h3>Public Instance</h3>
             <ol>
               <li><a target="docwin" href="#method-i-5B-5D">[]</a></li>
-              <li><a target="docwin" href="#method-i-5B-5D-3D">[]=</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -62,24 +61,35 @@
               <div class='name-list'>
                 <table summary='Constants'>
                   <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>MUTEX</td>
+                    <td class='context-item-name'>CGI_VARIABLES</td>
                     <td>=</td>
-                    <td class='context-item-value'>::Mutex.new</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>Mutex used to ensure multiple per-thread caches don&#39;t use the same key</p>
+                    <td class='context-item-value'>
+                      Set.new(%w'
+                      AUTH_TYPE
+                      CONTENT_LENGTH
+                      CONTENT_TYPE
+                      GATEWAY_INTERFACE
+                      HTTPS
+                      PATH_INFO
+                      PATH_TRANSLATED
+                      QUERY_STRING
+                      REMOTE_ADDR
+                      REMOTE_HOST
+                      REMOTE_IDENT
+                      REMOTE_USER
+                      REQUEST_METHOD
+                      SCRIPT_NAME
+                      SERVER_NAME
+                      SERVER_PORT
+                      SERVER_PROTOCOL
+                      SERVER_SOFTWARE
+                      ').freeze
                     </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>N</td>
-                    <td>=</td>
-                    <td class='context-item-value'>lambda{MUTEX.synchronize{n += 1}}</td>
                     <td>&nbsp;</td>
                     <td class='context-item-desc'>
                       
-                      <p>Auto incrementing number proc used to make sure multiple thread-thread
-                      caches don&#39;t use the same key.</p>
+                      <p>Set of environment variable names that don&#39;t need HTTP_ prepended to
+                      them.</p>
                     </td>
                   </tr>
                 </table>
@@ -91,17 +101,16 @@
                 <a name='method-c-new'></a>
                 <div class='synopsis'>
                   <span class='name'>new</span>
-                  <span class='arguments'>()</span>
+                  <span class='arguments'>(env)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Store unique symbol used to look up in the per thread caches.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 37</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>&#x000A;  <span class="ruby-ivar">@o</span> = <span class="ruby-value">:&quot;roda_per_thread_cache_#{N.call}&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/request_headers.rb, line 60</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@env</span> = <span class="ruby-identifier">env</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -113,30 +122,13 @@
                 </div>
                 <div class='description'>
                   
-                  <p>Return the current thread&#39;s cached value.</p>
+                  <p>Returns the value for the given key mapped to @env</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-5B-5D-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 42</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-identifier">_hash</span>[<span class="ruby-identifier">key</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-5B-5D-3D'>
-                <a name='method-i-5B-5D-3D'></a>
-                <div class='synopsis'>
-                  <span class='name'>[]=</span>
-                  <span class='arguments'>(key, value)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Set the current thread&#39;s cached value.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-5B-5D-3D-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-5B-5D-3D-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 47</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;  <span class="ruby-identifier">_hash</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-5B-5D-source'><span class="ruby-comment"># File lib/roda/plugins/request_headers.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-identifier">env_name</span>(<span class="ruby-identifier">key</span>)]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -32,7 +32,7 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v2.15.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v2.16.0)</h1>
 
 <h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
@@ -102,6 +102,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/DropBody.html">drop_body</a>: Automatically drops response body and Content-Type/Content-Length headers for response statuses indicating no body.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Halt.html">halt</a>: Augments request halt method for support for setting response status and/or response body.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ModuleInclude.html">module_include</a>: Adds request_module and response_module class methods for adding modules/methods to request/response classes.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/RequestHeaders.html">request_headers</a>: Adds a headers method to the request object, for easier access to request headers.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ResponseRequest.html">response_request</a>: Gives response object access to request object.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/SinatraHelpers.html">sinatra_helpers</a>: Port of Sinatra::Helpers methods not covered by other plugins.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolStatus.html">symbol_status</a>: Allows the use of symbols as status codes, converting them to the appropriate integer.</li>
@@ -113,6 +114,8 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/PathRewriter.html">path_rewriter</a>: Adds support for rewriting paths before routing.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/StatusHandler.html">status_handler</a>: Adds status_handler method for handling responses without bodies for a given status code.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/TypeRouting.html">type_routing</a>: Route based on path extensions and Accept headers.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/UnescapePath.html">unescape_path</a>: Decodes URL-encoded PATH_INFO before routing.</li>
   </ul></li>
   <li>Matchers: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/EmptyRoot.html">empty_root</a>: Makes root matcher match empty string in addition to single slash.</li>
@@ -167,6 +170,7 @@
 <li><a href="https://github.com/AMHOL/roda-container">roda-container</a>: Turns application into an inversion of control (IoC) container.</li>
 <li><a href="https://github.com/AMHOL/roda-flow">roda-flow</a>: Changes routing methods to delegate to containers.</li>
 <li><a href="https://github.com/kematzy/roda-i18n">roda-i18n</a>: Adds easy internationalization and localization support.</li>
+<li><a href="https://github.com/jeremyevans/roda-message_bus">roda-message_bus</a>: MessageBus Integration for Roda.</li>
 <li><a href="https://github.com/3scale/roda-parse-request">roda-parse-request</a>: Automatically parse JSON and URL-encoded requests.</li>
 <li><a href="https://github.com/jeremyevans/roda-rails">roda-rails</a>: Integration for using Roda as Rack middleware in a Rails app.</li>
 <li><a href="https://github.com/jeremyevans/roda-route_list">roda-route_list</a>: Parses route metadata from comments in an app file, allowing introspection of routes.</li>
@@ -194,7 +198,7 @@
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/2_15_0_txt.html'>2.15</a> | <a href='rdoc/files/doc/release_notes/2_14_0_txt.html'>2.14</a> | <a href='rdoc/files/doc/release_notes/2_13_0_txt.html'>2.13</a> | <a href='rdoc/files/doc/release_notes/2_12_0_txt.html'>2.12</a> | <a href='rdoc/files/doc/release_notes/2_11_0_txt.html'>2.11</a> | <a href='rdoc/files/doc/release_notes/2_10_0_txt.html'>2.10</a>
+          <a href='rdoc/files/doc/release_notes/2_16_0_txt.html'>2.16</a> | <a href='rdoc/files/doc/release_notes/2_15_0_txt.html'>2.15</a> | <a href='rdoc/files/doc/release_notes/2_14_0_txt.html'>2.14</a> | <a href='rdoc/files/doc/release_notes/2_13_0_txt.html'>2.13</a> | <a href='rdoc/files/doc/release_notes/2_12_0_txt.html'>2.12</a> | <a href='rdoc/files/doc/release_notes/2_11_0_txt.html'>2.11</a> | <a href='rdoc/files/doc/release_notes/2_10_0_txt.html'>2.10</a>
         </li>
       
         <li>

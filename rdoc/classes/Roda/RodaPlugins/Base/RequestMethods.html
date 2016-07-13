@@ -214,7 +214,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 350</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;  <span class="ruby-ivar">@captures</span> = []&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-identifier">env</span>[<span class="ruby-constant">PATH_INFO</span>]&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 350</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;  <span class="ruby-ivar">@captures</span> = []&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-identifier">_remaining_path</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>

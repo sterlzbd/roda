@@ -41,13 +41,9 @@
             
             <p>The per_thread_caching plugin changes the default cache from being a shared
             thread safe cache to a separate cache per thread.  This means getting or
-            setting values no longer needs a mutex on non-MRI ruby implementations,
-            which may be faster when using a thread pool.  However, since the caches
-            are no longer shared, this will take up more memory.</p>
-            
-            <p>Note that it does not make sense to use this plugin on MRI, since the
-            default cache on MRI doesn&#39;t use a mutex as it is already thread safe
-            due to the GVL.</p>
+            setting values no longer needs a mutex, which may be faster when using a
+            thread pool. However, since the caches are no longer shared, this will take
+            up more memory.</p>
             
             <p>Using this plugin changes the matcher regexp cache to use per-thread
             caches, and changes the default for future thread-safe caches to use
@@ -88,7 +84,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">match_pattern_cache</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">thread_safe_cache</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">match_pattern_cache</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">thread_safe_cache</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

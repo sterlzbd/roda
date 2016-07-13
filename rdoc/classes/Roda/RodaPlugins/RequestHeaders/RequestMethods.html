@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::PerThreadCaching::ClassMethods</title>
+    <title>Roda::RodaPlugins::RequestHeaders::RequestMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::PerThreadCaching::ClassMethods
+          Roda::RodaPlugins::RequestHeaders::RequestMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/per_thread_caching_rb.html">lib/roda/plugins/per_thread_caching.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/request_headers_rb.html">lib/roda/plugins/request_headers.rb</a>
           </li>
         </ol>
       </div>
@@ -42,7 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-thread_safe_cache">thread_safe_cache</a></li>
+              <li><a target="docwin" href="#method-i-headers">headers</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -50,21 +50,21 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-thread_safe_cache'>
-                <a name='method-i-thread_safe_cache'></a>
+              <div class='method public-instance' id='method-method-i-headers'>
+                <a name='method-i-headers'></a>
                 <div class='synopsis'>
-                  <span class='name'>thread_safe_cache</span>
+                  <span class='name'>headers</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Use the per-thread cache instead of the default cache.</p>
+                  <p>Provide access to the request headers while normalising indexes.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-thread_safe_cache-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-headers-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-thread_safe_cache-source'><span class="ruby-comment"># File lib/roda/plugins/per_thread_caching.rb, line 61</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">thread_safe_cache</span>&#x000A;  <span class="ruby-constant">Cache</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-headers-source'><span class="ruby-comment"># File lib/roda/plugins/request_headers.rb, line 32</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">headers</span>&#x000A;  <span class="ruby-ivar">@request_headers</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">Headers</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
