@@ -809,7 +809,7 @@ Roda 3.  Note that when specifying the +:path+ option when rendering a template,
 not check paths, as it assumes that users and libraries that use this option will be checking
 such paths manually.
 
-== Reloading
+== Code Reloading
 
 Roda does not ship with integrated support for code reloading, as it is a toolkit and not a
 framework, but there are rack-based reloaders that will work with Roda apps.
@@ -819,6 +819,11 @@ is probably the fastest approach to reloading while still being fairly safe, as 
 reloads just files that have been modified, and unloads constants defined in the files
 before reloading them.  However, it requires modifying your application code to use
 rack-unreloader specific APIs.
+
+A similar solution that reloads files and unloads constants is ActiveSupport::Dependencies.
+ActiveSupport::Dependencies doesn't require modifying your application code, but it modifies
+some core methods, including +require+ and +const_missing+.  It requires less configuration,
+but depends that you follow Rails' file and class naming conventions.
 
 Both {rerun}[https://github.com/alexch/rerun] and
 {shotgun}[https://github.com/rtomayko/shotgun] use a fork/exec approach for loading new
@@ -836,8 +841,9 @@ There is no one reloading solution that is the best for all applications and dev
 approaches.  Consider your needs and the the tradeoffs of each of the reloading approaches,
 and pick the one you think will work best.
 
-If you are unsure where to start, it may be best to start with rerun or shotgun, and only
-consider rack-unreloader or Rack::Reloader if rerun or shotgun are not fast enough.
+If you are unsure where to start, it may be best to start with rerun or shotgun
+(unless you're running on JRuby or Windows), and only consider other options if rerun or
+shotgun are not fast enough.
 
 == Plugins
 
