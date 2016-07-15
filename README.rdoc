@@ -811,13 +811,33 @@ such paths manually.
 
 == Reloading
 
-Most rack-based reloaders will work with Roda, including:
+Roda does not ship with integrated support for code reloading, as it is a toolkit and not a
+framework, but there are rack-based reloaders that will work with Roda apps.
 
-* {rack-unreloader}[https://github.com/jeremyevans/rack-unreloader]
-* {rerun}[https://github.com/alexch/rerun]
-* {shotgun}[https://github.com/rtomayko/shotgun]
-* {Rack::Reloader}[https://github.com/rack/rack/blob/master/lib/rack/reloader.rb]
-* {pistol}[https://github.com/monk/pistol]
+For most applications, {rack-unreloader}[https://github.com/jeremyevans/rack-unreloader]
+is probably the fastest approach to reloading while still being fairly safe, as it
+reloads just files that have been modified, and unloads constants defined in the files
+before reloading them.  However, it requires modifying your application code to use
+rack-unreloader specific APIs.
+
+Both {rerun}[https://github.com/alexch/rerun] and
+{shotgun}[https://github.com/rtomayko/shotgun] use a fork/exec approach for loading new
+versions of your app.  rerun is faster as it only reloads the app on changes, whereas
+shotgun reloads the app on every request.  Both work without any changes to application
+code, but may be slower as they have to reload the entire application on every change.
+However, for small apps that load quickly, either may be a good approach.
+
+{Rack::Reloader}[https://github.com/rack/rack/blob/master/lib/rack/reloader.rb] ships
+with rack and just reloads monitored files when they change, without unloading constants.
+It's fast but may cause issues in cases where you remove classes, constants, or methods,
+or when you are not clearing out cached data manually when files are reloaded.
+
+There is no one reloading solution that is the best for all applications and development
+approaches.  Consider your needs and the the tradeoffs of each of the reloading approaches,
+and pick the one you think will work best.
+
+If you are unsure where to start, it may be best to start with rerun or shotgun, and only
+consider rack-unreloader or Rack::Reloader if rerun or shotgun are not fast enough.
 
 == Plugins
 
