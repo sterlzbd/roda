@@ -25,7 +25,7 @@ class Roda
         def run(app)
           is do
             if path[-1] != '/'
-              if app.opts[:append_slash_redirect]
+              if scope.opts[:append_slash_redirect]
                 redirect path + '/'
               else
                 @remaining_path = @remaining_path + '/'
