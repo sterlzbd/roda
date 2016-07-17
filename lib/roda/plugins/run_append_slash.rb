@@ -8,9 +8,6 @@ class Roda
     # trailing slash is missing.
     module RunAppendSlash
       OPTS = {}.freeze
-      def self.load_dependencies(app, _opts = nil)
-        app.plugin :pass
-      end
       # Set plugin specific options.  Options:
       # :use_redirects :: Whether to issue 302 redirects when appending the
       # trailing slash.
@@ -23,14 +20,11 @@ class Roda
         # path internally. A redirect is issued when configured with
         # <tt>use_redirects: true</tt>.
         def run(app)
-          is do
-            if path[-1] != '/'
-              if scope.opts[:append_slash_redirect]
-                redirect path + '/'
-              else
-                @remaining_path = @remaining_path + '/'
-                pass
-              end
+          if remaining_path.empty?
+            if scope.opts[:append_slash_redirect]
+              redirect path + '/'
+            else
+              @remaining_path = @remaining_path + '/'
             end
           end
           super
