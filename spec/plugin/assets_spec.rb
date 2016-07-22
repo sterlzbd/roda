@@ -266,6 +266,31 @@ if run_tests
       js.must_include('console.log')
     end
 
+    [[:sha256, 64, 44], [:sha384, 96, 64], [:sha512, 128, 88]].each do |algo, hex_length, base64_length|
+      it 'should handle :sri option for subresource integrity when compiling assets' do
+        app.plugin :assets, :sri=>algo
+        app.compile_assets
+        html = body('/test')
+        html.scan(/<link/).length.must_equal 1
+        html =~ %r|integrity="#{algo}-([^"]+)" />|
+        css_hash = $1.gsub('&#x2F;', '/')
+        css_hash.length.must_equal base64_length
+        html =~ %r|href="(/assets/app\.[a-f0-9]{#{hex_length}}\.css)"|
+        css = body($1)
+        [Digest.const_get(algo.to_s.upcase).digest(css)].pack('m').tr("\n", "").must_equal css_hash
+        html.scan(/<script/).length.must_equal 1
+        html =~ %r|integrity="#{algo}-([^"]+)"></script>|
+        js_hash = $1.gsub('&#x2F;', '/')
+        js_hash.length.must_equal base64_length
+        html =~ %r|src="(/assets/app\.head\.[a-f0-9]{#{hex_length}}\.js)"|
+        js = body($1)
+        [Digest.const_get(algo.to_s.upcase).digest(js)].pack('m').tr("\n", "").must_equal js_hash
+        css.must_match(/color: ?red/)
+        css.must_match(/color: ?blue/)
+        js.must_include('console.log')
+      end
+    end
+
     it 'should handle linking to compiled assets when a compiled asset host is used' do
       app.plugin :assets, :compiled_asset_host=>'https://cdn.example.com'
       app.compile_assets

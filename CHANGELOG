@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :sri option to assets plugin to enable subresource integrity (jeremyevans)
+
 * Add run_append_slash plugin, so r.run uses "/" instead of "" for app's PATH_INFO (kenaniah) (#77)
 
 = 2.16.0 (2016-07-13)

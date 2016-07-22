@@ -251,6 +251,9 @@ class Roda
     #                 non-compiled mode, but will write the metadata to the file if compile_assets is called.
     # :public :: Path to your public folder, in which compiled files are placed (default: 'public').  Relative
     #            paths will be considered relative to the application's :root option.
+    # :sri :: Enables subresource integrity when setting up references to compiled assets. The value should be
+    #         :sha256, :sha384, or :sha512 depending on which hash algorithm you want to use.  This changes the
+    #         hash algorithm that Roda will use when naming compiled asset files.
     module Assets
       DEFAULTS = {
         :compiled_name    => 'app'.freeze,
@@ -546,8 +549,15 @@ class Roda
         # a different digest type or to return a static string if you don't
         # want to use a unique value.
         def asset_digest(content)
-          require 'digest/sha1'
-          ::Digest::SHA1.hexdigest(content)
+          klass = if algo = assets_opts[:sri]
+            require 'digest/sha2'
+            ::Digest.const_get(algo.to_s.upcase)
+          else
+            require 'digest/sha1'
+            ::Digest::SHA1
+          end
+
+          klass.hexdigest(content)
         end
       end
 
@@ -566,9 +576,9 @@ class Roda
           o = self.class.assets_opts
           type, *dirs = type if type.is_a?(Array)
           stype = type.to_s
+          ru = Rack::Utils
 
           attrs = if attrs
-            ru = Rack::Utils
             attrs.map{|k,v| "#{k}=\"#{ru.escape_html(v.to_s)}\""}.join(SPACE)
           else
             EMPTY_STRING
@@ -590,15 +600,19 @@ class Roda
             if dirs && !dirs.empty?
               key = dirs.join(DOT)
               ckey = "#{stype}.#{key}"
-              if ukey = compiled[ckey]
+              if hash = ukey = compiled[ckey]
                 ukey = "#{key}.#{ukey}"
               end
             else
-              ukey = compiled[stype]
+              hash = ukey = compiled[stype]
             end
 
             if ukey
-              "#{tag_start}#{asset_host}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{tag_end}"
+              if algo = o[:sri]
+                integrity = "\" integrity=\"#{algo}-#{ru.escape_html([[hash].pack('H*')].pack('m').tr("\n", EMPTY_STRING))}"
+              end
+
+              "#{tag_start}#{asset_host}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{integrity}#{tag_end}"
             end
           else
             asset_dir = o[type]
