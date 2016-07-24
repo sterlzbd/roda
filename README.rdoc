@@ -822,8 +822,17 @@ rack-unreloader specific APIs.
 
 A similar solution that reloads files and unloads constants is ActiveSupport::Dependencies.
 ActiveSupport::Dependencies doesn't require modifying your application code, but it modifies
-some core methods, including +require+ and +const_missing+.  It requires less configuration,
-but depends that you follow Rails' file and class naming conventions.
+some core methods, including +require+ and +const_missing+. It requires less configuration,
+but depends that you follow Rails' file and class naming conventions. It also provides
+autoloading (on the fly) of files when a missing constant is accessed. If your application
+does not rely on autoloading then +require_dependency+ must be used to require the dependencies
+or they won't be reloaded.
+
+{AutoReloader}[https://github.com/rosenfeld/auto_reloader] provides transparent reloading for
+all files reached from one of the +reloadable_paths+ option entries, by detecting new top-level
+constants and removing them when any of the reloadable loaded files changes. It overrides
++require+ and +require_relative+ when activated (usually in the development environment). No
+configurations other than +reloadable_paths+ are required.
 
 Both {rerun}[https://github.com/alexch/rerun] and
 {shotgun}[https://github.com/rtomayko/shotgun] use a fork/exec approach for loading new
