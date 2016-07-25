@@ -46,9 +46,12 @@ class Roda
     # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape is used,
     #             overriding the default.  If given, object should respond to +escape_xml+ with
     #             a single argument and return an output string.
-    # :layout :: The base name of the layout file, defaults to 'layout'.
+    # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
+    #            with the :template or :inline options.
     # :layout_opts :: The options to use when rendering the layout, if different
-    #                 from the default options.
+    #                 from the default options.  To pass local variables to the layout, include a :locals
+    #                 option inside :layout_opts.  To automatically merge the view template locals into
+    #                 the layout template locals, include a :merge_locals option inside :layout_opts.
     # :template_opts :: The tilt options used when rendering all templates. defaults to:
     #                   <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
     # :engine_opts :: The tilt options to use per template engine.  Keys are
@@ -154,6 +157,11 @@ class Roda
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
         opts[:layout_opts][:_is_layout] = true
+
+        if opts[:layout_opts][:merge_locals] && opts[:locals]
+          opts[:layout_opts][:locals] = opts[:locals].merge(opts[:layout_opts][:locals] || {})
+        end
+
         if layout = opts.fetch(:layout, true)
           opts[:layout] = true unless opts.has_key?(:layout)
 
@@ -373,16 +381,31 @@ class Roda
         # used, return nil.
         def view_layout_opts(opts)
           if layout = opts.fetch(:layout, render_opts[:layout])
+
             layout_opts = render_layout_opts
-            if l_opts = opts[:layout_opts]
-              if (l_locals = l_opts[:locals]) && (layout_locals = layout_opts[:locals])
-                set_locals = Hash[layout_locals].merge!(l_locals)
-              end
-              layout_opts.merge!(l_opts)
-              if set_locals
-                layout_opts[:locals] = set_locals
-              end
+            merge_locals = layout_opts[:merge_locals]
+
+            if method_layout_opts = opts[:layout_opts]
+              method_layout_locals = method_layout_opts[:locals]
+              merge_locals = method_layout_opts[:merge_locals] if method_layout_opts.has_key?(:merge_locals)
             end
+
+            locals = {}
+            if merge_locals && (plugin_locals = render_opts[:locals])
+              locals.merge!(plugin_locals)
+            end
+            if layout_locals = layout_opts[:locals]
+              locals.merge!(layout_locals)
+            end
+            if merge_locals && (method_locals = opts[:locals])
+              locals.merge!(method_locals)
+            end
+            if method_layout_locals
+              locals.merge!(method_layout_locals)
+            end
+
+            layout_opts.merge!(method_layout_opts) if method_layout_opts
+            layout_opts[:locals] = locals unless locals.empty?
 
             case layout
             when Hash

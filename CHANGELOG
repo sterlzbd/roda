@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :layout_opts=>:merge_locals option in render plugin for merging view template locals into layout template locals (jeremyevans) (#80)
+
 * Support :sri option to assets plugin to enable subresource integrity (jeremyevans)
 
 * Add run_append_slash plugin, so r.run uses "/" instead of "" for app's PATH_INFO (kenaniah) (#77)

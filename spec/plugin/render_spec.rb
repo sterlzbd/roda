@@ -68,6 +68,34 @@ describe "render plugin" do
   end
 end
 
+describe "render plugin with :layout_opts=>{:merge_locals=>true}" do
+  h = {:a=>1, :b=>2, :c=>3, :d=>4}
+
+  before do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :check_paths=>true, :locals=>{:a=>1, :b=>2, :c=>3, :d=>4, :e=>5}, :layout_opts=>{:inline=>'<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>|<%= f %>|<%= yield %>', :merge_locals=>true, :locals=>{:a=>-1, :f=>6}}
+
+      route do |r|
+        r.on "base" do
+          view(:inline=>'(<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>)')
+        end
+        r.on "override" do
+          view(:inline=>'(<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>)', :locals=>{:b=>-2, :d=>-4, :f=>-6}, :layout_opts=>{:locals=>{:d=>0, :c=>-3, :e=>-5}})
+        end
+        r.on "no_merge" do
+          view(:inline=>'(<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>)', :locals=>{:b=>-2, :d=>-4, :f=>-6}, :layout_opts=>{:merge_locals=>false, :locals=>{:d=>0, :c=>-3, :e=>-5}})
+        end
+      end
+    end
+  end
+
+  it "should choose method opts before plugin opts, and layout specific before locals" do
+    body("/base").must_equal '-1|2|3|4|5|6|(1|2|3|4|5)'
+    body("/override").must_equal '-1|-2|-3|0|-5|-6|(1|-2|3|-4|5)'
+    body("/no_merge").must_equal '-1|2|-3|0|-5|6|(1|-2|3|-4|5)'
+  end
+end
+
 describe "render plugin" do
   it "simple layout support" do
     app(:bare) do
