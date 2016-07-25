@@ -29,10 +29,21 @@ class Roda
     # The error handler can change the response status if necessary,
     # as well set headers and/or write to the body, just like a regular
     # request.
+    #
+    #
+    # By default, this plugin handles StandardError and ScriptError.
+    # To override the exception classes it will handle, pass a :classes
+    # option to the plugin:
+    #
+    #   plugin :error_handler, :classes=>[StandardError, ScriptError, NoMemoryError]
     module ErrorHandler
+      DEFAULT_ERROR_HANDLER_CLASSES = [StandardError, ScriptError].freeze
+
       # If a block is given, automatically call the +error+ method on
       # the Roda class with it.
-      def self.configure(app, &block)
+      def self.configure(app, opts={}, &block)
+        app.opts[:error_handler_classes] = (opts[:classes] || app.opts[:error_handler_classes] || DEFAULT_ERROR_HANDLER_CLASSES).dup.freeze
+
         if block
           app.error(&block)
         end
@@ -53,7 +64,7 @@ class Roda
         # the error handler.
         def call
           super
-        rescue StandardError, ScriptError => e
+        rescue *opts[:error_handler_classes] => e
           res = @_response = self.class::RodaResponse.new
           res.status = 500
           super{handle_error(e)}

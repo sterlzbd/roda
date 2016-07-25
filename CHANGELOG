@@ -1,5 +1,7 @@
 = HEAD
 
+* Support :classes option to error_handler plugin for overriding which exception classes to rescue (jeremyevans)
+
 * Support :layout_opts=>:merge_locals option in render plugin for merging view template locals into layout template locals (jeremyevans) (#80)
 
 * Support :sri option to assets plugin to enable subresource integrity (jeremyevans)

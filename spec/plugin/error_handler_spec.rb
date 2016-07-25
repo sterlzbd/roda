@@ -47,6 +47,31 @@ describe "error_handler plugin" do
     status.must_equal 500
   end
 
+  it "executes on custom exception classes" do
+    app(:bare) do
+      plugin :error_handler, :classes=>[StandardError]
+
+      error do |e|
+        e.message
+      end
+
+      route do |r|
+        r.on "a" do
+          raise 'foo'
+        end
+
+        raise SyntaxError, 'bad idea'
+      end
+    end
+
+    proc{body}.must_raise SyntaxError
+    body("/a").must_equal 'foo'
+
+    @app = Class.new(@app)
+    proc{body}.must_raise SyntaxError
+    body("/a").must_equal 'foo'
+  end
+
   it "can override status inside error block" do
     app(:bare) do
       plugin :error_handler do |e|
