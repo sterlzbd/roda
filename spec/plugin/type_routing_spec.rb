@@ -50,6 +50,18 @@ describe "type_routing plugin" do
     body('/a.html', 'HTTP_ACCEPT' => 'application/xml').must_equal 'HTML: html'
   end
 
+  it "works correctly in sub apps" do
+    sup_app = app
+    b = sup_app.route_block
+    @app = Class.new(sup_app)
+    app.route do |r|
+      r.run(sup_app)
+    end
+    
+    body('/a.json', 'HTTP_ACCEPT' => 'text/html').must_equal 'JSON: json'
+    body('/a.xml', 'HTTP_ACCEPT' => 'application/json').must_equal 'XML: xml'
+    body('/a.html', 'HTTP_ACCEPT' => 'application/xml').must_equal 'HTML: html'
+  end
 
   it "uses the default if neither file extension nor Accept header are given" do
     body('/a').must_equal 'HTML: html'

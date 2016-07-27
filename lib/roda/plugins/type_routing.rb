@@ -159,6 +159,16 @@ class Roda
           @requested_type ||= opts[:default_type]
         end
 
+        # Add the type routing extension back to the remaining path
+        # if it was removed from the path when the application was
+        # initialized.
+        def run(_)
+          if defined?(@type_routing_extension)
+            @remaining_path += ".#{@type_routing_extension}"
+          end
+          super
+        end
+
         private
 
         # Removes a trailing file extension from the path, and sets
@@ -169,7 +179,7 @@ class Roda
 
           if opts[:use_extension]
             if m = path.match(opts[:extension_regexp])
-              @requested_type = m[2].to_sym
+              @type_routing_extension =  @requested_type = m[2].to_sym
               path = m[1]
             end
           end

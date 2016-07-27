@@ -1,5 +1,7 @@
 = HEAD
 
+* Fix path passed to rack apps when using r.run and the type_routing plugin (jeremyevans) (#82)
+
 * Support :classes option to error_handler plugin for overriding which exception classes to rescue (jeremyevans)
 
 * Support :layout_opts=>:merge_locals option in render plugin for merging view template locals into layout template locals (jeremyevans) (#80)
