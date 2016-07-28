@@ -19,4 +19,25 @@ describe "match_affix plugin" do
     body("/albums/a/1").must_equal 'albums-/'
     body("/albums/b/1").must_equal 'b-/-1-""'
   end
+
+  it "handles extra trailing slash only" do
+    app(:bare) do
+      plugin :match_affix, nil, /(?:\/\z|(?=\/|\z))/
+
+      route do |r|
+        r.on "albums" do
+          r.on "b" do
+            "albums/b:#{r.remaining_path}"
+          end
+
+          "albums:#{r.remaining_path}"
+        end
+      end
+    end
+
+    body("/albums/a").must_equal 'albums:/a'
+    body("/albums/a/").must_equal 'albums:/a/'
+    body("/albums/b").must_equal 'albums/b:'
+    body("/albums/b/").must_equal 'albums/b:'
+  end
 end

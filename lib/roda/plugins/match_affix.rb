@@ -15,15 +15,16 @@ class Roda
     #
     #   plugin :match_affix, ""
     #
-    # will load the plugin and use an empty prefix.
+    # will load the plugin and use an empty prefix (instead of a slash).
     #
     #   plugin :match_affix, "", /(\/|\z)/
     #
     # will use an empty prefix and change the suffix to consume a trailing slash.
     #
-    #  plugin :match_affix, nil, /(\/|\z)/
+    #  plugin :match_affix, nil, /(?:\/\z|(?=\/|\z))/
     #
-    # will not modify the prefix and will change the suffix to consume a trailing slash.
+    # will not modify the prefix and will change the suffix so that it consumes a trailing slash
+    # at the end of the path only.
     module MatchAffix
       PREFIX = "/".freeze
       SUFFIX = "(?=\/|\z)".freeze
