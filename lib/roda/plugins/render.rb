@@ -20,10 +20,23 @@ class Roda
     #     end
     #   end
     #
-    # Unlike the behavior of frameworks like Rails, +render+ does not have
-    # any side effect as it won't touch the response directly but simply
-    # return the rendered text. If you use it as the last statement in the
-    # block, then it will be the response text due to how Roda works.
+    # The +render+ and +view+ methods just return strings, they do not have
+    # side effects (unless the templates themselves have side effects).
+    # As Roda uses the routing block return value as the body of the response,
+    # in most cases you will call these methods as the last expression in a
+    # routing block # to have the response body be the result of the template
+    # rendering.
+    #
+    # Because +render+ and +view+ just return strings, you can call them inside
+    # templates (i.e. for subtemplates/partials), or multiple times in the
+    # same route and combine the results together:
+    #
+    #   route do |r|
+    #     r.is 'foo-bars' do
+    #       @bars = Bar.where(:foo).map{|b| render(:bar, :locals=>{:bar=>b})}.join
+    #       view('foo')
+    #     end
+    #   end
     #
     # You can provide options to the plugin method:
     #
