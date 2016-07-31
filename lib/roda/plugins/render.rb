@@ -20,6 +20,11 @@ class Roda
     #     end
     #   end
     #
+    # Unlike the behavior of frameworks like Rails, +render+ does not have
+    # any side effect as it won't touch the response directly but simply
+    # return the rendered text. If you use it as the last statement in the
+    # block, then it will be the response text due to how Roda works.
+    #
     # You can provide options to the plugin method:
     #
     #   plugin :render, :engine=>'haml', :views=>'admin_views'
