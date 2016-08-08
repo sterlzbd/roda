@@ -182,6 +182,26 @@ class Roda
     # and it will run in compiled mode, assuming that the compiled asset files
     # already exist.
     #
+    # ==== Postprocessing
+    #
+    # If you pass a callable object to the :postprocessor option, it will be called
+    # before an asset is served.
+    # If the assets are to be compiled, the object will be called at compilation time.
+    #
+    # It is passed three arguments; the name of the asset file, the type of the
+    # asset file (which is a symbol, either :css or :js), and the asset contents.
+    #
+    # It should return the new content for the asset.
+    #
+    # You can use this to call Autoprefixer on your CSS:
+    #
+    #   plugin :assets, {
+    #     :css => [ 'style.scss' ],
+    #     :postprocessor => lambda do |file, type, content|
+    #       type == :css ? AutoprefixerRails.process(content).css : content
+    #     end
+    #   }
+    #
     # ==== On Heroku
     #
     # Heroku supports precompiling the assets when using Roda.  You just need to
@@ -245,6 +265,10 @@ class Roda
     # :js_route :: Route under :prefix for javascript assets (default: :js_dir)
     # :path :: Path to your asset source directory (default: 'assets').   Relative
     #          paths will be considered relative to the application's :root option.
+    # :postprocessor :: A block which should accept three arguments (asset name, asset type,
+    #                   content). This block can be used to hook into the asset system and
+    #                   make your own modifications before the asset is served. If the asset
+    #                   is to be compiled, the block is called at compile time.
     # :prefix :: Prefix for assets path in your URL/routes (default: 'assets')
     # :precompiled :: Path to the compiled asset metadata file.  If the file exists, will use compiled
     #                 mode using the metadata in the file.  If the file does not exist, will use
@@ -654,11 +678,15 @@ class Roda
         # Otherwise, render the file using the render plugin.  +file+ should be
         # the relative path to the file from the current directory.
         def read_asset_file(file, type)
-          if file.end_with?(".#{type}")
+          o = self.class.assets_opts
+
+          content = if file.end_with?(".#{type}")
             ::File.read(file)
           else
-            render_asset_file(file, :template_opts=>self.class.assets_opts[:"#{type}_opts"])
+            render_asset_file(file, :template_opts=>o[:"#{type}_opts"])
           end
+
+          o[:postprocessor] ? o[:postprocessor].call(file, type, content) : content
         end
 
         private
@@ -694,7 +722,7 @@ class Roda
         # handled.
         def assets_matchers
           @assets_matchers ||= [:css, :js].map do |t|
-            [t.to_s.freeze, assets_regexp(t)].freeze if roda_class.assets_opts[t]
+            [t, assets_regexp(t)].freeze if roda_class.assets_opts[t]
           end.compact.freeze
         end
 

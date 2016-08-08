@@ -544,7 +544,7 @@ if run_tests
       a = app::RodaRequest.assets_matchers
       a.length.must_equal 1
       a.first.length.must_equal 2
-      a.first.first.must_equal 'js'
+      a.first.first.must_equal :js
       'assets/js/head/app.js'.must_match a.first.last
       'assets/js/head/app2.js'.wont_match a.first.last
     end
@@ -552,6 +552,30 @@ if run_tests
     it 'should not add routes if no asset types' do
       app.plugin :assets, :js=>nil, :css=>nil
       app::RodaRequest.assets_matchers.must_equal []
+    end
+
+    it 'should support :postprocessor option' do
+      postprocessor = lambda do |file, type, content|
+        "file=#{file} type=#{type} tc=#{type.class} #{content.sub('color', 'font')}"
+      end
+
+      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :prefix=>nil,
+        :postprocessor=>postprocessor,
+        :css=>{:assets=>{:css=>%w'app.scss'}}
+      app.route do |r|
+        r.assets
+        r.is 'test' do
+          "#{assets([:css, :assets, :css])}"
+        end
+      end
+      html = body('/test')
+      html.scan(/<link/).length.must_equal 1
+      html =~ %r{href="(/assets/css/app\.scss)"}
+      css = body($1)
+      css.must_match(/app\.scss/)
+      css.must_match(/type=css/)
+      css.must_match(/tc=Symbol/)
+      css.must_match(/font: red;/)
     end
 
     it 'should support :precompiled option' do
