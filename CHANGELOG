@@ -1,5 +1,7 @@
 = HEAD
 
+* Add :postprocessor option to assets plugin, for postprocessing assets (e.g. autoprefixing CSS) (celsworth) (#86)
+
 * Fix path passed to rack apps when using r.run and the type_routing plugin (jeremyevans) (#82)
 
 * Support :classes option to error_handler plugin for overriding which exception classes to rescue (jeremyevans)
