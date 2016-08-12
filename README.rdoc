@@ -443,6 +443,14 @@ via the +status+ attribute for the response.
     end
   end
 
+When redirecting, you can set the status code via the second argument to +r.redirect+:
+
+  route do |r|
+    r.get "hello" do
+      r.redirect "/other", 301 # use 301 Moved Permanently
+    end
+  end
+
 == Verb Methods
 
 As displayed above, Roda has +r.get+ and +r.post+ methods
