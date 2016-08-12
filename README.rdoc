@@ -443,7 +443,8 @@ via the +status+ attribute for the response.
     end
   end
 
-When redirecting, you can set the status code via the second argument to +r.redirect+:
+When redirecting, the response will use a 302 status code by default.
+You can change this by passing a second argument to +r.redirect+:
 
   route do |r|
     r.get "hello" do
