@@ -46,7 +46,7 @@ to get the default behavior.
 
 Roda has low per-request overhead, and the use of a routing tree
 and intelligent caching of internal datastructures makes it 
-significantly faster than popular ruby web frameworks.
+significantly faster than other popular ruby web frameworks.
 
 == Usage
 
