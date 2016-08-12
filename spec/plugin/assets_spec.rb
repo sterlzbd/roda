@@ -54,6 +54,7 @@ if run_tests
     after(:all) do
       FileUtils.rm_r('spec/assets/tmp') if File.directory?('spec/assets/tmp')
       FileUtils.rm_r('spec/public') if File.directory?('spec/public')
+      FileUtils.rm(Dir['spec/assets/app.*.{js,css}*'])
     end
 
     def gunzip(body)
