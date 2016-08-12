@@ -601,8 +601,8 @@ and still have access to them inside the +api+ +route+ block.
 
 It is very easy to test Roda with {Rack::Test}[https://github.com/brynary/rack-test]
 or {Capybara}[https://github.com/jnicklas/capybara].
-Roda's own tests use {RSpec}[http://rspec.info].
-The default Rake task will run the specs for Roda, if RSpec is installed.
+Roda's own tests use {minitest/spec}[https://github.com/seattlerb/minitest].
+The default Rake task will run the specs for Roda.
 
 == Settings
 
@@ -743,7 +743,7 @@ to escape by default, so that in your templates:
   <%= '<>' %>  # outputs &lt;&gt; 
   <%== '<>' %> # outputs <>
 
-When using the +:escape_option, you will need to ensure that your layouts
+When using the +:escape+ option, you will need to ensure that your layouts
 are not escaping the output of the content template:
 
   <%== yield %> # not <%= yield %>
