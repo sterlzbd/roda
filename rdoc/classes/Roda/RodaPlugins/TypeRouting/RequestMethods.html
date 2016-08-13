@@ -44,6 +44,7 @@
             <ol>
               <li><a target="docwin" href="#method-i-on_type">on_type</a></li>
               <li><a target="docwin" href="#method-i-requested_type">requested_type</a></li>
+              <li><a target="docwin" href="#method-i-run">run</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -84,6 +85,24 @@
                     [show source]
                   </a>
                   <pre id='method-i-requested_type-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 154</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">requested_type</span>&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@requested_type</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@requested_type</span>)&#x000A;&#x000A;  <span class="ruby-identifier">opts</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>]&#x000A;  <span class="ruby-ivar">@requested_type</span> = <span class="ruby-identifier">accept_response_type</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:use_header</span>]&#x000A;  <span class="ruby-ivar">@requested_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_type</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-run'>
+                <a name='method-i-run'></a>
+                <div class='synopsis'>
+                  <span class='name'>run</span>
+                  <span class='arguments'>(_)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Add the type routing extension back to the remaining path if it was removed
+                  from the path when the application was initialized.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 165</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">_</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@type_routing_extension</span>)&#x000A;    <span class="ruby-ivar">@remaining_path</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;.#{@type_routing_extension}&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

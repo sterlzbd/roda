@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::Assets::RequestClassMethods</title>
+    <title>Roda::RodaPlugins::RunAppendSlash::RequestMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::Assets::RequestClassMethods
+          Roda::RodaPlugins::RunAppendSlash::RequestMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/assets_rb.html">lib/roda/plugins/assets.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/run_append_slash_rb.html">lib/roda/plugins/run_append_slash.rb</a>
           </li>
         </ol>
       </div>
@@ -42,7 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-assets_matchers">assets_matchers</a></li>
+              <li><a target="docwin" href="#method-i-run">run</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -50,22 +50,24 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-assets_matchers'>
-                <a name='method-i-assets_matchers'></a>
+              <div class='method public-instance' id='method-method-i-run'>
+                <a name='method-i-run'></a>
                 <div class='synopsis'>
-                  <span class='name'>assets_matchers</span>
-                  <span class='arguments'>()</span>
+                  <span class='name'>run</span>
+                  <span class='arguments'>(app)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>An array of asset type strings and regexps for that type, for all asset
-                  types handled.</p>
+                  <p>Calls the given rack app. If the path matches the root of the app but does
+                  not contain a trailing slash, a trailing slash is appended to the path
+                  internally, or a redirect is issued when configured with
+                  <code>use_redirects: true</code>.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-assets_matchers-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-assets_matchers-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 723</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">assets_matchers</span>&#x000A;  <span class="ruby-ivar">@assets_matchers</span> <span class="ruby-operator">||=</span> [<span class="ruby-value">:css</span>, <span class="ruby-value">:js</span>].<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>&#x000A;    [<span class="ruby-identifier">t</span>, <span class="ruby-identifier">assets_regexp</span>(<span class="ruby-identifier">t</span>)].<span class="ruby-identifier">freeze</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">assets_opts</span>[<span class="ruby-identifier">t</span>]&#x000A;  <span class="ruby-keyword">end</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/run_append_slash.rb, line 37</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">remaining_path</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:run_append_slash_redirect</span>]&#x000A;      <span class="ruby-identifier">redirect</span>(<span class="ruby-node">&quot;#{path}/&quot;</span>)&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-ivar">@remaining_path</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;/&#39;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

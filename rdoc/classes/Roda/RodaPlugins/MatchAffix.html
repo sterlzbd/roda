@@ -55,16 +55,16 @@
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">match_affix</span>, <span class="ruby-string">&quot;&quot;</span></pre>
             
-            <p>will load the plugin and use an empty prefix.</p>
+            <p>will load the plugin and use an empty prefix (instead of a slash).</p>
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">match_affix</span>, <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-regexp">/(\/|\z)/</span></pre>
             
             <p>will use an empty prefix and change the suffix to consume a trailing slash.</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">match_affix</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-regexp">/(\/|\z)/</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">match_affix</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-regexp">/(?:\/\z|(?=\/|\z))/</span></pre>
             
-            <p>will not modify the prefix and will change the suffix to consume a trailing
-            slash.</p>
+            <p>will not modify the prefix and will change the suffix so that it consumes a
+            trailing slash at the end of the path only.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -121,7 +121,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/match_affix.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">suffix</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_prefix</span>] = <span class="ruby-identifier">prefix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">prefix</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_suffix</span>] = <span class="ruby-identifier">suffix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">suffix</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/match_affix.rb, line 34</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">suffix</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_prefix</span>] = <span class="ruby-identifier">prefix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">prefix</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_suffix</span>] = <span class="ruby-identifier">suffix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">suffix</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

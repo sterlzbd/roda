@@ -31,7 +31,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2016-04-13 16:47:16 -0700</span>
+          <span class='datetime'>2016-08-12 09:05:15 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -100,7 +100,7 @@
             
             <p><a href="../classes/Roda.html">Roda</a> has low per-request overhead, and
             the use of a routing tree and intelligent caching of internal
-            datastructures makes it  significantly faster than popular ruby web
+            datastructures makes it  significantly faster than other popular ruby web
             frameworks.</p>
             
             <h2 id="label-Usage">Usage<span><a href="#label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h2>
@@ -361,6 +361,11 @@
             
             <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">200</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
+            <p>When redirecting, the response will use a 302 status code by default. You
+            can change this by passing a second argument to <code>r.redirect</code>:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/other&quot;</span>, <span class="ruby-value">301</span> <span class="ruby-comment"># use 301 Moved Permanently</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
             <h2 id="label-Verb+Methods">Verb Methods<span><a href="#label-Verb+Methods">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>As displayed above, <a href="../classes/Roda.html">Roda</a> has
@@ -495,9 +500,9 @@
             <p>It is very easy to test <a href="../classes/Roda.html">Roda</a> with <a
             href="https://github.com/brynary/rack-test">Rack::Test</a> or <a
             href="https://github.com/jnicklas/capybara">Capybara</a>. Roda&#39;s own
-            tests use <a target="_top" href="http://rspec.info">RSpec</a>. The default Rake task will
-            run the specs for <a href="../classes/Roda.html">Roda</a>, if RSpec is
-            installed.</p>
+            tests use <a
+            href="https://github.com/seattlerb/minitest">minitest/spec</a>. The default
+            Rake task will run the specs for <a href="../classes/Roda.html">Roda</a>.</p>
             
             <h2 id="label-Settings">Settings<span><a href="#label-Settings">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -602,8 +607,8 @@
             
             <pre>&lt;%= &#39;&lt;&gt;&#39; %&gt;  # outputs &amp;lt;&amp;gt; &#x000A;&lt;%== &#39;&lt;&gt;&#39; %&gt; # outputs &lt;&gt;</pre>
             
-            <p>When using the +:escape_option, you will need to ensure that your layouts
-            are not escaping the output of the content template:</p>
+            <p>When using the <code>:escape</code> option, you will need to ensure that
+            your layouts are not escaping the output of the content template:</p>
             
             <pre>&lt;%== yield %&gt; # not &lt;%= yield %&gt;</pre>
             
@@ -667,23 +672,62 @@
             that users and libraries that use this option will be checking such paths
             manually.</p>
             
-            <h2 id="label-Reloading">Reloading<span><a href="#label-Reloading">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            <h2 id="label-Code+Reloading">Code Reloading<span><a href="#label-Code+Reloading">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
-            <p>Most rack-based reloaders will work with <a
-            href="../classes/Roda.html">Roda</a>, including:</p>
-            <ul><li>
+            <p><a href="../classes/Roda.html">Roda</a> does not ship with integrated
+            support for code reloading, as it is a toolkit and not a framework, but
+            there are rack-based reloaders that will work with <a
+            href="../classes/Roda.html">Roda</a> apps.</p>
+            
+            <p>For most applications, <a
+            href="https://github.com/jeremyevans/rack-unreloader">rack-unreloader</a>
+            is probably the fastest approach to reloading while still being fairly
+            safe, as it reloads just files that have been modified, and unloads
+            constants defined in the files before reloading them.  However, it requires
+            modifying your application code to use rack-unreloader specific APIs.</p>
+            
+            <p>A similar solution that reloads files and unloads constants is
+            ActiveSupport::Dependencies. ActiveSupport::Dependencies doesn&#39;t
+            require modifying your application code, but it modifies some core methods,
+            including <code>require</code> and <code>const_missing</code>. It requires
+            less configuration, but depends that you follow Rails&#39; file and class
+            naming conventions. It also provides autoloading (on the fly) of files when
+            a missing constant is accessed. If your application does not rely on
+            autoloading then <code>require_dependency</code> must be used to require
+            the dependencies or they won&#39;t be reloaded.</p>
+            
+            <p><a href="https://github.com/rosenfeld/auto_reloader">AutoReloader</a>
+            provides transparent reloading for all files reached from one of the
+            <code>reloadable_paths</code> option entries, by detecting new top-level
+            constants and removing them when any of the reloadable loaded files
+            changes. It overrides <code>require</code> and
+            <code>require_relative</code> when activated (usually in the development
+            environment). No configurations other than <code>reloadable_paths</code>
+            are required.</p>
+            
+            <p>Both <a href="https://github.com/alexch/rerun">rerun</a> and <a
+            href="https://github.com/rtomayko/shotgun">shotgun</a> use a fork/exec
+            approach for loading new versions of your app.  rerun is faster as it only
+            reloads the app on changes, whereas shotgun reloads the app on every
+            request.  Both work without any changes to application code, but may be
+            slower as they have to reload the entire application on every change.
+            However, for small apps that load quickly, either may be a good approach.</p>
+            
             <p><a
-            href="https://github.com/jeremyevans/rack-unreloader">rack-unreloader</a></p>
-            </li><li>
-            <p><a href="https://github.com/alexch/rerun">rerun</a></p>
-            </li><li>
-            <p><a href="https://github.com/rtomayko/shotgun">shotgun</a></p>
-            </li><li>
-            <p><a
-            href="https://github.com/rack/rack/blob/master/lib/rack/reloader.rb">Rack::Reloader</a></p>
-            </li><li>
-            <p><a href="https://github.com/monk/pistol">pistol</a></p>
-            </li></ul>
+            href="https://github.com/rack/rack/blob/master/lib/rack/reloader.rb">Rack::Reloader</a>
+            ships with rack and just reloads monitored files when they change, without
+            unloading constants. It&#39;s fast but may cause issues in cases where you
+            remove classes, constants, or methods, or when you are not clearing out
+            cached data manually when files are reloaded.</p>
+            
+            <p>There is no one reloading solution that is the best for all applications
+            and development approaches.  Consider your needs and the the tradeoffs of
+            each of the reloading approaches, and pick the one you think will work
+            best.</p>
+            
+            <p>If you are unsure where to start, it may be best to start with rerun or
+            shotgun (unless you&#39;re running on JRuby or Windows), and only consider
+            other options if rerun or shotgun are not fast enough.</p>
             
             <h2 id="label-Plugins">Plugins<span><a href="#label-Plugins">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
