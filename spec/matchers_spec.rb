@@ -131,10 +131,15 @@ describe "matchers" do
       r.on "posts/:id" do |id|
         id
       end
+
+      r.on "responses-:id" do |id|
+        id
+      end
     end
 
     body('/posts/123').must_equal '123'
     status('/post/123').must_equal 404
+    body('/responses-123').must_equal '123'
   end
 
   it "should handle multiple params in single string" do
