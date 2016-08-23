@@ -26,6 +26,10 @@ class Roda
     # HEAD requests for +/+, +/a+, and +/b+ will all return 200 status
     # with an empty body.
     #
+    # This plugin also works with the not_allowed plugin if it is loaded
+    # after the not_allowed plugin.  In that case, if GET is one of Allow
+    # header options, then HEAD will be as well.
+    #
     # NOTE: if you have a public facing website it is recommended that
     # you enable this plugin. Search engines and other bots may send a
     # HEAD request prior to crawling a page with a GET request. Without
@@ -58,6 +62,13 @@ class Roda
         # the given methods is a GET request.
         def match_method(method)
           super || (!method.is_a?(Array) && head? && method.to_s.upcase == 'GET')
+        end
+
+        # Work with the not_allowed plugin so that if GET is one
+        # of the Allow header options, then HEAD is as well.
+        def method_not_allowed(verbs)
+          verbs = verbs.sub('GET', 'HEAD, GET')
+          super
         end
       end
     end

@@ -1,3 +1,7 @@
+= HEAD
+
+* Make head plugin work with not_allowed plugin if loaded after (jeremyevans) (#92)
+
 = 2.17.0 (2016-08-13)
 
 * Add :postprocessor option to assets plugin, for postprocessing assets (e.g. autoprefixing CSS) (celsworth) (#86)

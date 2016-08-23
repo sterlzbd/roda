@@ -62,5 +62,8 @@ describe "not_allowed plugin" do
     body('/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'c'
     status('/c', 'REQUEST_METHOD'=>'PATCH').must_equal 405
     header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'GET, POST'
+
+    @app.plugin :head
+    header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'HEAD, GET, POST'
   end
 end
