@@ -89,7 +89,9 @@ class Roda
         def public_file_readable?(path)
           ::File.file?(path) && ::File.readable?(path)
         rescue SystemCallError
+          # :nocov:
           false
+          # :nocov:
         end
 
         if ::Rack.release > '2'
