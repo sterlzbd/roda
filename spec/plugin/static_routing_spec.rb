@@ -74,8 +74,8 @@ describe "static_routing plugin" do
     old_app.static_route '/bar' do |r|
       'bar1'
     end
-    old_app.static_post '/bar' do |r|
-      'barp'
+    old_app.static_get '/foo' do |r|
+      'foop'
     end
     @app.static_route '/bar' do |r|
       'bar2'
@@ -83,11 +83,11 @@ describe "static_routing plugin" do
 
     body('/foo').must_equal 'foo'
     body('/bar').must_equal 'bar2'
-    body('/bar', 'REQUEST_METHOD'=>'POST').must_equal 'bar2'
+    body('/foo', 'REQUEST_METHOD'=>'POST').must_equal 'foo'
     @app = old_app
-    body('/foo').must_equal 'foo'
+    body('/foo').must_equal 'foop'
     body('/bar').must_equal 'bar1'
-    body('/bar', 'REQUEST_METHOD'=>'POST').must_equal 'barp'
+    body('/foo', 'REQUEST_METHOD'=>'POST').must_equal 'foo'
   end
 
   it "freezes static routes when app is frozen" do

@@ -45,7 +45,7 @@ class Roda
     # method that will match regardless of the request method, if there is no
     # matching request methods specific route.  This is why the static_get
     # method call takes precedence over the static_route method call for /foo.
-    # As shown above, you can use # Roda's routing tree methods inside the
+    # As shown above, you can use Roda's routing tree methods inside the
     # static_route block to have shared behavior for different request methods,
     # while still having handling the request methods differently.
     module StaticRouting
@@ -59,6 +59,15 @@ class Roda
           super
           opts[:static_routes].freeze
           opts[:static_routes].each_value(&:freeze)
+        end
+
+        # Duplicate static route metadata in subclass.
+        def inherited(subclass)
+          super
+          static_routes = subclass.opts[:static_routes]
+          opts[:static_routes].each do |k, v|
+            static_routes[k] = v.dup
+          end
         end
 
         # Add a static route for any request method.  These are
