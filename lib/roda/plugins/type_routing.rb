@@ -169,6 +169,16 @@ class Roda
           super
         end
 
+        # Return the untouched original remaining_path if we
+        # have modified it.
+        def real_remaining_path
+          if defined?(@type_routing_extension)
+            remaining_path + ".#{@type_routing_extension}"
+          else
+            super
+          end
+        end
+
         private
 
         # Removes a trailing file extension from the path, and sets

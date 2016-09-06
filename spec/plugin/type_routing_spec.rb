@@ -264,4 +264,32 @@ describe "type_routing plugin" do
     body('/a.html').must_equal 'HTML'
     body('/a.json').must_equal 'JSON'
   end
+
+  it "removes the handled part from r.remaining_path" do
+    app(:bare) do
+      plugin :type_routing
+
+      route do |r|
+        r.is 'a' do
+          r.html{ r.remaining_path }
+        end
+      end
+    end
+
+    body('/a.html').must_equal ''
+  end
+
+  it "overrides r.real_remaining_path correctly" do
+    app(:bare) do
+      plugin :type_routing
+
+      route do |r|
+        r.is 'a' do
+          r.html{ r.real_remaining_path }
+        end
+      end
+    end
+
+    body('/a.html').must_equal '.html'
+  end
 end

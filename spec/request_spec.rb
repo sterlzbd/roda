@@ -12,6 +12,18 @@ describe "request.path, .remaining_path, and .matched_path" do
   end
 end
 
+describe "request.real_remaining_path" do
+  it "should be an alias of remaining_path" do
+    app do |r|
+      r.on "foo" do
+        "#{r.remaining_path}:#{r.real_remaining_path}"
+      end
+    end
+
+    body("/foo/bar").must_equal "/bar:/bar"
+  end
+end
+
 describe "request.halt" do
   it "should return rack response as argument given it as argument" do
     app do |r|

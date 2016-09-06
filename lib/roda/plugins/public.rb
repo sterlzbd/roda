@@ -41,7 +41,7 @@ class Roda
         # Serve files from the public directory if the file exists and this is a GET request.
         def public
           if is_get?
-            path = PARSER.unescape(remaining_path)
+            path = PARSER.unescape(real_remaining_path)
             return if path.include?(NULL_BYTE)
 
             roda_opts = roda_class.opts
