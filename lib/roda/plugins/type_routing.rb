@@ -159,21 +159,11 @@ class Roda
           @requested_type ||= opts[:default_type]
         end
 
-        # Add the type routing extension back to the remaining path
-        # if it was removed from the path when the application was
-        # initialized.
-        def run(_)
-          if defined?(@type_routing_extension)
-            @remaining_path += ".#{@type_routing_extension}"
-          end
-          super
-        end
-
-        # Return the untouched original remaining_path if we
-        # have modified it.
+        # Append the type routing extension back to the path if it was
+        # removed before routing.
         def real_remaining_path
           if defined?(@type_routing_extension)
-            remaining_path + ".#{@type_routing_extension}"
+            "#{super}.#{@type_routing_extension}"
           else
             super
           end

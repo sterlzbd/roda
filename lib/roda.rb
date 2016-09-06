@@ -631,7 +631,7 @@ class Roda
         # a URL mapper.
         def run(app)
           e = @env
-          path = @remaining_path
+          path = real_remaining_path
           sn = SCRIPT_NAME
           pi = PATH_INFO
           script_name = e[sn]

@@ -1,5 +1,7 @@
 = HEAD
 
+* Make type_routing plugin work correctly with public plugin (celsworth, jeremyevans) (#95)
+
 * Add static_routing plugin for 3-4x increase in performance for large numbers of static routes (jeremyevans)
 
 * Make head plugin work with not_allowed plugin if loaded after (jeremyevans) (#92)
