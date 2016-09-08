@@ -63,6 +63,21 @@ class Roda
     # if it set it will automatically prefix the path with the SCRIPT_NAME for
     # the request.
     #
+    # == Asset Paths
+    #
+    # If you just want the paths rather than the full tags, you can use
+    # assets_paths instead. This will return an array of the sources that
+    # the assets function would have put into tags:
+    #
+    #   assets_paths(:css)
+    #   # => ["/assets/css/foo.css", "/assets/css/app.css"]
+    #
+    # If compilation is turned on, it will return the path to the compiled
+    # asset:
+    #
+    #   assets_paths(:css)
+    #   # => ["/assets/app.5e7b06baa1a514d8473b0eca514b806c201073b9.css"]
+    #
     # == Asset Groups
     #
     # The asset plugin supports groups for the cases where you have different
@@ -586,39 +601,16 @@ class Roda
       end
 
       module InstanceMethods
-        # Return a string containing html tags for the given asset type.
-        # This will use a script tag for the :js type and a link tag for
-        # the :css type.
-        #
-        # To return the tags for a specific asset group, use an array for
-        # the type, such as [:css, :frontend].
-        #
-        # When the assets are not compiled, this will result in a separate
-        # tag for each asset file.  When the assets are compiled, this will
-        # result in a single tag to the compiled asset file.
-        def assets(type, attrs = nil)
+        # Return an array of paths for the given asset type and optionally
+        # asset group. See the assets function documentation for details.
+        def assets_paths(type)
           o = self.class.assets_opts
           type, *dirs = type if type.is_a?(Array)
           stype = type.to_s
           ru = Rack::Utils
 
-          attrs = if attrs
-            attrs.map{|k,v| "#{k}=\"#{ru.escape_html(v.to_s)}\""}.join(SPACE)
-          else
-            EMPTY_STRING
-          end
-
-          if type == :js
-            tag_start = "<script type=\"text/javascript\" #{attrs} src=\""
-            tag_end = JS_END
-          else
-            tag_start = "<link rel=\"stylesheet\" #{attrs} href=\""
-            tag_end = CSS_END
-          end
-
           url_prefix = request.script_name if self.class.opts[:add_script_name]
 
-          # Create a tag for each individual file
           if compiled = o[:compiled]
             asset_host = o[:compiled_asset_host]
             if dirs && !dirs.empty?
@@ -636,7 +628,9 @@ class Roda
                 integrity = "\" integrity=\"#{algo}-#{ru.escape_html([[hash].pack('H*')].pack('m').tr("\n", EMPTY_STRING))}"
               end
 
-              "#{tag_start}#{asset_host}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{integrity}#{tag_end}"
+              [ "#{asset_host}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{integrity}" ]
+            else
+              []
             end
           else
             asset_dir = o[type]
@@ -644,8 +638,42 @@ class Roda
               dirs.each{|f| asset_dir = asset_dir[f]}
               prefix = "#{dirs.join(SLASH)}/" if o[:group_subdirs]
             end
-            Array(asset_dir).map{|f| "#{tag_start}#{url_prefix}/#{o[:"#{stype}_prefix"]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}#{tag_end}"}.join(NEWLINE)
+            Array(asset_dir).map{|f| "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"}
           end
+        end
+
+        # Return a string containing html tags for the given asset type.
+        # This will use a script tag for the :js type and a link tag for
+        # the :css type.
+        #
+        # To return the tags for a specific asset group, use an array for
+        # the type, such as [:css, :frontend].
+        #
+        # When the assets are not compiled, this will result in a separate
+        # tag for each asset file.  When the assets are compiled, this will
+        # result in a single tag to the compiled asset file.
+        def assets(type, attrs = nil)
+          ru = Rack::Utils
+          attrs = if attrs
+            attrs.map{|k,v| "#{k}=\"#{ru.escape_html(v.to_s)}\""}.join(SPACE)
+          else
+            EMPTY_STRING
+          end
+
+          ltype = if type.is_a?(Array)
+            type[0]
+          else
+            type
+          end
+          if ltype == :js
+            tag_start = "<script type=\"text/javascript\" #{attrs} src=\""
+            tag_end = JS_END
+          else
+            tag_start = "<link rel=\"stylesheet\" #{attrs} href=\""
+            tag_end = CSS_END
+          end
+
+          assets_paths(type).map{|p| "#{tag_start}#{p}#{tag_end}"}.join(NEWLINE)
         end
 
         # Render the asset with the given filename.  When assets are compiled,

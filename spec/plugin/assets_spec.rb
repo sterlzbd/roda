@@ -43,6 +43,15 @@ if run_tests
           r.is 'test' do
             "#{assets(:css)}\n#{assets([:js, :head])}"
           end
+
+          r.is 'paths_test' do
+            css_paths = assets_paths(:css)
+            js_paths = assets_paths([:js, :head])
+            empty_paths = assets_paths(:empty)
+            { 'css' => css_paths, 'js' => js_paths, 'empty' => empty_paths }.map do |k, a|
+            "#{k}:#{a.class}:#{a.length}:#{a.join(',')}"
+            end.join("\n")
+          end
         end
       end
     end
@@ -137,6 +146,23 @@ if run_tests
 
       app.plugin :assets, :css_headers=>{'A'=>'B1'}, :js_headers=>{'E'=>'F1'}, :dependencies=>{'c'=>'d1'}
       app.assets_opts.values_at(*keys).must_equal [{'Content-Type'=>"C", 'A'=>'B1', 'C'=>'D', 'E'=>'G'}, {'Content-Type'=>"C", 'A'=>'B', 'E'=>'F1'}, {'a'=>'b', 'c'=>'d1'}]
+    end
+
+    it 'assets_paths should return arrays of source paths' do
+      html = body('/paths_test')
+      html.scan('css:Array:2:/assets/css/app.scss,/assets/css/raw.css').length.must_equal 1
+      html.scan('js:Array:1:/assets/js/head/app.js').length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+    end
+
+    it 'assets_paths should return the compiled path in an array' do
+      app.compile_assets
+      html = body('/paths_test')
+      css_hash = app.assets_opts[:compiled]['css']
+      js_hash = app.assets_opts[:compiled]['js.head']
+      html.scan("css:Array:1:/assets/app.#{css_hash}.css").length.must_equal 1
+      html.scan("js:Array:1:/assets/app.head.#{js_hash}.js").length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
     end
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling' do
