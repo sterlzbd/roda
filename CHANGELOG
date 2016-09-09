@@ -1,5 +1,7 @@
 = HEAD
 
+* Add assets_paths method to assets plugin, for just the paths to the assets, instead of the full paths (celsworth) (#96)
+
 * Make type_routing plugin work correctly with public plugin (celsworth, jeremyevans) (#95)
 
 * Add static_routing plugin for 3-4x increase in performance for large numbers of static routes (jeremyevans)
