@@ -182,7 +182,20 @@ class Roda
     # and it will run in compiled mode, assuming that the compiled asset files
     # already exist.
     #
-    # ==== Postprocessing
+    # ==== On Heroku
+    #
+    # Heroku supports precompiling the assets when using Roda.  You just need to
+    # add an assets:precompile task, similar to this:
+    #
+    #   namespace :assets do
+    #     desc "Precompile the assets"
+    #     task :precompile do
+    #       require './app'
+    #       App.compile_assets
+    #     end
+    #   end
+    #
+    # == Postprocessing
     #
     # If you pass a callable object to the :postprocessor option, it will be called
     # before an asset is served.
@@ -201,19 +214,6 @@ class Roda
     #       type == :css ? AutoprefixerRails.process(content).css : content
     #     end
     #   }
-    #
-    # ==== On Heroku
-    #
-    # Heroku supports precompiling the assets when using Roda.  You just need to
-    # add an assets:precompile task, similar to this:
-    #
-    #   namespace :assets do
-    #     desc "Precompile the assets"
-    #     task :precompile do
-    #       require './app'
-    #       App.compile_assets
-    #     end
-    #   end
     #
     # == External Assets/Assets from Gems
     #
