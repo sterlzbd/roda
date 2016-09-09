@@ -1,6 +1,6 @@
 = HEAD
 
-* Add assets_paths method to assets plugin, for just the paths to the assets, instead of the full paths (celsworth) (#96)
+* Add assets_paths method to assets plugin, for just the paths to the assets, instead of the full tags (celsworth) (#96)
 
 * Make type_routing plugin work correctly with public plugin (celsworth, jeremyevans) (#95)
 
