@@ -1,4 +1,5 @@
 # frozen-string-literal: true
+
 #
 class Roda
   module RodaPlugins
@@ -45,8 +46,8 @@ class Roda
     #
     module AssetsPreloading
       TYPE_AS = {
-        :css => 'style',
-        :js => 'script',
+        :css => 'style'.freeze,
+        :js => 'script'.freeze,
       }.freeze
       COMMA = ",".freeze
       NEWLINE= "\n".freeze
@@ -60,32 +61,26 @@ class Roda
         # Return a string of <link> tags for the given asset
         # types/groups.
         def preload_assets_link_tags(*args)
-          _assets_array(*args).map do |asset|
-            path, as = asset
-            "<link href=\"#{path}\" rel=\"preload\" as=\"#{as}\">"
-          end.join(NEWLINE)
+          _preload_assets_array(args).map{|path, as| "<link href=\"#{path}\" rel=\"preload\" as=\"#{as}\">"}.join(NEWLINE)
         end
 
         # Return a string suitable for a Link header for the
         # given asset types/groups.
         def preload_assets_link_header(*args)
-          _assets_array(*args).map do |asset|
-            path, as = asset
-            "<#{path}>;rel=preload;as=#{as}"
-          end.join(COMMA)
+          _preload_assets_array(args).map{|path, as| "<#{path}>;rel=preload;as=#{as}"}.join(COMMA)
         end
 
         private
 
         # Return an array of paths/as pairs for the given asset
         # types and/or groups.
-        def _assets_array(*args)
-          args.map do |type|
+        def _preload_assets_array(assets)
+          assets.map do |type|
             paths = assets_paths(type)
             type = type[0] if type.is_a?(Array)
             as = TYPE_AS[type]
 
-            paths.map{|path| [ path, as ] }
+            paths.map{|path| [path, as]}
           end.flatten(1)
         end
       end

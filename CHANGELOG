@@ -1,5 +1,7 @@
 = HEAD
 
+* Add assets_preloading plugin, for creating link tags or Link header for preloading assets (celsworth, jeremyevans) (#98)
+
 * Add assets_paths method to assets plugin, for just the paths to the assets, instead of the full tags (celsworth) (#96)
 
 * Make type_routing plugin work correctly with public plugin (celsworth, jeremyevans) (#95)
