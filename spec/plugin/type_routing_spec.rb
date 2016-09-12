@@ -58,6 +58,7 @@ describe "type_routing plugin" do
       r.run(sup_app)
     end
     
+    body('/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'HTML: html'
     body('/a.json', 'HTTP_ACCEPT' => 'text/html').must_equal 'JSON: json'
     body('/a.xml', 'HTTP_ACCEPT' => 'application/json').must_equal 'XML: xml'
     body('/a.html', 'HTTP_ACCEPT' => 'application/xml').must_equal 'HTML: html'
