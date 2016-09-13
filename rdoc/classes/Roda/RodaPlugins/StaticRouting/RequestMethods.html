@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::Head::InstanceMethods</title>
+    <title>Roda::RodaPlugins::StaticRouting::RequestMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -27,11 +27,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::Head::InstanceMethods
+          Roda::RodaPlugins::StaticRouting::RequestMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/head_rb.html">lib/roda/plugins/head.rb</a>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/static_routing_rb.html">lib/roda/plugins/static_routing.rb</a>
           </li>
         </ol>
       </div>
@@ -42,7 +42,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-call">call</a></li>
+              <li><a target="docwin" href="#method-i-static_route">static_route</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -50,22 +50,22 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-call'>
-                <a name='method-i-call'></a>
+              <div class='method public-instance' id='method-method-i-static_route'>
+                <a name='method-i-static_route'></a>
                 <div class='synopsis'>
-                  <span class='name'>call</span>
-                  <span class='arguments'>(*)</span>
+                  <span class='name'>static_route</span>
+                  <span class='arguments'>(&block)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Always use an empty response body for head requests, with a content length
-                  of 0.</p>
+                  <p>Assume that this request matches a static route, setting the remaining path
+                  to the emptry string and passing control to the given block.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-call-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-static_route-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/head.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">head?</span>&#x000A;    <span class="ruby-identifier">res</span>[<span class="ruby-value">2</span>] = <span class="ruby-constant">EMPTY_ARRAY</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-static_route-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 122</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">static_route</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-string">&#39;&#39;</span>&#x000A;&#x000A;  <span class="ruby-identifier">always</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

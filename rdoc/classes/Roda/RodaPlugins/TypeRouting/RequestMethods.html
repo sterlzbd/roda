@@ -43,8 +43,8 @@
             <h3>Public Instance</h3>
             <ol>
               <li><a target="docwin" href="#method-i-on_type">on_type</a></li>
+              <li><a target="docwin" href="#method-i-real_remaining_path">real_remaining_path</a></li>
               <li><a target="docwin" href="#method-i-requested_type">requested_type</a></li>
-              <li><a target="docwin" href="#method-i-run">run</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -70,6 +70,24 @@
                   <pre id='method-i-on_type-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 147</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">on_type</span>(<span class="ruby-identifier">type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">requested_type</span>&#x000A;  <span class="ruby-identifier">response</span>[<span class="ruby-constant">CONTENT_TYPE_HEADER</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>][<span class="ruby-value">:types</span>][<span class="ruby-identifier">type</span>]&#x000A;  <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
+              <div class='method public-instance' id='method-method-i-real_remaining_path'>
+                <a name='method-i-real_remaining_path'></a>
+                <div class='synopsis'>
+                  <span class='name'>real_remaining_path</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Append the type routing extension back to the path if it was removed before
+                  routing.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-real_remaining_path-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-real_remaining_path-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 164</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">real_remaining_path</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@type_routing_extension</span>)&#x000A;    <span class="ruby-node">&quot;#{super}.#{@type_routing_extension}&quot;</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
               <div class='method public-instance' id='method-method-i-requested_type'>
                 <a name='method-i-requested_type'></a>
                 <div class='synopsis'>
@@ -85,24 +103,6 @@
                     [show source]
                   </a>
                   <pre id='method-i-requested_type-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 154</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">requested_type</span>&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@requested_type</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@requested_type</span>)&#x000A;&#x000A;  <span class="ruby-identifier">opts</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>]&#x000A;  <span class="ruby-ivar">@requested_type</span> = <span class="ruby-identifier">accept_response_type</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:use_header</span>]&#x000A;  <span class="ruby-ivar">@requested_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_type</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-run'>
-                <a name='method-i-run'></a>
-                <div class='synopsis'>
-                  <span class='name'>run</span>
-                  <span class='arguments'>(_)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Add the type routing extension back to the remaining path if it was removed
-                  from the path when the application was initialized.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 165</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">_</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@type_routing_extension</span>)&#x000A;    <span class="ruby-ivar">@remaining_path</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;.#{@type_routing_extension}&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::StaticRouting::ClassMethods</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::StaticRouting::ClassMethods
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../../../../files/lib/roda/plugins/static_routing_rb.html">lib/roda/plugins/static_routing.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a target="docwin" href="#method-i-freeze">freeze</a></li>
+              <li><a target="docwin" href="#method-i-inherited">inherited</a></li>
+              <li><a target="docwin" href="#method-i-static_route">static_route</a></li>
+              <li><a target="docwin" href="#method-i-static_route_for">static_route_for</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-freeze'>
+                <a name='method-i-freeze'></a>
+                <div class='synopsis'>
+                  <span class='name'>freeze</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Freeze the static route metadata when freezing the app.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-freeze-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-freeze-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 58</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>].<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>].<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-inherited'>
+                <a name='method-i-inherited'></a>
+                <div class='synopsis'>
+                  <span class='name'>inherited</span>
+                  <span class='arguments'>(subclass)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Duplicate static route metadata in subclass.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-inherited-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 65</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">static_routes</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>]&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">static_routes</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-static_route'>
+                <a name='method-i-static_route'></a>
+                <div class='synopsis'>
+                  <span class='name'>static_route</span>
+                  <span class='arguments'>(path, &block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Add a static route for any request method.  These are tried after the
+                  request method specific static routes (e.g. static_get), but allow you to
+                  use Roda&#39;s routing tree methods inside the route for handling shared
+                  behavior while still allowing request method specific handling.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-static_route-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-static_route-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 78</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">static_route</span>(<span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">add_static_route</span>(<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-static_route_for'>
+                <a name='method-i-static_route_for'></a>
+                <div class='synopsis'>
+                  <span class='name'>static_route_for</span>
+                  <span class='arguments'>(method, path)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return the static route for the given request method and path.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-static_route_for-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-static_route_for-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 83</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">static_route_for</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">path</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>][<span class="ruby-identifier">path</span>]&#x000A;    <span class="ruby-identifier">h</span>[<span class="ruby-identifier">method</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">h</span>[<span class="ruby-keyword">nil</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
