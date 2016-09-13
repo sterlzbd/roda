@@ -1,4 +1,4 @@
-= HEAD
+= 2.18.0 (2016-09-13)
 
 * Add assets_preloading plugin, for creating link tags or Link header for preloading assets (celsworth, jeremyevans) (#98)
 
