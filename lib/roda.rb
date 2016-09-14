@@ -83,19 +83,6 @@ class Roda
     # Methods are put into a plugin so future plugins can easily override
     # them and call super to get the default behavior.
     module Base
-      # A Hash of entities and their escaped equivalents,
-      # to be escaped by h().
-      ESCAPE_HTML = {
-        "&" => "&amp;".freeze,
-        "<" => "&lt;".freeze,
-        ">" => "&gt;".freeze,
-        "'" => "&#x27;".freeze,
-        '"' => "&quot;".freeze,
-      }.freeze
-
-      # A Regexp of HTML entities to match for escaping.
-      ESCAPE_HTML_PATTERN = Regexp.union(*ESCAPE_HTML.keys)
-
       # Class methods for the Roda class.
       module ClassMethods
         # The rack application that this class uses.
@@ -290,11 +277,6 @@ class Roda
         #   session # => {}
         def session
           @_request.session
-        end
-
-        # HTML escape the input and return the escaped version.
-        def h(string)
-          string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
         end
       end
 

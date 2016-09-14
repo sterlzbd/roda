@@ -1,6 +1,6 @@
 = HEAD
 
-* Move h plugin into core, and have it not escape / (celsworth) (#100)
+* Make h plugin not escape / (celsworth, jeremyevans) (#100)
 
 = 2.18.0 (2016-09-13)
 
