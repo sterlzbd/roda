@@ -323,11 +323,12 @@ class Roda
       # Internal exception raised when a compressor cannot be found
       CompressorNotFound = Class.new(RodaError)
 
-      # Load the render and caching plugins plugins, since the assets plugin
+      # Load the render, caching, and h plugins, since the assets plugin
       # depends on them.
       def self.load_dependencies(app, _opts = nil)
         app.plugin :render
         app.plugin :caching
+        app.plugin :h
       end
 
       # Setup the options for the plugin.  See the Assets module RDoc
@@ -607,7 +608,6 @@ class Roda
           o = self.class.assets_opts
           type, *dirs = type if type.is_a?(Array)
           stype = type.to_s
-          ru = Rack::Utils
 
           url_prefix = request.script_name if self.class.opts[:add_script_name]
 
@@ -625,7 +625,7 @@ class Roda
 
             if ukey
               if algo = o[:sri]
-                integrity = "\" integrity=\"#{algo}-#{ru.escape_html([[hash].pack('H*')].pack('m').tr("\n", EMPTY_STRING))}"
+                integrity = "\" integrity=\"#{algo}-#{h([[hash].pack('H*')].pack('m').tr("\n", EMPTY_STRING))}"
               end
 
               [ "#{asset_host}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{integrity}" ]
@@ -653,9 +653,8 @@ class Roda
         # tag for each asset file.  When the assets are compiled, this will
         # result in a single tag to the compiled asset file.
         def assets(type, attrs = nil)
-          ru = Rack::Utils
           attrs = if attrs
-            attrs.map{|k,v| "#{k}=\"#{ru.escape_html(v.to_s)}\""}.join(SPACE)
+            attrs.map{|k,v| "#{k}=\"#{h(v)}\""}.join(SPACE)
           else
             EMPTY_STRING
           end
