@@ -661,7 +661,7 @@ class Roda
             tag_end = CSS_END
           end
 
-          assets_paths(type).map{|p| "#{tag_start}#{p}#{tag_end}"}.join(NEWLINE)
+          assets_paths(type).map{|p| "#{tag_start}#{h(p)}#{tag_end}"}.join(NEWLINE)
         end
 
         # Render the asset with the given filename.  When assets are compiled,

@@ -61,7 +61,7 @@ class Roda
         # Return a string of <link> tags for the given asset
         # types/groups.
         def preload_assets_link_tags(*args)
-          _preload_assets_array(args).map{|path, as| "<link href=\"#{path}\" rel=\"preload\" as=\"#{as}\">"}.join(NEWLINE)
+          _preload_assets_array(args).map{|path, as| "<link href=\"#{h(path)}\" rel=\"preload\" as=\"#{as}\">"}.join(NEWLINE)
         end
 
         # Return a string suitable for a Link header for the
