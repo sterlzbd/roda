@@ -294,20 +294,20 @@ if run_tests
     end
 
     [[:sha256, 64, 44], [:sha384, 96, 64], [:sha512, 128, 88]].each do |algo, hex_length, base64_length|
-      it 'should handle :sri option for subresource integrity when compiling assets' do
+      it "should handle :sri option for subresource integrity for #{algo} when compiling assets" do
         app.plugin :assets, :sri=>algo
         app.compile_assets
         html = body('/test')
         html.scan(/<link/).length.must_equal 1
-        html =~ %r|integrity="#{algo}-([^"]+)" />|
-        css_hash = $1.gsub('&#x2F;', '/')
+        html =~ %r|et" integrity="#{algo}-([^"]+)"|
+        css_hash = $1
         css_hash.length.must_equal base64_length
         html =~ %r|href="(/assets/app\.[a-f0-9]{#{hex_length}}\.css)"|
         css = body($1)
         [Digest.const_get(algo.to_s.upcase).digest(css)].pack('m').tr("\n", "").must_equal css_hash
         html.scan(/<script/).length.must_equal 1
-        html =~ %r|integrity="#{algo}-([^"]+)"></script>|
-        js_hash = $1.gsub('&#x2F;', '/')
+        html =~ %r|pt" integrity="#{algo}-([^"]+)"|
+        js_hash = $1
         js_hash.length.must_equal base64_length
         html =~ %r|src="(/assets/app\.head\.[a-f0-9]{#{hex_length}}\.js)"|
         js = body($1)

@@ -319,6 +319,7 @@ class Roda
       CONTENT_ENCODING = 'Content-Encoding'.freeze
       GZIP = 'gzip'.freeze
       DOTGZ = '.gz'.freeze
+      EMPTY_ATTRS = {}.freeze
 
       # Internal exception raised when a compressor cannot be found
       CompressorNotFound = Class.new(RodaError)
@@ -606,34 +607,23 @@ class Roda
         # asset group. See the assets function documentation for details.
         def assets_paths(type)
           o = self.class.assets_opts
-          type, *dirs = type if type.is_a?(Array)
-          stype = type.to_s
+          if type.is_a?(Array)
+            ltype, *dirs = type
+          else
+            ltype = type
+          end
+          stype = ltype.to_s
 
           url_prefix = request.script_name if self.class.opts[:add_script_name]
 
           if compiled = o[:compiled]
-            asset_host = o[:compiled_asset_host]
-            if dirs && !dirs.empty?
-              key = dirs.join(DOT)
-              ckey = "#{stype}.#{key}"
-              if hash = ukey = compiled[ckey]
-                ukey = "#{key}.#{ukey}"
-              end
-            else
-              hash = ukey = compiled[stype]
-            end
-
-            if ukey
-              if algo = o[:sri]
-                integrity = "\" integrity=\"#{algo}-#{h([[hash].pack('H*')].pack('m').tr("\n", EMPTY_STRING))}"
-              end
-
-              [ "#{asset_host}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}#{integrity}" ]
+            if ukey = _compiled_assets_hash(type, true)
+              ["#{o[:compiled_asset_host]}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}"]
             else
               []
             end
           else
-            asset_dir = o[type]
+            asset_dir = o[ltype]
             if dirs && !dirs.empty?
               dirs.each{|f| asset_dir = asset_dir[f]}
               prefix = "#{dirs.join(SLASH)}/" if o[:group_subdirs]
@@ -652,18 +642,17 @@ class Roda
         # When the assets are not compiled, this will result in a separate
         # tag for each asset file.  When the assets are compiled, this will
         # result in a single tag to the compiled asset file.
-        def assets(type, attrs = nil)
-          attrs = if attrs
-            attrs.map{|k,v| "#{k}=\"#{h(v)}\""}.join(SPACE)
-          else
-            EMPTY_STRING
+        def assets(type, attrs = EMPTY_ATTRS)
+          ltype = type.is_a?(Array) ? type[0] : type
+
+          o = self.class.assets_opts
+          if o[:compiled] && (algo = o[:sri]) && (hash = _compiled_assets_hash(type))
+            attrs = Hash[attrs]
+            attrs[:integrity] = "#{algo}-#{h([[hash].pack('H*')].pack('m').tr("\n", EMPTY_STRING))}"
           end
 
-          ltype = if type.is_a?(Array)
-            type[0]
-          else
-            type
-          end
+          attrs = attrs.map{|k,v| "#{k}=\"#{h(v)}\""}.join(SPACE)
+
           if ltype == :js
             tag_start = "<script type=\"text/javascript\" #{attrs} src=\""
             tag_end = JS_END
@@ -717,6 +706,24 @@ class Roda
         end
 
         private
+
+        def _compiled_assets_hash(type, return_ukey=false)
+          compiled = self.class.assets_opts[:compiled]
+          type, *dirs = type if type.is_a?(Array)
+          stype = type.to_s
+
+          if dirs && !dirs.empty?
+            key = dirs.join(DOT)
+            ckey = "#{stype}.#{key}"
+            if hash = ukey = compiled[ckey]
+              ukey = "#{key}.#{ukey}"
+            end
+          else
+            hash = ukey = compiled[stype]
+          end
+
+          return_ukey ? ukey : hash
+        end
 
         # Return when the file was last modified.  If the file depends on any
         # other files, check the modification times of all dependencies and
