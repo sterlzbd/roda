@@ -1,5 +1,7 @@
 = HEAD
 
+* Optimize indifferent_params plugin when using Rack 2 (jeremyevans)
+
 * Fix assets_paths method in assets plugin when subresource integrity is used (jeremyevans, celsworth)
 
 * Make assets plugin depend on h plugin, instead of using Rack::Utils.escape_html (jeremyevans)

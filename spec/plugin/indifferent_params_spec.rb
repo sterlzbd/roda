@@ -9,5 +9,6 @@ describe "indifferent_params plugin" do
     end
 
     body('QUERY_STRING'=>'a=2&b[][c]=3', 'rack.input'=>StringIO.new).must_equal '2/3'
+    body('REQUEST_METHOD'=>'POST', 'rack.input'=>StringIO.new('a=2&b[][c]=3')).must_equal '2/3'
   end
 end
