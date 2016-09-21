@@ -1,5 +1,21 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
+run_tests = true
+begin
+  begin
+    require 'tilt/sass'
+  rescue LoadError
+    begin
+      for lib in %w'tilt sass'
+        require lib
+      end
+    rescue LoadError
+      warn "#{lib} not installed, skipping assets_preloading plugin test"
+      run_tests = false
+    end
+  end
+end
+
 describe "assets_preloading plugin" do
   before do
     app(:bare) do
@@ -79,4 +95,4 @@ describe "assets_preloading plugin" do
     html = body('/tags-js')
     html.scan('as="script"').count.must_equal 1
   end
-end
+end if run_tests
