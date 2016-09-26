@@ -65,6 +65,16 @@ describe "response #finish" do
     header('Content-Length').must_equal '1'
   end
 
+  it "should not set Content-Type header on a 204 response" do
+    app do |r|
+      response.status = 204
+      throw :halt, response.finish
+    end
+
+    header('Content-Type').must_equal nil
+    header('Content-Length').must_equal nil
+  end
+
   it "should not overwrite existing status" do
     app do |r|
       response.status = 500

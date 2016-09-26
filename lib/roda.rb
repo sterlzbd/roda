@@ -867,6 +867,7 @@ class Roda
       # Instance methods for RodaResponse
       module ResponseMethods
         CONTENT_LENGTH = "Content-Length".freeze
+        CONTENT_TYPE = "Content-Type".freeze
         DEFAULT_HEADERS = {"Content-Type" => "text/html".freeze}.freeze
         LOCATION = "Location".freeze
 
@@ -936,6 +937,10 @@ class Roda
           set_default_headers
           h = @headers
           h[CONTENT_LENGTH] ||= @length.to_s
+          if b.empty? && ((s >= 100 && s <= 199) || [204, 205, 304].include?(s))
+            h.delete(CONTENT_LENGTH)
+            h.delete(CONTENT_TYPE)
+          end
           [s, h, b]
         end
 
