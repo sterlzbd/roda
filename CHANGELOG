@@ -1,5 +1,7 @@
 = HEAD
 
+* Don't add Content-Type/Content-Length headers for 1xx, 204, 205, 304 statuses (celsworth, jeremyevans) (#101, #102)
+
 * Optimize indifferent_params plugin when using Rack 2 (jeremyevans)
 
 * Fix assets_paths method in assets plugin when subresource integrity is used (jeremyevans, celsworth)

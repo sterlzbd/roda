@@ -936,10 +936,10 @@ class Roda
           s = (@status ||= b.empty? ? 404 : default_status)
           set_default_headers
           h = @headers
-          h[CONTENT_LENGTH] ||= @length.to_s
-          if b.empty? && ((s >= 100 && s <= 199) || [204, 205, 304].include?(s))
-            h.delete(CONTENT_LENGTH)
+          if b.empty? && ((s >= 100 && s <= 199) || s == 204 || s == 205 || s == 304)
             h.delete(CONTENT_TYPE)
+          else
+            h[CONTENT_LENGTH] ||= @length.to_s
           end
           [s, h, b]
         end
