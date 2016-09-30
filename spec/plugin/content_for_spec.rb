@@ -2,9 +2,8 @@ require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 begin
   require 'tilt/erb'
-  require 'tilt/haml'
 rescue LoadError
-  warn "tilt, erb, or haml not installed, skipping content_for plugin test"
+  warn "tilt not installed, skipping content_for plugin test"
 else
 describe "content_for plugin with erb" do
   before do
@@ -39,6 +38,37 @@ describe "content_for plugin with erb" do
   end
 end
 
+describe "content_for plugin with multiple calls to the same key" do
+  before do
+    app(:bare) do
+      plugin :render, :views => './spec/views'
+      plugin :content_for
+
+      route do |r|
+        r.root do
+          view(:inline => "<% content_for :foo do %>foo<% end %><% content_for :foo do %>baz<% end %>bar", :layout => { :inline => '<%= yield %> <%= content_for(:foo) %>' })
+        end
+      end
+    end
+  end
+
+  it "should replace with multiple calls to the same key by default" do
+    body.strip.must_equal "bar baz"
+  end
+
+  it "should append with multiple calls to the same key if :append plugin option is used" do
+    app.plugin :content_for, :append => true
+    body.strip.must_equal "bar foobaz"
+  end
+end
+end
+
+begin
+  require 'tilt/erb'
+  require 'tilt/haml'
+rescue LoadError
+  warn "tilt or haml not installed, skipping content_for plugin haml tests"
+else
 describe "content_for plugin with haml" do
   before do
     app(:bare) do
@@ -105,30 +135,6 @@ describe "content_for plugin when overriding :engine" do
   it "should work with alternate rendering engines" do
     body.strip.must_equal "bar\nfoo"
     body('/a').strip.must_equal "bar\nfoo"
-  end
-end
-
-describe "content_for plugin with multiple calls to the same key" do
-  before do
-    app(:bare) do
-      plugin :render, :views => './spec/views'
-      plugin :content_for
-
-      route do |r|
-        r.root do
-          view(:inline => "<% content_for :foo do %>foo<% end %><% content_for :foo do %>baz<% end %>bar", :layout => { :inline => '<%= yield %> <%= content_for(:foo) %>' })
-        end
-      end
-    end
-  end
-
-  it "should replace with multiple calls to the same key by default" do
-    body.strip.must_equal "bar baz"
-  end
-
-  it "should append with multiple calls to the same key if :append plugin option is used" do
-    app.plugin :content_for, :append => true
-    body.strip.must_equal "bar foobaz"
   end
 end
 end
