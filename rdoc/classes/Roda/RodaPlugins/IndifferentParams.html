@@ -5,21 +5,19 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
     </script>
   </head>
   <body class='page'>
@@ -31,7 +29,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/roda/plugins/indifferent_params_rb.html">lib/roda/plugins/indifferent_params.rb</a>
+            <a href="../../../files/lib/roda/plugins/indifferent_params_rb.html">lib/roda/plugins/indifferent_params.rb</a>
           </li>
         </ol>
       </div>
@@ -40,36 +38,59 @@
           <div id='description'>
             
             <p>The indifferent_params plugin adds a <code>params</code> instance method
-            which returns a copy of the request params hash that will automatically
-            convert symbols to strings. Example:</p>
+            which offers indifferent access to the request params, allowing you to use
+            symbols to lookup values in a hash where the keys are strings.  Example:</p>
             
             <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">indifferent_params</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">params</span>[:<span class="ruby-identifier">foo</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
             
-            <p>The params hash is initialized lazily, so you only pay the penalty of
-            copying the request params if you call the <code>params</code> method.</p>
+            <p>The exact behavior depends on the version of Rack in use. If you are using
+            Rack 2, this plugin uses rack&#39;s API to set the query parser for the
+            request to use indifferent access. Rack 1 doesn&#39;t support indifferent
+            access to params, so if you are using Rack 1, this plugin will make a deep
+            copy of the request params hash, where each level uses indifferent access. 
+            On Rack 1, The params hash is initialized lazily, so you only pay the
+            penalty of copying the request params if you call the <code>params</code>
+            method.</p>
             
-            <p>Note that there is a rack-indifferent gem that automatically makes rack use
-            indifferent params. Using rack-indifferent is faster and has some other
-            minor advantages over the indifferent_params plugin, though it affects rack
-            itself instead of just the <a href="../../Roda.html">Roda</a> app that you
-            load the plugin into.</p>
+            <p>Note that there is a rack-indifferent gem that monkey patches rack to
+            always use indifferent params. If you are using Rack 1, it is recommended
+            to use rack-indifferent instead of this plugin, as it is faster and has
+            some other minor advantages, though it affects all rack applications
+            instead of just the <a href="../../Roda.html">Roda</a> app that you load
+            the plugin into.</p>
           </div>
           <div id='context'>
           </div>
           <div id='class-list'>
             <h2>Classes and Modules</h2>
             <ol>
-              <li><a target="docwin" href="IndifferentParams/InstanceMethods.html">Roda::RodaPlugins::IndifferentParams::InstanceMethods</a></li>
+              <li><a href="IndifferentParams/InstanceMethods.html">Roda::RodaPlugins::IndifferentParams::InstanceMethods</a></li>
+              <li><a href="IndifferentParams/RequestMethods.html">Roda::RodaPlugins::IndifferentParams::RequestMethods</a></li>
+              <li><a href="IndifferentParams/QueryParser.html">Roda::RodaPlugins::IndifferentParams::QueryParser</a></li>
             </ol>
           </div>
           <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>INDIFFERENT_PROC</td>
+                    <td>=</td>
+                    <td class='context-item-value'>lambda{|h,k| h[k.to_s] if k.is_a?(Symbol)}</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div id='footer-push'></div>
     </div>
     <div id='footer'>
-      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
     </div>
   </body>
 </html>

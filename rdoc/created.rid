@@ -1,12 +1,12 @@
-Tue, 13 Sep 2016 12:20:57 -0700
+Fri, 14 Oct 2016 08:05:10 -0700
 README.rdoc	Fri, 12 Aug 2016 09:05:15 -0700
-CHANGELOG	Tue, 13 Sep 2016 08:02:11 -0700
+CHANGELOG	Fri, 14 Oct 2016 08:01:43 -0700
 MIT-LICENSE	Wed, 13 Jan 2016 08:58:01 -0800
-lib/roda.rb	Tue, 06 Sep 2016 09:02:01 -0700
+lib/roda.rb	Tue, 27 Sep 2016 10:34:51 -0700
 lib/roda/plugins/_erubis_escaping.rb	Sun, 31 Jan 2016 11:52:29 -0800
 lib/roda/plugins/all_verbs.rb	Sun, 31 Jan 2016 11:52:33 -0800
-lib/roda/plugins/assets.rb	Fri, 09 Sep 2016 08:31:59 -0700
-lib/roda/plugins/assets_preloading.rb	Mon, 12 Sep 2016 08:42:59 -0700
+lib/roda/plugins/assets.rb	Wed, 14 Sep 2016 11:34:36 -0700
+lib/roda/plugins/assets_preloading.rb	Wed, 14 Sep 2016 11:34:36 -0700
 lib/roda/plugins/backtracking_array.rb	Sun, 31 Jan 2016 11:52:42 -0800
 lib/roda/plugins/caching.rb	Sun, 31 Jan 2016 11:52:45 -0800
 lib/roda/plugins/chunked.rb	Sun, 31 Jan 2016 11:52:48 -0800
@@ -25,14 +25,14 @@ lib/roda/plugins/environments.rb	Sun, 31 Jan 2016 11:53:17 -0800
 lib/roda/plugins/error_email.rb	Fri, 08 Jan 2016 15:41:05 -0800
 lib/roda/plugins/error_handler.rb	Mon, 25 Jul 2016 09:46:49 -0700
 lib/roda/plugins/flash.rb	Fri, 08 Jan 2016 15:41:05 -0800
-lib/roda/plugins/h.rb	Sun, 31 Jan 2016 11:53:26 -0800
+lib/roda/plugins/h.rb	Wed, 14 Sep 2016 09:29:18 -0700
 lib/roda/plugins/halt.rb	Sun, 31 Jan 2016 11:53:28 -0800
 lib/roda/plugins/hash_matcher.rb	Sun, 31 Jan 2016 11:53:31 -0800
 lib/roda/plugins/head.rb	Tue, 23 Aug 2016 09:35:27 -0700
 lib/roda/plugins/header_matchers.rb	Tue, 31 May 2016 10:24:41 -0700
 lib/roda/plugins/heartbeat.rb	Sun, 31 Jan 2016 11:53:38 -0800
 lib/roda/plugins/hooks.rb	Sun, 31 Jan 2016 11:53:41 -0800
-lib/roda/plugins/indifferent_params.rb	Sun, 31 Jan 2016 11:53:43 -0800
+lib/roda/plugins/indifferent_params.rb	Wed, 21 Sep 2016 15:13:51 -0700
 lib/roda/plugins/json.rb	Wed, 13 Jan 2016 08:14:27 -0800
 lib/roda/plugins/json_parser.rb	Fri, 08 Jan 2016 15:41:05 -0800
 lib/roda/plugins/mailer.rb	Fri, 08 Jan 2016 15:41:05 -0800
@@ -79,7 +79,7 @@ lib/roda/plugins/unescape_path.rb	Wed, 13 Jul 2016 08:09:00 -0700
 lib/roda/plugins/view_options.rb	Sun, 31 Jan 2016 11:55:12 -0800
 lib/roda/plugins/view_subdirs.rb	Sun, 08 Mar 2015 14:07:21 -0700
 lib/roda/plugins/websockets.rb	Fri, 08 Jan 2016 15:41:05 -0800
-lib/roda/version.rb	Tue, 13 Sep 2016 08:02:11 -0700
+lib/roda/version.rb	Fri, 14 Oct 2016 08:01:43 -0700
 doc/conventions.rdoc	Sat, 10 Jan 2015 15:40:37 -0800
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -105,3 +105,4 @@ doc/release_notes/2.15.0.txt	Mon, 13 Jun 2016 14:04:57 -0700
 doc/release_notes/2.16.0.txt	Wed, 13 Jul 2016 08:09:00 -0700
 doc/release_notes/2.17.0.txt	Fri, 12 Aug 2016 17:16:05 -0700
 doc/release_notes/2.18.0.txt	Tue, 13 Sep 2016 12:20:48 -0700
+doc/release_notes/2.19.0.txt	Fri, 14 Oct 2016 08:01:43 -0700

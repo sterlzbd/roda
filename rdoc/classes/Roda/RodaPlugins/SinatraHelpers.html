@@ -5,21 +5,19 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
     </script>
   </head>
   <body class='page'>
@@ -31,7 +29,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/roda/plugins/sinatra_helpers_rb.html">lib/roda/plugins/sinatra_helpers.rb</a>
+            <a href="../../../files/lib/roda/plugins/sinatra_helpers_rb.html">lib/roda/plugins/sinatra_helpers.rb</a>
           </li>
         </ol>
       </div>
@@ -231,7 +229,7 @@
             <h2>Methods</h2>
             <h3>Public Class</h3>
             <ol>
-              <li><a target="docwin" href="#method-c-configure">configure</a></li>
+              <li><a href="#method-c-configure">configure</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -239,11 +237,11 @@
           <div id='class-list'>
             <h2>Classes and Modules</h2>
             <ol>
-              <li><a target="docwin" href="SinatraHelpers/ClassMethods.html">Roda::RodaPlugins::SinatraHelpers::ClassMethods</a></li>
-              <li><a target="docwin" href="SinatraHelpers/DelegateMethods.html">Roda::RodaPlugins::SinatraHelpers::DelegateMethods</a></li>
-              <li><a target="docwin" href="SinatraHelpers/RequestMethods.html">Roda::RodaPlugins::SinatraHelpers::RequestMethods</a></li>
-              <li><a target="docwin" href="SinatraHelpers/ResponseMethods.html">Roda::RodaPlugins::SinatraHelpers::ResponseMethods</a></li>
-              <li><a target="docwin" href="SinatraHelpers/DelayedBody.html">Roda::RodaPlugins::SinatraHelpers::DelayedBody</a></li>
+              <li><a href="SinatraHelpers/ClassMethods.html">Roda::RodaPlugins::SinatraHelpers::ClassMethods</a></li>
+              <li><a href="SinatraHelpers/DelegateMethods.html">Roda::RodaPlugins::SinatraHelpers::DelegateMethods</a></li>
+              <li><a href="SinatraHelpers/RequestMethods.html">Roda::RodaPlugins::SinatraHelpers::RequestMethods</a></li>
+              <li><a href="SinatraHelpers/ResponseMethods.html">Roda::RodaPlugins::SinatraHelpers::ResponseMethods</a></li>
+              <li><a href="SinatraHelpers/DelayedBody.html">Roda::RodaPlugins::SinatraHelpers::DelayedBody</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -369,7 +367,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 232</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 231</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
@@ -379,7 +377,7 @@
       <div id='footer-push'></div>
     </div>
     <div id='footer'>
-      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
     </div>
   </body>
 </html>

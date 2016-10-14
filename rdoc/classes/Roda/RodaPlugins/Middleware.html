@@ -5,21 +5,19 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
     </script>
   </head>
   <body class='page'>
@@ -31,7 +29,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../files/lib/roda/plugins/middleware_rb.html">lib/roda/plugins/middleware.rb</a>
+            <a href="../../../files/lib/roda/plugins/middleware_rb.html">lib/roda/plugins/middleware.rb</a>
           </li>
         </ol>
       </div>
@@ -55,7 +53,7 @@
             <h2>Methods</h2>
             <h3>Public Class</h3>
             <ol>
-              <li><a target="docwin" href="#method-c-configure">configure</a></li>
+              <li><a href="#method-c-configure">configure</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -63,9 +61,9 @@
           <div id='class-list'>
             <h2>Classes and Modules</h2>
             <ol>
-              <li><a target="docwin" href="Middleware/ClassMethods.html">Roda::RodaPlugins::Middleware::ClassMethods</a></li>
-              <li><a target="docwin" href="Middleware/RequestMethods.html">Roda::RodaPlugins::Middleware::RequestMethods</a></li>
-              <li><a target="docwin" href="Middleware/Forwarder.html">Roda::RodaPlugins::Middleware::Forwarder</a></li>
+              <li><a href="Middleware/ClassMethods.html">Roda::RodaPlugins::Middleware::ClassMethods</a></li>
+              <li><a href="Middleware/RequestMethods.html">Roda::RodaPlugins::Middleware::RequestMethods</a></li>
+              <li><a href="Middleware/Forwarder.html">Roda::RodaPlugins::Middleware::Forwarder</a></li>
             </ol>
           </div>
           <div id='section'>
@@ -91,7 +89,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:env_var</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:env_var</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;roda.forward_next&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:env_var</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:env_var</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;roda.forward_next&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
@@ -101,7 +99,7 @@
       <div id='footer-push'></div>
     </div>
     <div id='footer'>
-      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
     </div>
   </body>
 </html>

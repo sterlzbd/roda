@@ -5,21 +5,19 @@
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
-      //<![CDATA[
-        function popupCode(url) {
-          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-        }
-        
-        function toggleCode(id) {
-          var code = document.getElementById(id)
-        
-          code.style.display = code.style.display != 'block' ? 'block' : 'none'
-          return true
-        }
-        
-        // Make codeblocks hidden by default
-        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-      //]]>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
     </script>
   </head>
   <body class='page'>
@@ -31,7 +29,7 @@
         </h1>
         <ol class='paths'>
           <li>
-            <a target="docwin" href="../../../../files/lib/roda/plugins/_erubis_escaping_rb.html">lib/roda/plugins/_erubis_escaping.rb</a>
+            <a href="../../../../files/lib/roda/plugins/_erubis_escaping_rb.html">lib/roda/plugins/_erubis_escaping.rb</a>
           </li>
         </ol>
         <div class='parent'>
@@ -50,11 +48,11 @@
             <h2>Methods</h2>
             <h3>Public Class</h3>
             <ol>
-              <li><a target="docwin" href="#method-c-new">new</a></li>
+              <li><a href="#method-c-new">new</a></li>
             </ol>
             <h3>Public Instance</h3>
             <ol>
-              <li><a target="docwin" href="#method-i-escape_xml">escape_xml</a></li>
+              <li><a href="#method-i-escape_xml">escape_xml</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -93,7 +91,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 18</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">safe_classes</span>)&#x000A;  <span class="ruby-ivar">@safe_classes</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">safe_classes</span>).<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 17</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">safe_classes</span>)&#x000A;  <span class="ruby-ivar">@safe_classes</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">safe_classes</span>).<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -113,7 +111,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-escape_xml-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-escape_xml-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 26</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">escape_xml</span>(<span class="ruby-identifier">string</span>)&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;    <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@safe_classes</span>.<span class="ruby-identifier">any?</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-identifier">c</span>)}&#x000A;    <span class="ruby-identifier">string</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-constant">Escaper</span>.<span class="ruby-identifier">escape_xml</span>(<span class="ruby-identifier">string</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-escape_xml-source'><span class="ruby-comment"># File lib/roda/plugins/_erubis_escaping.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">escape_xml</span>(<span class="ruby-identifier">string</span>)&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;    <span class="ruby-identifier">string</span> = <span class="ruby-identifier">string</span>.<span class="ruby-identifier">to_s</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@safe_classes</span>.<span class="ruby-identifier">any?</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-identifier">c</span>)}&#x000A;    <span class="ruby-identifier">string</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-constant">Escaper</span>.<span class="ruby-identifier">escape_xml</span>(<span class="ruby-identifier">string</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
@@ -123,7 +121,7 @@
       <div id='footer-push'></div>
     </div>
     <div id='footer'>
-      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
     </div>
   </body>
 </html>
