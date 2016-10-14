@@ -1,4 +1,4 @@
-= HEAD
+= 2.19.0 (2016-10-14)
 
 * Don't add Content-Type/Content-Length headers for 1xx, 204, 205, 304 statuses (celsworth, jeremyevans) (#101, #102)
 
