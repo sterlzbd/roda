@@ -58,10 +58,10 @@ class Roda
     #            templates, defaults to 'erb'.
     # :escape :: Use Roda's Erubis escaping support, which makes <tt><%= %></tt> escape output,
     #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
-    #            <tt><%= %></tt> tags.
+    #            <tt><%= %></tt> tags.  Can have a value of :erubi to use Erubi escaping support.
     # :escape_safe_classes :: String subclasses that should not be HTML escaped when used in
-    #                         <tt><%= %></tt> tags, when :escape is used. Can be an array for multiple classes.
-    # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape is used,
+    #                         <tt><%= %></tt> tags, when :escape=>true is used. Can be an array for multiple classes.
+    # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape=>true is used,
     #             overriding the default.  If given, object should respond to +escape_xml+ with
     #             a single argument and return an output string.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
@@ -146,7 +146,7 @@ class Roda
       OPTS={}.freeze
 
       def self.load_dependencies(app, opts=OPTS)
-        if opts[:escape]
+        if opts[:escape] && opts[:escape] != :erubi
           app.plugin :_erubis_escaping
         end
       end
@@ -199,7 +199,10 @@ class Roda
         if RUBY_VERSION >= "1.9" && !template_opts.has_key?(:default_encoding)
           template_opts[:default_encoding] = Encoding.default_external
         end
-        if opts[:escape]
+        if opts[:escape] == :erubi
+          require 'tilt/erubi'
+          template_opts[:escape] = true
+        elsif opts[:escape]
           template_opts[:engine_class] = ErubisEscaping::Eruby
 
           opts[:escaper] ||= if opts[:escape_safe_classes]

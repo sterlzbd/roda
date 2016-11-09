@@ -693,7 +693,8 @@ You can override the default rendering options by passing a hash to the plugin:
 
   class App < Roda
     plugin :render,
-      :escape => true,        # Automatically escape output in erb templates
+      :escape => true, # Automatically escape output in erb templates using Erubis
+                       # can use :erubi instead of true to use Erubi instead of Erubis
       :views => 'admin_views', # Default views directory
       :layout_opts => {:template=>'admin_layout',
                        :ext=>'html.erb'},    # Default layout template options
@@ -763,6 +764,8 @@ if you have helpers that already return escaped output using a
 string subclass instance.
 
 This support requires {Erubis}[http://www.kuwata-lab.com/erubis/].
+You can use <tt>:escape=>:erubi</tt> to use {Erubi}[https://github.com/jeremyevans/erubi],
+a simplified fork of Erubis.
 
 === Security Related HTTP Headers
 

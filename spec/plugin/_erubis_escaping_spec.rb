@@ -9,15 +9,17 @@ begin
   rescue LoadError
     # Tilt 1 support
   end
-
-  if defined?(Tilt::ErubisTemplate) && ::Tilt['erb'] != Tilt::ErubisTemplate
-    # Work around error where erubis isn't set as erb template handler
-    Tilt.register(Tilt::ErubisTemplate, 'erb')
-  end
 rescue LoadError
   warn "tilt or erubis not installed, skipping _erubis_escaping plugin test"  
 else
 describe "_erubis_escaping plugin" do
+  before do
+    if defined?(Tilt::ErubisTemplate) && ::Tilt['erb'] != Tilt::ErubisTemplate
+      # Set erubis as default erb template handler
+      Tilt.register(Tilt::ErubisTemplate, 'erb')
+    end
+  end
+
   it "should escape inside <%= %> and not inside <%== %>, and handle postfix conditionals" do
     app(:bare) do
       plugin :render, :escape=>true

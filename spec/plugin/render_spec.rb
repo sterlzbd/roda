@@ -549,3 +549,50 @@ describe "render plugin" do
 
 end
 end
+
+begin
+  require 'tilt'
+  require 'tilt/erubi'
+rescue LoadError
+  warn "tilt 2 or erubi not installed, skipping render :escape=>:erubi test"  
+else
+describe "_erubis_escaping plugin" do
+  before do
+    if defined?(Tilt::ErubiTemplate) && ::Tilt['erb'] != Tilt::ErubiTemplate
+      # Set erubi as default erb template handler
+      Tilt.register(Tilt::ErubiTemplate, 'erb')
+    end
+  end
+
+  it "should escape inside <%= %> and not inside <%== %>, and handle postfix conditionals" do
+    app(:bare) do
+      plugin :render, :escape=>:erubi
+
+      route do |r|
+        render(:inline=>'<%= "<>" %> <%== "<>" %><%= "<>" if false %>')
+      end
+    end
+
+    body.must_equal '&lt;&gt; <>'
+  end
+
+  it "should allow for per-branch escaping via set_view options" do
+    app(:bare) do
+      plugin :render, :escape=>:erubi
+      plugin :view_options
+
+      route do |r|
+        set_view_options :template_opts=>{:escape=>false}
+        r.is 'a' do
+          set_view_options :template_opts=>{:engine_class=>render_opts[:template_opts][:engine_class]}
+          render(:inline=>'<%= "<>" %>')
+        end
+        render(:inline=>'<%= "<>" %>')
+      end
+    end
+
+    body('/a').must_equal '&lt;&gt;'
+    body.must_equal '<>'
+  end
+end
+end
