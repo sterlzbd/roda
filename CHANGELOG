@@ -1,6 +1,6 @@
-= HEAD
+= 2.20.0 (2016-11-13)
 
-* Support :escape=>:erubi option in the render plugin to use the erubi template engine for escaping (jeremyevans)
+* Support :escape=>:erubi option in the render plugin to use the erubi template engine (jeremyevans)
 
 = 2.19.0 (2016-10-14)
 
