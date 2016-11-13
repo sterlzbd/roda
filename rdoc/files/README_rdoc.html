@@ -29,7 +29,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2016-08-12 09:05:15 -0700</span>
+          <span class='datetime'>2016-11-10 13:38:01 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -556,7 +556,7 @@
             <p>You can override the default rendering options by passing a hash to the
             plugin:</p>
             
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>,&#x000A;    :<span class="ruby-identifier">escape</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>,        <span class="ruby-comment"># Automatically escape output in erb templates</span>&#x000A;    :<span class="ruby-identifier">views</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;admin_views&#39;</span>, <span class="ruby-comment"># Default views directory</span>&#x000A;    :<span class="ruby-identifier">layout_opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">template=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;admin_layout&#39;</span>,&#x000A;                     :<span class="ruby-identifier">ext=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;html.erb&#39;</span>},    <span class="ruby-comment"># Default layout template options</span>&#x000A;    :<span class="ruby-identifier">template_opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">default_encoding=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;UTF-8&#39;</span>} <span class="ruby-comment"># Default template options</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>,&#x000A;    :<span class="ruby-identifier">escape</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>, <span class="ruby-comment"># Automatically escape output in erb templates using Erubis</span>&#x000A;                     <span class="ruby-comment"># can use :erubi instead of true to use Erubi instead of Erubis</span>&#x000A;    :<span class="ruby-identifier">views</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;admin_views&#39;</span>, <span class="ruby-comment"># Default views directory</span>&#x000A;    :<span class="ruby-identifier">layout_opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">template=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;admin_layout&#39;</span>,&#x000A;                     :<span class="ruby-identifier">ext=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;html.erb&#39;</span>},    <span class="ruby-comment"># Default layout template options</span>&#x000A;    :<span class="ruby-identifier">template_opts</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">default_encoding=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;UTF-8&#39;</span>} <span class="ruby-comment"># Default template options</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <h2 id="label-Sessions">Sessions<span><a href="#label-Sessions">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -616,7 +616,10 @@
             subclass instance.</p>
             
             <p>This support requires <a
-            href="http://www.kuwata-lab.com/erubis/">Erubis</a>.</p>
+            href="http://www.kuwata-lab.com/erubis/">Erubis</a>. You can use
+            <code>:escape=&gt;:erubi</code> to use <a
+            href="https://github.com/jeremyevans/erubi">Erubi</a>, a simplified fork of
+            Erubis.</p>
             
             <h3 id="label-Security+Related+HTTP+Headers">Security Related HTTP Headers<span><a href="#label-Security+Related+HTTP+Headers">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
