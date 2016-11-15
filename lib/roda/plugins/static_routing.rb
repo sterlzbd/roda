@@ -106,7 +106,6 @@ class Roda
         # instead having the routing tree handle the request.
         def call
           r = @_request
-          path_info = r.env['PATH_INFO']
           if route = self.class.static_route_for(r.request_method, r.path_info)
             catch(:halt){r.static_route(&route)}
           else

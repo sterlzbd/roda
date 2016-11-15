@@ -616,7 +616,7 @@ class Roda
 
           url_prefix = request.script_name if self.class.opts[:add_script_name]
 
-          if compiled = o[:compiled]
+          if o[:compiled]
             if ukey = _compiled_assets_hash(type, true)
               ["#{o[:compiled_asset_host]}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}"]
             else
