@@ -31,6 +31,7 @@ describe "chunked plugin" do
 
   it "accepts a block that is called after layout yielding but before content when streaming" do
     app(:chunked) do |r|
+      @h = nil
       chunked(:inline=>'m<%= @h %>', :layout=>{:inline=>'<%= @h %><%= yield %>t'}) do
         @h = 'h'
       end

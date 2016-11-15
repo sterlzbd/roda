@@ -4,7 +4,7 @@ describe "unescape_path_path plugin" do
   it "decodes URL-encoded routing path" do
     app(:unescape_path) do |r|
       r.on 'b' do
-        r.get /(.)/ do |a|
+        r.get(/(.)/) do |a|
           "#{a}-b"
         end
       end

@@ -69,8 +69,6 @@ describe "render plugin" do
 end
 
 describe "render plugin with :layout_opts=>{:merge_locals=>true}" do
-  h = {:a=>1, :b=>2, :c=>3, :d=>4}
-
   before do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :check_paths=>true, :locals=>{:a=>1, :b=>2, :c=>3, :d=>4, :e=>5}, :layout_opts=>{:inline=>'<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>|<%= f %>|<%= yield %>', :merge_locals=>true, :locals=>{:a=>-1, :f=>6}}
@@ -269,6 +267,7 @@ describe "render plugin" do
     app(:bare) do
       plugin :render, :engine_opts=>{'a.erb'=>{:outvar=>'@a'}}
       route do |r|
+        @a = nil
         r.is('a') do
           render(:inline=>'<%= @a.class.name %>', :engine=>'a.erb')
         end
@@ -344,6 +343,7 @@ describe "render plugin" do
         render(:inline=>template.dup, :locals=>{:b=>2, :c=>4})
       end
       r.is "c" do
+        @a = nil
         render(:inline=>template.dup, :locals=>{:c=>3})
       end
     end

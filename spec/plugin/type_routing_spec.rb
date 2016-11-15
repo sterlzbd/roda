@@ -52,7 +52,6 @@ describe "type_routing plugin" do
 
   it "works correctly in sub apps" do
     sup_app = app
-    b = sup_app.route_block
     @app = Class.new(sup_app)
     app.route do |r|
       r.run(sup_app)
