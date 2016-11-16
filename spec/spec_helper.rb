@@ -2,6 +2,11 @@ $:.unshift(File.expand_path("../lib", File.dirname(__FILE__)))
 
 require "rubygems"
 
+if ENV['WARNING']
+  require 'warning'
+  Warning.ignore([:missing_ivar, :method_redefined, :not_reached], File.dirname(File.dirname(__FILE__)))
+end
+
 if ENV['COVERAGE']
   require 'coverage'
   require 'simplecov'
