@@ -9,8 +9,8 @@ describe "drop_body plugin" do
 
     [101, 102, 204, 205, 304].each do  |i|
       body(i.to_s).must_equal ''
-      header('Content-Type', i.to_s).must_equal nil
-      header('Content-Length', i.to_s).must_equal nil
+      header('Content-Type', i.to_s).must_be_nil
+      header('Content-Length', i.to_s).must_be_nil
     end
 
     body('200').must_equal 'a'

@@ -378,7 +378,7 @@ describe "sinatra_helpers plugin" do
     end
 
     it "does not set the Content-Disposition header by default" do
-      header('Content-Disposition').must_equal nil
+      header('Content-Disposition').must_be_nil
     end
 
     it "sets the Content-Disposition header when :disposition set to 'attachment'" do

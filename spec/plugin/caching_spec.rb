@@ -12,7 +12,7 @@ describe 'response.cache_control' do
     app(:caching) do |r|
       response.cache_control({})
     end
-    header('Cache-Control').must_equal nil
+    header('Cache-Control').must_be_nil
   end
 end
 
@@ -39,8 +39,8 @@ describe 'response.finish' do
     app(:caching) do |r|
       response.status = 304
     end
-    header('Content-Type').must_equal nil
-    header('Content-Length').must_equal nil
+    header('Content-Type').must_be_nil
+    header('Content-Length').must_be_nil
   end
 
   it 'does not change non-304 responses' do
@@ -57,7 +57,7 @@ describe 'request.last_modified' do
     app(:caching) do |r|
       r.last_modified nil
     end
-    header('Last-Modified').must_equal nil
+    header('Last-Modified').must_be_nil
   end
 
   it 'does not change a status other than 200' do

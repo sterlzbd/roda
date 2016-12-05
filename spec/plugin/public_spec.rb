@@ -43,10 +43,10 @@ describe "public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Encoding', '/about/_test.erb').must_equal nil
+    header('Content-Encoding', '/about/_test.erb').must_be_nil
 
     body('/about.erb').must_equal File.read('spec/views/about.erb')
-    header('Content-Encoding', '/about.erb').must_equal nil
+    header('Content-Encoding', '/about.erb').must_be_nil
 
     meth = RUBY_VERSION >= '1.9' ? :binread : :read
     body('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.send(meth, 'spec/views/about/_test.erb.gz')

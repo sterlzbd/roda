@@ -357,7 +357,7 @@ describe "render plugin" do
     with_rack_env('development') do
       app(:render){}
     end
-    app.render_opts[:cache].must_equal nil
+    app.render_opts[:cache].must_be_nil
     app(:render){}
     app.render_opts[:cache].wont_equal nil
   end
@@ -374,7 +374,7 @@ describe "render plugin" do
     end
 
     body('/a').strip.must_equal "a"
-    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_equal nil
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_be_nil
     body('/b').strip.must_equal "a"
     app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_equal nil
   end
@@ -403,7 +403,7 @@ describe "render plugin" do
     end
 
     body('/a').strip.must_equal "iv-a"
-    app.render_opts[:cache][['iv', c, nil, nil, proca]].must_equal nil
+    app.render_opts[:cache][['iv', c, nil, nil, proca]].must_be_nil
     body('/b').strip.must_equal "iv-a"
     app.render_opts[:cache][['iv', c, nil, nil, proca]].wont_equal nil
   end

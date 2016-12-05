@@ -84,8 +84,8 @@ describe "mailer plugin" do
       end
     end
 
-    app.mail('/foo', 1, 2).must_equal nil
-    app.sendmail('/foo', 1, 2).must_equal nil
+    app.mail('/foo', 1, 2).must_be_nil
+    app.sendmail('/foo', 1, 2).must_be_nil
     deliveries.must_equal []
   end
 

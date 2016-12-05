@@ -16,7 +16,7 @@ describe "precompile_templates plugin" do
       end
     end
 
-    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_equal nil
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_be_nil
     app.precompile_templates 'spec/views/iv.erb'
     app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_equal nil
     app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].instance_variable_get(:@compiled_method)[[]].wont_equal nil
@@ -32,7 +32,7 @@ describe "precompile_templates plugin" do
       end
     end
 
-    app.render_opts[:cache][File.expand_path('spec/views/about.erb')].must_equal nil
+    app.render_opts[:cache][File.expand_path('spec/views/about.erb')].must_be_nil
     app.precompile_templates 'spec/views/about.erb', :locals=>[:title]
     app.render_opts[:cache][File.expand_path('spec/views/about.erb')].wont_equal nil
     app.render_opts[:cache][File.expand_path('spec/views/about.erb')].instance_variable_get(:@compiled_method)[[:title]].wont_equal nil
@@ -48,7 +48,7 @@ describe "precompile_templates plugin" do
       end
     end
 
-    app.render_opts[:cache][File.expand_path('spec/views/home.erb')].must_equal nil
+    app.render_opts[:cache][File.expand_path('spec/views/home.erb')].must_be_nil
     app.precompile_templates 'spec/views/h*.erb', :locals=>[:title, :name]
     app.render_opts[:cache][File.expand_path('spec/views/home.erb')].wont_equal nil
     app.render_opts[:cache][File.expand_path('spec/views/home.erb')].instance_variable_get(:@compiled_method)[[:name, :title]].wont_equal nil
@@ -64,7 +64,7 @@ describe "precompile_templates plugin" do
       end
     end
 
-    app.render_opts[:cache]['a'].must_equal nil
+    app.render_opts[:cache]['a'].must_be_nil
     app.precompile_templates :inline=>'a', :cache_key=>'a'
     app.render_opts[:cache]['a'].wont_equal nil
     app.render_opts[:cache]['a'].instance_variable_get(:@compiled_method)[[]].wont_equal nil

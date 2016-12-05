@@ -115,7 +115,7 @@ describe "error_handler plugin" do
     end
 
     header('Content-Type').must_equal 'text/html'
-    header('Foo').must_equal nil
+    header('Foo').must_be_nil
   end
 
   it "can set error via the plugin block" do

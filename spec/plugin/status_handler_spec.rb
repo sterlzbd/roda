@@ -68,7 +68,7 @@ describe "status_handler plugin" do
     end
 
     header('Content-Type').must_equal 'text/html'
-    header('Foo').must_equal nil
+    header('Foo').must_be_nil
   end
 
   it "does not modify behavior if status_handler is not called" do

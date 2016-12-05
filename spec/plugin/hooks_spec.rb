@@ -57,7 +57,7 @@ describe "hooks plugin" do
 
     proc{req}.must_raise(Roda::RodaError)
     a.pop.must_be_kind_of(Roda::RodaError)
-    a.pop.must_equal nil
+    a.pop.must_be_nil
   end
 
   it "handles multiple before and after blocks correctly" do

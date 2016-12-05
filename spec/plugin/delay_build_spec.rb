@@ -3,7 +3,7 @@ require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 describe "delay_build plugin" do 
   it "does not build rack app until app is called" do
     app(:delay_build){"a"}
-    app.instance_variable_get(:@app).must_equal nil
+    app.instance_variable_get(:@app).must_be_nil
     body.must_equal "a"
     # Work around minitest bug
     refute_equal app.instance_variable_get(:@app), nil

@@ -58,7 +58,7 @@ describe "response #finish" do
   it "should set Content-Length header" do
     app do |r|
       response.write 'a'
-      response['Content-Length'].must_equal nil
+      response['Content-Length'].must_be_nil
       throw :halt, response.finish
     end
 
@@ -71,8 +71,8 @@ describe "response #finish" do
       throw :halt, response.finish
     end
 
-    header('Content-Type').must_equal nil
-    header('Content-Length').must_equal nil
+    header('Content-Type').must_be_nil
+    header('Content-Length').must_be_nil
   end
 
   it "should not overwrite existing status" do
@@ -106,11 +106,11 @@ describe "response #finish_with_body" do
   it "should not set Content-Length header" do
     app do |r|
       response.write 'a'
-      response['Content-Length'].must_equal nil
+      response['Content-Length'].must_be_nil
       throw :halt, response.finish_with_body(['123'])
     end
 
-    header('Content-Length').must_equal nil
+    header('Content-Length').must_be_nil
   end
 
   it "should not overwrite existing status" do
