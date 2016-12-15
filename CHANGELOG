@@ -1,3 +1,7 @@
+= HEAD
+
+* Add handle_stream_error method to streaming plugin, for handling errors when using stream(:loop=>true) (jeremyevans)
+
 = 2.20.0 (2016-11-13)
 
 * Support :escape=>:erubi option in the render plugin to use the erubi template engine (jeremyevans)
