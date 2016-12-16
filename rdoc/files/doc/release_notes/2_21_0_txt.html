@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>2.20.0.txt</title>
+    <title>2.21.0.txt</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -23,13 +23,13 @@
   <body class='page'>
     <div class='file' id='wrapper'>
       <div class='header'>
-        <h1 class='name'>2.20.0.txt</h1>
+        <h1 class='name'>2.21.0.txt</h1>
         <div class='paths'>
-          doc/release_notes/2.20.0.txt
+          doc/release_notes/2.21.0.txt
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2016-11-15 12:34:14 -0800</span>
+          <span class='datetime'>2016-12-16 08:37:32 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -38,9 +38,21 @@
             
             <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>
-            <p>The render plugin now supports :erubi as an :escape option value, which
-            will change the plugin to use Erubi instead of Erubis as the template
-            processor.  Erubi is a simplified Erubis fork.</p>
+            <p>The streaming plugin now supports a handle_stream_error method to handle
+            exceptions when using stream(:loop=&gt;true).  This method takes the
+            exception and the stream object, and can be used to log errors, output
+            errors into the stream, close the stream, ignore errors, or any other error
+            handling.</p>
+            </li></ul>
+            
+            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>A couple of unused variable assignments have been removed, providing a
+            minor speedup.</p>
+            </li><li>
+            <p>The specs no longer produce deprecation warnings when using Minitest 5.10.</p>
+            </li><li>
+            <p>Some verbose warnings have been removed from the specs.</p>
             </li></ul>
           </div>
           <div id='context'>
