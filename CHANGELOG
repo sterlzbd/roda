@@ -1,4 +1,4 @@
-= HEAD
+= 2.21.0 (2016-12-16)
 
 * Add handle_stream_error method to streaming plugin, for handling errors when using stream(:loop=>true) (jeremyevans)
 
