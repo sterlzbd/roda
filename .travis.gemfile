@@ -13,6 +13,7 @@ end
 
 if RUBY_VERSION < '1.9'
   gem 'mime-types', '< 2'
+  gem 'rack_csrf', '< 2.6'
 else
   if RUBY_VERSION < '2.0'
     gem 'mime-types', '< 3'
