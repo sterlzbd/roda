@@ -232,12 +232,12 @@ Here's an example showcasing how different matchers work:
       end
 
       # GET /post/2011/02/16/hello
-      r.get "post/:y/:m/:d/:slug" do |y, m, d, slug|
+      r.get "post", :y, :m, :d, :slug do |y, m, d, slug|
         "#{y}-#{m}-#{d} #{slug}" #=> "2011-02-16 hello"
       end
 
       # GET /username/foobar branch
-      r.on "username/:username", :method=>:get do |username|
+      r.on "username", :username, :method=>:get do |username|
         user = User.find_by_username(username)
 
         # GET /username/foobar/posts
@@ -290,9 +290,9 @@ If a string contains any slashes, it matches one additional segment for each sla
   "foo/bar" # matches "/foo/bar"
   "foo/bar" # does not match "/foo/bard"
 
-If a string contains a colon followed by any <tt>\\w</tt> characters,
-the colon and remaining <tt>\\w</tt> characters match any nonempty segment
-that contains at least one character:
+For backwards compatibility, if a string contains a colon followed by any
+<tt>\\w</tt> characters, the colon and remaining <tt>\\w</tt> characters match any
+nonempty segment that contains at least one character:
 
   "foo/:id" # matches "/foo/bar", "/foo/baz", etc.
   "foo/:id" # does not match "/fo/bar"
@@ -302,22 +302,17 @@ You can use multiple colons in a string:
   ":x/:y" # matches "/foo/bar", "/bar/foo" etc.
   ":x/:y" # does not match "/foo", "/bar/"
 
-You can prefix colons:
+Note that instead of using colons in strings, it is recommended to use separate
+symbol arguments, as it is faster and simpler:
 
-  "foo:x/bar:y" # matches "/food/bard", "/fool/bart", etc.
-  "foo:x/bar:y" # does not match "/foo/bart", "/fool/bar", etc.
+  "foo", :id # instead of "foo/:id"
+  :x, :y     # instead of ":x/:y"
 
-If any colons are used, the block will yield one argument
-for each segment matched containing the matched text, so:
+It is possible in future versions of Roda, colons will not be treated specially
+in strings, and will just match a literal colon character.
 
-  "foo:x/:y" # matching "/fool/bar" yields "l", "bar"
-
-Colons that are not followed by a <tt>\\w</tt> character are matched literally:
-
-  ":/a" # matches "/:/a"
-
-Note that other than colons, strings do no handle regular expression syntax, the
-string is matched verbatim:
+Note that other than colons followed by a <tt>\\w</tt> character, strings do no
+handle regular expression syntax, they are matched verbatim:
 
   "\\d+(/\\w+)?" # matches "/\d+(/\w+)?"
   "\\d+(/\\w+)?" # does not match "/123/abc"
