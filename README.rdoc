@@ -93,9 +93,6 @@ Here's a simple application, showing how the routing tree works:
 
 Here's a breakdown of what is going on in the block above:
 
-After requiring the library and subclassing Roda, the +use+ method is called.
-This loads a Rack middleware into the current application.
-
 The +route+ block is called whenever a new request comes in. 
 It is yielded an instance of a subclass of <tt>Rack::Request</tt>
 with some additional methods for matching routes.
