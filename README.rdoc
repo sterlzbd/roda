@@ -56,8 +56,6 @@ Here's a simple application, showing how the routing tree works:
   require "roda"
 
   class App < Roda
-    use Rack::Session::Cookie, :secret => ENV['SECRET']
-
     route do |r|
       # GET / request
       r.root do
