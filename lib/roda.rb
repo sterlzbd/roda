@@ -750,12 +750,19 @@ class Roda
           throw :halt, response.finish
         end
 
-        # The body to use for the response if the response does not return
+        # The body to use for the response if the response does not already have
         # a body.  By default, a String is returned directly, and nil is
         # returned otherwise.
         def block_result_body(result)
-          if result.is_a?(String)
+          case result
+          when String
             result
+          when nil, false
+            # nothing
+          else
+            if roda_class.opts[:unsupported_block_result] == :raise
+              raise RodaError, "unsupported block result: #{result.inspect}"
+            end
           end
         end
 
@@ -976,6 +983,7 @@ class Roda
         def redirect(path, status = 302)
           @headers[LOCATION] = path
           @status  = status
+          nil
         end
 
         # Return the Roda class related to this response.

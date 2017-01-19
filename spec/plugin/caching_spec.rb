@@ -38,6 +38,7 @@ describe 'response.finish' do
   it 'removes Content-Type and Content-Length for 304 responses' do
     app(:caching) do |r|
       response.status = 304
+      nil
     end
     header('Content-Type').must_be_nil
     header('Content-Length').must_be_nil
@@ -46,6 +47,7 @@ describe 'response.finish' do
   it 'does not change non-304 responses' do
     app(:caching) do |r|
       response.status = 200
+      nil
     end
     header('Content-Type').must_equal 'text/html'
     header('Content-Length').must_equal '0'

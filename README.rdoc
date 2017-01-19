@@ -631,12 +631,18 @@ The plugins that ship with Roda freeze their settings and only allow modificatio
 to their settings by reloading the plugin, and external plugins are encouraged
 to follow this approach.
 
-The following options are respected by multiple plugins:
+The following options are respected by the default library or multiple plugins:
 
 :add_script_name :: Prepend the SCRIPT_NAME for the request to paths.  This is
                     useful if you mount the app as a path under another app.
 :root :: Set the root path for the app.  This defaults to the current working
          directory of the process.
+:unsupported_block_result :: If set to :raise, raises an error if a match or
+                             route block returns an object that is not handled.
+                             By default, String, nil, and false are handled,
+                             and other types can be handled via plugins. Setting
+                             this option can alert you to possible issues in your
+                             application.
 
 There may be other options supported by individual plugins, if so it will be
 mentioned in the documentation for the plugin.

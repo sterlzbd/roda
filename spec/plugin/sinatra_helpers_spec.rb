@@ -507,7 +507,7 @@ describe "sinatra_helpers plugin" do
   end
 
   it 'logger logs to rack.logger' do
-    sin_app{logger.info "foo"}
+    sin_app{logger.info "foo"; nil}
     o = Object.new
     def o.method_missing(*a)
       (@a ||= []) << a

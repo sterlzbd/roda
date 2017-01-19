@@ -5,6 +5,7 @@ describe "symbol_status plugin" do
     app(:symbol_status) do |r|
       r.on do
         response.status = :unauthorized
+        nil
       end
     end
 
@@ -15,6 +16,7 @@ describe "symbol_status plugin" do
     app(:symbol_status) do |r|
       r.on do
         response.status = 204
+        nil
       end
     end
 

@@ -94,6 +94,7 @@ class Roda
                   instance_exec(*a, &blk)
                 end
               end
+              nil
             end
           else
             result

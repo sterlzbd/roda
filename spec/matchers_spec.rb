@@ -700,3 +700,45 @@ describe "route block that returns string" do
     body.must_equal '+1'
   end
 end
+
+describe "app with :unsupported_block_result => :raise option" do
+  def app_value(v)
+    app(:bare) do
+      opts[:unsupported_block_result] = :raise
+      route do |r|
+        r.is 'a' do v end
+        v
+      end
+    end
+  end
+
+  it "should handle String as body" do
+    app_value '1'
+    status.must_equal 200
+    body.must_equal '1'
+    status('/a').must_equal 200
+    body('/a').must_equal '1'
+  end
+
+  it "should handle nil and false as not found" do
+    app_value nil
+    status.must_equal 404
+    body.must_equal ''
+    status('/a').must_equal 404
+    body('/a').must_equal ''
+  end
+
+  it "should handle false as not found" do
+    app_value false
+    status.must_equal 404
+    body.must_equal ''
+    status('/a').must_equal 404
+    body('/a').must_equal ''
+  end
+
+  it "should raise RodaError for other types" do
+    app_value Object.new
+    proc{body}.must_raise Roda::RodaError
+    proc{body('/a')}.must_raise Roda::RodaError
+  end
+end
