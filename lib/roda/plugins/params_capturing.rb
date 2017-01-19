@@ -73,7 +73,7 @@ class Roda
           # Add the capture names from this string to list of param
           # capture names if param capturing.
           def _match_string(str)
-            if pc = @_params_captures
+            if (pc = @_params_captures) && placeholder_string_matcher?
               pc.concat(str.scan(STRING_PARAM_CAPTURE_REGEXP))
             end
             super
@@ -86,7 +86,7 @@ class Roda
           STRING_PARAM_CAPTURE_RANGE = 1..-1
 
           def _match_string(str)
-            if pc = @_params_captures
+            if (pc = @_params_captures) && placeholder_string_matcher?
               pc.concat(str.scan(/:\w+/).map{|s| s[STRING_PARAM_CAPTURE_RANGE]})
             end
             super

@@ -3,7 +3,7 @@ require File.expand_path("spec_helper", File.dirname(__FILE__))
 describe "r.run" do
   it "should allow composition of apps" do
     a = app do |r|
-      r.on "services/:id" do |id|
+      r.on "services", :id do |id|
         "View #{id}"
       end
     end

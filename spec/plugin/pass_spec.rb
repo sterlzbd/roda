@@ -13,7 +13,7 @@ describe "pass plugin" do
         id
       end
 
-      r.on ":x/:y" do |x, y|
+      r.on :x, :y do |x, y|
         x + y
       end
     end

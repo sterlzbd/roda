@@ -136,10 +136,30 @@ describe "matchers" do
         id
       end
     end
+    app.opts[:verbatim_string_matcher] = false
 
     body('/posts/123').must_equal '123'
     status('/post/123').must_equal 404
     body('/responses-123').must_equal '123'
+  end
+
+  it "should not handle string with embedded param if :verbatim_string_matcher option is set" do
+    app do |r|
+      r.on "posts/:id" do
+        '1'
+      end
+
+      r.on "responses-:id" do
+        '2'
+      end
+    end
+    app.opts[:verbatim_string_matcher] = true
+
+    status('/post/123').must_equal 404
+    status('/posts/123').must_equal 404
+    body('/posts/:id').must_equal '1'
+    status('/responses-123').must_equal 404
+    body('/responses-:id').must_equal '2'
   end
 
   it "should handle multiple params in single string" do
@@ -148,6 +168,7 @@ describe "matchers" do
         uid + id
       end
     end
+    app.opts[:verbatim_string_matcher] = false
 
     body("/u/jdoe/posts/123").must_equal 'jdoe123'
     status("/u/jdoe/pots/123").must_equal 404
@@ -159,6 +180,7 @@ describe "matchers" do
         uid + id
       end
     end
+    app.opts[:verbatim_string_matcher] = false
 
     body("/u/jdoe/posts?/123").must_equal 'jdoe123'
     status("/u/jdoe/post/123").must_equal 404
@@ -170,6 +192,7 @@ describe "matchers" do
         uid + id
       end
     end
+    app.opts[:verbatim_string_matcher] = false
 
     body("/u/:/jdoe/posts/:123").must_equal 'jdoe123'
     status("/u/a/jdoe/post/b123").must_equal 404

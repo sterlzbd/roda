@@ -19,7 +19,13 @@ class Roda
     # Then the route will only if the path is +/foobar123+, but not if it is
     # +/foo+, +/FooBar123+, or +/foobar_123+.
     #
-    # Note that this feature does not apply to just symbols, but also to
+    # By default, this plugin sets up the following symbol matchers:
+    #
+    # :d :: <tt>/(\d+)/</tt>, a decimal segment
+    # :rest :: <tt>/(.*)/</tt>, all remaining characters, if any
+    # :w :: <tt>/(\w+)/</tt>, a alphanumeric segment
+    #
+    # If placeholder string matchers are supported, this feature also applies to
     # embedded colons in strings, so the following:
     #
     #   r.on "users/:username" do
@@ -29,17 +35,16 @@ class Roda
     # Would match +/users/foobar123+, but not +/users/foo+, +/users/FooBar123+,
     # or +/users/foobar_123+.
     #
-    # By default, this plugin sets up the following symbol matchers:
+    # If placeholder string matchers are supported, it also adds the following
+    # symbol matchers:
     #
-    # :d :: <tt>/(\d+)/</tt>, a decimal segment
     # :format :: <tt>/(?:\.(\w+))?/</tt>, an optional format/extension
     # :opt :: <tt>/(?:\/([^\/]+))?</tt>, an optional segment
     # :optd :: <tt>/(?:\/(\d+))?</tt>, an optional decimal segment
-    # :rest :: <tt>/(.*)/</tt>, all remaining characters, if any
-    # :w :: <tt>/(\w+)/</tt>, a alphanumeric segment
     #
-    # Note that because of how segment matching works, :format, :opt, and :optd
-    # are only going to work inside of a string, like this:
+    # These are only added when placeholder string matchers are supported,
+    # because they only make sense when used inside of a string, due to how
+    # segment matching works.  Example:
     #
     #   r.is "album:opt" do |id| end
     #   # matches /album (yielding nil) and /album/foo (yielding "foo")
@@ -50,11 +55,14 @@ class Roda
     module SymbolMatchers
       def self.configure(app)
         app.symbol_matcher(:d, /(\d+)/)
-        app.symbol_matcher(:format, /(?:\.(\w+))?/)
-        app.symbol_matcher(:opt, /(?:\/([^\/]+))?/)
-        app.symbol_matcher(:optd, /(?:\/(\d+))?/)
-        app.symbol_matcher(:rest, /(.*)/)
         app.symbol_matcher(:w, /(\w+)/)
+        app.symbol_matcher(:rest, /(.*)/)
+
+        if !app.opts[:verbatim_string_matcher]
+          app.symbol_matcher(:format, /(?:\.(\w+))?/)
+          app.symbol_matcher(:opt, /(?:\/([^\/]+))?/)
+          app.symbol_matcher(:optd, /(?:\/(\d+))?/)
+        end
       end
 
       module ClassMethods

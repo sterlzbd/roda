@@ -683,7 +683,7 @@ class Roda
         # string so that regexp metacharacters are not matched, and recognizes
         # colon tokens for placeholders.
         def _match_string(str)
-          if str.index(COLON)
+          if str.index(COLON) && placeholder_string_matcher?
             consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})
           else
             rp = @remaining_path
@@ -860,6 +860,12 @@ class Roda
           else
             type.to_s.upcase == @env[REQUEST_METHOD]
           end
+        end
+
+        # Whether string matchers are used verbatim, without handling
+        # placeholders via colons.
+        def placeholder_string_matcher?
+          !roda_class.opts[:verbatim_string_matcher]
         end
       end
 

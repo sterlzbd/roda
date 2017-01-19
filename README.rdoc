@@ -648,6 +648,11 @@ The following options are respected by the default library or multiple plugins:
                         Array, Proc, true, false, and nil are handled.  Setting
                         this option can alert you to possible issues in your
                         application.
+:verbatim_string_matcher :: If set to true, makes all string matchers match
+                            verbatim strings, disallowing the use of colons
+                            for placeholders.  In general, it is recommended
+                            to use separate symbol matchers instead of
+                            embedding placeholders in string matchers.
 
 There may be other options supported by individual plugins, if so it will be
 mentioned in the documentation for the plugin.
