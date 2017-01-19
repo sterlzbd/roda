@@ -837,7 +837,12 @@ class Roda
             _match_array(matcher)
           when Proc
             matcher.call
+          when true, false, nil
+            matcher
           else
+            if roda_class.opts[:unsupported_matcher] == :raise
+              raise RodaError, "unsupported matcher: #{matcher.inspect}"
+            end
             matcher
           end
         end

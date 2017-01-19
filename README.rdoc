@@ -643,6 +643,11 @@ The following options are respected by the default library or multiple plugins:
                              and other types can be handled via plugins. Setting
                              this option can alert you to possible issues in your
                              application.
+:unsupported_matcher :: If set to :raise, raises an error if a matcher is used that
+                        is not handled.  By default, String, Symbol, Regexp, Hash,
+                        Array, Proc, true, false, and nil are handled.  Setting
+                        this option can alert you to possible issues in your
+                        application.
 
 There may be other options supported by individual plugins, if so it will be
 mentioned in the documentation for the plugin.

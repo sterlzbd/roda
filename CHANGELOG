@@ -1,5 +1,7 @@
 = master
 
+* Add support for :unsupported_matcher => :raise option, for raising on unsupported matcher values (jeremyevans)
+
 * Add support for :unsupported_block_result => :raise option, for raising on unsupported route/match block return values (jeremyevans)
 
 = 2.21.0 (2016-12-16)

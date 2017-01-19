@@ -286,6 +286,49 @@ describe "r.on" do
     body.must_equal '+1'
   end
 
+  it "does not execute on false" do
+    app do |r|
+      r.on false do
+        "+1"
+      end
+    end
+
+    status.must_equal 404
+  end
+
+  it "does not execute on nil" do
+    app do |r|
+      r.on nil do
+        "+1"
+      end
+    end
+
+    status.must_equal 404
+  end
+
+  it "executes on arbitrary object" do
+    app do |r|
+      r.on Object.new do
+        "+1"
+      end
+    end
+
+    body.must_equal '+1'
+  end
+
+  it "raises on arbitrary object if :unsupported_matcher => :raise" do
+    app(:bare) do 
+      opts[:unsupported_matcher] = :raise
+      route do |r|
+        r.on Object.new do
+          "+1"
+        end
+      end
+    end
+
+    proc{body}.must_raise Roda::RodaError
+  end
+
   it "executes on non-false" do
     app do |r|
       r.on "123" do
