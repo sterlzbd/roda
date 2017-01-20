@@ -44,7 +44,7 @@ class Roda
     # block will be delayed until rendering the content template.  This is
     # useful if you want to delay execution for all routes under a branch:
     #
-    #   r.on 'albums/:d' do |album_id|
+    #   r.on 'albums', :d do |album_id|
     #     delay do
     #       @album = Album[album_id]
     #     end

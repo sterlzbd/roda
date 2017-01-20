@@ -3,7 +3,7 @@
 #
 class Roda
   module RodaPlugins
-    # The params_capturing plugin makes string and symbol matchers
+    # The params_capturing plugin makes symbol matchers
     # update the request params with the value of the captured segments,
     # using the matcher as the key:
     #
@@ -11,7 +11,7 @@ class Roda
     #
     #   route do |r|
     #     # GET /foo/123/abc/67
-    #     r.on("foo/:bar/:baz", :quux) do
+    #     r.on("foo", :bar, :baz, :quux) do
     #       r[:bar] #=> '123'
     #       r[:baz] #=> 'abc'
     #       r[:quux] #=> '67'
@@ -23,10 +23,9 @@ class Roda
     # or strings.
     #
     # All matchers will update the request params by adding all
-    # captured segments to the +captures+ key, including
-    # symbol and string matchers:
+    # captured segments to the +captures+ key:
     #
-    #   r.on(:x, /(\d+)\/(\w+)/, ':y') do
+    #   r.on(:x, /(\d+)\/(\w+)/, :y) do
     #     r[:x] #=> nil
     #     r[:y] #=> nil
     #     r[:captures] #=> ["foo", "123", "abc", "67"]
@@ -52,6 +51,9 @@ class Roda
     # Also note that the param keys are actually stored in +r.params+ as
     # strings and not symbols (<tt>r[]</tt> converts the argument
     # to a string before looking it up in +r.params+).
+    #
+    # This plugin will also handle string matchers if placeholders in
+    # string matchers are supported.
     #
     # Also note that this plugin will not work correctly if you are using
     # the symbol_matchers plugin with custom symbol matching and are using
