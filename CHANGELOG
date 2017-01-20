@@ -1,4 +1,4 @@
-= master
+= 2.22.0 (2017-01-20)
 
 * Add support for :verbatim_string_matcher option, for making all string matchers match verbatim (jeremyevans)
 
