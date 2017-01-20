@@ -52,31 +52,36 @@
             it is <code>/foo</code>, <code>/FooBar123</code>, or
             <code>/foobar_123</code>.</p>
             
-            <p>Note that this feature does not apply to just symbols, but also to embedded
-            colons in strings, so the following:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users/:username&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Would match <code>/users/foobar123</code>, but not <code>/users/foo</code>,
-            <code>/users/FooBar123</code>, or <code>/users/foobar_123</code>.</p>
-            
             <p>By default, this plugin sets up the following symbol matchers:</p>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>:d </td><td>
             <p><code>/(\d+)/</code>, a decimal segment</p>
-            </td></tr><tr><td class='label'>:format </td><td>
-            <p><code>/(?:\.(\w+))?/</code>, an optional format/extension</p>
-            </td></tr><tr><td class='label'>:opt </td><td>
-            <p><code>/(?:\/([^\/]+))?</code>, an optional segment</p>
-            </td></tr><tr><td class='label'>:optd </td><td>
-            <p><code>/(?:\/(\d+))?</code>, an optional decimal segment</p>
             </td></tr><tr><td class='label'>:rest </td><td>
             <p><code>/(.*)/</code>, all remaining characters, if any</p>
             </td></tr><tr><td class='label'>:w </td><td>
             <p><code>/(\w+)/</code>, a alphanumeric segment</p>
             </td></tr></tbody></table>
             
-            <p>Note that because of how segment matching works, :format, :opt, and :optd
-            are only going to work inside of a string, like this:</p>
+            <p>If placeholder string matchers are supported, this feature also applies to
+            embedded colons in strings, so the following:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users/:username&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Would match <code>/users/foobar123</code>, but not <code>/users/foo</code>,
+            <code>/users/FooBar123</code>, or <code>/users/foobar_123</code>.</p>
+            
+            <p>If placeholder string matchers are supported, it also adds the following
+            symbol matchers:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:format </td><td>
+            <p><code>/(?:\.(\w+))?/</code>, an optional format/extension</p>
+            </td></tr><tr><td class='label'>:opt </td><td>
+            <p><code>/(?:\/([^\/]+))?</code>, an optional segment</p>
+            </td></tr><tr><td class='label'>:optd </td><td>
+            <p><code>/(?:\/(\d+))?</code>, an optional decimal segment</p>
+            </td></tr></tbody></table>
+            
+            <p>These are only added when placeholder string matchers are supported,
+            because they only make sense when used inside of a string, due to how
+            segment matching works.  Example:</p>
             
             <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;album:opt&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span> <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># matches /album (yielding nil) and /album/foo (yielding &quot;foo&quot;)</span>&#x000A;<span class="ruby-comment"># does not match /album/ or /album/foo/bar</span></pre>
             
@@ -115,7 +120,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 50</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:d</span>, <span class="ruby-regexp">/(\d+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:format</span>, <span class="ruby-regexp">/(?:\.(\w+))?/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:opt</span>, <span class="ruby-regexp">/(?:\/([^\/]+))?/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:optd</span>, <span class="ruby-regexp">/(?:\/(\d+))?/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:rest</span>, <span class="ruby-regexp">/(.*)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:w</span>, <span class="ruby-regexp">/(\w+)/</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:d</span>, <span class="ruby-regexp">/(\d+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:w</span>, <span class="ruby-regexp">/(\w+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:rest</span>, <span class="ruby-regexp">/(.*)/</span>)&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:verbatim_string_matcher</span>]&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:format</span>, <span class="ruby-regexp">/(?:\.(\w+))?/</span>)&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:opt</span>, <span class="ruby-regexp">/(?:\/([^\/]+))?/</span>)&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:optd</span>, <span class="ruby-regexp">/(?:\/(\d+))?/</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

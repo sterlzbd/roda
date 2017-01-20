@@ -37,8 +37,6 @@
 require "roda"
 
 class App < Roda
-  use Rack::Session::Cookie, :secret => ENV['SECRET']
-
   route do |r|
     # GET / request
     r.root do
@@ -71,6 +69,8 @@ class App < Roda
     end
   end
 end
+
+run App.freeze.app
 </code></pre>
 </div>
 
