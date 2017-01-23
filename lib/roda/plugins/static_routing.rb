@@ -56,9 +56,9 @@ class Roda
       module ClassMethods
         # Freeze the static route metadata when freezing the app.
         def freeze
-          super
           opts[:static_routes].freeze
           opts[:static_routes].each_value(&:freeze)
+          super
         end
 
         # Duplicate static route metadata in subclass.
