@@ -23,11 +23,11 @@ For a small application, the following directory layout is recommended:
   views/
 
 +app_name.rb+ should contain the Roda application, and should reflect the name of your application.
-So if your application is named +FooBar+, you should use +foo_bar.rb+.
+So, if your application is named +FooBar+, you should use +foo_bar.rb+.
 
 +views/+ should contain your template files.  This assumes you are using the +render+ plugin
 and server-side rendering.  If you are creating a single page application and just serving
-JSON, then you won't need a +views+ directory.  For small applications, all view files should
+JSON, then you won't need a +views+ directory.  For small applications, all view files should be
 in the +views+ directory.
 
 +public/+ should contain any static files that should be served directly by the webserver.
