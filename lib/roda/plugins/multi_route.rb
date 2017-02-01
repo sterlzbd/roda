@@ -9,8 +9,8 @@ class Roda
     # and if the named route does handle the request, the response returned by
     # the named route will be returned.
     #
-    # In addition, this also adds the +r.multi_route+ method, which will assume
-    # check if the first segment in the path matches a named route, and dispatch
+    # In addition, this plugin adds the +r.multi_route+ method, which will check
+    # if the first segment in the path matches a named route, and dispatch
     # to that named route.
     #
     # Example:
