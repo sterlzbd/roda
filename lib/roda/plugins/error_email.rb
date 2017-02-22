@@ -38,7 +38,12 @@ class Roda
         :emailer=>lambda{|h| Net::SMTP.start(h[:host]){|s| s.send_message(h[:message], h[:from], h[:to])}},
         # :nocov:
         :default_headers=>lambda do |h, e|
-          {'From'=>h[:from], 'To'=>h[:to], 'Subject'=>"#{h[:prefix]}#{e.class}: #{e.message}"}
+          subject = if e.respond_to?(:message)
+            "#{e.class}: #{e.message}"
+          else
+            e.to_s
+          end
+          {'From'=>h[:from], 'To'=>h[:to], 'Subject'=>"#{h[:prefix]}#{subject}"}
         end,
         :body=>lambda do |s, e|
           format = lambda{|h| h.map{|k, v| "#{k.inspect} => #{v.inspect}"}.sort.join("\n")}
@@ -47,14 +52,21 @@ class Roda
           message << <<END
 Path: #{s.request.path}
 
+END
+          if e.respond_to?(:backtrace)
+            message << <<END
 Backtrace:
 
 #{e.backtrace.join("\n")}
+END
+          end
 
+          message << <<END
 ENV:
 
 #{format[s.env]}
 END
+
           unless s.request.params.empty?
             message << <<END
 
