@@ -106,12 +106,18 @@ END
         # Send an email for the given error.
         def error_email(e)
           email_opts = self.class.opts[:error_email].dup
+          email_opts[:message] = error_email_content(e)
+          email_opts[:emailer].call(email_opts)
+        end
+
+        # The content of the email to send, include the headers and the body.
+        def error_email_content(e)
+          email_opts = self.class.opts[:error_email]
           headers = email_opts[:default_headers].call(email_opts, e)
           headers = Hash[headers].merge!(email_opts[:headers])
           headers = headers.map{|k,v| "#{k}: #{v.gsub(/\r?\n/m, "\r\n ")}"}.sort.join("\r\n")
           body = email_opts[:body].call(self, e)
-          email_opts[:message] = "#{headers}\r\n\r\n#{body}"
-          email_opts[:emailer].call(email_opts)
+          "#{headers}\r\n\r\n#{body}"
         end
       end
     end

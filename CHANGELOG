@@ -1,5 +1,7 @@
 = master
 
+* Add error_email_content method to error_email plugin (jeremyevans)
+
 * Make error_email method in error_email plugin support non-exception arguments (jeremyevans)
 
 * Make Roda.freeze in the static_routing plugin return self (jeremyevans)
