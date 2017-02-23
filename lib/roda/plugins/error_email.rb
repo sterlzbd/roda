@@ -25,6 +25,8 @@ class Roda
     # The subject of the error email shows the exception class and message.
     # The body of the error email shows the backtrace of the error and the
     # request environment, as well the request params and session variables (if any).
+    # You can also call error_email with a plain string instead of an exception,
+    # in which case the string is used as the subject, and no backtrace is included.
     #
     # Note that emailing on every error as shown above is only appropriate
     # for low traffic web applications.  For high traffic web applications,
@@ -103,20 +105,23 @@ END
       end
 
       module InstanceMethods
-        # Send an email for the given error.
-        def error_email(e)
+        # Send an email for the given error.  +exception+ is usually an exception
+        # instance, but it can be a plain string which is used as the subject for
+        # the email.
+        def error_email(exception)
           email_opts = self.class.opts[:error_email].dup
-          email_opts[:message] = error_email_content(e)
+          email_opts[:message] = error_email_content(exception)
           email_opts[:emailer].call(email_opts)
         end
 
         # The content of the email to send, include the headers and the body.
-        def error_email_content(e)
+        # Takes the same argument as #error_email.
+        def error_email_content(exception)
           email_opts = self.class.opts[:error_email]
-          headers = email_opts[:default_headers].call(email_opts, e)
+          headers = email_opts[:default_headers].call(email_opts, exception)
           headers = Hash[headers].merge!(email_opts[:headers])
           headers = headers.map{|k,v| "#{k}: #{v.gsub(/\r?\n/m, "\r\n ")}"}.sort.join("\r\n")
-          body = email_opts[:body].call(self, e)
+          body = email_opts[:body].call(self, exception)
           "#{headers}\r\n\r\n#{body}"
         end
       end
