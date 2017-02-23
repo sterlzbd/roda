@@ -48,9 +48,7 @@ class Roda
     #
     # :allowed_paths :: Set the template paths to allow if +:check_paths+ is true.
     #                   Defaults to the +:views+ directory.
-    # :cache :: nil/false to not cache templates (useful for development), defaults
-    #           to true unless RACK_ENV is development to automatically use the
-    #           default template cache.
+    # :cache :: nil/false to disallow template caching completely.
     # :cache_class :: A class to use as the template cache instead of the default.
     # :check_paths :: Check template paths start with one of the entries in +:allowed_paths+,
     #                 and raise a RodaError if the path doesn't.
@@ -64,7 +62,9 @@ class Roda
     # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape=>true is used,
     #             overriding the default.  If given, object should respond to +escape_xml+ with
     #             a single argument and return an output string.
-    # :explicit_cache :: Only use the template cache if the :cache option is provided when rendering.
+    # :explicit_cache :: Only use the template cache if the :cache option is provided when rendering
+    #           (useful for development). Defaults to true if RACK_ENV is development, allowing explicit
+    #           caching of specific templates, but not caching by default.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
     #            with the :template or :inline options.
     # :layout_opts :: The options to use when rendering the layout, if different
@@ -166,13 +166,15 @@ class Roda
         opts[:allowed_paths] ||= [opts[:views]].freeze
         opts[:allowed_paths] = opts[:allowed_paths].map{|f| ::File.expand_path(f)}.uniq.freeze
 
-        if opts.fetch(:cache, ENV['RACK_ENV'] != 'development')
+        if opts.fetch(:cache, true)
           if cache_class = opts[:cache_class]
             opts[:cache] = cache_class.new
           else
             opts[:cache] = app.thread_safe_cache
           end
         end
+
+        opts[:explicit_cache] = ENV['RACK_ENV'] == 'development' unless opts.has_key?(:explicit_cache)
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
         opts[:layout_opts][:_is_layout] = true

@@ -1,5 +1,7 @@
 = master
 
+* In development mode, default to :explicit_cache=>true, :cache=>true instead of :cache=>false (jeremyevans)
+
 * Add :explicit_cache render plugin option, to only cache templates if the :cache option is given to render/view (jeremyevans)
 
 * Add error_email_content method to error_email plugin (jeremyevans)
