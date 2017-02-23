@@ -1,5 +1,7 @@
 = master
 
+* Add :inherit_cache render plugin option, to create a copy of the cache for subclasses, instead of using an empty cache (jeremyevans)
+
 * In development mode, default to :explicit_cache=>true, :cache=>true instead of :cache=>false (jeremyevans)
 
 * Add :explicit_cache render plugin option, to only cache templates if the :cache option is given to render/view (jeremyevans)

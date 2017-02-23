@@ -488,23 +488,36 @@ describe "render plugin" do
     body.must_equal "1-2"
   end
 
-  it "render_opts inheritance" do
+  it "should dup render_opts when subclasses, including an empty cache" do
     c = Class.new(Roda)
     c.plugin :render
+    c.render_opts[:cache][:foo] = 1
     sc = Class.new(c)
 
     c.render_opts.wont_be_same_as(sc.render_opts)
     c.render_opts[:cache].wont_be_same_as(sc.render_opts[:cache])
+    sc.render_opts[:cache][:foo].must_be_nil
   end
 
-  it "render plugin call should not override options" do
+  it "should use same render_opts as superclass when inheriting if :inherit_cache option is used" do
+    c = Class.new(Roda)
+    c.plugin :render, :inherit_cache=>true
+    c.render_opts[:cache][:foo] = 1
+    sc = Class.new(c)
+
+    c.render_opts.wont_be_same_as(sc.render_opts)
+    c.render_opts[:cache].wont_be_same_as(sc.render_opts[:cache])
+    sc.render_opts[:cache][:foo].must_equal 1
+  end
+
+  it "render plugin call should not override existing options" do
     c = Class.new(Roda)
     c.plugin :render, :layout=>:foo
     c.plugin :render
     c.render_opts[:layout].must_equal :foo
   end
 
-  it "with caching disabled" do
+  it "should not use cache in subclass if caching disabled in superclass" do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :cache=>false
       

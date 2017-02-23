@@ -29,6 +29,16 @@ class Roda
     def []=(key, value)
       @mutex.synchronize{@hash[key] = value}
     end
+
+    private
+
+    # Create a copy of the cache with a separate mutex.
+    def initialize_copy(other)
+      @mutex = Mutex.new
+      other.instance_variable_get(:@mutex).synchronize do
+        @hash = other.instance_variable_get(:@hash).dup
+      end
+    end
   end
 
   # Base class used for Roda requests.  The instance methods for this

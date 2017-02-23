@@ -63,8 +63,10 @@ class Roda
     #             overriding the default.  If given, object should respond to +escape_xml+ with
     #             a single argument and return an output string.
     # :explicit_cache :: Only use the template cache if the :cache option is provided when rendering
-    #           (useful for development). Defaults to true if RACK_ENV is development, allowing explicit
-    #           caching of specific templates, but not caching by default.
+    #                    (useful for development). Defaults to true if RACK_ENV is development, allowing explicit
+    #                    caching of specific templates, but not caching by default.
+    # :inherit_cache :: Whether to create a dup of the cache in subclasses.  The default is false, which
+    #                   starts subclasses with an empty cache.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
     #            with the :template or :inline options.
     # :layout_opts :: The options to use when rendering the layout, if different
@@ -234,7 +236,9 @@ class Roda
           opts = subclass.opts[:render] = subclass.opts[:render].dup
 
           if opts[:cache]
-            if cache_class = opts[:cache_class]
+            opts[:cache] = if opts[:inherit_cache]
+              opts[:cache] = opts[:cache].dup
+            elsif cache_class = opts[:cache_class]
               opts[:cache] = cache_class.new
             else
               opts[:cache] = thread_safe_cache
