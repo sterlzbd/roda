@@ -1,5 +1,7 @@
 = master
 
+* Add :explicit_cache render plugin option, to only cache templates if the :cache option is given to render/view (jeremyevans)
+
 * Add error_email_content method to error_email plugin (jeremyevans)
 
 * Make error_email method in error_email plugin support non-exception arguments (jeremyevans)

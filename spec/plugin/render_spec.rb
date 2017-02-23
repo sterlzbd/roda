@@ -379,6 +379,57 @@ describe "render plugin" do
     app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_equal nil
   end
 
+  it "Support :cache=>false option to disable template caching even when :cache_key is given" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views"
+
+      route do |r|
+        @a = 'a'
+        r.is('a'){render('iv', :cache=>false, :cache_key=>:foo)}
+        render('iv', :cache_key=>:foo)
+      end
+    end
+
+    body('/a').strip.must_equal "a"
+    app.render_opts[:cache][:foo].must_be_nil
+    body('/b').strip.must_equal "a"
+    app.render_opts[:cache][:foo].wont_equal nil
+  end
+
+  it "Support :explicit_cache option to disable caching by default, but still allow caching on a per-call basis" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :explicit_cache=>true
+
+      route do |r|
+        @a = 'a'
+        r.is('a'){render('iv')}
+        render('iv', :cache=>true)
+      end
+    end
+
+    body('/a').strip.must_equal "a"
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_be_nil
+    body('/b').strip.must_equal "a"
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_equal nil
+  end
+
+  it "Support :explicit_cache plugin option with :cache_key render option" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :explicit_cache=>true
+
+      route do |r|
+        @a = 'a'
+        r.is('a'){render('iv', :cache_key=>:foo)}
+        render('iv', :cache=>true, :cache_key=>:foo)
+      end
+    end
+
+    body('/a').strip.must_equal "a"
+    app.render_opts[:cache][:foo].must_be_nil
+    body('/b').strip.must_equal "a"
+    app.render_opts[:cache][:foo].wont_equal nil
+  end
+
   it "Support :cache=>true option to enable template caching when :template_block is used" do
     c = Class.new do 
       def initialize(path, *, &block)

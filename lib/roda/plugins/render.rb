@@ -64,6 +64,7 @@ class Roda
     # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape=>true is used,
     #             overriding the default.  If given, object should respond to +escape_xml+ with
     #             a single argument and return an output string.
+    # :explicit_cache :: Only use the template cache if the :cache option is provided when rendering.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
     #            with the :template or :inline options.
     # :layout_opts :: The options to use when rendering the layout, if different
@@ -285,7 +286,7 @@ class Roda
         # If caching templates, attempt to retrieve the template from the cache.  Otherwise, just yield
         # to get the template.
         def cached_template(opts, &block)
-          if (cache = render_opts[:cache]) && (key = opts[:cache_key])
+          if (!render_opts[:explicit_cache] || opts[:cache]) && (cache = render_opts[:cache]) && (key = opts[:cache_key])
             unless template = cache[key]
               template = cache[key] = yield
             end
