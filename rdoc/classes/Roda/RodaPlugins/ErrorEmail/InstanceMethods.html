@@ -41,6 +41,7 @@
             <h3>Public Instance</h3>
             <ol>
               <li><a href="#method-i-error_email">error_email</a></li>
+              <li><a href="#method-i-error_email_content">error_email_content</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -52,17 +53,38 @@
                 <a name='method-i-error_email'></a>
                 <div class='synopsis'>
                   <span class='name'>error_email</span>
-                  <span class='arguments'>(e)</span>
+                  <span class='arguments'>(exception)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Send an email for the given error.</p>
+                  <p>Send an email for the given error.  <code>exception</code> is usually an
+                  exception instance, but it can be a plain string which is used as the
+                  subject for the email.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-error_email-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-error_email-source'><span class="ruby-comment"># File lib/roda/plugins/error_email.rb, line 94</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">error_email</span>(<span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-identifier">email_opts</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>].<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:default_headers</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">email_opts</span>, <span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-identifier">headers</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">headers</span>].<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>])&#x000A;  <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{k}: #{v.gsub(/\r?\n/m, &quot;\r\n &quot;)}&quot;</span>}.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\r\n&quot;</span>)&#x000A;  <span class="ruby-identifier">body</span> = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:body</span>].<span class="ruby-identifier">call</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:message</span>] = <span class="ruby-node">&quot;#{headers}\r\n\r\n#{body}&quot;</span>&#x000A;  <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:emailer</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">email_opts</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-error_email-source'><span class="ruby-comment"># File lib/roda/plugins/error_email.rb, line 110</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">error_email</span>(<span class="ruby-identifier">exception</span>)&#x000A;  <span class="ruby-identifier">email_opts</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>].<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:message</span>] = <span class="ruby-identifier">error_email_content</span>(<span class="ruby-identifier">exception</span>)&#x000A;  <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:emailer</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">email_opts</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-error_email_content'>
+                <a name='method-i-error_email_content'></a>
+                <div class='synopsis'>
+                  <span class='name'>error_email_content</span>
+                  <span class='arguments'>(exception)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>The content of the email to send, include the headers and the body. Takes
+                  the same argument as <a
+                  href="InstanceMethods.html#method-i-error_email">error_email</a>.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-error_email_content-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-error_email_content-source'><span class="ruby-comment"># File lib/roda/plugins/error_email.rb, line 118</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">error_email_content</span>(<span class="ruby-identifier">exception</span>)&#x000A;  <span class="ruby-identifier">email_opts</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>]&#x000A;  <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:default_headers</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">email_opts</span>, <span class="ruby-identifier">exception</span>)&#x000A;  <span class="ruby-identifier">headers</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">headers</span>].<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>])&#x000A;  <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{k}: #{v.gsub(/\r?\n/m, &quot;\r\n &quot;)}&quot;</span>}.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\r\n&quot;</span>)&#x000A;  <span class="ruby-identifier">body</span> = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:body</span>].<span class="ruby-identifier">call</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">exception</span>)&#x000A;  <span class="ruby-node">&quot;#{headers}\r\n\r\n#{body}&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

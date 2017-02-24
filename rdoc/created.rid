@@ -1,8 +1,8 @@
-Fri, 20 Jan 2017 09:09:29 -0800
+Fri, 24 Feb 2017 08:47:43 -0800
 README.rdoc	Thu, 19 Jan 2017 12:45:27 -0800
-CHANGELOG	Fri, 20 Jan 2017 09:06:43 -0800
+CHANGELOG	Fri, 24 Feb 2017 08:23:12 -0800
 MIT-LICENSE	Wed, 13 Jan 2016 08:58:01 -0800
-lib/roda.rb	Thu, 19 Jan 2017 12:45:27 -0800
+lib/roda.rb	Fri, 24 Feb 2017 08:23:12 -0800
 lib/roda/plugins/_erubis_escaping.rb	Sun, 31 Jan 2016 11:52:29 -0800
 lib/roda/plugins/all_verbs.rb	Sun, 31 Jan 2016 11:52:33 -0800
 lib/roda/plugins/assets.rb	Tue, 15 Nov 2016 12:34:23 -0800
@@ -22,7 +22,7 @@ lib/roda/plugins/delete_empty_headers.rb	Sun, 31 Jan 2016 11:53:10 -0800
 lib/roda/plugins/drop_body.rb	Sun, 31 Jan 2016 11:53:13 -0800
 lib/roda/plugins/empty_root.rb	Sun, 31 Jan 2016 11:53:15 -0800
 lib/roda/plugins/environments.rb	Sun, 31 Jan 2016 11:53:17 -0800
-lib/roda/plugins/error_email.rb	Fri, 08 Jan 2016 15:41:05 -0800
+lib/roda/plugins/error_email.rb	Fri, 24 Feb 2017 08:23:12 -0800
 lib/roda/plugins/error_handler.rb	Mon, 25 Jul 2016 09:46:49 -0700
 lib/roda/plugins/flash.rb	Fri, 08 Jan 2016 15:41:05 -0800
 lib/roda/plugins/h.rb	Wed, 14 Sep 2016 09:29:18 -0700
@@ -39,7 +39,7 @@ lib/roda/plugins/mailer.rb	Fri, 20 Jan 2017 09:06:43 -0800
 lib/roda/plugins/match_affix.rb	Thu, 28 Jul 2016 09:29:13 -0700
 lib/roda/plugins/middleware.rb	Mon, 18 Apr 2016 12:27:17 -0700
 lib/roda/plugins/module_include.rb	Sun, 31 Jan 2016 11:53:56 -0800
-lib/roda/plugins/multi_route.rb	Sun, 31 Jan 2016 11:53:58 -0800
+lib/roda/plugins/multi_route.rb	Wed, 01 Feb 2017 07:52:47 -0800
 lib/roda/plugins/multi_run.rb	Sun, 31 Jan 2016 11:54:00 -0800
 lib/roda/plugins/multi_view.rb	Sun, 31 Jan 2016 11:54:03 -0800
 lib/roda/plugins/named_templates.rb	Sun, 31 Jan 2016 11:54:05 -0800
@@ -57,7 +57,7 @@ lib/roda/plugins/path_rewriter.rb	Fri, 29 Jul 2016 07:57:29 -0700
 lib/roda/plugins/per_thread_caching.rb	Mon, 27 Jun 2016 21:39:03 -0700
 lib/roda/plugins/precompile_templates.rb	Sun, 31 Jan 2016 11:54:32 -0800
 lib/roda/plugins/public.rb	Tue, 06 Sep 2016 09:02:01 -0700
-lib/roda/plugins/render.rb	Thu, 10 Nov 2016 13:38:01 -0800
+lib/roda/plugins/render.rb	Fri, 24 Feb 2017 08:23:12 -0800
 lib/roda/plugins/render_each.rb	Sun, 31 Jan 2016 11:54:37 -0800
 lib/roda/plugins/request_headers.rb	Tue, 28 Jun 2016 10:17:29 -0700
 lib/roda/plugins/response_request.rb	Sun, 31 Jan 2016 11:54:39 -0800
@@ -68,7 +68,7 @@ lib/roda/plugins/sinatra_helpers.rb	Wed, 08 Jun 2016 15:00:19 -0700
 lib/roda/plugins/slash_path_empty.rb	Sun, 31 Jan 2016 11:54:50 -0800
 lib/roda/plugins/static.rb	Wed, 08 Jun 2016 15:00:19 -0700
 lib/roda/plugins/static_path_info.rb	Wed, 14 Jan 2015 18:50:19 -0800
-lib/roda/plugins/static_routing.rb	Tue, 15 Nov 2016 12:34:23 -0800
+lib/roda/plugins/static_routing.rb	Sun, 22 Jan 2017 16:41:33 -0800
 lib/roda/plugins/status_handler.rb	Sun, 31 Jan 2016 11:55:01 -0800
 lib/roda/plugins/streaming.rb	Thu, 15 Dec 2016 14:55:04 -0800
 lib/roda/plugins/symbol_matchers.rb	Thu, 19 Jan 2017 12:45:27 -0800
@@ -79,8 +79,8 @@ lib/roda/plugins/unescape_path.rb	Wed, 13 Jul 2016 08:09:00 -0700
 lib/roda/plugins/view_options.rb	Sun, 31 Jan 2016 11:55:12 -0800
 lib/roda/plugins/view_subdirs.rb	Sun, 08 Mar 2015 14:07:21 -0700
 lib/roda/plugins/websockets.rb	Fri, 20 Jan 2017 09:06:43 -0800
-lib/roda/version.rb	Fri, 20 Jan 2017 09:06:43 -0800
-doc/conventions.rdoc	Sat, 10 Jan 2015 15:40:37 -0800
+lib/roda/version.rb	Fri, 24 Feb 2017 08:23:12 -0800
+doc/conventions.rdoc	Wed, 01 Feb 2017 07:52:47 -0800
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
 doc/release_notes/1.2.0.txt	Wed, 17 Dec 2014 09:22:57 -0800
@@ -109,3 +109,4 @@ doc/release_notes/2.19.0.txt	Fri, 14 Oct 2016 08:01:43 -0700
 doc/release_notes/2.20.0.txt	Tue, 15 Nov 2016 12:34:14 -0800
 doc/release_notes/2.21.0.txt	Fri, 16 Dec 2016 08:37:32 -0800
 doc/release_notes/2.22.0.txt	Fri, 20 Jan 2017 09:06:43 -0800
+doc/release_notes/2.23.0.txt	Fri, 24 Feb 2017 08:23:12 -0800
