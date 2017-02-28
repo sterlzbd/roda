@@ -1,5 +1,7 @@
 = master
 
+* Make the static_routing plugin work with the hooks plugin if the hooks plugin is loaded first (jeremyevans) (#110)
+
 * Do not modify the render plugin's cache if loading the plugin multiple times (jeremyevans)
 
 = 2.23.0 (2017-02-24)
