@@ -499,7 +499,7 @@ describe "render plugin" do
     sc.render_opts[:cache][:foo].must_be_nil
   end
 
-  it "should use same render_opts as superclass when inheriting if :inherit_cache option is used" do
+  it "should use a copy of superclass's cache when inheriting if :inherit_cache option is used" do
     c = Class.new(Roda)
     c.plugin :render, :inherit_cache=>true
     c.render_opts[:cache][:foo] = 1
@@ -508,6 +508,19 @@ describe "render plugin" do
     c.render_opts.wont_be_same_as(sc.render_opts)
     c.render_opts[:cache].wont_be_same_as(sc.render_opts[:cache])
     sc.render_opts[:cache][:foo].must_equal 1
+  end
+
+  it "should not modifying existing cache if loading the plugin a separate time" do
+    c = Class.new(Roda)
+    c.plugin :render
+    cache = c.render_opts[:cache]
+    c.plugin :render
+    c.render_opts[:cache].must_be_same_as cache
+
+    c.plugin :render, :cache=>false
+    c.render_opts[:cache].must_equal false
+    c.plugin :render
+    c.render_opts[:cache].must_equal false
   end
 
   it "render plugin call should not override existing options" do

@@ -157,6 +157,7 @@ class Roda
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=OPTS)
         if app.opts[:render]
+          orig_cache = app.opts[:render][:cache]
           opts = app.opts[:render][:orig_opts].merge(opts)
         end
         app.opts[:render] = opts.dup
@@ -169,7 +170,9 @@ class Roda
         opts[:allowed_paths] = opts[:allowed_paths].map{|f| ::File.expand_path(f)}.uniq.freeze
 
         if opts.fetch(:cache, true)
-          if cache_class = opts[:cache_class]
+          if orig_cache
+            opts[:cache] = orig_cache
+          elsif cache_class = opts[:cache_class]
             opts[:cache] = cache_class.new
           else
             opts[:cache] = app.thread_safe_cache
