@@ -1,5 +1,7 @@
 = master
 
+* Support an options hash when loading the cookies plugin, that will be used as the defaults for setting and deleting cookies (mwpastore, jeremyevans) (#112)
+
 * Make the static_routing plugin work with the hooks plugin if the hooks plugin is loaded first (jeremyevans) (#110)
 
 * Do not modify the render plugin's cache if loading the plugin multiple times (jeremyevans)

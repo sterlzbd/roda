@@ -16,9 +16,9 @@ class Roda
     #
     #   plugin :cookies, :domain=>'example.com', :path=>'/api'
     module Cookies
-      # Configure the cookies plugin.
+      # Allow setting default cookie options when loading the cookies plugin.
       def self.configure(app, opts={})
-        app.opts[:cookie_opts] = opts.dup.freeze
+        app.opts[:cookies_opts] = (app.opts[:cookies_opts]||{}).merge(opts).freeze
       end
 
       module ResponseMethods
@@ -30,7 +30,7 @@ class Roda
         #   response.delete_cookie('foo')
         #   response.delete_cookie('foo', :domain=>'example.org')
         def delete_cookie(key, value = {})
-          ::Rack::Utils.delete_cookie_header!(@headers, key, roda_class.opts[:cookie_opts].merge(value))
+          ::Rack::Utils.delete_cookie_header!(@headers, key, roda_class.opts[:cookies_opts].merge(value))
         end
 
         # Set the cookie with the given key in the headers.
@@ -39,7 +39,7 @@ class Roda
         #   response.set_cookie('foo', :value=>'bar', :domain=>'example.org')
         def set_cookie(key, value)
           value = { :value=>value } unless value.respond_to?(:keys)
-          ::Rack::Utils.set_cookie_header!(@headers, key, roda_class.opts[:cookie_opts].merge(value))
+          ::Rack::Utils.set_cookie_header!(@headers, key, roda_class.opts[:cookies_opts].merge(value))
         end
       end
     end
