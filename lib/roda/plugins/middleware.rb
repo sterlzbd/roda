@@ -35,22 +35,60 @@ class Roda
     #
     # It is possible to use the Roda app as a regular app even when using
     # the middleware plugin.
+    #
+    # You can support configurable middleware by passing a block when loading
+    # the plugin:
+    #
+    #   class Mid < Roda
+    #     plugin :middleware do |middleware, *args, &block|
+    #       middleware.opts[:middleware_args] = args
+    #       block.call(middleware)
+    #     end
+    #
+    #     route do |r|
+    #       r.is "mid" do
+    #         opts[:middleware_args].join(' ')
+    #       end
+    #     end
+    #   end
+    #
+    #   class App < Roda
+    #     use Mid :foo, :bar do |middleware|
+    #       middleware.opts[:middleware_args] << :baz
+    #     end
+    #   end
+    #
+    #   # Request to App for /mid returns
+    #   # "foo bar baz"
+    #
+    # Note that when supporting configurable middleware via a block, the middleware
+    # used is a subclass of the class loading the plugin, instead of the class itself.
+    # This is done so the same class can be used as middleware with multiple separate
+    # configurations.
     module Middleware
       # Configure the middleware plugin.  Options:
       # :env_var :: Set the environment variable to use to indicate to the roda
       #             application that the current request is a middleware request.
       #             You should only need to override this if you are using multiple
       #             roda middleware in the same application.
-      def self.configure(app, opts={})
+      def self.configure(app, opts={}, &block)
         app.opts[:middleware_env_var] = opts[:env_var] if opts.has_key?(:env_var)
         app.opts[:middleware_env_var] ||= 'roda.forward_next'
+        app.opts[:middleware_configure] = block if block
       end
 
       # Forward instances are what is actually used as middleware.
       class Forwarder
         # Store the current middleware and the next middleware to call.
-        def initialize(mid, app)
-          @mid = mid
+        def initialize(mid, app, *args, &block)
+          @mid = if configure = mid.opts[:middleware_configure]
+            mid = Class.new(mid)
+            configure.call(mid, *args, &block)
+            mid
+          else
+            raise RodaError, "cannot provide middleware args or block unless loading middleware plugin with a block" if block || !args.empty?
+            mid
+          end
           @app = app
         end
 
@@ -76,11 +114,11 @@ class Roda
 
       module ClassMethods
         # Create a Forwarder instead of a new instance if a non-Hash is given.
-        def new(app)
+        def new(app, *args, &block)
           if app.is_a?(Hash)
             super
           else
-            Forwarder.new(self, app)
+            Forwarder.new(self, app, *args, &block)
           end
         end
 

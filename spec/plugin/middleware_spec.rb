@@ -57,6 +57,43 @@ describe "middleware plugin" do
     body.must_equal 'a'
   end
 
+  it "should raise error if attempting to use options for Roda application that does not support configurable middleware" do
+    a1 = app(:bare){plugin :middleware}
+    proc{app(:bare){use a1, :foo; route{}; build_rack_app}}.must_raise Roda::RodaError
+    proc{app(:bare){use(a1){}; route{}; build_rack_app}}.must_raise Roda::RodaError
+  end
+
+  it "supports configuring middleware via a block" do
+    a1 = app(:bare) do
+      plugin :middleware do |mid, *args, &block|
+        mid.opts[:a] = args.concat(block.call(:quux)).join(' ')
+      end
+      opts[:a] = 'a1'
+
+      route do |r|
+        r.is 'a' do opts[:a] end
+      end
+    end
+
+    body('/a').must_equal 'a1'
+    
+    app(:bare) do
+      use a1, :foo, :bar do |baz|
+        [baz, :a1]
+      end
+
+      route do
+        'b1'
+      end
+    end
+
+    body.must_equal 'b1'
+    body('/a').must_equal 'foo bar quux a1'
+
+    @app = a1
+    body('/a').must_equal 'a1'
+  end
+
   it "is compatible with the multi_route plugin" do
     app(:bare) do
       plugin :multi_route
