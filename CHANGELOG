@@ -1,5 +1,7 @@
 = master
 
+* Add strip_path_prefix plugin for stripping prefixes off of internal absolute paths, making them relative paths (jeremyevans)
+
 * Add Roda.expand_path method to DRY up path expansion (jeremyevans)
 
 * Support :freeze_middleware option, which freezes all middleware instances when building the rack app (jeremyevans)
