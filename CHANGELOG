@@ -1,5 +1,7 @@
 = master
 
+* Support :freeze_middleware option, which freezes all middleware instances when building the rack app (jeremyevans)
+
 * Allow middleware plugin to accept a block that will be used to configure the application when used as middleware (jeremyevans)
 
 * Support an options hash when loading the cookies plugin, that will be used as the defaults for setting and deleting cookies (mwpastore, jeremyevans) (#112)

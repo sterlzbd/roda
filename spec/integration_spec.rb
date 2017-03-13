@@ -54,6 +54,27 @@ describe "integration" do
     body('/hello').must_equal 'D   '
   end
 
+  it "should freeze middleware if opts[:freeze_middleware] is true" do
+    c = Class.new do
+      def initialize(app) @app = app end
+      def call(env) @a = 1; @app.call(env) end
+    end
+
+    app do 
+      "D"
+    end
+
+    body.must_equal 'D'
+
+    app.use c
+    body.must_equal 'D'
+
+    app.clear_middleware!
+    app.opts[:freeze_middleware] = true
+    app.use c
+    proc{body}.must_raise RuntimeError, TypeError
+  end
+
   it "should support adding middleware using use after route block setup" do
     c = @c
     app(:bare) do 

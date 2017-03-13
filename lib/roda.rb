@@ -220,10 +220,13 @@ class Roda
         # Build the rack app to use
         def build_rack_app
           if block = @route_block
-            builder = Rack::Builder.new
-            @middleware.each{|a, b| builder.use(*a, &b)}
-            builder.run lambda{|env| new(env).call(&block)}
-            @app = builder.to_app
+            app = lambda{|env| new(env).call(&block)}
+            @middleware.reverse_each do |args, bl|
+              mid, *args = args
+              app = mid.new(app, *args, &bl)
+              app.freeze if opts[:freeze_middleware]
+            end
+            @app = app
           end
         end
       end
