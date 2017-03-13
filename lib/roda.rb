@@ -123,6 +123,11 @@ class Roda
           build_rack_app
         end
 
+        # Expand the given path, using the root argument as the base directory.
+        def expand_path(path, root=opts[:root])
+          ::File.expand_path(path, root)
+        end
+
         # Freeze the internal state of the class, to avoid thread safety issues at runtime.
         # It's optional to call this method, as nothing should be modifying the
         # internal state at runtime anyway, but this makes sure an exception will

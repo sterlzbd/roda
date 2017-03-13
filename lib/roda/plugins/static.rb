@@ -30,7 +30,7 @@ class Roda
       def self.configure(app, paths, opts={})
         opts = opts.dup
         opts[:urls] = paths
-        opts[:root] =  File.expand_path(opts[:root]||"public", app.opts[:root])
+        opts[:root] =  app.expand_path(opts[:root]||"public")
         app.use ::Rack::Static, opts
       end
     end

@@ -1,5 +1,7 @@
 = master
 
+* Add Roda.expand_path method to DRY up path expansion (jeremyevans)
+
 * Support :freeze_middleware option, which freezes all middleware instances when building the rack app (jeremyevans)
 
 * Allow middleware plugin to accept a block that will be used to configure the application when used as middleware (jeremyevans)

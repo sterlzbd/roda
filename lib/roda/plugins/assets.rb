@@ -354,8 +354,8 @@ class Roda
           app.opts[:assets][:orig_opts] = opts
         end
         opts = app.opts[:assets]
-        opts[:path] = File.expand_path(opts[:path]||"assets", app.opts[:root]).freeze
-        opts[:public] = File.expand_path(opts[:public]||"public", app.opts[:root]).freeze
+        opts[:path] = app.expand_path(opts[:path]||"assets").freeze
+        opts[:public] = app.expand_path(opts[:public]||"public").freeze
 
         # Combine multiple values into a path, ignoring trailing slashes
         j = lambda do |*v|

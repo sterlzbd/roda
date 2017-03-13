@@ -165,9 +165,9 @@ class Roda
 
         opts = app.opts[:render]
         opts[:engine] = (opts[:engine] || opts[:ext] || "erb").dup.freeze
-        opts[:views] = File.expand_path(opts[:views]||"views", app.opts[:root]).freeze
+        opts[:views] = app.expand_path(opts[:views]||"views").freeze
         opts[:allowed_paths] ||= [opts[:views]].freeze
-        opts[:allowed_paths] = opts[:allowed_paths].map{|f| ::File.expand_path(f)}.uniq.freeze
+        opts[:allowed_paths] = opts[:allowed_paths].map{|f| app.expand_path(f, nil)}.uniq.freeze
 
         if opts.fetch(:cache, true)
           if orig_cache
@@ -399,7 +399,7 @@ class Roda
         def template_path(opts)
           path = "#{opts[:views]}/#{template_name(opts)}.#{opts[:engine]}"
           if opts.fetch(:check_paths){render_opts[:check_paths]}
-            full_path = ::File.expand_path(path)
+            full_path = self.class.expand_path(path)
             unless render_opts[:allowed_paths].any?{|f| full_path.start_with?(f)}
               raise RodaError, "attempt to render path not in allowed_paths: #{path} (allowed: #{render_opts[:allowed_paths].join(', ')})"
             end

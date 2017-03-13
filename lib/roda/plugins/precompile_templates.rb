@@ -71,7 +71,7 @@ class Roda
           compile_opts = if pattern.is_a?(Hash)
             [opts]
           else
-            Dir[pattern].map{|file| opts.merge(:path=>File.expand_path(file))}
+            Dir[pattern].map{|file| opts.merge(:path=>File.expand_path(file, nil))}
           end
 
           instance = allocate
