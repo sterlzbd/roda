@@ -1,5 +1,7 @@
 = master
 
+* Have h plugin use cgi/escape if available for faster escaping (jeremyevans)
+
 * Add disallow_file_uploads plugin for raising an exception if a multipart file upload is attempted (jeremyevans)
 
 * Add strip_path_prefix plugin for stripping prefixes off of internal absolute paths, making them relative paths (jeremyevans)

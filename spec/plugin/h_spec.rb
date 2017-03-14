@@ -6,6 +6,6 @@ describe "h plugin" do
       h("<form>") + h(:form) + h("test&<>/'")
     end
 
-    body.must_equal '&lt;form&gt;formtest&amp;&lt;&gt;/&#x27;'
+    body.must_equal '&lt;form&gt;formtest&amp;&lt;&gt;/&#39;'
   end
 end
