@@ -29,12 +29,41 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2017-02-24 08:23:12 -0800</span>
+          <span class='datetime'>2017-03-15 09:47:40 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-2.24.0+-282017-03-15-29">2.24.0 (2017-03-15)<span><a href="#label-2.24.0+-282017-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Have h plugin use cgi/escape if available for faster escaping (jeremyevans)</p>
+            </li><li>
+            <p>Add disallow_file_uploads plugin for raising an exception if a multipart
+            file upload is attempted (jeremyevans)</p>
+            </li><li>
+            <p>Add strip_path_prefix plugin for stripping prefixes off of internal
+            absolute paths, making them relative paths (jeremyevans)</p>
+            </li><li>
+            <p>Add Roda.expand_path method to DRY up path expansion (jeremyevans)</p>
+            </li><li>
+            <p>Support :freeze_middleware option, which freezes all middleware instances
+            when building the rack app (jeremyevans)</p>
+            </li><li>
+            <p>Allow middleware plugin to accept a block that will be used to configure
+            the application when used as middleware (jeremyevans)</p>
+            </li><li>
+            <p>Support an options hash when loading the cookies plugin, that will be used
+            as the defaults for setting and deleting cookies (mwpastore, jeremyevans)
+            (#112)</p>
+            </li><li>
+            <p>Make the static_routing plugin work with the hooks plugin if the hooks
+            plugin is loaded first (jeremyevans) (#110)</p>
+            </li><li>
+            <p>Do not modify the render plugin&#39;s cache if loading the plugin multiple
+            times (jeremyevans)</p>
+            </li></ul>
             
             <h1 id="label-2.23.0+-282017-02-24-29">2.23.0 (2017-02-24)<span><a href="#label-2.23.0+-282017-02-24-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>

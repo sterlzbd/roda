@@ -42,6 +42,20 @@
             <code>delete_cookie</code>:</p>
             
             <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">set_cookie</span>(<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>)&#x000A;<span class="ruby-identifier">response</span>.<span class="ruby-identifier">delete_cookie</span>(<span class="ruby-string">&#39;foo&#39;</span>)</pre>
+            
+            <p><a href="Pass.html">Pass</a> a hash of cookie options when loading the
+            plugin to set some defaults for all cookies upon setting and deleting. This
+            is particularly useful for configuring the <code>domain</code> and
+            <code>path</code> of all cookies.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">cookies</span>, :<span class="ruby-identifier">domain=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;example.com&#39;</span>, :<span class="ruby-identifier">path=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;/api&#39;</span></pre>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a href="#method-c-configure">configure</a></li>
+            </ol>
           </div>
           <div id='context'>
           </div>
@@ -52,6 +66,26 @@
             </ol>
           </div>
           <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app, opts={})</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Allow setting default cookie options when loading the cookies plugin.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/cookies.rb, line 19</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookies_opts</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookies_opts</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -62,7 +62,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-h-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-h-source'><span class="ruby-comment"># File lib/roda/plugins/h.rb, line 31</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">h</span>(<span class="ruby-identifier">string</span>)&#x000A;  <span class="ruby-identifier">string</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">ESCAPE_HTML_PATTERN</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-constant">ESCAPE_HTML</span>[<span class="ruby-identifier">c</span>] }&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-h-source'><span class="ruby-comment"># File lib/roda/plugins/h.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">h</span>(<span class="ruby-identifier">string</span>)&#x000A;  <span class="ruby-constant">CGI</span>.<span class="ruby-identifier">escapeHTML</span>(<span class="ruby-identifier">string</span>.<span class="ruby-identifier">to_s</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

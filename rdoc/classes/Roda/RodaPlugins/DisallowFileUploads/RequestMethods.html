@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::StaticRouting::RequestMethods</title>
+    <title>Roda::RodaPlugins::DisallowFileUploads::RequestMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -25,11 +25,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::StaticRouting::RequestMethods
+          Roda::RodaPlugins::DisallowFileUploads::RequestMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../../../files/lib/roda/plugins/static_routing_rb.html">lib/roda/plugins/static_routing.rb</a>
+            <a href="../../../../files/lib/roda/plugins/disallow_file_uploads_rb.html">lib/roda/plugins/disallow_file_uploads.rb</a>
           </li>
         </ol>
       </div>
@@ -38,32 +38,31 @@
           <div id='description'></div>
           <div id='method-list'>
             <h2>Methods</h2>
-            <h3>Public Instance</h3>
+            <h3>Public Class</h3>
             <ol>
-              <li><a href="#method-i-static_route">static_route</a></li>
+              <li><a href="#method-c-new">new</a></li>
             </ol>
           </div>
           <div id='context'>
           </div>
           <div id='section'>
             <div id='methods'>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-static_route'>
-                <a name='method-i-static_route'></a>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
                 <div class='synopsis'>
-                  <span class='name'>static_route</span>
-                  <span class='arguments'>(&block)</span>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(_, env)</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Assume that this request matches a static route, setting the remaining path
-                  to the emptry string and passing control to the given block.</p>
+                  <p>HTML escape the input and return the escaped version.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-static_route-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-static_route-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 124</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">static_route</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-string">&#39;&#39;</span>&#x000A;&#x000A;  <span class="ruby-identifier">always</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/disallow_file_uploads.rb, line 27</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">_</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.multipart.tempfile_factory&#39;</span>] = <span class="ruby-constant">NO_TEMPFILE</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

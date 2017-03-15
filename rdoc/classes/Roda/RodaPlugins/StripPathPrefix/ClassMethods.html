@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::StaticRouting::RequestMethods</title>
+    <title>Roda::RodaPlugins::StripPathPrefix::ClassMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -25,11 +25,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::StaticRouting::RequestMethods
+          Roda::RodaPlugins::StripPathPrefix::ClassMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../../../files/lib/roda/plugins/static_routing_rb.html">lib/roda/plugins/static_routing.rb</a>
+            <a href="../../../../files/lib/roda/plugins/strip_path_prefix_rb.html">lib/roda/plugins/strip_path_prefix.rb</a>
           </li>
         </ol>
       </div>
@@ -40,7 +40,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a href="#method-i-static_route">static_route</a></li>
+              <li><a href="#method-i-expand_path">expand_path</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -48,22 +48,21 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-static_route'>
-                <a name='method-i-static_route'></a>
+              <div class='method public-instance' id='method-method-i-expand_path'>
+                <a name='method-i-expand_path'></a>
                 <div class='synopsis'>
-                  <span class='name'>static_route</span>
-                  <span class='arguments'>(&block)</span>
+                  <span class='name'>expand_path</span>
+                  <span class='arguments'>(path, root=opts[:root])</span>
                 </div>
                 <div class='description'>
                   
-                  <p>Assume that this request matches a static route, setting the remaining path
-                  to the emptry string and passing control to the given block.</p>
+                  <p>Strip the path prefix from the gien path if it starts with the prefix.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-static_route-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-expand_path-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-static_route-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 124</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">static_route</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-string">&#39;&#39;</span>&#x000A;&#x000A;  <span class="ruby-identifier">always</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-expand_path-source'><span class="ruby-comment"># File lib/roda/plugins/strip_path_prefix.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">root</span>=<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])&#x000A;  <span class="ruby-keyword">super</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip_path_prefix</span>], <span class="ruby-string">&#39;&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

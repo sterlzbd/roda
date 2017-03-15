@@ -48,6 +48,16 @@
             
             <p>It is possible to use the <a href="../../Roda.html">Roda</a> app as a
             regular app even when using the middleware plugin.</p>
+            
+            <p>You can support configurable middleware by passing a block when loading the
+            plugin:</p>
+            
+            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Mid</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">middleware</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">middleware</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">middleware</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">middleware_args</span>] = <span class="ruby-identifier">args</span>&#x000A;    <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">middleware</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;mid&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">middleware_args</span>].<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Mid</span>, :<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">middleware</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">middleware</span>.<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">middleware_args</span>] <span class="ruby-operator">&lt;&lt;</span> :<span class="ruby-identifier">baz</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># Request to App for /mid returns</span>&#x000A;<span class="ruby-comment"># &quot;foo bar baz&quot;</span></pre>
+            
+            <p>Note that when supporting configurable middleware via a block, the
+            middleware used is a subclass of the class loading the plugin, instead of
+            the class itself. This is done so the same class can be used as middleware
+            with multiple separate configurations.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -73,7 +83,7 @@
                 <a name='method-c-configure'></a>
                 <div class='synopsis'>
                   <span class='name'>configure</span>
-                  <span class='arguments'>(app, opts={})</span>
+                  <span class='arguments'>(app, opts={}, &block)</span>
                 </div>
                 <div class='description'>
                   
@@ -89,7 +99,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:env_var</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:env_var</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;roda.forward_next&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 73</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:env_var</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:env_var</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;roda.forward_next&#39;</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_configure</span>] = <span class="ruby-identifier">block</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>
