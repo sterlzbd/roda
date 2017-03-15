@@ -53,7 +53,7 @@ class Roda
     #   end
     #
     #   class App < Roda
-    #     use Mid :foo, :bar do |middleware|
+    #     use Mid, :foo, :bar do |middleware|
     #       middleware.opts[:middleware_args] << :baz
     #     end
     #   end
