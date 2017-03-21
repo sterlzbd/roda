@@ -275,6 +275,39 @@ describe "matchers" do
     status('/123bard').must_equal 404
   end
 
+  it "should allow arrays to match optional segments with splats" do
+    app do |r|
+      r.on :foo, [:bar, true] do |*m|
+        m.inspect
+      end
+    end
+
+    body('/123').must_equal '["123"]'
+    body('/123/456').must_equal '["123", "456"]'
+  end
+
+  it "should allow arrays to match optional segments with separate arguments" do
+    app do |r|
+      r.on :foo, [:bar, true] do |f, b|
+        [f, b].inspect
+      end
+    end
+
+    body('/123').must_equal '["123", nil]'
+    body('/123/456').must_equal '["123", "456"]'
+  end
+
+  it "should allow regexp to match optional segments with separate arguments" do
+    app do |r|
+      r.on /(\d+)(?:\/(\d+))?/ do |f, b|
+        [f, b].inspect
+      end
+    end
+
+    body('/123').must_equal '["123", nil]'
+    body('/123/456').must_equal '["123", "456"]'
+  end
+
   it "should have array capture match string if match" do
     app do |r|
       r.on %w'p q' do |id|
