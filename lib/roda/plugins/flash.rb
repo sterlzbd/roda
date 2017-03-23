@@ -27,6 +27,19 @@ class Roda
     #       end
     #     end
     #   end
+    #
+    # == Setting flash for current request
+    #
+    # You can make flash messages available in the current
+    # request by using the +flash.now+ method.
+    #
+    #   plugin :flash
+    #
+    #   route do |r|
+    #     r.get '' do
+    #       flash.now['a'] = 'b'
+    #     end
+    #   end
     module Flash
       # The internal session key used to store the flash.
       KEY = :_flash
