@@ -28,17 +28,12 @@ class Roda
     #     end
     #   end
     #
-    # == Setting flash for current request
+    # You can modify the flash for the current request (instead of
+    # the next request) by using the +flash.now+ method:
     #
-    # You can make flash messages available in the current
-    # request by using the +flash.now+ method.
-    #
-    #   plugin :flash
-    #
-    #   route do |r|
-    #     r.get '' do
-    #       flash.now['a'] = 'b'
-    #     end
+    #   r.get do
+    #     flash.now['a'] = 'b'
+    #     flash['a'] # = >'b'
     #   end
     module Flash
       # The internal session key used to store the flash.
