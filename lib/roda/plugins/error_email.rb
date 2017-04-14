@@ -14,6 +14,11 @@ class Roda
     #     'Internal Server Error'
     #   end
     #
+    # It is similar to the error_mail plugin, except that it uses net/smtp
+    # directly instead of using the mail library.  If you are not already using the
+    # mail library in your application, it makes sense to use error_email
+    # instead of error_mail.
+    #
     # Options:
     #
     # :from :: The From address to use in the email (required)
@@ -34,7 +39,7 @@ class Roda
     module ErrorEmail
       OPTS = {}.freeze
       DEFAULTS = {
-        :headers=>{},
+        :headers=>OPTS,
         :host=>'localhost',
         # :nocov:
         :emailer=>lambda{|h| Net::SMTP.start(h[:host]){|s| s.send_message(h[:message], h[:from], h[:to])}},

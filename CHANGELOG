@@ -1,3 +1,7 @@
+= master
+
+* Add error_mail plugin, similar to error_email but using mail instead of net/smtp directly (jeremyevans)
+
 = 2.24.0 (2017-03-15)
 
 * Have h plugin use cgi/escape if available for faster escaping (jeremyevans)
