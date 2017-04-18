@@ -9,14 +9,20 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/styles/default.min.css">
     <link rel="stylesheet" href="css/roda.css">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" defer></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" defer></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.0/highlight.min.js" defer></script>
+    <script>
+      document.addEventListener("load", function() {
+        hljs.initHighlightingOnLoad();
+      });
+    </script>
   </head>
   <body>
     <nav class="navbar navbar-default navigation-clean">
       <div class="container">
         <div class="navbar-header"><a class="navbar-brand navbar-link" href="index.html"><span class="roda">Roda</span> : Routing Tree Web Toolkit</a>
-          <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
         </div>
         <div class="collapse navbar-collapse" id="navcol-1">
           <ul class="nav navbar-nav navbar-right">
@@ -28,7 +34,7 @@
       </div>
     </nav>
     <div class="container" id="content">
-      <h1>Documentation for <span class="roda">Roda</span> (v2.24.0)</h1>
+      <h1>Documentation for <span class="roda">Roda</span> (v2.25.0)</h1>
 
 <h2 id="readme"><a href="rdoc/files/README_rdoc.html">README</a> (Introduction to Roda, start here if new)</h2>
 
@@ -132,7 +138,8 @@
   <li>Other: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/DelayBuild.html">delay_build</a>: Delay building the rack app until Roda.app is called.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Environments.html">environments</a>: Adds support for handling different execution environments (development/test/production).</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorEmail.html">error_email</a>: Adds ability to easily email a notification when an error is raised by the application.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorEmail.html">error_email</a>: Adds ability to easily email a notification when an error is raised by the application, using net/smtp.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorMail.html">error_mail</a>: Adds ability to easily email a notification when an error is raised by the application, using mail.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Heartbeat.html">heartbeat</a>: Adds support for heartbeats.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/IndifferentParams.html">indifferent_params</a>: Adds params method for indifferent parameters.</li>
@@ -202,7 +209,7 @@
   
       
         <li>
-          <a href='rdoc/files/doc/release_notes/2_24_0_txt.html'>2.24</a> | <a href='rdoc/files/doc/release_notes/2_23_0_txt.html'>2.23</a> | <a href='rdoc/files/doc/release_notes/2_22_0_txt.html'>2.22</a> | <a href='rdoc/files/doc/release_notes/2_21_0_txt.html'>2.21</a> | <a href='rdoc/files/doc/release_notes/2_20_0_txt.html'>2.20</a>
+          <a href='rdoc/files/doc/release_notes/2_25_0_txt.html'>2.25</a> | <a href='rdoc/files/doc/release_notes/2_24_0_txt.html'>2.24</a> | <a href='rdoc/files/doc/release_notes/2_23_0_txt.html'>2.23</a> | <a href='rdoc/files/doc/release_notes/2_22_0_txt.html'>2.22</a> | <a href='rdoc/files/doc/release_notes/2_21_0_txt.html'>2.21</a> | <a href='rdoc/files/doc/release_notes/2_20_0_txt.html'>2.20</a>
         </li>
       
         <li>

@@ -29,7 +29,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2017-03-13 16:05:07 -0700</span>
+          <span class='datetime'>2017-03-21 12:46:08 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -336,6 +336,38 @@
             <h3 id="label-Everything+else">Everything else<span><a href="#label-Everything+else">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
             <p>Everything else matches anything.</p>
+            
+            <h2 id="label-Optional+segments">Optional segments<span><a href="#label-Optional+segments">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            
+            <p>There are multiple ways you can handle optional segments in <a
+            href="../classes/Roda.html">Roda</a>.  For example, let&#39;s say you want
+            to accept both <code>/items/123</code> and <code>/items/123/456</code>,
+            with 123 being the item&#39;s id, and 456 being some optional data.</p>
+            
+            <p>The simplest way to handle this is by treating this as two separate routes
+            with a shared branch:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;items&quot;</span>, :<span class="ruby-identifier">id</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Shared code for branch here</span>&#x000A;&#x000A;  <span class="ruby-comment"># /items/123/456</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> :<span class="ruby-identifier">opt_data</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">optional_data</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># /items/123</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>This works well for many cases, but there are also cases where you really
+            want to treat it as one route with an optional segment.  One simple way to
+            do that is to use a parameter instead of an optional segment (e.g.
+            +/items/123?opt=456+).</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, :<span class="ruby-identifier">id</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">optional_data</span> = <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;opt&#39;</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>However, if you really do want to use a optional segment, there are a
+            couple different ways to use matchers to do so.  One is using an array
+            matcher where the last element is true:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, :<span class="ruby-identifier">id</span>, [:<span class="ruby-identifier">opt_data</span>, <span class="ruby-keyword">true</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span>, <span class="ruby-identifier">optional_data</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>Note that this technically yields only one argument instead of two
+            arguments if the optional segment isn&#39;t provided.</p>
+            
+            <p>An alternative way to implement this is via a regexp:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, <span class="ruby-regexp">/(\d+)(?:\/(\d+))?/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span>, <span class="ruby-identifier">optional_data</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <h2 id="label-Status+codes">Status codes<span><a href="#label-Status+codes">&para;</a> <a href="#top">&uarr;</a></span></h2>
             

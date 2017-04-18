@@ -1,6 +1,6 @@
-Wed, 15 Mar 2017 09:51:12 -0700
-README.rdoc	Mon, 13 Mar 2017 16:05:07 -0700
-CHANGELOG	Wed, 15 Mar 2017 09:47:40 -0700
+Tue, 18 Apr 2017 11:09:32 -0700
+README.rdoc	Tue, 21 Mar 2017 12:46:08 -0700
+CHANGELOG	Tue, 18 Apr 2017 11:06:09 -0700
 MIT-LICENSE	Wed, 13 Jan 2016 08:58:01 -0800
 lib/roda.rb	Mon, 13 Mar 2017 16:05:07 -0700
 lib/roda/plugins/_erubis_escaping.rb	Sun, 31 Jan 2016 11:52:29 -0800
@@ -23,9 +23,10 @@ lib/roda/plugins/disallow_file_uploads.rb	Tue, 14 Mar 2017 15:49:19 -0700
 lib/roda/plugins/drop_body.rb	Sun, 31 Jan 2016 11:53:13 -0800
 lib/roda/plugins/empty_root.rb	Sun, 31 Jan 2016 11:53:15 -0800
 lib/roda/plugins/environments.rb	Sun, 31 Jan 2016 11:53:17 -0800
-lib/roda/plugins/error_email.rb	Fri, 24 Feb 2017 08:23:12 -0800
+lib/roda/plugins/error_email.rb	Fri, 14 Apr 2017 13:45:51 -0700
 lib/roda/plugins/error_handler.rb	Mon, 25 Jul 2016 09:46:49 -0700
-lib/roda/plugins/flash.rb	Fri, 08 Jan 2016 15:41:05 -0800
+lib/roda/plugins/error_mail.rb	Fri, 14 Apr 2017 13:45:51 -0700
+lib/roda/plugins/flash.rb	Thu, 23 Mar 2017 13:50:03 -0700
 lib/roda/plugins/h.rb	Tue, 14 Mar 2017 15:49:19 -0700
 lib/roda/plugins/halt.rb	Sun, 31 Jan 2016 11:53:28 -0800
 lib/roda/plugins/hash_matcher.rb	Sun, 31 Jan 2016 11:53:31 -0800
@@ -81,7 +82,7 @@ lib/roda/plugins/unescape_path.rb	Wed, 13 Jul 2016 08:09:00 -0700
 lib/roda/plugins/view_options.rb	Sun, 31 Jan 2016 11:55:12 -0800
 lib/roda/plugins/view_subdirs.rb	Sun, 08 Mar 2015 14:07:21 -0700
 lib/roda/plugins/websockets.rb	Fri, 20 Jan 2017 09:06:43 -0800
-lib/roda/version.rb	Wed, 15 Mar 2017 09:47:40 -0700
+lib/roda/version.rb	Tue, 18 Apr 2017 11:06:09 -0700
 doc/conventions.rdoc	Wed, 01 Feb 2017 07:52:47 -0800
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -113,3 +114,4 @@ doc/release_notes/2.21.0.txt	Fri, 16 Dec 2016 08:37:32 -0800
 doc/release_notes/2.22.0.txt	Fri, 20 Jan 2017 09:06:43 -0800
 doc/release_notes/2.23.0.txt	Fri, 24 Feb 2017 08:23:12 -0800
 doc/release_notes/2.24.0.txt	Wed, 15 Mar 2017 09:47:40 -0700
+doc/release_notes/2.25.0.txt	Tue, 18 Apr 2017 11:06:09 -0700
