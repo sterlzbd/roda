@@ -292,4 +292,23 @@ describe "type_routing plugin" do
 
     body('/a.html').must_equal '.html'
   end
+
+  it "takes the longest file extension first, when ambiguous" do
+    app(:bare) do
+      plugin :type_routing, :types => {
+        :gz => 'application/octet-stream',
+        :'tar.gz' => 'application/octet-stream',
+      }
+
+      route do |r|
+        r.is 'a' do
+          r.on_type(:gz) { 'GZ' }
+          r.on_type(:'tar.gz') { 'TAR.GZ' }
+          raise "Mismatch!"
+        end
+      end
+    end
+
+    body('/a.tar.gz').must_equal 'TAR.GZ'
+  end
 end
