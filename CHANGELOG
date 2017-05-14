@@ -1,3 +1,7 @@
+= master
+
+* Handle multiple types with matching suffixes in the type_routing plugin (e.g. tar.gz and gz) (tomdalling) (#117)
+
 = 2.25.0 (2017-04-18)
 
 * Add error_mail plugin, similar to error_email but using mail instead of net/smtp directly (jeremyevans)

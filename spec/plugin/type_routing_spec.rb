@@ -304,11 +304,13 @@ describe "type_routing plugin" do
         r.is 'a' do
           r.on_type(:gz) { 'GZ' }
           r.on_type(:'tar.gz') { 'TAR.GZ' }
-          raise "Mismatch!"
+          "NO"
         end
       end
     end
 
+    body('/a').must_equal "NO"
+    body('/a.gz').must_equal 'GZ'
     body('/a.tar.gz').must_equal 'TAR.GZ'
   end
 end
