@@ -1,5 +1,7 @@
 = master
 
+* Support :skip_middleware option to csrf plugin to add only the methods and not add the middleware (luciusgone) (#118)
+
 * Handle multiple types with matching suffixes in the type_routing plugin (e.g. tar.gz and gz) (tomdalling) (#117)
 
 = 2.25.0 (2017-04-18)

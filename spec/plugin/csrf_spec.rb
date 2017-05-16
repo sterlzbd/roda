@@ -50,7 +50,8 @@ describe "csrf plugin" do
   end
 
   it "can optionally skip setting up the middleware" do
-    sub_app = Class.new(Roda) do
+    sub_app = Class.new(Roda)
+    sub_app.class_eval do
       plugin :csrf, :skip_middleware=>true
 
       route do |r|
@@ -101,8 +102,10 @@ describe "csrf plugin" do
     sub_app.plugin :csrf, :skip_middleware=>true
     body('/foo/bar', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 'foobar'
 
-    m = sub_app.instance_variable_get(:@middleware)
-    m.must_equal []
+    @app = sub_app
+    s, _, b = req('/bar', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io)
+    s.must_equal 200
+    b.must_equal ['foobar']
   end
 end
 end
