@@ -3,9 +3,9 @@ require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 begin
   require 'rack/csrf'
 rescue LoadError
-  warn "rack_csrf not installed, skipping csrf plugin test"
+  warn "rack_csrf not installed, skipping csrf plugin test"  
 else
-describe "csrf plugin" do
+describe "csrf plugin" do 
   it "adds csrf protection and csrf helper methods" do
     app(:bare) do
       use Rack::Session::Cookie, :secret=>'1'
