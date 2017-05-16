@@ -87,8 +87,8 @@ describe "content_for plugin with haml" do
   end
 
   it "should work with alternate rendering engines" do
-    body.strip.must_equal "bar\nfoo"
-    body('/a').strip.must_equal "bar\nfoo"
+    body.strip.sub(/\n+/, "\n").must_equal "bar\nfoo"
+    body('/a').strip.sub(/\n+/, "\n").must_equal "bar\nfoo"
   end
 end
 
