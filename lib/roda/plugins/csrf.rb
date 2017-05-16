@@ -10,6 +10,11 @@ class Roda
     #
     #   plugin :csrf, :raise=>true
     #
+    # Optionally you can choose not to setup rack_csrf middleware on the
+    # roda app if you already have one configured:
+    #
+    #   plugin :csrf, :skip_middleware=>true
+    #
     # This adds the following instance methods:
     #
     # csrf_field :: The field name to use for the hidden/meta csrf tag.
@@ -26,6 +31,7 @@ class Roda
 
       # Load the Rack::Csrf middleware into the app with the given options.
       def self.configure(app, opts={})
+        return if opts[:skip_middleware]
         app.instance_exec do
           @middleware.each do |(mid, *rest), _|
             if mid.equal?(CSRF)
