@@ -240,7 +240,7 @@ class Roda
 
         # Delay adding a file to the message until after the message body has been set.
         # If a block is given, the block is called after the file has been added, and you
-        # can access the attachment via <tt>response.mail.attachments.last</tt>.
+        # can access the attachment via <tt>response.mail_attachments.last</tt>.
         def add_file(*a, &block)
           response.mail_attachments << [a, block]
           nil
