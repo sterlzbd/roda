@@ -1,7 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(__FILE__))
 
 describe "capturing" do
-  it "doesn't yield the verb" do
+  it "doesn't yield the verb for verb matcher" do
     app do |r|
       r.get do |*args|
         args.size.to_s
@@ -11,7 +11,7 @@ describe "capturing" do
     body.must_equal '0'
   end
 
-  it "doesn't yield the path" do
+  it "doesn't yield the path for string matcher" do
     app do |r|
       r.get "home" do |*args|
         args.size.to_s
@@ -21,7 +21,7 @@ describe "capturing" do
     body('/home').must_equal '0'
   end
 
-  it "yields the segment" do
+  it "yields the segment for symbol matcher" do
     app do |r|
       r.get "user", :id do |id|
         id
@@ -31,7 +31,7 @@ describe "capturing" do
     body("/user/johndoe").must_equal 'johndoe'
   end
 
-  it "yields a number" do
+  it "yields an integer segment as a string when using symbol matcher" do
     app do |r|
       r.get "user", :id do |id|
         id
@@ -41,7 +41,7 @@ describe "capturing" do
     body("/user/101").must_equal '101'
   end
 
-  it "yields a segment per nested block" do
+  it "yields a segment per nested block for symbol matcher" do
     app do |r|
       r.on :one do |one|
         r.on :two do |two|
@@ -55,7 +55,17 @@ describe "capturing" do
     body("/one/two/three").must_equal "onetwothree"
   end
 
-  it "regex captures in regex format" do
+  it "yields a segment per argument for symbol matcher" do
+    app do |r|
+      r.on :one, :two, :three do |one, two, three|
+        one + two + three
+      end
+    end
+
+    body("/one/two/three").must_equal "onetwothree"
+  end
+
+  it "yields regex captures as separate arguments" do
     app do |r|
       r.get %r{posts/(\d+)-(.*)} do |id, slug|
         id + slug
@@ -63,6 +73,28 @@ describe "capturing" do
     end
 
     body("/posts/123-postal-service").must_equal "123postal-service"
+  end
+
+  it "yields an integer segment as an integer when using Integer matcher " do
+    app do |r|
+      r.get "user", Integer do |id|
+        "#{id}-#{id.is_a?(Integer)}"
+      end
+      "b"
+    end
+
+    body("/user/101").must_equal '101-true'
+    body("/user/a").must_equal 'b'
+  end
+
+  it "yields the segment for symbol matcher" do
+    app do |r|
+      r.get "user", String do |id|
+        id
+      end
+    end
+
+    body("/user/johndoe").must_equal 'johndoe'
   end
 end
 

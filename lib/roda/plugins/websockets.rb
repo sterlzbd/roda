@@ -27,7 +27,7 @@ class Roda
     #   end
     #
     #   route do |r|
-    #     r.get "room", :d do |room_id|
+    #     r.get "room", Integer do |room_id|
     #       room = sync{ROOMS[room_id] ||= []}
     #
     #       r.websocket do |ws|

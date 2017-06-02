@@ -18,7 +18,7 @@ class Roda
     #     plugin :shared_vars
     #
     #     route do |r|
-    #       r.on :user_id do |user_id|
+    #       r.on Integer do |user_id|
     #         shared[:user] = User[user_id]
     #         r.run API
     #       end
@@ -29,7 +29,7 @@ class Roda
     # vars with the content of the hash:
     #
     #   route do |r|
-    #     r.on :user_id do |user_id|
+    #     r.on Integer do |user_id|
     #       shared(:user => User[user_id])
     #       r.run API
     #     end
@@ -40,7 +40,7 @@ class Roda
     # previous shared variables afterward:
     #
     #   route do |r|
-    #     r.on :user_id do |user_id|
+    #     r.on Integer do |user_id|
     #       shared(:user => User[user_id]) do
     #         r.run API
     #       end

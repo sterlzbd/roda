@@ -687,11 +687,35 @@ class Roda
           end
         end
 
+        # Match the given class.  Currently, the following classes
+        # are supported by default:
+        # Integer :: Match an integer segment, yielding result to block as an integer
+        # String :: Match any non-empty segment, yielding result to block as a string
+        def _match_class(matcher)
+          if matcher == Integer
+            _match_integer
+          elsif matcher == String
+            _match_segment
+          else
+            unsupported_matcher(matcher)
+          end
+        end
+
         # Match the given hash if all hash matchers match.
         def _match_hash(hash)
           hash.all?{|k,v| send("match_#{k}", v)}
         end
 
+        # Match integer segment, and yield resulting value as an
+        # integer.
+        def _match_integer
+          if matchdata = remaining_path.match(/\A\/(\d+)(?=\/|\z)/)
+            @remaining_path = matchdata.post_match
+            @captures << matchdata[1].to_i
+          end
+        end
+
+        # Match only if all of the arguments in the given array match.
         # Match the given regexp exactly if it matches a full segment.
         def _match_regexp(re)
           consume(self.class.cached_matcher(re){re})
@@ -725,7 +749,7 @@ class Roda
         end
 
         # Match the given symbol if any segment matches.
-        def _match_symbol(sym)
+        def _match_symbol(sym=nil)
           rp = @remaining_path
           if rp[0, 1] == SLASH
             if last = rp.index('/', 1)
@@ -739,6 +763,9 @@ class Roda
             end
           end
         end
+
+        # Match any nonempty segment.  This should be called without an argument.
+        alias _match_segment _match_symbol
 
         # The regular expression to use for matching symbols.  By default, any non-empty
         # segment matches.
@@ -836,17 +863,19 @@ class Roda
             false
           end
         end
-        
+
         # Attempt to match the argument to the given request, handling
         # common ruby types.
         def match(matcher)
           case matcher
           when String
             _match_string(matcher)
-          when Symbol
-            _match_symbol(matcher)
+          when Class
+            _match_class(matcher)
           when TERM
             empty_path?
+          when Symbol
+            _match_symbol(matcher)
           when Regexp
             _match_regexp(matcher)
           when Hash
@@ -858,10 +887,7 @@ class Roda
           when true, false, nil
             matcher
           else
-            if roda_class.opts[:unsupported_matcher] == :raise
-              raise RodaError, "unsupported matcher: #{matcher.inspect}"
-            end
-            matcher
+            unsupported_matcher(matcher)
           end
         end
 
@@ -884,6 +910,14 @@ class Roda
         # placeholders via colons.
         def placeholder_string_matcher?
           !roda_class.opts[:verbatim_string_matcher]
+        end
+
+        # Handle an unsupported matcher.
+        def unsupported_matcher(matcher)
+          if roda_class.opts[:unsupported_matcher] == :raise
+            raise RodaError, "unsupported matcher: #{matcher.inspect}"
+          end
+          matcher
         end
       end
 

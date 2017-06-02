@@ -227,12 +227,12 @@ Here's an example showcasing how different matchers work:
       end
 
       # GET /post/2011/02/16/hello
-      r.get "post", :y, :m, :d, :slug do |y, m, d, slug|
-        "#{y}-#{m}-#{d} #{slug}" #=> "2011-02-16 hello"
+      r.get "post", Integer, Integer, Integer, String do |year, month, day, slug|
+        "#{year}-#{month}-#{day} #{slug}" #=> "2011-02-16 hello"
       end
 
       # GET /username/foobar branch
-      r.on "username", :username, :method=>:get do |username|
+      r.on "username", String, :method=>:get do |username|
         user = User.find_by_username(username)
 
         # GET /username/foobar/posts
@@ -300,8 +300,8 @@ You can use multiple colons in a string:
 Note that instead of using colons in strings, it is recommended to use separate
 symbol arguments, as it is faster and simpler:
 
-  "foo", :id # instead of "foo/:id"
-  :x, :y     # instead of ":x/:y"
+  "foo", String # instead of "foo/:id"
+  String, String     # instead of ":x/:y"
 
 It is possible in future versions of Roda, colons will not be treated specially
 in strings, and will just match a literal colon character.
@@ -325,6 +325,25 @@ If any patterns are captured by the Regexp, they are yielded:
   /foo\w+/   # matches "/foobar", yields nothing
   /foo(\w+)/ # matches "/foobar", yields "bar" 
 
+=== Class
+
+There are two classes that are supported as matchers, String
+and Integer.
+
+String :: matches any non-empty segment
+Integer :: matches any segment of 0-9, returns matched values as integers
+
+Using String and Integer is the recommended way to handle
+arbitrary segments
+
+  String # matches "/foo", yields "foo"
+  String # matches "/1", yields "1"
+  String # does not match "/"
+
+  Integer # does not match "/foo"
+  Integer # matches "/1", yields 1
+  Integer # does not match "/"
+
 === Symbol
 
 Symbols match any nonempty segment,
@@ -332,6 +351,11 @@ yielding the segment except for the preceding slash:
 
   :id # matches "/foo" yields "foo"
   :id # does not match "/"
+
+Symbol matchers operate the same as the class String matcher,
+and is the historical way to do arbitrary segment matching.
+It is recommended to use the class String matcher in new code
+as it is a bit more intuitive.
 
 === Proc
 
@@ -381,20 +405,20 @@ allows for easily defining your own:
 
 The +:all+ matcher matches if all of the entries in the given array match, so
 
-  r.on :all=>[:a, :b] do
+  r.on :all=>[String, String] do
     # ...
   end
 
 is the same as:
 
-  r.on :a, :b do
+  r.on String, String do
     # ...
   end
 
 The reason it also exists as a separate hash matcher
 is so you can use it inside an array matcher, so:
 
-  r.on ['foo', {:all=>['foos', :id]}] do
+  r.on ['foo', {:all=>['foos', Integer]}] do
   end
 
 would match +/foo+ and +/foos/10+, but not +/foos+.
@@ -413,7 +437,9 @@ If +false+ or +nil+ is given directly as a matcher, it doesn't match anything.
 
 === Everything else
 
-Everything else matches anything.
+Everything else matches anything.  Note that future versions of Roda will probably
+raise exceptions for unsupported matchers, so it is not recommended to rely on this
+behavior.
 
 == Optional segments
 
@@ -424,11 +450,11 @@ the item's id, and 456 being some optional data.
 The simplest way to handle this is by treating this as two separate routes with a
 shared branch:
 
-  r.on "items", :id do |item_id|
+  r.on "items", String do |item_id|
     # Shared code for branch here
 
     # /items/123/456
-    r.is :opt_data do |optional_data|
+    r.is String do |optional_data|
     end
 
     # /items/123
@@ -440,7 +466,7 @@ This works well for many cases, but there are also cases where you really want t
 treat it as one route with an optional segment.  One simple way to do that is to
 use a parameter instead of an optional segment (e.g. +/items/123?opt=456+).
 
-  r.is "items", :id do |item_id|
+  r.is "items", Integer do |item_id|
     optional_data = r['opt']
   end
 
@@ -448,7 +474,7 @@ However, if you really do want to use a optional segment, there are a couple dif
 ways to use matchers to do so.  One is using an array matcher where the last element
 is true:
 
-  r.is "items", :id, [:opt_data, true] do |item_id, optional_data|
+  r.is "items", Integer, [String, true] do |item_id, optional_data|
   end
 
 Note that this technically yields only one argument instead of two arguments if the

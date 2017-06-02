@@ -8,7 +8,7 @@ class Roda
     # For proper caching, you should use either the +last_modified+ or
     # +etag+ request methods.  
     #
-    #   r.get 'albums', :d do |album_id|
+    #   r.get 'albums', Integer do |album_id|
     #     @album = Album[album_id]
     #     r.last_modified @album.updated_at
     #     view('album')
@@ -16,7 +16,7 @@ class Roda
     #
     #   # or
     #
-    #   r.get 'albums', :d do |album_id|
+    #   r.get 'albums', Integer do |album_id|
     #     @album = Album[album_id]
     #     r.etag @album.sha1
     #     view('album')

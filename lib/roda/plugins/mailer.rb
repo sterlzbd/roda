@@ -60,8 +60,8 @@ class Roda
     # email bodies, you can use all of Roda's usual routing tree features
     # to DRY up your code:
     #
-    #   r.on "albums", :d do |album_id|
-    #     @album = Album[album_id.to_i]
+    #   r.on "albums", Integer do |album_id|
+    #     @album = Album[album_id]
     #     from 'from@example.com'
     #     to 'to@example.com'
     #
@@ -92,7 +92,7 @@ class Roda
     # If while preparing the email you figure out you don't want to send an
     # email, call +no_mail!+:
     #
-    #  r.mail 'welcome', :d do |id| 
+    #  r.mail 'welcome', Integer do |id| 
     #    no_mail! unless user = User[id]
     #    # ...
     #  end

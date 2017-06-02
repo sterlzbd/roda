@@ -1,3 +1,9 @@
+= master
+
+* Support String class matcher for non-empty segments, same behavior as symbol matchers but more intuitive and DRY (jeremyevans)
+
+* Support Integer class matcher for \d+ segments, yielding matched values as integers (jeremyevans)
+
 = 2.26.0 (2017-05-16)
 
 * Support :skip_middleware option to csrf plugin to add only the methods and not add the middleware (luciusgone) (#118)

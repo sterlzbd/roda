@@ -139,7 +139,7 @@ class App &lt; Roda
       view :index
     end
 
-    r.is 'artist', :id do |artist_id|
+    r.is 'artist', Integer do |artist_id|
       @artist = Artist[artist_id]
       check_access(@artist)
 
@@ -172,20 +172,20 @@ class App &lt; Sinatra::Base
   end
 
   get '/artist/:id' do
-    @artist = Artist[params[:id]]
+    @artist = Artist[params[:id].to_i]
     check_access(@artist)
     erb :artist
   end
 
   post '/artist/:id' do
-    @artist = Artist[params[:id]]
+    @artist = Artist[params[:id].to_i]
     check_access(@artist)
     @artist.update(params[:artist])
     redirect(request.path_info)
   end
 
   delete '/artist/:id' do
-    @artist = Artist[params[:id]]
+    @artist = Artist[params[:id].to_i]
     check_access(@artist)
     @artist.destory
     redirect '/' 
