@@ -23,7 +23,7 @@ describe "error_mail plugin" do
     end
   end
 
-  before do
+  after do
     Mail::TestMailer.deliveries.clear
   end
 
