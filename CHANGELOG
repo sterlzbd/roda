@@ -1,5 +1,7 @@
 = master
 
+* Add class_matchers plugin for matching other classes (in addition to String/Integer), with user specified regexps and type conversion (jeremyevans)
+
 * Support String class matcher for non-empty segments, same behavior as symbol matchers but more intuitive and DRY (jeremyevans)
 
 * Support Integer class matcher for \d+ segments, yielding matched values as integers (jeremyevans)

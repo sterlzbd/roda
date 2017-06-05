@@ -691,13 +691,12 @@ class Roda
         # are supported by default:
         # Integer :: Match an integer segment, yielding result to block as an integer
         # String :: Match any non-empty segment, yielding result to block as a string
-        def _match_class(matcher)
-          if matcher == Integer
-            _match_integer
-          elsif matcher == String
-            _match_segment
+        def _match_class(klass)
+          meth = :"_match_class_#{klass}"
+          if respond_to?(meth, true)
+            send(meth)
           else
-            unsupported_matcher(matcher)
+            unsupported_matcher(klass)
           end
         end
 
@@ -708,11 +707,8 @@ class Roda
 
         # Match integer segment, and yield resulting value as an
         # integer.
-        def _match_integer
-          if matchdata = remaining_path.match(/\A\/(\d+)(?=\/|\z)/)
-            @remaining_path = matchdata.post_match
-            @captures << matchdata[1].to_i
-          end
+        def _match_class_Integer
+          consume(/\A\/(\d+)(?=\/|\z)/){|i| [i.to_i]}
         end
 
         # Match only if all of the arguments in the given array match.
@@ -765,7 +761,7 @@ class Roda
         end
 
         # Match any nonempty segment.  This should be called without an argument.
-        alias _match_segment _match_symbol
+        alias _match_class_String _match_symbol
 
         # The regular expression to use for matching symbols.  By default, any non-empty
         # segment matches.
@@ -818,7 +814,9 @@ class Roda
         def consume(pattern)
           if matchdata = remaining_path.match(pattern)
             @remaining_path = matchdata.post_match
-            @captures.concat(matchdata.captures)
+            captures = matchdata.captures
+            captures = yield(*captures) if block_given?
+            @captures.concat(captures)
           end
         end
 
