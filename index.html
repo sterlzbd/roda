@@ -175,7 +175,7 @@ class App &lt; Roda
       view :index
     end
 
-    r.is 'artist', :id do |artist_id|
+    r.is 'artist', Integer do |artist_id|
       @artist = Artist[artist_id]
       check_access(@artist)
 
@@ -208,20 +208,20 @@ class App &lt; Sinatra::Base
   end
 
   get '/artist/:id' do
-    @artist = Artist[params[:id]]
+    @artist = Artist[params[:id].to_i]
     check_access(@artist)
     erb :artist
   end
 
   post '/artist/:id' do
-    @artist = Artist[params[:id]]
+    @artist = Artist[params[:id].to_i]
     check_access(@artist)
     @artist.update(params[:artist])
     redirect(request.path_info)
   end
 
   delete '/artist/:id' do
-    @artist = Artist[params[:id]]
+    @artist = Artist[params[:id].to_i]
     check_access(@artist)
     @artist.destory
     redirect '/' 
@@ -234,11 +234,11 @@ end
 
 <h3>Faster</h3>
 
-<p>In addition to being more maintainable, Roda's approach is also faster in general.   Sinatra routes requests by testing each of the stored routes against the current request, in order.  With Roda, once one branch of the tree matches, only routes inside that branch are considered, not any routes after that branch.  Roda also has support for a single route that dispatches to multiple branches via the multi_route and multi_run plugins.  For large applications, routing in Sinatra is roughly O(N), where N is the number of routes, while routing in Roda can be close to O(log N), depending on how you structure your routing tree.  For small applications, because Roda has lower per-request overhead, <a href="https://github.com/luislavena/bench-micro#requestssec">Roda is about 2.5 times faster than Sinatra</a>.</p>
+<p>In addition to being more maintainable, Roda's approach is also faster in general.   Sinatra routes requests by testing each of the stored routes against the current request.  With Roda, once one branch of the tree matches, only routes inside that branch are considered, not any routes after that branch.  Roda also has support for a single route that dispatches to multiple branches via the multi_route and multi_run plugins.  For large applications, routing in Sinatra is roughly O(N), where N is the number of routes, while routing in Roda can be close to O(log N), depending on how you structure your routing tree.  For small applications, because Roda has lower per-request overhead, <a href="https://github.com/luislavena/bench-micro#requestssec">Roda is about 3 times faster than Sinatra</a>.</p>
 
 <h3>Plugin System</h3>
 
-<p>Another difference between Roda and Sinatra is that Roda has a very small core, with a plugin system modeled on <a href="http://sequel.jeremyevans.net">Sequel</a>'s.  All parts of Roda (class/instance/request/response) can be overridden by plugins and call super to get the default behavior.  This includes when plugins are applied to the Roda class itself (affecting all subclasses).  The reason Roda is referred to as a toolkit is that by using different combinations of plugins, you can build the routing tree web framework that meets your needs.<p>
+<p>Another difference between Roda and Sinatra is that Roda has a very small core, with a plugin system modeled on <a href="http://sequel.jeremyevans.net">Sequel</a>'s.  All parts of Roda (class/instance/request/response) can be overridden by plugins and call super to get the default behavior.  This includes when plugins are applied to the Roda class itself (affecting all subclasses).  The reason Roda is referred to as a toolkit is that it offers a lot of different tools (in the form of plugins), and you can choose which tools you use to build your application. Some applications (e.g. form-based websites) are best built using some tools, and other applications (e.g. APIs) are best built using different tools.  Roda provides a large variety of tools that work together to make it easy to build most web applications.<p>
 
 <p>Many features that are built into Sinatra are shipped as plugins in Roda. This way they can easily be used if needed, but if you don't use them you don't pay the cost for loading them.  Near the top of the Roda example, you can see <span class="code">plugin :render</span>, which adds support for template rendering, and <span class="code">plugin :all_verbs</span>, which adds routing methods for all HTTP request methods.
 

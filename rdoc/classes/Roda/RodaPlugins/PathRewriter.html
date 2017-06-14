@@ -67,7 +67,7 @@
             <p>Patterns can be rewritten dynamically by providing a block accepting a
             MatchData object and evaluating to the replacement.</p>
             
-            <pre>rewrite_path(/\A\/a/(\w+)/){|match| &quot;/a/#{match[1].capitalize}&quot;}&#x000A;# PATH_INFO &#39;/a/moo&#39; =&gt; remaining_path &#39;/a/Moo&#39;&#x000A;rewrite_path(/\A\/a/(\w+)/, :path_info =&gt; true){|match| &quot;/a/#{match[1].capitalize}&quot;}&#x000A;# PATH_INFO &#39;/a/moo&#39; =&gt; PATH_INFO &#39;/a/Moo&#39;</pre>
+            <pre class="ruby"><span class="ruby-identifier">rewrite_path</span>(<span class="ruby-regexp">/\A\/a\/(\w+)/</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;/a/#{match[1].capitalize}&quot;</span>}&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/moo&#39; =&gt; remaining_path &#39;/a/Moo&#39;</span>&#x000A;<span class="ruby-identifier">rewrite_path</span>(<span class="ruby-regexp">/\A\/a\/(\w+)/</span>, :<span class="ruby-identifier">path_info</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;/a/#{match[1].capitalize}&quot;</span>}&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/moo&#39; =&gt; PATH_INFO &#39;/a/Moo&#39;</span></pre>
             
             <p>All path rewrites are applied in order, so if a path is rewritten by one
             rewrite, it can be rewritten again by a later rewrite.  Note that <a
