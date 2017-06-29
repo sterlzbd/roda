@@ -226,6 +226,11 @@ class Roda
       CHARSET = 'charset'.freeze
       OPTS = {}.freeze
 
+      # Depend on the status_303 plugin.
+      def self.load_dependencies(app, _opts = nil)
+        app.plugin :status_303
+      end
+
       # Add delegate methods to the route block scope
       # calling request or response methods, unless the
       # :delegate option is false.
@@ -380,17 +385,6 @@ class Roda
         end
         alias url uri
         alias to uri
-
-        private
-
-        # Use a 303 response for non-GET responses if client uses HTTP 1.1.
-        def default_redirect_status
-          if @env[HTTP_VERSION] == HTTP11 && !is_get?
-            303
-          else
-            super
-          end
-        end
       end
 
       module ResponseMethods
