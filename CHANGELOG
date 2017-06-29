@@ -1,3 +1,7 @@
+= master
+
+* Move 303 default redirect status from sinatra_helpers to status_303 plugin, so it can be loaded separately (plujon) (#122)
+
 = 2.27.0 (2017-06-14)
 
 * Add class_matchers plugin for matching other classes (in addition to String/Integer), with user specified regexps and type conversion (jeremyevans)
