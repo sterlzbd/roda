@@ -239,6 +239,9 @@
             <a href="../../files/lib/roda/plugins/static_routing_rb.html">lib/roda/plugins/static_routing.rb</a>
           </li>
           <li class='other'>
+            <a href="../../files/lib/roda/plugins/status_303_rb.html">lib/roda/plugins/status_303.rb</a>
+          </li>
+          <li class='other'>
             <a href="../../files/lib/roda/plugins/status_handler_rb.html">lib/roda/plugins/status_handler.rb</a>
           </li>
           <li class='other'>
@@ -287,6 +290,7 @@
             <h2>Methods</h2>
             <h3>Public Class</h3>
             <ol>
+              <li><a href="#method-c-deprecate_constant">deprecate_constant</a></li>
               <li><a href="#method-c-load_plugin">load_plugin</a></li>
               <li><a href="#method-c-register_plugin">register_plugin</a></li>
             </ol>
@@ -366,6 +370,7 @@
               <li><a href="RodaPlugins/Static.html">Roda::RodaPlugins::Static</a></li>
               <li><a href="RodaPlugins/StaticPathInfo.html">Roda::RodaPlugins::StaticPathInfo</a></li>
               <li><a href="RodaPlugins/StaticRouting.html">Roda::RodaPlugins::StaticRouting</a></li>
+              <li><a href="RodaPlugins/Status303.html">Roda::RodaPlugins::Status303</a></li>
               <li><a href="RodaPlugins/StatusHandler.html">Roda::RodaPlugins::StatusHandler</a></li>
               <li><a href="RodaPlugins/Streaming.html">Roda::RodaPlugins::Streaming</a></li>
               <li><a href="RodaPlugins/StripPathPrefix.html">Roda::RodaPlugins::StripPathPrefix</a></li>
@@ -381,6 +386,24 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-deprecate_constant'>
+                <a name='method-c-deprecate_constant'></a>
+                <div class='synopsis'>
+                  <span class='name'>deprecate_constant</span>
+                  <span class='arguments'>(mod, name)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Deprecate the constant with the given name in the given module, if the ruby
+                  version supports it.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-deprecate_constant-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-deprecate_constant-source'><span class="ruby-comment"># File lib/roda.rb, line 93</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-string">&#39;2.3&#39;</span>&#x000A;    <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
               <div class='method public-class' id='method-method-c-load_plugin'>
                 <a name='method-c-load_plugin'></a>
                 <div class='synopsis'>
