@@ -49,8 +49,11 @@ class Roda
         :css => 'style'.freeze,
         :js => 'script'.freeze,
       }.freeze
+
       COMMA = ",".freeze
+      RodaPlugins.deprecate_constant(self, :COMMA)
       NEWLINE= "\n".freeze
+      RodaPlugins.deprecate_constant(self, :NEWLINE)
 
       # Depend on the assets plugin, as we'll be calling some functions in it.
       def self.load_dependencies(app)
@@ -61,13 +64,13 @@ class Roda
         # Return a string of <link> tags for the given asset
         # types/groups.
         def preload_assets_link_tags(*args)
-          _preload_assets_array(args).map{|path, as| "<link href=\"#{h(path)}\" rel=\"preload\" as=\"#{as}\">"}.join(NEWLINE)
+          _preload_assets_array(args).map{|path, as| "<link href=\"#{h(path)}\" rel=\"preload\" as=\"#{as}\">"}.join("\n")
         end
 
         # Return a string suitable for a Link header for the
         # given asset types/groups.
         def preload_assets_link_header(*args)
-          _preload_assets_array(args).map{|path, as| "<#{path}>;rel=preload;as=#{as}"}.join(COMMA)
+          _preload_assets_array(args).map{|path, as| "<#{path}>;rel=preload;as=#{as}"}.join(",")
         end
 
         private

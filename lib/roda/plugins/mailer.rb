@@ -110,17 +110,28 @@ class Roda
     # Roda application if you want your helper methods to automatically be
     # available in your email views.
     module Mailer
-      REQUEST_METHOD = "REQUEST_METHOD".freeze
-      PATH_INFO = "PATH_INFO".freeze
-      SCRIPT_NAME = 'SCRIPT_NAME'.freeze
-      EMPTY_STRING = ''.freeze
-      RACK_INPUT = 'rack.input'.freeze
-      RODA_MAIL = 'roda.mail'.freeze
-      RODA_MAIL_ARGS = 'roda.mail_args'.freeze
-      MAIL = "MAIL".freeze
-      CONTENT_TYPE = 'Content-Type'.freeze
-      TEXT_PLAIN = "text/plain".freeze
       OPTS = {}.freeze
+
+      REQUEST_METHOD = "REQUEST_METHOD".freeze
+      RodaPlugins.deprecate_constant(self, :REQUEST_METHOD)
+      PATH_INFO = "PATH_INFO".freeze
+      RodaPlugins.deprecate_constant(self, :PATH_INFO)
+      SCRIPT_NAME = 'SCRIPT_NAME'.freeze
+      RodaPlugins.deprecate_constant(self, :SCRIPT_NAME)
+      EMPTY_STRING = ''.freeze
+      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
+      RACK_INPUT = 'rack.input'.freeze
+      RodaPlugins.deprecate_constant(self, :RACK_INPUT)
+      RODA_MAIL = 'roda.mail'.freeze
+      RodaPlugins.deprecate_constant(self, :RODA_MAIL)
+      RODA_MAIL_ARGS = 'roda.mail_args'.freeze
+      RodaPlugins.deprecate_constant(self, :RODA_MAIL_ARGS)
+      MAIL = "MAIL".freeze
+      RodaPlugins.deprecate_constant(self, :MAIL)
+      CONTENT_TYPE = 'Content-Type'.freeze
+      RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
+      TEXT_PLAIN = "text/plain".freeze
+      RodaPlugins.deprecate_constant(self, :TEXT_PLAIN)
 
       # Error raised when the using the mail class method, but the routing
       # tree doesn't return the mail object. 
@@ -139,7 +150,7 @@ class Roda
         def mail(path, *args)
           mail = ::Mail.new
           catch(:no_mail) do
-            unless mail.equal?(new(PATH_INFO=>path, SCRIPT_NAME=>EMPTY_STRING, REQUEST_METHOD=>MAIL, RACK_INPUT=>StringIO.new, RODA_MAIL=>mail, RODA_MAIL_ARGS=>args).call(&route_block))
+            unless mail.equal?(new("PATH_INFO"=>path, 'SCRIPT_NAME'=>'', "REQUEST_METHOD"=>"MAIL", 'rack.input'=>StringIO.new, 'roda.mail'=>mail, 'roda.mail_args'=>args).call(&route_block))
               raise Error, "route did not return mail instance for #{path.inspect}, #{args.inspect}"
             end
             mail
@@ -161,9 +172,9 @@ class Roda
         # the request.  This yields any of the captures to the block, as well as
         # any arguments passed to the +mail+ or +sendmail+ Roda class methods.
         def mail(*args)
-          if @env[REQUEST_METHOD] == MAIL
+          if @env["REQUEST_METHOD"] == "MAIL"
             if_match(args) do |*vs|
-              yield(*(vs + @env[RODA_MAIL_ARGS]))
+              yield(*(vs + @env['roda.mail_args']))
             end
           end
         end
@@ -179,7 +190,7 @@ class Roda
         # that the routing tree did not handle the request.
         def finish
           if m = mail
-            header_content_type = @headers.delete(CONTENT_TYPE)
+            header_content_type = @headers.delete('Content-Type')
             m.headers(@headers)
             m.body(@body.join) unless @body.empty?
             mail_attachments.each do |a, block|
@@ -191,7 +202,7 @@ class Roda
               if mail.multipart?
                 if mail.content_type =~ /multipart\/mixed/ &&
                    mail.parts.length >= 2 &&
-                   (part = mail.parts.find{|p| !p.attachment && p.content_type == TEXT_PLAIN})
+                   (part = mail.parts.find{|p| !p.attachment && p.content_type == "text/plain"})
                   part.content_type = content_type
                 end
               else
@@ -217,7 +228,7 @@ class Roda
         # Add delegates for common email methods.
         [:from, :to, :cc, :bcc, :subject].each do |meth|
           define_method(meth) do |*args|
-            env[RODA_MAIL].send(meth, *args)
+            env['roda.mail'].send(meth, *args)
             nil
           end
         end
@@ -231,10 +242,10 @@ class Roda
         # as the default content_type for the email.
         def initialize(env)
           super
-          if mail = env[RODA_MAIL]
+          if mail = env['roda.mail']
             res = @_response
             res.mail = mail
-            res.headers.delete(CONTENT_TYPE)
+            res.headers.delete('Content-Type')
           end
         end
 
@@ -256,7 +267,7 @@ class Roda
         # Set the text_part or html_part (depending on the method) in the related email,
         # using the given body and optional headers.
         def _mail_part(meth, body, headers=nil)
-          env[RODA_MAIL].send(meth) do
+          env['roda.mail'].send(meth) do
             body(body)
             headers(headers) if headers
           end

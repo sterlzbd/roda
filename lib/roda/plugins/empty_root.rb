@@ -32,6 +32,7 @@ class Roda
     # it is empty.
     module EmptyRoot
       EMPTY_STRING = ''.freeze
+      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
 
       module RequestMethods
         # Match when the remaining path is the empty string,
@@ -39,7 +40,7 @@ class Roda
         # the remaining path is +/+.
         def root(&block)
           super
-          if remaining_path == EMPTY_STRING && is_get?
+          if remaining_path == '' && is_get?
             always(&block)
           end
         end

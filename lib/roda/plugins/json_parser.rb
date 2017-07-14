@@ -12,12 +12,17 @@ class Roda
     # header for the request includes "json".
     module JsonParser
       OPTS = {}.freeze
-      JSON_PARAMS_KEY = "roda.json_params".freeze
-      INPUT_KEY = "rack.input".freeze
-      FORM_HASH_KEY = "rack.request.form_hash".freeze
-      FORM_INPUT_KEY = "rack.request.form_input".freeze
       DEFAULT_ERROR_HANDLER = proc{|r| r.halt [400, {}, []]}
       DEFAULT_PARSER = JSON.method(:parse)
+
+      JSON_PARAMS_KEY = "roda.json_params".freeze
+      RodaPlugins.deprecate_constant(self, :JSON_PARAMS_KEY)
+      INPUT_KEY = "rack.input".freeze
+      RodaPlugins.deprecate_constant(self, :INPUT_KEY)
+      FORM_HASH_KEY = "rack.request.form_hash".freeze
+      RodaPlugins.deprecate_constant(self, :FORM_HASH_KEY)
+      FORM_INPUT_KEY = "rack.request.form_input".freeze
+      RodaPlugins.deprecate_constant(self, :FORM_INPUT_KEY)
 
       # Handle options for the json_parser plugin:
       # :error_handler :: A proc to call if an exception is raised when
@@ -41,18 +46,18 @@ class Roda
         # parse the request body as JSON.  Ignore an empty request body.
         def POST
           env = @env
-          if post_params = (env[JSON_PARAMS_KEY] || env[FORM_HASH_KEY])
+          if post_params = (env["roda.json_params"] || env["rack.request.form_hash"])
             post_params
-          elsif (input = env[INPUT_KEY]) && content_type =~ /json/
+          elsif (input = env["rack.input"]) && content_type =~ /json/
             str = input.read
             input.rewind
             return super if str.empty?
             begin
-              json_params = env[JSON_PARAMS_KEY] = parse_json(str)
+              json_params = env["roda.json_params"] = parse_json(str)
             rescue
               roda_class.opts[:json_parser_error_handler].call(self)
             end
-            env[FORM_INPUT_KEY] = input
+            env["rack.request.form_input"] = input
             json_params
           else
             super

@@ -48,6 +48,7 @@ class Roda
     #   end
     module SharedVars
       KEY = 'roda.shared'.freeze
+      RodaPlugins.deprecate_constant(self, :KEY)
 
       module InstanceMethods
         # Returns the current shared vars for the request.  These are
@@ -61,15 +62,15 @@ class Roda
         # only make the changes to the shared vars for the duration of the
         # block, restoring the previous shared vars before the block returns.
         def shared(vars=nil)
-          h = env[KEY] ||= {}
+          h = env['roda.shared'] ||= {}
 
           if block_given?
             if vars
               begin
-                env[KEY] = Hash[h].merge!(vars)
+                env['roda.shared'] = Hash[h].merge!(vars)
                 yield
               ensure
-                env[KEY] = h
+                env['roda.shared'] = h
               end
             else
               raise RodaError, "must pass a vars hash when calling shared with a block"

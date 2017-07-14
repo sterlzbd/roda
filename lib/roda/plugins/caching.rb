@@ -73,12 +73,19 @@ class Roda
 
       module RequestMethods
         LAST_MODIFIED = 'Last-Modified'.freeze
+        RodaPlugins.deprecate_constant(self, :LAST_MODIFIED)
         HTTP_IF_NONE_MATCH = 'HTTP_IF_NONE_MATCH'.freeze
+        RodaPlugins.deprecate_constant(self, :HTTP_IF_NONE_MATCH)
         HTTP_IF_MATCH = 'HTTP_IF_MATCH'.freeze
+        RodaPlugins.deprecate_constant(self, :HTTP_IF_MATCH)
         HTTP_IF_MODIFIED_SINCE = 'HTTP_IF_MODIFIED_SINCE'.freeze
+        RodaPlugins.deprecate_constant(self, :HTTP_IF_MODIFIED_SINCE)
         HTTP_IF_UNMODIFIED_SINCE = 'HTTP_IF_UNMODIFIED_SINCE'.freeze
+        RodaPlugins.deprecate_constant(self, :HTTP_IF_UNMODIFIED_SINCE)
         ETAG = 'ETag'.freeze
+        RodaPlugins.deprecate_constant(self, :ETAG)
         STAR = '*'.freeze
+        RodaPlugins.deprecate_constant(self, :STAR)
 
         # Set the last modified time of the resource using the Last-Modified header.
         # The +time+ argument should be a Time instance.
@@ -94,16 +101,16 @@ class Roda
           return unless time
           res = response
           e = env
-          res[LAST_MODIFIED] = time.httpdate
-          return if e[HTTP_IF_NONE_MATCH]
+          res['Last-Modified'] = time.httpdate
+          return if e['HTTP_IF_NONE_MATCH']
           status = res.status
 
-          if (!status || status == 200) && (ims = time_from_header(e[HTTP_IF_MODIFIED_SINCE])) && ims >= time.to_i
+          if (!status || status == 200) && (ims = time_from_header(e['HTTP_IF_MODIFIED_SINCE'])) && ims >= time.to_i
             res.status = 304
             halt
           end
 
-          if (!status || (status >= 200 && status < 300) || status == 412) && (ius = time_from_header(e[HTTP_IF_UNMODIFIED_SINCE])) && ius < time.to_i
+          if (!status || (status >= 200 && status < 300) || status == 412) && (ius = time_from_header(e['HTTP_IF_UNMODIFIED_SINCE'])) && ius < time.to_i
             res.status = 412
             halt
           end
@@ -130,16 +137,16 @@ class Roda
 
           res = response
           e = env
-          res[ETAG] = etag = "#{'W/' if weak}\"#{value}\""
+          res['ETag'] = etag = "#{'W/' if weak}\"#{value}\""
           status = res.status
 
           if (!status || (status >= 200 && status < 300) || status == 304)
-            if etag_matches?(e[HTTP_IF_NONE_MATCH], etag, new_resource)
+            if etag_matches?(e['HTTP_IF_NONE_MATCH'], etag, new_resource)
               res.status = (request_method =~ /\AGET|HEAD|OPTIONS|TRACE\z/i ? 304 : 412)
               halt
             end
 
-            if ifm = e[HTTP_IF_MATCH]
+            if ifm = e['HTTP_IF_MATCH']
               unless etag_matches?(ifm, etag, new_resource)
                 res.status = 412
                 halt
@@ -153,7 +160,7 @@ class Roda
         # Helper method checking if a ETag value list includes the current ETag.
         def etag_matches?(list, etag, new_resource)
           return unless list
-          return !new_resource if list == STAR
+          return !new_resource if list == '*'
           list.to_s.split(/\s*,\s*/).include?(etag)
         end
 

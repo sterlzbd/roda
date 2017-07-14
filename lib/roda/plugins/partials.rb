@@ -21,7 +21,9 @@ class Roda
     # Note that this plugin automatically loads the :render plugin.
     module Partials
       OPTS = {}.freeze
+
       SLASH = '/'.freeze
+      RodaPlugins.deprecate_constant(self, :SLASH)
 
       # Depend on the render plugin, since this overrides
       # some of its methods.
@@ -36,9 +38,9 @@ class Roda
         def partial(template, opts=OPTS)
           opts = parse_template_opts(template, opts)
           if opts[:template]
-            template = opts[:template].split(SLASH)
+            template = opts[:template].split('/')
             template[-1] = "_#{template[-1]}"
-            opts[:template] = template.join(SLASH)
+            opts[:template] = template.join('/')
           end
           render_template(opts)
         end

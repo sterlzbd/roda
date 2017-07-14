@@ -1,5 +1,9 @@
 = master
 
+* Deprecate unneeded internal constants (jeremyevans)
+
+* Optimize for ruby 2.3+ using frozen string literals instead of constants (jeremyevans)
+
 * Move 303 default redirect status from sinatra_helpers to status_303 plugin, so it can be loaded separately (plujon) (#122)
 
 = 2.27.0 (2017-06-14)

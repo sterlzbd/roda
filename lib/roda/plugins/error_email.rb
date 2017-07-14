@@ -94,7 +94,7 @@ END
 
           message
         end
-      }
+      }#.freeze # RODA3
 
       # Set default opts for plugin.  See ErrorEmail module RDoc for options.
       def self.configure(app, opts=OPTS)

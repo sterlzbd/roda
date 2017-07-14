@@ -89,6 +89,14 @@ class Roda
       @plugins[name] = mod
     end
 
+    # Deprecate the constant with the given name in the given module,
+    # if the ruby version supports it.
+    def self.deprecate_constant(mod, name)
+      if RUBY_VERSION >= '2.3'
+        mod.deprecate_constant(name)
+      end
+    end
+
     # The base plugin for Roda, implementing all default functionality.
     # Methods are put into a plugin so future plugins can easily override
     # them and call super to get the default behavior.
@@ -340,19 +348,29 @@ class Roda
       # for the request.
       module RequestMethods
         PATH_INFO = "PATH_INFO".freeze
+        RodaPlugins.deprecate_constant(self, :PATH_INFO)
         SCRIPT_NAME = "SCRIPT_NAME".freeze
+        RodaPlugins.deprecate_constant(self, :SCRIPT_NAME)
         REQUEST_METHOD = "REQUEST_METHOD".freeze
+        RodaPlugins.deprecate_constant(self, :REQUEST_METHOD)
         EMPTY_STRING = "".freeze
+        RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
         SLASH = "/".freeze
+        RodaPlugins.deprecate_constant(self, :SLASH)
         COLON = ":".freeze
+        RodaPlugins.deprecate_constant(self, :COLON)
         SEGMENT = "([^\\/]+)".freeze
+        RodaPlugins.deprecate_constant(self, :SEGMENT)
         TERM_INSPECT = "TERM".freeze
+        RodaPlugins.deprecate_constant(self, :TERM_INSPECT)
         GET_REQUEST_METHOD = 'GET'.freeze
+        RodaPlugins.deprecate_constant(self, :GET_REQUEST_METHOD)
         SESSION_KEY = 'rack.session'.freeze
+        RodaPlugins.deprecate_constant(self, :SESSION_KEY)
 
         TERM = Object.new
         def TERM.inspect
-          TERM_INSPECT
+          "TERM"
         end
         TERM.freeze
 
@@ -408,7 +426,7 @@ class Roda
         #   r.inspect
         #   # => '#<Roda::RodaRequest GET /foo/bar>'
         def inspect
-          "#<#{self.class.inspect} #{@env[REQUEST_METHOD]} #{path}>"
+          "#<#{self.class.inspect} #{@env["REQUEST_METHOD"]} #{path}>"
         end
 
         # Does a terminal match on the current path, matching only if the arguments
@@ -469,7 +487,7 @@ class Roda
         # Similar to the default Rack::Request get? method, but can be
         # overridden without changing rack's behavior.
         def is_get?
-          @env[REQUEST_METHOD] == GET_REQUEST_METHOD
+          @env["REQUEST_METHOD"] == 'GET'
         end
 
         # Does a match on the path, matching only if the arguments
@@ -510,7 +528,7 @@ class Roda
         # The already matched part of the path, including the original SCRIPT_NAME.
         def matched_path
           e = @env
-          e[SCRIPT_NAME] + e[PATH_INFO].chomp(@remaining_path)
+          e["SCRIPT_NAME"] + e["PATH_INFO"].chomp(@remaining_path)
         end
 
         # This an an optimized version of Rack::Request#path.
@@ -521,7 +539,7 @@ class Roda
         #   # => '/foo/bar'
         def path
           e = @env
-          "#{e[SCRIPT_NAME]}#{e[PATH_INFO]}"
+          "#{e["SCRIPT_NAME"]}#{e["PATH_INFO"]}"
         end
 
         # The current path to match requests against.
@@ -631,7 +649,7 @@ class Roda
         # Use <tt>r.get true</tt> to handle +GET+ requests where the current
         # path is empty.
         def root(&block)
-          if remaining_path == SLASH && is_get?
+          if remaining_path == "/" && is_get?
             always(&block)
           end
         end
@@ -650,8 +668,8 @@ class Roda
         def run(app)
           e = @env
           path = real_remaining_path
-          sn = SCRIPT_NAME
-          pi = PATH_INFO
+          sn = "SCRIPT_NAME"
+          pi = "PATH_INFO"
           script_name = e[sn]
           path_info = e[pi]
           begin
@@ -667,7 +685,7 @@ class Roda
         # The session for the current request.  Raises a RodaError if
         # a session handler has not been loaded.
         def session
-          @env[SESSION_KEY] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
+          @env['rack.session'] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
         end
 
         private
@@ -721,21 +739,21 @@ class Roda
         # string so that regexp metacharacters are not matched, and recognizes
         # colon tokens for placeholders.
         def _match_string(str)
-          if str.index(COLON) && placeholder_string_matcher?
+          if str.index(":") && placeholder_string_matcher?
             consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})
           else
             rp = @remaining_path
             if rp.start_with?("/#{str}")
               last = str.length + 1
               case rp[last]
-              when SLASH
+              when "/"
                 @remaining_path = rp[last, rp.length]
               when nil
-                @remaining_path = EMPTY_STRING
+                @remaining_path = ""
               when Integer
                 # :nocov:
                 # Ruby 1.8 support
-                if rp[last].chr == SLASH
+                if rp[last].chr == "/"
                   @remaining_path = rp[last, rp.length]
                 end
                 # :nocov:
@@ -747,7 +765,7 @@ class Roda
         # Match the given symbol if any segment matches.
         def _match_symbol(sym=nil)
           rp = @remaining_path
-          if rp[0, 1] == SLASH
+          if rp[0, 1] == "/"
             if last = rp.index('/', 1)
               if last > 1
                 @captures << rp[1, last-1]
@@ -755,7 +773,7 @@ class Roda
               end
             elsif rp.length > 1
               @captures << rp[1,rp.length]
-              @remaining_path = EMPTY_STRING
+              @remaining_path = ""
             end
           end
         end
@@ -766,12 +784,12 @@ class Roda
         # The regular expression to use for matching symbols.  By default, any non-empty
         # segment matches.
         def _match_symbol_regexp(s)
-          SEGMENT
+          "([^\\/]+)"
         end
 
         # The base remaining path to use.
         def _remaining_path(env)
-          env[PATH_INFO]
+          env["PATH_INFO"]
         end
 
         # Backbone of the verb method support, using a terminal match if
@@ -841,7 +859,7 @@ class Roda
 
         # Whether the current path is considered empty.
         def empty_path?
-          remaining_path == EMPTY_STRING
+          remaining_path == ""
         end
 
         # If all of the arguments match, yields to the match block and
@@ -900,7 +918,7 @@ class Roda
           if type.is_a?(Array)
             type.any?{|t| match_method(t)}
           else
-            type.to_s.upcase == @env[REQUEST_METHOD]
+            type.to_s.upcase == @env["REQUEST_METHOD"]
           end
         end
 
@@ -934,10 +952,14 @@ class Roda
 
       # Instance methods for RodaResponse
       module ResponseMethods
-        CONTENT_LENGTH = "Content-Length".freeze
-        CONTENT_TYPE = "Content-Type".freeze
         DEFAULT_HEADERS = {"Content-Type" => "text/html".freeze}.freeze
+
+        CONTENT_LENGTH = "Content-Length".freeze
+        RodaPlugins.deprecate_constant(self, :CONTENT_LENGTH)
+        CONTENT_TYPE = "Content-Type".freeze
+        RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
         LOCATION = "Location".freeze
+        RodaPlugins.deprecate_constant(self, :LOCATION)
 
         # The body for the current response.
         attr_reader :body
@@ -1007,9 +1029,9 @@ class Roda
           h = @headers
 
           if empty && (s == 304 || s == 204 || s == 205 || (s >= 100 && s <= 199))
-            h.delete(CONTENT_TYPE)
+            h.delete("Content-Type")
           else
-            h[CONTENT_LENGTH] ||= @length.to_s
+            h["Content-Length"] ||= @length.to_s
           end
 
           [s, h, b]
@@ -1042,7 +1064,7 @@ class Roda
         #   response.redirect('foo', 301)
         #   response.redirect('bar')
         def redirect(path, status = 302)
-          @headers[LOCATION] = path
+          @headers["Location"] = path
           @status  = status
           nil
         end

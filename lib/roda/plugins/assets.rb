@@ -306,20 +306,34 @@ class Roda
         :compiled_css_dir => nil,
         :compiled_js_dir  => nil,
       }.freeze
-      JS_END = "\"></script>".freeze
-      CSS_END = "\" />".freeze
-      SPACE = ' '.freeze
-      DOT = '.'.freeze
-      SLASH = '/'.freeze
-      NEWLINE = "\n".freeze
-      EMPTY_STRING = ''.freeze
-      JS_SUFFIX = '.js'.freeze
-      CSS_SUFFIX = '.css'.freeze
-      HTTP_ACCEPT_ENCODING = 'HTTP_ACCEPT_ENCODING'.freeze
-      CONTENT_ENCODING = 'Content-Encoding'.freeze
-      GZIP = 'gzip'.freeze
-      DOTGZ = '.gz'.freeze
       EMPTY_ATTRS = {}.freeze
+
+      JS_END = "\"></script>".freeze
+      RodaPlugins.deprecate_constant(self, :JS_END)
+      CSS_END = "\" />".freeze
+      RodaPlugins.deprecate_constant(self, :CSS_END)
+      SPACE = ' '.freeze
+      RodaPlugins.deprecate_constant(self, :SPACE)
+      DOT = '.'.freeze
+      RodaPlugins.deprecate_constant(self, :DOT)
+      SLASH = '/'.freeze
+      RodaPlugins.deprecate_constant(self, :SLASH)
+      NEWLINE = "\n".freeze
+      RodaPlugins.deprecate_constant(self, :NEWLINE)
+      EMPTY_STRING = ''.freeze
+      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
+      JS_SUFFIX = '.js'.freeze
+      RodaPlugins.deprecate_constant(self, :JS_SUFFIX)
+      CSS_SUFFIX = '.css'.freeze
+      RodaPlugins.deprecate_constant(self, :CSS_SUFFIX)
+      HTTP_ACCEPT_ENCODING = 'HTTP_ACCEPT_ENCODING'.freeze
+      RodaPlugins.deprecate_constant(self, :HTTP_ACCEPT_ENCODING)
+      CONTENT_ENCODING = 'Content-Encoding'.freeze
+      RodaPlugins.deprecate_constant(self, :CONTENT_ENCODING)
+      GZIP = 'gzip'.freeze
+      RodaPlugins.deprecate_constant(self, :GZIP)
+      DOTGZ = '.gz'.freeze
+      RodaPlugins.deprecate_constant(self, :DOTGZ)
 
       # Internal exception raised when a compressor cannot be found
       CompressorNotFound = Class.new(RodaError)
@@ -419,8 +433,8 @@ class Roda
         opts[:css_prefix]          = sj.call(:prefix, :css_route)
         opts[:compiled_js_prefix]  = j.call(:prefix, :compiled_js_route, :compiled_name)
         opts[:compiled_css_prefix] = j.call(:prefix, :compiled_css_route, :compiled_name)
-        opts[:js_suffix]           = opts[:add_suffix] ? JS_SUFFIX : EMPTY_STRING
-        opts[:css_suffix]          = opts[:add_suffix] ? CSS_SUFFIX : EMPTY_STRING
+        opts[:js_suffix]           = (opts[:add_suffix] ? '.js' : '').freeze
+        opts[:css_suffix]          = (opts[:add_suffix] ? '.css' : '').freeze
 
         opts.freeze
       end
@@ -626,7 +640,7 @@ class Roda
             asset_dir = o[ltype]
             if dirs && !dirs.empty?
               dirs.each{|f| asset_dir = asset_dir[f]}
-              prefix = "#{dirs.join(SLASH)}/" if o[:group_subdirs]
+              prefix = "#{dirs.join('/')}/" if o[:group_subdirs]
             end
             Array(asset_dir).map{|f| "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"}
           end
@@ -648,20 +662,20 @@ class Roda
           o = self.class.assets_opts
           if o[:compiled] && (algo = o[:sri]) && (hash = _compiled_assets_hash(type))
             attrs = Hash[attrs]
-            attrs[:integrity] = "#{algo}-#{h([[hash].pack('H*')].pack('m').tr("\n", EMPTY_STRING))}"
+            attrs[:integrity] = "#{algo}-#{h([[hash].pack('H*')].pack('m').tr("\n", ''))}"
           end
 
-          attrs = attrs.map{|k,v| "#{k}=\"#{h(v)}\""}.join(SPACE)
+          attrs = attrs.map{|k,v| "#{k}=\"#{h(v)}\""}.join(' ')
 
           if ltype == :js
             tag_start = "<script type=\"text/javascript\" #{attrs} src=\""
-            tag_end = JS_END
+            tag_end = "\"></script>"
           else
             tag_start = "<link rel=\"stylesheet\" #{attrs} href=\""
-            tag_end = CSS_END
+            tag_end = "\" />"
           end
 
-          assets_paths(type).map{|p| "#{tag_start}#{h(p)}#{tag_end}"}.join(NEWLINE)
+          assets_paths(type).map{|p| "#{tag_start}#{h(p)}#{tag_end}"}.join("\n")
         end
 
         # Render the asset with the given filename.  When assets are compiled,
@@ -676,9 +690,9 @@ class Roda
           if o[:compiled]
             file = "#{o[:"compiled_#{type}_path"]}#{file}"
 
-            if o[:gzip] && env[HTTP_ACCEPT_ENCODING] =~ /\bgzip\b/
-              @_response[CONTENT_ENCODING] = GZIP
-              file += DOTGZ
+            if o[:gzip] && env['HTTP_ACCEPT_ENCODING'] =~ /\bgzip\b/
+              @_response['Content-Encoding'] = 'gzip'
+              file += '.gz'
             end
 
             check_asset_request(file, type, ::File.stat(file).mtime)
@@ -713,7 +727,7 @@ class Roda
           stype = type.to_s
 
           if dirs && !dirs.empty?
-            key = dirs.join(DOT)
+            key = dirs.join('.')
             ckey = "#{stype}.#{key}"
             if hash = ukey = compiled[ckey]
               ukey = "#{key}.#{ukey}"

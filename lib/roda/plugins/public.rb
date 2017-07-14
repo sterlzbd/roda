@@ -21,9 +21,11 @@ class Roda
     #   plugin :public
     #   plugin :public, :root=>'static'
     module Public
-      NULL_BYTE = "\0".freeze
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
       PARSER = RUBY_VERSION >= '1.9' ? URI::DEFAULT_PARSER : URI
+
+      NULL_BYTE = "\0".freeze
+      RodaPlugins.deprecate_constant(self, :NULL_BYTE)
 
       # Use options given to setup a Rack::File instance for serving files. Options:
       # :default_mime :: The default mime type to use if the mime type is not recognized.
@@ -42,7 +44,7 @@ class Roda
         def public
           if is_get?
             path = PARSER.unescape(real_remaining_path)
-            return if path.include?(NULL_BYTE)
+            return if path.include?("\0")
 
             roda_opts = roda_class.opts
             server = roda_opts[:public_server]

@@ -12,13 +12,14 @@ class Roda
     # where a trailing "/" in the path should be ignored.
     module SlashPathEmpty
       SLASH = "/".freeze
+      RodaPlugins.deprecate_constant(self, :SLASH)
 
       module RequestMethods
         private
 
         # Consider the path empty if it is "/".
         def empty_path?
-          super || remaining_path == SLASH
+          super || remaining_path == '/'
         end
       end
     end

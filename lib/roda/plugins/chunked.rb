@@ -145,11 +145,16 @@ class Roda
     # method is not called until template rendering, the flash may not be
     # rotated.
     module Chunked
-      HTTP_VERSION = 'HTTP_VERSION'.freeze
-      HTTP11 = "HTTP/1.1".freeze
-      TRANSFER_ENCODING = 'Transfer-Encoding'.freeze
-      CHUNKED = 'chunked'.freeze
       OPTS = {}.freeze
+
+      HTTP_VERSION = 'HTTP_VERSION'.freeze
+      RodaPlugins.deprecate_constant(self, :HTTP_VERSION)
+      HTTP11 = "HTTP/1.1".freeze
+      RodaPlugins.deprecate_constant(self, :HTTP11)
+      TRANSFER_ENCODING = 'Transfer-Encoding'.freeze
+      RodaPlugins.deprecate_constant(self, :TRANSFER_ENCODING)
+      CHUNKED = 'chunked'.freeze
+      RodaPlugins.deprecate_constant(self, :CHUNKED)
 
       # Depend on the render plugin
       def self.load_dependencies(app, opts=OPTS)
@@ -215,7 +220,7 @@ class Roda
         # an overview.  If a block is given, it is passed to #delay.
         def chunked(template, opts=OPTS, &block)
           unless defined?(@_chunked)
-            @_chunked = env[HTTP_VERSION] == HTTP11
+            @_chunked = env['HTTP_VERSION'] == "HTTP/1.1"
           end
 
           if block
@@ -245,7 +250,7 @@ class Roda
           if chunk_headers = self.opts[:chunk_headers]
             headers.merge!(chunk_headers)
           end
-          headers[TRANSFER_ENCODING] = CHUNKED
+          headers['Transfer-Encoding'] = 'chunked'
 
           throw :halt, res.finish_with_body(Body.new(self))
         end

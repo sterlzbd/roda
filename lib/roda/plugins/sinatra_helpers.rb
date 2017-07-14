@@ -211,20 +211,34 @@ class Roda
     # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     # OTHER DEALINGS IN THE SOFTWARE.
     module SinatraHelpers
-      CONTENT_TYPE = "Content-Type".freeze
-      CONTENT_DISPOSITION = "Content-Disposition".freeze
-      CONTENT_LENGTH = "Content-Length".freeze
-      OCTET_STREAM = 'application/octet-stream'.freeze
-      ATTACHMENT = 'attachment'.freeze
-      HTTP_VERSION = 'HTTP_VERSION'.freeze
-      HTTP11 = "HTTP/1.1".freeze
-      HTTP_X_FORWARDED_HOST = "HTTP_X_FORWARDED_HOST".freeze
-      EMPTY_STRING = ''.freeze
-      SLASH = '/'.freeze
-      SEMICOLON = ';'.freeze
-      COMMA = ', '.freeze
-      CHARSET = 'charset'.freeze
       OPTS = {}.freeze
+
+      CONTENT_TYPE = "Content-Type".freeze
+      RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
+      CONTENT_DISPOSITION = "Content-Disposition".freeze
+      RodaPlugins.deprecate_constant(self, :CONTENT_DISPOSITION)
+      CONTENT_LENGTH = "Content-Length".freeze
+      RodaPlugins.deprecate_constant(self, :CONTENT_LENGTH)
+      OCTET_STREAM = 'application/octet-stream'.freeze
+      RodaPlugins.deprecate_constant(self, :OCTET_STREAM)
+      ATTACHMENT = 'attachment'.freeze
+      RodaPlugins.deprecate_constant(self, :ATTACHMENT)
+      HTTP_VERSION = 'HTTP_VERSION'.freeze
+      RodaPlugins.deprecate_constant(self, :HTTP_VERSION)
+      HTTP11 = "HTTP/1.1".freeze
+      RodaPlugins.deprecate_constant(self, :HTTP11)
+      HTTP_X_FORWARDED_HOST = "HTTP_X_FORWARDED_HOST".freeze
+      RodaPlugins.deprecate_constant(self, :HTTP_X_FORWARDED_HOST)
+      EMPTY_STRING = ''.freeze
+      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
+      SLASH = '/'.freeze
+      RodaPlugins.deprecate_constant(self, :SLASH)
+      SEMICOLON = ';'.freeze
+      RodaPlugins.deprecate_constant(self, :SEMICOLON)
+      COMMA = ', '.freeze
+      RodaPlugins.deprecate_constant(self, :COMMA)
+      CHARSET = 'charset'.freeze
+      RodaPlugins.deprecate_constant(self, :CHARSET)
 
       # Depend on the status_303 plugin.
       def self.load_dependencies(app, _opts = nil)
@@ -328,14 +342,14 @@ class Roda
         def send_file(path, opts = OPTS)
           res = response
           headers = res.headers
-          if opts[:type] || !headers[CONTENT_TYPE]
-            res.content_type(opts[:type] || ::File.extname(path), :default => OCTET_STREAM)
+          if opts[:type] || !headers["Content-Type"]
+            res.content_type(opts[:type] || ::File.extname(path), :default => 'application/octet-stream')
           end
 
           disposition = opts[:disposition]
           filename    = opts[:filename]
           if disposition || filename
-            disposition ||= ATTACHMENT
+            disposition ||= 'attachment'
             filename = path if filename.nil?
             res.attachment(filename, disposition)
           end
@@ -355,7 +369,7 @@ class Roda
           end
 
           res.status = opts[:status] || s
-          headers.delete(CONTENT_LENGTH)
+          headers.delete("Content-Length")
           headers.replace(h.merge!(headers))
           res.body = b
 
@@ -370,14 +384,14 @@ class Roda
           addr = addr.to_s if addr
           return addr if addr =~ /\A[A-z][A-z0-9\+\.\-]*:/
           uri = if absolute
-            h = if @env.has_key?(HTTP_X_FORWARDED_HOST) || port != (ssl? ? 443 : 80)
+            h = if @env.has_key?("HTTP_X_FORWARDED_HOST") || port != (ssl? ? 443 : 80)
               host_with_port
             else
               host
             end
             ["http#{'s' if ssl?}://#{h}"]
           else
-            [EMPTY_STRING]
+            ['']
           end
           uri << script_name.to_s if add_script_name
           uri << (addr || path_info)
@@ -410,7 +424,7 @@ class Roda
 
         # If the body is a DelayedBody, set the appropriate length for it.
         def finish
-          @length = @body.length if @body.is_a?(DelayedBody) && !@headers[CONTENT_LENGTH]
+          @length = @body.length if @body.is_a?(DelayedBody) && !@headers["Content-Length"]
           super
         end
 
@@ -427,35 +441,35 @@ class Roda
 
         # Set the Content-Type of the response body given a media type or file
         # extension.  See plugin documentation for options.
-        def content_type(type = (return @headers[CONTENT_TYPE]; nil), opts = OPTS)
+        def content_type(type = (return @headers["Content-Type"]; nil), opts = OPTS)
           unless (mime_type = mime_type(type) || opts[:default])
             raise RodaError, "Unknown media type: #{type}"
           end
 
           unless opts.empty?
             opts.each do |key, val|
-              next if key == :default || (key == :charset && mime_type.include?(CHARSET))
+              next if key == :default || (key == :charset && mime_type.include?('charset'))
               val = val.inspect if val =~ /[";,]/
-              mime_type += "#{mime_type.include?(SEMICOLON) ? COMMA : SEMICOLON}#{key}=#{val}"
+              mime_type += "#{mime_type.include?(';') ? ', ' : ';'}#{key}=#{val}"
             end
           end
 
-          @headers[CONTENT_TYPE] = mime_type
+          @headers["Content-Type"] = mime_type
         end
 
         # Set the Content-Disposition to "attachment" with the specified filename,
         # instructing the user agents to prompt to save.
-        def attachment(filename = nil, disposition=ATTACHMENT)
+        def attachment(filename = nil, disposition='attachment')
           if filename
             params = "; filename=#{File.basename(filename).inspect}"
-            unless @headers[CONTENT_TYPE]
+            unless @headers["Content-Type"]
               ext = File.extname(filename)
               unless ext.empty?
                 content_type(ext)
               end
             end
           end
-          @headers[CONTENT_DISPOSITION] = "#{disposition}#{params}"
+          @headers["Content-Disposition"] = "#{disposition}#{params}"
         end
 
         # Whether or not the status is set to 1xx. Returns nil if status not yet set.
@@ -494,7 +508,7 @@ class Roda
         # If only a type is given, lookup the type in Rack's MIME registry and
         # return it.
         def mime_type(type=(return; nil), value = nil)
-          return type.to_s if type.to_s.include?(SLASH)
+          return type.to_s if type.to_s.include?('/')
           type = ".#{type}" unless type.to_s[0] == ?.
           if value
             Rack::Mime::MIME_TYPES[type] = value

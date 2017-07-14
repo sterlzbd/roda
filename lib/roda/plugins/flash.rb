@@ -38,6 +38,7 @@ class Roda
     module Flash
       # The internal session key used to store the flash.
       KEY = :_flash
+      RodaPlugins.deprecate_constant(self, :KEY)
 
       # Simple flash hash, where assiging to the hash updates the flash
       # used in the following request.
@@ -94,7 +95,7 @@ class Roda
         # Access the flash hash for the current request, loading
         # it from the session if it is not already loaded.
         def flash
-          @_flash ||= FlashHash.new(session[KEY])
+          @_flash ||= FlashHash.new(session[:_flash])
         end
 
         # If the routing doesn't raise an error, rotate the flash
@@ -103,7 +104,7 @@ class Roda
           res = super
 
           if f = @_flash
-            session[KEY] = f.next
+            session[:_flash] = f.next
           end
 
           res

@@ -27,7 +27,9 @@ class Roda
     # at the end of the path only.
     module MatchAffix
       PREFIX = "/".freeze
+      RodaPlugins.deprecate_constant(self, :PREFIX)
       SUFFIX = "(?=\/|\z)".freeze
+      RodaPlugins.deprecate_constant(self, :SUFFIX)
 
       # Set the default prefix and suffix to use in match patterns, if a non-nil value
       # is given.
@@ -42,7 +44,7 @@ class Roda
         # Use the match prefix and suffix provided when loading the plugin, or fallback
         # to Roda's default prefix/suffix if one was not provided.
         def consume_pattern(pattern)
-          /\A#{roda_class.opts[:match_prefix] || PREFIX}(?:#{pattern})#{roda_class.opts[:match_suffix] || SUFFIX}/
+          /\A#{roda_class.opts[:match_prefix] || "/"}(?:#{pattern})#{roda_class.opts[:match_suffix] || "(?=\/|\z)"}/
         end
       end
 

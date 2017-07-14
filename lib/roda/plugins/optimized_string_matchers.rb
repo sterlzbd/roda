@@ -25,6 +25,7 @@ class Roda
     # match blocks.
     module OptimizedStringMatchers
       EMPTY_STRING = ''.freeze
+      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
 
       module RequestMethods
         # Optimized version of +on+ that only supports a single string.
@@ -36,7 +37,7 @@ class Roda
         def is_exactly(s)
           rp = @remaining_path
           if _match_string(s)
-            if @remaining_path == EMPTY_STRING
+            if @remaining_path == ''
               always{yield}
             else
               @remaining_path = rp

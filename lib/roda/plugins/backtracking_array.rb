@@ -27,7 +27,9 @@ class Roda
     module BacktrackingArray
       module RequestMethods
         PATH_INFO = "PATH_INFO".freeze
+        RodaPlugins.deprecate_constant(self, :PATH_INFO)
         SCRIPT_NAME = "SCRIPT_NAME".freeze
+        RodaPlugins.deprecate_constant(self, :SCRIPT_NAME)
 
         private
 

@@ -82,7 +82,9 @@ class Roda
     #                Default is +true+.
     module TypeRouting
       ACCEPT_HEADER = 'HTTP_ACCEPT'.freeze
+      RodaPlugins.deprecate_constant(self, :ACCEPT_HEADER)
       CONTENT_TYPE_HEADER = 'Content-Type'.freeze
+      RodaPlugins.deprecate_constant(self, :CONTENT_TYPE_HEADER)
 
       CONFIGURATION = {
         :mimes => {
@@ -146,7 +148,7 @@ class Roda
         # the request afterwards, returning the result of the block.
         def on_type(type, &block)
           return unless type == requested_type
-          response[CONTENT_TYPE_HEADER] ||= @scope.opts[:type_routing][:types][type]
+          response['Content-Type'] ||= @scope.opts[:type_routing][:types][type]
           always(&block)
         end
 
@@ -191,7 +193,7 @@ class Roda
         def accept_response_type
           mimes = @scope.opts[:type_routing][:mimes]
 
-          @env[ACCEPT_HEADER].to_s.split(/\s*,\s*/).map do |part|
+          @env['HTTP_ACCEPT'].to_s.split(/\s*,\s*/).map do |part|
             mime, _= part.split(/\s*;\s*/, 2)
             if sym = mimes[mime]
               return sym
