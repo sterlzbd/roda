@@ -187,7 +187,7 @@ class App &lt; Sinatra::Base
   delete '/artist/:id' do
     @artist = Artist[params[:id].to_i]
     check_access(@artist)
-    @artist.destory
+    @artist.destroy
     redirect '/' 
   end
 end
