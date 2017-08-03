@@ -1,5 +1,7 @@
 = master
 
+* Deprecate the per_thread_caching plugin (jeremyevans)
+
 * Deprecate the websockets plugin (jeremyevans)
 
 * Deprecate treating unsupported matchers as always matching (jeremyevans)

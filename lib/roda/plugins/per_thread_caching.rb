@@ -3,6 +3,8 @@
 #
 class Roda
   module RodaPlugins
+    warn "The per_thread_caching plugin is deprecated and will be removed in Roda 3.  Consider maintaining the plugin as a separate gem if you would like to keep using it."
+
     # The per_thread_caching plugin changes the default cache
     # from being a shared thread safe cache to a separate cache per
     # thread.  This means getting or setting values no longer

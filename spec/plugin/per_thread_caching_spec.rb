@@ -1,7 +1,7 @@
 require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
 
 describe "per_thread_caching plugin" do 
-  it "should use a per thread cache instead of a shared cache" do
+  deprecated "should use a per thread cache instead of a shared cache" do
     app(:bare) do
       plugin :per_thread_caching
       @c = thread_safe_cache
