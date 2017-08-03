@@ -117,7 +117,7 @@ class Roda
           @closed = false
 
           if opts[:callback]
-            callback(&opts[:callback])
+            @callbacks << opts[:callback]
           end
         end
 
@@ -134,6 +134,7 @@ class Roda
 
         # Add the given block as a callback to call when the block closes.
         def callback(&block)
+          RodaPlugins.warn 'Stream#callback in the streaming plugin is deprecated and will be removed in Roda 3.  Specify callback at initialization using the stream method :callback option.'
           return yield if closed?
           @callbacks << block
         end
