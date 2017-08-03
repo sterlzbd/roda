@@ -1,5 +1,7 @@
 = master
 
+* Deprecate the view_subdirs plugin alias for the view_options plugin (jeremyevans)
+
 * Deprecate Stream#callback in the streaming plugin (jeremyevans)
 
 * Deprecate the automatic support for EventMachine in the streaming plugin (jeremyevans)
