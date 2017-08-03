@@ -25,8 +25,8 @@ class Roda
     # :rest :: <tt>/(.*)/</tt>, all remaining characters, if any
     # :w :: <tt>/(\w+)/</tt>, a alphanumeric segment
     #
-    # If placeholder string matchers are supported, this feature also applies to
-    # embedded colons in strings, so the following:
+    # If the placeholder_string_matchers plugin is loaded, this feature also applies to
+    # placeholders in strings, so the following:
     #
     #   r.on "users/:username" do
     #     # ...
@@ -34,24 +34,6 @@ class Roda
     #
     # Would match +/users/foobar123+, but not +/users/foo+, +/users/FooBar123+,
     # or +/users/foobar_123+.
-    #
-    # The symbol_matchers plugin will work with the placehoder_string_matchers
-    # plugin if both are loaded into the same application.
-    #
-    # If placeholder string matchers are supported, it also adds the following
-    # symbol matchers:
-    #
-    # :format :: <tt>/(?:\.(\w+))?/</tt>, an optional format/extension
-    # :opt :: <tt>/(?:\/([^\/]+))?</tt>, an optional segment
-    # :optd :: <tt>/(?:\/(\d+))?</tt>, an optional decimal segment
-    #
-    # These are only added when placeholder string matchers are supported,
-    # because they only make sense when used inside of a string, due to how
-    # segment matching works.  Example:
-    #
-    #   r.is "album:opt" do |id| end
-    #   # matches /album (yielding nil) and /album/foo (yielding "foo")
-    #   # does not match /album/ or /album/foo/bar
     #
     # If using this plugin with the params_capturing plugin, this plugin should
     # be loaded first.
@@ -66,9 +48,23 @@ class Roda
         app.symbol_matcher(:rest, /(.*)/)
 
         if !app.opts[:verbatim_string_matcher]
-          app.symbol_matcher(:format, /(?:\.(\w+))?/)
-          app.symbol_matcher(:opt, /(?:\/([^\/]+))?/)
-          app.symbol_matcher(:optd, /(?:\/(\d+))?/)
+          # RODA3: Remove
+          app::RodaRequest.class_eval do
+            def match_symbol_format
+              Roda::RodaPlugins.warn('Implicit use of the :format symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :format symbol matcher, add the following code to your Roda class: symbol_matcher(:format, /(?:\.(\w+))?/)')
+              /(?:\.(\w+))?/
+            end
+
+            def match_symbol_opt
+              Roda::RodaPlugins.warn('Implicit use of the :opt symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :opt symbol matcher, add the following code to your Roda class: symbol_matcher(:opt, /(?:\/([^\/]+))?/)')
+              /(?:\/([^\/]+))?/
+            end
+
+            def match_symbol_optd
+              Roda::RodaPlugins.warn('Implicit use of the :optd symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :optd symbol matcher, add the following code to your Roda class: symbol_matcher(:optd, /(?:\/(\d+))?/)')
+              /(?:\/(\d+))?/
+            end
+          end
         end
       end
 
