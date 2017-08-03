@@ -47,7 +47,7 @@ class Roda
     # method call takes precedence over the static_route method call for /foo.
     # As shown above, you can use Roda's routing tree methods inside the
     # static_route block to have shared behavior for different request methods,
-    # while still having handling the request methods differently.
+    # while still handling the request methods differently.
     #
     # Note that if you want to use the static_routing plugin and the hooks
     # plugin at the same time, you should load the hooks plugin first.
