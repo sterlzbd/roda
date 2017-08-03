@@ -148,6 +148,7 @@ class Roda
     module Render
       OPTS={}.freeze
 
+      # RODA3: Remove
       def self.load_dependencies(app, opts=OPTS)
         if opts[:escape] && opts[:escape] != :erubi
           app.plugin :_erubis_escaping
@@ -207,6 +208,7 @@ class Roda
         if RUBY_VERSION >= "1.9" && !template_opts.has_key?(:default_encoding)
           template_opts[:default_encoding] = Encoding.default_external
         end
+        # RODA3: Make :escape assume erubi, remove erubis support
         if opts[:escape] == :erubi
           require 'tilt/erubi'
           template_opts[:escape] = true

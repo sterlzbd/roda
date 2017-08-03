@@ -20,7 +20,7 @@ describe "_erubis_escaping plugin" do
     end
   end
 
-  it "should escape inside <%= %> and not inside <%== %>, and handle postfix conditionals" do
+  deprecated "should escape inside <%= %> and not inside <%== %>, and handle postfix conditionals" do
     app(:bare) do
       plugin :render, :escape=>true
 
@@ -32,7 +32,7 @@ describe "_erubis_escaping plugin" do
     body.must_equal '&lt;&gt; <>'
   end
 
-  it "should consider classes in :escape_safe_classes as safe" do
+  deprecated "should consider classes in :escape_safe_classes as safe" do
     c = Class.new(String)
     c2 = Class.new(String)
     app(:bare) do
@@ -47,7 +47,7 @@ describe "_erubis_escaping plugin" do
     body.must_equal '&lt;&gt; <>'
   end
 
-  it "should covnert arguments to strings when escaping with safe classes" do
+  deprecated "should covnert arguments to strings when escaping with safe classes" do
     app(:bare) do
       plugin :render, :escape=>true, :escape_safe_classes=>[]
 
@@ -59,7 +59,7 @@ describe "_erubis_escaping plugin" do
     body.must_equal '&lt;&gt; <>'
   end
 
-  it "should allow use of custom :escaper" do
+  deprecated "should allow use of custom :escaper" do
     escaper = Object.new
     def escaper.escape_xml(s)
       s.gsub("'", "''")
@@ -75,7 +75,7 @@ describe "_erubis_escaping plugin" do
     body.must_equal "ab''1 ab'1"
   end
 
-  it "should allow for per-branch escaping via set_view options" do
+  deprecated "should allow for per-branch escaping via set_view options" do
     app(:bare) do
       plugin :render, :escape=>true
       plugin :view_options

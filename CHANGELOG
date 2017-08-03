@@ -1,5 +1,7 @@
 = master
 
+* Deprecate render plugin :escape option loading Erubis escaping support (jeremyevans)
+
 * Deprecate the per_thread_caching plugin (jeremyevans)
 
 * Deprecate the websockets plugin (jeremyevans)

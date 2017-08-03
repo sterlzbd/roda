@@ -4,6 +4,8 @@ require 'erubis'
 
 class Roda
   module RodaPlugins
+    warn 'Using the render plugin :escape option for Erubis escaping support is deprecated.  In Roda 3, the :escape option will use Erubi escaping support.  You can turn on the Roda 3 behavior by using :escape=>:erubi.'
+
     # The _erubis_escaping plugin handles escaping of <tt><%= %></tt> inside
     # ERB templates.  It is an internal plugin that should not be loaded
     # directlyn by user code.
