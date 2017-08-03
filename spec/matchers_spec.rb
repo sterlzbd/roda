@@ -158,7 +158,7 @@ describe "r.is" do
 end
 
 describe "matchers" do
-  it "should handle string with embedded param" do
+  deprecated "should handle string with embedded param" do
     app do |r|
       r.on "posts/:id" do |id|
         id
@@ -185,6 +185,7 @@ describe "matchers" do
         '2'
       end
     end
+    # RODA3: remove option
     app.opts[:verbatim_string_matcher] = true
 
     status('/post/123').must_equal 404
@@ -194,7 +195,7 @@ describe "matchers" do
     body('/responses-:id').must_equal '2'
   end
 
-  it "should handle multiple params in single string" do
+  deprecated "should handle multiple params in single string" do
     app do |r|
       r.on "u/:uid/posts/:id" do |uid, id|
         uid + id
@@ -206,7 +207,7 @@ describe "matchers" do
     status("/u/jdoe/pots/123").must_equal 404
   end
 
-  it "should escape regexp metacharaters in string" do
+  deprecated "should escape regexp metacharaters in string" do
     app do |r|
       r.on "u/:uid/posts?/:id" do |uid, id|
         uid + id
@@ -218,7 +219,7 @@ describe "matchers" do
     status("/u/jdoe/post/123").must_equal 404
   end
 
-  it "should handle colons by themselves" do
+  deprecated "should handle colons by themselves" do
     app do |r|
       r.on "u/:/:uid/posts/::id" do |uid, id|
         uid + id

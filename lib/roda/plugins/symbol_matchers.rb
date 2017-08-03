@@ -35,6 +35,9 @@ class Roda
     # Would match +/users/foobar123+, but not +/users/foo+, +/users/FooBar123+,
     # or +/users/foobar_123+.
     #
+    # The symbol_matchers plugin will work with the placehoder_string_matchers
+    # plugin if both are loaded into the same application.
+    #
     # If placeholder string matchers are supported, it also adds the following
     # symbol matchers:
     #
@@ -53,6 +56,10 @@ class Roda
     # If using this plugin with the params_capturing plugin, this plugin should
     # be loaded first.
     module SymbolMatchers
+      def self.load_dependencies(app)
+        app.plugin :_symbol_regexp_matchers
+      end
+
       def self.configure(app)
         app.symbol_matcher(:d, /(\d+)/)
         app.symbol_matcher(:w, /(\w+)/)

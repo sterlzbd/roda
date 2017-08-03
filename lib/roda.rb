@@ -68,6 +68,13 @@ class Roda
     # Stores registered plugins
     @plugins = RodaCache.new
 
+    class << self
+      # Make warn a public method, as it is used for deprecation warnings.
+      # Roda::RodaPlugins.warn can be overridden for custom handling of
+      # deprecation warnings.
+      public :warn
+    end
+
     # If the registered plugin already exists, use it.  Otherwise,
     # require it and return it.  This raises a LoadError if such a
     # plugin doesn't exist, or a RodaError if it exists but it does
@@ -740,7 +747,16 @@ class Roda
         # colon tokens for placeholders.
         def _match_string(str)
           if str.index(":") && placeholder_string_matcher?
-            consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})
+            # RODA3: Remove
+            not_warned = true
+            consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/) do |m|
+              match = $1
+              if not_warned
+                nor_warned = false
+                RodaPlugins.warn("Placeholder symbol matchers are deprecated by default and will be removed in Roda 3 (matcher used: #{str.inspect}). Use the placeholder_symbol_matchers plugin or split the string and use separate symbol matchers or String class matchers for the placeholders")
+              end
+              _match_symbol_regexp(match)
+            end})
           else
             rp = @remaining_path
             if rp.start_with?("/#{str}")
@@ -752,6 +768,7 @@ class Roda
                 @remaining_path = ""
               when Integer
                 # :nocov:
+                # RODA3: Remove
                 # Ruby 1.8 support
                 if rp[last].chr == "/"
                   @remaining_path = rp[last, rp.length]
@@ -781,8 +798,7 @@ class Roda
         # Match any nonempty segment.  This should be called without an argument.
         alias _match_class_String _match_symbol
 
-        # The regular expression to use for matching symbols.  By default, any non-empty
-        # segment matches.
+        # RODA3: Remove
         def _match_symbol_regexp(s)
           "([^\\/]+)"
         end

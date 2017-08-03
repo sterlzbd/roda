@@ -29,9 +29,25 @@ require "stringio"
 gem 'minitest'
 require "minitest/autorun"
 
-#def (Roda::RodaPlugins).warn(s); end
+$RODA_WARN = true
+def (Roda::RodaPlugins).warn(s)
+  return unless $RODA_WARN
+  $stderr.puts s
+  puts caller.grep(/_spec\.rb:\d+:/)
+end
 
 class Minitest::Spec
+  def self.deprecated(a, &block)
+    it("#{a} (deprecated)") do
+      begin
+        $RODA_WARN = false
+        instance_exec(&block)
+      ensure
+        $RODA_WARN = true
+      end
+    end
+  end
+
   def app(type=nil, &block)
     case type
     when :new

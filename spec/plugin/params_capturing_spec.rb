@@ -31,7 +31,7 @@ describe "params_capturing plugin" do
     body('/quux/asdf/890', 'rack.input'=>StringIO.new).must_equal 'y--890-quux-asdf-890-3'
   end
 
-  it "should add captures to r.params for string matchers" do
+  deprecated "should add captures to r.params for string matchers" do
     app(:params_capturing) do |r|
       r.on("bar/:foo") do |foo|
         "b-#{foo}-#{r[:foo]}-#{r[:captures].length}"

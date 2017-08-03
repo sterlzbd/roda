@@ -52,8 +52,8 @@ class Roda
     # strings and not symbols (<tt>r[]</tt> converts the argument
     # to a string before looking it up in +r.params+).
     #
-    # This plugin will also handle string matchers if placeholders in
-    # string matchers are supported.
+    # This plugin will also handle string matchers with placeholders if
+    # the placeholder_string_matchers plugin is loaded before this plugin.
     #
     # Also note that this plugin will not work correctly if you are using
     # the symbol_matchers plugin with custom symbol matching and are using
@@ -82,7 +82,7 @@ class Roda
           end
         else
           # :nocov:
-
+          # RODA3: Remove
           # Ruby 1.8 doesn't support positive lookbehind, so include the
           # colon in the scan, and strip it out later.
           STRING_PARAM_CAPTURE_RANGE = 1..-1

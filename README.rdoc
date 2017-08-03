@@ -285,7 +285,7 @@ If a string contains any slashes, it matches one additional segment for each sla
   "foo/bar" # matches "/foo/bar"
   "foo/bar" # does not match "/foo/bard"
 
-For backwards compatibility, if a string contains a colon followed by any
+While deprecated by default, if a string contains a colon followed by any
 <tt>\\w</tt> characters, the colon and remaining <tt>\\w</tt> characters match any
 nonempty segment that contains at least one character:
 
@@ -303,8 +303,9 @@ symbol arguments, as it is faster and simpler:
   "foo", String # instead of "foo/:id"
   String, String     # instead of ":x/:y"
 
-It is possible in future versions of Roda, colons will not be treated specially
-in strings, and will just match a literal colon character.
+You can load the placeholder_string_matchers plugin to allow placeholders in
+strings without a deprecation warning.  The deprecated default handling of placeholders
+in strings will be removed in Roda 3.
 
 Note that other than colons followed by a <tt>\\w</tt> character, strings do no
 handle regular expression syntax, they are matched verbatim:

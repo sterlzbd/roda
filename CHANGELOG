@@ -1,3 +1,7 @@
+= master
+
+* Deprecate use of placeholders in string matchers by default, add placeholder_string_matchers plugin for it (jeremyevans)
+
 = 2.28.0 (2017-07-14)
 
 * Deprecate unneeded internal constants (jeremyevans)

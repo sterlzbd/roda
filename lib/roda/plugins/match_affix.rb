@@ -25,11 +25,17 @@ class Roda
     #
     # will not modify the prefix and will change the suffix so that it consumes a trailing slash
     # at the end of the path only.
+    #
+    # This plugin automatically loads the placeholder_string_matchers plugin.
     module MatchAffix
       PREFIX = "/".freeze
       RodaPlugins.deprecate_constant(self, :PREFIX)
       SUFFIX = "(?=\/|\z)".freeze
       RodaPlugins.deprecate_constant(self, :SUFFIX)
+
+      def self.load_dependencies(app, _prefix, _suffix)
+        app.plugin :placeholder_string_matchers
+      end
 
       # Set the default prefix and suffix to use in match patterns, if a non-nil value
       # is given.
