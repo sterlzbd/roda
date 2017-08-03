@@ -60,7 +60,11 @@ class Minitest::Spec
         route(&block)
       end
     else
-      @app ||= _app{route(&block)}
+      if block
+        @app = _app{route(&block)}
+      else
+        @app ||= _app{route(&block)}
+      end
     end
   end
 
