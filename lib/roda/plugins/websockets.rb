@@ -4,6 +4,8 @@ require 'faye/websocket'
 
 class Roda
   module RodaPlugins
+    warn "The websockets plugin is deprecated and will be removed in Roda 3.  Consider maintaining the plugin as a separate gem if you would like to keep using it."
+
     # The websocket plugin adds integration support for websockets.
     # Currently, only 'faye-websocket' is supported, so eventmachine
     # is required for websockets.  See the

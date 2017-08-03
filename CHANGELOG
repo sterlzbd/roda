@@ -1,5 +1,7 @@
 = master
 
+* Deprecate the websockets plugin (jeremyevans)
+
 * Deprecate treating unsupported matchers as always matching (jeremyevans)
 
 * Deprecate ignoring unsupported match block return values (jeremyevans)

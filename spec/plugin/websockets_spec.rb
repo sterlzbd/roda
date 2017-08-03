@@ -10,7 +10,7 @@ rescue LoadError
   warn "#{lib} not installed, skipping websockets plugin test"  
 else
 describe "websockets plugin" do 
-  it "supports regular requests" do
+  deprecated "supports regular requests" do
     app(:websockets) do |r|
       r.websocket{}
       "a"
@@ -20,7 +20,12 @@ describe "websockets plugin" do
 end
 
 describe "websockets plugin" do 
-  before do
+  after do
+    #$DEBUG=nil
+    @server.stop
+  end
+
+  deprecated "supports websocket requests" do
     events = @events = []
     app(:bare) do
       plugin :websockets, :adapter=>:thin
@@ -52,13 +57,7 @@ describe "websockets plugin" do
       end
     end
     q.pop
-  end
-  after do
-    #$DEBUG=nil
-    @server.stop
-  end
 
-  it "supports websocket requests" do
     ws = Faye::WebSocket::Client.new("ws://localhost:#{@port}")
     msg = nil
     sleep_for = 0.01
