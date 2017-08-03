@@ -486,7 +486,25 @@ An alternative way to implement this is via a regexp:
   r.is "items", /(\d+)(?:\/(\d+))?/ do |item_id, optional_data|
   end
 
-== Status codes
+== Match/Route Block Return Values
+
+If the response body has already been written to by calling +response.write+
+directly, then any return value of a match block or route block is ignored.
+
+If the response body has not already been written to, then the match block
+or route block return value is inspected:
+
+String :: used as the response body
+nil, false :: ignored
+everything else :: also ignored, but this is deprecated and will raise an
+                   error starting in Roda 3
+
+Plugins can add support for additional match block and route block return
+values.  One example of this is the json plugin, which allows returning
+arrays and hashes in match and route blocks and converts those directly
+to JSON and uses the JSON as the response body.
+
+== Status Codes
 
 When it comes time to finalize a response,
 if a status code has not been set manually and anything has been written to the response,
