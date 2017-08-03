@@ -1,5 +1,7 @@
 = master
 
+* Deprecate static_path_info plugin, which has been a no-op in Roda 2 (jeremyevans)
+
 * Deprecate render plugin :escape option loading Erubis escaping support (jeremyevans)
 
 * Deprecate the per_thread_caching plugin (jeremyevans)

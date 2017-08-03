@@ -38,7 +38,5 @@ describe "backtracking_array plugin" do
     end
 
     tests.call
-    app.plugin(:static_path_info)
-    tests.call
   end
 end
