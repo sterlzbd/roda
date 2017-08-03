@@ -173,7 +173,10 @@ class Roda
         # status and headers, calling the block to get the streaming response.
         # See Streaming for details.
         def stream(opts=OPTS, &block)
-          opts = opts.merge(:scheduler=>EventMachine) if !opts.has_key?(:scheduler) && env['async.callback']
+          if !opts.has_key?(:scheduler) && env['async.callback']
+            RodaPlugins.warn 'The automatic support for EventMachine in the streaming plugin is deprecated and will be removed in Roda 3.'
+            opts = opts.merge(:scheduler=>EventMachine)
+          end
 
           if opts[:loop]
             block = proc do |out|
