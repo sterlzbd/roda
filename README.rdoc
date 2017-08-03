@@ -438,9 +438,8 @@ If +false+ or +nil+ is given directly as a matcher, it doesn't match anything.
 
 === Everything else
 
-Everything else matches anything.  Note that future versions of Roda will probably
-raise exceptions for unsupported matchers, so it is not recommended to rely on this
-behavior.
+Everything else matches anything, but such usage is deprecated.  In Roda 3, using
+an unsupported matcher will raise an error.
 
 == Optional segments
 

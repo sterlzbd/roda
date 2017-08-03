@@ -1,5 +1,7 @@
 = master
 
+* Deprecate treating unsupported matchers as always matching (jeremyevans)
+
 * Deprecate ignoring unsupported match block return values (jeremyevans)
 
 * Deprecate the :format, :opt, and :optd default symbol matchers in the symbol_matchers plugin (jeremyevans)

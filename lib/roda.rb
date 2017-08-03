@@ -951,6 +951,7 @@ class Roda
           if roda_class.opts[:unsupported_matcher] == :raise
             raise RodaError, "unsupported matcher: #{matcher.inspect}"
           end
+          RodaPlugins.warn("Unsupported matcher used: #{matcher.inspect}.  This currently always matches, but will raise an error in Roda 3.  Switch to using true if you want the matcher to always match.")
           matcher
         end
       end

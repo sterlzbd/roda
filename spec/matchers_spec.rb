@@ -395,7 +395,7 @@ describe "r.on" do
     status.must_equal 404
   end
 
-  it "executes on arbitrary object" do
+  deprecated "executes on arbitrary object" do
     app do |r|
       r.on Object.new do
         "+1"
