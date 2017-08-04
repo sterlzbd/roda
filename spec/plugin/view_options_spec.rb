@@ -59,13 +59,13 @@ describe "view_options plugin" do
 
   it "should merge multiple calls to set view and layout options and locals" do
     app(:view_options) do
-      set_layout_options :views=>'spec/views', :template=>'multiple-layout', :ext=>'str'
-      set_view_options :views=>'spec/views', :ext=>'str'
+      set_layout_options :views=>'spec/views', :template=>'multiple-layout', :engine=>'str'
+      set_view_options :views=>'spec/views', :engine=>'str'
       set_layout_locals :title=>'About Roda'
       set_view_locals :title=>'Home'
 
-      set_layout_options :ext=>'erb'
-      set_view_options :ext=>'erb'
+      set_layout_options :engine=>'erb'
+      set_view_options :engine=>'erb'
       set_layout_locals :a=>'A'
       set_view_locals :b=>'B'
 
