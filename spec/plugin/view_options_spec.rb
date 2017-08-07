@@ -45,7 +45,41 @@ describe "view_options plugin view subdirs" do
 end
 
 describe "view_options plugin" do
-  it "should set view and layout options and locals to use" do
+  it "should set view and layout options to use" do
+    app(:bare) do
+      plugin :view_options
+      plugin :render_locals, :render=>{:title=>'About Roda'}, :layout=>{:title=>'Home'}
+
+      route do
+        set_view_options :views=>'spec/views'
+        set_layout_options :views=>'spec/views', :template=>'layout-alternative'
+        view('about')
+      end
+    end
+
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>About Roda</h1>"
+  end
+
+  it "should merge multiple calls to set view and layout options" do
+    app(:bare) do
+      plugin :view_options
+      plugin :render_locals, :render=>{:title=>'Home', :b=>'B'}, :layout=>{:title=>'About Roda', :a=>'A'}
+
+      route do
+        set_layout_options :views=>'spec/views', :template=>'multiple-layout', :engine=>'str'
+        set_view_options :views=>'spec/views', :engine=>'str'
+
+        set_layout_options :engine=>'erb'
+        set_view_options :engine=>'erb'
+
+        view('multiple')
+      end
+    end
+
+    body.strip.must_equal "About Roda:A::Home:B"
+  end
+
+  deprecated "should set view and layout options and locals to use" do
     app(:view_options) do
       set_view_options :views=>'spec/views'
       set_view_locals :title=>'About Roda'
@@ -57,7 +91,7 @@ describe "view_options plugin" do
     body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>About Roda</h1>"
   end
 
-  it "should merge multiple calls to set view and layout options and locals" do
+  deprecated "should merge multiple calls to set view and layout options and locals" do
     app(:view_options) do
       set_layout_options :views=>'spec/views', :template=>'multiple-layout', :engine=>'str'
       set_view_options :views=>'spec/views', :engine=>'str'
@@ -75,9 +109,49 @@ describe "view_options plugin" do
     body.strip.must_equal "About Roda:A::Home:B"
   end
 
-  it "should have set_view_locals have more precedence than plugin options, but less than view/render method options" do
+  deprecated "should have set_view_locals have more precedence than plugin options, but less than view/render method options" do
     app(:bare) do 
       plugin :render, :views=>"./spec/views", :locals=>{:title=>'Home', :b=>'B'}, :layout_opts=>{:template=>'multiple-layout', :locals=>{:title=>'About Roda', :a=>'A'}}
+      plugin :view_options
+
+      route do |r|
+        r.is 'c' do
+          view(:multiple)
+        end
+
+        set_view_locals :b=>'BB'
+        set_layout_locals :a=>'AA'
+
+        r.on 'b' do
+          set_view_locals :title=>'About'
+          set_layout_locals :title=>'Roda'
+
+          r.is 'a' do
+            view(:multiple)
+          end
+
+          view("multiple", :locals=>{:b => "BBB"}, :layout_opts=>{:locals=>{:a=>'AAA'}})
+        end
+
+        r.is 'a' do
+          view(:multiple)
+        end
+
+        view("multiple", :locals=>{:b => "BBB"}, :layout_opts=>{:locals=>{:a=>'AAA'}})
+      end
+    end
+
+    body('/c').strip.must_equal "About Roda:A::Home:B"
+    body('/b/a').strip.must_equal "Roda:AA::About:BB"
+    body('/b').strip.must_equal "Roda:AAA::About:BBB"
+    body('/a').strip.must_equal "About Roda:AA::Home:BB"
+    body.strip.must_equal "About Roda:AAA::Home:BBB"
+  end
+
+  deprecated "should have set_view_locals have more precedence than plugin options, but less than view/render method options" do
+    app(:bare) do 
+      plugin :render, :views=>"./spec/views", :layout_opts=>{:template=>'multiple-layout'}
+      plugin :render_locals, :render=>{:title=>'Home', :b=>'B'}, :layout=>{:title=>'About Roda', :a=>'A'}
       plugin :view_options
 
       route do |r|

@@ -57,11 +57,6 @@ class Roda
     # :escape :: Use Roda's Erubis escaping support, which makes <tt><%= %></tt> escape output,
     #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
     #            <tt><%= %></tt> tags.  Can have a value of :erubi to use Erubi escaping support.
-    # :escape_safe_classes :: String subclasses that should not be HTML escaped when used in
-    #                         <tt><%= %></tt> tags, when :escape=>true is used. Can be an array for multiple classes.
-    # :escaper :: Object used for escaping output of <tt><%= %></tt>, when :escape=>true is used,
-    #             overriding the default.  If given, object should respond to +escape_xml+ with
-    #             a single argument and return an output string.
     # :explicit_cache :: Only use the template cache if the :cache option is provided when rendering
     #                    (useful for development). Defaults to true if RACK_ENV is development, allowing explicit
     #                    caching of specific templates, but not caching by default.
@@ -69,10 +64,7 @@ class Roda
     #                   starts subclasses with an empty cache.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
     #            with the :template or :inline options.
-    # :layout_opts :: The options to use when rendering the layout, if different
-    #                 from the default options.  To pass local variables to the layout, include a :locals
-    #                 option inside :layout_opts.  To automatically merge the view template locals into
-    #                 the layout template locals, include a :merge_locals option inside :layout_opts.
+    # :layout_opts :: The options to use when rendering the layout, if different from the default options.
     # :template_opts :: The tilt options used when rendering all templates. defaults to:
     #                   <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
     # :engine_opts :: The tilt options to use per template engine.  Keys are
@@ -186,8 +178,22 @@ class Roda
         opts[:explicit_cache] = ENV['RACK_ENV'] == 'development' unless opts.has_key?(:explicit_cache)
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
+        # RODA3: Remove
         opts[:layout_opts][:_is_layout] = true
 
+        if opts[:locals]
+          RodaPlugins.warn "The :locals render plugin option is deprecated and will be removed in Roda 3. Locals should now be specified on a per-call basis, or you can use the render_locals plugin."
+        end
+
+        if opts[:layout_opts][:locals]
+          RodaPlugins.warn "The :layout_opts=>:locals render plugin option is deprecated and will be removed in Roda 3. Locals should now be specified on a per-call basis, or you can use the render_locals plugin."
+        end
+
+        if opts[:layout_opts][:merge_locals]
+          RodaPlugins.warn "The :layout_opts=>:merge_locals render plugin option is deprecated and will be removed in Roda 3. You can use the render_locals plugin for merging locals."
+        end
+
+        # RODA3: Remove
         if opts[:layout_opts][:merge_locals] && opts[:locals]
           opts[:layout_opts][:locals] = opts[:locals].merge(opts[:layout_opts][:locals] || {})
         end
@@ -265,8 +271,7 @@ class Roda
       module InstanceMethods
         # Render the given template. See Render for details.
         def render(template, opts = OPTS, &block)
-          opts = parse_template_opts(template, opts)
-          merge_render_locals(opts)
+          opts = render_template_opts(template, opts)
           retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
         end
 
@@ -281,7 +286,7 @@ class Roda
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
         def view(template, opts=OPTS)
-          opts = parse_template_opts(template, opts)
+          opts = view_template_opts(template, opts)
           content = opts[:content] || render_template(opts)
 
           if layout_opts  = view_layout_opts(opts)
@@ -292,6 +297,19 @@ class Roda
         end
 
         private
+
+        def render_template_opts(template, opts)
+          opts = parse_template_opts(template, opts)
+
+          # RODA3: Remove
+          merge_render_locals(opts) if render_plugin_handle_locals?
+
+          opts
+        end
+
+        def view_template_opts(template, opts)
+          parse_template_opts(template, opts)
+        end
 
         # Private alias for render.  Should be used by other plugins when they want to render a template
         # without a layout, as plugins can override render to use a layout.
@@ -352,7 +370,7 @@ class Roda
           opts
         end
 
-        # Merge any :locals specified in the render_opts into the :locals option given.
+        # RODA3: Remove
         def merge_render_locals(opts)
           if !opts[:_is_layout] && (r_locals = render_opts[:locals])
             opts[:locals] = if locals = opts[:locals]
@@ -415,36 +433,52 @@ class Roda
           path
         end
 
+        # RODA3: Remove
+        def render_plugin_handle_locals?
+          true
+        end
+
         # If a layout should be used, return a hash of options for
         # rendering the layout template.  If a layout should not be
         # used, return nil.
         def view_layout_opts(opts)
           if layout = opts.fetch(:layout, render_opts[:layout])
-
             layout_opts = render_layout_opts
+
+            # RODA3: Remove
             merge_locals = layout_opts[:merge_locals]
 
-            if method_layout_opts = opts[:layout_opts]
-              method_layout_locals = method_layout_opts[:locals]
-              merge_locals = method_layout_opts[:merge_locals] if method_layout_opts.has_key?(:merge_locals)
-            end
+            method_layout_opts = opts[:layout_opts]
 
-            locals = {}
-            if merge_locals && (plugin_locals = render_opts[:locals])
-              locals.merge!(plugin_locals)
-            end
-            if layout_locals = layout_opts[:locals]
-              locals.merge!(layout_locals)
-            end
-            if merge_locals && (method_locals = opts[:locals])
-              locals.merge!(method_locals)
-            end
-            if method_layout_locals
-              locals.merge!(method_layout_locals)
+            # RODA3: Remove
+            if render_plugin_handle_locals?
+              if method_layout_opts
+                method_layout_locals = method_layout_opts[:locals]
+                if method_layout_opts.has_key?(:merge_locals)
+                  RodaPlugins.warn "The :layout_opts=>:merge_locals view option is deprecated and will be removed in Roda 3. You can use the render_locals plugin for merging locals."
+                  merge_locals = method_layout_opts[:merge_locals]
+                end
+              end
+
+              locals = {}
+              if merge_locals && (plugin_locals = render_opts[:locals])
+                locals.merge!(plugin_locals)
+              end
+              if layout_locals = layout_opts[:locals]
+                locals.merge!(layout_locals)
+              end
+              if merge_locals && (method_locals = opts[:locals])
+                locals.merge!(method_locals)
+              end
+              if method_layout_locals
+                locals.merge!(method_layout_locals)
+              end
             end
 
             layout_opts.merge!(method_layout_opts) if method_layout_opts
-            layout_opts[:locals] = locals unless locals.empty?
+
+            # RODA3: Remove
+            layout_opts[:locals] = locals if render_plugin_handle_locals? && !locals.empty?
 
             case layout
             when Hash

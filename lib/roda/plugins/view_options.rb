@@ -4,7 +4,7 @@
 class Roda
   module RodaPlugins
     # The view_options plugin allows you to override view and layout
-    # options and locals for specific branches and routes.
+    # options for specific branches and routes.
     #
     #   plugin :render
     #   plugin :view_options
@@ -12,15 +12,14 @@ class Roda
     #   route do |r|
     #     r.on "users" do
     #       set_layout_options :template=>'users_layout'
-    #       set_layout_locals :title=>'Users'
     #       set_view_options :engine=>'haml'
-    #       set_view_locals :footer=>'(c) Roda'
     #
     #       # ...
     #     end
     #   end
     #
-    # The options and locals you specify have higher precedence than
+    # The options you specify via the set_view_options and
+    # set_layout_options methods have higher precedence than
     # the render plugin options, but lower precedence than options
     # you directly pass to the view/render methods.
     #
@@ -60,22 +59,22 @@ class Roda
     #
     # If you have an existing Roda application that doesn't use
     # automatic HTML escaping for <tt><%= %></tt> tags via the
-    # :render plugin's :escape option, but you want to switch to
+    # :render plugin's :escape=>:erubi option, but you want to switch to
     # using the :escape option, you can now do so without making
     # all changes at once.  With set_view_options, you can now
     # specify escaping or not on a per branch basis in the routing
     # tree:
     #
-    #   plugin :render, :escape=>true
+    #   plugin :render, :escape=>:erubi
     #   plugin :view_options
     #
     #   route do |r|
     #     # Don't escape <%= %> by default
-    #     set_view_options :template_opts=>{:engine_class=>nil}
+    #     set_view_options :template_opts=>{:escape=>false}
     #
     #     r.on "users" do
     #       # Escape <%= %> in this branch
-    #       set_view_options :template_opts=>{:engine_class=>render_opts[:template_opts][:engine_class]}
+    #       set_view_options :template_opts=>{:escape=>true}
     #     end
     #   end
     module ViewOptions
@@ -85,27 +84,7 @@ class Roda
         app.plugin :render
       end
 
-      # The following methods are created via metaprogramming:
-      # set_layout_locals :: Set locals to use in the layout
-      # set_layout_options :: Set options to use when rendering the layout
-      # set_view_locals :: Set locals to use in the view
-      # set_view_options :: Set options to use when rendering the view
       module InstanceMethods
-        %w'layout view'.each do |type|
-          %w'locals options'.each do |var|
-            v = "_#{type}_#{var}"
-            module_eval(<<-END, __FILE__, __LINE__+1)
-              def set#{v}(opts)
-                if @#{v}
-                  @#{v} = Hash[@#{v}].merge!(opts)
-                else
-                  @#{v} = opts
-                end
-              end
-            END
-          end
-        end
-
         # Append a view subdirectory to use.  If there hasn't already
         # been a view subdirectory set, this just sets it to the argument.
         # If there has already been a view subdirectory set, this sets
@@ -125,7 +104,61 @@ class Roda
           @_view_subdir = v
         end
 
+        # Set branch/route options to use when rendering the layout
+        def set_layout_options(opts)
+          if options = @_layout_options
+            @_layout_options = Hash[options].merge!(opts)
+          else
+            @_layout_options = opts
+          end
+        end
+
+        # Set branch/route options to use when rendering the view
+        def set_view_options(opts)
+          if options = @_view_options
+            @_view_options = Hash[options].merge!(opts)
+          else
+            @_view_options = opts
+          end
+        end
+
+        # RODA3: Remove
+        def set_layout_locals(opts)
+          RodaPlugins.warn "The set_layout_locals method in the view_options plugin is deprecated and will be removed in Roda 3. This feature has been moved to the branch_locals plugin."
+          if locals = @_layout_locals
+            @_layout_locals = Hash[locals].merge!(opts)
+          else
+            @_layout_locals = opts
+          end
+        end
+
+        # RODA3: Remove
+        def set_view_locals(opts)
+          RodaPlugins.warn "The set_view_locals method in the view_options plugin is deprecated and will be removed in Roda 3. This feature has been moved to the branch_locals plugin."
+          if locals = @_view_locals
+            @_view_locals = Hash[locals].merge!(opts)
+          else
+            @_view_locals = opts
+          end
+        end
+
         private
+
+        def render_locals
+          locals = super
+          if @_view_locals
+            locals = Hash[locals].merge!(@_view_locals)
+          end
+          locals
+        end
+
+        def layout_locals
+          locals = super
+          if @_view_locals
+            locals = Hash[locals].merge!(@_layout_locals)
+          end
+          locals
+        end
 
         # If view options or locals have been set and this
         # template isn't a layout template, merge the options
@@ -138,6 +171,7 @@ class Roda
               t_opts.merge!(v_opts)
             end
 
+            # RODA3: Remove
             if v_locals = @_view_locals
               t_opts[:locals] = if t_locals = t_opts[:locals]
                 Hash[v_locals].merge!(t_locals)
@@ -159,6 +193,7 @@ class Roda
             opts.merge!(l_opts)
           end
 
+          # RODA3: Remove
           if l_locals = @_layout_locals
             opts[:locals] = if o_locals = opts[:locals]
               Hash[o_locals].merge!(l_locals)

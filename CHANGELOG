@@ -1,5 +1,9 @@
 = master
 
+* Deprecate view_options plugin locals handling, move to the new branch_locals plugin (jeremyevans)
+
+* Deprecate render plugin locals handling, move to the new render_locals plugin (jeremyevans)
+
 * Deprecate the :ext render method and plugin option (jeremyevans)
 
 * Deprecate the view_subdirs plugin alias for the view_options plugin (jeremyevans)
