@@ -1,5 +1,7 @@
 = master
 
+* Deprecate use of :host matcher with regexp value in header_matchers plugin without :host_matcher_captures app option (jeremyevans)
+
 * Deprecate view_options plugin locals handling, move to the new branch_locals plugin (jeremyevans)
 
 * Deprecate render plugin locals handling, move to the new render_locals plugin (jeremyevans)

@@ -65,7 +65,8 @@ describe "host matcher" do
     status("HTTP_HOST" => "foo.com").must_equal 404
   end
 
-  it "should match a host with a regexp" do
+  # RODA3: switch deprecated to it
+  deprecated "should match a host with a regexp" do
     app(:header_matchers) do |r|
       r.on :host=>/example/ do
         "worked"
@@ -76,7 +77,7 @@ describe "host matcher" do
     status("HTTP_HOST" => "foo.com").must_equal 404
   end
 
-  it "doesn't yield host" do
+  it "doesn't yield host if given a string" do
     app(:header_matchers) do |r|
       r.on :host=>"example.com" do |*args|
         args.size.to_s
@@ -86,7 +87,7 @@ describe "host matcher" do
     body("HTTP_HOST" => "example.com").must_equal '0'
   end
 
-  it "yields host if passed a regexp and opts[:host_matcher_captures] is set" do
+  deprecated "doesn't yield host if passed a regexp" do
     app(:header_matchers) do |r|
       r.on :host=>/\A(.*)\.example\.com\z/ do |*m|
         m.empty? ? '0' : m[0]
@@ -94,10 +95,21 @@ describe "host matcher" do
     end
 
     body("HTTP_HOST" => "foo.example.com").must_equal '0'
+  end
+
+  # RODA3: Remove :host_matcher_captures setting
+  it "yields host if passed a regexp and opts[:host_matcher_captures] is set" do
+    app(:header_matchers) do |r|
+      r.on :host=>/\A(.*)\.example\.com\z/ do |*m|
+        m.empty? ? '0' : m[0]
+      end
+    end
+
     app.opts[:host_matcher_captures] = true
     body("HTTP_HOST" => "foo.example.com").must_equal 'foo'
   end
 
+  # RODA3: Remove
   it "doesn't yields host if passed a string and opts[:host_matcher_captures] is set" do
     app(:header_matchers) do |r|
       r.on :host=>'example.com' do |*m|
