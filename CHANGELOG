@@ -1,5 +1,7 @@
 = master
 
+* Deprecate using :header matcher in header_matchers plugin without :header_matcher_prefix app option (jeremyevans)
+
 * Deprecate using content_for multiple times with the same key in the content_for plugin unless :append plugin option is used (jeremyevans)
 
 * Deprecate use of :host matcher with regexp value in header_matchers plugin without :host_matcher_captures app option (jeremyevans)

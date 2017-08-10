@@ -14,7 +14,8 @@ describe "accept matcher" do
 end
 
 describe "header matcher" do
-  it "should match if header present" do
+  # RODA3: undeprecate, and switch http-accept to accept
+  deprecated "should match if header present" do
     app(:header_matchers) do |r|
       r.on :header=>"http-accept" do
         "bar"
@@ -28,15 +29,17 @@ describe "header matcher" do
 
   it "should yield the header value" do
     app(:header_matchers) do |r|
-      r.on :header=>"http-accept" do |v|
+      r.on :header=>"accept" do |v|
         "bar-#{v}"
       end
     end
 
+    app.opts[:header_matcher_prefix] = true
     body("HTTP_ACCEPT" => "application/xml").must_equal  "bar-application/xml"
     status.must_equal 404
   end
 
+  # RODA3: Remove
   it "should automatically use HTTP prefix for headers if :header_matcher_prefix is set" do
     app(:bare) do
       plugin :header_matchers
