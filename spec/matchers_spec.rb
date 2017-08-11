@@ -158,23 +158,6 @@ describe "r.is" do
 end
 
 describe "matchers" do
-  deprecated "should handle string with embedded param" do
-    app do |r|
-      r.on "posts/:id" do |id|
-        id
-      end
-
-      r.on "responses-:id" do |id|
-        id
-      end
-    end
-    app.opts[:verbatim_string_matcher] = false
-
-    body('/posts/123').must_equal '123'
-    status('/post/123').must_equal 404
-    body('/responses-123').must_equal '123'
-  end
-
   it "should not handle string with embedded param if :verbatim_string_matcher option is set" do
     app do |r|
       r.on "posts/:id" do
@@ -185,50 +168,12 @@ describe "matchers" do
         '2'
       end
     end
-    # RODA3: remove option
-    app.opts[:verbatim_string_matcher] = true
 
     status('/post/123').must_equal 404
     status('/posts/123').must_equal 404
     body('/posts/:id').must_equal '1'
     status('/responses-123').must_equal 404
     body('/responses-:id').must_equal '2'
-  end
-
-  deprecated "should handle multiple params in single string" do
-    app do |r|
-      r.on "u/:uid/posts/:id" do |uid, id|
-        uid + id
-      end
-    end
-    app.opts[:verbatim_string_matcher] = false
-
-    body("/u/jdoe/posts/123").must_equal 'jdoe123'
-    status("/u/jdoe/pots/123").must_equal 404
-  end
-
-  deprecated "should escape regexp metacharaters in string" do
-    app do |r|
-      r.on "u/:uid/posts?/:id" do |uid, id|
-        uid + id
-      end
-    end
-    app.opts[:verbatim_string_matcher] = false
-
-    body("/u/jdoe/posts?/123").must_equal 'jdoe123'
-    status("/u/jdoe/post/123").must_equal 404
-  end
-
-  deprecated "should handle colons by themselves" do
-    app do |r|
-      r.on "u/:/:uid/posts/::id" do |uid, id|
-        uid + id
-      end
-    end
-    app.opts[:verbatim_string_matcher] = false
-
-    body("/u/:/jdoe/posts/:123").must_equal 'jdoe123'
-    status("/u/a/jdoe/post/b123").must_equal 404
   end
 
   it "should handle regexes and nesting" do

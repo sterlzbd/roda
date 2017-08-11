@@ -728,35 +728,14 @@ class Roda
         # string so that regexp metacharacters are not matched, and recognizes
         # colon tokens for placeholders.
         def _match_string(str)
-          if str.index(":") && placeholder_string_matcher?
-            # RODA3: Remove
-            not_warned = true
-            consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/) do |m|
-              match = $1
-              if not_warned
-                nor_warned = false
-                RodaPlugins.warn("Placeholder symbol matchers are deprecated by default and will be removed in Roda 3 (matcher used: #{str.inspect}). Use the placeholder_symbol_matchers plugin or split the string and use separate symbol matchers or String class matchers for the placeholders")
-              end
-              _match_symbol_regexp(match)
-            end})
-          else
-            rp = @remaining_path
-            if rp.start_with?("/#{str}")
-              last = str.length + 1
-              case rp[last]
-              when "/"
-                @remaining_path = rp[last, rp.length]
-              when nil
-                @remaining_path = ""
-              when Integer
-                # :nocov:
-                # RODA3: Remove
-                # Ruby 1.8 support
-                if rp[last].chr == "/"
-                  @remaining_path = rp[last, rp.length]
-                end
-                # :nocov:
-              end
+          rp = @remaining_path
+          if rp.start_with?("/#{str}")
+            last = str.length + 1
+            case rp[last]
+            when "/"
+              @remaining_path = rp[last, rp.length]
+            when nil
+              @remaining_path = ""
             end
           end
         end
@@ -779,11 +758,6 @@ class Roda
 
         # Match any nonempty segment.  This should be called without an argument.
         alias _match_class_String _match_symbol
-
-        # RODA3: Remove
-        def _match_symbol_regexp(s)
-          "([^\\/]+)"
-        end
 
         # The base remaining path to use.
         def _remaining_path(env)

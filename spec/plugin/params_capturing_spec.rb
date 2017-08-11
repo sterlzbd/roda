@@ -30,20 +30,4 @@ describe "params_capturing plugin" do
     body('/quux/asdf', 'rack.input'=>StringIO.new).must_equal 'y--quux-asdf-2'
     body('/quux/asdf/890', 'rack.input'=>StringIO.new).must_equal 'y--890-quux-asdf-890-3'
   end
-
-  deprecated "should add captures to r.params for string matchers" do
-    app(:params_capturing) do |r|
-      r.on("bar/:foo") do |foo|
-        "b-#{foo}-#{r[:foo]}-#{r[:captures].length}"
-      end
-
-      r.on("baz/:bar", :foo) do |bar, foo|
-        "b-#{bar}-#{foo}-#{r[:bar]}-#{r[:foo]}-#{r[:captures].length}"
-      end
-    end
-    app.opts[:verbatim_string_matcher] = false
-
-    body('/bar/banana', 'rack.input'=>StringIO.new).must_equal 'b-banana-banana-1'
-    body('/baz/ban/ana', 'rack.input'=>StringIO.new).must_equal 'b-ban-ana-ban-ana-2'
-  end
 end
