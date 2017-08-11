@@ -365,6 +365,8 @@ class Roda
             else
               opts.delete(:cache_key)
             end
+          elsif opts[:cache]
+            RodaPlugins.warn ":cache render/view method option used when caching explicitly disabled via :cache=>nil/false plugin option.  Caching this template will be skipped for backwards compatibility.  Starting in Roda 3, the :cache render/view method option will force caching even if the plugin defaults to not caching."
           end
 
           opts

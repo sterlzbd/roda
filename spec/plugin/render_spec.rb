@@ -360,6 +360,26 @@ describe "render plugin" do
     app.render_opts[:explicit_cache].must_equal false
   end
 
+  deprecated "Support :cache=>false plugin option to disable template caching, even when :cache=>true method option is given" do
+    app(:bare) do
+      plugin :render, :views=>"./spec/views", :cache=>false
+
+      route do |r|
+        @a = 'a'
+        r.is('a'){render('iv', :cache=>false)}
+        r.is('b'){render('iv', :cache=>true)}
+        render('iv')
+      end
+    end
+
+    body('/a').strip.must_equal "a"
+    app.render_opts[:cache].must_equal false
+    body('/b').strip.must_equal "a"
+    app.render_opts[:cache].must_equal false
+    body('/c').strip.must_equal "a"
+    app.render_opts[:cache].must_equal false
+  end
+
   it "Support :cache=>false option to disable template caching" do
     app(:bare) do
       plugin :render, :views=>"./spec/views"
@@ -457,7 +477,7 @@ describe "render plugin" do
     app.render_opts[:cache][['iv', c, nil, nil, proca]].wont_equal nil
   end
 
-  it "Support :cache_key option to force the key used when caching" do
+  it "Support :cache_key option to force the key used when caching, unless :cache=>false option is used" do
     app(:bare) do
       plugin :render, :views=>"./spec/views"
 

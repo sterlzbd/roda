@@ -1,5 +1,7 @@
 = master
 
+* Deprecate :cache=>nil/false render plugin option overriding :cache render/view method option (jeremyevans)
+
 * Deprecate using :header matcher in header_matchers plugin without :header_matcher_prefix app option (jeremyevans)
 
 * Deprecate using content_for multiple times with the same key in the content_for plugin unless :append plugin option is used (jeremyevans)
