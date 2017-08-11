@@ -67,33 +67,13 @@ class Roda
 
         private
 
-        if RUBY_VERSION >= '1.9'
-          # Regexp to scan for capture names. Uses positive lookbehind
-          # so it is only valid on ruby 1.9+, hence the use of eval.
-          STRING_PARAM_CAPTURE_REGEXP = eval("/(?<=:)\\w+/")
-
-          # Add the capture names from this string to list of param
-          # capture names if param capturing.
-          def _match_string(str)
-            if (pc = @_params_captures) && placeholder_string_matcher?
-              pc.concat(str.scan(STRING_PARAM_CAPTURE_REGEXP))
-            end
-            super
+        # Add the capture names from this string to list of param
+        # capture names if param capturing.
+        def _match_string(str)
+          if (pc = @_params_captures) && placeholder_string_matcher?
+            pc.concat(str.scan(/(?<=:)\w+/))
           end
-        else
-          # :nocov:
-          # RODA3: Remove
-          # Ruby 1.8 doesn't support positive lookbehind, so include the
-          # colon in the scan, and strip it out later.
-          STRING_PARAM_CAPTURE_RANGE = 1..-1
-
-          def _match_string(str)
-            if (pc = @_params_captures) && placeholder_string_matcher?
-              pc.concat(str.scan(/:\w+/).map{|s| s[STRING_PARAM_CAPTURE_RANGE]})
-            end
-            super
-          end
-          # :nocov:
+          super
         end
 
         # Add the symbol to the list of param capture names if param capturing.

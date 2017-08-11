@@ -22,7 +22,7 @@ class Roda
     #   plugin :public, :root=>'static'
     module Public
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
-      PARSER = RUBY_VERSION >= '1.9' ? URI::DEFAULT_PARSER : URI
+      PARSER = URI::DEFAULT_PARSER
 
       # Use options given to setup a Rack::File instance for serving files. Options:
       # :default_mime :: The default mime type to use if the mime type is not recognized.

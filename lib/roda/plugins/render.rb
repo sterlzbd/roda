@@ -186,7 +186,7 @@ class Roda
 
         template_opts = opts[:template_opts] = (opts[:template_opts] || {}).dup
         template_opts[:outvar] ||= '@_out_buf'
-        if RUBY_VERSION >= "1.9" && !template_opts.has_key?(:default_encoding)
+        unless template_opts.has_key?(:default_encoding)
           template_opts[:default_encoding] = Encoding.default_external
         end
 

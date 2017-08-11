@@ -48,13 +48,12 @@ describe "public plugin" do
     body('/about.erb').must_equal File.read('spec/views/about.erb')
     header('Content-Encoding', '/about.erb').must_be_nil
 
-    meth = RUBY_VERSION >= '1.9' ? :binread : :read
-    body('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.send(meth, 'spec/views/about/_test.erb.gz')
+    body('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.erb.gz')
     h = req('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
     h['Content-Encoding'].must_equal 'gzip'
     h['Content-Type'].must_equal 'text/plain'
 
-    body('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.send(meth, 'spec/views/about/_test.css.gz')
+    body('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.css.gz')
     h = req('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
     h['Content-Encoding'].must_equal 'gzip'
     h['Content-Type'].must_equal 'text/css'
