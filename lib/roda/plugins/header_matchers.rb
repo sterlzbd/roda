@@ -71,12 +71,11 @@ class Roda
         # Match if the host of the request is the same as the hostname.  +hostname+
         # can be a regexp or a string.
         def match_host(hostname)
-          if hostname.is_a?(Regexp) && roda_class.opts[:host_matcher_captures]
+          if hostname.is_a?(Regexp)
             if match = hostname.match(host)
               @captures.concat(match.captures)
             end
           else
-            RodaPlugins.warn ":host matcher used with regexp value without :host_matcher_captures app option, no capturing will be done.  Starting in Roda 3, the :host matcher will automatically capture if the value is a Regexp.  Set :host_matcher_captures app option to enable capturing." if hostname.is_a?(Regexp)
             hostname === host
           end
         end
