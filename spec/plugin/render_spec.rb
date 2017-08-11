@@ -61,30 +61,6 @@ describe "render plugin" do
   end
 end
 
-describe "render plugin with :layout_opts=>{:merge_locals=>true}" do
-  deprecated "should choose method opts before plugin opts, and layout specific before locals" do
-    app(:bare) do
-      plugin :render, :views=>"./spec/views", :check_paths=>true, :locals=>{:a=>1, :b=>2, :c=>3, :d=>4, :e=>5}, :layout_opts=>{:inline=>'<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>|<%= f %>|<%= yield %>', :merge_locals=>true, :locals=>{:a=>-1, :f=>6}}
-
-      route do |r|
-        r.on "base" do
-          view(:inline=>'(<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>)')
-        end
-        r.on "override" do
-          view(:inline=>'(<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>)', :locals=>{:b=>-2, :d=>-4, :f=>-6}, :layout_opts=>{:locals=>{:d=>0, :c=>-3, :e=>-5}})
-        end
-        r.on "no_merge" do
-          view(:inline=>'(<%= a %>|<%= b %>|<%= c %>|<%= d %>|<%= e %>)', :locals=>{:b=>-2, :d=>-4, :f=>-6}, :layout_opts=>{:merge_locals=>false, :locals=>{:d=>0, :c=>-3, :e=>-5}})
-        end
-      end
-    end
-
-    body("/base").must_equal '-1|2|3|4|5|6|(1|2|3|4|5)'
-    body("/override").must_equal '-1|-2|-3|0|-5|-6|(1|-2|3|-4|5)'
-    body("/no_merge").must_equal '-1|2|-3|0|-5|6|(1|-2|3|-4|5)'
-  end
-end
-
 describe "render plugin" do
   it "simple layout support" do
     app(:bare) do
@@ -137,21 +113,9 @@ describe "render plugin" do
     body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
-  deprecated "locals overrides" do
+  it ":layout=>true/false/string/hash/not-present respects plugin layout switch and template" do
     app(:bare) do
-      plugin :render, :views=>"./spec/views", :locals=>{:title=>'Home', :b=>'B'}, :layout_opts=>{:template=>'multiple-layout', :locals=>{:title=>'Roda', :a=>'A'}}
-      
-      route do |r|
-        view("multiple", :locals=>{:b=>"BB"}, :layout_opts=>{:locals=>{:a=>'AA'}})
-      end
-    end
-
-    body.strip.must_equal "Roda:AA::Home:BB"
-  end
-
-  deprecated ":layout=>true/false/string/hash/not-present respects plugin layout switch and template" do
-    app(:bare) do
-      plugin :render, :views=>"./spec/views", :layout_opts=>{:template=>'layout-yield', :locals=>{:title=>'a'}}
+      plugin :render, :views=>"./spec/views", :layout_opts=>{:template=>'layout-yield'}
       
       route do |r|
         opts = {:content=>'bar'}
@@ -159,6 +123,7 @@ describe "render plugin" do
         opts[:layout] = false if r.path == '/f'
         opts[:layout] = 'layout' if r.path == '/s'
         opts[:layout] = {:template=>'layout'} if r.path == '/h'
+        opts[:layout_opts] = {:locals=>{:title=>'a'}}
         view(opts)
       end
     end

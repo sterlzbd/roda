@@ -169,25 +169,6 @@ class Roda
         if opts[:layout_opts][:views]
           opts[:layout_opts][:views] = app.expand_path(opts[:layout_opts][:views]).freeze
         end
-        # RODA3: Remove
-        opts[:layout_opts][:_is_layout] = true
-
-        if opts[:locals]
-          RodaPlugins.warn "The :locals render plugin option is deprecated and will be removed in Roda 3. Locals should now be specified on a per-call basis, or you can use the render_locals plugin."
-        end
-
-        if opts[:layout_opts][:locals]
-          RodaPlugins.warn "The :layout_opts=>:locals render plugin option is deprecated and will be removed in Roda 3. Locals should now be specified on a per-call basis, or you can use the render_locals plugin."
-        end
-
-        if opts[:layout_opts][:merge_locals]
-          RodaPlugins.warn "The :layout_opts=>:merge_locals render plugin option is deprecated and will be removed in Roda 3. You can use the render_locals plugin for merging locals."
-        end
-
-        # RODA3: Remove
-        if opts[:layout_opts][:merge_locals] && opts[:locals]
-          opts[:layout_opts][:locals] = opts[:locals].merge(opts[:layout_opts][:locals] || {})
-        end
 
         if layout = opts.fetch(:layout, true)
           opts[:layout] = true unless opts.has_key?(:layout)
@@ -283,12 +264,7 @@ class Roda
 
         # Convert template options to single hash when rendering templates using render.
         def render_template_opts(template, opts)
-          opts = parse_template_opts(template, opts)
-
-          # RODA3: Remove
-          merge_render_locals(opts) if render_plugin_handle_locals?
-
-          opts
+          parse_template_opts(template, opts)
         end
 
         # Private alias for render.  Should be used by other plugins when they want to render a template
@@ -349,17 +325,6 @@ class Roda
           opts
         end
 
-        # RODA3: Remove
-        def merge_render_locals(opts)
-          if !opts[:_is_layout] && (r_locals = render_opts[:locals])
-            opts[:locals] = if locals = opts[:locals]
-              Hash[r_locals].merge!(locals)
-            else
-              r_locals
-            end
-          end
-        end
-
         # Return a single hash combining the template and opts arguments.
         def parse_template_opts(template, opts)
           opts = Hash[opts]
@@ -416,11 +381,6 @@ class Roda
           path
         end
 
-        # RODA3: Remove
-        def render_plugin_handle_locals?
-          true
-        end
-
         # If a layout should be used, return a hash of options for
         # rendering the layout template.  If a layout should not be
         # used, return nil.
@@ -428,40 +388,8 @@ class Roda
           if layout = opts.fetch(:layout, render_opts[:layout])
             layout_opts = render_layout_opts
 
-            # RODA3: Remove
-            merge_locals = layout_opts[:merge_locals]
-
             method_layout_opts = opts[:layout_opts]
-
-            # RODA3: Remove
-            if render_plugin_handle_locals?
-              if method_layout_opts
-                method_layout_locals = method_layout_opts[:locals]
-                if method_layout_opts.has_key?(:merge_locals)
-                  RodaPlugins.warn "The :layout_opts=>:merge_locals view option is deprecated and will be removed in Roda 3. You can use the render_locals plugin for merging locals."
-                  merge_locals = method_layout_opts[:merge_locals]
-                end
-              end
-
-              locals = {}
-              if merge_locals && (plugin_locals = render_opts[:locals])
-                locals.merge!(plugin_locals)
-              end
-              if layout_locals = layout_opts[:locals]
-                locals.merge!(layout_locals)
-              end
-              if merge_locals && (method_locals = opts[:locals])
-                locals.merge!(method_locals)
-              end
-              if method_layout_locals
-                locals.merge!(method_layout_locals)
-              end
-            end
-
             layout_opts.merge!(method_layout_opts) if method_layout_opts
-
-            # RODA3: Remove
-            layout_opts[:locals] = locals if render_plugin_handle_locals? && !locals.empty?
 
             case layout
             when Hash

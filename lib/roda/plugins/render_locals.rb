@@ -49,11 +49,6 @@ class Roda
           opts[:layout_locals]
         end
 
-        # RODA3: Remove
-        def render_plugin_handle_locals?
-          false
-        end
-
         # If this isn't the layout template, then use the plugin's render locals as the default locals.
         def render_template_opts(template, opts)
           opts = super
