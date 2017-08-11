@@ -174,12 +174,19 @@ class Roda
 
       module ResponseMethods
         UNDERSCORE = '_'.freeze
+        RodaPlugins.deprecate_constant(self, :UNDERSCORE)
         DASH = '-'.freeze
+        RodaPlugins.deprecate_constant(self, :DASH)
         COMMA = ', '.freeze
+        RodaPlugins.deprecate_constant(self, :COMMA)
         CACHE_CONTROL = 'Cache-Control'.freeze
+        RodaPlugins.deprecate_constant(self, :CACHE_CONTROL)
         EXPIRES = 'Expires'.freeze
+        RodaPlugins.deprecate_constant(self, :EXPIRES)
         CONTENT_TYPE = 'Content-Type'.freeze
+        RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
         CONTENT_LENGTH = 'Content-Length'.freeze
+        RodaPlugins.deprecate_constant(self, :CONTENT_LENGTH)
 
         # Specify response freshness policy for using the Cache-Control header.
         # Options can can any non-value directives (:public, :private, :no_cache,
@@ -195,11 +202,11 @@ class Roda
           values = []
           opts.each do |k, v|
             next unless v
-            k = k.to_s.tr(UNDERSCORE, DASH)
+            k = k.to_s.tr('_', '-')
             values << (v == true ? k : "#{k}=#{v}")
           end
 
-          self[CACHE_CONTROL] = values.join(COMMA) unless values.empty?
+          self['Cache-Control'] = values.join(', ') unless values.empty?
         end
 
         # Set Cache-Control header with the max_age given.  max_age should
@@ -208,7 +215,7 @@ class Roda
         # HTTP 1.0 clients (Cache-Control is an HTTP 1.1 header).
         def expires(max_age, opts=OPTS)
           cache_control(Hash[opts].merge!(:max_age=>max_age))
-          self[EXPIRES] = (Time.now + max_age).httpdate
+          self['Expires'] = (Time.now + max_age).httpdate
         end
 
         # Remove Content-Type and Content-Length for 304 responses.
@@ -216,8 +223,8 @@ class Roda
           a = super
           if a[0] == 304
             h = a[1]
-            h.delete(CONTENT_TYPE)
-            h.delete(CONTENT_LENGTH)
+            h.delete('Content-Type')
+            h.delete('Content-Length')
           end
           a
         end
