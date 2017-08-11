@@ -123,37 +123,4 @@ describe "placeholder_string_matchers plugin" do
     body('/thing/q').must_equal 'thingq'
     body('/thing2/q').must_equal 'thing2q'
   end
-
-  deprecated "works with symbol_matchers plugin and deprecated matchers" do
-    app(:bare) do
-      plugin :placeholder_string_matchers
-      plugin :symbol_matchers
-      symbol_matcher(:f, /(f+)/)
-
-      route do |r|
-        r.is "foo:optd" do |o|
-          "foo#{o.inspect}"
-        end
-
-        r.is "bar:opt" do |o|
-          "bar#{o.inspect}"
-        end
-
-        r.is "format:format" do |f|
-          "format#{f.inspect}"
-        end
-      end
-    end
-
-    body("/foo").must_equal 'foonil'
-    body("/foo/123").must_equal 'foo"123"'
-    status("/foo/bar").must_equal 404
-    status("/foo/123/a").must_equal 404
-    body("/bar").must_equal 'barnil'
-    body("/bar/foo").must_equal 'bar"foo"'
-    status("/bar/foo/baz").must_equal 404
-    body("/format").must_equal 'formatnil'
-    body("/format.json").must_equal 'format"json"'
-    status("/format.").must_equal 404
-  end
 end

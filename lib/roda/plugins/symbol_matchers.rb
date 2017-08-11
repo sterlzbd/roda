@@ -46,26 +46,6 @@ class Roda
         app.symbol_matcher(:d, /(\d+)/)
         app.symbol_matcher(:w, /(\w+)/)
         app.symbol_matcher(:rest, /(.*)/)
-
-        if !app.opts[:verbatim_string_matcher]
-          # RODA3: Remove
-          app::RodaRequest.class_eval do
-            def match_symbol_format
-              Roda::RodaPlugins.warn('Implicit use of the :format symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :format symbol matcher, add the following code to your Roda class: symbol_matcher(:format, /(?:\.(\w+))?/)')
-              /(?:\.(\w+))?/
-            end
-
-            def match_symbol_opt
-              Roda::RodaPlugins.warn('Implicit use of the :opt symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :opt symbol matcher, add the following code to your Roda class: symbol_matcher(:opt, /(?:\/([^\/]+))?/)')
-              /(?:\/([^\/]+))?/
-            end
-
-            def match_symbol_optd
-              Roda::RodaPlugins.warn('Implicit use of the :optd symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :optd symbol matcher, add the following code to your Roda class: symbol_matcher(:optd, /(?:\/(\d+))?/)')
-              /(?:\/(\d+))?/
-            end
-          end
-        end
       end
 
       module ClassMethods
