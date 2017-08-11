@@ -148,10 +148,7 @@ class Roda
         app.opts[:render][:orig_opts] = opts
 
         opts = app.opts[:render]
-        if opts[:ext] && !opts[:engine]
-          RodaPlugins.warn "The :ext render plugin option is deprecated and will be removed in Roda 3.  Switch to using the :engine option."
-        end
-        opts[:engine] = (opts[:engine] || opts[:ext] || "erb").dup.freeze
+        opts[:engine] = (opts[:engine] || "erb").dup.freeze
         opts[:views] = app.expand_path(opts[:views]||"views").freeze
         opts[:allowed_paths] ||= [opts[:views]].freeze
         opts[:allowed_paths] = opts[:allowed_paths].map{|f| app.expand_path(f, nil)}.uniq.freeze
@@ -315,10 +312,7 @@ class Roda
         # template block, and locals to use for the render in the passed options.
         def find_template(opts)
           render_opts = render_opts()
-          if opts[:ext] && !opts[:engine]
-            RodaPlugins.warn "The :ext render plugin option is deprecated and will be removed in Roda 3.  Switch to using the :engine option."
-          end
-          engine_override = opts[:engine] ||= opts[:ext]
+          engine_override = opts[:engine]
           engine = opts[:engine] ||= render_opts[:engine]
           if content = opts[:inline]
             path = opts[:path] = content

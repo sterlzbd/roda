@@ -50,13 +50,6 @@ describe "render plugin" do
     body("/inline").strip.must_equal "Hello <%= name %>"
   end
 
-  deprecated "with str as ext" do
-    app.plugin :render, :ext => "str"
-    body("/about").strip.must_equal "<h1>About Roda</h1>"
-    body("/home").strip.must_equal "<title>Roda: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
-    body("/inline").strip.must_equal "Hello <%= name %>" 
-  end
-
   it "custom default layout support" do
     app.plugin :render, :layout => "layout-alternative"
     body("/home").strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Home</h1>\n<p>Hello Agent Smith</p>"
