@@ -340,19 +340,8 @@ describe "r.on" do
     status.must_equal 404
   end
 
-  deprecated "executes on arbitrary object" do
-    app do |r|
-      r.on Object.new do
-        "+1"
-      end
-    end
-
-    body.must_equal '+1'
-  end
-
-  it "raises on arbitrary object if :unsupported_matcher => :raise" do
+  it "raises on arbitrary object" do
     app(:bare) do 
-      opts[:unsupported_matcher] = :raise
       route do |r|
         r.on Object.new do
           "+1"
