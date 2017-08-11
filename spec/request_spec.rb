@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(__FILE__))
+require_relative "spec_helper"
 
 describe "request.path, .remaining_path, and .matched_path" do
   it "should return the script name and path_info as a string" do

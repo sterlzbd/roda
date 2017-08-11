@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "heartbeat plugin" do 
   it "should return heartbeat response for heartbeat paths only" do

@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "optimized_string_matchers plugin" do 
   it "should support on_branch and is_exactly match methods" do

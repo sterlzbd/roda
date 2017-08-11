@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "strip_path_prefix plugin" do 
   it "strips path prefix when expanding paths" do

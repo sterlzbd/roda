@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "halt plugin" do
   it "should still have halt return rack response as argument given it as argument" do

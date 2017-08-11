@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "symbol_matchers plugin" do 
   it "allows symbol specific regexps for symbol matchers" do

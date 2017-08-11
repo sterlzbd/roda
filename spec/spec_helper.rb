@@ -1,7 +1,5 @@
 $:.unshift(File.expand_path("../lib", File.dirname(__FILE__)))
 
-require "rubygems"
-
 if ENV['WARNING']
   require 'warning'
   Warning.ignore([:missing_ivar, :method_redefined, :not_reached], File.dirname(File.dirname(__FILE__)))
@@ -24,7 +22,7 @@ if ENV['COVERAGE']
   SimpleCov.roda_coverage
 end
 
-require "roda"
+require_relative "../lib/roda"
 require "stringio"
 gem 'minitest'
 require "minitest/autorun"

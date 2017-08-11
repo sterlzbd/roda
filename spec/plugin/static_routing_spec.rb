@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "static_routing plugin" do 
   it "adds support for static routes that are taken before normal routes" do

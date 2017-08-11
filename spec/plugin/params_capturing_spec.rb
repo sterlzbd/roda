@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "params_capturing plugin" do 
   it "should add captures to r.params for symbol matchers" do

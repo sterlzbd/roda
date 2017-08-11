@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "indifferent_params plugin" do 
   it "allows indifferent access to request params via params method" do

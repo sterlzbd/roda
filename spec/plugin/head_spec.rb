@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "head plugin" do 
   it "considers HEAD requests as GET requests which return no body" do

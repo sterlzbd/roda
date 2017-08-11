@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "type_routing plugin" do
   before do

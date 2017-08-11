@@ -2,7 +2,7 @@
 
 require "rack"
 require "thread"
-require "roda/version"
+require_relative "roda/version"
 
 # The main class for Roda.  Roda is built completely out of plugins, with the
 # default plugin being Roda::RodaPlugins::Base, so this class is mostly empty

@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "unescape_path_path plugin" do 
   it "decodes URL-encoded routing path" do

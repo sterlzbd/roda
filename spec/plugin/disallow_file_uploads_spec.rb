@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 if Rack.release < '1.6'
   warn "Rack #{Rack.release} used, skipping disallow_file_uploads plugin test"  

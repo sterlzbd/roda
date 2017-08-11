@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "drop_body plugin" do 
   it "automatically drops body and Content-Type/Content-Length headers for responses without a body" do

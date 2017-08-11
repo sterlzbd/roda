@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "placeholder_string_matchers plugin" do
   it "should handle string with embedded param" do

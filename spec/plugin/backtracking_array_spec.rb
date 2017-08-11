@@ -1,4 +1,4 @@
-require File.expand_path("spec_helper", File.dirname(File.dirname(__FILE__)))
+require_relative "../spec_helper"
 
 describe "backtracking_array plugin" do 
   it "backtracks to next entry in array if later matcher fails" do
