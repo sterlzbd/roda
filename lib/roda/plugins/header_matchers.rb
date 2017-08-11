@@ -63,15 +63,7 @@ class Roda
 
         # Match if the given uppercase key is present inside the environment.
         def match_header(key)
-          key = key.upcase.tr("-","_")
-
-          if roda_class.opts[:header_matcher_prefix]
-            key = "HTTP_#{key}"
-          else
-            RodaPlugins.warn ":header matcher used without :header_matcher_prefix app option.  Currently this looks for the #{key} header, but in Roda 3 it will look for the HTTP_#{key} header.  You should set the :header_matcher_prefix app option and update your code if necessary to avoid this deprecation warning."
-          end
-
-          if v = @env[key]
+          if v = @env["HTTP_#{key.upcase.tr("-","_")}"]
             @captures << v
           end
         end
