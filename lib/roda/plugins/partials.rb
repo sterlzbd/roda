@@ -22,7 +22,7 @@ class Roda
     module Partials
       # Depend on the render plugin, since this overrides
       # some of its methods.
-      def self.load_dependencies(app, opts=RodaPlugins::OPTS)
+      def self.load_dependencies(app, opts=OPTS)
         app.plugin :render, opts
       end
 
@@ -30,7 +30,7 @@ class Roda
         # Renders the given template without a layout, but
         # prefixes the template filename to use with an 
         # underscore.
-        def partial(template, opts=RodaPlugins::OPTS)
+        def partial(template, opts=OPTS)
           opts = parse_template_opts(template, opts)
           if opts[:template]
             template = opts[:template].split('/')

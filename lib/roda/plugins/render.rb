@@ -133,7 +133,7 @@ class Roda
     # plugin option.
     module Render
       # Setup default rendering options.  See Render for details.
-      def self.configure(app, opts=RodaPlugins::OPTS)
+      def self.configure(app, opts=OPTS)
         if app.opts[:render]
           orig_cache = app.opts[:render][:cache]
           opts = app.opts[:render][:orig_opts].merge(opts)
@@ -224,9 +224,9 @@ class Roda
 
       module InstanceMethods
         # Render the given template. See Render for details.
-        def render(template, opts = RodaPlugins::OPTS, &block)
+        def render(template, opts = OPTS, &block)
           opts = render_template_opts(template, opts)
-          retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||RodaPlugins::OPTS), &block)
+          retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
         end
 
         # Return the render options for the instance's class. While this
@@ -239,7 +239,7 @@ class Roda
         # Render the given template.  If there is a default layout
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
-        def view(template, opts=RodaPlugins::OPTS)
+        def view(template, opts=OPTS)
           opts = parse_template_opts(template, opts)
           content = opts[:content] || render_template(opts)
 

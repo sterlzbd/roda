@@ -24,7 +24,7 @@ class Roda
       # Set plugin specific options.  Options:
       # :use_redirects :: Whether to issue 302 redirects when appending the
       #                   trailing slash.
-      def self.configure(app, opts=RodaPlugins::OPTS)
+      def self.configure(app, opts=OPTS)
         app.opts[:run_append_slash_redirect] = !!opts[:use_redirects]
       end
 

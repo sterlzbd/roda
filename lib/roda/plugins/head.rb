@@ -42,7 +42,7 @@ class Roda
         def call(*)
           res = super
           if @_request.head?
-            res[2] = RodaPlugins::EMPTY_ARRAY
+            res[2] = EMPTY_ARRAY
           end
           res
         end

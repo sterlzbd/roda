@@ -25,7 +25,7 @@ class Roda
       # :include_request :: If true, the parser will be called with the request
       #                     object as the second argument, so the parser needs
       #                     to respond to +call(str, request)+.
-      def self.configure(app, opts=RodaPlugins::OPTS)
+      def self.configure(app, opts=OPTS)
         app.opts[:json_parser_error_handler] = opts[:error_handler] || app.opts[:json_parser_error_handler] || DEFAULT_ERROR_HANDLER
         app.opts[:json_parser_parser] = opts[:parser] || app.opts[:json_parser_parser] || DEFAULT_PARSER
         app.opts[:json_parser_include_request] = opts[:include_request] || app.opts[:json_parser_include_request]

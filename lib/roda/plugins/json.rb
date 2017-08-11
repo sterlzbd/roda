@@ -56,7 +56,7 @@ class Roda
       DEFAULT_SERIALIZER = :to_json.to_proc
 
       # Set the classes to automatically convert to JSON, and the serializer to use.
-      def self.configure(app, opts=RodaPlugins::OPTS)
+      def self.configure(app, opts=OPTS)
         classes = opts[:classes] || [Array, Hash]
         app.opts[:json_result_classes] ||= []
         app.opts[:json_result_classes] += classes

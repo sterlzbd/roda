@@ -62,7 +62,7 @@ class Roda
 
         # Record a path rewrite from path +was+ to path +is+.  Options:
         # :path_info :: Modify PATH_INFO, not just remaining path.
-        def rewrite_path(was, is = nil, opts=RodaPlugins::OPTS, &block)
+        def rewrite_path(was, is = nil, opts=OPTS, &block)
           if is.is_a? Hash
             raise RodaError, "cannot provide two hashes to rewrite_path" unless opts.empty?
             opts = is

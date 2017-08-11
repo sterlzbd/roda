@@ -37,8 +37,8 @@ class Roda
     # use an error reporting service instead of this plugin.
     module ErrorMail
       # Set default opts for plugin.  See ErrorEmail module RDoc for options.
-      def self.configure(app, opts=RodaPlugins::OPTS)
-        app.opts[:error_mail] = email_opts = (app.opts[:error_mail] || RodaPlugins::OPTS).merge(opts).freeze
+      def self.configure(app, opts=OPTS)
+        app.opts[:error_mail] = email_opts = (app.opts[:error_mail] || OPTS).merge(opts).freeze
         unless email_opts[:to] && email_opts[:from]
           raise RodaError, "must provide :to and :from options to error_mail plugin"
         end

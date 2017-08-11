@@ -24,14 +24,14 @@ class Roda
     module PadrinoRender
       # Depend on the render plugin, since this overrides
       # some of its methods.
-      def self.load_dependencies(app, opts=RodaPlugins::OPTS)
+      def self.load_dependencies(app, opts=OPTS)
         app.plugin :partials, opts
       end
 
       module InstanceMethods
         # Call view with the given arguments, so that render
         # uses a layout by default.
-        def render(template, opts=RodaPlugins::OPTS)
+        def render(template, opts=OPTS)
           view(template, opts)
         end
       end

@@ -48,7 +48,7 @@ class Roda
     module PrecompileTemplates
       # Load the render plugin as precompile_templates depends on it.
       # Default to sorting the locals if the Tilt version is greater than 2.0.1.
-      def self.load_dependencies(app, opts=RodaPlugins::OPTS)
+      def self.load_dependencies(app, opts=OPTS)
         app.plugin :render
         app.opts[:precompile_templates_sort] = opts.fetch(:sort_locals, Tilt::VERSION > '2.0.1')
       end
@@ -56,7 +56,7 @@ class Roda
       module ClassMethods
         # Precompile the templates using the given options.  See PrecompileTemplates
         # for details.
-        def precompile_templates(pattern, opts=RodaPlugins::OPTS)
+        def precompile_templates(pattern, opts=OPTS)
           if pattern.is_a?(Hash)
             opts = pattern.merge(opts)
           end

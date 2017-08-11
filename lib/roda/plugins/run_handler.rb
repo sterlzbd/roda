@@ -32,7 +32,7 @@ class Roda
         # If the <tt>:not_found=>:pass</tt> option is given, and the rack response
         # returned by the app is a 404 response, do not return the response, continue
         # routing normally.
-        def run(app, opts=RodaPlugins::OPTS)
+        def run(app, opts=OPTS)
           res = catch(:halt){super(app)}
           yield res if block_given?
           throw(:halt, res) unless opts[:not_found] == :pass && res[0] == 404
