@@ -791,11 +791,7 @@ class Roda
           when nil, false
             # nothing
           else
-            if roda_class.opts[:unsupported_block_result] == :raise
-              raise RodaError, "unsupported block result: #{result.inspect}"
-            else
-              RodaPlugins.warn("Unsupported match block return result: #{result.inspect}.  This is currently ignored, but will raise an error in Roda 3.  Have the block return nil or false to ignore the result.")
-            end
+            raise RodaError, "unsupported block result: #{result.inspect}"
           end
         end
 
