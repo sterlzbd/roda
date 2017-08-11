@@ -178,6 +178,9 @@ class Roda
         opts[:explicit_cache] = ENV['RACK_ENV'] == 'development' unless opts.has_key?(:explicit_cache)
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
+        if opts[:layout_opts][:views]
+          opts[:layout_opts][:views] = app.expand_path(opts[:layout_opts][:views]).freeze
+        end
         # RODA3: Remove
         opts[:layout_opts][:_is_layout] = true
 

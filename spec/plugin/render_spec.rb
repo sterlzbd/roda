@@ -107,6 +107,19 @@ describe "render plugin" do
     body.gsub(/\n+/, "\n").must_equal "Header\nThis is the actual content.\nFooter\n"
   end
 
+  it "should have :layout_opts=>:views plugin option respect :root app option" do
+    app(:bare) do
+      self.opts[:root] = 'spec'
+      plugin :render, :layout_opts=>{:views=>"views"}, :allowed_paths=>["spec/views"]
+
+      route do |r|
+        view(:content=>'a', :layout_opts=>{:locals=>{:title=>"Home"}})
+      end
+    end
+
+    body.strip.must_equal "<title>Roda: Home</title>\na"
+  end
+
   it "views without default layouts" do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :layout=>false

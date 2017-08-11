@@ -1,5 +1,7 @@
 = master
 
+* Respect :root app option when using :layout_opts=>:views render plugin option (jeremyevans)
+
 * Deprecate rendering templates outside of render plugin :allowed_paths option by default (jeremyevans)
 
 * Deprecate :cache=>nil/false render plugin option overriding :cache render/view method option (jeremyevans)
