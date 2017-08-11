@@ -48,20 +48,15 @@ class Roda
     #
     # :allowed_paths :: Set the template paths to allow if +:check_paths+ is true.
     #                   Defaults to the +:views+ directory.
-    # :cache :: nil/false to disallow template caching completely.
+    # :cache :: nil/false to disable template caching by default.  By default, caching
+    #           is disabled by default if RACK_ENV is developmenti.
     # :cache_class :: A class to use as the template cache instead of the default.
     # :check_paths :: Check template paths start with one of the entries in +:allowed_paths+,
     #                 and raise a RodaError if the path doesn't.
     # :engine :: The tilt engine to use for rendering, also the default file extension for
     #            templates, defaults to 'erb'.
-    # :escape :: Use Roda's Erubis escaping support, which makes <tt><%= %></tt> escape output,
-    #            <tt><%== %></tt> not escape output, and handles postfix conditions inside
-    #            <tt><%= %></tt> tags.  Can have a value of :erubi to use Erubi escaping support.
-    # :explicit_cache :: Only use the template cache if the :cache option is provided when rendering
-    #                    (useful for development). Defaults to true if RACK_ENV is development, allowing explicit
-    #                    caching of specific templates, but not caching by default.
-    # :inherit_cache :: Whether to create a dup of the cache in subclasses.  The default is false, which
-    #                   starts subclasses with an empty cache.
+    # :escape :: Use Erubi as the ERB template engine, and enable escaping by default,
+    #            which makes <tt><%= %></tt> escape output and  <tt><%== %></tt> not escape output.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
     #            with the :template or :inline options.
     # :layout_opts :: The options to use when rendering the layout, if different from the default options.
@@ -153,17 +148,22 @@ class Roda
         opts[:allowed_paths] ||= [opts[:views]].freeze
         opts[:allowed_paths] = opts[:allowed_paths].map{|f| app.expand_path(f, nil)}.uniq.freeze
 
-        if opts.fetch(:cache, true)
-          if orig_cache
-            opts[:cache] = orig_cache
-          elsif cache_class = opts[:cache_class]
-            opts[:cache] = cache_class.new
+        unless opts.has_key?(:explicit_cache)
+          opts[:explicit_cache] = if opts.fetch(:cache, true)
+            ENV['RACK_ENV'] == 'development'
           else
-            opts[:cache] = app.thread_safe_cache
+            true
           end
         end
 
-        opts[:explicit_cache] = ENV['RACK_ENV'] == 'development' unless opts.has_key?(:explicit_cache)
+        if orig_cache
+          opts[:cache] = orig_cache
+        elsif cache_class = opts[:cache_class]
+          opts[:cache] = cache_class.new
+        else
+          opts[:cache] = app.thread_safe_cache
+        end
+
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
         if opts[:layout_opts][:views]
@@ -212,17 +212,7 @@ class Roda
         def inherited(subclass)
           super
           opts = subclass.opts[:render] = subclass.opts[:render].dup
-
-          if opts[:cache]
-            opts[:cache] = if opts[:inherit_cache]
-              opts[:cache] = opts[:cache].dup
-            elsif cache_class = opts[:cache_class]
-              opts[:cache] = cache_class.new
-            else
-              opts[:cache] = thread_safe_cache
-            end
-          end
-
+          opts[:cache] = opts[:cache].dup
           opts.freeze
         end
 
@@ -274,7 +264,8 @@ class Roda
         # If caching templates, attempt to retrieve the template from the cache.  Otherwise, just yield
         # to get the template.
         def cached_template(opts, &block)
-          if (!render_opts[:explicit_cache] || opts[:cache]) && (cache = render_opts[:cache]) && (key = opts[:cache_key])
+          if (!render_opts[:explicit_cache] || opts[:cache]) && (key = opts[:cache_key])
+            cache = render_opts[:cache]
             unless template = cache[key]
               template = cache[key] = yield
             end
@@ -301,25 +292,21 @@ class Roda
             opts[:template_class] ||= ::Tilt
           end
 
-          if render_opts[:cache]
-            if (cache = opts[:cache]).nil?
-              cache = content || !opts[:template_block]
-            end
+          if (cache = opts[:cache]).nil?
+            cache = content || !opts[:template_block]
+          end
 
-            if cache
-              template_block = opts[:template_block] unless content
-              template_opts = opts[:template_opts]
+          if cache
+            template_block = opts[:template_block] unless content
+            template_opts = opts[:template_opts]
 
-              opts[:cache_key] ||= if template_class || engine_override || template_opts || template_block
-                [path, template_class, engine_override, template_opts, template_block]
-              else
-                path
-              end
+            opts[:cache_key] ||= if template_class || engine_override || template_opts || template_block
+              [path, template_class, engine_override, template_opts, template_block]
             else
-              opts.delete(:cache_key)
+              path
             end
-          elsif opts[:cache]
-            RodaPlugins.warn ":cache render/view method option used when caching explicitly disabled via :cache=>nil/false plugin option.  Caching this template will be skipped for backwards compatibility.  Starting in Roda 3, the :cache render/view method option will force caching even if the plugin defaults to not caching."
+          else
+            opts.delete(:cache_key)
           end
 
           opts

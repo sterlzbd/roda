@@ -331,24 +331,24 @@ describe "render plugin" do
     app.render_opts[:explicit_cache].must_equal false
   end
 
-  deprecated "Support :cache=>false plugin option to disable template caching, even when :cache=>true method option is given" do
+  deprecated "Support :cache=>false plugin option to disable template caching by default, except :cache=>true method option is given" do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :cache=>false
 
       route do |r|
         @a = 'a'
-        r.is('a'){render('iv', :cache=>false)}
-        r.is('b'){render('iv', :cache=>true)}
-        render('iv')
+        r.is('a'){render('iv', :cache=>false, :cache_key=>:a)}
+        r.is('b'){render('iv', :cache=>true, :cache_key=>:a)}
+        render('iv', :cache_key=>:a)
       end
     end
 
     body('/a').strip.must_equal "a"
-    app.render_opts[:cache].must_equal false
+    app.render_opts[:cache][:a].must_be_nil
     body('/b').strip.must_equal "a"
-    app.render_opts[:cache].must_equal false
+    app.render_opts[:cache][:a].wont_be_nil
     body('/c').strip.must_equal "a"
-    app.render_opts[:cache].must_equal false
+    app.render_opts[:cache][:a].wont_be_nil
   end
 
   it "Support :cache=>false option to disable template caching" do
@@ -477,20 +477,17 @@ describe "render plugin" do
     body.must_equal "1-2"
   end
 
-  it "should dup render_opts when subclasses, including an empty cache" do
+  it "should dup render_opts when subclassing" do
     c = Class.new(Roda)
-    c.plugin :render
-    c.render_opts[:cache][:foo] = 1
+    c.plugin :render, :foo=>:bar
     sc = Class.new(c)
-
     c.render_opts.wont_be_same_as(sc.render_opts)
-    c.render_opts[:cache].wont_be_same_as(sc.render_opts[:cache])
-    sc.render_opts[:cache][:foo].must_be_nil
+    c.render_opts[:foo].must_equal :bar
   end
 
-  it "should use a copy of superclass's cache when inheriting if :inherit_cache option is used" do
+  it "should use a copy of superclass's cache when subclassing" do
     c = Class.new(Roda)
-    c.plugin :render, :inherit_cache=>true
+    c.plugin :render
     c.render_opts[:cache][:foo] = 1
     sc = Class.new(c)
 
@@ -503,13 +500,17 @@ describe "render plugin" do
     c = Class.new(Roda)
     c.plugin :render
     cache = c.render_opts[:cache]
+    c.render_opts[:explicit_cache].must_equal false
     c.plugin :render
     c.render_opts[:cache].must_be_same_as cache
+    c.render_opts[:explicit_cache].must_equal false
 
     c.plugin :render, :cache=>false
-    c.render_opts[:cache].must_equal false
+    c.render_opts[:cache].must_be_same_as cache
+    c.render_opts[:explicit_cache].must_equal true
     c.plugin :render
-    c.render_opts[:cache].must_equal false
+    c.render_opts[:cache].must_be_same_as cache
+    c.render_opts[:explicit_cache].must_equal true
   end
 
   it "render plugin call should not override existing options" do
@@ -519,18 +520,17 @@ describe "render plugin" do
     c.render_opts[:layout].must_equal :foo
   end
 
-  it "should not use cache in subclass if caching disabled in superclass" do
+  it "should not use cache by default in subclass if not caching by default in superclass" do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :cache=>false
       
       route do |r|
-        view(:inline=>"Hello <%= name %>: <%= render_opts[:cache] %>", :locals=>{:name => "Agent Smith"}, :layout=>nil)
+        view(:inline=>"Hello <%= name %>", :cache_key=>:a, :locals=>{:name => "Agent Smith"}, :layout=>nil)
       end
     end
 
-    body("/inline").strip.must_equal "Hello Agent Smith: false"
-
-    Class.new(app).render_opts[:cache].must_equal false
+    body("/inline").strip.must_equal "Hello Agent Smith"
+    Class.new(app).render_opts[:cache][:a].must_be_nil
   end
 
   it "with :check_paths=>true plugin option used" do
