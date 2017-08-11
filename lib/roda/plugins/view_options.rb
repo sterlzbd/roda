@@ -122,43 +122,7 @@ class Roda
           end
         end
 
-        # RODA3: Remove
-        def set_layout_locals(opts)
-          RodaPlugins.warn "The set_layout_locals method in the view_options plugin is deprecated and will be removed in Roda 3. This feature has been moved to the branch_locals plugin."
-          if locals = @_layout_locals
-            @_layout_locals = Hash[locals].merge!(opts)
-          else
-            @_layout_locals = opts
-          end
-        end
-
-        # RODA3: Remove
-        def set_view_locals(opts)
-          RodaPlugins.warn "The set_view_locals method in the view_options plugin is deprecated and will be removed in Roda 3. This feature has been moved to the branch_locals plugin."
-          if locals = @_view_locals
-            @_view_locals = Hash[locals].merge!(opts)
-          else
-            @_view_locals = opts
-          end
-        end
-
         private
-
-        def render_locals
-          locals = super
-          if @_view_locals
-            locals = Hash[locals].merge!(@_view_locals)
-          end
-          locals
-        end
-
-        def layout_locals
-          locals = super
-          if @_view_locals
-            locals = Hash[locals].merge!(@_layout_locals)
-          end
-          locals
-        end
 
         # If view options or locals have been set and this
         # template isn't a layout template, merge the options
@@ -166,19 +130,8 @@ class Roda
         def parse_template_opts(template, opts)
           t_opts = super
 
-          unless t_opts[:_is_layout]
-            if v_opts = @_view_options
-              t_opts.merge!(v_opts)
-            end
-
-            # RODA3: Remove
-            if v_locals = @_view_locals
-              t_opts[:locals] = if t_locals = t_opts[:locals]
-                Hash[v_locals].merge!(t_locals)
-              else
-                v_locals
-              end
-            end
+          if !t_opts[:_is_layout] && (v_opts = @_view_options)
+            t_opts.merge!(v_opts)
           end
 
           t_opts
@@ -191,15 +144,6 @@ class Roda
 
           if l_opts = @_layout_options
             opts.merge!(l_opts)
-          end
-
-          # RODA3: Remove
-          if l_locals = @_layout_locals
-            opts[:locals] = if o_locals = opts[:locals]
-              Hash[o_locals].merge!(l_locals)
-            else
-              l_locals
-            end
           end
 
           opts
