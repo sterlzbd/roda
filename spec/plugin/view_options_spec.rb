@@ -47,6 +47,7 @@ end
 describe "view_options plugin" do
   it "should set view and layout options to use" do
     app(:bare) do
+      plugin :render, :allowed_paths=>['spec/views']
       plugin :view_options
       plugin :render_locals, :render=>{:title=>'About Roda'}, :layout=>{:title=>'Home'}
 
@@ -62,6 +63,7 @@ describe "view_options plugin" do
 
   it "should merge multiple calls to set view and layout options" do
     app(:bare) do
+      plugin :render, :allowed_paths=>['spec/views']
       plugin :view_options
       plugin :render_locals, :render=>{:title=>'Home', :b=>'B'}, :layout=>{:title=>'About Roda', :a=>'A'}
 

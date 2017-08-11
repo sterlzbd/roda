@@ -426,10 +426,14 @@ class Roda
         # The template path for the given options.
         def template_path(opts)
           path = "#{opts[:views]}/#{template_name(opts)}.#{opts[:engine]}"
+          full_path = self.class.expand_path(path)
           if opts.fetch(:check_paths){render_opts[:check_paths]}
-            full_path = self.class.expand_path(path)
             unless render_opts[:allowed_paths].any?{|f| full_path.start_with?(f)}
-              raise RodaError, "attempt to render path not in allowed_paths: #{path} (allowed: #{render_opts[:allowed_paths].join(', ')})"
+              raise RodaError, "attempt to render path not in allowed_paths: #{full_path} (allowed: #{render_opts[:allowed_paths].join(', ')})"
+            end
+          elsif !opts.has_key?(:check_paths) && !render_opts.has_key?(:check_paths)
+            unless render_opts[:allowed_paths].any?{|f| full_path.start_with?(f)}
+              RodaPlugins.warn "The :check_paths render/view method option and :check_paths render plugin option were not specified, and the path used for the template (#{full_path.inspect}) is not in the allowed paths (#{render_opts[:allowed_paths].inspect}).  Allowing the template render anyway for backwards compatibility, but an error will be raised starting in Roda 3.  Specify the :allowed_paths render plugin option to include the path, or use the :check_paths=>false render plugin option to explicitly disable path checking."
             end
           end
           path

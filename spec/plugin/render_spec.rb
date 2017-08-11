@@ -562,7 +562,7 @@ describe "render plugin" do
     Class.new(app).render_opts[:cache].must_equal false
   end
 
-  it "with :check_paths=>true" do
+  it "with :check_paths=>true plugin option used" do
     render_opts = {}
     app(:bare) do
       plugin :render, :views=>"./spec/views", :check_paths=>true
@@ -615,6 +615,50 @@ describe "render plugin" do
     body.strip.must_equal "b"
     proc{req("/a")}.must_raise Roda::RodaError
     req("/c")
+  end
+
+  deprecated "with :check_paths plugin option not set" do
+    render_opts = {}
+    app(:bare) do
+      plugin :render, :views=>"./spec/views"
+      
+      route do |r|
+        r.get 'a' do
+          render("a", render_opts)
+        end
+
+        r.get 'c' do
+          render("about/_test", :locals=>{:title=>'a'})
+        end
+
+        render("b", render_opts)
+      end
+    end
+
+    body.strip.must_equal "b"
+    body("/a").strip.must_equal 'a'
+    body("/c").strip.must_equal "<h1>Subdir: a</h1>"
+
+    app.plugin :render, :allowed_paths=>[]
+    body.strip.must_equal "b"
+    body("/a").strip.must_equal 'a'
+    body("/c").strip.must_equal "<h1>Subdir: a</h1>"
+
+    app.plugin :render, :allowed_paths=>['spec/views/about']
+    body.strip.must_equal "b"
+    body("/a").strip.must_equal 'a'
+    body("/c").strip.must_equal "<h1>Subdir: a</h1>"
+
+    app.plugin :render, :allowed_paths=>%w'spec/views/about spec/views/b'
+    body.strip.must_equal "b"
+    body("/a").strip.must_equal 'a'
+    body("/c").strip.must_equal "<h1>Subdir: a</h1>"
+
+    render_opts[:check_paths] = true
+    app.plugin :render, :check_paths=>false
+    body.strip.must_equal "b"
+    proc{req("/a")}.must_raise Roda::RodaError
+    body("/c").strip.must_equal "<h1>Subdir: a</h1>"
   end
 
   it "with a cache_class set" do
