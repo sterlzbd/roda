@@ -14,17 +14,6 @@ class Roda
       DEFAULT_ERROR_HANDLER = proc{|r| r.halt [400, {}, []]}
       DEFAULT_PARSER = JSON.method(:parse)
 
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-      JSON_PARAMS_KEY = "roda.json_params".freeze
-      RodaPlugins.deprecate_constant(self, :JSON_PARAMS_KEY)
-      INPUT_KEY = "rack.input".freeze
-      RodaPlugins.deprecate_constant(self, :INPUT_KEY)
-      FORM_HASH_KEY = "rack.request.form_hash".freeze
-      RodaPlugins.deprecate_constant(self, :FORM_HASH_KEY)
-      FORM_INPUT_KEY = "rack.request.form_input".freeze
-      RodaPlugins.deprecate_constant(self, :FORM_INPUT_KEY)
-
       # Handle options for the json_parser plugin:
       # :error_handler :: A proc to call if an exception is raised when
       #                   parsing a JSON request body.  The proc is called

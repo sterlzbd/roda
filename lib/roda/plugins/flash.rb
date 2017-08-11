@@ -36,10 +36,6 @@ class Roda
     #     flash['a'] # = >'b'
     #   end
     module Flash
-      # The internal session key used to store the flash.
-      KEY = :_flash
-      RodaPlugins.deprecate_constant(self, :KEY)
-
       # Simple flash hash, where assiging to the hash updates the flash
       # used in the following request.
       class FlashHash < DelegateClass(Hash)

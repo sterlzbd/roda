@@ -45,11 +45,6 @@ class Roda
     # it can be rewritten again by a later rewrite.  Note that PATH_INFO rewrites are
     # processed before remaining_path rewrites.
     module PathRewriter
-      OPTS={}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-      PATH_INFO = 'PATH_INFO'.freeze
-      RodaPlugins.deprecate_constant(self, :PATH_INFO)
-
       def self.configure(app)
         app.instance_exec do
           app.opts[:remaining_path_rewrites] ||= []

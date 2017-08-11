@@ -145,17 +145,6 @@ class Roda
     # method is not called until template rendering, the flash may not be
     # rotated.
     module Chunked
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-      HTTP_VERSION = 'HTTP_VERSION'.freeze
-      RodaPlugins.deprecate_constant(self, :HTTP_VERSION)
-      HTTP11 = "HTTP/1.1".freeze
-      RodaPlugins.deprecate_constant(self, :HTTP11)
-      TRANSFER_ENCODING = 'Transfer-Encoding'.freeze
-      RodaPlugins.deprecate_constant(self, :TRANSFER_ENCODING)
-      CHUNKED = 'chunked'.freeze
-      RodaPlugins.deprecate_constant(self, :CHUNKED)
-
       # Depend on the render plugin
       def self.load_dependencies(app, opts=RodaPlugins::OPTS)
         app.plugin :render
@@ -173,13 +162,6 @@ class Roda
 
       # Rack response body instance for chunked responses
       class Body
-        CHUNK_SIZE = "%x\r\n".freeze
-        RodaPlugins.deprecate_constant(self, :CHUNK_SIZE)
-        CRLF = "\r\n".freeze
-        RodaPlugins.deprecate_constant(self, :CRLF)
-        FINISH = "0\r\n\r\n".freeze
-        RodaPlugins.deprecate_constant(self, :FINISH)
-
         # Save the scope of the current request handling.
         def initialize(scope)
           @scope = scope

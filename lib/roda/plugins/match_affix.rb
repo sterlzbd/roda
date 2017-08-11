@@ -28,11 +28,6 @@ class Roda
     #
     # This plugin automatically loads the placeholder_string_matchers plugin.
     module MatchAffix
-      PREFIX = "/".freeze
-      RodaPlugins.deprecate_constant(self, :PREFIX)
-      SUFFIX = "(?=\/|\z)".freeze
-      RodaPlugins.deprecate_constant(self, :SUFFIX)
-
       def self.load_dependencies(app, _prefix, _suffix)
         app.plugin :placeholder_string_matchers
       end

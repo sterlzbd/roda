@@ -357,27 +357,6 @@ class Roda
       # Instance methods for RodaRequest, mostly related to handling routing
       # for the request.
       module RequestMethods
-        PATH_INFO = "PATH_INFO".freeze
-        RodaPlugins.deprecate_constant(self, :PATH_INFO)
-        SCRIPT_NAME = "SCRIPT_NAME".freeze
-        RodaPlugins.deprecate_constant(self, :SCRIPT_NAME)
-        REQUEST_METHOD = "REQUEST_METHOD".freeze
-        RodaPlugins.deprecate_constant(self, :REQUEST_METHOD)
-        EMPTY_STRING = "".freeze
-        RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
-        SLASH = "/".freeze
-        RodaPlugins.deprecate_constant(self, :SLASH)
-        COLON = ":".freeze
-        RodaPlugins.deprecate_constant(self, :COLON)
-        SEGMENT = "([^\\/]+)".freeze
-        RodaPlugins.deprecate_constant(self, :SEGMENT)
-        TERM_INSPECT = "TERM".freeze
-        RodaPlugins.deprecate_constant(self, :TERM_INSPECT)
-        GET_REQUEST_METHOD = 'GET'.freeze
-        RodaPlugins.deprecate_constant(self, :GET_REQUEST_METHOD)
-        SESSION_KEY = 'rack.session'.freeze
-        RodaPlugins.deprecate_constant(self, :SESSION_KEY)
-
         TERM = Object.new
         def TERM.inspect
           "TERM"
@@ -975,13 +954,6 @@ class Roda
       # Instance methods for RodaResponse
       module ResponseMethods
         DEFAULT_HEADERS = {"Content-Type" => "text/html".freeze}.freeze
-
-        CONTENT_LENGTH = "Content-Length".freeze
-        RodaPlugins.deprecate_constant(self, :CONTENT_LENGTH)
-        CONTENT_TYPE = "Content-Type".freeze
-        RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
-        LOCATION = "Location".freeze
-        RodaPlugins.deprecate_constant(self, :LOCATION)
 
         # The body for the current response.
         attr_reader :body

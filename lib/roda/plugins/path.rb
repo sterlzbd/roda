@@ -63,9 +63,6 @@ class Roda
     module Path
       DEFAULT_PORTS = {'http' => 80, 'https' => 443}.freeze
 
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       # Initialize the path classes when loading the plugin. Options:
       # :by_name :: Register classes by name, which is friendlier when reloading code (defaults to
       #             true in development mode)

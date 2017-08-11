@@ -47,9 +47,6 @@ class Roda
     #     end
     #   end
     module SharedVars
-      KEY = 'roda.shared'.freeze
-      RodaPlugins.deprecate_constant(self, :KEY)
-
       module InstanceMethods
         # Returns the current shared vars for the request.  These are
         # stored in the request's environment, so they will be implicitly

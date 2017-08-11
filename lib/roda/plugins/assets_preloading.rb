@@ -50,11 +50,6 @@ class Roda
         :js => 'script'.freeze,
       }.freeze
 
-      COMMA = ",".freeze
-      RodaPlugins.deprecate_constant(self, :COMMA)
-      NEWLINE= "\n".freeze
-      RodaPlugins.deprecate_constant(self, :NEWLINE)
-
       # Depend on the assets plugin, as we'll be calling some functions in it.
       def self.load_dependencies(app)
         app.plugin :assets

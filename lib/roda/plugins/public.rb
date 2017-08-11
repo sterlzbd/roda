@@ -24,9 +24,6 @@ class Roda
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
       PARSER = RUBY_VERSION >= '1.9' ? URI::DEFAULT_PARSER : URI
 
-      NULL_BYTE = "\0".freeze
-      RodaPlugins.deprecate_constant(self, :NULL_BYTE)
-
       # Use options given to setup a Rack::File instance for serving files. Options:
       # :default_mime :: The default mime type to use if the mime type is not recognized.
       # :gzip :: Whether to serve already gzipped files with a .gz extension for clients

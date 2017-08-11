@@ -26,9 +26,6 @@ class Roda
     # the template will be +bar+.  You can use <tt>:local=>nil</tt> to
     # not set a local variable inside the template.
     module RenderEach
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       # Load the render plugin before this plugin, since this plugin
       # calls the render method.
       def self.load_dependencies(app)

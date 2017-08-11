@@ -110,29 +110,6 @@ class Roda
     # Roda application if you want your helper methods to automatically be
     # available in your email views.
     module Mailer
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-      REQUEST_METHOD = "REQUEST_METHOD".freeze
-      RodaPlugins.deprecate_constant(self, :REQUEST_METHOD)
-      PATH_INFO = "PATH_INFO".freeze
-      RodaPlugins.deprecate_constant(self, :PATH_INFO)
-      SCRIPT_NAME = 'SCRIPT_NAME'.freeze
-      RodaPlugins.deprecate_constant(self, :SCRIPT_NAME)
-      EMPTY_STRING = ''.freeze
-      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
-      RACK_INPUT = 'rack.input'.freeze
-      RodaPlugins.deprecate_constant(self, :RACK_INPUT)
-      RODA_MAIL = 'roda.mail'.freeze
-      RodaPlugins.deprecate_constant(self, :RODA_MAIL)
-      RODA_MAIL_ARGS = 'roda.mail_args'.freeze
-      RodaPlugins.deprecate_constant(self, :RODA_MAIL_ARGS)
-      MAIL = "MAIL".freeze
-      RodaPlugins.deprecate_constant(self, :MAIL)
-      CONTENT_TYPE = 'Content-Type'.freeze
-      RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
-      TEXT_PLAIN = "text/plain".freeze
-      RodaPlugins.deprecate_constant(self, :TEXT_PLAIN)
-
       # Error raised when the using the mail class method, but the routing
       # tree doesn't return the mail object. 
       class Error < ::Roda::RodaError; end

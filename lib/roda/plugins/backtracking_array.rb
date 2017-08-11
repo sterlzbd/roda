@@ -26,11 +26,6 @@ class Roda
     # and the match block yields.
     module BacktrackingArray
       module RequestMethods
-        PATH_INFO = "PATH_INFO".freeze
-        RodaPlugins.deprecate_constant(self, :PATH_INFO)
-        SCRIPT_NAME = "SCRIPT_NAME".freeze
-        RodaPlugins.deprecate_constant(self, :SCRIPT_NAME)
-
         private
 
         # When matching for a single array, after a successful

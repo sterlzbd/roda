@@ -31,9 +31,6 @@ class Roda
     # matches only when the current PATH_INFO is +/+ and not when
     # it is empty.
     module EmptyRoot
-      EMPTY_STRING = ''.freeze
-      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
-
       module RequestMethods
         # Match when the remaining path is the empty string,
         # in addition to the default behavior of matching when

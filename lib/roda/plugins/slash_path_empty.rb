@@ -11,9 +11,6 @@ class Roda
     # are processed.  This can make it easier to handle applications
     # where a trailing "/" in the path should be ignored.
     module SlashPathEmpty
-      SLASH = "/".freeze
-      RodaPlugins.deprecate_constant(self, :SLASH)
-
       module RequestMethods
         private
 

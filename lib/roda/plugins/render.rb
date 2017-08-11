@@ -138,9 +138,6 @@ class Roda
     # rendering faster by specifying +:cache_key+ inside the +:layout_opts+
     # plugin option.
     module Render
-      OPTS={}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       # RODA3: Remove
       def self.load_dependencies(app, opts=RodaPlugins::OPTS)
         if opts[:escape] && opts[:escape] != :erubi

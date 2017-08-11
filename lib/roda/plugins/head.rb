@@ -36,9 +36,6 @@ class Roda
     # this plugin those HEAD requests will return a 404 status, which
     # may prevent search engine's from crawling your website.
     module Head
-      EMPTY_ARRAY = [].freeze
-      RodaPlugins.deprecate_constant(self, :EMPTY_ARRAY)
-
       module InstanceMethods
         # Always use an empty response body for head requests, with a
         # content length of 0.

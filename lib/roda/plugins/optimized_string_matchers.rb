@@ -24,9 +24,6 @@ class Roda
     # correctly in such cases, but the captures will not be yielded to the
     # match blocks.
     module OptimizedStringMatchers
-      EMPTY_STRING = ''.freeze
-      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
-
       module RequestMethods
         # Optimized version of +on+ that only supports a single string.
         def on_branch(s)

@@ -20,11 +20,6 @@ class Roda
     #
     # Note that this plugin automatically loads the :render plugin.
     module Partials
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-      SLASH = '/'.freeze
-      RodaPlugins.deprecate_constant(self, :SLASH)
-
       # Depend on the render plugin, since this overrides
       # some of its methods.
       def self.load_dependencies(app, opts=RodaPlugins::OPTS)

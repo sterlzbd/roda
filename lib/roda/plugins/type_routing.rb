@@ -81,11 +81,6 @@ class Roda
     # :use_header :: Whether to take the +Accept+ header into account.
     #                Default is +true+.
     module TypeRouting
-      ACCEPT_HEADER = 'HTTP_ACCEPT'.freeze
-      RodaPlugins.deprecate_constant(self, :ACCEPT_HEADER)
-      CONTENT_TYPE_HEADER = 'Content-Type'.freeze
-      RodaPlugins.deprecate_constant(self, :CONTENT_TYPE_HEADER)
-
       CONFIGURATION = {
         :mimes => {
           'text/json' => :json,

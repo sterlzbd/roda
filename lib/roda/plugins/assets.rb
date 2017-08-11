@@ -307,35 +307,6 @@ class Roda
         :compiled_js_dir  => nil,
       }.freeze
 
-      EMPTY_ATTRS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :EMPTY_ATTRS)
-      JS_END = "\"></script>".freeze
-      RodaPlugins.deprecate_constant(self, :JS_END)
-      CSS_END = "\" />".freeze
-      RodaPlugins.deprecate_constant(self, :CSS_END)
-      SPACE = ' '.freeze
-      RodaPlugins.deprecate_constant(self, :SPACE)
-      DOT = '.'.freeze
-      RodaPlugins.deprecate_constant(self, :DOT)
-      SLASH = '/'.freeze
-      RodaPlugins.deprecate_constant(self, :SLASH)
-      NEWLINE = "\n".freeze
-      RodaPlugins.deprecate_constant(self, :NEWLINE)
-      EMPTY_STRING = ''.freeze
-      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
-      JS_SUFFIX = '.js'.freeze
-      RodaPlugins.deprecate_constant(self, :JS_SUFFIX)
-      CSS_SUFFIX = '.css'.freeze
-      RodaPlugins.deprecate_constant(self, :CSS_SUFFIX)
-      HTTP_ACCEPT_ENCODING = 'HTTP_ACCEPT_ENCODING'.freeze
-      RodaPlugins.deprecate_constant(self, :HTTP_ACCEPT_ENCODING)
-      CONTENT_ENCODING = 'Content-Encoding'.freeze
-      RodaPlugins.deprecate_constant(self, :CONTENT_ENCODING)
-      GZIP = 'gzip'.freeze
-      RodaPlugins.deprecate_constant(self, :GZIP)
-      DOTGZ = '.gz'.freeze
-      RodaPlugins.deprecate_constant(self, :DOTGZ)
-
       # Internal exception raised when a compressor cannot be found
       CompressorNotFound = Class.new(RodaError)
 

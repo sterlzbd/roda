@@ -72,9 +72,6 @@ class Roda
     # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     # OTHER DEALINGS IN THE SOFTWARE.
     module Streaming
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       # Class of the response body in case you use #stream.
       #
       # Three things really matter: The front and back block (back being the

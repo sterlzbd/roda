@@ -69,25 +69,7 @@ class Roda
     # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     # OTHER DEALINGS IN THE SOFTWARE.
     module Caching
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       module RequestMethods
-        LAST_MODIFIED = 'Last-Modified'.freeze
-        RodaPlugins.deprecate_constant(self, :LAST_MODIFIED)
-        HTTP_IF_NONE_MATCH = 'HTTP_IF_NONE_MATCH'.freeze
-        RodaPlugins.deprecate_constant(self, :HTTP_IF_NONE_MATCH)
-        HTTP_IF_MATCH = 'HTTP_IF_MATCH'.freeze
-        RodaPlugins.deprecate_constant(self, :HTTP_IF_MATCH)
-        HTTP_IF_MODIFIED_SINCE = 'HTTP_IF_MODIFIED_SINCE'.freeze
-        RodaPlugins.deprecate_constant(self, :HTTP_IF_MODIFIED_SINCE)
-        HTTP_IF_UNMODIFIED_SINCE = 'HTTP_IF_UNMODIFIED_SINCE'.freeze
-        RodaPlugins.deprecate_constant(self, :HTTP_IF_UNMODIFIED_SINCE)
-        ETAG = 'ETag'.freeze
-        RodaPlugins.deprecate_constant(self, :ETAG)
-        STAR = '*'.freeze
-        RodaPlugins.deprecate_constant(self, :STAR)
-
         # Set the last modified time of the resource using the Last-Modified header.
         # The +time+ argument should be a Time instance.
         #
@@ -174,21 +156,6 @@ class Roda
       end
 
       module ResponseMethods
-        UNDERSCORE = '_'.freeze
-        RodaPlugins.deprecate_constant(self, :UNDERSCORE)
-        DASH = '-'.freeze
-        RodaPlugins.deprecate_constant(self, :DASH)
-        COMMA = ', '.freeze
-        RodaPlugins.deprecate_constant(self, :COMMA)
-        CACHE_CONTROL = 'Cache-Control'.freeze
-        RodaPlugins.deprecate_constant(self, :CACHE_CONTROL)
-        EXPIRES = 'Expires'.freeze
-        RodaPlugins.deprecate_constant(self, :EXPIRES)
-        CONTENT_TYPE = 'Content-Type'.freeze
-        RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
-        CONTENT_LENGTH = 'Content-Length'.freeze
-        RodaPlugins.deprecate_constant(self, :CONTENT_LENGTH)
-
         # Specify response freshness policy for using the Cache-Control header.
         # Options can can any non-value directives (:public, :private, :no_cache,
         # :no_store, :must_revalidate, :proxy_revalidate), with true as the value.

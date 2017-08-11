@@ -211,35 +211,6 @@ class Roda
     # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
     # OTHER DEALINGS IN THE SOFTWARE.
     module SinatraHelpers
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-      CONTENT_TYPE = "Content-Type".freeze
-      RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
-      CONTENT_DISPOSITION = "Content-Disposition".freeze
-      RodaPlugins.deprecate_constant(self, :CONTENT_DISPOSITION)
-      CONTENT_LENGTH = "Content-Length".freeze
-      RodaPlugins.deprecate_constant(self, :CONTENT_LENGTH)
-      OCTET_STREAM = 'application/octet-stream'.freeze
-      RodaPlugins.deprecate_constant(self, :OCTET_STREAM)
-      ATTACHMENT = 'attachment'.freeze
-      RodaPlugins.deprecate_constant(self, :ATTACHMENT)
-      HTTP_VERSION = 'HTTP_VERSION'.freeze
-      RodaPlugins.deprecate_constant(self, :HTTP_VERSION)
-      HTTP11 = "HTTP/1.1".freeze
-      RodaPlugins.deprecate_constant(self, :HTTP11)
-      HTTP_X_FORWARDED_HOST = "HTTP_X_FORWARDED_HOST".freeze
-      RodaPlugins.deprecate_constant(self, :HTTP_X_FORWARDED_HOST)
-      EMPTY_STRING = ''.freeze
-      RodaPlugins.deprecate_constant(self, :EMPTY_STRING)
-      SLASH = '/'.freeze
-      RodaPlugins.deprecate_constant(self, :SLASH)
-      SEMICOLON = ';'.freeze
-      RodaPlugins.deprecate_constant(self, :SEMICOLON)
-      COMMA = ', '.freeze
-      RodaPlugins.deprecate_constant(self, :COMMA)
-      CHARSET = 'charset'.freeze
-      RodaPlugins.deprecate_constant(self, :CHARSET)
-
       # Depend on the status_303 plugin.
       def self.load_dependencies(app, _opts = nil)
         app.plugin :status_303

@@ -25,9 +25,6 @@ class Roda
     #     end
     #   end
     module RunHandler
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       module RequestMethods
         # If a block is given, yield the rack response array to it.  The response can
         # be modified before it is returned by the current app.

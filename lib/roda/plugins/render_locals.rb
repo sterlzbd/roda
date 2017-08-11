@@ -25,9 +25,6 @@ class Roda
     # layout :: The default locals to use for layout rendering
     # merge :: Whether to merge template locals into layout locals
     module RenderLocals
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       def self.load_dependencies(app, opts=RodaPlugins::OPTS)
         app.plugin :render
       end

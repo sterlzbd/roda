@@ -16,11 +16,6 @@ class Roda
     module Heartbeat
       HEARTBEAT_RESPONSE = [200, {'Content-Type'=>'text/plain'}.freeze, ['OK'.freeze].freeze].freeze
 
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-      PATH_INFO = 'PATH_INFO'.freeze
-      RodaPlugins.deprecate_constant(self, :PATH_INFO)
-
       # Set the heartbeat path to the given path.
       def self.configure(app, opts=RodaPlugins::OPTS)
         app.opts[:heartbeat_path] = (opts[:path] || app.opts[:heartbeat_path] || "/heartbeat").dup.freeze

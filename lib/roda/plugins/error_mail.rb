@@ -36,9 +36,6 @@ class Roda
     # for low traffic web applications.  For high traffic web applications,
     # use an error reporting service instead of this plugin.
     module ErrorMail
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       # Set default opts for plugin.  See ErrorEmail module RDoc for options.
       def self.configure(app, opts=RodaPlugins::OPTS)
         app.opts[:error_mail] = email_opts = (app.opts[:error_mail] || RodaPlugins::OPTS).merge(opts).freeze

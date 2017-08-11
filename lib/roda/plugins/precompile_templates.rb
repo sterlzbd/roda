@@ -46,9 +46,6 @@ class Roda
     #
     #   precompile_templates :inline=>some_template_string
     module PrecompileTemplates
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       # Load the render plugin as precompile_templates depends on it.
       # Default to sorting the locals if the Tilt version is greater than 2.0.1.
       def self.load_dependencies(app, opts=RodaPlugins::OPTS)

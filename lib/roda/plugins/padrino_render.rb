@@ -22,9 +22,6 @@ class Roda
     #
     # Note that this plugin loads the :partials plugin.
     module PadrinoRender
-      OPTS = {}.freeze
-      RodaPlugins.deprecate_constant(self, :OPTS)
-
       # Depend on the render plugin, since this overrides
       # some of its methods.
       def self.load_dependencies(app, opts=RodaPlugins::OPTS)
