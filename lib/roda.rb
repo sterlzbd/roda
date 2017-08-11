@@ -177,7 +177,7 @@ class Roda
           
           request_class = Class.new(self::RodaRequest)
           request_class.roda_class = subclass
-          request_class.match_pattern_cache = thread_safe_cache
+          request_class.match_pattern_cache = RodaCache.new
           subclass.const_set(:RodaRequest, request_class)
 
           response_class = Class.new(self::RodaResponse)
@@ -226,6 +226,7 @@ class Roda
         # A new thread safe cache instance.  This is a method so it can be
         # easily overridden for alternative implementations.
         def thread_safe_cache
+          RodaPlugins.warn "Roda.thread_safe_cache is deprecated and will be removed from Roda 3.1."
           RodaCache.new
         end
 

@@ -156,14 +156,7 @@ class Roda
           end
         end
 
-        if orig_cache
-          opts[:cache] = orig_cache
-        elsif cache_class = opts[:cache_class]
-          opts[:cache] = cache_class.new
-        else
-          opts[:cache] = app.thread_safe_cache
-        end
-
+        opts[:cache] = orig_cache || (opts[:cache_class] || RodaCache).new
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
         if opts[:layout_opts][:views]
