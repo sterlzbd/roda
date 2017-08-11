@@ -44,7 +44,7 @@ class Roda
       # is called multiple times to set data. Overwrite is default, use
       # the :append option to append.
       def self.configure(app, opts = {})
-        app.opts[:append_content_for] = opts.fetch(:append, nil)
+        app.opts[:append_content_for] = opts.fetch(:append, true)
       end
 
       module InstanceMethods
@@ -71,9 +71,6 @@ class Roda
             if append
               (@_content_for[key] ||= []) << value
             else
-              if @_content_for[key] && append.nil?
-                RodaPlugins.warn "Attempt to set content_for with same key.  This currently overwrites the existing content_for for #{key}.  In Roda 3, it will start appending to the existing content_for by default.  Use the :append => false option to the content_for plugin to keep the existing behavior."
-              end
               @_content_for[key] = value
             end
           elsif @_content_for && (value = @_content_for[key])

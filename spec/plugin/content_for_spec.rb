@@ -52,18 +52,13 @@ describe "content_for plugin with multiple calls to the same key" do
     end
   end
 
-  deprecated "should replace with multiple calls to the same key by default" do
-    body.strip.must_equal "bar baz"
-  end
-
   it "should replace with multiple calls to the same key if :append=>false plugin option is used" do
     app.plugin :content_for, :append => false
     body.strip.must_equal "bar baz"
   end
 
-  # RODA3: Make default behavior
   it "should append with multiple calls to the same key if :append=>true plugin option is used" do
-    app.plugin :content_for, :append => true
+    app.plugin :content_for
     body.strip.must_equal "bar foobaz"
   end
 end
