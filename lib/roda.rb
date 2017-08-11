@@ -65,6 +65,9 @@ class Roda
   # Module in which all Roda plugins should be stored. Also contains logic for
   # registering and loading plugins.
   module RodaPlugins
+    OPTS = {}.freeze
+    EMPTY_ARRAY = [].freeze
+
     # Stores registered plugins
     @plugins = RodaCache.new
 

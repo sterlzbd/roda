@@ -38,8 +38,9 @@ class Roda
     # use an error reporting service instead of this plugin.
     module ErrorEmail
       OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
       DEFAULTS = {
-        :headers=>OPTS,
+        :headers=>RodaPlugins::OPTS,
         :host=>'localhost',
         # :nocov:
         :emailer=>lambda{|h| Net::SMTP.start(h[:host]){|s| s.send_message(h[:message], h[:from], h[:to])}},
@@ -97,7 +98,7 @@ END
       }#.freeze # RODA3
 
       # Set default opts for plugin.  See ErrorEmail module RDoc for options.
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         email_opts = app.opts[:error_email] ||= DEFAULTS
         email_opts = email_opts.merge(opts)
         email_opts[:headers] = email_opts[:headers].dup

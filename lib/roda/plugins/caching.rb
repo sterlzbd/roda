@@ -70,6 +70,7 @@ class Roda
     # OTHER DEALINGS IN THE SOFTWARE.
     module Caching
       OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
 
       module RequestMethods
         LAST_MODIFIED = 'Last-Modified'.freeze
@@ -130,7 +131,7 @@ class Roda
         #
         # When the current request includes an If-Match header with a
         # etag that doesn't match, immediately returns a response with a 412 status.
-        def etag(value, opts=OPTS)
+        def etag(value, opts=RodaPlugins::OPTS)
           # Before touching this code, please double check RFC 2616 14.24 and 14.26.
           weak = opts[:weak]
           new_resource = opts.fetch(:new_resource){post?}
@@ -213,7 +214,7 @@ class Roda
         # be an integer number of seconds that the current request should be
         # cached for.  Also sets the Expires header, useful if you have
         # HTTP 1.0 clients (Cache-Control is an HTTP 1.1 header).
-        def expires(max_age, opts=OPTS)
+        def expires(max_age, opts=RodaPlugins::OPTS)
           cache_control(Hash[opts].merge!(:max_age=>max_age))
           self['Expires'] = (Time.now + max_age).httpdate
         end

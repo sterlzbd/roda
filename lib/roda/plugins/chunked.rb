@@ -146,7 +146,7 @@ class Roda
     # rotated.
     module Chunked
       OPTS = {}.freeze
-
+      RodaPlugins.deprecate_constant(self, :OPTS)
       HTTP_VERSION = 'HTTP_VERSION'.freeze
       RodaPlugins.deprecate_constant(self, :HTTP_VERSION)
       HTTP11 = "HTTP/1.1".freeze
@@ -157,14 +157,14 @@ class Roda
       RodaPlugins.deprecate_constant(self, :CHUNKED)
 
       # Depend on the render plugin
-      def self.load_dependencies(app, opts=OPTS)
+      def self.load_dependencies(app, opts=RodaPlugins::OPTS)
         app.plugin :render
       end
 
       # Set plugin specific options.  Options:
       # :chunk_by_default :: chunk all calls to view by default
       # :headers :: Set default additional headers to use when calling view
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         app.opts[:chunk_by_default] = opts[:chunk_by_default]
         if opts[:headers]
           app.opts[:chunk_headers] = (app.opts[:chunk_headers] || {}).merge(opts[:headers]).freeze
@@ -221,7 +221,7 @@ class Roda
 
         # Render a response to the user in chunks.  See Chunked for
         # an overview.  If a block is given, it is passed to #delay.
-        def chunked(template, opts=OPTS, &block)
+        def chunked(template, opts=RodaPlugins::OPTS, &block)
           unless defined?(@_chunked)
             @_chunked = env['HTTP_VERSION'] == "HTTP/1.1"
           end

@@ -11,10 +11,11 @@ class Roda
     # This only parses the request body as JSON if the Content-Type
     # header for the request includes "json".
     module JsonParser
-      OPTS = {}.freeze
       DEFAULT_ERROR_HANDLER = proc{|r| r.halt [400, {}, []]}
       DEFAULT_PARSER = JSON.method(:parse)
 
+      OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
       JSON_PARAMS_KEY = "roda.json_params".freeze
       RodaPlugins.deprecate_constant(self, :JSON_PARAMS_KEY)
       INPUT_KEY = "rack.input".freeze
@@ -35,7 +36,7 @@ class Roda
       # :include_request :: If true, the parser will be called with the request
       #                     object as the second argument, so the parser needs
       #                     to respond to +call(str, request)+.
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         app.opts[:json_parser_error_handler] = opts[:error_handler] || app.opts[:json_parser_error_handler] || DEFAULT_ERROR_HANDLER
         app.opts[:json_parser_parser] = opts[:parser] || app.opts[:json_parser_parser] || DEFAULT_PARSER
         app.opts[:json_parser_include_request] = opts[:include_request] || app.opts[:json_parser_include_request]

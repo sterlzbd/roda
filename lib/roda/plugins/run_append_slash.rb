@@ -22,11 +22,12 @@ class Roda
     #   # GET /a/ => App gets "/" as PATH_INFO
     module RunAppendSlash
       OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
 
       # Set plugin specific options.  Options:
       # :use_redirects :: Whether to issue 302 redirects when appending the
       #                   trailing slash.
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         app.opts[:run_append_slash_redirect] = !!opts[:use_redirects]
       end
 

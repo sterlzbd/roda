@@ -1,5 +1,7 @@
 = master
 
+* Deprecate additional internal constants (jeremyevans)
+
 * Respect :root app option when using :layout_opts=>:views render plugin option (jeremyevans)
 
 * Deprecate rendering templates outside of render plugin :allowed_paths option by default (jeremyevans)

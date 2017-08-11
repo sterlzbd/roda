@@ -46,7 +46,7 @@ class Roda
     # processed before remaining_path rewrites.
     module PathRewriter
       OPTS={}.freeze
-
+      RodaPlugins.deprecate_constant(self, :OPTS)
       PATH_INFO = 'PATH_INFO'.freeze
       RodaPlugins.deprecate_constant(self, :PATH_INFO)
 
@@ -67,7 +67,7 @@ class Roda
 
         # Record a path rewrite from path +was+ to path +is+.  Options:
         # :path_info :: Modify PATH_INFO, not just remaining path.
-        def rewrite_path(was, is = nil, opts=OPTS, &block)
+        def rewrite_path(was, is = nil, opts=RodaPlugins::OPTS, &block)
           if is.is_a? Hash
             raise RodaError, "cannot provide two hashes to rewrite_path" unless opts.empty?
             opts = is

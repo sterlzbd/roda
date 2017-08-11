@@ -139,16 +139,17 @@ class Roda
     # plugin option.
     module Render
       OPTS={}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
 
       # RODA3: Remove
-      def self.load_dependencies(app, opts=OPTS)
+      def self.load_dependencies(app, opts=RodaPlugins::OPTS)
         if opts[:escape] && opts[:escape] != :erubi
           app.plugin :_erubis_escaping
         end
       end
 
       # Setup default rendering options.  See Render for details.
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         if app.opts[:render]
           orig_cache = app.opts[:render][:cache]
           opts = app.opts[:render][:orig_opts].merge(opts)
@@ -273,9 +274,9 @@ class Roda
 
       module InstanceMethods
         # Render the given template. See Render for details.
-        def render(template, opts = OPTS, &block)
+        def render(template, opts = RodaPlugins::OPTS, &block)
           opts = render_template_opts(template, opts)
-          retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
+          retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||RodaPlugins::OPTS), &block)
         end
 
         # Return the render options for the instance's class. While this
@@ -288,7 +289,7 @@ class Roda
         # Render the given template.  If there is a default layout
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
-        def view(template, opts=OPTS)
+        def view(template, opts=RodaPlugins::OPTS)
           opts = view_template_opts(template, opts)
           content = opts[:content] || render_template(opts)
 

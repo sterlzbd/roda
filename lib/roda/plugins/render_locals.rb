@@ -26,12 +26,13 @@ class Roda
     # merge :: Whether to merge template locals into layout locals
     module RenderLocals
       OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
 
-      def self.load_dependencies(app, opts=OPTS)
+      def self.load_dependencies(app, opts=RodaPlugins::OPTS)
         app.plugin :render
       end
 
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         app.opts[:render_locals] = (app.opts[:render_locals] || {}).merge(opts[:render]||{}).freeze
         app.opts[:layout_locals] = (app.opts[:layout_locals] || {}).merge(opts[:layout]||{}).freeze
         if opts.has_key?(:merge)

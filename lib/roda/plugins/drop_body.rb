@@ -11,8 +11,9 @@ class Roda
     module DropBody
       module ResponseMethods
         DROP_BODY_STATUSES = [100, 101, 102, 204, 205, 304].freeze
-        EMPTY_BODY = [].freeze
 
+        EMPTY_BODY = [].freeze
+        RodaPlugins.deprecate_constant(self, :EMPTY_BODY)
         CONTENT_LENGTH = "Content-Length".freeze
         RodaPlugins.deprecate_constant(self, :CONTENT_LENGTH)
         CONTENT_TYPE = "Content-Type".freeze
@@ -24,7 +25,7 @@ class Roda
         def finish
           r = super
           if DROP_BODY_STATUSES.include?(r[0])
-            r[2] = EMPTY_BODY
+            r[2] = EMPTY_ARRAY
             h = r[1]
             h.delete("Content-Length")
             h.delete("Content-Type")

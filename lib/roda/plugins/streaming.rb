@@ -73,6 +73,7 @@ class Roda
     # OTHER DEALINGS IN THE SOFTWARE.
     module Streaming
       OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
 
       # Class of the response body in case you use #stream.
       #
@@ -109,7 +110,7 @@ class Roda
         end
 
         # Handle streaming options, see Streaming for details.
-        def initialize(opts=OPTS, &back)
+        def initialize(opts=RodaPlugins::OPTS, &back)
           @scheduler = opts[:scheduler] || Scheduler.new(self)
           @back = back.to_proc
           @keep_open = opts[:keep_open]
@@ -173,7 +174,7 @@ class Roda
         # Immediately return a streaming response using the current response
         # status and headers, calling the block to get the streaming response.
         # See Streaming for details.
-        def stream(opts=OPTS, &block)
+        def stream(opts=RodaPlugins::OPTS, &block)
           if !opts.has_key?(:scheduler) && env['async.callback']
             RodaPlugins.warn 'The automatic support for EventMachine in the streaming plugin is deprecated and will be removed in Roda 3.'
             opts = opts.merge(:scheduler=>EventMachine)

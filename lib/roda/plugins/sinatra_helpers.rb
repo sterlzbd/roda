@@ -212,7 +212,7 @@ class Roda
     # OTHER DEALINGS IN THE SOFTWARE.
     module SinatraHelpers
       OPTS = {}.freeze
-
+      RodaPlugins.deprecate_constant(self, :OPTS)
       CONTENT_TYPE = "Content-Type".freeze
       RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
       CONTENT_DISPOSITION = "Content-Disposition".freeze
@@ -248,7 +248,7 @@ class Roda
       # Add delegate methods to the route block scope
       # calling request or response methods, unless the
       # :delegate option is false.
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         app.send(:include, DelegateMethods) unless opts[:delegate] == false
       end
 
@@ -339,7 +339,7 @@ class Roda
         end
 
         # Use the contents of the file at +path+ as the response body.  See plugin documentation for options.
-        def send_file(path, opts = OPTS)
+        def send_file(path, opts = RodaPlugins::OPTS)
           res = response
           headers = res.headers
           if opts[:type] || !headers["Content-Type"]
@@ -441,7 +441,7 @@ class Roda
 
         # Set the Content-Type of the response body given a media type or file
         # extension.  See plugin documentation for options.
-        def content_type(type = (return @headers["Content-Type"]; nil), opts = OPTS)
+        def content_type(type = (return @headers["Content-Type"]; nil), opts = RodaPlugins::OPTS)
           unless (mime_type = mime_type(type) || opts[:default])
             raise RodaError, "Unknown media type: #{type}"
           end

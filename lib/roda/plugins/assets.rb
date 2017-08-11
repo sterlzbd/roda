@@ -306,8 +306,9 @@ class Roda
         :compiled_css_dir => nil,
         :compiled_js_dir  => nil,
       }.freeze
-      EMPTY_ATTRS = {}.freeze
 
+      EMPTY_ATTRS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :EMPTY_ATTRS)
       JS_END = "\"></script>".freeze
       RodaPlugins.deprecate_constant(self, :JS_END)
       CSS_END = "\" />".freeze
@@ -656,7 +657,7 @@ class Roda
         # When the assets are not compiled, this will result in a separate
         # tag for each asset file.  When the assets are compiled, this will
         # result in a single tag to the compiled asset file.
-        def assets(type, attrs = EMPTY_ATTRS)
+        def assets(type, attrs = OPTS)
           ltype = type.is_a?(Array) ? type[0] : type
 
           o = self.class.assets_opts

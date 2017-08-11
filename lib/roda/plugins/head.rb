@@ -37,6 +37,7 @@ class Roda
     # may prevent search engine's from crawling your website.
     module Head
       EMPTY_ARRAY = [].freeze
+      RodaPlugins.deprecate_constant(self, :EMPTY_ARRAY)
 
       module InstanceMethods
         # Always use an empty response body for head requests, with a
@@ -44,7 +45,7 @@ class Roda
         def call(*)
           res = super
           if @_request.head?
-            res[2] = EMPTY_ARRAY
+            res[2] = RodaPlugins::EMPTY_ARRAY
           end
           res
         end

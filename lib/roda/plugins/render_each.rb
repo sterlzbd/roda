@@ -27,6 +27,7 @@ class Roda
     # not set a local variable inside the template.
     module RenderEach
       OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
 
       # Load the render plugin before this plugin, since this plugin
       # calls the render method.
@@ -41,7 +42,7 @@ class Roda
         # :local :: The local variable to use for the current enum value
         #           inside the template.  An explicit +nil+ value does not
         #           set a local variable.  If not set, uses the template name.
-        def render_each(enum, template, opts=OPTS)
+        def render_each(enum, template, opts=RodaPlugins::OPTS)
           if as = opts.has_key?(:local)
             as = opts[:local]
           else

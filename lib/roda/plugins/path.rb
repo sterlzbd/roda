@@ -62,12 +62,14 @@ class Roda
     # a block to a block that is instance_execed.
     module Path
       DEFAULT_PORTS = {'http' => 80, 'https' => 443}.freeze
+
       OPTS = {}.freeze
+      RodaPlugins.deprecate_constant(self, :OPTS)
 
       # Initialize the path classes when loading the plugin. Options:
       # :by_name :: Register classes by name, which is friendlier when reloading code (defaults to
       #             true in development mode)
-      def self.configure(app, opts=OPTS)
+      def self.configure(app, opts=RodaPlugins::OPTS)
         app.instance_eval do
           self.opts[:path_class_by_name] = opts.fetch(:by_name, ENV['RACK_ENV'] == 'development')
           self.opts[:path_classes] ||= {}
@@ -90,7 +92,7 @@ class Roda
         end
 
         # Create a new instance method for the named path.  See plugin module documentation for options.
-        def path(name, path=nil, opts=OPTS, &block)
+        def path(name, path=nil, opts=RodaPlugins::OPTS, &block)
           if name.is_a?(Class)
             raise RodaError, "can't provide path or options when calling path with a class" unless path.nil? && opts.empty?
             raise RodaError, "must provide a block when calling path with a class" unless block
