@@ -57,6 +57,20 @@ describe "middleware plugin" do
     body.must_equal 'a'
   end
 
+  it "makes middleware always use a subclass of the app" do
+    app(:middleware) do |r|
+      r.get{opts[:a]}
+    end
+    app.opts[:a] = 'a'
+    a = app
+    app(:bare) do
+      use a
+      route{}
+    end
+    a.opts[:a] = 'b'
+    body.must_equal 'a'
+  end
+
   it "should raise error if attempting to use options for Roda application that does not support configurable middleware" do
     a1 = app(:bare){plugin :middleware}
     proc{app(:bare){use a1, :foo; route{}; build_rack_app}}.must_raise Roda::RodaError

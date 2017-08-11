@@ -81,13 +81,11 @@ class Roda
       class Forwarder
         # Store the current middleware and the next middleware to call.
         def initialize(mid, app, *args, &block)
-          @mid = if configure = mid.opts[:middleware_configure]
-            mid = Class.new(mid)
-            configure.call(mid, *args, &block)
-            mid
-          else
-            raise RodaError, "cannot provide middleware args or block unless loading middleware plugin with a block" if block || !args.empty?
-            mid
+          @mid = Class.new(mid)
+          if configure = @mid.opts[:middleware_configure]
+            configure.call(@mid, *args, &block)
+          elsif block || !args.empty?
+            raise RodaError, "cannot provide middleware args or block unless loading middleware plugin with a block"
           end
           @app = app
         end
