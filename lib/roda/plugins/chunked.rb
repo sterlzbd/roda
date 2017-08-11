@@ -174,8 +174,11 @@ class Roda
       # Rack response body instance for chunked responses
       class Body
         CHUNK_SIZE = "%x\r\n".freeze
+        RodaPlugins.deprecate_constant(self, :CHUNK_SIZE)
         CRLF = "\r\n".freeze
+        RodaPlugins.deprecate_constant(self, :CRLF)
         FINISH = "0\r\n\r\n".freeze
+        RodaPlugins.deprecate_constant(self, :FINISH)
 
         # Save the scope of the current request handling.
         def initialize(scope)
@@ -190,12 +193,12 @@ class Roda
         def each
           @scope.each_chunk do |chunk|
             next if !chunk || chunk.empty?
-            yield(CHUNK_SIZE % chunk.bytesize)
+            yield("%x\r\n" % chunk.bytesize)
             yield(chunk)
-            yield(CRLF)
+            yield("\r\n")
           end
         ensure
-          yield(FINISH)
+          yield("0\r\n\r\n")
         end
       end
 
