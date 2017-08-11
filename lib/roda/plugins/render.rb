@@ -138,13 +138,6 @@ class Roda
     # rendering faster by specifying +:cache_key+ inside the +:layout_opts+
     # plugin option.
     module Render
-      # RODA3: Remove
-      def self.load_dependencies(app, opts=RodaPlugins::OPTS)
-        if opts[:escape] && opts[:escape] != :erubi
-          app.plugin :_erubis_escaping
-        end
-      end
-
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=RodaPlugins::OPTS)
         if app.opts[:render]
@@ -218,18 +211,10 @@ class Roda
         if RUBY_VERSION >= "1.9" && !template_opts.has_key?(:default_encoding)
           template_opts[:default_encoding] = Encoding.default_external
         end
-        # RODA3: Make :escape assume erubi, remove erubis support
-        if opts[:escape] == :erubi
+
+        if opts[:escape]
           require 'tilt/erubi'
           template_opts[:escape] = true
-        elsif opts[:escape]
-          template_opts[:engine_class] = ErubisEscaping::Eruby
-
-          opts[:escaper] ||= if opts[:escape_safe_classes]
-            ErubisEscaping::UnsafeClassEscaper.new(opts[:escape_safe_classes])
-          else
-            ::Erubis::XmlHelper
-          end
         end
         template_opts.freeze
 
