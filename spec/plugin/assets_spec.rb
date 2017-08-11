@@ -283,10 +283,10 @@ if run_tests
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
@@ -294,7 +294,7 @@ if run_tests
     end
 
     [[:sha256, 64, 44], [:sha384, 96, 64], [:sha512, 128, 88]].each do |algo, hex_length, base64_length|
-      it "should handle :sri option for subresource integrity for #{algo} when compiling assets" do
+      it "should handle :sri option for subresource integrity #{algo} when compiling assets" do
         app.plugin :assets, :sri=>algo
         app.compile_assets
         html = body('/test')
@@ -318,14 +318,30 @@ if run_tests
       end
     end
 
+    it "should handle :sri=>nil option for to disable subresource integrity when compiling assets" do
+      app.plugin :assets, :sri=>nil
+      app.compile_assets
+      html = body('/test')
+      html.scan(/<link/).length.must_equal 1
+      html.scan(/<script/).length.must_equal 1
+      html.wont_match %r|et" integrity="|
+      html =~ %r|href="(/assets/app\.[a-f0-9]{64}\.css)"|
+      css = body($1)
+      html =~ %r|src="(/assets/app\.head\.[a-f0-9]{64}\.js)"|
+      js = body($1)
+      css.must_match(/color: ?red/)
+      css.must_match(/color: ?blue/)
+      js.must_include('console.log')
+    end
+
     it 'should handle linking to compiled assets when a compiled asset host is used' do
       app.plugin :assets, :compiled_asset_host=>'https://cdn.example.com'
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html.must_match %r{href="https://cdn\.example\.com/assets/app\.[a-f0-9]{40}\.css"}
+      html.must_match %r{href="https://cdn\.example\.com/assets/app\.[a-f0-9]{64}\.css"}
       html.scan(/<script/).length.must_equal 1
-      html.must_match %r{src="https://cdn\.example\.com/assets/app\.head\.[a-f0-9]{40}\.js"}
+      html.must_match %r{src="https://cdn\.example\.com/assets/app\.head\.[a-f0-9]{64}\.js"}
     end
 
     it 'should handle compiling assets, linking to them, and accepting requests for them when :gzip is set' do
@@ -333,10 +349,10 @@ if run_tests
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.[a-f0-9]{64}\.css)"}
       css_path = $1
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js_path = $1
 
       css = body(css_path)
@@ -357,10 +373,10 @@ if run_tests
       app.plugin :assets
       app.compile_assets
       html = body('/test', 'SCRIPT_NAME'=>'/foo')
-      html =~ %r{href="/foo(/assets/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="/foo(/assets/app\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="/foo(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="/foo(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
@@ -373,10 +389,10 @@ if run_tests
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/a/bar/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/a/bar/app\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/a/foo/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/a/foo/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
@@ -395,10 +411,10 @@ if run_tests
       end
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/assets/app\.assets\.css\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.assets\.css\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
@@ -418,10 +434,10 @@ if run_tests
       end
       html = body('/test', 'SCRIPT_NAME'=>'/foo')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="/foo(/assets/app\.assets\.css\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="/foo(/assets/app\.assets\.css\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="/foo(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="/foo(/assets/app\.assets\.js\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
@@ -440,10 +456,10 @@ if run_tests
       end
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/assets/app\.assets\.css\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.assets\.css\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.assets\.js\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
@@ -455,10 +471,10 @@ if run_tests
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
@@ -469,7 +485,7 @@ if run_tests
       app.compile_assets(:css)
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/assets/app\.[a-f0-9]{40}\.css)"}
+      html =~ %r{href="(/assets/app\.[a-f0-9]{64}\.css)"}
       css = body($1)
       html.scan(/<script/).length.must_equal 0
       css.must_match(/color: ?red/)
@@ -481,7 +497,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.must_equal 0
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       js.must_include('console.log')
     end
@@ -491,7 +507,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.must_equal 0
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       js.must_include('console.log')
     end
@@ -502,7 +518,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.must_equal 0
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       js.must_include('console.log')
     end
@@ -513,7 +529,7 @@ if run_tests
       html = body('/test')
       html.scan(/<link/).length.must_equal 0
       html.scan(/<script/).length.must_equal 1
-      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
       js = body($1)
       js.must_include('console.log')
     end
@@ -612,13 +628,13 @@ if run_tests
 
       app.compile_assets
       File.exist?(metadata_file).must_equal true
-      app.allocate.assets([:js, :head]).must_match %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      app.allocate.assets([:js, :head]).must_match %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
 
       app.plugin :assets, :compiled=>false, :precompiled=>false
       app.allocate.assets([:js, :head]).must_equal '<script type="text/javascript"  src="/assets/js/head/app.js"></script>'
 
       app.plugin :assets, :precompiled=>metadata_file
-      app.allocate.assets([:js, :head]).must_match %r{src="(/assets/app\.head\.[a-f0-9]{40}\.js)"}
+      app.allocate.assets([:js, :head]).must_match %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
     end
 
     it 'should work correctly with json plugin when r.assets is the last method called' do

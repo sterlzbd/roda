@@ -292,7 +292,8 @@ class Roda
     #            paths will be considered relative to the application's :root option.
     # :sri :: Enables subresource integrity when setting up references to compiled assets. The value should be
     #         :sha256, :sha384, or :sha512 depending on which hash algorithm you want to use.  This changes the
-    #         hash algorithm that Roda will use when naming compiled asset files.
+    #         hash algorithm that Roda will use when naming compiled asset files. The default is :sha256, you
+    #         can use nil to disable subresource integrity.
     module Assets
       DEFAULTS = {
         :compiled_name    => 'app'.freeze,
@@ -305,6 +306,7 @@ class Roda
         :group_subdirs    => true,
         :compiled_css_dir => nil,
         :compiled_js_dir  => nil,
+        :sri              => :sha256
       }.freeze
 
       # Internal exception raised when a compressor cannot be found
@@ -576,15 +578,9 @@ class Roda
         # a different digest type or to return a static string if you don't
         # want to use a unique value.
         def asset_digest(content)
-          klass = if algo = assets_opts[:sri]
-            require 'digest/sha2'
-            ::Digest.const_get(algo.to_s.upcase)
-          else
-            require 'digest/sha1'
-            ::Digest::SHA1
-          end
-
-          klass.hexdigest(content)
+          require 'digest/sha2'
+          algo = assets_opts[:sri] || :sha256
+          ::Digest.const_get(algo.to_s.upcase).hexdigest(content)
         end
       end
 
