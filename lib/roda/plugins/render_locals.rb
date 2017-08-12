@@ -82,7 +82,6 @@ class Roda
             end
 
             layout_opts[:locals] = locals
-            layout_opts[:_is_layout] = true
             layout_opts
           end
         end

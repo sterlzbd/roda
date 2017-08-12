@@ -159,6 +159,7 @@ class Roda
         opts[:cache] = orig_cache || (opts[:cache_class] || RodaCache).new
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
+        opts[:layout_opts][:_is_layout] = true
         if opts[:layout_opts][:views]
           opts[:layout_opts][:views] = app.expand_path(opts[:layout_opts][:views]).freeze
         end
