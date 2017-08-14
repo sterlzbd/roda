@@ -40,7 +40,7 @@ class Roda
         # Match the given parameter if present, even if the parameter is empty.
         # Adds match to the captures.
         def match_param(key)
-          if v = self[key]
+          if v = params[key.to_s]
             @captures << v
           end
         end
@@ -48,7 +48,7 @@ class Roda
         # Match the given parameter if present and not empty.
         # Adds match to the captures.
         def match_param!(key)
-          if (v = self[key]) && !v.empty?
+          if (v = params[key.to_s]) && !v.empty?
             @captures << v
           end
         end

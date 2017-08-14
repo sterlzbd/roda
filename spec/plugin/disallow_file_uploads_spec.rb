@@ -6,7 +6,7 @@ else
 describe "disallow_file_uploads plugin" do 
   it "disallows the uploading of files" do
     app do |r|
-      r['foo'][:tempfile].read
+      r.params['foo'][:tempfile].read
     end
 
     request_body = StringIO.new("------WebKitFormBoundarymwHIM9XjTTVHn3YP\r\nContent-Disposition: form-data; name=\"foo\"; filename=\"bar.txt\"\r\nContent-Type: text/plain\r\n\r\nfoo\n\r\n------WebKitFormBoundarymwHIM9XjTTVHn3YP--\r\n")

@@ -12,9 +12,9 @@ class Roda
     #   route do |r|
     #     # GET /foo/123/abc/67
     #     r.on("foo", :bar, :baz, :quux) do
-    #       r[:bar] #=> '123'
-    #       r[:baz] #=> 'abc'
-    #       r[:quux] #=> '67'
+    #       r.params['bar'] #=> '123'
+    #       r.params['baz'] #=> 'abc'
+    #       r.params['quux'] #=> '67'
     #     end
     #   end
     #
@@ -26,9 +26,9 @@ class Roda
     # captured segments to the +captures+ key:
     #
     #   r.on(:x, /(\d+)\/(\w+)/, :y) do
-    #     r[:x] #=> nil
-    #     r[:y] #=> nil
-    #     r[:captures] #=> ["foo", "123", "abc", "67"]
+    #     r.params['x'] #=> nil
+    #     r.params['y'] #=> nil
+    #     r.params['captures'] #=> ["foo", "123", "abc", "67"]
     #   end
     #
     # Note that the request params +captures+ entry will be appended to with
@@ -38,7 +38,7 @@ class Roda
     #     r.on(:x) do
     #       r.on(:y) do
     #         r.on(:z) do
-    #           r[:captures] # => ["foo", "123", "abc", "67"]
+    #           r.params['captures'] # => ["foo", "123", "abc", "67"]
     #         end
     #       end
     #     end
@@ -47,10 +47,6 @@ class Roda
     # Note that any existing params captures entry will be overwritten
     # by this plugin.  You can use +r.GET+ or +r.POST+ to get the underlying
     # entry, depending on how it was submitted.
-    #
-    # Also note that the param keys are actually stored in +r.params+ as
-    # strings and not symbols (<tt>r[]</tt> converts the argument
-    # to a string before looking it up in +r.params+).
     #
     # This plugin will also handle string matchers with placeholders if
     # the placeholder_string_matchers plugin is loaded before this plugin.

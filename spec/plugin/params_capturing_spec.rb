@@ -4,23 +4,23 @@ describe "params_capturing plugin" do
   it "should add captures to r.params for symbol matchers" do
     app(:params_capturing) do |r|
       r.on('foo', :y, :z, :w) do |y, z, w|
-        (r.params.values_at('y', 'z', 'w') + [y, z, w, r[:captures].length]).join('-')
+        (r.params.values_at('y', 'z', 'w') + [y, z, w, r.params['captures'].length]).join('-')
       end
 
       r.on(/(quux)/, /(foo)(bar)/) do |q, foo, bar|
-        "y-#{r[:captures].join}-#{q}-#{foo}-#{bar}"
+        "y-#{r.params['captures'].join}-#{q}-#{foo}-#{bar}"
       end
 
       r.on(/(quux)/, :y) do |q, y|
         r.on(:x) do |x|
-          "y-#{r[:y]}-#{r[:x]}-#{q}-#{y}-#{x}-#{r[:captures].length}"
+          "y-#{r.params['y']}-#{r.params['x']}-#{q}-#{y}-#{x}-#{r.params['captures'].length}"
         end
 
-        "y-#{r[:y]}-#{q}-#{y}-#{r[:captures].length}"
+        "y-#{r.params['y']}-#{q}-#{y}-#{r.params['captures'].length}"
       end
 
       r.on(:x) do |x|
-        "x-#{x}-#{r[:x]}-#{r[:captures].length}"
+        "x-#{x}-#{r.params['x']}-#{r.params['captures'].length}"
       end
     end
 
