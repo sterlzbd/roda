@@ -277,7 +277,7 @@ describe "matchers" do
 
   it "should allow regexp to match optional segments with separate arguments" do
     app do |r|
-      r.on /(\d+)(?:\/(\d+))?/ do |f, b|
+      r.on(/(\d+)(?:\/(\d+))?/) do |f, b|
         [f, b].inspect
       end
     end

@@ -11,7 +11,7 @@ end
 
 describe "error_mail plugin" do 
   def app(opts={})
-    @emails = emails = [] unless defined?(@emails)
+    @emails = [] unless defined?(@emails)
     @app ||= super(:bare) do
       plugin :error_mail, {:to=>'t', :from=>'f'}.merge(opts)
 
