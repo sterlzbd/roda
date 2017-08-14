@@ -66,10 +66,14 @@ class Roda
         # Add the capture names from this string to list of param
         # capture names if param capturing.
         def _match_string(str)
-          if (pc = @_params_captures) && placeholder_string_matcher?
+          cap_len = @captures.length
+
+          if (ret = super) && (pc = @_params_captures) && (cap_len != @captures.length)
+            # Handle use with placeholder_string_matchers plugin
             pc.concat(str.scan(/(?<=:)\w+/))
           end
-          super
+
+          ret
         end
 
         # Add the symbol to the list of param capture names if param capturing.

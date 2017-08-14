@@ -591,7 +591,7 @@ class Roda
           self.class.roda_class
         end
 
-        # Routing matches that only matches +GET+ requests where the current
+        # Match method that only matches +GET+ requests where the current
         # path is +/+.  If it matches, the match block is executed, and when
         # the match block returns, the rack response is returned.
         #
@@ -896,7 +896,8 @@ class Roda
         # Whether string matchers are used verbatim, without handling
         # placeholders via colons.
         def placeholder_string_matcher?
-          !roda_class.opts[:verbatim_string_matcher]
+          RodaPlugins.warn "Roda::RodaRequest.placeholder_string_matcher? is deprecated and will be removed from Roda 3.1."
+          false
         end
 
         # Handle an unsupported matcher.
