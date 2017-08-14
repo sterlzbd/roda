@@ -131,10 +131,11 @@ allowing for code such as <tt>r.redirect(path) if some_condition</tt>.
 If +r.redirect+ is called without arguments
 and the current request method is not +GET+, it redirects to the current path.
 
-The +.freeze.app+ at the end is optional.  Freezing the app avoids any possible
-thread safety issues inside the application at runtime, which shouldn't be possible
-anyway.  This generally should only be done in production mode.
-The +.app+ is an optimization, which saves a few method calls for every request.
+The +.freeze.app+ at the end is optional.  Freezing the app makes modifying
+app-level settings raise an error, alerting you to possible thread-safety issues
+in your application.  It is recommended to freeze the app in production and
+during testing.  The +.app+ is an optimization, which saves a few method calls
+for every request.
 
 == The Routing Tree
 
@@ -232,7 +233,7 @@ Here's an example showcasing how different matchers work:
       end
 
       # GET /username/foobar branch
-      r.on "username", String, :method=>:get do |username|
+      r.on "username", String, method: :get do |username|
         user = User.find_by_username(username)
 
         # GET /username/foobar/posts
@@ -249,7 +250,7 @@ Here's an example showcasing how different matchers work:
 
       # /search?q=barbaz
       r.get "search" do
-        "Searched for #{r['q']}" #=> "Searched for barbaz"
+        "Searched for #{r.params['q']}" #=> "Searched for barbaz"
       end
 
       r.is "login" do
@@ -260,7 +261,7 @@ Here's an example showcasing how different matchers work:
 
         # POST /login?user=foo&password=baz
         r.post do
-          "#{r['user']}:#{r['password']}" #=> "foo:baz"
+          "#{r.params['user']}:#{r.params['password']}" #=> "foo:baz"
         end
       end
     end
@@ -285,41 +286,15 @@ If a string contains any slashes, it matches one additional segment for each sla
   "foo/bar" # matches "/foo/bar"
   "foo/bar" # does not match "/foo/bard"
 
-While deprecated by default, if a string contains a colon followed by any
-<tt>\\w</tt> characters, the colon and remaining <tt>\\w</tt> characters match any
-nonempty segment that contains at least one character:
-
-  "foo/:id" # matches "/foo/bar", "/foo/baz", etc.
-  "foo/:id" # does not match "/fo/bar"
-
-You can use multiple colons in a string:
-
-  ":x/:y" # matches "/foo/bar", "/bar/foo" etc.
-  ":x/:y" # does not match "/foo", "/bar/"
-
-Note that instead of using colons in strings, it is recommended to use separate
-symbol arguments, as it is faster and simpler:
-
-  "foo", String # instead of "foo/:id"
-  String, String     # instead of ":x/:y"
-
-You can load the placeholder_string_matchers plugin to allow placeholders in
-strings without a deprecation warning.  The deprecated default handling of placeholders
-in strings will be removed in Roda 3.
-
-Note that other than colons followed by a <tt>\\w</tt> character, strings do no
-handle regular expression syntax, they are matched verbatim:
-
-  "\\d+(/\\w+)?" # matches "/\d+(/\w+)?"
-  "\\d+(/\\w+)?" # does not match "/123/abc"
-
 === Regexp
 
 Regexps match one or more segments by looking for the pattern,
-preceded by a slash:
+preceded by a slash, and followed by a slash or the end of the path:
 
   /foo\w+/ # matches "/foobar"
   /foo\w+/ # does not match "/foo/bar"
+  /foo/i # matches "/foo", "/Foo/"
+  /foo/i # does not match "/food"
 
 If any patterns are captured by the Regexp, they are yielded:
 
@@ -331,7 +306,8 @@ If any patterns are captured by the Regexp, they are yielded:
 There are two classes that are supported as matchers, String
 and Integer.
 
-String :: matches any non-empty segment
+String :: matches any non-empty segment, yielding the segment except for
+          the preceding slash
 Integer :: matches any segment of 0-9, returns matched values as integers
 
 Using String and Integer is the recommended way to handle
@@ -396,7 +372,7 @@ allows for easily defining your own:
     end
     
     route do |r|
-      r.on :foo=>'bar' do
+      r.on foo: 'bar' do
         # ...
       end
     end
@@ -406,7 +382,7 @@ allows for easily defining your own:
 
 The +:all+ matcher matches if all of the entries in the given array match, so
 
-  r.on :all=>[String, String] do
+  r.on all: [String, String] do
     # ...
   end
 
@@ -419,7 +395,7 @@ is the same as:
 The reason it also exists as a separate hash matcher
 is so you can use it inside an array matcher, so:
 
-  r.on ['foo', {:all=>['foos', Integer]}] do
+  r.on ['foo', {all: ['foos', Integer]}] do
   end
 
 would match +/foo+ and +/foos/10+, but not +/foos+.
@@ -429,8 +405,8 @@ would match +/foo+ and +/foos/10+, but not +/foos+.
 The +:method+ matcher matches the method of the request.
 You can provide an array to specify multiple request methods and match on any of them:
 
-  {:method => :post}             # matches POST
-  {:method => ['post', 'patch']} # matches POST and PATCH
+  {method: :post}             # matches POST
+  {method: ['post', 'patch']} # matches POST and PATCH
 
 === false, nil
 
@@ -438,8 +414,8 @@ If +false+ or +nil+ is given directly as a matcher, it doesn't match anything.
 
 === Everything else
 
-Everything else matches anything, but such usage is deprecated.  In Roda 3, using
-an unsupported matcher will raise an error.
+Everything else raises an error, unless support is specifically added for it
+(some plugins add support for additional matcher types).
 
 == Optional segments
 
@@ -450,11 +426,11 @@ the item's id, and 456 being some optional data.
 The simplest way to handle this is by treating this as two separate routes with a
 shared branch:
 
-  r.on "items", String do |item_id|
+  r.on "items", Integer do |item_id|
     # Shared code for branch here
 
     # /items/123/456
-    r.is String do |optional_data|
+    r.is Integer do |optional_data|
     end
 
     # /items/123
@@ -495,8 +471,7 @@ or route block return value is inspected:
 
 String :: used as the response body
 nil, false :: ignored
-everything else :: also ignored, but this is deprecated and will raise an
-                   error starting in Roda 3
+everything else :: raises an error
 
 Plugins can add support for additional match block and route block return
 values.  One example of this is the json plugin, which allows returning
@@ -574,7 +549,7 @@ If you want to match the request method
 and do only a partial match on the request path,
 you need to use +r.on+ with the <tt>:method</tt> hash matcher:
 
-  r.on "foo", :method=>:get do # Matches GET /foo(/.*)?
+  r.on "foo", method: :get do # Matches GET /foo(/.*)?
   end
 
 == Root Method
@@ -694,7 +669,7 @@ The default Rake task will run the specs for Roda.
 == Settings
 
 Each Roda app can store settings in the +opts+ hash.
-The settings are inherited if you happen to subclass +Roda+.  
+The settings are inherited by subclasses.
 
   Roda.opts[:layout] = "guest"
 
@@ -726,22 +701,6 @@ The following options are respected by the default library or multiple plugins:
 :freeze_middleware :: Whether to freeze all middleware when building the rack app.
 :root :: Set the root path for the app.  This defaults to the current working
          directory of the process.
-:unsupported_block_result :: If set to :raise, raises an error if a match or
-                             route block returns an object that is not handled.
-                             By default, String, nil, and false are handled,
-                             and other types can be handled via plugins. Setting
-                             this option can alert you to possible issues in your
-                             application.
-:unsupported_matcher :: If set to :raise, raises an error if a matcher is used that
-                        is not handled.  By default, String, Symbol, Regexp, Hash,
-                        Array, Proc, true, false, and nil are handled.  Setting
-                        this option can alert you to possible issues in your
-                        application.
-:verbatim_string_matcher :: If set to true, makes all string matchers match
-                            verbatim strings, disallowing the use of colons
-                            for placeholders.  In general, it is recommended
-                            to use separate symbol matchers instead of
-                            embedding placeholders in string matchers.
 
 There may be other options supported by individual plugins, if so it will be
 mentioned in the documentation for the plugin.
@@ -769,7 +728,7 @@ By default, +view+ will render the template inside the default layout template;
       r.get "render" do
         # Renders the views/home.erb template, which will have access to
         # the instance variable @var, as well as local variable content.
-        render("home", :locals=>{:content => "hello, world"})
+        render("home", locals: {content: "hello, world"})
       end
 
       r.get "view" do
@@ -788,12 +747,10 @@ You can override the default rendering options by passing a hash to the plugin:
 
   class App < Roda
     plugin :render,
-      :escape => true, # Automatically escape output in erb templates using Erubis
-                       # can use :erubi instead of true to use Erubi instead of Erubis
-      :views => 'admin_views', # Default views directory
-      :layout_opts => {:template=>'admin_layout',
-                       :ext=>'html.erb'},    # Default layout template options
-      :template_opts => {:default_encoding=>'UTF-8'} # Default template options
+      escape: true, # Automatically escape output in erb templates using Erubi's escaping support
+      views: 'admin_views', # Default views directory
+      layout_opts: {template: 'admin_layout', engine: 'html.erb'},    # Default layout options
+      template_opts: {default_encoding: 'UTF-8'} # Default template options
   end
 
 == Sessions
@@ -806,7 +763,7 @@ that comes with Rack:
   require "roda"
 
   class App < Roda
-    use Rack::Session::Cookie, :secret => ENV['SECRET']
+    use Rack::Session::Cookie, secret: ENV['SECRET']
   end
 
 == Security
@@ -853,14 +810,7 @@ are not escaping the output of the content template:
 
   <%== yield %> # not <%= yield %>
 
-You can also provide a +:escape_safe_classes+ option, which will
-make <tt><%= %></tt> not escape certain string subclasses, useful
-if you have helpers that already return escaped output using a
-string subclass instance.
-
-This support requires {Erubis}[http://www.kuwata-lab.com/erubis/].
-You can use <tt>:escape=>:erubi</tt> to use {Erubi}[https://github.com/jeremyevans/erubi],
-a simplified fork of Erubis.
+This support requires {Erubi}[https://github.com/jeremyevans/erubi].
 
 === Security Related HTTP Headers
 
@@ -890,36 +840,21 @@ Example:
 
 === Rendering Templates Derived From User Input
 
-Roda's rendering plugin assumes that template paths given to it are trusted by default.
-If you provide a path to the +render+/+view+ methods that is derived from user input, you
-are opening yourself for people rendering arbitrary files on the system that that have a
-file name ending in the default template extension.  For example, if you do:
+Roda's rendering plugin by default checks that rendered templates are inside the views
+directory.  This is because rendering templates outside the views directory is not
+commonly needed, and it prevents a common attack (which is especially severe if there is any
+location on the file system that users can write files to).
 
-  class App < Roda
-    plugin :render
-    route do |r|
-      view(r['page'])
-    end
-  end
-
-Then attackers can submit a <tt>page</tt> parameter such as <tt>'../../../../tmp/upload'</tt>
-to render the <tt>/tmp/upload.erb</tt> file.  If you have another part of your system that
-allows users to create files with arbitrary extensions (even temporary files), then it may
-be possible to combine these two issues into a remote code execution exploit.
-
-To mitigate against this issue, you can use the <tt>:check_paths => true</tt> render
-option, which will check that the full path of the template to be rendered begins with the
-+:views+ directory, and raises an exception if not.  You can also use the +:allowed_paths+
-render option to specify which paths are allowed.  While
-<tt>:check_paths => true</tt> is not currently the default, it will become the default in
-Roda 3.  Note that when specifying the +:path+ option when rendering a template, Roda will
+You can specify which directories are allowed using the +:allowed_paths+ render plugin
+option. If you really want to turn path checking off, you can do so via the
+<tt>check_paths: false</tt> render plugin option.
 not check paths, as it assumes that users and libraries that use this option will be checking
 such paths manually.
 
 == Code Reloading
 
-Roda does not ship with integrated support for code reloading, as it is a toolkit and not a
-framework, but there are rack-based reloaders that will work with Roda apps.
+Roda does not ship with integrated support for code reloading, but there are rack-based
+reloaders that will work with Roda apps.
 
 For most applications, {rack-unreloader}[https://github.com/jeremyevans/rack-unreloader]
 is probably the fastest approach to reloading while still being fairly safe, as it
@@ -1060,7 +995,7 @@ It started out as a fork of Cuba, from which it borrows the idea of using a rout
 (which Cuba in turn took from {Rum}[https://github.com/chneukirchen/rum]).
 From Sinatra, it takes the ideas that route blocks should return the request bodies
 and that routes should be canonical.
-It pilfers the idea for an extensible plugin system from the Ruby database library
+Roda's plugin system is based on the the plugin system used by
 {Sequel}[http://sequel.jeremyevans.net].
 
 == License

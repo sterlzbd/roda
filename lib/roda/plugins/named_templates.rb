@@ -37,7 +37,7 @@ class Roda
     #     "<p>#{greating} <%= @user %>!</p>"
     #   end
     #   
-    # This plugin also works with the view_subdirs plugin, as long as you
+    # This plugin also works with the view_options plugin, as long as you
     # prefix the template name with the view subdirectory:
     #
     #   template "main/index" do
