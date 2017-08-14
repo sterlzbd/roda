@@ -1,9 +1,10 @@
 require "rake"
 require "rake/clean"
+require "rdoc/task"
 
 NAME = 'roda'
 VERS = lambda do
-  require File.expand_path("../lib/roda/version.rb", __FILE__)
+  require_relative 'lib/roda/version'
   Roda::RodaVersion
 end
 CLEAN.include ["#{NAME}-*.gem", "rdoc", "coverage", "www/public/*.html", "www/public/rdoc", "spec/assets/app.*.css", "spec/assets/app.*.js", "spec/assets/app.*.css.gz", "spec/assets/app.*.js.gz"]
@@ -17,32 +18,24 @@ end
 
 ### RDoc
 
-RDOC_DEFAULT_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web toolkit']
+RDOC_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web toolkit']
 
 begin
   gem 'hanna-nouveau'
-  RDOC_DEFAULT_OPTS.concat(['-f', 'hanna'])
+  RDOC_OPTS.concat(['-f', 'hanna'])
 rescue Gem::LoadError
 end
 
-rdoc_task_class = begin
-  require "rdoc/task"
-  RDoc::Task
-rescue LoadError
-  require "rake/rdoctask"
-  Rake::RDocTask
-end
-
-RDOC_OPTS = RDOC_DEFAULT_OPTS + ['--main', 'README.rdoc']
+RDOC_OPTS.concat(['--main', 'README.rdoc'])
 RDOC_FILES = %w"README.rdoc CHANGELOG MIT-LICENSE lib/**/*.rb" + Dir["doc/*.rdoc"] + Dir['doc/release_notes/*.txt']
 
-rdoc_task_class.new do |rdoc|
+RDoc::Task.new do |rdoc|
   rdoc.rdoc_dir = "rdoc"
   rdoc.options += RDOC_OPTS
   rdoc.rdoc_files.add RDOC_FILES
 end
 
-rdoc_task_class.new(:website_rdoc) do |rdoc|
+RDoc::Task.new(:website_rdoc) do |rdoc|
   rdoc.rdoc_dir = "www/public/rdoc"
   rdoc.options += RDOC_OPTS
   rdoc.rdoc_files.add RDOC_FILES
