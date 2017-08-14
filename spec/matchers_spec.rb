@@ -145,6 +145,18 @@ describe "r.is" do
     status("/123/").must_equal 404
   end
 
+  it "matches regexps" do
+    app do |r|
+      r.on(/foo/) do |id|
+        'a'
+      end
+    end
+
+    body("/foo").must_equal 'a'
+    body("/foo/").must_equal 'a'
+    status("/food").must_equal 404
+  end
+
   it "matches segments" do
     app do |r|
       r.is :id do |id|
