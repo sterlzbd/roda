@@ -171,12 +171,14 @@ describe "multi_route plugin" do
 end
 
 describe "multi_route plugin" do
-  deprecated "r.multi_route works even without routes defined" do
+  it "r.multi_route raises error for invalid namespace" do
     app(:multi_route) do |r|
+      r.is('a'){r.multi_route('foo')}
       r.multi_route
       'a'
     end
-    body.must_equal 'a'
+    proc{body}.must_raise Roda::RodaError
+    proc{body('/a')}.must_raise Roda::RodaError
   end
 end
 

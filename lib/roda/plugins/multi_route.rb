@@ -133,10 +133,13 @@ class Roda
       end
 
       module ClassMethods
-        # Freeze the namespaced routes so that there can be no thread safety issues at runtime.
+        # Freeze the namespaced routes and setup the regexp matchers so that there can be no thread safety issues at runtime.
         def freeze
-          opts[:namespaced_routes].freeze
-          opts[:namespaced_routes].each_value(&:freeze)
+          opts[:namespaced_routes].freeze.each do |k,v|
+            v.freeze
+            self::RodaRequest.named_route_regexp(k)
+          end
+          self::RodaRequest.instance_variable_get(:@namespaced_route_regexps).freeze
           super
         end
 
@@ -151,9 +154,9 @@ class Roda
         # The names for the currently stored named routes
         def named_routes(namespace=nil)
           unless routes = opts[:namespaced_routes][namespace]
-            RodaPlugins.warn "Attempt to access multi_route namespace for which no routes have been defined: #{namespace}"
+            raise RodaError, "unsupported multi_route namespace used: #{namespace.inspect}"
           end
-          routes ? routes.keys : []
+          routes.keys
         end
 
         # Return the named route with the given name.
