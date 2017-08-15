@@ -290,7 +290,7 @@ class Roda
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
         def view(template, opts=RodaPlugins::OPTS)
-          opts = view_template_opts(template, opts)
+          opts = parse_template_opts(template, opts)
           content = opts[:content] || render_template(opts)
 
           if layout_opts  = view_layout_opts(opts)
@@ -302,6 +302,7 @@ class Roda
 
         private
 
+        # Convert template options to single hash when rendering templates using render.
         def render_template_opts(template, opts)
           opts = parse_template_opts(template, opts)
 
@@ -309,10 +310,6 @@ class Roda
           merge_render_locals(opts) if render_plugin_handle_locals?
 
           opts
-        end
-
-        def view_template_opts(template, opts)
-          parse_template_opts(template, opts)
         end
 
         # Private alias for render.  Should be used by other plugins when they want to render a template
