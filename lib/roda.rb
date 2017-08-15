@@ -702,6 +702,7 @@ class Roda
         def _match_class(klass)
           meth = :"_match_class_#{klass}"
           if respond_to?(meth, true)
+            # Allow calling private methods, as match methods are generally private
             send(meth)
           else
             unsupported_matcher(klass)
@@ -710,6 +711,7 @@ class Roda
 
         # Match the given hash if all hash matchers match.
         def _match_hash(hash)
+          # Allow calling private methods, as match methods are generally private
           hash.all?{|k,v| send("match_#{k}", v)}
         end
 

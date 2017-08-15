@@ -509,6 +509,7 @@ class Roda
           when nil
             # default, try different compressors
           else
+            # Allow calling private compress methods
             return send("compress_#{type}_#{compressor}", content)
           end
 
@@ -520,6 +521,7 @@ class Roda
 
           compressors.each do |comp|
             begin
+            # Allow calling private compress methods
               if c = send("compress_#{type}_#{comp}", content)
                 return c
               end
@@ -566,7 +568,7 @@ class Roda
         # Compress the CSS/JS using YUI Compressor, requires java runtime
         def compress_yui(content, meth)
           require 'yuicompressor'
-          ::YUICompressor.send(meth, content, :munge => true)
+          ::YUICompressor.public_send(meth, content, :munge => true)
         rescue ::Errno::ENOENT => e
           raise CompressorNotFound, "#{e.class}: #{e.message}", e.backtrace
         end

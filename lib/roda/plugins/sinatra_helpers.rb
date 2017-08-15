@@ -491,17 +491,17 @@ class Roda
 
       module DelegateMethods
         [:logger, :back].each do |meth|
-          define_method(meth){@_request.send(meth)}
+          define_method(meth){@_request.public_send(meth)}
         end
         [:redirect, :uri, :url, :to, :send_file, :error, :not_found].each do |meth|
-          define_method(meth){|*v, &block| @_request.send(meth, *v, &block)}
+          define_method(meth){|*v, &block| @_request.public_send(meth, *v, &block)}
         end
 
         [:informational?, :success?, :redirect?, :client_error?, :server_error?, :not_found?].each do |meth|
-          define_method(meth){@_response.send(meth)}
+          define_method(meth){@_response.public_send(meth)}
         end
         [:status, :body, :headers, :mime_type, :content_type, :attachment].each do |meth|
-          define_method(meth){|*v, &block| @_response.send(meth, *v, &block)}
+          define_method(meth){|*v, &block| @_response.public_send(meth, *v, &block)}
         end
       end
     end

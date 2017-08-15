@@ -64,6 +64,7 @@ class Roda
         def _match_symbol(s)
           meth = :"match_symbol_#{s}"
           if respond_to?(meth)
+            # Allow calling private match methods
             re = send(meth)
             consume(self.class.cached_matcher(re){re})
           else
@@ -76,6 +77,7 @@ class Roda
         def _match_symbol_regexp(s)
           meth = :"match_symbol_#{s}"
           if respond_to?(meth)
+            # Allow calling private match methods
             send(meth)
           else
             super

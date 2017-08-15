@@ -121,11 +121,13 @@ class Roda
           if add_script_name || url || opts[:url_only]
             _meth = "_#{meth}"
             define_method(_meth, &block)
+            private _meth
           end
 
           unless opts[:url_only]
             if add_script_name
               define_method(meth) do |*a, &blk|
+                # Allow calling private _method to get path
                 request.script_name.to_s + send(_meth, *a, &blk)
               end
             else
@@ -146,6 +148,7 @@ class Roda
               port = r.port
               uri = ["#{scheme}://#{r.host}#{":#{port}" unless DEFAULT_PORTS[scheme] == port}"]
               uri << request.script_name.to_s if add_script_name
+              # Allow calling private _method to get path
               uri << send(_meth, *a, &blk)
               File.join(uri)
             end

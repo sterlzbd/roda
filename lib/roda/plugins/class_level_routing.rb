@@ -90,7 +90,7 @@ class Roda
             super do |r|
               opts[:class_level_routes].each do |meth, args, blk|
                 req.instance_variable_set(:@remaining_path, rp)
-                r.send(meth, *args) do |*a|
+                r.public_send(meth, *args) do |*a|
                   instance_exec(*a, &blk)
                 end
               end

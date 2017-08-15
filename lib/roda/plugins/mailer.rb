@@ -218,7 +218,7 @@ class Roda
         # Add delegates for common email methods.
         [:from, :to, :cc, :bcc, :subject].each do |meth|
           define_method(meth) do |*args|
-            env['roda.mail'].send(meth, *args)
+            env['roda.mail'].public_send(meth, *args)
             nil
           end
         end
@@ -257,7 +257,7 @@ class Roda
         # Set the text_part or html_part (depending on the method) in the related email,
         # using the given body and optional headers.
         def _mail_part(meth, body, headers=nil)
-          env['roda.mail'].send(meth) do
+          env['roda.mail'].public_send(meth) do
             body(body)
             headers(headers) if headers
           end
