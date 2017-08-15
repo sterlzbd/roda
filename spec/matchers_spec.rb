@@ -87,7 +87,7 @@ describe "capturing" do
     body("/user/a").must_equal 'b'
   end
 
-  it "yields the segment for symbol matcher" do
+  it "yields the segment for String class matcher" do
     app do |r|
       r.get "user", String do |id|
         id
@@ -95,6 +95,16 @@ describe "capturing" do
     end
 
     body("/user/johndoe").must_equal 'johndoe'
+  end
+
+  it "raises error for unsupported class matcher" do
+    app do |r|
+      r.get Hash do |id|
+        id
+      end
+    end
+
+    proc{status}.must_raise Roda::RodaError
   end
 end
 
