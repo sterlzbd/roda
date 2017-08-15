@@ -94,18 +94,18 @@ class Roda
         end
 
         if ::Rack.release > '2'
-          # :nocov:
+          # Serve the given path using the given Rack::File server.
           def public_serve(server, path)
             server.serving(self, path)
           end
-          # :nocov:
         else
-          # Serve the given path using the given Rack::File server.
+          # :nocov:
           def public_serve(server, path)
             server = server.dup
             server.path = path
             server.serving(env)
           end
+          # :nocov:
         end
       end
     end

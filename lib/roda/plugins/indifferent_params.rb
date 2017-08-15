@@ -35,7 +35,6 @@ class Roda
       INDIFFERENT_PROC = lambda{|h,k| h[k.to_s] if k.is_a?(Symbol)}
 
       if Rack.release > '2'
-        # :nocov:
         class QueryParser < Rack::QueryParser
           # Work around for invalid optimization in rack
           def parse_nested_query(qs, d=nil)
@@ -66,8 +65,8 @@ class Roda
             @_request.params
           end
         end
-        # :nocov:
       else
+        # :nocov:
         module InstanceMethods
           # A copy of the request params that will automatically
           # convert symbols to strings.
@@ -93,6 +92,7 @@ class Roda
             end
           end
         end
+        # :nocov:
       end  
     end
 

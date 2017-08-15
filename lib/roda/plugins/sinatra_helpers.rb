@@ -331,12 +331,12 @@ class Roda
 
           file = ::Rack::File.new nil
           s, h, b = if Rack.release > '2'
-            # :nocov:
             file.serving(self, path)
-            # :nocov:
           else
+            # :nocov:
             file.path = path
             file.serving(@env)
+            # :nocov:
           end
 
           res.status = opts[:status] || s

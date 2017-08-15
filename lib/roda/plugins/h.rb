@@ -17,8 +17,10 @@ class Roda
       begin
         require 'cgi/escape'
         unless CGI.respond_to?(:escapeHTML) # work around for JRuby 9.1
+          # :nocov:
           CGI = Object.new
           CGI.extend(defined?(::CGI::Escape) ? ::CGI::Escape : ::CGI::Util)
+          # :nocov:
         end
 
         module InstanceMethods
@@ -28,6 +30,8 @@ class Roda
           end
         end
       rescue LoadError
+        # :nocov:
+
         # A Hash of entities and their escaped equivalents,
         # to be escaped by h().
         ESCAPE_HTML = {
@@ -46,6 +50,7 @@ class Roda
             string.to_s.gsub(ESCAPE_HTML_PATTERN){|c| ESCAPE_HTML[c] }
           end
         end
+        # :nocov:
       end
     end
 

@@ -102,9 +102,11 @@ class Roda
     # Deprecate the constant with the given name in the given module,
     # if the ruby version supports it.
     def self.deprecate_constant(mod, name)
+      # :nocov:
       if RUBY_VERSION >= '2.3'
         mod.deprecate_constant(name)
       end
+      # :nocov:
     end
 
     # The base plugin for Roda, implementing all default functionality.
@@ -223,11 +225,11 @@ class Roda
           build_rack_app
         end
 
-        # A new thread safe cache instance.  This is a method so it can be
-        # easily overridden for alternative implementations.
         def thread_safe_cache
+          # :nocov:
           RodaPlugins.warn "Roda.thread_safe_cache is deprecated and will be removed from Roda 3.1."
           RodaCache.new
+          # :nocov:
         end
 
         # Add a middleware to use for the rack application.  Must be
@@ -898,8 +900,10 @@ class Roda
         # Whether string matchers are used verbatim, without handling
         # placeholders via colons.
         def placeholder_string_matcher?
+          # :nocov:
           RodaPlugins.warn "Roda::RodaRequest.placeholder_string_matcher? is deprecated and will be removed from Roda 3.1."
           false
+          # :nocov:
         end
 
         # Handle an unsupported matcher.
