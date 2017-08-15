@@ -331,7 +331,7 @@ describe "render plugin" do
     app.render_opts[:explicit_cache].must_equal false
   end
 
-  deprecated "Support :cache=>false plugin option to disable template caching by default, except :cache=>true method option is given" do
+  it "Support :cache=>false plugin option to disable template caching by default, except :cache=>true method option is given" do
     app(:bare) do
       plugin :render, :views=>"./spec/views", :cache=>false
 

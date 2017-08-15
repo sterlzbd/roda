@@ -109,7 +109,7 @@ describe "halt plugin" do
     proc{req}.must_raise(Roda::RodaError)
   end
 
-  deprecated "should raise an error for single argument not integer, String, or Array" do
+  it "should raise an error for single argument not integer, String, or Array" do
     app(:halt) do |r|
       r.halt('a'=>'b')
     end
