@@ -14,7 +14,7 @@ class Roda
     # Most notably, this makes the +render+ method default to
     # using the layout, similar to how the +view+ method works
     # in the render plugin.  If you want to call render and not
-    # use a layout, you can use the <tt>:layout=>false</tt>
+    # use a layout, you can use the <tt>layout: false</tt>
     # option:
     #
     #   render('test')                 # layout

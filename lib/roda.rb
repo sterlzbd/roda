@@ -233,7 +233,7 @@ class Roda
         # Add a middleware to use for the rack application.  Must be
         # called before calling #route to have an effect. Example:
         #
-        #   Roda.use Rack::Session::Cookie, :secret=>ENV['secret']
+        #   Roda.use Rack::Session::Cookie, secret: ENV['secret']
         def use(*args, &block)
           @middleware << [args, block].freeze
           build_rack_app

@@ -8,7 +8,7 @@ class Roda
     # send an email related to the exception.  This is most useful if you are
     # also using the error_handler plugin:
     #
-    #   plugin :error_email, :to=>'to@example.com', :from=>'from@example.com'
+    #   plugin :error_email, to: 'to@example.com', from: 'from@example.com'
     #   plugin :error_handler do |e|
     #     error_email(e)
     #     'Internal Server Error'

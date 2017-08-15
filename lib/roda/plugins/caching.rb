@@ -31,14 +31,14 @@ class Roda
     # response methods.  The +cache_control+ method sets the
     # Cache-Control header using the given hash:
     #
-    #   response.cache_control :public=>true, :max_age=>60
+    #   response.cache_control public: true, max_age: 60
     #   # Cache-Control: public, max-age=60
     # 
     # The +expires+ method is similar, but in addition
     # to setting the HTTP 1.1 Cache-Control header, it also sets
     # the HTTP 1.0 Expires header:
     #
-    #   response.expires 60, :public=>true
+    #   response.expires 60, public: true
     #   # Cache-Control: public, max-age=60
     #   # Expires: Mon, 29 Sep 2014 21:25:47 GMT
     #
@@ -161,7 +161,7 @@ class Roda
         # :no_store, :must_revalidate, :proxy_revalidate), with true as the value.
         # Options can also contain value directives (:max_age, :s_maxage).
         #
-        #   response.cache_control :public=>true, :max_age => 60
+        #   response.cache_control public: true, max_age: 60
         #   # => Cache-Control: public, max-age=60
         #
         # See RFC 2616 / 14.9 for more on standard cache control directives:

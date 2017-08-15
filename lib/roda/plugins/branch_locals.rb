@@ -7,13 +7,13 @@ class Roda
     # locals for specific branches and routes.
     #
     #   plugin :render
-    #   plugin :render_locals, :render=>{:footer=>'Default'}, :layout=>{:title=>'Main'}
+    #   plugin :render_locals, render: {footer: 'Default'}, layout: {title: 'Main'}
     #   plugin :branch_locals
     #
     #   route do |r|
     #     r.on "users" do
-    #       set_layout_locals :title=>'Users'
-    #       set_view_locals :footer=>'(c) Roda'
+    #       set_layout_locals title: 'Users'
+    #       set_view_locals footer: '(c) Roda'
     #     end
     #   end
     #

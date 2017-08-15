@@ -19,7 +19,7 @@ class Roda
     #
     #   opts[:root] = '/path/to/app'
     #   plugin :public
-    #   plugin :public, :root=>'static'
+    #   plugin :public, root: 'static'
     module Public
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
       PARSER = URI::DEFAULT_PARSER

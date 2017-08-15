@@ -60,7 +60,7 @@ class Roda
     # If you want to chunk all responses, pass the :chunk_by_default option
     # when loading the plugin:
     #
-    #   plugin :chunked, :chunk_by_default => true
+    #   plugin :chunked, chunk_by_default: true
     #
     # then you can just use the normal view method:
     #
@@ -104,10 +104,10 @@ class Roda
     #   <% flush %><%= render(:subtemplate) %>
     #
     # If you want to use chunked encoding when rendering a template, but don't
-    # want to use a layout, pass the :layout=>false option to chunked.
+    # want to use a layout, pass the <tt>layout: false</tt> option to chunked.
     #
     #   r.root do
-    #     chunked(:index, :layout=>false)
+    #     chunked(:index, layout: false)
     #   end
     #
     # In order to handle errors in chunked responses, you can override the
@@ -133,7 +133,7 @@ class Roda
     # X-Accel-Buffering header.  To set this header or similar headers for
     # all chunked responses, pass a :headers option when loading the plugin:
     #
-    #   plugin :chunked, :headers=>{'X-Accel-Buffering'=>'no'}
+    #   plugin :chunked, headers: {'X-Accel-Buffering'=>'no'}
     #
     # The chunked plugin requires the render plugin, and only works for
     # template engines that store their template output variable in

@@ -8,12 +8,12 @@ class Roda
     # some csrf helper methods to use in your views.  To use it, load
     # the plugin, with the options hash passed to Rack::Csrf:
     #
-    #   plugin :csrf, :raise=>true
+    #   plugin :csrf, raise: true
     #
     # Optionally you can choose not to setup rack_csrf middleware on the
     # roda app if you already have one configured:
     #
-    #   plugin :csrf, :skip_middleware=>true
+    #   plugin :csrf, skip_middleware: true
     #
     # This adds the following instance methods:
     #
