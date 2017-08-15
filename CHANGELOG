@@ -1,5 +1,7 @@
 = master
 
+* Deprecate accessing multi_route namespace when there are no routes (jeremyevans)
+
 * Deprecate additional internal constants (jeremyevans)
 
 * Respect :root app option when using :layout_opts=>:views render plugin option (jeremyevans)

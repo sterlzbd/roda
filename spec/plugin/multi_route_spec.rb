@@ -171,7 +171,7 @@ describe "multi_route plugin" do
 end
 
 describe "multi_route plugin" do
-  it "r.multi_route works even without routes defined" do
+  deprecated "r.multi_route works even without routes defined" do
     app(:multi_route) do |r|
       r.multi_route
       'a'

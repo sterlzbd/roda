@@ -150,7 +150,9 @@ class Roda
 
         # The names for the currently stored named routes
         def named_routes(namespace=nil)
-          routes = opts[:namespaced_routes][namespace]
+          unless routes = opts[:namespaced_routes][namespace]
+            RodaPlugins.warn "Attempt to access multi_route namespace for which no routes have been defined: #{namespace}"
+          end
           routes ? routes.keys : []
         end
 
