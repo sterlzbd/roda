@@ -4,7 +4,7 @@
 class Roda
   module RodaPlugins
     # The static_routing plugin adds static_* routing class methods for handling
-    # static routes (i.e. routes with static paths, no placeholders).  These
+    # static routes (i.e. routes with static paths, no nesting or placeholders).  These
     # routes are processed before the normal routing tree and designed for
     # maximum performance.  This can be substantially faster than Roda's normal
     # tree based routing if you have large numbers of static routes, about 3-4x
@@ -59,8 +59,7 @@ class Roda
       module ClassMethods
         # Freeze the static route metadata when freezing the app.
         def freeze
-          opts[:static_routes].freeze
-          opts[:static_routes].each_value(&:freeze)
+          opts[:static_routes].freeze.each_value(&:freeze)
           super
         end
 

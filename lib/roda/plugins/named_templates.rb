@@ -24,7 +24,7 @@ class Roda
     # You can provide options for the template, for example to change the
     # engine that the template uses:
     #
-    #   template :index, :engine=>:str do
+    #   template :index, engine: :str do
     #     "<p>Hello #{@user}!</p>"
     #   end
     #   

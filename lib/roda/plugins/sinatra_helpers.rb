@@ -15,9 +15,9 @@ class Roda
     # of the route block that call the methods on the request
     # or response.  If you do not want to pollute the namespace
     # of the route block, you should load the plugin with the
-    # :delegate => false option:
+    # <tt>delegate: false</tt> option:
     #
-    #   plugin :sinatra_helpers, :delegate=>false
+    #   plugin :sinatra_helpers, delegate: false
     #
     # == Class Methods Added
     #

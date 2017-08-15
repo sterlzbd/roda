@@ -19,16 +19,14 @@ class Roda
     #
     #   r.headers['X-My-Header']
     #
-    # The name is actually case-insensitive so x-my-header will work as well.
-    #
+    # The name is actually case-insensitive so <tt>x-my-header</tt> will work as well.
     #
     # Example:
     #
     #   plugin :request_headers
-    #
     module RequestHeaders
       module RequestMethods
-        # Provide access to the request headers while normalising indexes.
+        # Provide access to the request headers while normalizing indexes.
         def headers
           @request_headers ||= Headers.new(@env)
         end

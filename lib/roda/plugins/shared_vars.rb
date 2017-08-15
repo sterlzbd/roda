@@ -3,7 +3,7 @@
 #
 class Roda
   module RodaPlugins
-    # The shared_vars plugin adds a shared method for storing
+    # The shared_vars plugin adds a +shared+ method for storing
     # shared variables across nested Roda apps.
     #
     #   class API < Roda
@@ -30,7 +30,7 @@ class Roda
     #
     #   route do |r|
     #     r.on Integer do |user_id|
-    #       shared(:user => User[user_id])
+    #       shared(user: User[user_id])
     #       r.run API
     #     end
     #   end
@@ -41,7 +41,7 @@ class Roda
     #
     #   route do |r|
     #     r.on Integer do |user_id|
-    #       shared(:user => User[user_id]) do
+    #       shared(user: User[user_id]) do
     #         r.run API
     #       end
     #     end

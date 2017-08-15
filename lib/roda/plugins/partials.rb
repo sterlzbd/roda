@@ -6,7 +6,7 @@ class Roda
     # The partials plugin adds a +partial+ method, which renders 
     # templates without the layout.
     # 
-    #   plugin :partials, :views => 'path/2/views'
+    #   plugin :partials, views: 'path/2/views'
     # 
     # Template files are prefixed with an underscore:
     #

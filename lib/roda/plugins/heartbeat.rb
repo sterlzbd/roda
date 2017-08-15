@@ -12,7 +12,7 @@ class Roda
     #
     # You can also specify a custom heartbeat path:
     #
-    #   plugin :heartbeat, :path=>'/status'
+    #   plugin :heartbeat, path: '/status'
     module Heartbeat
       HEARTBEAT_RESPONSE = [200, {'Content-Type'=>'text/plain'}.freeze, ['OK'.freeze].freeze].freeze
 

@@ -24,7 +24,7 @@ class Roda
     # When loading the plugin, use the :css and :js options
     # to set the source file(s) to use for CSS and javascript assets:
     #
-    #   plugin :assets, :css => 'some_file.scss', :js => 'some_file.coffee'
+    #   plugin :assets, css: 'some_file.scss', js: 'some_file.coffee'
     #
     # This will look for the following files:
     #
@@ -57,10 +57,10 @@ class Roda
     #
     # You can add attributes to the tags by using an options hash:
     #
-    #   <%= assets(:css, :media => 'print') %>
+    #   <%= assets(:css, media: 'print') %>
     #
-    # The assets method will respect the application's :add_script_name option,
-    # if it set it will automatically prefix the path with the SCRIPT_NAME for
+    # The assets method will respect the application's +:add_script_name+ option,
+    # if it set it will automatically prefix the path with the +SCRIPT_NAME+ for
     # the request.
     #
     # == Asset Paths
@@ -84,8 +84,8 @@ class Roda
     # css/js files for your front end and back end.  To use asset groups, you
     # pass a hash for the :css and/or :js options:
     #
-    #   plugin :assets, :css => {:frontend => 'some_frontend_file.scss',
-    #                            :backend => 'some_backend_file.scss'}
+    #   plugin :assets, css: {frontend: 'some_frontend_file.scss',
+    #                         backend: 'some_backend_file.scss'}
     #
     # This expects the following directory structure for your assets:
     #
@@ -93,7 +93,7 @@ class Roda
     #   assets/css/backend/some_backend_file.scss
     #
     # If you do not want to force that directory structure when using
-    # asset groups, you can use the <tt>:group_subdirs => false</tt> option.
+    # asset groups, you can use the <tt>group_subdirs: false</tt> option.
     #
     # In your view code use an array argument in your call to assets:
     #
@@ -106,7 +106,7 @@ class Roda
     # the plugin:
     #
     #   plugin :assets,
-    #     :css => {:frontend => {:dashboard => 'some_frontend_file.scss'}}
+    #     css: {frontend: {dashboard: 'some_frontend_file.scss'}}
     #
     # and an extra entry per nesting level when creating the tags.
     #
@@ -126,7 +126,7 @@ class Roda
     # dependencies of those asset files:
     #
     #   app.plugin :assets,
-    #     :dependencies=>{'assets/css/bootstrap.scss'=>Dir['assets/css/bootstrap/' '**/*.scss']}
+    #     dependencies: {'assets/css/bootstrap.scss'=>Dir['assets/css/bootstrap/' '**/*.scss']}
     #
     # == Asset Compilation
     #
@@ -134,7 +134,7 @@ class Roda
     # into a single file, with you can do by calling compile_assets after
     # loading the plugin:
     #
-    #   plugin :assets, :css => 'some_file.scss', :js => 'some_file.coffee'
+    #   plugin :assets, css: 'some_file.scss', js: 'some_file.coffee'
     #   compile_assets
     #
     # After calling compile_assets, calls to assets in your views will default
@@ -224,8 +224,8 @@ class Roda
     # You can use this to call Autoprefixer on your CSS:
     #
     #   plugin :assets, {
-    #     :css => [ 'style.scss' ],
-    #     :postprocessor => lambda do |file, type, content|
+    #     css: [ 'style.scss' ],
+    #     postprocessor: lambda do |file, type, content|
     #       type == :css ? AutoprefixerRails.process(content).css : content
     #     end
     #   }
@@ -500,10 +500,8 @@ class Roda
           nil
         end
 
-        # Compress the given content for the given type using yuicompressor,
-        # but handle cases where yuicompressor isn't installed or can't find
-        # a java runtime.  This method can be overridden by the application
-        # to use a different compressor.
+        # Compress the given content for the given type by using the
+        # configured compressor, or trying the supported compressors.
         def compress_asset(content, type)
           case compressor = assets_opts[:"#{type}_compressor"]
           when :none
@@ -574,7 +572,7 @@ class Roda
         end
 
         # Return a unique id for the given content.  By default, uses the
-        # SHA1 hash of the content.  This method can be overridden to use
+        # SHA256 hash of the content.  This method can be overridden to use
         # a different digest type or to return a static string if you don't
         # want to use a unique value.
         def asset_digest(content)
@@ -649,7 +647,7 @@ class Roda
         # Render the asset with the given filename.  When assets are compiled,
         # or when the file is already of the given type (no rendering necessary),
         # this returns the contents of the compiled file.
-        # When assets are not compiled and the file is not already of the correct,
+        # When assets are not compiled and the file is not already in the same format,
         # this will render the asset using the render plugin.
         # In both cases, if the file has not been modified since the last request,
         # this will return a 304 response.

@@ -9,7 +9,7 @@ class Roda
     # It adds a :param matcher for matching on any param with the
     # same name, yielding the value of the param:
     #
-    #   r.on :param => 'foo' do |value|
+    #   r.on param: 'foo' do |value|
     #     # Matches '?foo=bar', '?foo='
     #     # Doesn't match '?bar=foo'
     #   end
@@ -17,7 +17,7 @@ class Roda
     # It adds a :param! matcher for matching on any non-empty param
     # with the same name, yielding the value of the param:
     #
-    #   r.on(:param! => 'foo') do |value|
+    #   r.on(param!: 'foo') do |value|
     #     # Matches '?foo=bar'
     #     # Doesn't match '?foo=', '?bar=foo'
     #   end
@@ -25,12 +25,12 @@ class Roda
     # It also adds :params and :params! matchers, for matching multiple
     # params at the same time:
     #
-    #   r.on :params => ['foo', 'baz'] do |value|
+    #   r.on params: ['foo', 'baz'] do |value|
     #     # Matches '?foo=bar&baz=quuz', '?foo=&baz='
     #     # Doesn't match '?foo=bar', '?baz='
     #   end
     #
-    #   r.on :params! => ['foo', 'baz'] do |value|
+    #   r.on params!: ['foo', 'baz'] do |value|
     #     # Matches '?foo=bar&baz=quuz'
     #     # Doesn't match '?foo=bar', '?baz=', '?foo=&baz=', '?foo=bar&baz='
     #   end

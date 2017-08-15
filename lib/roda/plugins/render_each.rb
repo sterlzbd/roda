@@ -15,15 +15,15 @@ class Roda
     #
     # You can pass additional render options via an options hash:
     #
-    #   render_each([1,2,3], :foo, :views=>'partials')
+    #   render_each([1,2,3], :foo, views: 'partials')
     #
     # One additional option supported by is +:local+, which sets the
     # local variable containing the current value to use.  So:
     #
-    #   render_each([1,2,3], :foo, :local=>:bar)
+    #   render_each([1,2,3], :foo, local: :bar)
     #
     # Will render the +foo+ template, but the local variable used inside
-    # the template will be +bar+.  You can use <tt>:local=>nil</tt> to
+    # the template will be +bar+.  You can use <tt>local: nil</tt> to
     # not set a local variable inside the template.
     module RenderEach
       # Load the render plugin before this plugin, since this plugin

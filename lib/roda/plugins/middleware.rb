@@ -34,7 +34,8 @@ class Roda
     #   run App
     #
     # It is possible to use the Roda app as a regular app even when using
-    # the middleware plugin.
+    # the middleware plugin.  Using an app as middleware automatically creates
+    # a subclass of the app for the middleware.
     #
     # You can support configurable middleware by passing a block when loading
     # the plugin:
@@ -60,11 +61,6 @@ class Roda
     #
     #   # Request to App for /mid returns
     #   # "foo bar baz"
-    #
-    # Note that when supporting configurable middleware via a block, the middleware
-    # used is a subclass of the class loading the plugin, instead of the class itself.
-    # This is done so the same class can be used as middleware with multiple separate
-    # configurations.
     module Middleware
       # Configure the middleware plugin.  Options:
       # :env_var :: Set the environment variable to use to indicate to the roda
@@ -77,9 +73,10 @@ class Roda
         app.opts[:middleware_configure] = block if block
       end
 
-      # Forward instances are what is actually used as middleware.
+      # Forwarder instances are what is actually used as middleware.
       class Forwarder
-        # Store the current middleware and the next middleware to call.
+        # Make a subclass of +mid+ to use as the current middleware,
+        # and store +app+ as the next middleware to call.
         def initialize(mid, app, *args, &block)
           @mid = Class.new(mid)
           if configure = @mid.opts[:middleware_configure]

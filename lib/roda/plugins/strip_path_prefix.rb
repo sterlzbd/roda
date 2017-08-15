@@ -7,7 +7,7 @@ class Roda
     # turning them to relative paths.  Roda by default stores internal paths as absolute paths.
     # The main reason to use this plugin is when the internal absolute path could change at
     # runtime, either due to a symlink change or chroot call, or you really want to use
-    # relative links instead of absolute links.
+    # relative paths instead of absolute paths.
     # 
     # Examples:
     #

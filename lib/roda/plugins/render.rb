@@ -24,7 +24,7 @@ class Roda
     # side effects (unless the templates themselves have side effects).
     # As Roda uses the routing block return value as the body of the response,
     # in most cases you will call these methods as the last expression in a
-    # routing block # to have the response body be the result of the template
+    # routing block to have the response body be the result of the template
     # rendering.
     #
     # Because +render+ and +view+ just return strings, you can call them inside
@@ -33,14 +33,14 @@ class Roda
     #
     #   route do |r|
     #     r.is 'foo-bars' do
-    #       @bars = Bar.where(:foo).map{|b| render(:bar, :locals=>{:bar=>b})}.join
+    #       @bars = Bar.where(:foo).map{|b| render(:bar, locals: {bar: b})}.join
     #       view('foo')
     #     end
     #   end
     #
     # You can provide options to the plugin method:
     #
-    #   plugin :render, :engine=>'haml', :views=>'admin_views'
+    #   plugin :render, engine: 'haml', views: 'admin_views'
     #
     # = Plugin Options
     #
@@ -60,7 +60,7 @@ class Roda
     #            with the :template or :inline options.
     # :layout_opts :: The options to use when rendering the layout, if different from the default options.
     # :template_opts :: The tilt options used when rendering all templates. defaults to:
-    #                   <tt>{:outvar=>'@_out_buf', :default_encoding=>Encoding.default_external}</tt>.
+    #                   <tt>{outvar: '@_out_buf', default_encoding: Encoding.default_external}</tt>.
     # :engine_opts :: The tilt options to use per template engine.  Keys are
     #                 engine strings, values are hashes of template options.
     # :views :: The directory holding the view files, defaults to the 'views' subdirectory of the
@@ -71,8 +71,8 @@ class Roda
     # Most of these options can be overridden at runtime by passing options
     # to the +view+ or +render+ methods:
     #
-    #   view('foo', :engine=>'html.erb')
-    #   render('foo', :views=>'admin_views')
+    #   view('foo', engine: 'html.erb')
+    #   render('foo', views: 'admin_views')
     #
     # There are additional options to +view+ and +render+ that are
     # available at runtime:
@@ -102,10 +102,10 @@ class Roda
     # :template_class :: Provides the template class to use, inside of using
     #                    Tilt or <tt>Tilt[:engine]</tt>.
     #
-    # Here's how those options are used:
+    # Here's an example of using these options:
     #
-    #   view(:inline=>'<%= @foo %>')
-    #   render(:path=>'/path/to/template.erb')
+    #   view(inline: '<%= @foo %>')
+    #   render(path: '/path/to/template.erb')
     #
     # If you pass a hash as the first argument to +view+ or +render+, it should
     # have either +:template+, +:inline+, +:path+, or +:content+ (for +view+) as
@@ -122,7 +122,7 @@ class Roda
     # path never uses more than one template, you can use the +view_options+ plugin
     # and do:
     #
-    #   set_view_options :cache_key=>r.path_info
+    #   set_view_options cache_key: r.path_info
     #
     # at the top of your route block.  You can even do this if you do have paths
     # that use more than one template, as long as you specify +:cache_key+
@@ -223,9 +223,7 @@ class Roda
           retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
         end
 
-        # Return the render options for the instance's class. While this
-        # is not currently frozen, it may be frozen in a future version,
-        # so you should not attempt to modify it.
+        # Return the render options for the instance's class.
         def render_opts
           self.class.render_opts
         end

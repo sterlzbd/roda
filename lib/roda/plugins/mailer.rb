@@ -7,14 +7,15 @@ class Roda
   module RodaPlugins
     # The mailer plugin allows your Roda application to send emails easily.
     #
-    #   class App < Roda
+    #   class Mailer < Roda
     #     plugin :render
     #     plugin :mailer
     #
     #     route do |r|
-    #       r.on "albums" do
-    #         r.mail "added" do |album|
-    #           @album = album
+    #       r.on "albums", Integer do |album_id|
+    #         @album = Album[album_id]
+    #
+    #         r.mail "added" do
     #           from 'from@example.com'
     #           to 'to@example.com'
     #           cc 'cc@example.com'
@@ -29,12 +30,12 @@ class Roda
     #
     # The default method for sending a mail is +sendmail+:
     #
-    #   App.sendmail("/albums/added", Album[1])
+    #   Mailer.sendmail("/albums/1/added")
     #
     # If you want to return the <tt>Mail::Message</tt> instance for further modification,
     # you can just use the +mail+ method:
     #
-    #   mail = App.mail("/albums/added", Album[1])
+    #   mail = Mailer.mail("/albums/1/added")
     #   mail.from 'from2@example.com'
     #   mail.deliver
     #
@@ -43,12 +44,12 @@ class Roda
     # more details):
     #
     #   Mail.defaults do
-    #     delivery_method :smtp, :address=>'smtp.example.com', :port=>587
+    #     delivery_method :smtp, address: 'smtp.example.com', port: 587
     #   end
     #
     # You can support multipart emails using +text_part+ and +html_part+:
     #
-    #   r.mail "added" do |album_added|
+    #   r.mail "added" do
     #     from 'from@example.com'
     #     to 'to@example.com'
     #     subject 'Album Added'
@@ -97,11 +98,22 @@ class Roda
     #    # ...
     #  end
     #
+    # You can pass arguments when calling +mail+ or +sendmail+, and they
+    # will be yielded as additional arguments to the appropriate +r.mail+ block:
+    # 
+    #  Mailer.sendmail('/welcome/1', 'foo@example.com')
+    #
+    #  r.mail 'welcome' do |user_id, mail_from| 
+    #    from mail_from
+    #    to User[user_id].email
+    #    # ...
+    #  end
+    #
     # By default, the mailer uses text/plain as the Content-Type for emails.
     # You can override the default by specifying a :content_type option when
     # loading the plugin:
     #
-    #   plugin :mailer, :content_type=>'text/html'
+    #   plugin :mailer, content_type: 'text/html'
     #
     # The mailer plugin does support being used inside a Roda application
     # that is handling web requests, where the routing block for mails and
@@ -122,8 +134,9 @@ class Roda
 
       module ClassMethods
         # Return a Mail::Message instance for the email for the given request path
-        # and arguments.  You can further manipulate the returned mail object before
-        # calling +deliver+ to send the mail.
+        # and arguments.   Any arguments given are yielded to the appropriate +r.mail+
+        # block after any usual match block arguments. You can further manipulate the
+        #returned mail object before calling +deliver+ to send the mail.
         def mail(path, *args)
           mail = ::Mail.new
           catch(:no_mail) do
@@ -134,7 +147,7 @@ class Roda
           end
         end
 
-        # Calls +mail+ and immediately sends the resulting mail.
+        # Calls +mail+ with given arguments and immediately sends the resulting mail.
         def sendmail(*args)
           if m = mail(*args)
             m.deliver

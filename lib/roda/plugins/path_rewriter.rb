@@ -18,10 +18,10 @@ class Roda
     #
     # In some cases, you may want to override PATH_INFO for the rewritten
     # paths, such as when you are passing the request to another Rack app.
-    # For those cases, you can use the <tt>:path_info => true</tt> option to
+    # For those cases, you can use the <tt>path_info: true</tt> option to
     # +rewrite_path+.
     #
-    #   rewrite_path '/a', '/b', :path_info => true
+    #   rewrite_path '/a', '/b', path_info: true
     #   # PATH_INFO '/a' => PATH_INFO '/b'
     #   # PATH_INFO '/a/c' => PATH_INFO '/b/c'
     #

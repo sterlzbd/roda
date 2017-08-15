@@ -30,12 +30,11 @@ class Roda
     # as well set headers and/or write to the body, just like a regular
     # request.
     #
-    #
     # By default, this plugin handles StandardError and ScriptError.
     # To override the exception classes it will handle, pass a :classes
     # option to the plugin:
     #
-    #   plugin :error_handler, :classes=>[StandardError, ScriptError, NoMemoryError]
+    #   plugin :error_handler, classes: [StandardError, ScriptError, NoMemoryError]
     module ErrorHandler
       DEFAULT_ERROR_HANDLER_CLASSES = [StandardError, ScriptError].freeze
 

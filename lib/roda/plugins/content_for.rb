@@ -28,22 +28,22 @@ class Roda
     #   <%= content_for :foo %>
     #
     # If content_for is used multiple times with the same key,
-    # by default, the last call will override previous calls.
-    # If you want to append to the content, pass the :append
-    # option when loading the plugin:
+    # by default, the last call will append previous calls.
+    # If you want to overwrite the previous content, pass the
+    # <tt>append: false</tt> option when loading the plugin:
     #
-    #   plugin :content_for, :append=>true
+    #   plugin :content_for, append: false
     module ContentFor
       # Depend on the render plugin, since this plugin only makes
       # sense when the render plugin is used.
-      def self.load_dependencies(app, _opts = {})
+      def self.load_dependencies(app, _opts = OPTS)
         app.plugin :render
       end
 
       # Configure whether to append or overwrite if content_for
       # is called multiple times to set data. Overwrite is default, use
       # the :append option to append.
-      def self.configure(app, opts = {})
+      def self.configure(app, opts = OPTS)
         app.opts[:append_content_for] = opts.fetch(:append, true)
       end
 

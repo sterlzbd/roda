@@ -9,46 +9,34 @@ class Roda
     #   plugin :header_matchers
     #
     # It adds a +:header+ matcher for matching on arbitrary headers, which matches
-    # if the header is present:
+    # if the header is present, and yields the header value:
     #
-    #   r.on :header=>'HTTP-X-App-Token' do |header_value|
-    #     # Looks for env['HTTP_X_APP_TOKEN']
-    #   end
-    #
-    # For backwards compatibility, the header value is not automatically prefixed
-    # with HTTP_.  You can set the +:header_matcher_prefix+ option for the application,
-    # which will automatically prefix the header with HTTP_:
-    #
-    #   r.on :header=>'X-App-Token' do |header_value|
-    #     # Looks for env['HTTP_X_APP_TOKEN'] 
+    #   r.on header: 'HTTP-X-App-Token' do |header_value|
+    #     # Looks for env['HTTP_X_APP_TOKEN'] and yields it
     #   end
     #
     # It adds a +:host+ matcher for matching by the host of the request:
     #
-    #   r.on :host=>'foo.example.com' do
-    #   end
-    #   r.on :host=>/\A\w+.example.com\z/ do
+    #   r.on host: 'foo.example.com' do
     #   end
     #
-    # By default the +:host+ matcher does not yield matchers, but if you use a regexp
-    # and set the +:host_matcher_captures+ option for the application, it will
-    # yield regexp captures:
-    # 
-    #   r.on :host=>/\A(\w+).example.com\z/ do |subdomain|
+    # For regexp values of the +:host+ matcher, any captures are yielded to the block:
+    #
+    #   r.on host: /\A(\w+).example.com\z/ do |subdomain|
     #   end
     #
     # It adds a +:user_agent+ matcher for matching on a user agent patterns, which
     # yields the regexp captures to the block:
     #
-    #   r.on :user_agent=>/Chrome\/([.\d]+)/ do |chrome_version|
+    #   r.on user_agent: /Chrome\/([.\d]+)/ do |chrome_version|
     #   end
     #
     # It adds an +:accept+ matcher for matching based on the Accept header:
     #
-    #   r.on :accept=>'text/csv' do
+    #   r.on accept: 'text/csv' do
     #   end
     #
-    # Note that the accept matcher is very simple and cannot handle wildcards,
+    # Note that the +:accept+ matcher is very simple and cannot handle wildcards,
     # priorities, or anything but a simple comma separated list of mime types.
     module HeaderMatchers
       module RequestMethods

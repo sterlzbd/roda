@@ -17,7 +17,7 @@ class Roda
     #   end
     #
     # It is not recommended to use this in new applications, and it is encouraged
-    # to use separate symbol or string class matchers instead:
+    # to use separate string class or symbol matchers instead:
     #
     #   r.is "foo", String
     #   r.is "foo", :bar 

@@ -18,7 +18,7 @@ class Roda
     #       'a'
     #     end
     #
-    #     r.is 'b', :method=>[:get, :post] do
+    #     r.is 'b', method: [:get, :post] do
     #       'b'
     #     end
     #   end
@@ -31,10 +31,11 @@ class Roda
     # header options, then HEAD will be as well.
     #
     # NOTE: if you have a public facing website it is recommended that
-    # you enable this plugin. Search engines and other bots may send a
+    # you enable this plugin, or manually handle HEAD anywhere you would
+    # handle GET. Search engines and other bots may send a
     # HEAD request prior to crawling a page with a GET request. Without
     # this plugin those HEAD requests will return a 404 status, which
-    # may prevent search engine's from crawling your website.
+    # may prevent search engines from crawling your website.
     module Head
       module InstanceMethods
         # Always use an empty response body for head requests, with a

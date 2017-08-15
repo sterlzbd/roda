@@ -3,7 +3,7 @@
 #
 class Roda
   module RodaPlugins
-    # Allows to respond to specific request data types. User agents can request
+    # This plugin makes it easier to to respond to specific request data types. User agents can request
     # specific data types by either supplying an appropriate +Accept+ header
     # or by appending it as file extension to the path.
     #
@@ -48,9 +48,9 @@ class Roda
     #
     # To match custom extensions, use the :types option:
     #
-    #   plugin :type_routing, :types => {
-    #     :yaml => 'application/x-yaml',
-    #     :js => 'application/javascript; charset=utf-8',
+    #   plugin :type_routing, types: {
+    #     yaml: 'application/x-yaml',
+    #     js: 'application/javascript; charset=utf-8'
     #   }
     #
     #   route do |r|

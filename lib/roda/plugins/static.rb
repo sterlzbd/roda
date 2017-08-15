@@ -22,8 +22,8 @@ class Roda
     #
     #   opts[:root] = '/path/to/app'
     #   plugin :static, ['/js', '/css'] # path: /path/to/app/public
-    #   plugin :static, ['/images'], :root=>'pub'  # path: /path/to/app/pub
-    #   plugin :static, ['/media'], :root=>'/path/to/public' # path: /path/to/public
+    #   plugin :static, ['/images'], root: 'pub'  # path: /path/to/app/pub
+    #   plugin :static, ['/media'], root: '/path/to/public' # path: /path/to/public
     module Static
       # Load the Rack::Static middleware.  Use the paths given as the :urls option,
       # and set the :root option to be relative to the application's :root option.

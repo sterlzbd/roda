@@ -12,7 +12,7 @@ class Roda
     #     end
     #
     #     route do
-    #       r.on :foo=>'bar' do
+    #       r.on foo: 'bar' do
     #         # matches when param foo has value bar
     #       end
     #     end

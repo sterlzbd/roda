@@ -11,8 +11,8 @@ class Roda
     #
     #   route do |r|
     #     r.on "users" do
-    #       set_layout_options :template=>'users_layout'
-    #       set_view_options :engine=>'haml'
+    #       set_layout_options template: 'users_layout'
+    #       set_view_options engine: 'haml'
     #
     #       # ...
     #     end
@@ -31,7 +31,7 @@ class Roda
     # use, and template names that do not contain a slash will
     # automatically use that view subdirectory.  Example:
     #
-    #   plugin :render, :layout=>'./layout'
+    #   plugin :render, layout: './layout'
     #   plugin :view_options
     #
     #   route do |r|
@@ -59,22 +59,22 @@ class Roda
     #
     # If you have an existing Roda application that doesn't use
     # automatic HTML escaping for <tt><%= %></tt> tags via the
-    # :render plugin's :escape=>:erubi option, but you want to switch to
-    # using the :escape option, you can now do so without making
+    # render plugin's +:escape+ option, but you want to switch to
+    # using the +:escape+ option, you can now do so without making
     # all changes at once.  With set_view_options, you can now
     # specify escaping or not on a per branch basis in the routing
     # tree:
     #
-    #   plugin :render, :escape=>:erubi
+    #   plugin :render, escape: true
     #   plugin :view_options
     #
     #   route do |r|
     #     # Don't escape <%= %> by default
-    #     set_view_options :template_opts=>{:escape=>false}
+    #     set_view_options template_opts: {escape: false}
     #
     #     r.on "users" do
     #       # Escape <%= %> in this branch
-    #       set_view_options :template_opts=>{:escape=>true}
+    #       set_view_options template_opts: {escape: true}
     #     end
     #   end
     module ViewOptions
