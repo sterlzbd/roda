@@ -58,11 +58,6 @@ class Roda
           @out.call(data.to_s)
           self
         end
-
-        # Alias for +write+.
-        def <<(data)
-          write(data)
-        end
         alias << write
 
         # If not already closed, close the connection, and call
