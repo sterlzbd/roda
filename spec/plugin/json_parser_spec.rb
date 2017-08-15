@@ -69,4 +69,15 @@ describe "json_parser plugin" do
     end
     body('rack.input'=>StringIO.new('{}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '{}:/'
   end
+
+  it "supports resetting :include_request option to false" do
+    app(:bare) do
+      plugin :json_parser, :include_request => true
+      plugin :json_parser, :include_request => false
+      route do |r|
+        r.params['a']['b'].to_s
+      end
+    end
+    body('rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+  end
 end
