@@ -1,4 +1,4 @@
-= master
+= 2.29.0 (2017-08-16)
 
 * Deprecate accessing multi_route namespace when there are no routes (jeremyevans)
 
