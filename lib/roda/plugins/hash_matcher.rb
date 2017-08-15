@@ -25,7 +25,9 @@ class Roda
         # match, and anything else to match.  See the HashMatcher module
         # documentation for an example.
         def hash_matcher(key, &block)
-          self::RodaRequest.send(:define_method, :"match_#{key}", &block)
+          meth = :"match_#{key}"
+          self::RodaRequest.send(:define_method, meth, &block)
+          self::RodaRequest.send(:private, meth)
         end
       end
     end

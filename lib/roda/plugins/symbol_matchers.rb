@@ -51,7 +51,9 @@ class Roda
       module ClassMethods
         # Set the regexp to use for the given symbol, instead of the default.
         def symbol_matcher(s, re)
-          self::RodaRequest.send(:define_method, :"match_symbol_#{s}"){re}
+          meth = :"match_symbol_#{s}"
+          self::RodaRequest.send(:define_method, meth){re}
+          self::RodaRequest.send(:private, meth)
         end
       end
 
@@ -63,7 +65,7 @@ class Roda
         # behavior.
         def _match_symbol(s)
           meth = :"match_symbol_#{s}"
-          if respond_to?(meth)
+          if respond_to?(meth, true)
             # Allow calling private match methods
             re = send(meth)
             consume(self.class.cached_matcher(re){re})
@@ -76,7 +78,7 @@ class Roda
         # Otherwise, call super for the default behavior.
         def _match_symbol_regexp(s)
           meth = :"match_symbol_#{s}"
-          if respond_to?(meth)
+          if respond_to?(meth, true)
             # Allow calling private match methods
             send(meth)
           else
