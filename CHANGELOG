@@ -1,3 +1,55 @@
+= master
+
+* Make defined symbol_matcher and hash_matcher match methods private (jeremyevans)
+
+* Use public_send instead of send unless calling private methods is expected (jeremyevans)
+
+* Compute multi_run regexp when freezing app to avoid thread safety issues at runtime (jeremyevans)
+
+* Remove deprecated support for using undefined multi_route namespaces when routing (jeremyevans)
+
+* Make it possible to reset :include_request options to false for json and json_parser plugins (jeremyevans)
+
+* Deprecate RodaRequest#placeholder_string_matcher? private method (jeremyevans)
+
+* Deprecate Roda.thread_safe_cache, use RodaCache directly (jeremyevans)
+
+* Make using an app as middleware always create a subclass of the app (jeremyevans)
+
+* Enable SHA256 subresource integrity by default in assets plugin (jeremyevans)
+
+* Make subclassing a roda app always inherit the render cache (jeremyevans)
+
+* Make :cache=>nil render plugin option still allow caching via :cache render method option (jeremyevans)
+
+* Make content_for plugin append to existing content by default (jeremyevans)
+
+* Make :host matcher in the header_matchers plugin always yield captures if given a regexp (jeremyevans)
+
+* Make :header matcher in the header_matchers plugin now always prefix header with HTTP_ (jeremyevans)
+
+* Remove deprecated support for locals handling at the plugin level in the render plugin (jeremyevans)
+
+* Remove deprecated support for handling locals in the view_options plugin (jeremyevans)
+
+* Remove deprecated support for :ext option in render plugin (jeremyevans)
+
+* Remove deprecated view_subdirs alias for view_options plugin (jeremyevans)
+
+* Remove deprecated support for EventMachine and Stream#callback method in the streaming plugin (jeremyevans)
+
+* Drop support for ruby 1.8.7 (jeremyevans)
+
+* Make using an unsupported matcher raise error by default (jeremyevans)
+
+* Make having a match/route block return an unsupported value raise error by default (jeremyevans)
+
+* Remove deprecated :format, :opt, and :optd symbol matchers in symbol_matchers plugin (jeremyevans)
+
+* Remove deprecated support for placeholders in string matchers (jeremyevans)
+
+* Remove deprecated constants and plugins (jeremyevans)
+
 = 2.29.0 (2017-08-16)
 
 * Deprecate accessing multi_route namespace when there are no routes (jeremyevans)

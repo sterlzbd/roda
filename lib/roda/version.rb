@@ -1,10 +1,10 @@
 class Roda
   # The major version of Roda, updated only for major changes that are
   # likely to require modification to Roda apps.
-  RodaMajorVersion = 2
+  RodaMajorVersion = 3
 
   # The minor version of Roda, updated for new feature releases of Roda.
-  RodaMinorVersion = 29
+  RodaMinorVersion = 0
 
   # The patch version of Roda, updated only for bug fixes from the last
   # feature release.
