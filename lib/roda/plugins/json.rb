@@ -84,6 +84,7 @@ class Roda
 
       module RequestMethods
         CONTENT_TYPE = 'Content-Type'.freeze
+        RodaPlugins.deprecate_constant(self, :CONTENT_TYPE)
 
         private
 
@@ -93,7 +94,7 @@ class Roda
         def block_result_body(result)
           case result
           when *roda_class.json_result_classes
-            response[CONTENT_TYPE] ||= roda_class.opts[:json_result_content_type]
+            response['Content-Type'] ||= roda_class.opts[:json_result_content_type]
             convert_to_json(result)
           else
             super
