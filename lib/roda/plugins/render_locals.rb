@@ -5,15 +5,15 @@ class Roda
   module RodaPlugins
     # The render_locals plugin allows setting default locals for rendering templates.
     #
-    #   plugin :render_locals, :render=>{:heading=>'Hello'}
+    #   plugin :render_locals, render: {heading: 'Hello'}
     #
     #   route do |r|
     #     r.get "foo" do
-    #       view 'foo', :locals=>{:name=>'Foo'} # locals: {:heading=>'Hello', :name=>'Foo'}
+    #       view 'foo', locals: {name: 'Foo'} # locals: {:heading=>'Hello', :name=>'Foo'}
     #     end
     #
     #     r.get "bar" do
-    #       view 'foo', :locals=>{:heading=>'Bar'} # locals: {:heading=>'Bar'}
+    #       view 'foo', locals: {heading: 'Bar'} # locals: {:heading=>'Bar'}
     #     end
     #
     #     view "default" # locals: {:heading=>'Hello'}
@@ -68,12 +68,7 @@ class Roda
             merge_locals = layout_opts.has_key?(:merge_locals) ? layout_opts[:merge_locals] : self.opts[:merge_locals] 
 
             locals = {}
-            if merge_locals && (plugin_locals = render_locals)
-              locals.merge!(plugin_locals)
-            end
-            if layout_locals = layout_locals()
-              locals.merge!(layout_locals)
-            end
+            locals.merge!(layout_locals)
             if merge_locals && (method_locals = opts[:locals])
               locals.merge!(method_locals)
             end
