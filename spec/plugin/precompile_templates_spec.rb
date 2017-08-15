@@ -39,22 +39,6 @@ describe "precompile_templates plugin" do
     body.strip.must_equal '<h1>1</h1>'
   end
 
-  it "adds support for template precompilation with sorting :locals" do
-    app(:bare) do
-      plugin :render, :views=>'spec/views'
-      plugin :precompile_templates, :sort_locals=>true
-      route do |r|
-        render('home', :locals=>{:name => "Agent Smith", :title => "Home"})
-      end
-    end
-
-    app.render_opts[:cache][File.expand_path('spec/views/home.erb')].must_be_nil
-    app.precompile_templates 'spec/views/h*.erb', :locals=>[:title, :name]
-    app.render_opts[:cache][File.expand_path('spec/views/home.erb')].wont_equal nil
-    app.render_opts[:cache][File.expand_path('spec/views/home.erb')].instance_variable_get(:@compiled_method)[[:name, :title]].wont_equal nil
-    body.strip.must_equal "<h1>Home</h1>\n<p>Hello Agent Smith</p>"
-  end
-
   it "adds support for template precompilation with :inline" do
     app(:bare) do
       plugin :render, :views=>'spec/views'
