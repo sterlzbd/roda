@@ -29,7 +29,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2017-06-02 08:40:37 -0700</span>
+          <span class='datetime'>2017-08-16 07:55:02 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -228,7 +228,7 @@
             
             <pre class="ruby"><span class="ruby-string">&quot;foo/bar&quot;</span> <span class="ruby-comment"># matches &quot;/foo/bar&quot;</span>&#x000A;<span class="ruby-string">&quot;foo/bar&quot;</span> <span class="ruby-comment"># does not match &quot;/foo/bard&quot;</span></pre>
             
-            <p>For backwards compatibility, if a string contains a colon followed by any
+            <p>While deprecated by default, if a string contains a colon followed by any
             <code>\w</code> characters, the colon and remaining <code>\w</code>
             characters match any nonempty segment that contains at least one character:</p>
             
@@ -243,9 +243,10 @@
             
             <pre>&quot;foo&quot;, String # instead of &quot;foo/:id&quot;&#x000A;String, String     # instead of &quot;:x/:y&quot;</pre>
             
-            <p>It is possible in future versions of <a
-            href="../classes/Roda.html">Roda</a>, colons will not be treated specially
-            in strings, and will just match a literal colon character.</p>
+            <p>You can load the placeholder_string_matchers plugin to allow placeholders
+            in strings without a deprecation warning.  The deprecated default handling
+            of placeholders in strings will be removed in <a
+            href="../classes/Roda.html">Roda</a> 3.</p>
             
             <p>Note that other than colons followed by a <code>\w</code> character,
             strings do no handle regular expression syntax, they are matched verbatim:</p>
@@ -353,9 +354,9 @@
             
             <h3 id="label-Everything+else">Everything else<span><a href="#label-Everything+else">&para;</a> <a href="#top">&uarr;</a></span></h3>
             
-            <p>Everything else matches anything.  Note that future versions of <a
-            href="../classes/Roda.html">Roda</a> will probably raise exceptions for
-            unsupported matchers, so it is not recommended to rely on this behavior.</p>
+            <p>Everything else matches anything, but such usage is deprecated.  In <a
+            href="../classes/Roda.html">Roda</a> 3, using an unsupported matcher will
+            raise an error.</p>
             
             <h2 id="label-Optional+segments">Optional segments<span><a href="#label-Optional+segments">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -389,7 +390,29 @@
             
             <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, <span class="ruby-regexp">/(\d+)(?:\/(\d+))?/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span>, <span class="ruby-identifier">optional_data</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
-            <h2 id="label-Status+codes">Status codes<span><a href="#label-Status+codes">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            <h2 id="label-Match-2FRoute+Block+Return+Values">Match/Route Block Return Values<span><a href="#label-Match-2FRoute+Block+Return+Values">&para;</a> <a href="#top">&uarr;</a></span></h2>
+            
+            <p>If the response body has already been written to by calling
+            <code>response.write</code> directly, then any return value of a match
+            block or route block is ignored.</p>
+            
+            <p>If the response body has not already been written to, then the match block
+            or route block return value is inspected:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>String </td><td>
+            <p>used as the response body</p>
+            </td></tr><tr><td class='label'>nil, false </td><td>
+            <p>ignored</p>
+            </td></tr><tr><td class='label'>everything else </td><td>
+            <p>also ignored, but this is deprecated and will raise an error starting in <a
+            href="../classes/Roda.html">Roda</a> 3</p>
+            </td></tr></tbody></table>
+            
+            <p>Plugins can add support for additional match block and route block return
+            values.  One example of this is the json plugin, which allows returning
+            arrays and hashes in match and route blocks and converts those directly to
+            JSON and uses the JSON as the response body.</p>
+            
+            <h2 id="label-Status+Codes">Status Codes<span><a href="#label-Status+Codes">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
             <p>When it comes time to finalize a response, if a status code has not been
             set manually and anything has been written to the response, the response

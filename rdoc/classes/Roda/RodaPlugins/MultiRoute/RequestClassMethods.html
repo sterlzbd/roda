@@ -68,7 +68,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-clear_named_route_regexp-21-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-clear_named_route_regexp-21-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 182</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">clear_named_route_regexp!</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@namespaced_route_regexps</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">namespace</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-clear_named_route_regexp-21-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 184</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">clear_named_route_regexp!</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@namespaced_route_regexps</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">namespace</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-named_route_regexp'>
@@ -85,7 +85,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-named_route_regexp-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-named_route_regexp-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 187</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_route_regexp</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@namespaced_route_regexps</span>[<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> <span class="ruby-node">/(#{Regexp.union(roda_class.named_routes(namespace).select{|s| s.is_a?(String)}.sort.reverse)})/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-named_route_regexp-source'><span class="ruby-comment"># File lib/roda/plugins/multi_route.rb, line 189</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">named_route_regexp</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-ivar">@namespaced_route_regexps</span>[<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> <span class="ruby-node">/(#{Regexp.union(roda_class.named_routes(namespace).select{|s| s.is_a?(String)}.sort.reverse)})/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

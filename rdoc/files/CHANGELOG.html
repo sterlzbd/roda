@@ -29,12 +29,74 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2017-07-14 11:04:23 -0700</span>
+          <span class='datetime'>2017-08-16 07:55:22 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-2.29.0+-282017-08-16-29">2.29.0 (2017-08-16)<span><a href="#label-2.29.0+-282017-08-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Deprecate accessing multi_route namespace when there are no routes
+            (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate additional internal constants (jeremyevans)</p>
+            </li><li>
+            <p>Respect :root app option when using :layout_opts=&gt;:views render plugin
+            option (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate rendering templates outside of render plugin :allowed_paths
+            option by default (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate :cache=&gt;nil/false render plugin option overriding :cache
+            render/view method option (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate using :header matcher in header_matchers plugin without
+            :header_matcher_prefix app option (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate using content_for multiple times with the same key in the
+            content_for plugin unless :append plugin option is used (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate use of :host matcher with regexp value in header_matchers plugin
+            without :host_matcher_captures app option (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate view_options plugin locals handling, move to the new
+            branch_locals plugin (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate render plugin locals handling, move to the new render_locals
+            plugin (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate the :ext render method and plugin option (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate the view_subdirs plugin alias for the view_options plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate Stream#callback in the streaming plugin (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate the automatic support for EventMachine in the streaming plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate static_path_info plugin, which has been a no-op in <a
+            href="../classes/Roda.html">Roda</a> 2 (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate render plugin :escape option loading Erubis escaping support
+            (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate the per_thread_caching plugin (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate the websockets plugin (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate treating unsupported matchers as always matching (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate ignoring unsupported match block return values (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate the :format, :opt, and :optd default symbol matchers in the
+            symbol_matchers plugin (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate use of placeholders in string matchers by default, add
+            placeholder_string_matchers plugin for it (jeremyevans)</p>
+            </li></ul>
             
             <h1 id="label-2.28.0+-282017-07-14-29">2.28.0 (2017-07-14)<span><a href="#label-2.28.0+-282017-07-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>

@@ -98,7 +98,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-cached_matcher-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-cached_matcher-source'><span class="ruby-comment"># File lib/roda.rb, line 319</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;  <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;    <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">pattern</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-cached_matcher-source'><span class="ruby-comment"># File lib/roda.rb, line 329</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;  <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;    <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">pattern</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-inspect'>
@@ -118,7 +118,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-inspect-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 332</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 342</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">inspect</span>&#x000A;  <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

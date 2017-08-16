@@ -63,12 +63,15 @@
             
             <p>will not modify the prefix and will change the suffix so that it consumes a
             trailing slash at the end of the path only.</p>
+            
+            <p>This plugin automatically loads the placeholder_string_matchers plugin.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
             <h3>Public Class</h3>
             <ol>
               <li><a href="#method-c-configure">configure</a></li>
+              <li><a href="#method-c-load_dependencies">load_dependencies</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -119,7 +122,23 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/match_affix.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">suffix</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_prefix</span>] = <span class="ruby-identifier">prefix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">prefix</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_suffix</span>] = <span class="ruby-identifier">suffix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">suffix</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/match_affix.rb, line 41</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">suffix</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_prefix</span>] = <span class="ruby-identifier">prefix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">prefix</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_suffix</span>] = <span class="ruby-identifier">suffix</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">suffix</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-load_dependencies'>
+                <a name='method-c-load_dependencies'></a>
+                <div class='synopsis'>
+                  <span class='name'>load_dependencies</span>
+                  <span class='arguments'>(app, _prefix, _suffix)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/match_affix.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_prefix</span>, <span class="ruby-identifier">_suffix</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:placeholder_string_matchers</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

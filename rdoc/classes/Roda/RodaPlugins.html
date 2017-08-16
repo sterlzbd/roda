@@ -35,6 +35,9 @@
             <a href="../../files/lib/roda/plugins/_erubis_escaping_rb.html">lib/roda/plugins/_erubis_escaping.rb</a>
           </li>
           <li class='other'>
+            <a href="../../files/lib/roda/plugins/_symbol_regexp_matchers_rb.html">lib/roda/plugins/_symbol_regexp_matchers.rb</a>
+          </li>
+          <li class='other'>
             <a href="../../files/lib/roda/plugins/all_verbs_rb.html">lib/roda/plugins/all_verbs.rb</a>
           </li>
           <li class='other'>
@@ -45,6 +48,9 @@
           </li>
           <li class='other'>
             <a href="../../files/lib/roda/plugins/backtracking_array_rb.html">lib/roda/plugins/backtracking_array.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/roda/plugins/branch_locals_rb.html">lib/roda/plugins/branch_locals.rb</a>
           </li>
           <li class='other'>
             <a href="../../files/lib/roda/plugins/caching_rb.html">lib/roda/plugins/caching.rb</a>
@@ -197,6 +203,9 @@
             <a href="../../files/lib/roda/plugins/per_thread_caching_rb.html">lib/roda/plugins/per_thread_caching.rb</a>
           </li>
           <li class='other'>
+            <a href="../../files/lib/roda/plugins/placeholder_string_matchers_rb.html">lib/roda/plugins/placeholder_string_matchers.rb</a>
+          </li>
+          <li class='other'>
             <a href="../../files/lib/roda/plugins/precompile_templates_rb.html">lib/roda/plugins/precompile_templates.rb</a>
           </li>
           <li class='other'>
@@ -207,6 +216,9 @@
           </li>
           <li class='other'>
             <a href="../../files/lib/roda/plugins/render_each_rb.html">lib/roda/plugins/render_each.rb</a>
+          </li>
+          <li class='other'>
+            <a href="../../files/lib/roda/plugins/render_locals_rb.html">lib/roda/plugins/render_locals.rb</a>
           </li>
           <li class='other'>
             <a href="../../files/lib/roda/plugins/request_headers_rb.html">lib/roda/plugins/request_headers.rb</a>
@@ -305,6 +317,7 @@
               <li><a href="RodaPlugins/AssetsPreloading.html">Roda::RodaPlugins::AssetsPreloading</a></li>
               <li><a href="RodaPlugins/BacktrackingArray.html">Roda::RodaPlugins::BacktrackingArray</a></li>
               <li><a href="RodaPlugins/Base.html">Roda::RodaPlugins::Base</a></li>
+              <li><a href="RodaPlugins/BranchLocals.html">Roda::RodaPlugins::BranchLocals</a></li>
               <li><a href="RodaPlugins/Caching.html">Roda::RodaPlugins::Caching</a></li>
               <li><a href="RodaPlugins/Chunked.html">Roda::RodaPlugins::Chunked</a></li>
               <li><a href="RodaPlugins/ClassLevelRouting.html">Roda::RodaPlugins::ClassLevelRouting</a></li>
@@ -356,10 +369,12 @@
               <li><a href="RodaPlugins/PathMatchers.html">Roda::RodaPlugins::PathMatchers</a></li>
               <li><a href="RodaPlugins/PathRewriter.html">Roda::RodaPlugins::PathRewriter</a></li>
               <li><a href="RodaPlugins/PerThreadCaching.html">Roda::RodaPlugins::PerThreadCaching</a></li>
+              <li><a href="RodaPlugins/PlaceholderStringMatchers.html">Roda::RodaPlugins::PlaceholderStringMatchers</a></li>
               <li><a href="RodaPlugins/PrecompileTemplates.html">Roda::RodaPlugins::PrecompileTemplates</a></li>
               <li><a href="RodaPlugins/Public.html">Roda::RodaPlugins::Public</a></li>
               <li><a href="RodaPlugins/Render.html">Roda::RodaPlugins::Render</a></li>
               <li><a href="RodaPlugins/RenderEach.html">Roda::RodaPlugins::RenderEach</a></li>
+              <li><a href="RodaPlugins/RenderLocals.html">Roda::RodaPlugins::RenderLocals</a></li>
               <li><a href="RodaPlugins/RequestHeaders.html">Roda::RodaPlugins::RequestHeaders</a></li>
               <li><a href="RodaPlugins/ResponseRequest.html">Roda::RodaPlugins::ResponseRequest</a></li>
               <li><a href="RodaPlugins/RunAppendSlash.html">Roda::RodaPlugins::RunAppendSlash</a></li>
@@ -375,6 +390,7 @@
               <li><a href="RodaPlugins/Streaming.html">Roda::RodaPlugins::Streaming</a></li>
               <li><a href="RodaPlugins/StripPathPrefix.html">Roda::RodaPlugins::StripPathPrefix</a></li>
               <li><a href="RodaPlugins/SymbolMatchers.html">Roda::RodaPlugins::SymbolMatchers</a></li>
+              <li><a href="RodaPlugins/SymbolRegexpMatchers.html">Roda::RodaPlugins::SymbolRegexpMatchers</a></li>
               <li><a href="RodaPlugins/SymbolStatus.html">Roda::RodaPlugins::SymbolStatus</a></li>
               <li><a href="RodaPlugins/SymbolViews.html">Roda::RodaPlugins::SymbolViews</a></li>
               <li><a href="RodaPlugins/TypeRouting.html">Roda::RodaPlugins::TypeRouting</a></li>
@@ -384,6 +400,27 @@
             </ol>
           </div>
           <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>EMPTY_ARRAY</td>
+                    <td>=</td>
+                    <td class='context-item-value'>[].freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>OPTS</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-deprecate_constant'>
@@ -401,7 +438,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-deprecate_constant-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-deprecate_constant-source'><span class="ruby-comment"># File lib/roda.rb, line 93</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-string">&#39;2.3&#39;</span>&#x000A;    <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-deprecate_constant-source'><span class="ruby-comment"># File lib/roda.rb, line 103</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-string">&#39;2.3&#39;</span>&#x000A;    <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-load_plugin'>
@@ -421,7 +458,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 74</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 84</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;  <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">plugin</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-register_plugin'>
@@ -442,7 +479,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-register_plugin-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 87</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-register_plugin-source'><span class="ruby-comment"># File lib/roda.rb, line 97</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;  <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

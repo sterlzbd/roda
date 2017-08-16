@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::RenderLocals</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Roda::RodaPlugins::RenderLocals
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../files/lib/roda/plugins/render_locals_rb.html">lib/roda/plugins/render_locals.rb</a>
+          </li>
+        </ol>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>The render_locals plugin allows setting default locals for rendering
+            templates.</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render_locals</span>, :<span class="ruby-identifier">render=</span><span class="ruby-operator">&gt;</span>{:<span class="ruby-identifier">heading=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;Hello&#39;</span>}&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;foo&#39;</span>, :<span class="ruby-identifier">locals=</span><span class="ruby-operator">&gt;</span>{:<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;Foo&#39;</span>} <span class="ruby-comment"># locals: {:heading=&gt;&#39;Hello&#39;, :name=&gt;&#39;Foo&#39;}</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;foo&#39;</span>, :<span class="ruby-identifier">locals=</span><span class="ruby-operator">&gt;</span>{:<span class="ruby-identifier">heading=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;Bar&#39;</span>} <span class="ruby-comment"># locals: {:heading=&gt;&#39;Bar&#39;}</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;default&quot;</span> <span class="ruby-comment"># locals: {:heading=&gt;&#39;Hello&#39;}</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            
+            <p>The render_locals plugin accepts the following options:</p>
+            <table class="rdoc-list note-list"><tbody><tr><td class='label'>render </td><td>
+            <p>The default locals to use for template rendering</p>
+            </td></tr><tr><td class='label'>layout </td><td>
+            <p>The default locals to use for layout rendering</p>
+            </td></tr><tr><td class='label'>merge </td><td>
+            <p>Whether to merge template locals into layout locals</p>
+            </td></tr></tbody></table>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a href="#method-c-configure">configure</a></li>
+              <li><a href="#method-c-load_dependencies">load_dependencies</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='class-list'>
+            <h2>Classes and Modules</h2>
+            <ol>
+              <li><a href="RenderLocals/InstanceMethods.html">Roda::RodaPlugins::RenderLocals::InstanceMethods</a></li>
+            </ol>
+          </div>
+          <div id='section'>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>OPTS</td>
+                    <td>=</td>
+                    <td class='context-item-value'>{}.freeze</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-configure'>
+                <a name='method-c-configure'></a>
+                <div class='synopsis'>
+                  <span class='name'>configure</span>
+                  <span class='arguments'>(app, opts=RodaPlugins::OPTS)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/render_locals.rb, line 34</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:merge</span>)&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:merge_locals</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:merge</span>]&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>]).<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-load_dependencies'>
+                <a name='method-c-load_dependencies'></a>
+                <div class='synopsis'>
+                  <span class='name'>load_dependencies</span>
+                  <span class='arguments'>(app, opts=RodaPlugins::OPTS)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/render_locals.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
