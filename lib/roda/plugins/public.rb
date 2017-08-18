@@ -10,7 +10,7 @@ class Roda
     #
     # The public plugin recognizes the application's :root option, and defaults to
     # using the +public+ subfolder of the application's +:root+ option.  If the application's
-    # :root option is not set, it defaults to the the +public+ folder in the working
+    # :root option is not set, it defaults to the +public+ folder in the working
     # directory.  Additionally, if a relative path is provided as the :root
     # option to the plugin, it will be considered relative to the application's
     # +:root+ option.

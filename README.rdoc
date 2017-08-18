@@ -563,7 +563,7 @@ Unlike the other matching methods, +r.root+ takes no arguments.
 
 Note that +r.root+ does not match if the path is empty;
 you should use <tt>r.get true</tt> for that.
-If you want to match either the the empty path or +/+,
+If you want to match either the empty path or +/+,
 you can use <tt>r.get ["", true]</tt>, or use the slash_path_empty
 plugin.
 
@@ -889,7 +889,7 @@ It's fast but may cause issues in cases where you remove classes, constants, or 
 or when you are not clearing out cached data manually when files are reloaded.
 
 There is no one reloading solution that is the best for all applications and development
-approaches.  Consider your needs and the the tradeoffs of each of the reloading approaches,
+approaches.  Consider your needs and the tradeoffs of each of the reloading approaches,
 and pick the one you think will work best.
 
 If you are unsure where to start, it may be best to start with rerun or shotgun
@@ -995,7 +995,7 @@ It started out as a fork of Cuba, from which it borrows the idea of using a rout
 (which Cuba in turn took from {Rum}[https://github.com/chneukirchen/rum]).
 From Sinatra, it takes the ideas that route blocks should return the request bodies
 and that routes should be canonical.
-Roda's plugin system is based on the the plugin system used by
+Roda's plugin system is based on the plugin system used by
 {Sequel}[http://sequel.jeremyevans.net].
 
 == Ruby Support Policy

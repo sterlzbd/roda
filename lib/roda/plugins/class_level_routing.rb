@@ -43,7 +43,7 @@ class Roda
     #     end
     #   end
     #
-    # When using the the class_level_routing plugin with nested routes, you may also want to use the
+    # When using the class_level_routing plugin with nested routes, you may also want to use the
     # delegate plugin to delegate certain instance methods to the request object, so you don't have
     # to continually use +request.+ in your routing blocks.
     #
