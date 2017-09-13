@@ -57,11 +57,11 @@ describe "placeholder_string_matchers plugin" do
 
       route do |r|
         r.on("bar/:foo") do |foo|
-          "b-#{foo}-#{r[:foo]}-#{r[:captures].length}"
+          "b-#{foo}-#{r.params['foo']}-#{r.params['captures'].length}"
         end
 
         r.on("baz/:bar", :foo) do |bar, foo|
-          "b-#{bar}-#{foo}-#{r[:bar]}-#{r[:foo]}-#{r[:captures].length}"
+          "b-#{bar}-#{foo}-#{r.params['bar']}-#{r.params['foo']}-#{r.params['captures'].length}"
         end
       end
     end
