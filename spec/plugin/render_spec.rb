@@ -620,9 +620,9 @@ begin
   require 'tilt'
   require 'tilt/erubi'
 rescue LoadError
-  warn "tilt 2 or erubi not installed, skipping render :escape=>:erubi test"  
+  warn "tilt 2 or erubi not installed, skipping render :escape=>true test"  
 else
-describe "_erubis_escaping plugin" do
+describe ":render plugin :escape option" do
   before do
     if defined?(Tilt::ErubiTemplate) && ::Tilt['erb'] != Tilt::ErubiTemplate
       # Set erubi as default erb template handler
