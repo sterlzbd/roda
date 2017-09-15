@@ -1,4 +1,4 @@
-= master
+= 3.0.0 (2017-09-15)
 
 * Make defined symbol_matcher and hash_matcher match methods private (jeremyevans)
 
