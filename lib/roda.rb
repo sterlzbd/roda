@@ -225,13 +225,6 @@ class Roda
           build_rack_app
         end
 
-        def thread_safe_cache
-          # :nocov:
-          RodaPlugins.warn "Roda.thread_safe_cache is deprecated and will be removed from Roda 3.1."
-          RodaCache.new
-          # :nocov:
-        end
-
         # Add a middleware to use for the rack application.  Must be
         # called before calling #route to have an effect. Example:
         #
@@ -895,15 +888,6 @@ class Roda
           else
             type.to_s.upcase == @env["REQUEST_METHOD"]
           end
-        end
-
-        # Whether string matchers are used verbatim, without handling
-        # placeholders via colons.
-        def placeholder_string_matcher?
-          # :nocov:
-          RodaPlugins.warn "Roda::RodaRequest.placeholder_string_matcher? is deprecated and will be removed from Roda 3.1."
-          false
-          # :nocov:
         end
 
         # Handle an unsupported matcher.
