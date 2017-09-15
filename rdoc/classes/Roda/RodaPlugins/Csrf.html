@@ -41,12 +41,12 @@
             rack_csrf, along with some csrf helper methods to use in your views.  To
             use it, load the plugin, with the options hash passed to Rack::Csrf:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">csrf</span>, :<span class="ruby-identifier">raise=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">csrf</span>, <span class="ruby-identifier">raise</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span></pre>
             
             <p>Optionally you can choose not to setup rack_csrf middleware on the roda app
             if you already have one configured:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">csrf</span>, :<span class="ruby-identifier">skip_middleware=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">csrf</span>, <span class="ruby-identifier">skip_middleware</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span></pre>
             
             <p>This adds the following instance methods:</p>
             <table class="rdoc-list note-list"><tbody><tr><td class='label'>csrf_field </td><td>

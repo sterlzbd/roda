@@ -44,19 +44,17 @@
             <p>By default, <code>rewrite_path</code> will rewrite just the remaining path.
             So only routing in the current <a href="../../Roda.html">Roda</a> app will
             be affected.  This is useful if you have other code in your app that uses
-            <a href="PathRewriter.html#PATH_INFO">PATH_INFO</a> and needs to see the
-            original <a href="PathRewriter.html#PATH_INFO">PATH_INFO</a> (for example,
-            when using relative links).</p>
+            PATH_INFO and needs to see the original PATH_INFO (for example, when using
+            relative links).</p>
             
             <pre class="ruby"><span class="ruby-identifier">rewrite_path</span> <span class="ruby-string">&#39;/a&#39;</span>, <span class="ruby-string">&#39;/b&#39;</span>&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a&#39; =&gt; remaining_path &#39;/b&#39;</span>&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/c&#39; =&gt; remaining_path &#39;/b/c&#39;</span></pre>
             
-            <p>In some cases, you may want to override <a
-            href="PathRewriter.html#PATH_INFO">PATH_INFO</a> for the rewritten paths,
+            <p>In some cases, you may want to override PATH_INFO for the rewritten paths,
             such as when you are passing the request to another Rack app. For those
-            cases, you can use the <code>:path_info =&gt; true</code> option to
+            cases, you can use the <code>path_info: true</code> option to
             <code>rewrite_path</code>.</p>
             
-            <pre class="ruby"><span class="ruby-identifier">rewrite_path</span> <span class="ruby-string">&#39;/a&#39;</span>, <span class="ruby-string">&#39;/b&#39;</span>, :<span class="ruby-identifier">path_info</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a&#39; =&gt; PATH_INFO &#39;/b&#39;</span>&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/c&#39; =&gt; PATH_INFO &#39;/b/c&#39;</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">rewrite_path</span> <span class="ruby-string">&#39;/a&#39;</span>, <span class="ruby-string">&#39;/b&#39;</span>, <span class="ruby-identifier">path_info</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a&#39; =&gt; PATH_INFO &#39;/b&#39;</span>&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/c&#39; =&gt; PATH_INFO &#39;/b/c&#39;</span></pre>
             
             <p>If you pass a string to <code>rewrite_path</code>, it will rewrite all
             paths starting with that string.  You can provide a regexp if you want more
@@ -67,12 +65,11 @@
             <p>Patterns can be rewritten dynamically by providing a block accepting a
             MatchData object and evaluating to the replacement.</p>
             
-            <pre class="ruby"><span class="ruby-identifier">rewrite_path</span>(<span class="ruby-regexp">/\A\/a\/(\w+)/</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;/a/#{match[1].capitalize}&quot;</span>}&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/moo&#39; =&gt; remaining_path &#39;/a/Moo&#39;</span>&#x000A;<span class="ruby-identifier">rewrite_path</span>(<span class="ruby-regexp">/\A\/a\/(\w+)/</span>, :<span class="ruby-identifier">path_info</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">true</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;/a/#{match[1].capitalize}&quot;</span>}&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/moo&#39; =&gt; PATH_INFO &#39;/a/Moo&#39;</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">rewrite_path</span>(<span class="ruby-regexp">/\A\/a\/(\w+)/</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;/a/#{match[1].capitalize}&quot;</span>}&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/moo&#39; =&gt; remaining_path &#39;/a/Moo&#39;</span>&#x000A;<span class="ruby-identifier">rewrite_path</span>(<span class="ruby-regexp">/\A\/a\/(\w+)/</span>, <span class="ruby-identifier">path_info</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;/a/#{match[1].capitalize}&quot;</span>}&#x000A;<span class="ruby-comment"># PATH_INFO &#39;/a/moo&#39; =&gt; PATH_INFO &#39;/a/Moo&#39;</span></pre>
             
             <p>All path rewrites are applied in order, so if a path is rewritten by one
-            rewrite, it can be rewritten again by a later rewrite.  Note that <a
-            href="PathRewriter.html#PATH_INFO">PATH_INFO</a> rewrites are processed
-            before remaining_path rewrites.</p>
+            rewrite, it can be rewritten again by a later rewrite.  Note that PATH_INFO
+            rewrites are processed before remaining_path rewrites.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -91,27 +88,6 @@
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>PATH_INFO</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'PATH_INFO'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-configure'>
@@ -127,7 +103,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/path_rewriter.rb, line 52</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_exec</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:remaining_path_rewrites</span>] <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_info_rewrites</span>] <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/path_rewriter.rb, line 47</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_exec</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:remaining_path_rewrites</span>] <span class="ruby-operator">||=</span> []&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_info_rewrites</span>] <span class="ruby-operator">||=</span> []&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

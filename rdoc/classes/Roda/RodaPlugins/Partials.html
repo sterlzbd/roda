@@ -40,7 +40,7 @@
             <p>The partials plugin adds a <code>partial</code> method, which renders 
             templates without the layout.</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">partials</span>, :<span class="ruby-identifier">views</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;path/2/views&#39;</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">partials</span>, <span class="ruby-identifier">views</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;path/2/views&#39;</span></pre>
             
             <p>Template files are prefixed with an underscore:</p>
             
@@ -68,34 +68,13 @@
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>SLASH</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'/'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-load_dependencies'>
                 <a name='method-c-load_dependencies'></a>
                 <div class='synopsis'>
                   <span class='name'>load_dependencies</span>
-                  <span class='arguments'>(app, opts=RodaPlugins::OPTS)</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
@@ -105,7 +84,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/partials.rb, line 29</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/partials.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

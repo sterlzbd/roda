@@ -47,9 +47,9 @@
             However, for consistency with Sinatra, delegate methods are added to the
             scope of the route block that call the methods on the request or response. 
             If you do not want to pollute the namespace of the route block, you should
-            load the plugin with the :delegate =&gt; false option:</p>
+            load the plugin with the <code>delegate: false</code> option:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">sinatra_helpers</span>, :<span class="ruby-identifier">delegate=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">false</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">sinatra_helpers</span>, <span class="ruby-identifier">delegate</span><span class="ruby-operator">:</span> <span class="ruby-keyword">false</span></pre>
             
             <h2 id="module-Roda::RodaPlugins::SinatraHelpers-label-Class+Methods+Added">Class Methods Added<span><a href="#module-Roda::RodaPlugins::SinatraHelpers-label-Class+Methods+Added">&para;</a> <a href="#top">&uarr;</a></span></h2>
             
@@ -246,118 +246,13 @@
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>ATTACHMENT</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'attachment'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CHARSET</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'charset'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>COMMA</td>
-                    <td>=</td>
-                    <td class='context-item-value'>', '.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CONTENT_DISPOSITION</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"Content-Disposition".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CONTENT_LENGTH</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"Content-Length".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CONTENT_TYPE</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"Content-Type".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>EMPTY_STRING</td>
-                    <td>=</td>
-                    <td class='context-item-value'>''.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>HTTP11</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"HTTP/1.1".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>HTTP_VERSION</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'HTTP_VERSION'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>HTTP_X_FORWARDED_HOST</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"HTTP_X_FORWARDED_HOST".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OCTET_STREAM</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'application/octet-stream'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>SEMICOLON</td>
-                    <td>=</td>
-                    <td class='context-item-value'>';'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>SLASH</td>
-                    <td>=</td>
-                    <td class='context-item-value'>'/'.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-configure'>
                 <a name='method-c-configure'></a>
                 <div class='synopsis'>
                   <span class='name'>configure</span>
-                  <span class='arguments'>(app, opts=RodaPlugins::OPTS)</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
@@ -368,7 +263,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 250</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 221</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -385,7 +280,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 243</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_303</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 214</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_303</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

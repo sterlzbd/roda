@@ -43,7 +43,7 @@
             
             <p>So for the following routes,</p>
             
-            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;root&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;a&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;b&#39;</span>, :<span class="ruby-identifier">method=</span><span class="ruby-operator">&gt;</span>[:<span class="ruby-identifier">get</span>, :<span class="ruby-identifier">post</span>] <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;b&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;root&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;a&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> [:<span class="ruby-identifier">get</span>, :<span class="ruby-identifier">post</span>] <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;b&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>HEAD requests for <code>/</code>, <code>/a</code>, and <code>/b</code> will
             all return 200 status with an empty body.</p>
@@ -53,10 +53,10 @@
             options, then HEAD will be as well.</p>
             
             <p>NOTE: if you have a public facing website it is recommended that you enable
-            this plugin. Search engines and other bots may send a HEAD request prior to
-            crawling a page with a GET request. Without this plugin those HEAD requests
-            will return a 404 status, which may prevent search engine&#39;s from
-            crawling your website.</p>
+            this plugin, or manually handle HEAD anywhere you would handle GET. Search
+            engines and other bots may send a HEAD request prior to crawling a page
+            with a GET request. Without this plugin those HEAD requests will return a
+            404 status, which may prevent search engines from crawling your website.</p>
           </div>
           <div id='context'>
           </div>
@@ -68,20 +68,6 @@
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>EMPTY_ARRAY</td>
-                    <td>=</td>
-                    <td class='context-item-value'>[].freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
       </div>

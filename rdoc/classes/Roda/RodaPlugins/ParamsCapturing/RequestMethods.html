@@ -46,35 +46,6 @@
           <div id='context'>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>STRING_PARAM_CAPTURE_RANGE</td>
-                    <td>=</td>
-                    <td class='context-item-value'>1..-1</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>:nocov:  RODA3: Remove Ruby 1.8 doesn&#39;t support positive lookbehind, so
-                      include the colon in the scan, and strip it out later.</p>
-                    </td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>STRING_PARAM_CAPTURE_REGEXP</td>
-                    <td>=</td>
-                    <td class='context-item-value'>eval("/(?<=:)\\w+/")</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'>
-                      
-                      <p>Regexp to scan for capture names. Uses positive lookbehind so it is only
-                      valid on ruby 1.9+, hence the use of eval.</p>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-new'>
@@ -90,7 +61,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/params_capturing.rb, line 62</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;captures&#39;</span>] = []&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/params_capturing.rb, line 58</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;captures&#39;</span>] = []&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

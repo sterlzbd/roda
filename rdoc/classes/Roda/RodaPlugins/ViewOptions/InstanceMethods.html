@@ -41,9 +41,7 @@
             <h3>Public Instance</h3>
             <ol>
               <li><a href="#method-i-append_view_subdir">append_view_subdir</a></li>
-              <li><a href="#method-i-set_layout_locals">set_layout_locals</a></li>
               <li><a href="#method-i-set_layout_options">set_layout_options</a></li>
-              <li><a href="#method-i-set_view_locals">set_view_locals</a></li>
               <li><a href="#method-i-set_view_options">set_view_options</a></li>
               <li><a href="#method-i-set_view_subdir">set_view_subdir</a></li>
             </ol>
@@ -73,23 +71,6 @@
                   <pre id='method-i-append_view_subdir-source'><span class="ruby-comment"># File lib/roda/plugins/view_options.rb, line 92</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">append_view_subdir</span>(<span class="ruby-identifier">v</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">subdir</span> = <span class="ruby-ivar">@_view_subdir</span>&#x000A;    <span class="ruby-identifier">set_view_subdir</span>(<span class="ruby-node">&quot;#{subdir}/#{v}&quot;</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">set_view_subdir</span>(<span class="ruby-identifier">v</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-method-i-set_layout_locals'>
-                <a name='method-i-set_layout_locals'></a>
-                <div class='synopsis'>
-                  <span class='name'>set_layout_locals</span>
-                  <span class='arguments'>(opts)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>RODA3: Remove</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-set_layout_locals-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-set_layout_locals-source'><span class="ruby-comment"># File lib/roda/plugins/view_options.rb, line 125</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_layout_locals</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span> <span class="ruby-string">&quot;The set_layout_locals method in the view_options plugin is deprecated and will be removed in Roda 3. This feature has been moved to the branch_locals plugin.&quot;</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-ivar">@_layout_locals</span>&#x000A;    <span class="ruby-ivar">@_layout_locals</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">locals</span>].<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-ivar">@_layout_locals</span> = <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
               <div class='method public-instance' id='method-method-i-set_layout_options'>
                 <a name='method-i-set_layout_options'></a>
                 <div class='synopsis'>
@@ -105,23 +86,6 @@
                     [show source]
                   </a>
                   <pre id='method-i-set_layout_options-source'><span class="ruby-comment"># File lib/roda/plugins/view_options.rb, line 107</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_layout_options</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">options</span> = <span class="ruby-ivar">@_layout_options</span>&#x000A;    <span class="ruby-ivar">@_layout_options</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">options</span>].<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-ivar">@_layout_options</span> = <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-set_view_locals'>
-                <a name='method-i-set_view_locals'></a>
-                <div class='synopsis'>
-                  <span class='name'>set_view_locals</span>
-                  <span class='arguments'>(opts)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>RODA3: Remove</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-set_view_locals-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-set_view_locals-source'><span class="ruby-comment"># File lib/roda/plugins/view_options.rb, line 135</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">set_view_locals</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span> <span class="ruby-string">&quot;The set_view_locals method in the view_options plugin is deprecated and will be removed in Roda 3. This feature has been moved to the branch_locals plugin.&quot;</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-ivar">@_view_locals</span>&#x000A;    <span class="ruby-ivar">@_view_locals</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">locals</span>].<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-ivar">@_view_locals</span> = <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-instance' id='method-method-i-set_view_options'>

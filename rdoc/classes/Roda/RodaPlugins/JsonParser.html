@@ -78,41 +78,6 @@
                     <td>&nbsp;</td>
                     <td class='context-item-desc'></td>
                   </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>FORM_HASH_KEY</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"rack.request.form_hash".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>FORM_INPUT_KEY</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"rack.request.form_input".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>INPUT_KEY</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"rack.input".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>JSON_PARAMS_KEY</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"roda.json_params".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
                 </table>
               </div>
             </div>
@@ -122,7 +87,7 @@
                 <a name='method-c-configure'></a>
                 <div class='synopsis'>
                   <span class='name'>configure</span>
-                  <span class='arguments'>(app, opts=RodaPlugins::OPTS)</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
@@ -144,7 +109,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json_parser.rb, line 38</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_error_handler</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_error_handler</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_ERROR_HANDLER</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_parser</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:parser</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_parser</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_PARSER</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_include_request</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:include_request</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_include_request</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/json_parser.rb, line 27</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_error_handler</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_error_handler</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_ERROR_HANDLER</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_parser</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:parser</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_parser</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_PARSER</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_include_request</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:include_request</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:include_request</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

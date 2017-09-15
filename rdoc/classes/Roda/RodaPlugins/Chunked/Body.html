@@ -57,34 +57,6 @@
           <div id='context'>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CHUNK_SIZE</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"%x\r\n".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CRLF</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"\r\n".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>FINISH</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"0\r\n\r\n".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-new'>
@@ -101,7 +73,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/chunked.rb, line 183</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/chunked.rb, line 165</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scope</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <h2>Public Instance methods</h2>
@@ -122,7 +94,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-each-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-each-source'><span class="ruby-comment"># File lib/roda/plugins/chunked.rb, line 192</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">each</span>&#x000A;  <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">each_chunk</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chunk</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">chunk</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;%x\r\n&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">bytesize</span>)&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-identifier">chunk</span>)&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;\r\n&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">ensure</span>&#x000A;  <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;0\r\n\r\n&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-each-source'><span class="ruby-comment"># File lib/roda/plugins/chunked.rb, line 174</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">each</span>&#x000A;  <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">each_chunk</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chunk</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">chunk</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;%x\r\n&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">bytesize</span>)&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-identifier">chunk</span>)&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;\r\n&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">ensure</span>&#x000A;  <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;0\r\n\r\n&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

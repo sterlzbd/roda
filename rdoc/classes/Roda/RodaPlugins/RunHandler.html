@@ -41,10 +41,10 @@
             rack response array, before it returns it as a response.</p>
             
             <p>Additionally, r.run also takes a options hash, and you can provide a
-            <code>:not_found=&gt;:pass</code> option to keep routing normally if the
-            rack app returns a 404 response.</p>
+            <code>not_found: :pass</code> option to keep routing normally if the rack
+            app returns a 404 response.</p>
             
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">run_handler</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Keep running code if RackAppFoo doesn&#39;t return a result</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">RackAppFoo</span>, :<span class="ruby-identifier">not_found=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">pass</span>&#x000A;&#x000A;    <span class="ruby-comment"># Change response status codes before returning.</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span>(<span class="ruby-constant">RackAppBar</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">response</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] = <span class="ruby-value">200</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">201</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">run_handler</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Keep running code if RackAppFoo doesn&#39;t return a result</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">RackAppFoo</span>, <span class="ruby-identifier">not_found</span><span class="ruby-operator">:</span> :<span class="ruby-identifier">pass</span>&#x000A;&#x000A;    <span class="ruby-comment"># Change response status codes before returning.</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span>(<span class="ruby-constant">RackAppBar</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">response</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] = <span class="ruby-value">200</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">201</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
           </div>
           <div id='context'>
           </div>
@@ -55,20 +55,6 @@
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
       </div>

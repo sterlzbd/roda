@@ -52,22 +52,22 @@
                 <a name='method-i-run'></a>
                 <div class='synopsis'>
                   <span class='name'>run</span>
-                  <span class='arguments'>(app, opts=RodaPlugins::OPTS)</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
                   <p>If a block is given, yield the rack response array to it.  The response can
                   be modified before it is returned by the current app.</p>
                   
-                  <p>If the <code>:not_found=&gt;:pass</code> option is given, and the rack
-                  response returned by the app is a 404 response, do not return the response,
-                  continue routing normally.</p>
+                  <p>If the <code>not_found: :pass</code> option is given, and the rack response
+                  returned by the app is a 404 response, do not return the response, continue
+                  routing normally.</p>
                 </div>
                 <div class='source'>
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-run-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/run_handler.rb, line 37</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>){<span class="ruby-keyword">super</span>(<span class="ruby-identifier">app</span>)}&#x000A;  <span class="ruby-keyword">yield</span> <span class="ruby-identifier">res</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;  <span class="ruby-identifier">throw</span>(<span class="ruby-value">:halt</span>, <span class="ruby-identifier">res</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:not_found</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:pass</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">res</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">404</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-run-source'><span class="ruby-comment"># File lib/roda/plugins/run_handler.rb, line 34</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>){<span class="ruby-keyword">super</span>(<span class="ruby-identifier">app</span>)}&#x000A;  <span class="ruby-keyword">yield</span> <span class="ruby-identifier">res</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;  <span class="ruby-identifier">throw</span>(<span class="ruby-value">:halt</span>, <span class="ruby-identifier">res</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:not_found</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:pass</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">res</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">404</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

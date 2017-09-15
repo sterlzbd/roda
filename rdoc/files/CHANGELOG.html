@@ -29,12 +29,81 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2017-08-16 07:55:22 -0700</span>
+          <span class='datetime'>2017-09-15 08:13:40 -0700</span>
         </div>
       </div>
       <div id='content'>
         <div id='text'>
           <div id='description'>
+            
+            <h1 id="label-3.0.0+-282017-09-15-29">3.0.0 (2017-09-15)<span><a href="#label-3.0.0+-282017-09-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+            <ul><li>
+            <p>Make defined symbol_matcher and hash_matcher match methods private
+            (jeremyevans)</p>
+            </li><li>
+            <p>Use public_send instead of send unless calling private methods is expected
+            (jeremyevans)</p>
+            </li><li>
+            <p>Compute multi_run regexp when freezing app to avoid thread safety issues at
+            runtime (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated support for using undefined multi_route namespaces when
+            routing (jeremyevans)</p>
+            </li><li>
+            <p>Make it possible to reset :include_request options to false for json and
+            json_parser plugins (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate RodaRequest#placeholder_string_matcher? private method
+            (jeremyevans)</p>
+            </li><li>
+            <p>Deprecate Roda.thread_safe_cache, use RodaCache directly (jeremyevans)</p>
+            </li><li>
+            <p>Make using an app as middleware always create a subclass of the app
+            (jeremyevans)</p>
+            </li><li>
+            <p>Enable SHA256 subresource integrity by default in assets plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Make subclassing a roda app always inherit the render cache (jeremyevans)</p>
+            </li><li>
+            <p>Make :cache=&gt;nil render plugin option still allow caching via :cache
+            render method option (jeremyevans)</p>
+            </li><li>
+            <p>Make content_for plugin append to existing content by default (jeremyevans)</p>
+            </li><li>
+            <p>Make :host matcher in the header_matchers plugin always yield captures if
+            given a regexp (jeremyevans)</p>
+            </li><li>
+            <p>Make :header matcher in the header_matchers plugin now always prefix header
+            with HTTP_ (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated support for locals handling at the plugin level in the
+            render plugin (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated support for handling locals in the view_options plugin
+            (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated support for :ext option in render plugin (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated view_subdirs alias for view_options plugin (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated support for EventMachine and Stream#callback method in
+            the streaming plugin (jeremyevans)</p>
+            </li><li>
+            <p>Drop support for ruby 1.8.7 (jeremyevans)</p>
+            </li><li>
+            <p>Make using an unsupported matcher raise error by default (jeremyevans)</p>
+            </li><li>
+            <p>Make having a match/route block return an unsupported value raise error by
+            default (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated :format, :opt, and :optd symbol matchers in
+            symbol_matchers plugin (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated support for placeholders in string matchers (jeremyevans)</p>
+            </li><li>
+            <p>Remove deprecated constants and plugins (jeremyevans)</p>
+            </li></ul>
             
             <h1 id="label-2.29.0+-282017-08-16-29">2.29.0 (2017-08-16)<span><a href="#label-2.29.0+-282017-08-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
             <ul><li>

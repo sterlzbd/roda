@@ -43,14 +43,14 @@
             <p>The public plugin recognizes the application&#39;s :root option, and
             defaults to using the <code>public</code> subfolder of the
             application&#39;s <code>:root</code> option.  If the application&#39;s
-            :root option is not set, it defaults to the the <code>public</code> folder
-            in the working directory.  Additionally, if a relative path is provided as
-            the :root option to the plugin, it will be considered relative to the
+            :root option is not set, it defaults to the <code>public</code> folder in
+            the working directory.  Additionally, if a relative path is provided as the
+            :root option to the plugin, it will be considered relative to the
             application&#39;s <code>:root</code> option.</p>
             
             <p>Examples:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">public</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">public</span>, :<span class="ruby-identifier">root=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;static&#39;</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">public</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">public</span>, <span class="ruby-identifier">root</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;static&#39;</span></pre>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -73,16 +73,9 @@
               <div class='name-list'>
                 <table summary='Constants'>
                   <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>NULL_BYTE</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"\0".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>PARSER</td>
                     <td>=</td>
-                    <td class='context-item-value'>RUBY_VERSION >= '1.9' ? URI::DEFAULT_PARSER : URI</td>
+                    <td class='context-item-value'>URI::DEFAULT_PARSER</td>
                     <td>&nbsp;</td>
                     <td class='context-item-desc'></td>
                   </tr>
@@ -123,7 +116,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/public.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">root</span> =  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;public&quot;</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">root</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/public.rb, line 32</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">root</span> =  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;public&quot;</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">root</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -49,17 +49,15 @@
             
             <p>You can pass additional render options via an options hash:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">views=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;partials&#39;</span>)</pre>
+            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, <span class="ruby-identifier">views</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;partials&#39;</span>)</pre>
             
             <p>One additional option supported by is <code>:local</code>, which sets the
             local variable containing the current value to use.  So:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, :<span class="ruby-identifier">local=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">bar</span>)</pre>
+            <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], :<span class="ruby-identifier">foo</span>, <span class="ruby-identifier">local</span><span class="ruby-operator">:</span> :<span class="ruby-identifier">bar</span>)</pre>
             
             <p>Will render the <code>foo</code> template, but the local variable used
-            inside the template will be <code>bar</code>.  You can use
-            <code>:local=&gt;nil</code> to not set a local variable inside the
-            template.</p>
+            inside the template will be <code>bar</code>.  You can use <code>local:&#x000A;nil</code> to not set a local variable inside the template.</p>
           </div>
           <div id='method-list'>
             <h2>Methods</h2>
@@ -77,20 +75,6 @@
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Class methods</h2>
               <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -108,7 +92,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/render_each.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/render_each.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

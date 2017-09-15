@@ -79,12 +79,6 @@
               <li><a href="#method-c-configure">configure</a></li>
               <li><a href="#method-c-load_dependencies">load_dependencies</a></li>
             </ol>
-            <h3>Public Instance</h3>
-            <ol>
-              <li><a href="#method-i-match_symbol_format">match_symbol_format</a></li>
-              <li><a href="#method-i-match_symbol_opt">match_symbol_opt</a></li>
-              <li><a href="#method-i-match_symbol_optd">match_symbol_optd</a></li>
-            </ol>
           </div>
           <div id='context'>
           </div>
@@ -111,7 +105,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:d</span>, <span class="ruby-regexp">/(\d+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:w</span>, <span class="ruby-regexp">/(\w+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:rest</span>, <span class="ruby-regexp">/(.*)/</span>)&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:verbatim_string_matcher</span>]&#x000A;    <span class="ruby-comment"># RODA3: Remove</span>&#x000A;    <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-keyword">def</span> <span class="ruby-identifier">match_symbol_format</span>&#x000A;        <span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;Implicit use of the :format symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :format symbol matcher, add the following code to your Roda class: symbol_matcher(:format, /(?:\.(\w+))?/)&#39;</span>)&#x000A;        <span class="ruby-regexp">/(?:\.(\w+))?/</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-keyword">def</span> <span class="ruby-identifier">match_symbol_opt</span>&#x000A;        <span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;Implicit use of the :opt symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :opt symbol matcher, add the following code to your Roda class: symbol_matcher(:opt, /(?:\/([^\/]+))?/)&#39;</span>)&#x000A;        <span class="ruby-regexp">/(?:\/([^\/]+))?/</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-keyword">def</span> <span class="ruby-identifier">match_symbol_optd</span>&#x000A;        <span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;Implicit use of the :optd symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :optd symbol matcher, add the following code to your Roda class: symbol_matcher(:optd, /(?:\/(\d+))?/)&#39;</span>)&#x000A;        <span class="ruby-regexp">/(?:\/(\d+))?/</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:d</span>, <span class="ruby-regexp">/(\d+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:w</span>, <span class="ruby-regexp">/(\w+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:rest</span>, <span class="ruby-regexp">/(.*)/</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
               <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -128,55 +122,6 @@
                     [show source]
                   </a>
                   <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 40</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_symbol_regexp_matchers</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-match_symbol_format'>
-                <a name='method-i-match_symbol_format'></a>
-                <div class='synopsis'>
-                  <span class='name'>match_symbol_format</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-match_symbol_format-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-match_symbol_format-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 52</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_symbol_format</span>&#x000A;  <span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;Implicit use of the :format symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :format symbol matcher, add the following code to your Roda class: symbol_matcher(:format, /(?:\.(\w+))?/)&#39;</span>)&#x000A;  <span class="ruby-regexp">/(?:\.(\w+))?/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-match_symbol_opt'>
-                <a name='method-i-match_symbol_opt'></a>
-                <div class='synopsis'>
-                  <span class='name'>match_symbol_opt</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-match_symbol_opt-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-match_symbol_opt-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 57</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_symbol_opt</span>&#x000A;  <span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;Implicit use of the :opt symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :opt symbol matcher, add the following code to your Roda class: symbol_matcher(:opt, /(?:\/([^\/]+))?/)&#39;</span>)&#x000A;  <span class="ruby-regexp">/(?:\/([^\/]+))?/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-match_symbol_optd'>
-                <a name='method-i-match_symbol_optd'></a>
-                <div class='synopsis'>
-                  <span class='name'>match_symbol_optd</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-match_symbol_optd-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-match_symbol_optd-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 62</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">match_symbol_optd</span>&#x000A;  <span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span>(<span class="ruby-string">&#39;Implicit use of the :optd symbol matcher is deprecated and will be removed in Roda 3.  If you want to use the :optd symbol matcher, add the following code to your Roda class: symbol_matcher(:optd, /(?:\/(\d+))?/)&#39;</span>)&#x000A;  <span class="ruby-regexp">/(?:\/(\d+))?/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

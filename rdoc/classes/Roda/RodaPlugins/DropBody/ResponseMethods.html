@@ -51,30 +51,9 @@
               <div class='name-list'>
                 <table summary='Constants'>
                   <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CONTENT_LENGTH</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"Content-Length".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>CONTENT_TYPE</td>
-                    <td>=</td>
-                    <td class='context-item-value'>"Content-Type".freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
                     <td class='context-item-name'>DROP_BODY_STATUSES</td>
                     <td>=</td>
                     <td class='context-item-value'>[100, 101, 102, 204, 205, 304].freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>EMPTY_BODY</td>
-                    <td>=</td>
-                    <td class='context-item-value'>[].freeze</td>
                     <td>&nbsp;</td>
                     <td class='context-item-desc'></td>
                   </tr>
@@ -98,7 +77,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-finish-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-finish-source'><span class="ruby-comment"># File lib/roda/plugins/drop_body.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">finish</span>&#x000A;  <span class="ruby-identifier">r</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-constant">DROP_BODY_STATUSES</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">r</span>[<span class="ruby-value">0</span>])&#x000A;    <span class="ruby-identifier">r</span>[<span class="ruby-value">2</span>] = <span class="ruby-constant">EMPTY_ARRAY</span>&#x000A;    <span class="ruby-identifier">h</span> = <span class="ruby-identifier">r</span>[<span class="ruby-value">1</span>]&#x000A;    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Length&quot;</span>)&#x000A;    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Type&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-finish-source'><span class="ruby-comment"># File lib/roda/plugins/drop_body.rb, line 17</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">finish</span>&#x000A;  <span class="ruby-identifier">r</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-constant">DROP_BODY_STATUSES</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">r</span>[<span class="ruby-value">0</span>])&#x000A;    <span class="ruby-identifier">r</span>[<span class="ruby-value">2</span>] = <span class="ruby-constant">EMPTY_ARRAY</span>&#x000A;    <span class="ruby-identifier">h</span> = <span class="ruby-identifier">r</span>[<span class="ruby-value">1</span>]&#x000A;    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Length&quot;</span>)&#x000A;    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Type&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

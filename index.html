@@ -184,7 +184,7 @@ class App &lt; Roda
       end
 
       r.post do
-        @artist.update(r['artist'])
+        @artist.update(r.params['artist'])
         r.redirect
       end
 
@@ -248,7 +248,7 @@ end
 
 <h3>Immutable</h3>
 
-<p>In production use, Roda applications are designed to be frozen (using the standard <span class="code">freeze</span> method), which freezes all internal datastructures (except thead-safe caches used at runtime).  This avoids possible thread-safety issues when using Roda.</p>
+<p>In production use, Roda applications are designed to be frozen (using the standard <span class="code">freeze</span> method), which freezes all internal datastructures (except thead-safe caches used at runtime).  Using this reduces the possibility of thread-safety issues when using Roda, by making attempts to modify global settings during runtime raise an error.</p>
 
     </div>
   </body>

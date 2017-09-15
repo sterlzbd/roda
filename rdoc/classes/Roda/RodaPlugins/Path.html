@@ -100,13 +100,6 @@
                     <td>&nbsp;</td>
                     <td class='context-item-desc'></td>
                   </tr>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
                 </table>
               </div>
             </div>
@@ -116,7 +109,7 @@
                 <a name='method-c-configure'></a>
                 <div class='synopsis'>
                   <span class='name'>configure</span>
-                  <span class='arguments'>(app, opts=RodaPlugins::OPTS)</span>
+                  <span class='arguments'>(app, opts=OPTS)</span>
                 </div>
                 <div class='description'>
                   
@@ -130,7 +123,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/path.rb, line 71</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_by_name</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:by_name</span>, <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;development&#39;</span>)&#x000A;    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_classes</span>] <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">path_block</span>(<span class="ruby-constant">String</span>)&#x000A;      <span class="ruby-identifier">path</span>(<span class="ruby-constant">String</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>}&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/path.rb, line 68</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_by_name</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:by_name</span>, <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;development&#39;</span>)&#x000A;    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_classes</span>] <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">path_block</span>(<span class="ruby-constant">String</span>)&#x000A;      <span class="ruby-identifier">path</span>(<span class="ruby-constant">String</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>}&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

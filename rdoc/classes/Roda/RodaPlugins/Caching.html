@@ -53,12 +53,12 @@
             <code>expires</code> response methods.  The <code>cache_control</code>
             method sets the Cache-Control header using the given hash:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">cache_control</span> :<span class="ruby-identifier">public=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>, :<span class="ruby-identifier">max_age=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">60</span>&#x000A;<span class="ruby-comment"># Cache-Control: public, max-age=60</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">cache_control</span> <span class="ruby-identifier">public</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>, <span class="ruby-identifier">max_age</span><span class="ruby-operator">:</span> <span class="ruby-value">60</span>&#x000A;<span class="ruby-comment"># Cache-Control: public, max-age=60</span></pre>
             
             <p>The <code>expires</code> method is similar, but in addition to setting the
             HTTP 1.1 Cache-Control header, it also sets the HTTP 1.0 Expires header:</p>
             
-            <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">expires</span> <span class="ruby-value">60</span>, :<span class="ruby-identifier">public=</span><span class="ruby-operator">&gt;</span><span class="ruby-keyword">true</span>&#x000A;<span class="ruby-comment"># Cache-Control: public, max-age=60</span>&#x000A;<span class="ruby-comment"># Expires: Mon, 29 Sep 2014 21:25:47 GMT</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">expires</span> <span class="ruby-value">60</span>, <span class="ruby-identifier">public</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>&#x000A;<span class="ruby-comment"># Cache-Control: public, max-age=60</span>&#x000A;<span class="ruby-comment"># Expires: Mon, 29 Sep 2014 21:25:47 GMT</span></pre>
             
             <p>The implementation was originally taken from Sinatra, which is also
             released under the MIT License:</p>
@@ -94,20 +94,6 @@
             </ol>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>OPTS</td>
-                    <td>=</td>
-                    <td class='context-item-value'>{}.freeze</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
       </div>
