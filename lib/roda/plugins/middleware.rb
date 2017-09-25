@@ -35,7 +35,9 @@ class Roda
     #
     # It is possible to use the Roda app as a regular app even when using
     # the middleware plugin.  Using an app as middleware automatically creates
-    # a subclass of the app for the middleware.
+    # a subclass of the app for the middleware.  Because a subclass is automatically
+    # created when the app is used as middleware, any configuration of the app
+    # should be done before using it as middleware instead of after.
     #
     # You can support configurable middleware by passing a block when loading
     # the plugin:
