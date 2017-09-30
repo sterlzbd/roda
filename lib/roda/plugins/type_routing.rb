@@ -27,7 +27,7 @@ class Roda
     # /a :: HTML, JSON, or XML response, depending on the Accept header
     #
     # The response +Content-Type+ header will be set to a suitable value when
-    # the block is matched.
+    # the +r.html+, +r.json+, or +r.xml+ block is matched.
     #
     # Note that if no match is found, code will continue to execute, which can
     # result in unexpected behaviour.  This should only happen if you do not
@@ -44,7 +44,11 @@ class Roda
     #     end
     #   end
     #
-    # This works correctly because Roda assumes the html type by default.
+    # This works correctly because Roda's default Content-Type is text/html. Note that
+    # if you use this approach, the type_routing plugin's :html content type will not be
+    # used for html responses, since you aren't using an +r.html+ block.  Instead, the
+    # Content-Type header will be set to Roda's default (which you can override via
+    # the default_headers plugin).
     #
     # To match custom extensions, use the :types option:
     #
