@@ -1,5 +1,7 @@
 = master
 
+* Handle ExecJS::RuntimeUnavailable when testing for javascript compression support using uglifier (jeremyevans)
+
 * Remove deprecated Roda.thread_safe_cache and RodaRequest#placeholder_string_matcher? methods (jeremyevans)
 
 = 3.0.0 (2017-09-15)

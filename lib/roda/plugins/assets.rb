@@ -556,7 +556,12 @@ class Roda
 
         # Compress the JS using Uglifier, requires javascript runtime
         def compress_js_uglifier(content)
-          require 'uglifier'
+          begin
+            require 'uglifier'
+          rescue => e
+            raise CompressorNotFound, "#{e.class}: #{e.message}", e.backtrace
+          end
+
           Uglifier.compile(content)
         end
 
