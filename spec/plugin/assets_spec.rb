@@ -180,7 +180,23 @@ if run_tests
       js.must_include('console.log')
     end
 
-    it 'should handle rendering assets, linking to them, and accepting requests for them  when :add_script_name app option is used' do
+    it 'should handle rendering assets, linking to them, and accepting requests for them when :timestamp_paths plugin option is used' do
+      app.plugin :assets, :timestamp_paths=>true
+      html = body('/test')
+      html.scan(/<link/).length.must_equal 2
+      html =~ %r{href="(/assets/css/\d+/app\.scss)"}
+      css = body($1)
+      html =~ %r{href="(/assets/css/\d+/raw\.css)"}
+      css2 = body($1)
+      html.scan(/<script/).length.must_equal 1
+      html =~ %r{src="(/assets/js/\d+/head/app\.js)"}
+      js = body($1)
+      css.must_match(/color: red;/)
+      css2.must_match(/color: blue;/)
+      js.must_include('console.log')
+    end
+
+    it 'should handle rendering assets, linking to them, and accepting requests for them when :add_script_name app option is used' do
       app.opts[:add_script_name] = true
       app.plugin :assets
       html = body('/test', 'SCRIPT_NAME'=>'/foo')

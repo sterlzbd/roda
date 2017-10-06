@@ -1,5 +1,7 @@
 = master
 
+* Add :timestamp_paths option to assets plugin to include timestamps in paths in non-compiled mode (jeremyevans)
+
 * Handle ExecJS::RuntimeUnavailable when testing for javascript compression support using uglifier (jeremyevans)
 
 * Remove deprecated Roda.thread_safe_cache and RodaRequest#placeholder_string_matcher? methods (jeremyevans)

@@ -294,6 +294,10 @@ class Roda
     #         :sha256, :sha384, or :sha512 depending on which hash algorithm you want to use.  This changes the
     #         hash algorithm that Roda will use when naming compiled asset files. The default is :sha256, you
     #         can use nil to disable subresource integrity.
+    # :timestamp_paths :: Include the timestamp of assets in asset paths in non-compiled mode. Doing this can
+    #                     slow down development requests due to additional requests to get last modified times,
+    #                     put it will make sure the paths change in development when there are modifications,
+    #                     which can fix issues when using a caching proxy in non-compiled mode.
     module Assets
       DEFAULTS = {
         :compiled_name    => 'app'.freeze,
@@ -303,6 +307,7 @@ class Roda
         :concat_only      => false,
         :compiled         => false,
         :add_suffix       => false,
+        :timestamp_paths  => false,
         :group_subdirs    => true,
         :compiled_css_dir => nil,
         :compiled_js_dir  => nil,
@@ -615,7 +620,7 @@ class Roda
               dirs.each{|f| asset_dir = asset_dir[f]}
               prefix = "#{dirs.join('/')}/" if o[:group_subdirs]
             end
-            Array(asset_dir).map{|f| "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"}
+            Array(asset_dir).map{|f| "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{"#{asset_last_modified(File.join(o[:"#{stype}_path"], *[prefix, f].compact)).to_i}/" if o[:timestamp_paths]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"}
           end
         end
 
@@ -760,7 +765,7 @@ class Roda
             /#{o[:"compiled_#{type}_prefix"]}(#{Regexp.union(assets)})/
           else
             assets = unnest_assets_hash(o[type])
-            /#{o[:"#{type}_prefix"]}(#{Regexp.union(assets.uniq)})#{o[:"#{type}_suffix"]}/
+            /#{o[:"#{type}_prefix"]}#{"\\d+\/" if o[:timestamp_paths]}(#{Regexp.union(assets.uniq)})#{o[:"#{type}_suffix"]}/
           end
         end
 
