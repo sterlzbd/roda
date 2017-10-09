@@ -1,5 +1,7 @@
 = master
 
+* Make set_layout_locals and set_view_locals in branch_locals plugin work when the other is not called (jeremyevans)
+
 * Add :timestamp_paths option to assets plugin to include timestamps in paths in non-compiled mode (jeremyevans)
 
 * Handle ExecJS::RuntimeUnavailable when testing for javascript compression support using uglifier (jeremyevans)

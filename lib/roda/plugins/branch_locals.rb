@@ -60,7 +60,7 @@ class Roda
         # Make branch specific layout locals override render_locals plugin defaults.
         def layout_locals
           locals = super
-          if @_view_locals
+          if @_layout_locals
             locals = Hash[locals].merge!(@_layout_locals)
           end
           locals

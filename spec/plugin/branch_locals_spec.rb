@@ -17,6 +17,24 @@ describe "branch_locals plugin" do
     body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>About Roda</h1>"
   end
 
+  it "should have set_view_locals work without set_layout_locals" do
+    app(:branch_locals) do
+      set_view_locals :title=>'About Roda'
+      view(:inline=>'<h1><%= title %></h1>', :layout=>{:inline=>"<title>Alternative Layout: <%= title %></title>\n<%= yield %>", :locals=>{:title=>'Home'}})
+    end
+
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>About Roda</h1>"
+  end
+
+  it "should have set_layout_locals work without set_view_locals" do
+    app(:branch_locals) do
+      set_layout_locals :title=>'Home'
+      view(:inline=>'<h1><%= title %></h1>', :locals=>{:title=>'About Roda'}, :layout=>{:inline=>"<title>Alternative Layout: <%= title %></title>\n<%= yield %>"})
+    end
+
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>About Roda</h1>"
+  end
+
   it "should merge multiple calls to set view and layout locals" do
     app(:branch_locals) do
       set_layout_locals :title=>'About Roda'
