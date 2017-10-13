@@ -1,4 +1,4 @@
-= master
+= 3.1.0 (2017-10-13)
 
 * Make set_layout_locals and set_view_locals in branch_locals plugin work when the other is not called (jeremyevans)
 
