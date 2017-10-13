@@ -11,15 +11,29 @@ class Roda
     # The public plugin recognizes the application's :root option, and defaults to
     # using the +public+ subfolder of the application's +:root+ option.  If the application's
     # :root option is not set, it defaults to the +public+ folder in the working
-    # directory.  Additionally, if a relative path is provided as the :root
+    # directory.  Additionally, if a relative path is provided as the +:root+
     # option to the plugin, it will be considered relative to the application's
     # +:root+ option.
     #
     # Examples:
     #
-    #   opts[:root] = '/path/to/app'
+    #   # Use public folder as location of files
     #   plugin :public
+    #
+    #   # Use /path/to/app/static as location of files
+    #   opts[:root] = '/path/to/app'
     #   plugin :public, root: 'static'
+    #
+    #   # Assuming public is the location of files
+    #   r.route do
+    #     # Make GET /images/foo.png look for public/images/foo.png 
+    #     r.public
+    #
+    #     # Make GET /static/images/foo.png look for public/images/foo.png
+    #     r.on(:static) do
+    #       r.public
+    #     end
+    #   end
     module Public
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
       PARSER = URI::DEFAULT_PARSER
