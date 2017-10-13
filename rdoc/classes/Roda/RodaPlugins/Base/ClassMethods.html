@@ -54,7 +54,6 @@
               <li><a href="#method-i-plugin">plugin</a></li>
               <li><a href="#method-i-route">route</a></li>
               <li><a href="#attribute-i-route_block">route_block</a></li>
-              <li><a href="#method-i-thread_safe_cache">thread_safe_cache</a></li>
               <li><a href="#method-i-use">use</a></li>
             </ol>
           </div>
@@ -256,22 +255,6 @@
                   <pre id='method-i-route-source'><span class="ruby-comment"># File lib/roda.rb, line 222</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">route</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@route_block</span> = <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-identifier">build_rack_app</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
-              <div class='method public-instance' id='method-method-i-thread_safe_cache'>
-                <a name='method-i-thread_safe_cache'></a>
-                <div class='synopsis'>
-                  <span class='name'>thread_safe_cache</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-thread_safe_cache-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-thread_safe_cache-source'><span class="ruby-comment"># File lib/roda.rb, line 227</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">thread_safe_cache</span>&#x000A;  <span class="ruby-comment"># :nocov:</span>&#x000A;  <span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">warn</span> <span class="ruby-string">&quot;Roda.thread_safe_cache is deprecated and will be removed from Roda 3.1.&quot;</span>&#x000A;  <span class="ruby-constant">RodaCache</span>.<span class="ruby-identifier">new</span>&#x000A;  <span class="ruby-comment"># :nocov:</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
               <div class='method public-instance' id='method-method-i-use'>
                 <a name='method-i-use'></a>
                 <div class='synopsis'>
@@ -290,7 +273,7 @@
                   <a class='source-toggle' href='#' onclick="toggleCode('method-i-use-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-use-source'><span class="ruby-comment"># File lib/roda.rb, line 238</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">use</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@middleware</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">args</span>, <span class="ruby-identifier">block</span>].<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">build_rack_app</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-use-source'><span class="ruby-comment"># File lib/roda.rb, line 231</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">use</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@middleware</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">args</span>, <span class="ruby-identifier">block</span>].<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">build_rack_app</span>&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

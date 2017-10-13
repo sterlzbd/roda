@@ -29,7 +29,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2017-08-18 07:20:31 -0700</span>
+          <span class='datetime'>2017-10-09 15:48:01 -0700</span>
         </div>
       </div>
       <div id='content'>
@@ -350,7 +350,7 @@
             do that is to use a parameter instead of an optional segment (e.g.
             +/items/123?opt=456+).</p>
             
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">optional_data</span> = <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;opt&#39;</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">optional_data</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;opt&#39;</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>However, if you really do want to use a optional segment, there are a
             couple different ways to use matchers to do so.  One is using an array
