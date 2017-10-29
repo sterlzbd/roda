@@ -53,7 +53,7 @@ class Roda
     # and halts the request.  It takes an optional body:
     #
     #   error           # 500 response, empty boby
-    #   error 501       # 501 reponse, empty body
+    #   error 501       # 501 response, empty body
     #   error 'b'       # 500 response, 'b' body
     #   error 501, 'b'  # 501 response, 'b' body
     #
