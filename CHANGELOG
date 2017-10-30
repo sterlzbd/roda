@@ -1,5 +1,7 @@
 = master
 
+* Use microseconds in asset plugin :timestamp_paths timestamps (jeremyevans)
+
 * Add timestamp_public plugin for serving static files with paths that change based on modify timestamp (jeremyevans)
 
 = 3.1.0 (2017-10-13)

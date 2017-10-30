@@ -620,7 +620,13 @@ class Roda
               dirs.each{|f| asset_dir = asset_dir[f]}
               prefix = "#{dirs.join('/')}/" if o[:group_subdirs]
             end
-            Array(asset_dir).map{|f| "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{"#{asset_last_modified(File.join(o[:"#{stype}_path"], *[prefix, f].compact)).to_i}/" if o[:timestamp_paths]}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"}
+            Array(asset_dir).map do |f|
+              if o[:timestamp_paths]
+                mtime = asset_last_modified(File.join(o[:"#{stype}_path"], *[prefix, f].compact))
+                mtime = "#{sprintf("%i%06i", mtime.to_i, mtime.usec)}/"
+              end
+              "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{mtime}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"
+            end
           end
         end
 
