@@ -40,7 +40,7 @@ describe "timestamp_public plugin" do
     end
 
     mtime = File.mtime('spec/views/about/_test.erb')
-    body.must_equal "/static/#{mtime.to_i}#{mtime.usec}/../views/about/_test.erb"
+    body.must_equal "/static/#{sprintf("%i%06i", mtime.to_i, mtime.usec)}/../views/about/_test.erb"
     status("/static/1/../views/about/_test.erb").must_equal 404
   end
 
