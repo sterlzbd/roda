@@ -45,8 +45,12 @@ class Roda
       # :headers :: A hash of headers to use for statically served files
       # :root :: Use this option for the root of the public directory (default: "public")
       def self.configure(app, opts={})
-        root =  app.expand_path(opts[:root]||"public")
-        app.opts[:public_server] = ::Rack::File.new(root, opts[:headers]||{}, opts[:default_mime] || 'text/plain')
+        if opts[:root]
+          app.opts[:public_root] = app.expand_path(opts[:root])
+        elsif !app.opts[:public_root]
+          app.opts[:public_root] = app.expand_path("public")
+        end
+        app.opts[:public_server] = ::Rack::File.new(app.opts[:public_root], opts[:headers]||{}, opts[:default_mime] || 'text/plain')
         app.opts[:public_gzip] = opts[:gzip]
       end
 
