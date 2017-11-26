@@ -33,6 +33,24 @@ describe "public plugin" do
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
   end
 
+  it "keeps existing :root option if loaded a second time" do
+    app(:bare) do
+      plugin :public, :root=>'spec/views'
+      plugin :public
+
+      route do |r|
+        r.public
+      end
+    end
+
+    body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
+  end
+
+  it "assumes public directory as default :root option" do
+    app(:public){}
+    app.opts[:public_root].must_equal File.expand_path('public')
+  end
+
   it "handles serving gzip files in gzip mode if client supports gzip" do
     app(:bare) do
       plugin :public, :root=>'spec/views', :gzip=>true
