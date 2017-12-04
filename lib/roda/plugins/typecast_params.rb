@@ -130,13 +130,13 @@ class Roda
     # To allow easier access to nested data, there is a +dig+ method:
     #
     #   typecast_params.dig(:int, 'key', 'sub_key')
-    #   typecast_params.dig(:int1, 'key', 0, 'sub_key', 'sub_sub_key')
+    #   typecast_params.dig(:int!, 'key', 0, 'sub_key', 'sub_sub_key')
     #
     # +dig+ will return +nil+ if any access while looking up the nested value returns +nil+.
     # There is also a +dig!+ method, which will raise an Error if +dig+ would return +nil+:
     #
     #   typecast_params.dig!(:int, 'key', 'sub_key')
-    #   typecast_params.dig!(:int1, 'key', 0, 'sub_key', 'sub_sub_key')
+    #   typecast_params.dig!(:int, 'key', 0, 'sub_key', 'sub_sub_key')
     #
     # Note that none of these conversion methods modify +request.params+.  They purely do the
     # conversion and return the converted value.  However, in some cases it is useful to do all
