@@ -13,10 +13,11 @@ class Roda
     # desired type.  While this can be done via manual conversion:
     #
     #   key = request.params['key'].to_i
+    #   key = nil unless key > 0
     #
     # the typecast_params plugin adds a slightly friendly interface:
     #
-    #   key = typecast_params.int('key')
+    #   key = typecast_params.pos_int('key')
     #
     # One advantage of using typecast_params is that access or conversion
     # errors are raised as a specific exception class
@@ -26,7 +27,7 @@ class Roda
     #
     # typecast_params offers support for default values:
     #
-    #   key = typecast_params.int('key', 1)
+    #   key = typecast_params.pos_int('key', 1)
     #
     # The default value is only used if no value has been submitted for the parameter,
     # or if the conversion of the value results in +nil+.  Handling defaults for parameter
@@ -37,7 +38,7 @@ class Roda
     # In many cases, parameters should be required, and if they aren't submitted, that
     # should be considered an error.  typecast_params handles this with ! methods:
     #
-    #   key = typecast_params.int!('key')
+    #   key = typecast_params.pos_int!('key')
     #
     # These ! methods raise an error instead of returning +nil+, and do not allow defaults.
     #
@@ -45,27 +46,27 @@ class Roda
     # done, you can pass an array of keys to a conversion method, and it will return an array
     # of converted values:
     #
-    #   key1, key2 = typecast_params.int(['key1', 'key2'])
+    #   key1, key2 = typecast_params.pos_int(['key1', 'key2'])
     #
     # This is equivalent to:
     #
-    #   key1 = typecast_params.int('key1')
-    #   key2 = typecast_params.int('key2')
+    #   key1 = typecast_params.pos_int('key1')
+    #   key2 = typecast_params.pos_int('key2')
     #
     # The ! methods also support arrays, ensuring that all parameters have a value:
     #
-    #   key1, key2 = typecast_params.int!(['key1', 'key2'])
+    #   key1, key2 = typecast_params.pos_int!(['key1', 'key2'])
     #
     # For handling of array parameters, where all entries in the array use the
     # same conversion, there is an +array+ method which takes the type as the first argument
     # and the keys to convert as the second argument:
     #
-    #   keys = typecast_params.array(:int, 'keys')
+    #   keys = typecast_params.array(:pos_int, 'keys')
     #
     # If you want to ensure that all entries in the array are converted successfully and that
     # there is a value for the array itself, you can use +array!+:
     #
-    #   keys = typecast_params.array!(:int, 'keys')
+    #   keys = typecast_params.array!(:pos_int, 'keys')
     #
     # This will raise an exception if any of the values in the array for parameter +keys+ cannot
     # be converted to integer.
@@ -73,16 +74,20 @@ class Roda
     # Both +array+ and +array!+ support default values which are used if no value is present
     # for the parameter:
     #
-    #   keys = typecast_params.array(:int, 'keys', [])
-    #   keys = typecast_params.array!(:int, 'keys', [])
+    #   keys = typecast_params.array(:pos_int, 'keys', [])
+    #   keys = typecast_params.array!(:pos_int, 'keys', [])
     #
     # You can also pass an array of keys to +array+ or +array!+, if you would like to perform
     # the same conversion on multiple arrays:
     #
-    #   key1, key2 = typecast_params.array!(:int, ['key1', 'key2'])
+    #   key1, key2 = typecast_params.array!(:pos_int, ['key1', 'key2'])
     #
-    # The previous examples have shown use of the +int+ method, which uses +to_i+ to convert the
-    # value to an integer.  There are many other built in methods for type conversion:
+    # The previous examples have shown use of the +pos_int+ method, which uses +to_i+ to convert the
+    # value to an integer, but returns nil if the result integer is not positive.  Unless you need
+    # to handle negative numbers, it is recommended to use +pos_int+ instead of +int+ as +int+ will
+    # convert invalid values to 0 (since that is how <tt>String#to_i</tt> works).
+    #
+    # There are many other built in methods for type conversion:
     #
     # any :: Returns the value as is without conversion
     # str :: Raises if value is not already a string
@@ -93,10 +98,12 @@ class Roda
     #         true :: true, 1, '1', 't', 'true', 'yes', 'y', 'on' # case insensitive
     #         false :: false, 0, '0', 'f', 'false', 'no', 'n', 'off' # case insensitive
     #         If not in one of those formats, raises an error.
-    # int :: Converts value to integer using +to_i+
+    # int :: Converts value to integer using +to_i+ (note that invalid input strings will be
+    #        returned as 0)
     # pos_int :: Converts value using +to_i+, but non-positive values are converted to +nil+
     # Integer :: Converts value to integer using <tt>Kernel::Integer(value, 10)</tt>
-    # float :: Converts value to float using +to_f+
+    # float :: Converts value to float using +to_f+ (note that invalid input strings will be
+    #          returned as 0.0)
     # Float :: Converts value to float using <tt>Kernel::Float(value)</tt>
     # Hash :: Raises if value is not already a hash
     # date :: Converts value to Date using <tt>Date.parse(value)</tt>
@@ -112,31 +119,31 @@ class Roda
     # hashes:
     #
     #   # params: {'key'=>{'sub_key'=>'1'}}
-    #   typecast_params['key'].int!('sub_key') # => 1
+    #   typecast_params['key'].pos_int!('sub_key') # => 1
     #
     # This works to an arbitrary depth:
     #
     #   # params: {'key'=>{'sub_key'=>{'sub_sub_key'=>'1'}}}
-    #   typecast_params['key']['sub_key'].int!('sub_sub_key') # => 1
+    #   typecast_params['key']['sub_key'].pos_int!('sub_sub_key') # => 1
     #
     # And also works with arrays at any depth, if those arrays contain hashes:
     #
     #   # params: {'key'=>[{'sub_key'=>{'sub_sub_key'=>'1'}}]}
-    #   typecast_params['key'][0]['sub_key'].int!('sub_sub_key') # => 1
+    #   typecast_params['key'][0]['sub_key'].pos_int!('sub_sub_key') # => 1
     #
     #   # params: {'key'=>[{'sub_key'=>['1']}]}
-    #   typecast_params['key'][0].array!(:int, 'sub_key') # => [1]
+    #   typecast_params['key'][0].array!(:pos_int, 'sub_key') # => [1]
     #
     # To allow easier access to nested data, there is a +dig+ method:
     #
-    #   typecast_params.dig(:int, 'key', 'sub_key')
-    #   typecast_params.dig(:int!, 'key', 0, 'sub_key', 'sub_sub_key')
+    #   typecast_params.dig(:pos_int, 'key', 'sub_key')
+    #   typecast_params.dig(:pos_int!, 'key', 0, 'sub_key', 'sub_sub_key')
     #
     # +dig+ will return +nil+ if any access while looking up the nested value returns +nil+.
     # There is also a +dig!+ method, which will raise an Error if +dig+ would return +nil+:
     #
-    #   typecast_params.dig!(:int, 'key', 'sub_key')
-    #   typecast_params.dig!(:int, 'key', 0, 'sub_key', 'sub_sub_key')
+    #   typecast_params.dig!(:pos_int, 'key', 'sub_key')
+    #   typecast_params.dig!(:pos_int, 'key', 0, 'sub_key', 'sub_sub_key')
     #
     # Note that none of these conversion methods modify +request.params+.  They purely do the
     # conversion and return the converted value.  However, in some cases it is useful to do all
@@ -150,7 +157,7 @@ class Roda
     #     tp.pos_int!('artist_id')
     #     tp.array!(:pos_int, 'album_ids')
     #     tp['sales'].convert! do |stp|
-    #       tp.int!(['num_sold', 'num_shipped'])
+    #       tp.pos_int!(['num_sold', 'num_shipped'])
     #     end
     #     tp['members'].convert_each! do |stp|
     #       stp.str!(['first_name', 'last_name'])
@@ -183,7 +190,7 @@ class Roda
     #     tp.pos_int!('artist_id')
     #     tp.array!(:pos_int, 'album_ids')
     #     tp['sales'].convert! do |stp|
-    #       tp.int!(['num_sold', 'num_shipped'])
+    #       tp.pos_int!(['num_sold', 'num_shipped'])
     #     end
     #     tp['members'].convert_each! do |stp|
     #       stp.str!(['first_name', 'last_name'])
