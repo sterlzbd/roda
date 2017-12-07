@@ -796,14 +796,6 @@ describe "typecast_params plugin" do
     lambda{tp('a[b][c][d][e]=1&a[b][c][d][f]=').dig!(:int, 'a', 'b', 'c', 'd', %w'e f')}.must_raise @tp_error
   end
 
-  it "#dig and #dig! should be able to get nested values using :[] type" do
-    tp('a[b][c][d][]=1&a[b][c][d][]=2').dig(:[], 'a', 'b', 'c').array(:int, 'd').must_equal [1, 2]
-    tp('a[b][c][d][]=1&a[b][c][d][]=').dig(:[], 'a', 'b', 'c').array(:int, 'd').must_equal [1, nil]
-
-    tp('a[b][c][d][]=1&a[b][c][d][]=2').dig!(:[], 'a', 'b', 'c').array!(:int, 'd').must_equal [1, 2]
-    lambda{tp('a[b][c][d][]=1&a[b][c][d][]=').dig!(:[], 'a', 'b', 'c').array!(:int, 'd')}.must_raise @tp_error
-  end
-
   it "#dig and #dig! should be able to handle arrays using an array for the type" do
     tp('a[b][c][d][]=1&a[b][c][d][]=2').dig([:array, :int], 'a', 'b', 'c', 'd').must_equal [1, 2]
     tp('a[b][c][d][]=1&a[b][c][d][]=').dig([:array, :int], 'a', 'b', 'c', 'd').must_equal [1, nil]
@@ -830,7 +822,8 @@ describe "typecast_params plugin" do
     lambda{tp.dig!(:int, 'c')}.must_raise @tp_error
     lambda{tp.dig!(:int, 'b', 'c')}.must_raise @tp_error
     lambda{tp.dig!(:int, 'c', 'd')}.must_raise @tp_error
-    error{tp.dig!(:int, 'a', 'd', 'c', 'd', 'e')}.keys.must_equal %w'a d c d e'
+    error{tp.dig!(:int, 'a', 'd', 'c', 'd', 'e')}.keys.must_equal %w'a d'
+    error{tp.dig!(:int, 'a', 'b', 'c', 'e', 'e')}.keys.must_equal %w'a b c e'
 
     tp = tp('a[][c][][e]=1')
     tp.dig!(:int, 'a', 0, 'c', 0, 'e').must_equal 1
@@ -876,7 +869,106 @@ describe "typecast_params plugin" do
     error{tp['c'].int!('f')}.param_name.must_equal 'c[f]'
     error{tp('a[b][c][d][e]=1')['a']['b']['c']['d'].date('e')}.param_name.must_equal 'a[b][c][d][e]'
     error{tp('a[][c][][e]=1')['a'][0]['c'][0].date('e')}.param_name.must_equal 'a[][c][][e]'
+    error{tp('a[][c][][e]=1').dig(:date, 'a', 0, 'c', 0, 'e')}.param_name.must_equal 'a[][c][][e]'
   end
+
+  it "Error#param_names should be the name of the parameter in an array" do
+    error{tp.int!('b')}.param_names.must_equal ['b']
+    error{tp.int!(%w'b f')}.param_names.must_equal ['b']
+    error{tp['c'].int!('f')}.param_names.must_equal ['c[f]']
+    error{tp('a[b][c][d][e]=1')['a']['b']['c']['d'].date('e')}.param_names.must_equal ['a[b][c][d][e]']
+    error{tp('a[][c][][e]=1')['a'][0]['c'][0].date('e')}.param_names.must_equal ['a[][c][][e]']
+    error{tp('a[][c][][e]=1').dig(:date, 'a', 0, 'c', 0, 'e')}.param_names.must_equal ['a[][c][][e]']
+  end
+
+  it "Error#param_names should include all errors raised in convert! blocks" do
+    tp = tp('a[][b][][e]=0')
+    error do 
+      tp.convert! do |tp0|
+        tp0['a'].convert! do |tp1|
+          tp1[0].convert! do |tp2|
+            tp2['b'].convert! do |tp3|
+              tp3[0].convert! do |tp4|
+                tp4.pos_int!('e')
+              end
+            end
+          end
+        end
+        tp0.dig!(:pos_int, 'a', 0, 'b', 0, %w'f g')
+        tp0.dig!(:pos_int, 'a', 0, 'b')
+        tp0.int!('c')
+        tp0.array!(:int, %w'd e')
+        tp0['b']
+      end
+    end.param_names.must_equal %w'a[][b][][e] a[][b][][f] a[][b][][g] a[][b] c d e b'
+  end
+
+  it "Error#param_names should handle #[] failures by skipping the rest of the block" do
+    tp = tp('a[][b][][e]=0')
+    error do 
+      tp.convert! do |tp0|
+        tp0['b']
+        tp0.int!('c')
+      end
+    end.param_names.must_equal %w'b'
+
+    error do 
+      tp.convert! do |tp0|
+        tp0['a'][0].convert! do |tp1|
+          tp1['c']
+          tp1.int!('d')
+        end
+        tp0.int!('c')
+      end
+    end.param_names.must_equal %w'a[][c] c'
+  end
+
+  it "Error#param_names should handle array! with array of keys where one of the keys is not present" do
+    error do
+      tp('e[]=0').convert! do |tp0|
+          tp0.array!(:pos_int, %w'd e')
+      end
+    end.param_names.must_equal %w'd e'
+  end
+
+  it "Error#param_names should handle keys given to convert" do
+    tp = tp('e[][b][][e]=0')
+    error do 
+      tp.convert! do |tp0|
+        tp0.convert!(['a', 0, 'b', 0]) do |tp1|
+          tp1.pos_int!('e')
+        end
+        tp0.convert!('f') do |tp1|
+          tp1.dig!(:pos_int, 0, 'b', 0, %w'f g')
+        end
+        tp0.dig!(:pos_int, 'e', 0, 'b')
+        tp0.int!('c')
+        tp0.array!(:int, 'd')
+      end
+    end.param_names.must_equal %w'a f e[][b] c d'
+  end
+
+  it "Error#param_names should include all errors raised in convert_each! blocks" do
+    error do 
+      tp('a[][b]=0&a[][b]=1')['a'].convert_each! do |tp0|
+        tp0.dig!(:pos_int, 'b', 0, 'e')
+        tp0.dig!(:int, 'b', 0, %w'f g')
+        tp0.int!(%w'd e')
+        tp0.pos_int!('b')
+        tp0['c']
+      end
+    end.param_names.must_equal %w'a[][b] a[][b] a[][d] a[][e] a[][b] a[][c] a[][b] a[][b] a[][d] a[][e] a[][c]'
+  end
+
+  it "Error#param_names should include all errors for invalid keys used in convert_each!" do
+    tp = tp('a[0][b]=1&a[0][c]=2&a[1][b]=3&a[1][c]=4')
+    error do
+      tp['a'].convert_each!(:keys=>%w'0 2 3') do |tp0|
+        tp0.int(%w'b c')
+      end
+    end.param_names.must_equal %w'a[2] a[3]'
+  end
+
 end
 
 describe "typecast_params plugin with customized params" do 

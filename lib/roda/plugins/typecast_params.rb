@@ -80,19 +80,19 @@ class Roda
     # You can also pass an array of keys to +array+ or +array!+, if you would like to perform
     # the same conversion on multiple arrays:
     #
-    #   key1, key2 = typecast_params.array!(:pos_int, ['key1', 'key2'])
+    #   foo_ids, bar_ids = typecast_params.array!(:pos_int, ['foo_ids', 'bar_ids'])
     #
     # The previous examples have shown use of the +pos_int+ method, which uses +to_i+ to convert the
-    # value to an integer, but returns nil if the result integer is not positive.  Unless you need
+    # value to an integer, but returns nil if the resulting integer is not positive.  Unless you need
     # to handle negative numbers, it is recommended to use +pos_int+ instead of +int+ as +int+ will
     # convert invalid values to 0 (since that is how <tt>String#to_i</tt> works).
     #
-    # There are many other built in methods for type conversion:
+    # There are many built in methods for type conversion:
     #
     # any :: Returns the value as is without conversion
     # str :: Raises if value is not already a string
-    # nonempty_str :: Raises if value is not already a string, strips the string, and converts
-    #                 the empty string to +nil+
+    # nonempty_str :: Raises if value is not already a string, and converts
+    #                 the empty string or string containing only whitespace to +nil+
     # bool :: Converts entry to boolean if in one of the recognized formats:
     #         nil :: nil, ''
     #         true :: true, 1, '1', 't', 'true', 'yes', 'y', 'on' # case insensitive
@@ -156,11 +156,13 @@ class Roda
     #     tp.int('page')
     #     tp.pos_int!('artist_id')
     #     tp.array!(:pos_int, 'album_ids')
-    #     tp['sales'].convert! do |stp|
+    #     tp.convert!('sales') do |stp|
     #       tp.pos_int!(['num_sold', 'num_shipped'])
     #     end
-    #     tp['members'].convert_each! do |stp|
-    #       stp.str!(['first_name', 'last_name'])
+    #     tp.convert!('members') do |mtp|
+    #       mtp.convert_each! do |stp|
+    #         stp.str!(['first_name', 'last_name'])
+    #       end
     #     end
     #   end
     #
@@ -189,11 +191,13 @@ class Roda
     #     tp.int('page')
     #     tp.pos_int!('artist_id')
     #     tp.array!(:pos_int, 'album_ids')
-    #     tp['sales'].convert! do |stp|
+    #     tp.convert!('sales') do |stp|
     #       tp.pos_int!(['num_sold', 'num_shipped'])
     #     end
-    #     tp['members'].convert_each! do |stp|
-    #       stp.str!(['first_name', 'last_name'])
+    #     tp.convert!('members') do |mtp|
+    #       mtp.convert_each! do |stp|
+    #         stp.str!(['first_name', 'last_name'])
+    #       end
     #     end
     #   end
     #
@@ -216,22 +220,29 @@ class Roda
     # data (string keys), to trusted data that can be used internally (trusted in the sense that
     # the expected types are used).
     #
+    # Note that if there are multiple conversion Error raised inside a +convert!+ or +convert_each!+ 
+    # block, they are recorded and a single TypecastParams::Error instance is raised after
+    # processing the block.  TypecastParams::Error#params_names can be called on the exception to
+    # get an array of all parameter names with conversion issues.
+    #
+    # Because of how +convert!+ and +convert_each!+ work, you should avoid calling
+    # TypecastParams::Params#[] inside the block you pass to these methods, because if the #[]
+    # call fails, it will skip the reminder of the block.
+    #
+    # Be aware that when you use +convert!+ and +convert_each!+, the conversion methods called
+    # inside the block may return nil if there is a error raised, and nested calls to
+    # +convert!+ and +convert_each!+ may not return values.
+    #
     # When loading the typecast_params plugin, a subclass of +TypecastParams::Params+ is created
     # specific to the Roda application.  You can add support for custom types by passing a block
     # when loading the typecast_params plugin.  This block is executed in the context of the
-    # subclass, and calling +handle_type+ in the block can be used to add conversion methods:
+    # subclass, and calling +handle_type+ in the block can be used to add conversion methods.
+    # +handle_type+ accepts a type name and the block used to convert the type:
     #
     #   plugin :typecast_params do
-    #     handle_type(:decimal) do |value|
-    #       case value
-    #       when ''
-    #         nil
-    #       when String, Integer
-    #         BigDecimal.new(value)
-    #       when Float
-    #         BigDecimal.new(value, 15)
-    #       else
-    #         raise ArgumentError, "invalid value for decimal: #{value.inspect}"
+    #     handle_type(:album) do |value|
+    #       if id = convert_pos_int(val)
+    #         Album[id]
     #       end
     #     end
     #   end
@@ -239,6 +250,9 @@ class Roda
     # By design, typecast_params only deals with string keys, it is not possible to use
     # symbol keys as arguments to the conversion methods and have them converted.
     module TypecastParams
+      # Sentinal value for whether to raise exception during #process
+      CHECK_NIL = Object.new.freeze
+
       # Exception class for errors that are caused by misuse of the API by the programmer.
       # These are different from +Error+ which are raised because the submitted parameters
       # do not match what is expected.  Should probably be treated as a 5xx error.
@@ -247,29 +261,31 @@ class Roda
       # Exception class for errors that are due to the submitted parameters not matching
       # what is expected.  Should probably be treated as a 4xx error.
       class Error < RodaError
-        # Create a new instance with the keys and message set, and optionally using
-        # the given backtrace.
-        def self.create(keys, message, backtrace=nil)
-          e = new(message)
-          e.keys = keys
-          e.set_backtrace(backtrace) if backtrace
-          e
-        end
-
         # Set the keys in the given exception.  If the exception is not already an
         # instance of the class, create a new instance to wrap it.
         def self.set_keys(keys, e)
           if e.is_a?(self)
-            e.keys = keys
+            e.keys ||= keys
             e
           else
-            create(keys, "#{e.class}: #{e.message}", e.backtrace)
+            backtrace = e.backtrace
+            e = new("#{e.class}: #{e.message}")
+            e.keys = keys
+            e.set_backtrace(backtrace) if backtrace
+            e
           end
         end
 
         # The keys used to access the parameter that caused the error.  This is an array
         # that can be splatted to +dig+ to get the value of the parameter causing the error.
         attr_accessor :keys
+
+        # If not nil, this is an array of all other errors that were raised with this
+        # error.  This is only populated when Params#convert! is used, and contains all
+        # of the captured exceptions that were raised by the convert! block.  This allows
+        # you to use convert! to process a form input, and if an exception is raised, it
+        # can provide an array of all parameter names for parameters with problems.
+        attr_accessor :all_errors
 
         # The likely parameter name where the contents were not expected.  This is
         # designed for cases where the parameter was submitted with the typical
@@ -302,6 +318,19 @@ class Roda
             keys.first
           end
         end
+
+        # An array of all parameter names for parameters where the context were not
+        # expected.  If Params#convert! was not used, this will be an array containing
+        # #param_name.  If Params#convert! was used and multiple exceptions were
+        # captured inside the convert! block, this will contain the parameter names
+        # related to all captured exceptions.
+        def param_names
+          names = [param_name]
+          if all = all_errors
+            names.concat(all.map(&:param_name))
+          end
+          names
+        end
       end
 
       # Class handling conversion of submitted parameters to desired types.
@@ -312,7 +341,7 @@ class Roda
         # * foo(key, default=nil)
         # * foo!(key)
         # * convert_foo(value) # private
-        # * convert_array_foo(value) # private
+        # * _convert_array_foo(value) # private
         #
         # This method is used to define all type conversions, even the built
         # in ones.  It can be called in subclasses to setup subclass-specific
@@ -334,7 +363,7 @@ class Roda
           end
 
           define_method(:"#{type}!") do |key|
-            check_value!(key, send(type, key))
+            send(type, key, CHECK_NIL)
           end
         end
 
@@ -421,10 +450,6 @@ class Roda
           v
         end
 
-        # The current nesting level, showing where the current parameter object is in the
-        # parameter hierarchy.
-        attr_reader :nesting
-
         # Set the object used for converting.  Conversion methods will convert members of
         # the passed object.
         def initialize(obj)
@@ -433,9 +458,9 @@ class Roda
             # nothing
           else
             if @nesting
-              raise Error.create(keys(nil), "value of #{param_name(nil)} parameter not an array or hash: #{obj.inspect}")
+              handle_error(nil, Error.new("value of #{param_name(nil)} parameter not an array or hash: #{obj.inspect}"), true)
             else
-              raise Error.create(keys(nil), "parameters given not an array or hash: #{obj.inspect}")
+              handle_error(nil, Error.new("parameters given not an array or hash: #{obj.inspect}"), true)
             end
           end
         end
@@ -464,19 +489,29 @@ class Roda
           end
 
           if @obj.is_a?(Array)
-            raise Error.create(keys(nil), "invalid use of non-integer key for accessing array: #{key.inspect}") unless key.is_a?(Integer)
+            unless key.is_a?(Integer)
+              handle_error(key, Error.new("invalid use of non-integer key for accessing array: #{key.inspect}"), true)
+            end
           else
-            raise Error.create(keys(nil), "invalid use of integer key for accessing hash: #{key}") if key.is_a?(Integer)
+            if key.is_a?(Integer)
+              handle_error(key, Error.new("invalid use of integer key for accessing hash: #{key}"), true)
+            end
           end
 
           v = @obj[key]
           v = yield if v.nil? && block_given?
 
-          sub = @subs[key] = self.class.nest(v, Array(@nesting) + [key])
-          sub.start_capture(:symbolize=>@capture == :symbolize) if @capture
+          begin
+            sub = self.class.nest(v, Array(@nesting) + [key])
+          rescue => e
+            handle_error(key, e, true)
+          end
+
+          @subs[key] = sub
+          sub.sub_capture(@capture, @symbolize)
           sub
         end
-        
+
         # Return the nested value for key. If there is no nested_value for +key+,
         # calls the block to return the value, or returns nil if there is no block given.
         def fetch(key)
@@ -484,19 +519,23 @@ class Roda
         end
 
         # Captures conversions inside the given block, and returns a hash of all conversions,
-        # including conversions of subkeys.  Options:
+        # including conversions of subkeys.  +keys+ should be an array of subkeys to access,
+        # or nil to convert the current object. If +keys+ is given as a hash, it is used as
+        # the options hash. Options:
         #
         # :symbolize :: Convert any string keys in the resulting hash and for any
         #               conversions below
-        def convert!(opts=OPTS)
-          capturing_started = start_capture(opts)
+        def convert!(keys=nil, opts=OPTS)
+          if keys.is_a?(Hash)
+            opts = keys
+            keys = nil
+          end
 
-          yield self
-
-          nested_params
-        ensure
-          # Only unset capturing if capturing was not already started.
-          @capture = false if capturing_started
+          _capture!(:nested_params, opts) do
+            if sub = subkey(Array(keys).dup, true)
+              yield sub
+            end
+          end
         end
 
         # Runs convert! for each key specified by the :keys option.  If no :keys option is given and the object is an array,
@@ -506,13 +545,27 @@ class Roda
         #
         # :keys :: The keys to extract from the object
         def convert_each!(opts=OPTS, &block)
-          unless keys = opts[:keys]
-            raise Error.create(keys(nil), "convert_each! called on non-array") unless @obj.is_a?(Array)
-            keys = (0...@obj.length)
-          end
+          np = !@capture
 
-          keys.map do |i|
-            self[i].convert!(opts, &block)
+          _capture!(nil, opts) do
+            unless keys = opts[:keys]
+              unless @obj.is_a?(Array)
+                handle_error(nil, Error.new("convert_each! called on non-array"))
+                next 
+              end
+              keys = (0...@obj.length)
+            end
+
+            keys.map do |i|
+              begin
+                if v = subkey([i], true)
+                  yield v
+                  v.nested_params if np 
+                end
+              rescue => e
+                handle_error(i, e)
+              end
+            end
           end
         end
 
@@ -526,44 +579,20 @@ class Roda
         # Returns nil if any of the values are not present or not the expected type. If the nest path results
         # in an object that is not an array or hash, then raises an Error.
         #
-        # It is possible to use +:[]+ as the +type+, in which case this will return a nested value that
-        # other methods can be called on:
-        #
-        #   tp.dig(:[], 'foo', 'bar')        # tp['foo']['bar']
-        # 
         # You can use +dig+ to get access to nested arrays:
         #
         #   tp.dig([:array, :int], 'foo', 'bar', 'baz')  # tp['foo']['bar'].array(:int, 'baz')
         def dig(type, *nest, key)
-          if type.is_a?(Array)
-            meth = type.first
-          else
-            meth = type
-            type = [type]
+          if v = subkey(nest, false)
+            v.send(*dig_send_args(type), key)
           end
-
-          raise ProgrammerError, "no typecast_params type registered for #{meth.inspect}" unless respond_to?(meth)
-          cur = self
-
-          nest.each do |k|
-            case k
-            when String
-              return unless cur.obj.is_a?(Hash)
-              cur = cur.fetch(k){return}
-            when Integer
-              return unless cur.obj.is_a?(Array)
-              cur = cur.fetch(k){return}
-            else
-              raise ProgrammerError, "invalid argument passed to dig: #{k}"
-            end
-          end
-
-          cur.send(*type, key)
         end
 
         # Similar to +dig+, but raises an Error instead of returning +nil+ if no value is found.
         def dig!(type, *nest, key)
-          check_value!(key, dig(type, *nest, key), Array(nesting)+nest)
+          if v = subkey(nest, true)
+            v.send(*dig_send_args(type), key, CHECK_NIL)
+          end
         end
 
         # Convert the value of +key+ to an array of values of the given +type+. If +default+ is
@@ -579,14 +608,14 @@ class Roda
         # Call +array+ with the +type+, +key+, and +default+, but if the return value is nil or any value in
         # the returned array is +nil+, raise an Error.
         def array!(type, key, default=nil)
-          v = check_value!(key, array(type, key, default))
+          v = array(type, key, default)
 
           if key.is_a?(Array)
             key.zip(v).each do |key, arr|
-              raise Error.create(keys(key), "invalid value in array parameter #{param_name(key)}") if arr.any?{|val| val.nil?}
+              check_array!(key, arr)
             end
           else
-            raise Error.create(keys(key), "invalid value in array parameter #{param_name(key)}") if v.any?{|val| val.nil?}
+            check_array!(key, v)
           end
 
           v
@@ -594,33 +623,13 @@ class Roda
 
         protected
 
-        # The object being wrapped.
-        attr_reader :obj
-
-        # Start capturing data for this object.  Returns whether this call started the
-        # capturing.
-        def start_capture(opts)
-          capturing_started = unless @capture
-            @capture = true
-            @params = @obj.class.new
-            @subs.clear if @subs
-            true
-          end
-
-          if opts.has_key?(:symbolize)
-            @capture = opts[:symbolize] ? :symbolize : true
-          end
-
-          capturing_started
-        end
-
         # Recursively descendent into all known subkeys and get the converted params from each.
         def nested_params
-          params = @params ||= @obj.class.new
+          params = @params
 
           if @subs
             @subs.each do |key, v|
-              if key.is_a?(String) && @capture == :symbolize
+              if key.is_a?(String) && symbolize?
                 key = key.to_sym
               end
               params[key] = v.nested_params
@@ -630,64 +639,177 @@ class Roda
           params
         end
 
-        private
-
-        # If +key+ is an array, then raise an Error if any value of of the array is +nil+.
-        # Otherwise, raise an Error if +v+ is nil.
-        def check_value!(key, v, nest=nesting)
-          if key.is_a?(Array)
-            if v.any?(&:nil?)
-              keys = key.zip(v).reject{|_, val| val.nil?}.map(&:first)
-              raise Error.create(Array(nest) + [keys.first], "missing parameters for #{keys.map{|k| param_name(k)}.join(', ')}")
-            end
-          elsif v.nil?
-            raise Error.create(Array(nest) + Array(key), "missing parameter for #{param_name(key)}")
+        # Recursive method to get subkeys.
+        def subkey(keys, do_raise)
+          unless key = keys.shift
+            return self
           end
 
-          v
+          case key
+          when String
+            unless @obj.is_a?(Hash)
+              raise Error, "parameter #{param_name(nil)} is not a hash" if do_raise
+              return
+            end
+            present = @obj.has_key?(key)
+          when Integer
+            unless @obj.is_a?(Array)
+              raise Error, "parameter #{param_name(nil)} is not an array" if do_raise
+              return
+            end
+            present = key < @obj.length
+          else
+            raise ProgrammerError, "invalid argument used to traverse parameters: #{key.inspect}"
+          end
+
+          unless present
+            raise Error, "parameter #{param_name(key)} is not present" if do_raise
+            return
+          end
+
+          if v = self[key]
+            v.subkey(keys, do_raise)
+          end
+        rescue => e
+          handle_error(key, e)
+        end
+
+        # Inherit given capturing and symbolize setting from parent object.
+        def sub_capture(capture, symbolize)
+          if @capture = capture
+            @symbolize = symbolize
+            @params = @obj.class.new
+          end
+        end
+        
+        private
+
+        # Whether to symbolize keys when capturing.  Note that the method
+        # is renamed to +symbolize?+.
+        attr_reader :symbolize
+        alias symbolize? symbolize
+        undef symbolize
+
+        # Internals of convert! and convert_each!.
+        def _capture!(ret, opts)
+          unless @capture
+            @capture = []
+            @params = @obj.class.new
+            @subs.clear if @subs
+            capturing_started = true
+          end
+
+          if opts.has_key?(:symbolize)
+            @symbolize = !!opts[:symbolize]
+          end
+
+          begin
+            v = yield
+          rescue Error => e
+            @capture << e unless @capture.last == e
+          end
+
+          if capturing_started
+            if e = @capture.shift
+              unless @capture.empty?
+                e.all_errors = @capture
+              end
+              raise e
+            end
+
+            if ret == :nested_params
+              nested_params
+            else
+              v
+            end
+          end
+        ensure
+          # Only unset capturing if capturing was not already started.
+          if capturing_started
+            @capture = nil
+          end
+        end
+
+        # Raise an error if the array given does contains nil values.
+        def check_array!(key, arr)
+          if arr
+            if arr.any?{|val| val.nil?}
+              handle_error(key, Error.new("invalid value in array parameter #{param_name(key)}"))
+            end
+          else
+            handle_error(key, Error.new("missing parameter for #{param_name(key)}"))
+          end
+        end
+
+        # Internal handling of dig/dig! type argument, returning an array of arguments
+        # to prepend to the send call.
+        def dig_send_args(type)
+          if type.is_a?(Array)
+            meth = type.first
+          else
+            meth = type
+            type = [type]
+          end
+
+          raise ProgrammerError, "no typecast_params type registered for #{meth.inspect}" unless respond_to?(meth)
+          
+          type
         end
 
         # Format a reasonable parameter name value, for use in exception messages.
         def param_name(key)
-          keys = Array(nesting) + Array(key)
-          first, *rest = keys
-          v = first.dup
-          rest.each do |param|
-            v << "[#{param}]"
+          first, *rest = keys(key)
+          if first
+            v = first.dup
+            rest.each do |param|
+              v << "[#{param}]"
+            end
+            v
           end
-          v
         end
 
         # If +key+ is not +nil+, add it to the given nesting.  Otherwise, just return the given nesting.
         # Designed for use in setting the +keys+ values in raised exceptions.
         def keys(key)
-          Array(nesting) + Array(key)
+          Array(@nesting) + Array(key)
         end
 
         # Handle any conversion errors.  By default, reraises Error instances with the keys set,
         # converts ::ArgumentError instances to Error instances, and reraises other exceptions.
-        # Can be overridden in subclasses to record all errors.
-        def handle_error(key, e)
+        def handle_error(key, e, do_raise=false)
           case e
           when Error, ArgumentError
-            raise Error.set_keys(keys(key), e)
+            if @capture && (le = @capture.last) && le == e
+              raise e if do_raise
+              return
+            end
+
+            e = Error.set_keys(keys(key), e)
+
+            if @capture
+              @capture << e
+              raise e if do_raise
+              nil
+            else
+              raise e
+            end
           else
             raise e
           end
         end
 
-        # If +key+ is not an array, convert the value at the given +key+ using the +meth+ method, and if
-        # the value is nil, return +default+ instead of the value.
-        # If +key+ is an array, return an array with the conversion done for each respective member of +key+.
+        # If +key+ is not an array, convert the value at the given +key+ using the +meth+ method and +default+
+        # value.  If +key+ is an array, return an array with the conversion done for each respective member of +key+.
         def process_arg(meth, key, default)
           case key
           when String
-            v = process(meth, key)
-            v = default if v.nil?
-            if cap = @capture
-              key = key.to_sym if cap == :symbolize
+            v = process(meth, key, default)
+
+            if @capture
+              key = key.to_sym if symbolize?
               @params[key] = v
             end
+
             v
           when Array
             key.map do |k|
@@ -700,10 +822,21 @@ class Roda
         end
 
         # Get the value of +key+ for the object, and convert it to the expected type using +meth+.
-        def process(meth, key)
+        # If the value either before or after conversion is nil, return the +default+ value.
+        def process(meth, key, default)
           v = @obj[key]
           unless v.nil?
-            send(meth, v)
+            v = send(meth, v)
+          end
+
+          if v.nil?
+            if default == CHECK_NIL
+              handle_error(key, Error.new("missing parameter for #{param_name(key)}"))
+            end
+
+            default
+          else
+            v
           end
         rescue => e
           handle_error(key, e)
