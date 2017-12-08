@@ -249,6 +249,11 @@ class Roda
     #     end
     #   end
     #
+    # By default, the typecast_params conversion procs are passed the parameter value directly
+    # from +request.params+ without modification.  In some cases, it may be beneficial to
+    # strip leading and trailing whitespace from parameter string values before processing, which
+    # you can do by passing the <tt>strip: :all</tt> option when loading the plugin.
+    #
     # By design, typecast_params only deals with string keys, it is not possible to use
     # symbol keys as arguments to the conversion methods and have them converted.
     module TypecastParams
@@ -342,6 +347,21 @@ class Roda
         # related to all captured exceptions.
         def param_names
           all_errors.map(&:param_name)
+        end
+      end
+
+      module StringStripper
+        private
+
+        # Strip any resulting input string.
+        def param_value(key)
+          v = super
+
+          if v.is_a?(String)
+            v = v.strip
+          end
+
+          v
         end
       end
 
@@ -852,7 +872,8 @@ class Roda
         # Get the value of +key+ for the object, and convert it to the expected type using +meth+.
         # If the value either before or after conversion is nil, return the +default+ value.
         def process(meth, key, default)
-          v = @obj[key]
+          v = param_value(key)
+
           unless v.nil?
             v = send(meth, v)
           end
@@ -868,6 +889,11 @@ class Roda
           end
         rescue => e
           handle_error(key, meth.to_s.sub(/\A_?convert_/, '').to_sym, e)
+        end
+
+        # Get the value for the given key in the object.
+        def param_value(key)
+          @obj[key]
         end
 
         # Helper for conversion methods where '' should be considered nil,
@@ -900,9 +926,14 @@ class Roda
 
       # Set application-specific Params subclass unless one has been set,
       # and if a block is passed, eval it in the context of the subclass.
-      def self.load_dependencies(app, &block)
+      # Respect the <tt>strip: :all</tt> to strip all parameter strings
+      # before processing them.
+      def self.configure(app, opts=OPTS, &block)
         app.const_set(:TypecastParams, Class.new(RodaPlugins::TypecastParams::Params)) unless app.const_defined?(:TypecastParams)
         app::TypecastParams.class_eval(&block) if block
+        if opts[:strip] == :all
+          app::TypecastParams.send(:include, StringStripper)
+        end
       end
 
       module ClassMethods

@@ -1178,3 +1178,38 @@ describe "typecast_params plugin with files" do
     lambda{tp.array!(:file, 'c')}.must_raise @tp_error
   end
 end
+
+describe "typecast_params plugin with strip: :all option" do 
+  def tp(arg='a=+1+')
+    @tp.call(arg)
+  end
+
+
+  before do
+    res = nil
+    app(:bare) do
+      plugin :typecast_params, strip: :all
+      route do |r|
+        res = typecast_params
+        nil
+      end
+    end
+
+    @tp = lambda do |params|
+      req('QUERY_STRING'=>params, 'rack.input'=>StringIO.new)
+      res
+    end
+
+    @tp_error = Roda::RodaPlugins::TypecastParams::Error
+  end
+
+  it "#file should require an uploaded file" do
+    tp.str('a').must_equal '1'
+    tp.nonempty_str('a').must_equal '1'
+    tp.int('a').must_equal 1
+    tp.pos_int('a').must_equal 1
+    tp.Integer('a').must_equal 1
+    tp.float('a').must_equal 1.0
+    tp.Float('a').must_equal 1.0
+  end
+end
