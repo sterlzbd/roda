@@ -912,6 +912,18 @@ describe "typecast_params plugin" do
     e.reason.must_equal :invalid_type
   end
 
+  it "Error#param_names and #all_errors should handle array submission" do
+    tp = tp('a[][b]=0')
+    e = error do 
+      tp.convert!('a') do |tp0|
+        tp0.int(%w'a b c')
+        tp0.array(:int, %w'a b c')
+      end
+    end
+    e.param_names.must_equal %w'a'
+    e.all_errors.map(&:reason).must_equal [:invalid_type]
+  end
+
   it "Error#param_names and #all_errors should include all errors raised in convert! blocks" do
     tp = tp('a[][b][][e]=0')
     e = error do 

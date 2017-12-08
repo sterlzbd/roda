@@ -371,7 +371,7 @@ class Roda
           private convert_meth, convert_array_meth
 
           define_method(type) do |key, default=nil|
-            process_arg(convert_meth, key, default)
+            process_arg(convert_meth, key, default) if require_hash!
           end
 
           define_method(:"#{type}!") do |key|
@@ -611,7 +611,7 @@ class Roda
         def array(type, key, default=nil)
           meth = :"_convert_array_#{type}"
           raise ProgrammerError, "no typecast_params type registered for #{type.inspect}" unless respond_to?(meth, true)
-          process_arg(meth, key, default)
+          process_arg(meth, key, default) if require_hash!
         end
 
         # Call +array+ with the +type+, +key+, and +default+, but if the return value is nil or any value in
@@ -818,6 +818,12 @@ class Roda
           else
             raise e
           end
+        end
+
+        # Issue an error unless the current object is a hash.  Used to ensure we don't try to access
+        # entries if the current object is an array.
+        def require_hash!
+          @obj.is_a?(Hash) || handle_error(nil, :invalid_type, "expected hash object in #{param_name(nil)} but received array object")
         end
 
         # If +key+ is not an array, convert the value at the given +key+ using the +meth+ method and +default+
