@@ -137,7 +137,7 @@ class Roda
     # To allow easier access to nested data, there is a +dig+ method:
     #
     #   typecast_params.dig(:pos_int, 'key', 'sub_key')
-    #   typecast_params.dig(:pos_int!, 'key', 0, 'sub_key', 'sub_sub_key')
+    #   typecast_params.dig(:pos_int, 'key', 0, 'sub_key', 'sub_sub_key')
     #
     # +dig+ will return +nil+ if any access while looking up the nested value returns +nil+.
     # There is also a +dig!+ method, which will raise an Error if +dig+ would return +nil+:
@@ -583,16 +583,12 @@ class Roda
         #
         #   tp.dig([:array, :int], 'foo', 'bar', 'baz')  # tp['foo']['bar'].array(:int, 'baz')
         def dig(type, *nest, key)
-          if v = subkey(nest, false)
-            v.send(*dig_send_args(type), key)
-          end
+          _dig(false, type, nest, key)
         end
 
         # Similar to +dig+, but raises an Error instead of returning +nil+ if no value is found.
         def dig!(type, *nest, key)
-          if v = subkey(nest, true)
-            v.send(*dig_send_args(type), key, CHECK_NIL)
-          end
+          _dig(true, type, nest, key)
         end
 
         # Convert the value of +key+ to an array of values of the given +type+. If +default+ is
@@ -741,9 +737,8 @@ class Roda
           end
         end
 
-        # Internal handling of dig/dig! type argument, returning an array of arguments
-        # to prepend to the send call.
-        def dig_send_args(type)
+        # Internals of dig/dig!
+        def _dig(force, type, nest, key)
           if type.is_a?(Array)
             meth = type.first
           else
@@ -752,8 +747,10 @@ class Roda
           end
 
           raise ProgrammerError, "no typecast_params type registered for #{meth.inspect}" unless respond_to?(meth)
-          
-          type
+
+          if v = subkey(nest, force)
+            v.send(*type, key, (CHECK_NIL if force))
+          end
         end
 
         # Format a reasonable parameter name value, for use in exception messages.
