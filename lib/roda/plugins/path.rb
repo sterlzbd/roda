@@ -32,8 +32,11 @@ class Roda
     #     end
     #
     #     r.post 'bar' do
-    #       bar = Bar.create(r.params['bar'])
-    #       r.redirect bar_path(bar) # /bar/1
+    #       bar_params = r.params['bar']
+    #       if bar_params.is_a?(Hash)
+    #         bar = Bar.create(bar_params)
+    #         r.redirect bar_path(bar) # /bar/1
+    #       end
     #     end
     #
     #     r.post 'baz' do

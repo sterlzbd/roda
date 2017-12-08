@@ -28,7 +28,7 @@ class Roda
     # This is useful to DRY up code if you are using the same type of pattern and
     # type conversion in multiple places in your application.
     #
-    # This plugin does not work with the params capturing plugin, as it does not
+    # This plugin does not work with the params_capturing plugin, as it does not
     # offer the ability to associate block arguments with named keys.
     module ClassMatchers
       module ClassMethods
