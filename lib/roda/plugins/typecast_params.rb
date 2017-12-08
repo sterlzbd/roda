@@ -15,9 +15,13 @@ class Roda
     #   key = request.params['key'].to_i
     #   key = nil unless key > 0
     #
-    # the typecast_params plugin adds a slightly friendly interface:
+    # the typecast_params plugin adds a friendlier interface:
     #
     #   key = typecast_params.pos_int('key')
+    #
+    # As +typecast_params+ is a fairly long method name, you may want to
+    # consider aliasing it to something more terse in your application,
+    # such as +tp+.
     #
     # One advantage of using typecast_params is that access or conversion
     # errors are raised as a specific exception class
