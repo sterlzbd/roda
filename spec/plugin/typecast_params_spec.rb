@@ -797,19 +797,25 @@ describe "typecast_params plugin" do
   end
 
   it "#dig and #dig! should be able to handle arrays using an array for the type" do
-    tp('a[b][c][d][]=1&a[b][c][d][]=2').dig([:array, :int], 'a', 'b', 'c', 'd').must_equal [1, 2]
-    tp('a[b][c][d][]=1&a[b][c][d][]=').dig([:array, :int], 'a', 'b', 'c', 'd').must_equal [1, nil]
+    tp('a[b][c][d][]=1&a[b][c][d][]=2').dig(:array, :int, 'a', 'b', 'c', 'd').must_equal [1, 2]
+    tp('a[b][c][d][]=1&a[b][c][d][]=').dig(:array, :int, 'a', 'b', 'c', 'd').must_equal [1, nil]
 
-    tp('a[b][c][d][]=1&a[b][c][d][]=2').dig!([:array!, :int], 'a', 'b', 'c', 'd').must_equal [1, 2]
-    lambda{tp('a[b][c][d][]=1&a[b][c][d][]=').dig!([:array!, :int], 'a', 'b', 'c', 'd')}.must_raise @tp_error
+    tp('a[b][c][d][]=1&a[b][c][d][]=2').dig!(:array!, :int, 'a', 'b', 'c', 'd').must_equal [1, 2]
+    lambda{tp('a[b][c][d][]=1&a[b][c][d][]=').dig!(:array!, :int, 'a', 'b', 'c', 'd')}.must_raise @tp_error
   end
 
   it "#dig should raise for unsupported types" do
     lambda{tp.dig(:foo, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
   end
 
+  it "#dig should raise for array without subtype" do
+    lambda{tp.dig(:array, 'foo', 'a')}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
+  end
+
+
   it "#dig should raise for unsupported nest values" do
     lambda{tp.dig(:int, :foo, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
+    lambda{tp.dig(:array, :int, :foo, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
   end
 
   it "#dig! should return nested values or raise Error if thers is no value" do

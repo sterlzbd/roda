@@ -569,19 +569,20 @@ class Roda
           end
         end
 
-        # Return nested values under the current obj, calling +type+ with +key+ on the nested object (traversed
-        # to using +nest+).  Example:
+        # Convert values nested under the current obj.  Traverses the current object using +nest+, then converts
+        # +key+ on that object using +type+:
         #
-        #   tp.dig(:int, 'foo')               # tp.int('foo')
-        #   tp.dig(:int, 'foo', 'bar')        # tp['foo'].int('bar')
-        #   tp.dig(:int, 'foo', 'bar', 'baz') # tp['foo']['bar'].int('baz')
+        #   tp.dig(:pos_int, 'foo')               # tp.pos_int('foo')
+        #   tp.dig(:pos_int, 'foo', 'bar')        # tp['foo'].pos_int('bar')
+        #   tp.dig(:pos_int, 'foo', 'bar', 'baz') # tp['foo']['bar'].pos_int('baz')
         #
         # Returns nil if any of the values are not present or not the expected type. If the nest path results
         # in an object that is not an array or hash, then raises an Error.
         #
-        # You can use +dig+ to get access to nested arrays:
+        # You can use +dig+ to get access to nested arrays by using <tt>:array</tt> or <tt>:array!</tt> as
+        # the first argument and providing the type in the second argument:
         #
-        #   tp.dig([:array, :int], 'foo', 'bar', 'baz')  # tp['foo']['bar'].array(:int, 'baz')
+        #   tp.dig(:array, :pos_int, 'foo', 'bar', 'baz')  # tp['foo']['bar'].array(:int, 'baz')
         def dig(type, *nest, key)
           _dig(false, type, nest, key)
         end
@@ -739,17 +740,25 @@ class Roda
 
         # Internals of dig/dig!
         def _dig(force, type, nest, key)
-          if type.is_a?(Array)
-            meth = type.first
+          if type == :array || type == :array!
+            conv_type = nest.shift
+            unless conv_type.is_a?(Symbol)
+              raise ProgrammerError, "incorrect subtype given when using #{type} as argument for dig/dig!: #{conv_type.inspect}"
+            end
+            meth = type
+            type = conv_type
+            args = [meth, type]
           else
             meth = type
-            type = [type]
+            args = [type]
           end
 
-          raise ProgrammerError, "no typecast_params type registered for #{meth.inspect}" unless respond_to?(meth)
+          unless respond_to?("_convert_array_#{type}", true)
+            raise ProgrammerError, "no typecast_params type registered for #{meth.inspect}"
+          end
 
           if v = subkey(nest, force)
-            v.send(*type, key, (CHECK_NIL if force))
+            v.send(*args, key, (CHECK_NIL if force))
           end
         end
 
