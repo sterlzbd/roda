@@ -812,6 +812,34 @@ are not escaping the output of the content template:
 
 This support requires {Erubi}[https://github.com/jeremyevans/erubi].
 
+=== Unexpected Parameter Types
+
+Rack converts submitted parameters into a hash of strings, arrays, and
+nested hashes.  Since the user controls the submission of parameters, you
+should treat any submission of parameters with caution, and should be
+explicitly checking and/or converting types before using any submitted 
+parameters.  One way to do this is explicitly after accessing them:
+
+  # Convert foo_id parameter to an integer
+  request.params['foo_id'].to_i
+
+However, it is easy to forget to convert the type, and if the user
+submits +foo_id+ as a hash or array, a NoMethodError will be raised.
+Worse is if you do:
+
+  some_method(request.params['bar'])
+
+Where +some_method+ supports both a string argument and a hash
+argument, and you expect the parameter will be submitted as a
+string, and +some_method+'s handling of a hash argument performs
+an unauthorized action.
+
+Roda ships with a +typecast_params+ plugin that can easily handle
+the typecasting of submitted parameters, and it is recommended
+that all Roda applications that deal with parameters use it or
+another tool to explicitly convert submitted parameters to the
+expected types.
+
 === Security Related HTTP Headers
 
 You may want to look into setting the following HTTP headers, which
