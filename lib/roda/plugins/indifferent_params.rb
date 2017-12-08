@@ -6,7 +6,14 @@ class Roda
     # The indifferent_params plugin adds a +params+ instance
     # method which offers indifferent access to the request
     # params, allowing you to use symbols to lookup values in
-    # a hash where the keys are strings.  Example:
+    # a hash where the keys are strings.  Note that while this
+    # allows for an easier transition from some other ruby frameworks,
+    # it is a bad idea in general as it makes it more difficult to
+    # separate external data from internal data, and doesn't handle
+    # any typecasting of the data.  Consider using the typecast_params
+    # plugin instead of this plugin for accessing parameters.
+    #
+    # Example:
     #
     #   plugin :indifferent_params
     #
