@@ -23,7 +23,8 @@ class Roda
     # errors are raised as a specific exception class
     # (+Roda::RodaPlugins::TypecastParams::Error+).  This allows you to handle
     # this specific exception class globally and return an appropriate 4xx
-    # response to the client.
+    # response to the client.  You can use the Error#param_name and Error#reason 
+    # methods to get more information about the error.
     #
     # typecast_params offers support for default values:
     #
@@ -223,7 +224,8 @@ class Roda
     # Note that if there are multiple conversion Error raised inside a +convert!+ or +convert_each!+ 
     # block, they are recorded and a single TypecastParams::Error instance is raised after
     # processing the block.  TypecastParams::Error#params_names can be called on the exception to
-    # get an array of all parameter names with conversion issues.
+    # get an array of all parameter names with conversion issues, and TypecastParams::Error#all_errors
+    # can be used to get an array of all Error instances.
     #
     # Because of how +convert!+ and +convert_each!+ work, you should avoid calling
     # TypecastParams::Params#[] inside the block you pass to these methods, because if the #[]
@@ -263,14 +265,16 @@ class Roda
       class Error < RodaError
         # Set the keys in the given exception.  If the exception is not already an
         # instance of the class, create a new instance to wrap it.
-        def self.set_keys(keys, e)
+        def self.create(keys, reason, e)
           if e.is_a?(self)
             e.keys ||= keys
+            e.reason ||= reason
             e
           else
             backtrace = e.backtrace
             e = new("#{e.class}: #{e.message}")
             e.keys = keys
+            e.reason = reason
             e.set_backtrace(backtrace) if backtrace
             e
           end
@@ -280,12 +284,24 @@ class Roda
         # that can be splatted to +dig+ to get the value of the parameter causing the error.
         attr_accessor :keys
 
-        # If not nil, this is an array of all other errors that were raised with this
-        # error.  This is only populated when Params#convert! is used, and contains all
-        # of the captured exceptions that were raised by the convert! block.  This allows
-        # you to use convert! to process a form input, and if an exception is raised, it
-        # can provide an array of all parameter names for parameters with problems.
-        attr_accessor :all_errors
+        # An array of all other errors that were raised with this error.  If the error
+        # was not raised inside Params#convert! or Params#convert_each!, this will just be
+        # an array containing the current the receiver.
+        # 
+        # This allows you to use Params#convert! to process a form input, and if any
+        # conversion errors occur inside the block, it can provide an array of all parameter
+        # names and reasons for parameters with problems.
+        attr_writer :all_errors
+
+        def all_errors
+          @all_errors ||= [self]
+        end
+
+        # The reason behind this error.  If this error was caused by a conversion method,
+        # this will be the the conversion method symbol.  If this error was caused
+        # because a value was missing, then it will be +:missing+.  If this error was
+        # caused because a value was not the correct type, then it will be +:invalid_type+.
+        attr_accessor :reason
 
         # The likely parameter name where the contents were not expected.  This is
         # designed for cases where the parameter was submitted with the typical
@@ -325,11 +341,7 @@ class Roda
         # captured inside the convert! block, this will contain the parameter names
         # related to all captured exceptions.
         def param_names
-          names = [param_name]
-          if all = all_errors
-            names.concat(all.map(&:param_name))
-          end
-          names
+          all_errors.map(&:param_name)
         end
       end
 
@@ -458,9 +470,9 @@ class Roda
             # nothing
           else
             if @nesting
-              handle_error(nil, Error.new("value of #{param_name(nil)} parameter not an array or hash: #{obj.inspect}"), true)
+              handle_error(nil, (@obj.nil? ? :missing : :invalid_type), Error.new("value of #{param_name(nil)} parameter not an array or hash: #{obj.inspect}"), true)
             else
-              handle_error(nil, Error.new("parameters given not an array or hash: #{obj.inspect}"), true)
+              handle_error(nil, :invalid_type, Error.new("parameters given not an array or hash: #{obj.inspect}"), true)
             end
           end
         end
@@ -490,11 +502,11 @@ class Roda
 
           if @obj.is_a?(Array)
             unless key.is_a?(Integer)
-              handle_error(key, Error.new("invalid use of non-integer key for accessing array: #{key.inspect}"), true)
+              handle_error(key, :invalid_type, Error.new("invalid use of non-integer key for accessing array: #{key.inspect}"), true)
             end
           else
             if key.is_a?(Integer)
-              handle_error(key, Error.new("invalid use of integer key for accessing hash: #{key}"), true)
+              handle_error(key, :invalid_type, Error.new("invalid use of integer key for accessing hash: #{key}"), true)
             end
           end
 
@@ -504,7 +516,7 @@ class Roda
           begin
             sub = self.class.nest(v, Array(@nesting) + [key])
           rescue => e
-            handle_error(key, e, true)
+            handle_error(key, :invalid_type, e, true)
           end
 
           @subs[key] = sub
@@ -550,7 +562,7 @@ class Roda
           _capture!(nil, opts) do
             unless keys = opts[:keys]
               unless @obj.is_a?(Array)
-                handle_error(nil, Error.new("convert_each! called on non-array"))
+                handle_error(nil, :invalid_type, Error.new("convert_each! called on non-array"))
                 next 
               end
               keys = (0...@obj.length)
@@ -563,7 +575,7 @@ class Roda
                   v.nested_params if np 
                 end
               rescue => e
-                handle_error(i, e)
+                handle_error(i, :invalid_type, e)
               end
             end
           end
@@ -642,6 +654,8 @@ class Roda
             return self
           end
 
+          reason = :invalid_type
+
           case key
           when String
             unless @obj.is_a?(Hash)
@@ -660,6 +674,7 @@ class Roda
           end
 
           unless present
+            reason = :missing
             raise Error, "parameter #{param_name(key)} is not present" if do_raise
             return
           end
@@ -668,7 +683,7 @@ class Roda
             v.subkey(keys, do_raise)
           end
         rescue => e
-          handle_error(key, e)
+          handle_error(key, reason, e)
         end
 
         # Inherit given capturing and symbolize setting from parent object.
@@ -689,11 +704,11 @@ class Roda
 
         # Internals of convert! and convert_each!.
         def _capture!(ret, opts)
-          unless @capture
-            @capture = []
+          unless cap = @capture
             @params = @obj.class.new
             @subs.clear if @subs
             capturing_started = true
+            cap = @capture = []
           end
 
           if opts.has_key?(:symbolize)
@@ -703,14 +718,13 @@ class Roda
           begin
             v = yield
           rescue Error => e
-            @capture << e unless @capture.last == e
+            cap << e unless cap.last == e
           end
 
           if capturing_started
-            if e = @capture.shift
-              unless @capture.empty?
-                e.all_errors = @capture
-              end
+            unless cap.empty?
+              e = cap[0]
+              e.all_errors = cap
               raise e
             end
 
@@ -731,10 +745,10 @@ class Roda
         def check_array!(key, arr)
           if arr
             if arr.any?{|val| val.nil?}
-              handle_error(key, Error.new("invalid value in array parameter #{param_name(key)}"))
+              handle_error(key, :invalid_type, Error.new("invalid value in array parameter #{param_name(key)}"))
             end
           else
-            handle_error(key, Error.new("missing parameter for #{param_name(key)}"))
+            handle_error(key, :missing, Error.new("missing parameter for #{param_name(key)}"))
           end
         end
 
@@ -782,7 +796,7 @@ class Roda
 
         # Handle any conversion errors.  By default, reraises Error instances with the keys set,
         # converts ::ArgumentError instances to Error instances, and reraises other exceptions.
-        def handle_error(key, e, do_raise=false)
+        def handle_error(key, reason, e, do_raise=false)
           case e
           when Error, ArgumentError
             if @capture && (le = @capture.last) && le == e
@@ -790,7 +804,7 @@ class Roda
               return
             end
 
-            e = Error.set_keys(keys(key), e)
+            e = Error.create(keys(key), reason, e)
 
             if @capture
               @capture << e
@@ -837,7 +851,7 @@ class Roda
 
           if v.nil?
             if default == CHECK_NIL
-              handle_error(key, Error.new("missing parameter for #{param_name(key)}"))
+              handle_error(key, :missing, Error.new("missing parameter for #{param_name(key)}"))
             end
 
             default
@@ -845,7 +859,7 @@ class Roda
             v
           end
         rescue => e
-          handle_error(key, e)
+          handle_error(key, meth.to_s.sub(/\A_?convert_/, '').to_sym, e)
         end
 
         # Helper for conversion methods where '' should be considered nil,

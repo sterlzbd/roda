@@ -878,18 +878,43 @@ describe "typecast_params plugin" do
     error{tp('a[][c][][e]=1').dig(:date, 'a', 0, 'c', 0, 'e')}.param_name.must_equal 'a[][c][][e]'
   end
 
-  it "Error#param_names should be the name of the parameter in an array" do
-    error{tp.int!('b')}.param_names.must_equal ['b']
-    error{tp.int!(%w'b f')}.param_names.must_equal ['b']
-    error{tp['c'].int!('f')}.param_names.must_equal ['c[f]']
-    error{tp('a[b][c][d][e]=1')['a']['b']['c']['d'].date('e')}.param_names.must_equal ['a[b][c][d][e]']
-    error{tp('a[][c][][e]=1')['a'][0]['c'][0].date('e')}.param_names.must_equal ['a[][c][][e]']
-    error{tp('a[][c][][e]=1').dig(:date, 'a', 0, 'c', 0, 'e')}.param_names.must_equal ['a[][c][][e]']
+  it "Error#param_names and #reason should be correct for errors" do
+    e = error{tp.int!('b')}
+    e.param_names.must_equal ['b']
+    e.reason.must_equal :int
+
+    e = error{tp.int!(%w'b f')}
+    e.param_names.must_equal ['b']
+    e.reason.must_equal :int
+
+    e = error{tp['c'].int!('f')}
+    e.param_names.must_equal ['c[f]']
+    e.reason.must_equal :missing
+
+    e = error{tp('a[b][c][d][e]=1')['a']['b']['c']['d'].date('e')}
+    e.param_names.must_equal ['a[b][c][d][e]']
+    e.reason.must_equal :date
+
+    e = error{tp('a[][c][][e]=1')['a'][0]['c'][0].date('e')}
+    e.param_names.must_equal ['a[][c][][e]']
+    e.reason.must_equal :date
+
+    e = error{tp('a[][c][][e]=1').dig(:date, 'a', 0, 'c', 0, 'e')}
+    e.param_names.must_equal ['a[][c][][e]']
+    e.reason.must_equal :date
+
+    e = error{tp('a[][c][][e]=1').dig!(:date, 'a', 1, 'c', 0, 'e')}
+    e.param_names.must_equal ['a[]']
+    e.reason.must_equal :missing
+
+    e = error{tp('a[][c][][e]=1').dig!(:date, 'a', 'b', 'c', 0, 'e')}
+    e.param_names.must_equal ['a[b]']
+    e.reason.must_equal :invalid_type
   end
 
-  it "Error#param_names should include all errors raised in convert! blocks" do
+  it "Error#param_names and #all_errors should include all errors raised in convert! blocks" do
     tp = tp('a[][b][][e]=0')
-    error do 
+    e = error do 
       tp.convert! do |tp0|
         tp0['a'].convert! do |tp1|
           tp1[0].convert! do |tp2|
@@ -906,19 +931,23 @@ describe "typecast_params plugin" do
         tp0.array!(:int, %w'd e')
         tp0['b']
       end
-    end.param_names.must_equal %w'a[][b][][e] a[][b][][f] a[][b][][g] a[][b] c d e b'
+    end
+    e.param_names.must_equal %w'a[][b][][e] a[][b][][f] a[][b][][g] a[][b] c d e b'
+    e.all_errors.map(&:reason).must_equal [:missing, :missing, :missing, :pos_int, :missing, :missing, :missing, :missing]
   end
 
-  it "Error#param_names should handle #[] failures by skipping the rest of the block" do
+  it "Error#param_names and #all_errors should handle #[] failures by skipping the rest of the block" do
     tp = tp('a[][b][][e]=0')
-    error do 
+    e = error do 
       tp.convert! do |tp0|
         tp0['b']
         tp0.int!('c')
       end
-    end.param_names.must_equal %w'b'
+    end
+    e.param_names.must_equal %w'b'
+    e.all_errors.map(&:reason).must_equal [:missing]
 
-    error do 
+    e = error do 
       tp.convert! do |tp0|
         tp0['a'][0].convert! do |tp1|
           tp1['c']
@@ -926,20 +955,24 @@ describe "typecast_params plugin" do
         end
         tp0.int!('c')
       end
-    end.param_names.must_equal %w'a[][c] c'
+    end
+    e.param_names.must_equal %w'a[][c] c'
+    e.all_errors.map(&:reason).must_equal [:missing, :missing]
   end
 
-  it "Error#param_names should handle array! with array of keys where one of the keys is not present" do
-    error do
+  it "Error#param_names and #all_errorsshould handle array! with array of keys where one of the keys is not present" do
+    e = error do
       tp('e[]=0').convert! do |tp0|
-          tp0.array!(:pos_int, %w'd e')
+        tp0.array!(:pos_int, %w'd e')
       end
-    end.param_names.must_equal %w'd e'
+    end
+    e.param_names.must_equal %w'd e'
+    e.all_errors.map(&:reason).must_equal [:missing, :invalid_type]
   end
 
-  it "Error#param_names should handle keys given to convert" do
+  it "Error#param_names and #all_errors should handle keys given to convert" do
     tp = tp('e[][b][][e]=0')
-    error do 
+    e = error do 
       tp.convert! do |tp0|
         tp0.convert!(['a', 0, 'b', 0]) do |tp1|
           tp1.pos_int!('e')
@@ -951,11 +984,13 @@ describe "typecast_params plugin" do
         tp0.int!('c')
         tp0.array!(:int, 'd')
       end
-    end.param_names.must_equal %w'a f e[][b] c d'
+    end
+    e.param_names.must_equal %w'a f e[][b] c d'
+    e.all_errors.map(&:reason).must_equal [:missing, :missing, :pos_int, :missing, :missing]
   end
 
-  it "Error#param_names should include all errors raised in convert_each! blocks" do
-    error do 
+  it "Error#param_names and #all_errors should include all errors raised in convert_each! blocks" do
+    e = error do 
       tp('a[][b]=0&a[][b]=1')['a'].convert_each! do |tp0|
         tp0.dig!(:pos_int, 'b', 0, 'e')
         tp0.dig!(:int, 'b', 0, %w'f g')
@@ -963,18 +998,21 @@ describe "typecast_params plugin" do
         tp0.pos_int!('b')
         tp0['c']
       end
-    end.param_names.must_equal %w'a[][b] a[][b] a[][d] a[][e] a[][b] a[][c] a[][b] a[][b] a[][d] a[][e] a[][c]'
+    end
+    e.param_names.must_equal %w'a[][b] a[][b] a[][d] a[][e] a[][b] a[][c] a[][b] a[][b] a[][d] a[][e] a[][c]'
+    e.all_errors.map(&:reason).must_equal [:invalid_type, :invalid_type, :missing, :missing, :missing, :missing, :invalid_type, :invalid_type, :missing, :missing, :missing]
   end
 
-  it "Error#param_names should include all errors for invalid keys used in convert_each!" do
+  it "Error#param_names and #all_errors should include all errors for invalid keys used in convert_each!" do
     tp = tp('a[0][b]=1&a[0][c]=2&a[1][b]=3&a[1][c]=4')
-    error do
+    e = error do
       tp['a'].convert_each!(:keys=>%w'0 2 3') do |tp0|
         tp0.int(%w'b c')
       end
-    end.param_names.must_equal %w'a[2] a[3]'
+    end
+    e.param_names.must_equal %w'a[2] a[3]'
+    e.all_errors.map(&:reason).must_equal [:missing, :missing]
   end
-
 end
 
 describe "typecast_params plugin with customized params" do 
