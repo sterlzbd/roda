@@ -470,9 +470,9 @@ class Roda
             # nothing
           else
             if @nesting
-              handle_error(nil, (@obj.nil? ? :missing : :invalid_type), Error.new("value of #{param_name(nil)} parameter not an array or hash: #{obj.inspect}"), true)
+              handle_error(nil, (@obj.nil? ? :missing : :invalid_type), "value of #{param_name(nil)} parameter not an array or hash: #{obj.inspect}", true)
             else
-              handle_error(nil, :invalid_type, Error.new("parameters given not an array or hash: #{obj.inspect}"), true)
+              handle_error(nil, :invalid_type, "parameters given not an array or hash: #{obj.inspect}", true)
             end
           end
         end
@@ -502,11 +502,11 @@ class Roda
 
           if @obj.is_a?(Array)
             unless key.is_a?(Integer)
-              handle_error(key, :invalid_type, Error.new("invalid use of non-integer key for accessing array: #{key.inspect}"), true)
+              handle_error(key, :invalid_type, "invalid use of non-integer key for accessing array: #{key.inspect}", true)
             end
           else
             if key.is_a?(Integer)
-              handle_error(key, :invalid_type, Error.new("invalid use of integer key for accessing hash: #{key}"), true)
+              handle_error(key, :invalid_type, "invalid use of integer key for accessing hash: #{key}", true)
             end
           end
 
@@ -562,7 +562,7 @@ class Roda
           _capture!(nil, opts) do
             unless keys = opts[:keys]
               unless @obj.is_a?(Array)
-                handle_error(nil, :invalid_type, Error.new("convert_each! called on non-array"))
+                handle_error(nil, :invalid_type, "convert_each! called on non-array")
                 next 
               end
               keys = (0...@obj.length)
@@ -745,10 +745,10 @@ class Roda
         def check_array!(key, arr)
           if arr
             if arr.any?{|val| val.nil?}
-              handle_error(key, :invalid_type, Error.new("invalid value in array parameter #{param_name(key)}"))
+              handle_error(key, :invalid_type, "invalid value in array parameter #{param_name(key)}")
             end
           else
-            handle_error(key, :missing, Error.new("missing parameter for #{param_name(key)}"))
+            handle_error(key, :missing, "missing parameter for #{param_name(key)}")
           end
         end
 
@@ -798,6 +798,8 @@ class Roda
         # converts ::ArgumentError instances to Error instances, and reraises other exceptions.
         def handle_error(key, reason, e, do_raise=false)
           case e
+          when String
+            handle_error(key, reason, Error.new(e), do_raise=false)
           when Error, ArgumentError
             if @capture && (le = @capture.last) && le == e
               raise e if do_raise
@@ -851,7 +853,7 @@ class Roda
 
           if v.nil?
             if default == CHECK_NIL
-              handle_error(key, :missing, Error.new("missing parameter for #{param_name(key)}"))
+              handle_error(key, :missing, "missing parameter for #{param_name(key)}")
             end
 
             default
