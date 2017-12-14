@@ -1,6 +1,6 @@
-Thu, 16 Nov 2017 15:31:29 -0800
-README.rdoc	Mon, 09 Oct 2017 15:48:01 -0700
-CHANGELOG	Thu, 16 Nov 2017 15:24:30 -0800
+Thu, 14 Dec 2017 08:06:29 -0800
+README.rdoc	Fri, 08 Dec 2017 15:45:27 -0800
+CHANGELOG	Thu, 14 Dec 2017 07:52:58 -0800
 MIT-LICENSE	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda.rb	Fri, 15 Sep 2017 10:50:32 -0700
 lib/roda/plugins/_symbol_regexp_matchers.rb	Fri, 04 Aug 2017 14:18:37 -0700
@@ -12,7 +12,7 @@ lib/roda/plugins/branch_locals.rb	Mon, 09 Oct 2017 15:54:49 -0700
 lib/roda/plugins/caching.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/chunked.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/class_level_routing.rb	Fri, 18 Aug 2017 07:20:31 -0700
-lib/roda/plugins/class_matchers.rb	Mon, 05 Jun 2017 15:45:10 -0700
+lib/roda/plugins/class_matchers.rb	Fri, 08 Dec 2017 15:45:27 -0800
 lib/roda/plugins/content_for.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/cookies.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/csrf.rb	Wed, 16 Aug 2017 08:44:25 -0700
@@ -36,7 +36,7 @@ lib/roda/plugins/head.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/header_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/heartbeat.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/hooks.rb	Sun, 31 Jan 2016 11:53:41 -0800
-lib/roda/plugins/indifferent_params.rb	Wed, 16 Aug 2017 08:44:25 -0700
+lib/roda/plugins/indifferent_params.rb	Fri, 08 Dec 2017 15:45:27 -0800
 lib/roda/plugins/json.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/json_parser.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/mailer.rb	Wed, 16 Aug 2017 08:44:25 -0700
@@ -51,11 +51,11 @@ lib/roda/plugins/not_allowed.rb	Mon, 22 Aug 2016 16:27:35 -0700
 lib/roda/plugins/not_found.rb	Sun, 31 Jan 2016 11:54:09 -0800
 lib/roda/plugins/optimized_string_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/padrino_render.rb	Wed, 16 Aug 2017 08:44:25 -0700
-lib/roda/plugins/param_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
+lib/roda/plugins/param_matchers.rb	Fri, 08 Dec 2017 15:45:27 -0800
 lib/roda/plugins/params_capturing.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/partials.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/pass.rb	Fri, 20 Jan 2017 09:06:43 -0800
-lib/roda/plugins/path.rb	Wed, 16 Aug 2017 08:44:25 -0700
+lib/roda/plugins/path.rb	Fri, 08 Dec 2017 15:45:27 -0800
 lib/roda/plugins/path_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/path_rewriter.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/placeholder_string_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
@@ -78,13 +78,14 @@ lib/roda/plugins/status_handler.rb	Sun, 31 Jan 2016 11:55:01 -0800
 lib/roda/plugins/streaming.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/strip_path_prefix.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/symbol_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
-lib/roda/plugins/symbol_status.rb	Fri, 13 May 2016 10:12:52 -0700
+lib/roda/plugins/symbol_status.rb	Thu, 14 Dec 2017 07:52:58 -0800
 lib/roda/plugins/symbol_views.rb	Sun, 31 Jan 2016 11:55:10 -0800
 lib/roda/plugins/timestamp_public.rb	Mon, 30 Oct 2017 11:03:30 -0700
 lib/roda/plugins/type_routing.rb	Fri, 29 Sep 2017 21:38:23 -0700
+lib/roda/plugins/typecast_params.rb	Fri, 08 Dec 2017 10:55:37 -0800
 lib/roda/plugins/unescape_path.rb	Wed, 13 Jul 2016 08:09:00 -0700
 lib/roda/plugins/view_options.rb	Wed, 16 Aug 2017 08:44:25 -0700
-lib/roda/version.rb	Thu, 16 Nov 2017 15:24:31 -0800
+lib/roda/version.rb	Thu, 14 Dec 2017 07:52:58 -0800
 doc/conventions.rdoc	Wed, 16 Aug 2017 08:44:25 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -124,3 +125,4 @@ doc/release_notes/2.29.0.txt	Wed, 16 Aug 2017 07:55:22 -0700
 doc/release_notes/3.0.0.txt	Fri, 15 Sep 2017 08:13:40 -0700
 doc/release_notes/3.1.0.txt	Fri, 13 Oct 2017 08:55:29 -0700
 doc/release_notes/3.2.0.txt	Thu, 16 Nov 2017 15:24:31 -0800
+doc/release_notes/3.3.0.txt	Thu, 14 Dec 2017 07:52:58 -0800

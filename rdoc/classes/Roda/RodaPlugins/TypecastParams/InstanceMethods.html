@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::IndifferentParams::RequestMethods</title>
+    <title>Roda::RodaPlugins::TypecastParams::InstanceMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -25,11 +25,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::IndifferentParams::RequestMethods
+          Roda::RodaPlugins::TypecastParams::InstanceMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../../../files/lib/roda/plugins/indifferent_params_rb.html">lib/roda/plugins/indifferent_params.rb</a>
+            <a href="../../../../files/lib/roda/plugins/typecast_params_rb.html">lib/roda/plugins/typecast_params.rb</a>
           </li>
         </ol>
       </div>
@@ -40,42 +40,31 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a href="#method-i-query_parser">query_parser</a></li>
+              <li><a href="#method-i-typecast_params">typecast_params</a></li>
             </ol>
           </div>
           <div id='context'>
           </div>
           <div id='section'>
-            <div id='constants-list'>
-              <h2>Constants</h2>
-              <div class='name-list'>
-                <table summary='Constants'>
-                  <tr class='top-aligned-row context-row'>
-                    <td class='context-item-name'>QUERY_PARSER</td>
-                    <td>=</td>
-                    <td class='context-item-value'>Rack::Utils.default_query_parser = QueryParser.new(QueryParser::Params, 65536, 100)</td>
-                    <td>&nbsp;</td>
-                    <td class='context-item-desc'></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-query_parser'>
-                <a name='method-i-query_parser'></a>
+              <div class='method public-instance' id='method-method-i-typecast_params'>
+                <a name='method-i-typecast_params'></a>
                 <div class='synopsis'>
-                  <span class='name'>query_parser</span>
+                  <span class='name'>typecast_params</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
+                  <p>Return and cache the instance of the <a href="Params.html">Params</a> class
+                  for the current request. Type conversion methods will be called on the
+                  result of this method.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-query_parser-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-typecast_params-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-query_parser-source'><span class="ruby-comment"># File lib/roda/plugins/indifferent_params.rb, line 64</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">query_parser</span>&#x000A;  <span class="ruby-constant">QUERY_PARSER</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-typecast_params-source'><span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb, line 959</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">typecast_params</span>&#x000A;  <span class="ruby-ivar">@_typecast_params</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">params</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

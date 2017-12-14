@@ -29,7 +29,7 @@
         </div>
         <div class='last-update'>
           Last Update:
-          <span class='datetime'>2017-10-09 15:48:01 -0700</span>
+          <span class='datetime'>2017-12-08 15:45:27 -0800</span>
         </div>
       </div>
       <div id='content'>
@@ -350,7 +350,7 @@
             do that is to use a parameter instead of an optional segment (e.g.
             +/items/123?opt=456+).</p>
             
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">optional_data</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;opt&#39;</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;items&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">item_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">optional_data</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;opt&#39;</span>].<span class="ruby-identifier">to_s</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>However, if you really do want to use a optional segment, there are a
             couple different ways to use matchers to do so.  One is using an array
@@ -654,6 +654,34 @@
             
             <p>This support requires <a
             href="https://github.com/jeremyevans/erubi">Erubi</a>.</p>
+            
+            <h3 id="label-Unexpected+Parameter+Types">Unexpected Parameter Types<span><a href="#label-Unexpected+Parameter+Types">&para;</a> <a href="#top">&uarr;</a></span></h3>
+            
+            <p>Rack converts submitted parameters into a hash of strings, arrays, and
+            nested hashes.  Since the user controls the submission of parameters, you
+            should treat any submission of parameters with caution, and should be
+            explicitly checking and/or converting types before using any submitted 
+            parameters.  One way to do this is explicitly after accessing them:</p>
+            
+            <pre class="ruby"><span class="ruby-comment"># Convert foo_id parameter to an integer</span>&#x000A;<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;foo_id&#39;</span>].<span class="ruby-identifier">to_i</span></pre>
+            
+            <p>However, it is easy to forget to convert the type, and if the user submits
+            <code>foo_id</code> as a hash or array, a NoMethodError will be raised.
+            Worse is if you do:</p>
+            
+            <pre class="ruby"><span class="ruby-identifier">some_method</span>(<span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;bar&#39;</span>])</pre>
+            
+            <p>Where <code>some_method</code> supports both a string argument and a hash
+            argument, and you expect the parameter will be submitted as a string, and
+            <code>some_method</code>&#39;s handling of a hash argument performs an
+            unauthorized action.</p>
+            
+            <p><a href="../classes/Roda.html">Roda</a> ships with a
+            <code>typecast_params</code> plugin that can easily handle the typecasting
+            of submitted parameters, and it is recommended that all <a
+            href="../classes/Roda.html">Roda</a> applications that deal with parameters
+            use it or another tool to explicitly convert submitted parameters to the
+            expected types.</p>
             
             <h3 id="label-Security+Related+HTTP+Headers">Security Related HTTP Headers<span><a href="#label-Security+Related+HTTP+Headers">&para;</a> <a href="#top">&uarr;</a></span></h3>
             

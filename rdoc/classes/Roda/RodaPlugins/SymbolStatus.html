@@ -43,7 +43,7 @@
             
             <p>Examples:</p>
             
-            <pre>r.is &quot;needs_authorization&quot;&#x000A;  response.status = :unauthorized&#x000A;end&#x000A;r.is &quot;nothing&quot;&#x000A;  response.status = :no_content&#x000A;end</pre>
+            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;needs_authorization&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = :<span class="ruby-identifier">unauthorized</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;nothing&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = :<span class="ruby-identifier">no_content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
             
             <p>The conversion is done through <code>Rack::Utils.status_code</code>.</p>
           </div>
