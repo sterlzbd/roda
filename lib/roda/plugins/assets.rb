@@ -564,7 +564,9 @@ class Roda
           begin
             require 'uglifier'
           rescue => e
+            # :nocov:
             raise CompressorNotFound, "#{e.class}: #{e.message}", e.backtrace
+            # :nocov:
           end
 
           Uglifier.compile(content)
