@@ -37,13 +37,36 @@ class Roda
     # this plugin those HEAD requests will return a 404 status, which
     # may prevent search engines from crawling your website.
     module Head
+
+      # used to ensure proper resource release on HEAD requests
+      # we do not respond to a to_path method, here.
+      class CloseLater
+        def initialize(body)
+          @body = body
+        end
+
+        # yield nothing
+        def each
+        end
+
+        # this should be called by the Rack server
+        def close
+          @body.close
+        end
+      end
+
       module InstanceMethods
         # Always use an empty response body for head requests, with a
         # content length of 0.
         def call(*)
           res = super
           if @_request.head?
-            res[2] = EMPTY_ARRAY
+            body = res[2]
+            if body.respond_to?(:close)
+              res[2] = CloseLater.new(body)
+            else
+              res[2] = EMPTY_ARRAY
+            end
           end
           res
         end
