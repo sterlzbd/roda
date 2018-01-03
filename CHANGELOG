@@ -1,3 +1,7 @@
+= master
+
+* Make head plugin handle closing existing response bodies if the body responds to close (Eric Wong)
+
 = 3.3.0 (2017-12-14)
 
 * Add typecast_params plugin for converting param values to explicit types (jeremyevans)
