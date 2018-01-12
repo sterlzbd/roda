@@ -1,110 +1,112 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::TimestampPublic</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::TimestampPublic
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/roda/plugins/timestamp_public_rb.html">lib/roda/plugins/timestamp_public.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The timestamp_public plugin adds a <code>timestamp_path</code> method for
-            constructing timestamp paths, and a <code>r.timestamp_public</code> routing
-            method to serve static files from a directory (using the public plugin). 
-            This plugin is useful when you want to modify the path to static files when
-            the modify timestamp on the file changes, ensuring that requests for the
-            static file will not be cached.</p>
-            
-            <p>Note that while this plugin will not serve files outside of the public
-            directory, for performance reasons it does not check the path of the file
-            is inside the public directory when getting the modify timestamp.  If the
-            <code>timestamp_path</code> method is called with untrusted input, it is
-            possible for an attacker to get the modify timestamp for any file on the
-            file system.</p>
-            
-            <p>Examples:</p>
-            
-            <pre class="ruby"><span class="ruby-comment"># Use public folder as location of files, and static as the path prefix</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">timestamp_public</span>&#x000A;&#x000A;<span class="ruby-comment"># Use /path/to/app/static as location of files, and public as the path prefix</span>&#x000A;<span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">public</span>, <span class="ruby-identifier">root</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;static&#39;</span>, <span class="ruby-identifier">prefix</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;public&#39;</span>&#x000A;&#x000A;<span class="ruby-comment"># Assuming public is the location of files, and static is the path prefix</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># Make GET /static/1238099123/images/foo.png look for public/images/foo.png </span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">timestamp_public</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;example&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># &quot;/static/1238099123/images/foo.png&quot;</span>&#x000A;    <span class="ruby-identifier">timestamp_path</span>(<span class="ruby-string">&quot;images/foo.png&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-          </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a href="#method-c-configure">configure</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="TimestampPublic/InstanceMethods.html">Roda::RodaPlugins::TimestampPublic::InstanceMethods</a></li>
-              <li><a href="TimestampPublic/RequestMethods.html">Roda::RodaPlugins::TimestampPublic::RequestMethods</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-configure'>
-                <a name='method-c-configure'></a>
-                <div class='synopsis'>
-                  <span class='name'>configure</span>
-                  <span class='arguments'>(app, opts={})</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Use options given to setup timestamped file serving.  The following option
-                  is recognized by the plugin:</p>
-                  <table class="rdoc-list note-list"><tbody><tr><td class='label'>:prefix </td><td>
-                  <p>The prefix for paths, before the timestamp segment</p>
-                  </td></tr></tbody></table>
-                  
-                  <p>The options given are also passed to the public plugin.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/timestamp_public.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>, <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;static&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::TimestampPublic</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::TimestampPublic
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/timestamp_public_rb.html">lib/roda/plugins/timestamp_public.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The timestamp_public plugin adds a <code>timestamp_path</code> method for
+constructing timestamp paths, and a <code>r.timestamp_public</code> routing
+method to serve static files from a directory (using the public plugin). 
+This plugin is useful when you want to modify the path to static files when
+the modify timestamp on the file changes, ensuring that requests for the
+static file will not be cached.</p>
+
+<p>Note that while this plugin will not serve files outside of the public
+directory, for performance reasons it does not check the path of the file
+is inside the public directory when getting the modify timestamp.  If the
+<code>timestamp_path</code> method is called with untrusted input, it is
+possible for an attacker to get the modify timestamp for any file on the
+file system.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-comment"># Use public folder as location of files, and static as the path prefix</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:timestamp_public</span>&#x000A;&#x000A;<span class="ruby-comment"># Use /path/to/app/static as location of files, and public as the path prefix</span>&#x000A;<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>, <span class="ruby-value">root:</span> <span class="ruby-string">&#39;static&#39;</span>, <span class="ruby-value">prefix:</span> <span class="ruby-string">&#39;public&#39;</span>&#x000A;&#x000A;<span class="ruby-comment"># Assuming public is the location of files, and static is the path prefix</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># Make GET /static/1238099123/images/foo.png look for public/images/foo.png</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">timestamp_public</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;example&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># &quot;/static/1238099123/images/foo.png&quot;</span>&#x000A;    <span class="ruby-identifier">timestamp_path</span>(<span class="ruby-string">&quot;images/foo.png&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="TimestampPublic/InstanceMethods.html">Roda::RodaPlugins::TimestampPublic::InstanceMethods</a></li>
+<li><a href="TimestampPublic/RequestMethods.html">Roda::RodaPlugins::TimestampPublic::RequestMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span>
+<span class='arguments'>(app, opts={})</span>
+
+</div>
+<div class='description'>
+
+<p>Use options given to setup timestamped file serving.  The following option
+is recognized by the plugin:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:prefix </td><td>
+<p>The prefix for paths, before the timestamp segment</p>
+</td></tr></tbody></table>
+
+<p>The options given are also passed to the public plugin.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/timestamp_public.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>, <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;static&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

@@ -1,277 +1,279 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>3.3.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>3.3.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/3.3.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2017-12-14 07:52:58 -0800</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A typecast_params plugin has been added for handling the conversion of
-            params to the expected type.  This plugin is recommended for all
-            applications that deal with submitted parameters.</p>
-            
-            <p>Submitted parameters should be considered untrusted input, and in standard
-            use with browsers, parameters are submitted as strings (or a hash/array
-            containing strings).  In most cases it makes sense to explicitly convert
-            the parameter to the desired type.  While this can be done via manual
-            conversion:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">to_i</span>&#x000A;<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span></pre>
-            
-            <p>the typecast_params plugin adds a friendlier interface:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>)</pre>
-            
-            <p>As typecast_params is a fairly long method name, you may want to consider
-            aliasing it to something more terse in your application, such as tp.</p>
-            
-            <p>One advantage of using typecast_params is that access or conversion errors
-            are raised as a specific exception class
-            (Roda::RodaPlugins::TypecastParams::Error).  This allows you to handle this
-            specific exception class globally and return an appropriate 4xx response to
-            the client.  You can use the Error#param_name and Error#reason methods to
-            get more information about the error.</p>
-            
-            <p>typecast_params offers support for default values:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">1</span>)</pre>
-            
-            <p>The default value is only used if no value has been submitted for the
-            parameter, or if the conversion of the value results in nil. Handling
-            defaults for parameter conversion manually is more difficult, since the
-            parameter may not be present at all, or it may be present but an empty
-            string because the user did not enter a value on the related form.  Use of
-            typecast_params for the conversion handles both cases.</p>
-            
-            <p>In many cases, parameters should be required, and if they aren&#39;t
-            submitted, that should be considered an error.  typecast_params handles
-            this with ! methods:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;key&#39;</span>)</pre>
-            
-            <p>These ! methods raise an error instead of returning nil, and do not allow
-            defaults.</p>
-            
-            <p>To make it easy to handle cases where many parameters need the same
-            conversion done, you can pass an array of keys to a conversion method, and
-            it will return an array of converted values:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])</pre>
-            
-            <p>This is equivalent to:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">key1</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key1&#39;</span>)&#x000A;<span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key2&#39;</span>)</pre>
-            
-            <p>The ! methods also support arrays of keys, ensuring that all parameters
-            have a value:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])</pre>
-            
-            <p>For handling of array parameters, where all entries in the array use the
-            same conversion, there is an array method which takes the type as the first
-            argument and the keys to convert as the second argument:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)</pre>
-            
-            <p>If you want to ensure that all entries in the array are converted
-            successfully and that there is a value for the array itself, you can use
-            array!:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)</pre>
-            
-            <p>This will raise an exception if any of the values in the array for
-            parameter keys cannot be converted to a positive integer.</p>
-            
-            <p>Both array and array! support default values which are used if no value is
-            present for the parameter:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])&#x000A;<span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])</pre>
-            
-            <p>You can also pass an array of keys to array or array!, if you would like to
-            perform the same conversion on multiple arrays:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">foo_ids</span>, <span class="ruby-identifier">bar_ids</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(:<span class="ruby-identifier">pos_int</span>, [<span class="ruby-string">&#39;foo_ids&#39;</span>, <span class="ruby-string">&#39;bar_ids&#39;</span>])</pre>
-            
-            <p>The previous examples have shown use of the pos_int method, which uses to_i
-            to convert the value to an integer, but returns nil if the resulting
-            integer is not positive.  Unless you need to handle negative numbers, it is
-            recommended to use pos_int instead of int as int will convert invalid
-            values to 0 (since that is how <code>String#to_i</code> works).</p>
-            
-            <p>There are many built in methods for type conversion:</p>
-            <table class="rdoc-list note-list"><tbody><tr><td class='label'>any </td><td>
-            <p>Returns the value as is without conversion</p>
-            </td></tr><tr><td class='label'>str </td><td>
-            <p>Raises if value is not already a string</p>
-            </td></tr><tr><td class='label'>nonempty_str </td><td>
-            <p>Raises if value is not already a string, and converts the empty string or
-            string containing only whitespace to nil</p>
-            </td></tr><tr><td class='label'>bool </td><td>
-            <p>Converts entry to boolean if in one of the recognized formats (case
-            insensitive for strings):</p>
-            <table class="rdoc-list note-list"><tbody><tr><td class='label'>nil </td><td>
-            <p>nil, &#39;&#39;</p>
-            </td></tr><tr><td class='label'>true </td><td>
-            <p>true, 1, &#39;1&#39;, &#39;t&#39;, &#39;true&#39;, &#39;yes&#39;,
-            &#39;y&#39;, &#39;on&#39;</p>
-            </td></tr><tr><td class='label'>false </td><td>
-            <p>false, 0, &#39;0&#39;, &#39;f&#39;, &#39;false&#39;, &#39;no&#39;,
-            &#39;n&#39;, &#39;off&#39;</p>
-            </td></tr></tbody></table>
-            
-            <p>If not in one of those formats, raises an error.</p>
-            </td></tr><tr><td class='label'>int </td><td>
-            <p>Converts value to integer using to_i (note that invalid input strings will
-            be converted to 0)</p>
-            </td></tr><tr><td class='label'>pos_int </td><td>
-            <p>Converts value using to_i, but non-positive values are converted to nil</p>
-            </td></tr><tr><td class='label'>Integer </td><td>
-            <p>Converts value to integer using Kernel::Integer(value, 10)</p>
-            </td></tr><tr><td class='label'>float </td><td>
-            <p>Converts value to float using to_f (note that invalid input strings will be
-            converted to 0.0)</p>
-            </td></tr><tr><td class='label'>Float </td><td>
-            <p>Converts value to float using Kernel::Float(value)</p>
-            </td></tr><tr><td class='label'>Hash </td><td>
-            <p>Raises if value is not already a hash</p>
-            </td></tr><tr><td class='label'>date </td><td>
-            <p>Converts value to Date using Date.parse(value)</p>
-            </td></tr><tr><td class='label'>time </td><td>
-            <p>Converts value to Time using Time.parse(value)</p>
-            </td></tr><tr><td class='label'>datetime </td><td>
-            <p>Converts value to DateTime using DateTime.parse(value)</p>
-            </td></tr><tr><td class='label'>file </td><td>
-            <p>Raises if value is not already a hash with a :tempfile key whose value
-            responds to read (this is the format rack uses for uploaded files).</p>
-            </td></tr></tbody></table>
-            
-            <p>All of these methods also support ! methods (e.g. pos_int!), and all of
-            them can be used in the array and array! methods to support arrays of
-            values.</p>
-            
-            <p>Since parameter hashes can be nested, the [] method can be used to access
-            nested hashes:</p>
-            
-            <pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;&#39;1&#39;}}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span></pre>
-            
-            <p>This works to an arbitrary depth:</p>
-            
-            <pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span></pre>
-            
-            <p>And also works with arrays at any depth, if those arrays contain hashes:</p>
-            
-            <pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}]}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span>&#x000A;&#x000A;<span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;[&#39;1&#39;]}]}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">array!</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; [1]</span></pre>
-            
-            <p>To allow easier access to nested data, there is a dig method:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)&#x000A;<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)</pre>
-            
-            <p>dig will return nil if any access while looking up the nested value returns
-            nil.  There is also a dig! method, which will raise an Error if dig would
-            return nil:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)&#x000A;<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)</pre>
-            
-            <p>Note that none of these conversion methods modify request.params. They
-            purely do the conversion and return the converted value. However, in some
-            cases it is useful to do all the conversion up front, and then pass a hash
-            of converted parameters to an internal method that expects to receive
-            values in specific types.  The convert! method does this, and there is also
-            a convert_each! method designed for converting multiple values using the
-            same block:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># converted_params:</span>&#x000A;<span class="ruby-comment"># {</span>&#x000A;<span class="ruby-comment">#   &#39;page&#39; =&gt; 1,</span>&#x000A;<span class="ruby-comment">#   &#39;artist_id&#39; =&gt; 2,</span>&#x000A;<span class="ruby-comment">#   &#39;album_ids&#39; =&gt; [3, 4],</span>&#x000A;<span class="ruby-comment">#   &#39;sales&#39; =&gt; {</span>&#x000A;<span class="ruby-comment">#     &#39;num_sold&#39; =&gt; 5,</span>&#x000A;<span class="ruby-comment">#     &#39;num_shipped&#39; =&gt; 6</span>&#x000A;<span class="ruby-comment">#   },</span>&#x000A;<span class="ruby-comment">#   &#39;members&#39; =&gt; [</span>&#x000A;<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Foo&#39;, &#39;last_name&#39; =&gt; &#39;Bar&#39;},</span>&#x000A;<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Baz&#39;, &#39;last_name&#39; =&gt; &#39;Quux&#39;}</span>&#x000A;<span class="ruby-comment">#   ]</span>&#x000A;<span class="ruby-comment"># }</span></pre>
-            
-            <p>convert! and convert_each! only return values you explicitly specify for
-            conversion inside the passed block.</p>
-            
-            <p>You can specify the :symbolize option to convert! or convert_each!, which
-            will symbolize the resulting hash keys:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-identifier">symbolize</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(:<span class="ruby-identifier">pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># converted_params:</span>&#x000A;<span class="ruby-comment"># {</span>&#x000A;<span class="ruby-comment">#   :page =&gt; 1,</span>&#x000A;<span class="ruby-comment">#   :artist_id =&gt; 2,</span>&#x000A;<span class="ruby-comment">#   :album_ids =&gt; [3, 4],</span>&#x000A;<span class="ruby-comment">#   :sales =&gt; {</span>&#x000A;<span class="ruby-comment">#     :num_sold =&gt; 5,</span>&#x000A;<span class="ruby-comment">#     :num_shipped =&gt; 6</span>&#x000A;<span class="ruby-comment">#   },</span>&#x000A;<span class="ruby-comment">#   :members =&gt; [</span>&#x000A;<span class="ruby-comment">#      {:first_name =&gt; &#39;Foo&#39;, :last_name =&gt; &#39;Bar&#39;},</span>&#x000A;<span class="ruby-comment">#      {:first_name =&gt; &#39;Baz&#39;, :last_name =&gt; &#39;Quux&#39;}</span>&#x000A;<span class="ruby-comment">#   ]</span>&#x000A;<span class="ruby-comment"># }</span></pre>
-            
-            <p>Using the :symbolize option makes it simpler to transition from untrusted
-            external data (string keys), to trusted data that can be used internally
-            (trusted in the sense that the expected types are used).</p>
-            
-            <p>Note that if there are multiple conversion errors raised inside a convert!
-            or convert_each!  block, they are recorded and a single <a
-            href="../../../classes/Roda/RodaPlugins/TypecastParams/Error.html">Roda::RodaPlugins::TypecastParams::Error</a>
-            instance is raised after processing the block. 
-            TypecastParams::Error#params_names can be called on the exception to get an
-            array of all parameter names with conversion issues, and
-            TypecastParams::Error#all_errors can be used to get an array of all Error
-            instances.</p>
-            
-            <p>Because of how convert! and convert_each! work, you should avoid calling
-            TypecastParams::Params#[] inside the block you pass to these methods,
-            because if the [] call fails, it will skip the reminder of the block.</p>
-            
-            <p>Be aware that when you use convert! and convert_each!, the conversion
-            methods called inside the block may return nil if there is a error raised,
-            and nested calls to convert! and convert_each! may not return values.</p>
-            
-            <p>When loading the typecast_params plugin, a subclass of
-            TypecastParams::Params is created specific to the <a
-            href="../../../classes/Roda.html">Roda</a> application. You can add support
-            for custom types by passing a block when loading the typecast_params
-            plugin.  This block is executed in the context of the subclass, and calling
-            handle_type in the block can be used to add conversion methods. 
-            handle_type accepts a type name and the block used to convert the type:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">typecast_params</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">handle_type</span>(:<span class="ruby-identifier">album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span> = <span class="ruby-identifier">convert_pos_int</span>(<span class="ruby-identifier">val</span>)&#x000A;      <span class="ruby-constant">Album</span>[<span class="ruby-identifier">id</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>By default, the typecast_params conversion procs are passed the parameter
-            value directly from request.params without modification. In some cases, it
-            may be beneficial to strip leading and trailing whitespace from parameter
-            string values before processing, which you can do by passing the strip:
-            :all&gt; option when loading the plugin.</p>
-            
-            <p>By design, typecast_params only deals with string keys, it is not possible
-            to use symbol keys as arguments to the conversion methods and have them
-            converted.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>3.3.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.3.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.3.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2017-12-14 07:52:58 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A typecast_params plugin has been added for handling the conversion of
+params to the expected type.  This plugin is recommended for all
+applications that deal with submitted parameters.</p>
+
+<p>Submitted parameters should be considered untrusted input, and in standard
+use with browsers, parameters are submitted as strings (or a hash/array
+containing strings).  In most cases it makes sense to explicitly convert
+the parameter to the desired type.  While this can be done via manual
+conversion:</p>
+
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">to_i</span>&#x000A;<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span></pre>
+
+<p>the typecast_params plugin adds a friendlier interface:</p>
+
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>)</pre>
+
+<p>As typecast_params is a fairly long method name, you may want to consider
+aliasing it to something more terse in your application, such as tp.</p>
+
+<p>One advantage of using typecast_params is that access or conversion errors
+are raised as a specific exception class
+(Roda::RodaPlugins::TypecastParams::Error).  This allows you to handle this
+specific exception class globally and return an appropriate 4xx response to
+the client.  You can use the Error#param_name and Error#reason methods to
+get more information about the error.</p>
+
+<p>typecast_params offers support for default values:</p>
+
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">1</span>)</pre>
+
+<p>The default value is only used if no value has been submitted for the
+parameter, or if the conversion of the value results in nil. Handling
+defaults for parameter conversion manually is more difficult, since the
+parameter may not be present at all, or it may be present but an empty
+string because the user did not enter a value on the related form.  Use of
+typecast_params for the conversion handles both cases.</p>
+
+<p>In many cases, parameters should be required, and if they aren&#39;t
+submitted, that should be considered an error.  typecast_params handles
+this with ! methods:</p>
+
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;key&#39;</span>)</pre>
+
+<p>These ! methods raise an error instead of returning nil, and do not allow
+defaults.</p>
+
+<p>To make it easy to handle cases where many parameters need the same
+conversion done, you can pass an array of keys to a conversion method, and
+it will return an array of converted values:</p>
+
+<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])</pre>
+
+<p>This is equivalent to:</p>
+
+<pre class="ruby"><span class="ruby-identifier">key1</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key1&#39;</span>)&#x000A;<span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key2&#39;</span>)</pre>
+
+<p>The ! methods also support arrays of keys, ensuring that all parameters
+have a value:</p>
+
+<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])</pre>
+
+<p>For handling of array parameters, where all entries in the array use the
+same conversion, there is an array method which takes the type as the first
+argument and the keys to convert as the second argument:</p>
+
+<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)</pre>
+
+<p>If you want to ensure that all entries in the array are converted
+successfully and that there is a value for the array itself, you can use
+array!:</p>
+
+<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)</pre>
+
+<p>This will raise an exception if any of the values in the array for
+parameter keys cannot be converted to a positive integer.</p>
+
+<p>Both array and array! support default values which are used if no value is
+present for the parameter:</p>
+
+<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])&#x000A;<span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])</pre>
+
+<p>You can also pass an array of keys to array or array!, if you would like to
+perform the same conversion on multiple arrays:</p>
+
+<pre class="ruby"><span class="ruby-identifier">foo_ids</span>, <span class="ruby-identifier">bar_ids</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, [<span class="ruby-string">&#39;foo_ids&#39;</span>, <span class="ruby-string">&#39;bar_ids&#39;</span>])</pre>
+
+<p>The previous examples have shown use of the pos_int method, which uses to_i
+to convert the value to an integer, but returns nil if the resulting
+integer is not positive.  Unless you need to handle negative numbers, it is
+recommended to use pos_int instead of int as int will convert invalid
+values to 0 (since that is how <code>String#to_i</code> works).</p>
+
+<p>There are many built in methods for type conversion:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>any </td><td>
+<p>Returns the value as is without conversion</p>
+</td></tr><tr><td class='label'>str </td><td>
+<p>Raises if value is not already a string</p>
+</td></tr><tr><td class='label'>nonempty_str </td><td>
+<p>Raises if value is not already a string, and converts the empty string or
+string containing only whitespace to nil</p>
+</td></tr><tr><td class='label'>bool </td><td>
+<p>Converts entry to boolean if in one of the recognized formats (case
+insensitive for strings):</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>nil </td><td>
+<p>nil, &#39;&#39;</p>
+</td></tr><tr><td class='label'>true </td><td>
+<p>true, 1, &#39;1&#39;, &#39;t&#39;, &#39;true&#39;, &#39;yes&#39;,
+&#39;y&#39;, &#39;on&#39;</p>
+</td></tr><tr><td class='label'>false </td><td>
+<p>false, 0, &#39;0&#39;, &#39;f&#39;, &#39;false&#39;, &#39;no&#39;,
+&#39;n&#39;, &#39;off&#39;</p>
+</td></tr></tbody></table>
+
+<p>If not in one of those formats, raises an error.</p>
+</td></tr><tr><td class='label'>int </td><td>
+<p>Converts value to integer using to_i (note that invalid input strings will
+be converted to 0)</p>
+</td></tr><tr><td class='label'>pos_int </td><td>
+<p>Converts value using to_i, but non-positive values are converted to nil</p>
+</td></tr><tr><td class='label'>Integer </td><td>
+<p>Converts value to integer using Kernel::Integer(value, 10)</p>
+</td></tr><tr><td class='label'>float </td><td>
+<p>Converts value to float using to_f (note that invalid input strings will be
+converted to 0.0)</p>
+</td></tr><tr><td class='label'>Float </td><td>
+<p>Converts value to float using Kernel::Float(value)</p>
+</td></tr><tr><td class='label'>Hash </td><td>
+<p>Raises if value is not already a hash</p>
+</td></tr><tr><td class='label'>date </td><td>
+<p>Converts value to Date using Date.parse(value)</p>
+</td></tr><tr><td class='label'>time </td><td>
+<p>Converts value to Time using Time.parse(value)</p>
+</td></tr><tr><td class='label'>datetime </td><td>
+<p>Converts value to DateTime using DateTime.parse(value)</p>
+</td></tr><tr><td class='label'>file </td><td>
+<p>Raises if value is not already a hash with a :tempfile key whose value
+responds to read (this is the format rack uses for uploaded files).</p>
+</td></tr></tbody></table>
+
+<p>All of these methods also support ! methods (e.g. pos_int!), and all of
+them can be used in the array and array! methods to support arrays of
+values.</p>
+
+<p>Since parameter hashes can be nested, the [] method can be used to access
+nested hashes:</p>
+
+<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;&#39;1&#39;}}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span></pre>
+
+<p>This works to an arbitrary depth:</p>
+
+<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span></pre>
+
+<p>And also works with arrays at any depth, if those arrays contain hashes:</p>
+
+<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}]}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span>&#x000A;&#x000A;<span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;[&#39;1&#39;]}]}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; [1]</span></pre>
+
+<p>To allow easier access to nested data, there is a dig method:</p>
+
+<pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)&#x000A;<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)</pre>
+
+<p>dig will return nil if any access while looking up the nested value returns
+nil.  There is also a dig! method, which will raise an Error if dig would
+return nil:</p>
+
+<pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)&#x000A;<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)</pre>
+
+<p>Note that none of these conversion methods modify request.params. They
+purely do the conversion and return the converted value. However, in some
+cases it is useful to do all the conversion up front, and then pass a hash
+of converted parameters to an internal method that expects to receive
+values in specific types.  The convert! method does this, and there is also
+a convert_each! method designed for converting multiple values using the
+same block:</p>
+
+<pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># converted_params:</span>&#x000A;<span class="ruby-comment"># {</span>&#x000A;<span class="ruby-comment">#   &#39;page&#39; =&gt; 1,</span>&#x000A;<span class="ruby-comment">#   &#39;artist_id&#39; =&gt; 2,</span>&#x000A;<span class="ruby-comment">#   &#39;album_ids&#39; =&gt; [3, 4],</span>&#x000A;<span class="ruby-comment">#   &#39;sales&#39; =&gt; {</span>&#x000A;<span class="ruby-comment">#     &#39;num_sold&#39; =&gt; 5,</span>&#x000A;<span class="ruby-comment">#     &#39;num_shipped&#39; =&gt; 6</span>&#x000A;<span class="ruby-comment">#   },</span>&#x000A;<span class="ruby-comment">#   &#39;members&#39; =&gt; [</span>&#x000A;<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Foo&#39;, &#39;last_name&#39; =&gt; &#39;Bar&#39;},</span>&#x000A;<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Baz&#39;, &#39;last_name&#39; =&gt; &#39;Quux&#39;}</span>&#x000A;<span class="ruby-comment">#   ]</span>&#x000A;<span class="ruby-comment"># }</span></pre>
+
+<p>convert! and convert_each! only return values you explicitly specify for
+conversion inside the passed block.</p>
+
+<p>You can specify the :symbolize option to convert! or convert_each!, which
+will symbolize the resulting hash keys:</p>
+
+<pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-value">symbolize:</span> <span class="ruby-keyword">true</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># converted_params:</span>&#x000A;<span class="ruby-comment"># {</span>&#x000A;<span class="ruby-comment">#   :page =&gt; 1,</span>&#x000A;<span class="ruby-comment">#   :artist_id =&gt; 2,</span>&#x000A;<span class="ruby-comment">#   :album_ids =&gt; [3, 4],</span>&#x000A;<span class="ruby-comment">#   :sales =&gt; {</span>&#x000A;<span class="ruby-comment">#     :num_sold =&gt; 5,</span>&#x000A;<span class="ruby-comment">#     :num_shipped =&gt; 6</span>&#x000A;<span class="ruby-comment">#   },</span>&#x000A;<span class="ruby-comment">#   :members =&gt; [</span>&#x000A;<span class="ruby-comment">#      {:first_name =&gt; &#39;Foo&#39;, :last_name =&gt; &#39;Bar&#39;},</span>&#x000A;<span class="ruby-comment">#      {:first_name =&gt; &#39;Baz&#39;, :last_name =&gt; &#39;Quux&#39;}</span>&#x000A;<span class="ruby-comment">#   ]</span>&#x000A;<span class="ruby-comment"># }</span></pre>
+
+<p>Using the :symbolize option makes it simpler to transition from untrusted
+external data (string keys), to trusted data that can be used internally
+(trusted in the sense that the expected types are used).</p>
+
+<p>Note that if there are multiple conversion errors raised inside a convert!
+or convert_each!  block, they are recorded and a single <a
+href="../../../classes/Roda/RodaPlugins/TypecastParams/Error.html">Roda::RodaPlugins::TypecastParams::Error</a>
+instance is raised after processing the block. 
+TypecastParams::Error#params_names can be called on the exception to get an
+array of all parameter names with conversion issues, and
+TypecastParams::Error#all_errors can be used to get an array of all Error
+instances.</p>
+
+<p>Because of how convert! and convert_each! work, you should avoid calling
+TypecastParams::Params#[] inside the block you pass to these methods,
+because if the [] call fails, it will skip the reminder of the block.</p>
+
+<p>Be aware that when you use convert! and convert_each!, the conversion
+methods called inside the block may return nil if there is a error raised,
+and nested calls to convert! and convert_each! may not return values.</p>
+
+<p>When loading the typecast_params plugin, a subclass of
+TypecastParams::Params is created specific to the <a
+href="../../../classes/Roda.html">Roda</a> application. You can add support
+for custom types by passing a block when loading the typecast_params
+plugin.  This block is executed in the context of the subclass, and calling
+handle_type in the block can be used to add conversion methods. 
+handle_type accepts a type name and the block used to convert the type:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:typecast_params</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">handle_type</span>(<span class="ruby-value">:album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span> = <span class="ruby-identifier">convert_pos_int</span>(<span class="ruby-identifier">val</span>)&#x000A;      <span class="ruby-constant">Album</span>[<span class="ruby-identifier">id</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>By default, the typecast_params conversion procs are passed the parameter
+value directly from request.params without modification. In some cases, it
+may be beneficial to strip leading and trailing whitespace from parameter
+string values before processing, which you can do by passing the strip:
+:all&gt; option when loading the plugin.</p>
+
+<p>By design, typecast_params only deals with string keys, it is not possible
+to use symbol keys as arguments to the conversion methods and have them
+converted.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

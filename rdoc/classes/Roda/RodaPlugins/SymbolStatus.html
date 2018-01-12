@@ -1,68 +1,68 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::SymbolStatus</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::SymbolStatus
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/roda/plugins/symbol_status_rb.html">lib/roda/plugins/symbol_status.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The symbol_status plugin patches the <code>status=</code> response method
-            to accept the status name as a symbol.  If given an integer value, the
-            default behaviour is used.</p>
-            
-            <p>Examples:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;needs_authorization&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = :<span class="ruby-identifier">unauthorized</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;nothing&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = :<span class="ruby-identifier">no_content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>The conversion is done through <code>Rack::Utils.status_code</code>.</p>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="SymbolStatus/ResponseMethods.html">Roda::RodaPlugins::SymbolStatus::ResponseMethods</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::SymbolStatus</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::SymbolStatus
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/symbol_status_rb.html">lib/roda/plugins/symbol_status.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The symbol_status plugin patches the <code>status=</code> response method
+to accept the status name as a symbol.  If given an integer value, the
+default behaviour is used.</p>
+
+<p>Examples:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;needs_authorization&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">:unauthorized</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;nothing&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">:no_content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The conversion is done through <code>Rack::Utils.status_code</code>.</p>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="SymbolStatus/ResponseMethods.html">Roda::RodaPlugins::SymbolStatus::ResponseMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

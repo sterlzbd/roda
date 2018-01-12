@@ -1,122 +1,124 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::MultiRun</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::MultiRun
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/roda/plugins/multi_run_rb.html">lib/roda/plugins/multi_run.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The multi_run plugin provides the ability to easily dispatch to other rack
-            applications based on the request path prefix. First, load the plugin:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Then, other rack applications can register with the multi_run plugin:</p>
-            
-            <pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ra&quot;</span>, <span class="ruby-constant">PlainRackApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ro&quot;</span>, <span class="ruby-constant">OtherRodaApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;si&quot;</span>, <span class="ruby-constant">SinatraApp</span></pre>
-            
-            <p>Inside your route block, you can call r.multi_run to dispatch to all three
-            rack applications based on the prefix:</p>
-            
-            <pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>This will dispatch routes starting with <code>/ra</code> to
-            <code>PlainRackApp</code>, routes starting with <code>/ro</code> to
-            <code>OtherRodaApp</code>, and routes starting with <code>/si</code> to
-            SinatraApp.</p>
-            
-            <p>You can pass a block to <code>multi_run</code> that will be called with the
-            prefix, before dispatching to the rack app:</p>
-            
-            <pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># do something based on prefix before the request is passed further</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>This is useful for modifying the environment before passing it to the rack
-            app.</p>
-            
-            <p>The multi_run plugin is similar to the multi_route plugin, with the
-            difference being the multi_route plugin keeps all routing subtrees in the
-            same <a href="../../Roda.html">Roda</a> app/class, while multi_run
-            dispatches to other rack apps.  If you want to isolate your routing
-            subtrees, multi_run is a better approach, but it does not let you set
-            instance variables in the main <a href="../../Roda.html">Roda</a> app and
-            have those instance variables usable in the routing subtrees.</p>
-          </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a href="#method-c-configure">configure</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="MultiRun/ClassMethods.html">Roda::RodaPlugins::MultiRun::ClassMethods</a></li>
-              <li><a href="MultiRun/RequestClassMethods.html">Roda::RodaPlugins::MultiRun::RequestClassMethods</a></li>
-              <li><a href="MultiRun/RequestMethods.html">Roda::RodaPlugins::MultiRun::RequestMethods</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-configure'>
-                <a name='method-c-configure'></a>
-                <div class='synopsis'>
-                  <span class='name'>configure</span>
-                  <span class='arguments'>(app)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Initialize the storage for the dispatched applications</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 49</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::MultiRun</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::MultiRun
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/multi_run_rb.html">lib/roda/plugins/multi_run.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The multi_run plugin provides the ability to easily dispatch to other rack
+applications based on the request path prefix. First, load the plugin:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Then, other rack applications can register with the multi_run plugin:</p>
+
+<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ra&quot;</span>, <span class="ruby-constant">PlainRackApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ro&quot;</span>, <span class="ruby-constant">OtherRodaApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;si&quot;</span>, <span class="ruby-constant">SinatraApp</span></pre>
+
+<p>Inside your route block, you can call r.multi_run to dispatch to all three
+rack applications based on the prefix:</p>
+
+<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>This will dispatch routes starting with <code>/ra</code> to
+<code>PlainRackApp</code>, routes starting with <code>/ro</code> to
+<code>OtherRodaApp</code>, and routes starting with <code>/si</code> to
+SinatraApp.</p>
+
+<p>You can pass a block to <code>multi_run</code> that will be called with the
+prefix, before dispatching to the rack app:</p>
+
+<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># do something based on prefix before the request is passed further</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>This is useful for modifying the environment before passing it to the rack
+app.</p>
+
+<p>The multi_run plugin is similar to the multi_route plugin, with the
+difference being the multi_route plugin keeps all routing subtrees in the
+same <a href="../../Roda.html">Roda</a> app/class, while multi_run
+dispatches to other rack apps.  If you want to isolate your routing
+subtrees, multi_run is a better approach, but it does not let you set
+instance variables in the main <a href="../../Roda.html">Roda</a> app and
+have those instance variables usable in the routing subtrees.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="MultiRun/ClassMethods.html">Roda::RodaPlugins::MultiRun::ClassMethods</a></li>
+<li><a href="MultiRun/RequestClassMethods.html">Roda::RodaPlugins::MultiRun::RequestClassMethods</a></li>
+<li><a href="MultiRun/RequestMethods.html">Roda::RodaPlugins::MultiRun::RequestMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span>
+<span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+<p>Initialize the storage for the dispatched applications</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 49</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

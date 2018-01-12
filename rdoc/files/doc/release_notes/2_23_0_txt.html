@@ -1,80 +1,82 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.23.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.23.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.23.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2017-02-24 08:23:12 -0800</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>An :explicit_cache option has been added to the render plugin. This is
-            similar to the :cache=&gt;false option, but instead of disabling caching
-            completely, this disables caching by default but allows for explicit
-            caching of templates by providing the :cache option to view/render.</p>
-            
-            <p>In development mode, <a href="../../../classes/Roda.html">Roda</a> now
-            defaults to :explicit_cache=&gt;true instead of :cache=&gt;false.</p>
-            </li><li>
-            <p>An :inherit_cache option has been added to the render plugin, making
-            subclasses of that class start with a dup of the template cache, instead of
-            starting with an empty template cache.  This can result in less memory
-            used.</p>
-            </li><li>
-            <p>Roda#error_email in the error_email plugin now accepts non-Exception
-            arguments (such as strings).  This can be useful in conditions that are
-            errors you may want to notify about, where an exception hasn&#39;t been
-            raised.</p>
-            </li><li>
-            <p>Roda#error_email_content has been added to the error_email plugin. This can
-            be used to create the email message, which can be delivered via another
-            mechanism, and may make testing easier.</p>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>Roda.freeze in the static_routing plugin now returns self, fixing code such
-            as Roda.freeze.app.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.23.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.23.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.23.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2017-02-24 08:23:12 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>An :explicit_cache option has been added to the render plugin. This is
+similar to the :cache=&gt;false option, but instead of disabling caching
+completely, this disables caching by default but allows for explicit
+caching of templates by providing the :cache option to view/render.</p>
+
+<p>In development mode, <a href="../../../classes/Roda.html">Roda</a> now
+defaults to :explicit_cache=&gt;true instead of :cache=&gt;false.</p>
+</li><li>
+<p>An :inherit_cache option has been added to the render plugin, making
+subclasses of that class start with a dup of the template cache, instead of
+starting with an empty template cache.  This can result in less memory
+used.</p>
+</li><li>
+<p>Roda#error_email in the error_email plugin now accepts non-Exception
+arguments (such as strings).  This can be useful in conditions that are
+errors you may want to notify about, where an exception hasn&#39;t been
+raised.</p>
+</li><li>
+<p>Roda#error_email_content has been added to the error_email plugin. This can
+be used to create the email message, which can be delivered via another
+mechanism, and may make testing easier.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Roda.freeze in the static_routing plugin now returns self, fixing code such
+as Roda.freeze.app.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

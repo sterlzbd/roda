@@ -1,69 +1,69 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::DelayBuild</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::DelayBuild
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/roda/plugins/delay_build_rb.html">lib/roda/plugins/delay_build.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The delay_build plugin does not build the rack app until Roda.app is
-            called, and only rebuilds the rack app if Roda.build! is called.  This
-            differs from Roda&#39;s default behavior, which rebuilds the rack app every
-            time the route block changes and every time middleware is added if a route
-            block has already been defined.</p>
-            
-            <p>If you are loading hundreds of middleware after a route block has already
-            been defined, this can fix a possible performance issue, turning an O(n^2)
-            calculation into an O(n) calculation, where n is the number of middleware
-            used.</p>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="DelayBuild/ClassMethods.html">Roda::RodaPlugins::DelayBuild::ClassMethods</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::DelayBuild</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::DelayBuild
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/delay_build_rb.html">lib/roda/plugins/delay_build.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The delay_build plugin does not build the rack app until Roda.app is
+called, and only rebuilds the rack app if Roda.build! is called.  This
+differs from Roda&#39;s default behavior, which rebuilds the rack app every
+time the route block changes and every time middleware is added if a route
+block has already been defined.</p>
+
+<p>If you are loading hundreds of middleware after a route block has already
+been defined, this can fix a possible performance issue, turning an O(n^2)
+calculation into an O(n) calculation, where n is the number of middleware
+used.</p>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="DelayBuild/ClassMethods.html">Roda::RodaPlugins::DelayBuild::ClassMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

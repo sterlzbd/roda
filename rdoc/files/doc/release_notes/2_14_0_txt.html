@@ -1,86 +1,88 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.14.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.14.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.14.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2016-05-13 10:12:52 -0700</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A symbol_status plugin has been added for using symbolic status names in
-            response.status=:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">symbol_status</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;needs_authorization&quot;</span>&#x000A;      <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = :<span class="ruby-identifier">unauthorized</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span></pre>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The middleware plugin will now also run the application&#39;s middleware
-            when the application is used as middleware.  For example, if you have the
-            following code in your config.ru file:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">csrf</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">middleware</span>&#x000A;  <span class="ruby-identifier">route</span>{}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">use</span> <span class="ruby-constant">App</span></pre>
-            
-            <p>previously, the csrf protection would not be enforced, as it uses a
-            middleware instead of being part of the application. Now, csrf protection
-            will be enforced.  This change makes it so the <a
-            href="../../../classes/Roda.html">Roda</a> application operates the same
-            way regardless of whether it is run as the rack application or used as rack
-            middleware.</p>
-            
-            <p>Because of this change, if you are nesting roda applications using the
-            middleware plugin, you may need to use the middleware plugin&#39;s :env_var
-            option to specify the environment variable used to indicate to the <a
-            href="../../../classes/Roda.html">Roda</a> application that it is being run
-            as middleware.</p>
-            </li></ul>
-            
-            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>See above changes to the middleware plugin if you are using middleware
-            inside a <a href="../../../classes/Roda.html">Roda</a> application that
-            uses the middleware plugin.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.14.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.14.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.14.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2016-05-13 10:12:52 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A symbol_status plugin has been added for using symbolic status names in
+response.status=:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_status</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;needs_authorization&quot;</span>&#x000A;      <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">:unauthorized</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span></pre>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The middleware plugin will now also run the application&#39;s middleware
+when the application is used as middleware.  For example, if you have the
+following code in your config.ru file:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:csrf</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:middleware</span>&#x000A;  <span class="ruby-identifier">route</span>{}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">use</span> <span class="ruby-constant">App</span></pre>
+
+<p>previously, the csrf protection would not be enforced, as it uses a
+middleware instead of being part of the application. Now, csrf protection
+will be enforced.  This change makes it so the <a
+href="../../../classes/Roda.html">Roda</a> application operates the same
+way regardless of whether it is run as the rack application or used as rack
+middleware.</p>
+
+<p>Because of this change, if you are nesting roda applications using the
+middleware plugin, you may need to use the middleware plugin&#39;s :env_var
+option to specify the environment variable used to indicate to the <a
+href="../../../classes/Roda.html">Roda</a> application that it is being run
+as middleware.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>See above changes to the middleware plugin if you are using middleware
+inside a <a href="../../../classes/Roda.html">Roda</a> application that
+uses the middleware plugin.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

@@ -1,99 +1,101 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.11.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.11.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.11.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2016-02-16 10:26:52 -0800</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A params_capturing plugin has been added, which makes string and symbol
-            matchers update the request params with the value of the captured segments,
-            using the matcher as the key:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">params_capturing</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># GET /foo/123/abc/67</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;foo/:bar/:baz&quot;</span>, :<span class="ruby-identifier">quux</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>[:<span class="ruby-identifier">bar</span>] <span class="ruby-comment">#=&gt; &#39;123&#39;</span>&#x000A;    <span class="ruby-identifier">r</span>[:<span class="ruby-identifier">baz</span>] <span class="ruby-comment">#=&gt; &#39;abc&#39;</span>&#x000A;    <span class="ruby-identifier">r</span>[:<span class="ruby-identifier">quux</span>] <span class="ruby-comment">#=&gt; &#39;67&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Note that this updating of the request params using the matcher as the key
-            is only done if all arguments to the matcher are symbols or strings.</p>
-            
-            <p>All matchers will update the request params by adding all captured segments
-            to the captures key, including symbol and string matchers:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(:<span class="ruby-identifier">x</span>, <span class="ruby-regexp">/(\d+)\/(\w+)/</span>, <span class="ruby-string">&#39;:y&#39;</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>[:<span class="ruby-identifier">x</span>] <span class="ruby-comment">#=&gt; nil</span>&#x000A;  <span class="ruby-identifier">r</span>[:<span class="ruby-identifier">y</span>] <span class="ruby-comment">#=&gt; nil</span>&#x000A;  <span class="ruby-identifier">r</span>[:<span class="ruby-identifier">captures</span>] <span class="ruby-comment">#=&gt; [&quot;foo&quot;, &quot;123&quot;, &quot;abc&quot;, &quot;67&quot;]</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Note that the request params captures entry will be appended to with each
-            nested match:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(:<span class="ruby-identifier">w</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(:<span class="ruby-identifier">x</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(:<span class="ruby-identifier">y</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(:<span class="ruby-identifier">z</span>) <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">r</span>[:<span class="ruby-identifier">captures</span>] <span class="ruby-comment"># =&gt; [&quot;foo&quot;, &quot;123&quot;, &quot;abc&quot;, &quot;67&quot;]</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Note that any existing params captures entry will be overwritten by this
-            plugin.  You can use r.GET or r.POST to get the underlying entry, depending
-            on how it was submitted.</p>
-            
-            <p>Also note that the param keys are actually stored in r.params as strings
-            and not symbols (r[] converts the argument to a string before looking it up
-            in r.params).</p>
-            
-            <p>Also note that this plugin will not work correctly if you are using the
-            symbol_matchers plugin with custom symbol matching and are using symbols
-            that capture multiple values or no values.</p>
-            </li><li>
-            <p>A :scope option is now supported by render/view in the render plugin, which
-            allows you to specify the object in which context to evaluate the template.</p>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The assets plugin&#39;s support for the Minjs javascript minifier now
-            supports the latest version (0.4.1).</p>
-            </li></ul>
-            
-            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>Support for Minjs &lt;0.4.0 has been dropped from the assets plugin. Please
-            upgrade Minjs at the same time you upgrade <a
-            href="../../../classes/Roda.html">Roda</a> if you are using both of them.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.11.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.11.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.11.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2016-02-16 10:26:52 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A params_capturing plugin has been added, which makes string and symbol
+matchers update the request params with the value of the captured segments,
+using the matcher as the key:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:params_capturing</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># GET /foo/123/abc/67</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;foo/:bar/:baz&quot;</span>, <span class="ruby-value">:quux</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>[<span class="ruby-value">:bar</span>] <span class="ruby-comment">#=&gt; &#39;123&#39;</span>&#x000A;    <span class="ruby-identifier">r</span>[<span class="ruby-value">:baz</span>] <span class="ruby-comment">#=&gt; &#39;abc&#39;</span>&#x000A;    <span class="ruby-identifier">r</span>[<span class="ruby-value">:quux</span>] <span class="ruby-comment">#=&gt; &#39;67&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Note that this updating of the request params using the matcher as the key
+is only done if all arguments to the matcher are symbols or strings.</p>
+
+<p>All matchers will update the request params by adding all captured segments
+to the captures key, including symbol and string matchers:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:x</span>, <span class="ruby-regexp">/(\d+)\/(\w+)/</span>, <span class="ruby-string">&#39;:y&#39;</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>[<span class="ruby-value">:x</span>] <span class="ruby-comment">#=&gt; nil</span>&#x000A;  <span class="ruby-identifier">r</span>[<span class="ruby-value">:y</span>] <span class="ruby-comment">#=&gt; nil</span>&#x000A;  <span class="ruby-identifier">r</span>[<span class="ruby-value">:captures</span>] <span class="ruby-comment">#=&gt; [&quot;foo&quot;, &quot;123&quot;, &quot;abc&quot;, &quot;67&quot;]</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Note that the request params captures entry will be appended to with each
+nested match:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:w</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:x</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:y</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:z</span>) <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">r</span>[<span class="ruby-value">:captures</span>] <span class="ruby-comment"># =&gt; [&quot;foo&quot;, &quot;123&quot;, &quot;abc&quot;, &quot;67&quot;]</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Note that any existing params captures entry will be overwritten by this
+plugin.  You can use r.GET or r.POST to get the underlying entry, depending
+on how it was submitted.</p>
+
+<p>Also note that the param keys are actually stored in r.params as strings
+and not symbols (r[] converts the argument to a string before looking it up
+in r.params).</p>
+
+<p>Also note that this plugin will not work correctly if you are using the
+symbol_matchers plugin with custom symbol matching and are using symbols
+that capture multiple values or no values.</p>
+</li><li>
+<p>A :scope option is now supported by render/view in the render plugin, which
+allows you to specify the object in which context to evaluate the template.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The assets plugin&#39;s support for the Minjs javascript minifier now
+supports the latest version (0.4.1).</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Support for Minjs &lt;0.4.0 has been dropped from the assets plugin. Please
+upgrade Minjs at the same time you upgrade <a
+href="../../../classes/Roda.html">Roda</a> if you are using both of them.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

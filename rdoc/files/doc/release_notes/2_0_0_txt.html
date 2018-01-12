@@ -1,126 +1,128 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.0.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.0.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.0.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2015-02-13 09:02:31 -0800</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>RodaResponse#set_cookie and delete_cookie have been removed.</p>
-            </li><li>
-            <p>Roda.request_module and .response_module have been removed.</p>
-            </li><li>
-            <p>Roda.hash_matcher has been removed.</p>
-            </li><li>
-            <p>The :extension hash matcher has been removed.</p>
-            </li><li>
-            <p>The :param and :param! hash matchers have been removed.</p>
-            </li><li>
-            <p>RodaRequest#full_path_info has been removed.</p>
-            </li><li>
-            <p>The :opts render plugin option is no longer respected, Use the
-            :template_opts option instead.</p>
-            </li><li>
-            <p>Plugin option hashes for the chunked, default_headers, error_email, and
-            render plugins are now frozen.</p>
-            </li><li>
-            <p>The :header hash matcher in the header_matchers plugin now yields the
-            header value to the block.</p>
-            </li><li>
-            <p>Roda.json_result_classes in the json plugin is now frozen.</p>
-            </li><li>
-            <p>The PATH_INFO and SCRIPT_NAME env variables are no longer modified during
-            routing.</p>
-            </li><li>
-            <p>Roda#initialize now takes an env hash, and call now takes the route block. 
-            The private #_route method has been removed.</p>
-            </li><li>
-            <p>RodaRequest#keep_remaining_path/#updating_remaining_path private methods
-            have been removed.</p>
-            </li><li>
-            <p>The render plugin&#39;s :layout option is now always set to true or false,
-            specifying whether a layout should be used by default. The template used
-            for a layout is now located as the :template option inside :layout_opts.</p>
-            </li></ul>
-            
-            <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A padrino_render plugin has been added, which adds render/partial methods
-            that work similarly to Padrino&#39;s.</p>
-            </li></ul>
-            
-            <h1 id="label-Other+New+Features">Other New Features<span><a href="#label-Other+New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A Roda#render_template private method has been added to the render plugin. 
-            All internal users of render should switch to calling render_template.</p>
-            </li><li>
-            <p>The halt plugin now integrates with the symbol_views and json plugins,
-            allowing things like:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(:<span class="ruby-identifier">template</span>)&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-string">&#39;key&#39;</span>=<span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;value&#39;</span>)</pre>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The error_handler plugin now rescues ScriptError in addition to
-            StandardError.  This handles SyntaxError (raised by ERB), LoadError (raised
-            by require), and NotImplementedError (raised by TSort).</p>
-            </li><li>
-            <p>Using a :layout=&gt;true option to the render plugin&#39;s view method now
-            uses the default layout template, instead of a template named
-            &#39;true&#39;.  It can be used to force a layout even if the render plugin
-            has been configured to not use a layout by default.</p>
-            </li><li>
-            <p><a href="../../../classes/Roda.html">Roda</a> apps that use the middleware
-            plugin can now be used as regular rack apps.  Previously, using the
-            middleware plugin made it impossible to use the app as a regular rack app.</p>
-            </li><li>
-            <p>Roda#request and response are now faster.</p>
-            </li><li>
-            <p><a href="../../../classes/Roda.html">Roda</a> avoids creating unnecessary
-            hashes in more places now.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.0.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.0.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.0.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2015-02-13 09:02:31 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>RodaResponse#set_cookie and delete_cookie have been removed.</p>
+</li><li>
+<p>Roda.request_module and .response_module have been removed.</p>
+</li><li>
+<p>Roda.hash_matcher has been removed.</p>
+</li><li>
+<p>The :extension hash matcher has been removed.</p>
+</li><li>
+<p>The :param and :param! hash matchers have been removed.</p>
+</li><li>
+<p>RodaRequest#full_path_info has been removed.</p>
+</li><li>
+<p>The :opts render plugin option is no longer respected, Use the
+:template_opts option instead.</p>
+</li><li>
+<p>Plugin option hashes for the chunked, default_headers, error_email, and
+render plugins are now frozen.</p>
+</li><li>
+<p>The :header hash matcher in the header_matchers plugin now yields the
+header value to the block.</p>
+</li><li>
+<p>Roda.json_result_classes in the json plugin is now frozen.</p>
+</li><li>
+<p>The PATH_INFO and SCRIPT_NAME env variables are no longer modified during
+routing.</p>
+</li><li>
+<p>Roda#initialize now takes an env hash, and call now takes the route block. 
+The private #_route method has been removed.</p>
+</li><li>
+<p>RodaRequest#keep_remaining_path/#updating_remaining_path private methods
+have been removed.</p>
+</li><li>
+<p>The render plugin&#39;s :layout option is now always set to true or false,
+specifying whether a layout should be used by default. The template used
+for a layout is now located as the :template option inside :layout_opts.</p>
+</li></ul>
+
+<h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A padrino_render plugin has been added, which adds render/partial methods
+that work similarly to Padrino&#39;s.</p>
+</li></ul>
+
+<h1 id="label-Other+New+Features">Other New Features<span><a href="#label-Other+New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A Roda#render_template private method has been added to the render plugin. 
+All internal users of render should switch to calling render_template.</p>
+</li><li>
+<p>The halt plugin now integrates with the symbol_views and json plugins,
+allowing things like:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-value">:template</span>)&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span>(<span class="ruby-string">&#39;key&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;value&#39;</span>)</pre>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The error_handler plugin now rescues ScriptError in addition to
+StandardError.  This handles SyntaxError (raised by ERB), LoadError (raised
+by require), and NotImplementedError (raised by TSort).</p>
+</li><li>
+<p>Using a :layout=&gt;true option to the render plugin&#39;s view method now
+uses the default layout template, instead of a template named
+&#39;true&#39;.  It can be used to force a layout even if the render plugin
+has been configured to not use a layout by default.</p>
+</li><li>
+<p><a href="../../../classes/Roda.html">Roda</a> apps that use the middleware
+plugin can now be used as regular rack apps.  Previously, using the
+middleware plugin made it impossible to use the app as a regular rack app.</p>
+</li><li>
+<p>Roda#request and response are now faster.</p>
+</li><li>
+<p><a href="../../../classes/Roda.html">Roda</a> avoids creating unnecessary
+hashes in more places now.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

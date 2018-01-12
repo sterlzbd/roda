@@ -1,79 +1,82 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::JsonParser::RequestMethods</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::JsonParser::RequestMethods
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../../files/lib/roda/plugins/json_parser_rb.html">lib/roda/plugins/json_parser.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'></div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Instance</h3>
-            <ol>
-              <li><a href="#method-i-POST">POST</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='section'>
-            <div id='methods'>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-POST'>
-                <a name='method-i-POST'></a>
-                <div class='synopsis'>
-                  <span class='name'>POST</span>
-                  <span class='arguments'>()</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>If the Content-Type header in the request includes “json”, parse the
-                  request body as JSON.  Ignore an empty request body.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-POST-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-POST-source'><span class="ruby-comment"># File lib/roda/plugins/json_parser.rb, line 36</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-constant">POST</span>&#x000A;  <span class="ruby-identifier">env</span> = <span class="ruby-ivar">@env</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">post_params</span> = (<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;roda.json_params&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;rack.request.form_hash&quot;</span>])&#x000A;    <span class="ruby-identifier">post_params</span>&#x000A;  <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">input</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;rack.input&quot;</span>]) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">content_type</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/json/</span>&#x000A;    <span class="ruby-identifier">str</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">read</span>&#x000A;    <span class="ruby-identifier">input</span>.<span class="ruby-identifier">rewind</span>&#x000A;    <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword">begin</span>&#x000A;      <span class="ruby-identifier">json_params</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;roda.json_params&quot;</span>] = <span class="ruby-identifier">parse_json</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-keyword">rescue</span>&#x000A;      <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_error_handler</span>].<span class="ruby-identifier">call</span>(<span class="ruby-keyword">self</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;rack.request.form_input&quot;</span>] = <span class="ruby-identifier">input</span>&#x000A;    <span class="ruby-identifier">json_params</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::JsonParser::RequestMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::JsonParser::RequestMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/json_parser_rb.html">lib/roda/plugins/json_parser.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-POST">POST</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-POST'>
+<a name='method-i-POST'></a>
+<div class='synopsis'>
+<span class='name'>POST</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>If the Content-Type header in the request includes “json”, parse the
+request body as JSON.  Ignore an empty request body.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-POST-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-POST-source'><span class="ruby-comment"># File lib/roda/plugins/json_parser.rb, line 36</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-constant">POST</span>&#x000A;  <span class="ruby-identifier ruby-title">env</span> = <span class="ruby-ivar">@env</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">post_params</span> = (<span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;roda.json_params&quot;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;rack.request.form_hash&quot;</span>])&#x000A;    <span class="ruby-identifier">post_params</span>&#x000A;  <span class="ruby-keyword">elsif</span> (<span class="ruby-identifier">input</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;rack.input&quot;</span>]) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">content_type</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/json/</span>&#x000A;    <span class="ruby-identifier">str</span> = <span class="ruby-identifier">input</span>.<span class="ruby-identifier">read</span>&#x000A;    <span class="ruby-identifier">input</span>.<span class="ruby-identifier">rewind</span>&#x000A;    <span class="ruby-keyword">return</span> <span class="ruby-keyword">super</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">empty?</span>&#x000A;    <span class="ruby-keyword">begin</span>&#x000A;      <span class="ruby-identifier">json_params</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;roda.json_params&quot;</span>] = <span class="ruby-identifier">parse_json</span>(<span class="ruby-identifier">str</span>)&#x000A;    <span class="ruby-keyword">rescue</span>&#x000A;      <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser_error_handler</span>].<span class="ruby-identifier">call</span>(<span class="ruby-keyword">self</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">env</span>[<span class="ruby-string">&quot;rack.request.form_input&quot;</span>] = <span class="ruby-identifier">input</span>&#x000A;    <span class="ruby-identifier">json_params</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

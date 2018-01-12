@@ -1,66 +1,66 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::MiddlewareStack</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::MiddlewareStack
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/roda/plugins/middleware_stack_rb.html">lib/roda/plugins/middleware_stack.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The middleware_stack plugin adds methods to remove middleware from the
-            middleware stack, and insert new middleware at specific positions in the
-            middleware stack.</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">middleware_stack</span>&#x000A;&#x000A;<span class="ruby-comment"># Remove csrf middleware</span>&#x000A;<span class="ruby-identifier">middleware_stack</span>.<span class="ruby-identifier">remove</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Csrf</span>}&#x000A;&#x000A;<span class="ruby-comment"># Insert csrf middleware</span>&#x000A;<span class="ruby-identifier">middleware_stack</span>.<span class="ruby-identifier">before</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">CommonLogger</span>}.<span class="ruby-identifier">use</span>(<span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Csrf</span>, <span class="ruby-identifier">raise</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>)&#x000A;<span class="ruby-identifier">middleware_stack</span>.<span class="ruby-identifier">after</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">CommonLogger</span>}.<span class="ruby-identifier">use</span>(<span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Csrf</span>, <span class="ruby-identifier">raise</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>)</pre>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="MiddlewareStack/ClassMethods.html">Roda::RodaPlugins::MiddlewareStack::ClassMethods</a></li>
-              <li><a href="MiddlewareStack/Stack.html">Roda::RodaPlugins::MiddlewareStack::Stack</a></li>
-              <li><a href="MiddlewareStack/StackPosition.html">Roda::RodaPlugins::MiddlewareStack::StackPosition</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::MiddlewareStack</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::MiddlewareStack
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/middleware_stack_rb.html">lib/roda/plugins/middleware_stack.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The middleware_stack plugin adds methods to remove middleware from the
+middleware stack, and insert new middleware at specific positions in the
+middleware stack.</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:middleware_stack</span>&#x000A;&#x000A;<span class="ruby-comment"># Remove csrf middleware</span>&#x000A;<span class="ruby-identifier">middleware_stack</span>.<span class="ruby-identifier">remove</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Csrf</span>}&#x000A;&#x000A;<span class="ruby-comment"># Insert csrf middleware</span>&#x000A;<span class="ruby-identifier">middleware_stack</span>.<span class="ruby-identifier">before</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">CommonLogger</span>}.<span class="ruby-identifier">use</span>(<span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Csrf</span>, <span class="ruby-value">raise:</span> <span class="ruby-keyword">true</span>)&#x000A;<span class="ruby-identifier">middleware_stack</span>.<span class="ruby-identifier">after</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">CommonLogger</span>}.<span class="ruby-identifier">use</span>(<span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Csrf</span>, <span class="ruby-value">raise:</span> <span class="ruby-keyword">true</span>)</pre>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="MiddlewareStack/ClassMethods.html">Roda::RodaPlugins::MiddlewareStack::ClassMethods</a></li>
+<li><a href="MiddlewareStack/Stack.html">Roda::RodaPlugins::MiddlewareStack::Stack</a></li>
+<li><a href="MiddlewareStack/StackPosition.html">Roda::RodaPlugins::MiddlewareStack::StackPosition</a></li>
+</ol>
+</div>
+<div id='section'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

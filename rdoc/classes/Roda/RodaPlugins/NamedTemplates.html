@@ -1,124 +1,128 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::NamedTemplates</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::NamedTemplates
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/roda/plugins/named_templates_rb.html">lib/roda/plugins/named_templates.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The named_templates plugin allows you to specify templates by name,
-            providing the template code to use for a given name:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">named_templates</span>&#x000A;&#x000A;<span class="ruby-identifier">template</span> :<span class="ruby-identifier">layout</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">template</span> :<span class="ruby-identifier">index</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;&lt;p&gt;Hello &lt;%= @user %&gt;!&lt;/p&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@user</span> = <span class="ruby-string">&#39;You&#39;</span>&#x000A;  <span class="ruby-identifier">render</span>(:<span class="ruby-identifier">index</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># =&gt; &quot;&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello You!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span></pre>
-            
-            <p>You can provide options for the template, for example to change the engine
-            that the template uses:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">template</span> :<span class="ruby-identifier">index</span>, <span class="ruby-identifier">engine</span><span class="ruby-operator">:</span> :<span class="ruby-identifier">str</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-node">&quot;&lt;p&gt;Hello #{@user}!&lt;/p&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>The block you use is reevaluted on every call, allowing you to easily
-            include additional setup logic:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">template</span> :<span class="ruby-identifier">index</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">greeting</span> = [<span class="ruby-string">&#39;hello&#39;</span>, <span class="ruby-string">&#39;hi&#39;</span>, <span class="ruby-string">&#39;howdy&#39;</span>].<span class="ruby-identifier">sample</span>&#x000A;  <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">downcase!</span>&#x000A;  <span class="ruby-node">&quot;&lt;p&gt;#{greating} &lt;%= @user %&gt;!&lt;/p&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>This plugin also works with the view_options plugin, as long as you prefix
-            the template name with the view subdirectory:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">template</span> <span class="ruby-string">&quot;main/index&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">set_view_subdir</span>(<span class="ruby-string">&quot;main&quot;</span>)&#x000A;  <span class="ruby-ivar">@user</span> = <span class="ruby-string">&#39;You&#39;</span>&#x000A;  <span class="ruby-identifier">render</span>(:<span class="ruby-identifier">index</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-          </div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Class</h3>
-            <ol>
-              <li><a href="#method-c-configure">configure</a></li>
-              <li><a href="#method-c-load_dependencies">load_dependencies</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="NamedTemplates/ClassMethods.html">Roda::RodaPlugins::NamedTemplates::ClassMethods</a></li>
-              <li><a href="NamedTemplates/InstanceMethods.html">Roda::RodaPlugins::NamedTemplates::InstanceMethods</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-            <div id='methods'>
-              <h2>Public Class methods</h2>
-              <div class='method public-class' id='method-method-c-configure'>
-                <a name='method-c-configure'></a>
-                <div class='synopsis'>
-                  <span class='name'>configure</span>
-                  <span class='arguments'>(app)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Initialize the storage for named templates.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-configure-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/named_templates.rb, line 58</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:named_templates</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-class' id='method-method-c-load_dependencies'>
-                <a name='method-c-load_dependencies'></a>
-                <div class='synopsis'>
-                  <span class='name'>load_dependencies</span>
-                  <span class='arguments'>(app)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Depend on the render plugin</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-load_dependencies-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/named_templates.rb, line 53</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::NamedTemplates</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::NamedTemplates
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/named_templates_rb.html">lib/roda/plugins/named_templates.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The named_templates plugin allows you to specify templates by name,
+providing the template code to use for a given name:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:named_templates</span>&#x000A;&#x000A;<span class="ruby-identifier">template</span> <span class="ruby-value">:layout</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">template</span> <span class="ruby-value">:index</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;&lt;p&gt;Hello &lt;%= @user %&gt;!&lt;/p&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@user</span> = <span class="ruby-string">&#39;You&#39;</span>&#x000A;  <span class="ruby-identifier">render</span>(<span class="ruby-value">:index</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># =&gt; &quot;&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello You!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span></pre>
+
+<p>You can provide options for the template, for example to change the engine
+that the template uses:</p>
+
+<pre class="ruby"><span class="ruby-identifier">template</span> <span class="ruby-value">:index</span>, <span class="ruby-value">engine:</span> <span class="ruby-value">:str</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-node">&quot;&lt;p&gt;Hello #{@user}!&lt;/p&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The block you use is reevaluted on every call, allowing you to easily
+include additional setup logic:</p>
+
+<pre class="ruby"><span class="ruby-identifier">template</span> <span class="ruby-value">:index</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">greeting</span> = [<span class="ruby-string">&#39;hello&#39;</span>, <span class="ruby-string">&#39;hi&#39;</span>, <span class="ruby-string">&#39;howdy&#39;</span>].<span class="ruby-identifier">sample</span>&#x000A;  <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">downcase!</span>&#x000A;  <span class="ruby-node">&quot;&lt;p&gt;#{greating} &lt;%= @user %&gt;!&lt;/p&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>This plugin also works with the view_options plugin, as long as you prefix
+the template name with the view subdirectory:</p>
+
+<pre class="ruby"><span class="ruby-identifier">template</span> <span class="ruby-string">&quot;main/index&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">set_view_subdir</span>(<span class="ruby-string">&quot;main&quot;</span>)&#x000A;  <span class="ruby-ivar">@user</span> = <span class="ruby-string">&#39;You&#39;</span>&#x000A;  <span class="ruby-identifier">render</span>(<span class="ruby-value">:index</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="NamedTemplates/ClassMethods.html">Roda::RodaPlugins::NamedTemplates::ClassMethods</a></li>
+<li><a href="NamedTemplates/InstanceMethods.html">Roda::RodaPlugins::NamedTemplates::InstanceMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span>
+<span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+<p>Initialize the storage for named templates.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/named_templates.rb, line 58</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:named_templates</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
+<div class='synopsis'>
+<span class='name'>load_dependencies</span>
+<span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+<p>Depend on the render plugin</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/named_templates.rb, line 53</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

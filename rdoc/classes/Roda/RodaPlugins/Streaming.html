@@ -1,89 +1,89 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::Streaming</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::Streaming
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../files/lib/roda/plugins/streaming_rb.html">lib/roda/plugins/streaming.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <p>The streaming plugin adds support for streaming responses from roda using
-            the <code>stream</code> method:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">streaming</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">stream</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">out</span><span class="ruby-operator">|</span>&#x000A;    [<span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-string">&#39;c&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>; <span class="ruby-identifier">sleep</span> <span class="ruby-value">1</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>In order for streaming to work, any webservers used in front of the roda
-            app must not buffer responses.</p>
-            
-            <p>The stream method takes the following options:</p>
-            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:callback </td><td>
-            <p>A callback proc to call when the connection is closed.</p>
-            </td></tr><tr><td class='label'>:loop </td><td>
-            <p>Whether to call the stream block continuously until the connection is
-            closed.</p>
-            </td></tr></tbody></table>
-            
-            <p>If the :loop option is used, you can override the handle_stream_error
-            method to change how exceptions are handled during streaming. This method
-            is passed the exception and the stream.  By default, this method just
-            reraises the exception, but you can choose to output the an error message
-            to the stream, before raising:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)&#x000A;  <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&#39;ERROR!&#39;</span>&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Ignore errors completely while streaming:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>or handle the errors in some other way.</p>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='class-list'>
-            <h2>Classes and Modules</h2>
-            <ol>
-              <li><a href="Streaming/InstanceMethods.html">Roda::RodaPlugins::Streaming::InstanceMethods</a></li>
-              <li><a href="Streaming/Stream.html">Roda::RodaPlugins::Streaming::Stream</a></li>
-            </ol>
-          </div>
-          <div id='section'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::Streaming</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::Streaming
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/streaming_rb.html">lib/roda/plugins/streaming.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The streaming plugin adds support for streaming responses from roda using
+the <code>stream</code> method:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:streaming</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">stream</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">out</span><span class="ruby-operator">|</span>&#x000A;    [<span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-string">&#39;c&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>; <span class="ruby-identifier">sleep</span> <span class="ruby-value">1</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>In order for streaming to work, any webservers used in front of the roda
+app must not buffer responses.</p>
+
+<p>The stream method takes the following options:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:callback </td><td>
+<p>A callback proc to call when the connection is closed.</p>
+</td></tr><tr><td class='label'>:loop </td><td>
+<p>Whether to call the stream block continuously until the connection is
+closed.</p>
+</td></tr></tbody></table>
+
+<p>If the :loop option is used, you can override the handle_stream_error
+method to change how exceptions are handled during streaming. This method
+is passed the exception and the stream.  By default, this method just
+reraises the exception, but you can choose to output the an error message
+to the stream, before raising:</p>
+
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)&#x000A;  <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&#39;ERROR!&#39;</span>&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Ignore errors completely while streaming:</p>
+
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>or handle the errors in some other way.</p>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="Streaming/InstanceMethods.html">Roda::RodaPlugins::Streaming::InstanceMethods</a></li>
+<li><a href="Streaming/Stream.html">Roda::RodaPlugins::Streaming::Stream</a></li>
+</ol>
+</div>
+<div id='section'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

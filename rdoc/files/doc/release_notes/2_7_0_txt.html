@@ -1,100 +1,102 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.7.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.7.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.7.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2015-10-13 08:49:31 -0700</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A default_status plugin has been added for changing the default status for
-            responses.  Previously, the default status was hard coded to 200, this
-            plugin allows you to change it.  The plugin takes a block which is
-            instance_evaled in the context of the response:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_status</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-operator">?</span> <span class="ruby-value">201</span> <span class="ruby-operator">:</span> <span class="ruby-value">200</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Note that the default status for empty responses (used when no route
-            handles the response) is still 404, this just changes the default for
-            non-empty responses.</p>
-            </li><li>
-            <p>A response_request plugin has been added for giving the response instance
-            access to the related request.  This can be useful in conjunction with the
-            default_status plugin, if you want the default status of the response to
-            depend on the request, such as using a different status for different
-            request methods:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">response_request</span>&#x000A;<span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">default_status</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">post?</span> <span class="ruby-operator">?</span> <span class="ruby-value">201</span> <span class="ruby-operator">:</span> <span class="ruby-value">200</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>A run_handler plugin has been added, for modifying rack response arrays
-            before returning them when using r.run.  Additionally, it allows for
-            continuing with routing if the response returned by r.run is a 404
-            response, using the :not_found=&gt;:pass option:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">run_handler</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Keep running code if RackAppFoo returns a 404 response</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">RackAppFoo</span>, :<span class="ruby-identifier">not_found=</span><span class="ruby-operator">&gt;</span>:<span class="ruby-identifier">pass</span>&#x000A;&#x000A;  <span class="ruby-comment"># Change response status codes before returning.</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span>(<span class="ruby-constant">RackAppBar</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">response</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] = <span class="ruby-value">200</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">201</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>Roda.rewite_path in the path_rewriter extension now accepts a block to
-            allow for dynamic replacements. The block is yielded a MatchData instance:</p>
-            
-            <pre>rewrite_path(/\A\/a/(\w+)/){|match| match[1].capitalize}&#x000A;# PATH_INFO &#39;/a/moo&#39; =&gt; remaining_path &#39;/a/Moo&#39;&#x000A;rewrite_path(/\A\/a/(\w+)/, :path_info =&gt; true) do |match|&#x000A;  match[1].capitalize&#x000A;end&#x000A;# PATH_INFO &#39;/a/moo&#39; =&gt; PATH_INFO &#39;/a/Moo&#39;</pre>
-            </li><li>
-            <p>The :host matcher in the header_matchers plugin will now yield the regexp
-            captures to the block if given a regexp when the :host_matcher_captures
-            application option is set.  This behavior will become the default behavior
-            in <a href="../../../classes/Roda.html">Roda</a> 3.  This will allow for
-            code like:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">opts</span>[:<span class="ruby-identifier">host_matcher_captures</span>] = <span class="ruby-keyword">true</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">host=</span><span class="ruby-operator">&gt;</span><span class="ruby-regexp">/\A(\w+).example.com\z/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subdomain</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>RodaCache now uses a mutex to synchronize access on MRI. Previously, it
-            relied on the global interpreter lock, but testing has shown that is not
-            reliable in all cases.  RodaCache has always used a mutex for
-            synchronization on other ruby implementations, this just extends that code
-            to MRI as well.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.7.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.7.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.7.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2015-10-13 08:49:31 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A default_status plugin has been added for changing the default status for
+responses.  Previously, the default status was hard coded to 200, this
+plugin allows you to change it.  The plugin takes a block which is
+instance_evaled in the context of the response:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:default_status</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">headers</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-operator">?</span> <span class="ruby-value">201</span> <span class="ruby-operator">:</span> <span class="ruby-value">200</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Note that the default status for empty responses (used when no route
+handles the response) is still 404, this just changes the default for
+non-empty responses.</p>
+</li><li>
+<p>A response_request plugin has been added for giving the response instance
+access to the related request.  This can be useful in conjunction with the
+default_status plugin, if you want the default status of the response to
+depend on the request, such as using a different status for different
+request methods:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:response_request</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:default_status</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">post?</span> <span class="ruby-operator">?</span> <span class="ruby-value">201</span> <span class="ruby-operator">:</span> <span class="ruby-value">200</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>A run_handler plugin has been added, for modifying rack response arrays
+before returning them when using r.run.  Additionally, it allows for
+continuing with routing if the response returned by r.run is a 404
+response, using the :not_found=&gt;:pass option:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:run_handler</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Keep running code if RackAppFoo returns a 404 response</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">RackAppFoo</span>, <span class="ruby-value">:not_found</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:pass</span>&#x000A;&#x000A;  <span class="ruby-comment"># Change response status codes before returning.</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span>(<span class="ruby-constant">RackAppBar</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">response</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] = <span class="ruby-value">200</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-value">201</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>Roda.rewite_path in the path_rewriter extension now accepts a block to
+allow for dynamic replacements. The block is yielded a MatchData instance:</p>
+
+<pre>rewrite_path(/\A\/a/(\w+)/){|match| match[1].capitalize}&#x000A;# PATH_INFO &#39;/a/moo&#39; =&gt; remaining_path &#39;/a/Moo&#39;&#x000A;rewrite_path(/\A\/a/(\w+)/, :path_info =&gt; true) do |match|&#x000A;  match[1].capitalize&#x000A;end&#x000A;# PATH_INFO &#39;/a/moo&#39; =&gt; PATH_INFO &#39;/a/Moo&#39;</pre>
+</li><li>
+<p>The :host matcher in the header_matchers plugin will now yield the regexp
+captures to the block if given a regexp when the :host_matcher_captures
+application option is set.  This behavior will become the default behavior
+in <a href="../../../classes/Roda.html">Roda</a> 3.  This will allow for
+code like:</p>
+
+<pre class="ruby"><span class="ruby-identifier">opts</span>[<span class="ruby-value">:host_matcher_captures</span>] = <span class="ruby-keyword">true</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:host</span><span class="ruby-operator">=&gt;</span><span class="ruby-regexp">/\A(\w+).example.com\z/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subdomain</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>RodaCache now uses a mutex to synchronize access on MRI. Previously, it
+relied on the global interpreter lock, but testing has shown that is not
+reliable in all cases.  RodaCache has always used a mutex for
+synchronization on other ruby implementations, this just extends that code
+to MRI as well.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

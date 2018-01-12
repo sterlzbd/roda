@@ -1,331 +1,333 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>1.2.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>1.2.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/1.2.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2017-08-18 07:20:31 -0700</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A static_path_info plugin has been added, which doesn&#39;t modify
-            SCRIPT_NAME/PATH_INFO during routing, only before dispatching the request
-            to another rack application via r.run.  This is faster and avoids problems
-            caused by changing SCRIPT_NAME/PATH_INFO during routing, such as methods
-            that return paths that depend on SCRIPT_NAME.  This behavior will become
-            Roda&#39;s default starting in <a
-            href="../../../classes/Roda.html">Roda</a> 2, and it is recommended that
-            all <a href="../../../classes/Roda.html">Roda</a> apps use it.</p>
-            </li><li>
-            <p>A mailer plugin has been added, which allows you to use Roda&#39;s render
-            plugin to create email bodies, and allows you to use Roda&#39;s routing
-            tree features to DRY up your mailing code similar to how it DRYs up your
-            web code.</p>
-            
-            <p>Here is an example routing tree using the mailer plugin:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Mailer</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">render</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">mailer</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;user/:d&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># DRY up code by setting shared behavior in higher level</span>&#x000A;      <span class="ruby-comment"># branches, instead of duplicating it inside each subtree.</span>&#x000A;      <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>]&#x000A;      <span class="ruby-identifier">from</span> <span class="ruby-string">&#39;notifications@example.com&#39;</span>&#x000A;      <span class="ruby-identifier">to</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>&#x000A;&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-string">&quot;open_account&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;Welcome to example.com&#39;</span>&#x000A;        <span class="ruby-identifier">render</span>(:<span class="ruby-identifier">open_account</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-string">&quot;close_account&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;Thank you for using example.com&#39;</span>&#x000A;        <span class="ruby-identifier">render</span>(:<span class="ruby-identifier">close_account</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>With your routing tree setup, you can use the sendmail method to send
-            email:</p>
-            
-            <pre class="ruby"><span class="ruby-constant">Mailer</span>.<span class="ruby-identifier">sendmail</span>(<span class="ruby-string">&quot;/user/1/open_account&quot;</span>)</pre>
-            
-            <p>If you want a Mail::Message object returned for further modification before
-            sending, you can use mail instead of of sendmail:</p>
-            
-            <pre class="ruby"><span class="ruby-constant">Mailer</span>.<span class="ruby-identifier">mail</span>(<span class="ruby-string">&quot;/user/2/close_account&quot;</span>).<span class="ruby-identifier">deliver</span></pre>
-            </li><li>
-            <p>A delegate plugin has been added, allowing you to easily create methods in
-            the route block scope that delegate to the request or response.  While <a
-            href="../../../classes/Roda.html">Roda</a> does not pollute your namespaces
-            by default, this allows you to choose to do so yourself if you find it
-            offers a nicer API.  Example:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">delegate</span>&#x000A;  <span class="ruby-identifier">request_delegate</span> :<span class="ruby-identifier">root</span>, :<span class="ruby-identifier">on</span>, :<span class="ruby-identifier">is</span>, :<span class="ruby-identifier">get</span>, :<span class="ruby-identifier">post</span>, :<span class="ruby-identifier">redirect</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Someone said hello!&quot;</span>&#x000A;          <span class="ruby-identifier">redirect</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>A class_level_routing plugin has been added, allowing you to define your
-            routes at the class level if desired.  The routes defined at the class
-            level can still use a routing tree for further routing. Example:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">class_level_routing</span>&#x000A;&#x000A;  <span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;hello/world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Someone said hello!&quot;</span>&#x000A;      <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>A named_templates plugin has been added, for creating inline templates
-            associated with a given name, that are used by the render plugin&#39;s
-            render/view method in preference to templates stored in the filesystem. 
-            This makes it simpler to ship single-file <a
-            href="../../../classes/Roda.html">Roda</a> applications that use templates.
-            Example:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">named_templates</span>&#x000A;&#x000A;  <span class="ruby-identifier">template</span> :<span class="ruby-identifier">layout</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">template</span> :<span class="ruby-identifier">index</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;&lt;p&gt;Hello &lt;%= @user %&gt;!&lt;/p&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-ivar">@user</span> = <span class="ruby-string">&#39;You&#39;</span>&#x000A;    <span class="ruby-identifier">render</span>(:<span class="ruby-identifier">index</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># =&gt; &quot;&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello You!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>A multi_run plugin has been added, for dispatching to multiple rack
-            applications based on the request path prefix.  This provides a similar API
-            as the multi_route plugin, but allows you to separate your applications per
-            routing subtree, as opposed to multi_route which uses the same application
-            for all routing subtrees.</p>
-            
-            <p>With the multi_run plugin, you call the class level run method with the
-            routing prefix and the rack application to use, and you call r.multi_run to
-            dispatch to all of the applications based on the prefix.</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">multi_run</span>&#x000A;&#x000A;  <span class="ruby-identifier">run</span> <span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-constant">Foo</span>&#x000A;  <span class="ruby-identifier">run</span> <span class="ruby-string">&quot;bar&quot;</span>, <span class="ruby-constant">Bar</span>&#x000A;  <span class="ruby-identifier">run</span> <span class="ruby-string">&quot;baz&quot;</span>, <span class="ruby-constant">Baz</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>In this case, Foo, Bar, and Baz, can be subclasses of App, which allows
-            them to share methods that should be shared, but still define methods
-            themselves that are not shared by the other applications.</p>
-            </li><li>
-            <p>A sinatra_helpers plugin has been added, that ports over most of the
-            Sinatra::Helpers methods that haven&#39;t already been added by other
-            plugins.  All of the methods are added either to the request or response
-            class as appropriate.  By default, delegate methods are also added to the
-            route block scope, but you can turn this off by passing a
-            :delegate=&gt;false option when loading the plugin, which avoids polluting
-            the route block namespace.</p>
-            
-            <p>The sinatra_helpers plugin adds the following request methods:</p>
-            <ul><li>
-            <p>back</p>
-            </li><li>
-            <p>error</p>
-            </li><li>
-            <p>not_found</p>
-            </li><li>
-            <p>uri</p>
-            </li><li>
-            <p>send_file</p>
-            </li></ul>
-            
-            <p>And the following response methods:</p>
-            <ul><li>
-            <p>body</p>
-            </li><li>
-            <p>body=</p>
-            </li><li>
-            <p>status</p>
-            </li><li>
-            <p>headers</p>
-            </li><li>
-            <p>mime_type</p>
-            </li><li>
-            <p>content_type</p>
-            </li><li>
-            <p>attachment</p>
-            </li><li>
-            <p>informational?</p>
-            </li><li>
-            <p>success?</p>
-            </li><li>
-            <p>redirect?</p>
-            </li><li>
-            <p>client_error?</p>
-            </li><li>
-            <p>not_found?</p>
-            </li><li>
-            <p>server_error?</p>
-            </li></ul>
-            </li><li>
-            <p>A slash_path_empty plugin has been added, which changes <a
-            href="../../../classes/Roda.html">Roda</a> so that “/” is considered an
-            empty path when doing a terminal match via r.is or r.get/r.post with a
-            path.</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">slash_path_empty</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;albums&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># matches both GET /albums and GET /albums/ </span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>An empty_root plugin has been added, which makes r.root match the empty
-            string, in addition to /.  This can be useful in cases where a partial
-            match on the patch has been completed.</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">empty_root</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;albums&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-comment"># matches both GET /albums and GET /albums/ </span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>A match_affix plugin has been added, for overriding the default
-            prefix/suffix used in match patterns.  For example, if you want to require
-            that a leading / be specified in your routes. and you want to consume any
-            trailing slash:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">match_affix</span>, <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-regexp">/(\/|\z)/</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;/albums&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># GET /albums # s =&gt; &quot;&quot;</span>&#x000A;      <span class="ruby-comment"># GET /albums/ # s =&gt; &quot;/&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>An environments plugin has been added, giving some simple helpers for
-            executing code in different environments.  Example:</p>
-            
-            <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A; <span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">environments</span>&#x000A;&#x000A; <span class="ruby-identifier">environment</span>  <span class="ruby-comment"># =&gt; :development</span>&#x000A; <span class="ruby-identifier">development?</span> <span class="ruby-comment"># =&gt; true</span>&#x000A; <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; false</span>&#x000A; <span class="ruby-identifier">production?</span>  <span class="ruby-comment"># =&gt; false</span>&#x000A;&#x000A; <span class="ruby-comment"># Set the environment for the application</span>&#x000A; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">environment</span> = :<span class="ruby-identifier">test</span>&#x000A; <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; true</span>&#x000A;&#x000A; <span class="ruby-identifier">configure</span> <span class="ruby-keyword">do</span>&#x000A;   <span class="ruby-comment"># called, as no environments given</span>&#x000A; <span class="ruby-keyword">end</span>&#x000A;&#x000A; <span class="ruby-identifier">configure</span> :<span class="ruby-identifier">development</span>, :<span class="ruby-identifier">production</span> <span class="ruby-keyword">do</span>&#x000A;   <span class="ruby-comment"># not called, as no environments match</span>&#x000A; <span class="ruby-keyword">end</span>&#x000A;&#x000A; <span class="ruby-identifier">configure</span> :<span class="ruby-identifier">test</span> <span class="ruby-keyword">do</span>&#x000A;   <span class="ruby-comment"># called, as environment given matches current environment</span>&#x000A; <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>A drop_body plugin has been added, which automatically drops the body,
-            Content-Type header, and Content-Length header when the response status
-            indicates no body (100-102, 204, 205, 304).</p>
-            </li><li>
-            <p>A delay_build plugin has been added, which delays building the rack
-            application until Roda.app is called, and only rebuilds the rack
-            application if build! is called.  This removes O(n^2) performance in the
-            pathological case of adding a route block and then calling Roda.use many
-            times to add middlewares, though you have to add a few hundred middlewares
-            for the difference to be noticeable.</p>
-            </li></ul>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>r.remaining_path and r.matched_path have been added for returning the
-            remaining path that will be used for matching, and for returning the path
-            already matched.  Currently, these just provide the PATH_INFO and
-            SCRIPT_NAME, but starting in <a href="../../../classes/Roda.html">Roda</a>
-            2 PATH_INFO and SCRIPT_NAME will not be modified during routing, and
-            you&#39;ll need to use these methods if you want to find out the remaining
-            or already matched paths.</p>
-            </li><li>
-            <p>The render plugin now supports a :template option to render/view to specify
-            the template to use, instead of requiring a separate argument.</p>
-            </li><li>
-            <p>The render plugin now supports a :template_class option, allowing you to
-            override the default template class that <a
-            href="../../../classes/Roda.html">Roda</a> would use.</p>
-            </li><li>
-            <p>The render plugin now supports a :template_block option, specifying the
-            block to pass when creating a template.</p>
-            </li><li>
-            <p>The path class method added by the path plugin now accepts :name, :url,
-            :url_only, and :add_script_name options:</p>
-            <table class="rdoc-list note-list"><tbody><tr><td class='label'>:name </td><td>
-            <p>Specifies name for method</p>
-            </td></tr><tr><td class='label'>:url </td><td>
-            <p>Creates a url method in addition to a path method</p>
-            </td></tr><tr><td class='label'>:url_only </td><td>
-            <p>Only creates a url method, not a path method</p>
-            </td></tr><tr><td class='label'>:add_script_name </td><td>
-            <p>prefixes the path with SCRIPT_NAME</p>
-            </td></tr></tbody></table>
-            
-            <p>Note that if you plan to use :add_script_name, you should use the
-            static_path_info plugin so that the method created does not return
-            different results depending on where you are in the routing tree.</p>
-            </li><li>
-            <p>A :user_agent hash matcher has been added to the header_matchers plugin.</p>
-            </li><li>
-            <p>An inherit_middleware class accessor has been added.  This can be set to
-            false if you do not want subclasses to inherit middleware from the
-            superclass.  This is useful if the superclass dispatches to the subclass
-            via r.run, as otherwise it would have to run the same middleware stack
-            twice.</p>
-            </li><li>
-            <p>A clear_middleware! class accessor has been added, allowing you to clear
-            the current middleware stack.</p>
-            </li><li>
-            <p>RodaRequest#default_redirect_status has been added, allowing plugins to
-            override the default status used for redirect if a status is not given.</p>
-            </li><li>
-            <p>Roda{Request,Response}#roda_class has been added, which returns the <a
-            href="../../../classes/Roda.html">Roda</a> class related to the given
-            request/response.</p>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The render plugin no longer caches templates by default if RACK_ENV is
-            development.</p>
-            </li><li>
-            <p>When subclassing a <a href="../../../classes/Roda.html">Roda</a> app,
-            unfrozen Array/Hash entries in the opts hash are now duped into the
-            subclass, so the subclass no longer needs to dup them manually.  Note that
-            plugins that use nested arrays/hashes in the opts hash still need to dup
-            manually inside ClassMethods#inherited.  For the plugins where it is
-            possible, it is recommended to store plugin options in a frozen object in
-            the opts hash, and require loading the plugin again to modify the plugin
-            options.</p>
-            </li><li>
-            <p>Caching of templates is now fixed when the render/view :opts is used to
-            specify template options per-call.</p>
-            </li><li>
-            <p>An explicit :default_encoding of nil in the render plugin&#39;s :opts hash
-            is no longer overwritten with Encoding.default_external.</p>
-            </li><li>
-            <p>Roda#session now returns the same object as RodaRequest#session.</p>
-            </li><li>
-            <p>The view_subdirs, content_for, and render_each plugins now all depend on
-            the render plugin.</p>
-            </li><li>
-            <p>The not_allowed plugin now depends on the all_verbs plugin.</p>
-            </li><li>
-            <p>Local/instance variables are now used in more places instead of method
-            calls, improving performance.</p>
-            </li></ul>
-            
-            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The render plugin&#39;s render/view methods no longer pass the given hash
-            directly to the underlying template.  To pass options to the template
-            engine, use a separate hash under the :opts key:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">render</span> :<span class="ruby-identifier">file</span>, :<span class="ruby-identifier">opts=</span><span class="ruby-operator">&gt;</span>{:<span class="ruby-identifier">foo=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&#39;bar&#39;</span>}</pre>
-            
-            <p>This is more consistent with the class-level render plugin options, which
-            also uses :opts to pass options to the template engine.</p>
-            
-            <p>The :js_opts and :css_opts options to the assets plugin are now passed as
-            the :opts hash, so they continue to affect the template engine, so they no
-            longer specify general render method options.</p>
-            </li><li>
-            <p>Modifying render_opts :layout after loading the render plugin now has no
-            effect.  You need to use plugin :render, :layout=&gt;&#39;…&#39; to set the
-            layout to use now.</p>
-            </li><li>
-            <p>Default headers are not set on a response until the response is finished. 
-            This allows you to check for header presence during routing to detect
-            whether the header was specifically set for the current request.</p>
-            </li><li>
-            <p>RodaRequest.consume_pattern no longer captures anything by default.
-            Previously, it did so in order to update SCRIPT_NAME, but that is now
-            handled differently.  This should only affect external plugins that attempt
-            to override RodaRequest#consume.</p>
-            </li><li>
-            <p>RodaRequest.def_verb_method has been removed.</p>
-            </li><li>
-            <p>The hooks, default_headers, json, and multi_route plugins all store their
-            class-level metadata in the opts hash instead of separate class instance
-            variables.  This should have no affect unless you were accessing the class
-            instance variables directly.</p>
-            </li><li>
-            <p>The render plugin internals changed significantly, it now passes internal
-            data using a hash.  This should only affect users that were overriding
-            render plugin methods.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>1.2.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>1.2.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/1.2.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2017-08-18 07:20:31 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A static_path_info plugin has been added, which doesn&#39;t modify
+SCRIPT_NAME/PATH_INFO during routing, only before dispatching the request
+to another rack application via r.run.  This is faster and avoids problems
+caused by changing SCRIPT_NAME/PATH_INFO during routing, such as methods
+that return paths that depend on SCRIPT_NAME.  This behavior will become
+Roda&#39;s default starting in <a
+href="../../../classes/Roda.html">Roda</a> 2, and it is recommended that
+all <a href="../../../classes/Roda.html">Roda</a> apps use it.</p>
+</li><li>
+<p>A mailer plugin has been added, which allows you to use Roda&#39;s render
+plugin to create email bodies, and allows you to use Roda&#39;s routing
+tree features to DRY up your mailing code similar to how it DRYs up your
+web code.</p>
+
+<p>Here is an example routing tree using the mailer plugin:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Mailer</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:mailer</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;user/:d&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># DRY up code by setting shared behavior in higher level</span>&#x000A;      <span class="ruby-comment"># branches, instead of duplicating it inside each subtree.</span>&#x000A;      <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>]&#x000A;      <span class="ruby-identifier">from</span> <span class="ruby-string">&#39;notifications@example.com&#39;</span>&#x000A;      <span class="ruby-identifier">to</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>&#x000A;&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-string">&quot;open_account&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;Welcome to example.com&#39;</span>&#x000A;        <span class="ruby-identifier">render</span>(<span class="ruby-value">:open_account</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">mail</span> <span class="ruby-string">&quot;close_account&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;Thank you for using example.com&#39;</span>&#x000A;        <span class="ruby-identifier">render</span>(<span class="ruby-value">:close_account</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>With your routing tree setup, you can use the sendmail method to send
+email:</p>
+
+<pre class="ruby"><span class="ruby-constant">Mailer</span>.<span class="ruby-identifier">sendmail</span>(<span class="ruby-string">&quot;/user/1/open_account&quot;</span>)</pre>
+
+<p>If you want a Mail::Message object returned for further modification before
+sending, you can use mail instead of of sendmail:</p>
+
+<pre class="ruby"><span class="ruby-constant">Mailer</span>.<span class="ruby-identifier">mail</span>(<span class="ruby-string">&quot;/user/2/close_account&quot;</span>).<span class="ruby-identifier">deliver</span></pre>
+</li><li>
+<p>A delegate plugin has been added, allowing you to easily create methods in
+the route block scope that delegate to the request or response.  While <a
+href="../../../classes/Roda.html">Roda</a> does not pollute your namespaces
+by default, this allows you to choose to do so yourself if you find it
+offers a nicer API.  Example:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:delegate</span>&#x000A;  <span class="ruby-identifier">request_delegate</span> <span class="ruby-value">:root</span>, <span class="ruby-value">:on</span>, <span class="ruby-value">:is</span>, <span class="ruby-value">:get</span>, <span class="ruby-value">:post</span>, <span class="ruby-value">:redirect</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Someone said hello!&quot;</span>&#x000A;          <span class="ruby-identifier">redirect</span>&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>A class_level_routing plugin has been added, allowing you to define your
+routes at the class level if desired.  The routes defined at the class
+level can still use a routing tree for further routing. Example:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:class_level_routing</span>&#x000A;&#x000A;  <span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/hello&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;hello/world&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;Hello world!&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;hello&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-string">&quot;Hello!&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">request</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Someone said hello!&quot;</span>&#x000A;      <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>A named_templates plugin has been added, for creating inline templates
+associated with a given name, that are used by the render plugin&#39;s
+render/view method in preference to templates stored in the filesystem. 
+This makes it simpler to ship single-file <a
+href="../../../classes/Roda.html">Roda</a> applications that use templates.
+Example:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:named_templates</span>&#x000A;&#x000A;  <span class="ruby-identifier">template</span> <span class="ruby-value">:layout</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;&lt;html&gt;&lt;body&gt;&lt;%= yield %&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">template</span> <span class="ruby-value">:index</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;&lt;p&gt;Hello &lt;%= @user %&gt;!&lt;/p&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-ivar">@user</span> = <span class="ruby-string">&#39;You&#39;</span>&#x000A;    <span class="ruby-identifier">render</span>(<span class="ruby-value">:index</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># =&gt; &quot;&lt;html&gt;&lt;body&gt;&lt;p&gt;Hello You!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>A multi_run plugin has been added, for dispatching to multiple rack
+applications based on the request path prefix.  This provides a similar API
+as the multi_route plugin, but allows you to separate your applications per
+routing subtree, as opposed to multi_route which uses the same application
+for all routing subtrees.</p>
+
+<p>With the multi_run plugin, you call the class level run method with the
+routing prefix and the rack application to use, and you call r.multi_run to
+dispatch to all of the applications based on the prefix.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_run</span>&#x000A;&#x000A;  <span class="ruby-identifier">run</span> <span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-constant">Foo</span>&#x000A;  <span class="ruby-identifier">run</span> <span class="ruby-string">&quot;bar&quot;</span>, <span class="ruby-constant">Bar</span>&#x000A;  <span class="ruby-identifier">run</span> <span class="ruby-string">&quot;baz&quot;</span>, <span class="ruby-constant">Baz</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>In this case, Foo, Bar, and Baz, can be subclasses of App, which allows
+them to share methods that should be shared, but still define methods
+themselves that are not shared by the other applications.</p>
+</li><li>
+<p>A sinatra_helpers plugin has been added, that ports over most of the
+Sinatra::Helpers methods that haven&#39;t already been added by other
+plugins.  All of the methods are added either to the request or response
+class as appropriate.  By default, delegate methods are also added to the
+route block scope, but you can turn this off by passing a
+:delegate=&gt;false option when loading the plugin, which avoids polluting
+the route block namespace.</p>
+
+<p>The sinatra_helpers plugin adds the following request methods:</p>
+<ul><li>
+<p>back</p>
+</li><li>
+<p>error</p>
+</li><li>
+<p>not_found</p>
+</li><li>
+<p>uri</p>
+</li><li>
+<p>send_file</p>
+</li></ul>
+
+<p>And the following response methods:</p>
+<ul><li>
+<p>body</p>
+</li><li>
+<p>body=</p>
+</li><li>
+<p>status</p>
+</li><li>
+<p>headers</p>
+</li><li>
+<p>mime_type</p>
+</li><li>
+<p>content_type</p>
+</li><li>
+<p>attachment</p>
+</li><li>
+<p>informational?</p>
+</li><li>
+<p>success?</p>
+</li><li>
+<p>redirect?</p>
+</li><li>
+<p>client_error?</p>
+</li><li>
+<p>not_found?</p>
+</li><li>
+<p>server_error?</p>
+</li></ul>
+</li><li>
+<p>A slash_path_empty plugin has been added, which changes <a
+href="../../../classes/Roda.html">Roda</a> so that “/” is considered an
+empty path when doing a terminal match via r.is or r.get/r.post with a
+path.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:slash_path_empty</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;albums&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># matches both GET /albums and GET /albums/</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>An empty_root plugin has been added, which makes r.root match the empty
+string, in addition to /.  This can be useful in cases where a partial
+match on the patch has been completed.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:empty_root</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;albums&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-comment"># matches both GET /albums and GET /albums/</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>A match_affix plugin has been added, for overriding the default
+prefix/suffix used in match patterns.  For example, if you want to require
+that a leading / be specified in your routes. and you want to consume any
+trailing slash:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:match_affix</span>, <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-regexp">/(\/|\z)/</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;/albums&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># GET /albums # s =&gt; &quot;&quot;</span>&#x000A;      <span class="ruby-comment"># GET /albums/ # s =&gt; &quot;/&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>An environments plugin has been added, giving some simple helpers for
+executing code in different environments.  Example:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A; <span class="ruby-identifier">plugin</span> <span class="ruby-value">:environments</span>&#x000A;&#x000A; <span class="ruby-identifier">environment</span>  <span class="ruby-comment"># =&gt; :development</span>&#x000A; <span class="ruby-identifier">development?</span> <span class="ruby-comment"># =&gt; true</span>&#x000A; <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; false</span>&#x000A; <span class="ruby-identifier">production?</span>  <span class="ruby-comment"># =&gt; false</span>&#x000A;&#x000A; <span class="ruby-comment"># Set the environment for the application</span>&#x000A; <span class="ruby-keyword">self</span>.<span class="ruby-identifier">environment</span> = <span class="ruby-value">:test</span>&#x000A; <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; true</span>&#x000A;&#x000A; <span class="ruby-identifier">configure</span> <span class="ruby-keyword">do</span>&#x000A;   <span class="ruby-comment"># called, as no environments given</span>&#x000A; <span class="ruby-keyword">end</span>&#x000A;&#x000A; <span class="ruby-identifier">configure</span> <span class="ruby-value">:development</span>, <span class="ruby-value">:production</span> <span class="ruby-keyword">do</span>&#x000A;   <span class="ruby-comment"># not called, as no environments match</span>&#x000A; <span class="ruby-keyword">end</span>&#x000A;&#x000A; <span class="ruby-identifier">configure</span> <span class="ruby-value">:test</span> <span class="ruby-keyword">do</span>&#x000A;   <span class="ruby-comment"># called, as environment given matches current environment</span>&#x000A; <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>A drop_body plugin has been added, which automatically drops the body,
+Content-Type header, and Content-Length header when the response status
+indicates no body (100-102, 204, 205, 304).</p>
+</li><li>
+<p>A delay_build plugin has been added, which delays building the rack
+application until Roda.app is called, and only rebuilds the rack
+application if build! is called.  This removes O(n^2) performance in the
+pathological case of adding a route block and then calling Roda.use many
+times to add middlewares, though you have to add a few hundred middlewares
+for the difference to be noticeable.</p>
+</li></ul>
+
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>r.remaining_path and r.matched_path have been added for returning the
+remaining path that will be used for matching, and for returning the path
+already matched.  Currently, these just provide the PATH_INFO and
+SCRIPT_NAME, but starting in <a href="../../../classes/Roda.html">Roda</a>
+2 PATH_INFO and SCRIPT_NAME will not be modified during routing, and
+you&#39;ll need to use these methods if you want to find out the remaining
+or already matched paths.</p>
+</li><li>
+<p>The render plugin now supports a :template option to render/view to specify
+the template to use, instead of requiring a separate argument.</p>
+</li><li>
+<p>The render plugin now supports a :template_class option, allowing you to
+override the default template class that <a
+href="../../../classes/Roda.html">Roda</a> would use.</p>
+</li><li>
+<p>The render plugin now supports a :template_block option, specifying the
+block to pass when creating a template.</p>
+</li><li>
+<p>The path class method added by the path plugin now accepts :name, :url,
+:url_only, and :add_script_name options:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:name </td><td>
+<p>Specifies name for method</p>
+</td></tr><tr><td class='label'>:url </td><td>
+<p>Creates a url method in addition to a path method</p>
+</td></tr><tr><td class='label'>:url_only </td><td>
+<p>Only creates a url method, not a path method</p>
+</td></tr><tr><td class='label'>:add_script_name </td><td>
+<p>prefixes the path with SCRIPT_NAME</p>
+</td></tr></tbody></table>
+
+<p>Note that if you plan to use :add_script_name, you should use the
+static_path_info plugin so that the method created does not return
+different results depending on where you are in the routing tree.</p>
+</li><li>
+<p>A :user_agent hash matcher has been added to the header_matchers plugin.</p>
+</li><li>
+<p>An inherit_middleware class accessor has been added.  This can be set to
+false if you do not want subclasses to inherit middleware from the
+superclass.  This is useful if the superclass dispatches to the subclass
+via r.run, as otherwise it would have to run the same middleware stack
+twice.</p>
+</li><li>
+<p>A clear_middleware! class accessor has been added, allowing you to clear
+the current middleware stack.</p>
+</li><li>
+<p>RodaRequest#default_redirect_status has been added, allowing plugins to
+override the default status used for redirect if a status is not given.</p>
+</li><li>
+<p>Roda{Request,Response}#roda_class has been added, which returns the <a
+href="../../../classes/Roda.html">Roda</a> class related to the given
+request/response.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The render plugin no longer caches templates by default if RACK_ENV is
+development.</p>
+</li><li>
+<p>When subclassing a <a href="../../../classes/Roda.html">Roda</a> app,
+unfrozen Array/Hash entries in the opts hash are now duped into the
+subclass, so the subclass no longer needs to dup them manually.  Note that
+plugins that use nested arrays/hashes in the opts hash still need to dup
+manually inside ClassMethods#inherited.  For the plugins where it is
+possible, it is recommended to store plugin options in a frozen object in
+the opts hash, and require loading the plugin again to modify the plugin
+options.</p>
+</li><li>
+<p>Caching of templates is now fixed when the render/view :opts is used to
+specify template options per-call.</p>
+</li><li>
+<p>An explicit :default_encoding of nil in the render plugin&#39;s :opts hash
+is no longer overwritten with Encoding.default_external.</p>
+</li><li>
+<p>Roda#session now returns the same object as RodaRequest#session.</p>
+</li><li>
+<p>The view_subdirs, content_for, and render_each plugins now all depend on
+the render plugin.</p>
+</li><li>
+<p>The not_allowed plugin now depends on the all_verbs plugin.</p>
+</li><li>
+<p>Local/instance variables are now used in more places instead of method
+calls, improving performance.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The render plugin&#39;s render/view methods no longer pass the given hash
+directly to the underlying template.  To pass options to the template
+engine, use a separate hash under the :opts key:</p>
+
+<pre class="ruby"><span class="ruby-identifier">render</span> <span class="ruby-value">:file</span>, <span class="ruby-value">:opts</span><span class="ruby-operator">=&gt;</span>{<span class="ruby-value">:foo</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span>}</pre>
+
+<p>This is more consistent with the class-level render plugin options, which
+also uses :opts to pass options to the template engine.</p>
+
+<p>The :js_opts and :css_opts options to the assets plugin are now passed as
+the :opts hash, so they continue to affect the template engine, so they no
+longer specify general render method options.</p>
+</li><li>
+<p>Modifying render_opts :layout after loading the render plugin now has no
+effect.  You need to use plugin :render, :layout=&gt;&#39;…&#39; to set the
+layout to use now.</p>
+</li><li>
+<p>Default headers are not set on a response until the response is finished. 
+This allows you to check for header presence during routing to detect
+whether the header was specifically set for the current request.</p>
+</li><li>
+<p>RodaRequest.consume_pattern no longer captures anything by default.
+Previously, it did so in order to update SCRIPT_NAME, but that is now
+handled differently.  This should only affect external plugins that attempt
+to override RodaRequest#consume.</p>
+</li><li>
+<p>RodaRequest.def_verb_method has been removed.</p>
+</li><li>
+<p>The hooks, default_headers, json, and multi_route plugins all store their
+class-level metadata in the opts hash instead of separate class instance
+variables.  This should have no affect unless you were accessing the class
+instance variables directly.</p>
+</li><li>
+<p>The render plugin internals changed significantly, it now passes internal
+data using a hash.  This should only affect users that were overriding
+render plugin methods.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

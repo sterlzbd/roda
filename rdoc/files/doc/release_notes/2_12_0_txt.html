@@ -1,84 +1,86 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.12.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.12.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.12.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2016-03-15 08:56:37 -0700</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>An optimized_string_matchers plugin has been added, which contains
-            optimized matchers for single strings.  r.on_branch is an optimized version
-            of r.on and r.is_exactly is optimized version of r.is:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">optimized_string_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_branch</span> <span class="ruby-string">&quot;x&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches /x and paths starting with /x/</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_exactly</span> <span class="ruby-string">&quot;y&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># matches /x/y</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>Both of these methods will work even if the strings have placeholders, but
-            no captures will be yielded to the blocks.</p>
-            </li><li>
-            <p>The error_handler plugin now has access to the request&#39;s remaining_path
-            when handling an error.  You can then compare the remaining_path to
-            path_info to see how much of request was already routed, which can be
-            useful when reporting errors.</p>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>String matching for strings without placeholders is now 60% faster as it
-            uses optimized string operations instead of a regexp match.</p>
-            </li><li>
-            <p>Symbol matching is now 60% faster as it uses optimized string operations
-            instead of a regexp match.</p>
-            </li></ul>
-            
-            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The match methods no longer automatically reset the remaining_path via
-            ensure.  This means that using non-local jumps out of the code such as
-            begin/rescue and throw/catch will not reset remaining_path automatically. 
-            Users that want to reset remaining path in such cases should use their own
-            ensure blocks.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.12.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.12.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.12.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2016-03-15 08:56:37 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>An optimized_string_matchers plugin has been added, which contains
+optimized matchers for single strings.  r.on_branch is an optimized version
+of r.on and r.is_exactly is optimized version of r.is:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:optimized_string_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_branch</span> <span class="ruby-string">&quot;x&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches /x and paths starting with /x/</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_exactly</span> <span class="ruby-string">&quot;y&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># matches /x/y</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Both of these methods will work even if the strings have placeholders, but
+no captures will be yielded to the blocks.</p>
+</li><li>
+<p>The error_handler plugin now has access to the request&#39;s remaining_path
+when handling an error.  You can then compare the remaining_path to
+path_info to see how much of request was already routed, which can be
+useful when reporting errors.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>String matching for strings without placeholders is now 60% faster as it
+uses optimized string operations instead of a regexp match.</p>
+</li><li>
+<p>Symbol matching is now 60% faster as it uses optimized string operations
+instead of a regexp match.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The match methods no longer automatically reset the remaining_path via
+ensure.  This means that using non-local jumps out of the code such as
+begin/rescue and throw/catch will not reset remaining_path automatically. 
+Users that want to reset remaining path in such cases should use their own
+ensure blocks.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

@@ -1,149 +1,158 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>Roda::RodaPlugins::Assets::InstanceMethods</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='class' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>
-          <span class='type'>module</span>
-          Roda::RodaPlugins::Assets::InstanceMethods
-        </h1>
-        <ol class='paths'>
-          <li>
-            <a href="../../../../files/lib/roda/plugins/assets_rb.html">lib/roda/plugins/assets.rb</a>
-          </li>
-        </ol>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'></div>
-          <div id='method-list'>
-            <h2>Methods</h2>
-            <h3>Public Instance</h3>
-            <ol>
-              <li><a href="#method-i-assets">assets</a></li>
-              <li><a href="#method-i-assets_paths">assets_paths</a></li>
-              <li><a href="#method-i-read_asset_file">read_asset_file</a></li>
-              <li><a href="#method-i-render_asset">render_asset</a></li>
-            </ol>
-          </div>
-          <div id='context'>
-          </div>
-          <div id='section'>
-            <div id='methods'>
-              <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-assets'>
-                <a name='method-i-assets'></a>
-                <div class='synopsis'>
-                  <span class='name'>assets</span>
-                  <span class='arguments'>(type, attrs = OPTS)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Return a string containing html tags for the given asset type. This will
-                  use a script tag for the :js type and a link tag for the :css type.</p>
-                  
-                  <p>To return the tags for a specific asset group, use an array for the type,
-                  such as [:css, :frontend].</p>
-                  
-                  <p>When the assets are not compiled, this will result in a separate tag for
-                  each asset file.  When the assets are compiled, this will result in a
-                  single tag to the compiled asset file.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-assets-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-assets-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 644</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">assets</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attrs</span> = <span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">ltype</span> = <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">type</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>&#x000A;&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:compiled</span>] <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">algo</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:sri</span>]) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">hash</span> = <span class="ruby-identifier">_compiled_assets_hash</span>(<span class="ruby-identifier">type</span>))&#x000A;    <span class="ruby-identifier">attrs</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">attrs</span>]&#x000A;    <span class="ruby-identifier">attrs</span>[<span class="ruby-value">:integrity</span>] = <span class="ruby-node">&quot;#{algo}-#{h([[hash].pack(&#39;H*&#39;)].pack(&#39;m&#39;).tr(&quot;\n&quot;, &#39;&#39;))}&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">attrs</span> = <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{k}=\&quot;#{h(v)}\&quot;&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">ltype</span> <span class="ruby-operator">==</span> <span class="ruby-value">:js</span>&#x000A;    <span class="ruby-identifier">tag_start</span> = <span class="ruby-node">&quot;&lt;script type=\&quot;text/javascript\&quot; #{attrs} src=\&quot;&quot;</span>&#x000A;    <span class="ruby-identifier">tag_end</span> = <span class="ruby-string">&quot;\&quot;&gt;&lt;/script&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag_start</span> = <span class="ruby-node">&quot;&lt;link rel=\&quot;stylesheet\&quot; #{attrs} href=\&quot;&quot;</span>&#x000A;    <span class="ruby-identifier">tag_end</span> = <span class="ruby-string">&quot;\&quot; /&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">assets_paths</span>(<span class="ruby-identifier">type</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{tag_start}#{h(p)}#{tag_end}&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-assets_paths'>
-                <a name='method-i-assets_paths'></a>
-                <div class='synopsis'>
-                  <span class='name'>assets_paths</span>
-                  <span class='arguments'>(type)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Return an array of paths for the given asset type and optionally asset
-                  group. See the assets function documentation for details.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-assets_paths-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-assets_paths-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 601</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">assets_paths</span>(<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)&#x000A;    <span class="ruby-identifier">ltype</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">dirs</span> = <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">ltype</span> = <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">stype</span> = <span class="ruby-identifier">ltype</span>.<span class="ruby-identifier">to_s</span>&#x000A;&#x000A;  <span class="ruby-identifier">url_prefix</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">script_name</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:add_script_name</span>]&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:compiled</span>]&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">ukey</span> = <span class="ruby-identifier">_compiled_assets_hash</span>(<span class="ruby-identifier">type</span>, <span class="ruby-keyword">true</span>)&#x000A;      [<span class="ruby-node">&quot;#{o[:compiled_asset_host]}#{url_prefix}/#{o[:&quot;compiled_#{stype}_prefix&quot;]}.#{ukey}.#{stype}&quot;</span>]&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      []&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">asset_dir</span> = <span class="ruby-identifier">o</span>[<span class="ruby-identifier">ltype</span>]&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">dirs</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dirs</span>.<span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-identifier">dirs</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">asset_dir</span> = <span class="ruby-identifier">asset_dir</span>[<span class="ruby-identifier">f</span>]}&#x000A;      <span class="ruby-identifier">prefix</span> = <span class="ruby-node">&quot;#{dirs.join(&#39;/&#39;)}/&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:group_subdirs</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-constant">Array</span>(<span class="ruby-identifier">asset_dir</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:timestamp_paths</span>]&#x000A;        <span class="ruby-identifier">mtime</span> = <span class="ruby-identifier">asset_last_modified</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">o</span>[<span class="ruby-value">:&quot;#{stype}_path&quot;</span>], <span class="ruby-operator">*</span>[<span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">f</span>].<span class="ruby-identifier">compact</span>))&#x000A;        <span class="ruby-identifier">mtime</span> = <span class="ruby-node">&quot;#{sprintf(&quot;%i%06i&quot;, mtime.to_i, mtime.usec)}/&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-node">&quot;#{url_prefix}/#{o[:&quot;#{stype}_prefix&quot;]}#{mtime}#{prefix}#{f}#{o[:&quot;#{stype}_suffix&quot;]}&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-read_asset_file'>
-                <a name='method-i-read_asset_file'></a>
-                <div class='synopsis'>
-                  <span class='name'>read_asset_file</span>
-                  <span class='arguments'>(file, type)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p>Return the content of the file if it is already of the correct type.
-                  Otherwise, render the file using the render plugin.  <code>file</code>
-                  should be the relative path to the file from the current directory.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-read_asset_file-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-read_asset_file-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 695</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">read_asset_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;&#x000A;  <span class="ruby-identifier">content</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">end_with?</span>(<span class="ruby-node">&quot;.#{type}&quot;</span>)&#x000A;    <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">render_asset_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value">:template_opts=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">o</span>[<span class="ruby-value">:&quot;#{type}_opts&quot;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">o</span>[<span class="ruby-value">:postprocessor</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:postprocessor</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">content</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-              <div class='method public-instance' id='method-method-i-render_asset'>
-                <a name='method-i-render_asset'></a>
-                <div class='synopsis'>
-                  <span class='name'>render_asset</span>
-                  <span class='arguments'>(file, type)</span>
-                </div>
-                <div class='description'>
-                  
-                  <p><a href="../Render.html">Render</a> the asset with the given filename. 
-                  When assets are compiled, or when the file is already of the given type (no
-                  rendering necessary), this returns the contents of the compiled file. When
-                  assets are not compiled and the file is not already in the same format,
-                  this will render the asset using the render plugin. In both cases, if the
-                  file has not been modified since the last request, this will return a 304
-                  response.</p>
-                </div>
-                <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-render_asset-source'); return false">
-                    [show source]
-                  </a>
-                  <pre id='method-i-render_asset-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 673</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">render_asset</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:compiled</span>]&#x000A;    <span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{o[:&quot;compiled_#{type}_path&quot;]}#{file}&quot;</span>&#x000A;&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:gzip</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;HTTP_ACCEPT_ENCODING&#39;</span>] <span class="ruby-operator">=~</span> <span class="ruby-regexp">/\bgzip\b/</span>&#x000A;      <span class="ruby-ivar">@_response</span>[<span class="ruby-string">&#39;Content-Encoding&#39;</span>] = <span class="ruby-string">&#39;gzip&#39;</span>&#x000A;      <span class="ruby-identifier">file</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;.gz&#39;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">check_asset_request</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">mtime</span>)&#x000A;    <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{o[:&quot;#{type}_path&quot;]}#{file}&quot;</span>&#x000A;    <span class="ruby-identifier">check_asset_request</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">asset_last_modified</span>(<span class="ruby-identifier">file</span>))&#x000A;    <span class="ruby-identifier">read_asset_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>Roda::RodaPlugins::Assets::InstanceMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::Assets::InstanceMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/assets_rb.html">lib/roda/plugins/assets.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-assets">assets</a></li>
+<li><a href="#method-i-assets_paths">assets_paths</a></li>
+<li><a href="#method-i-read_asset_file">read_asset_file</a></li>
+<li><a href="#method-i-render_asset">render_asset</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-assets'>
+<a name='method-i-assets'></a>
+<div class='synopsis'>
+<span class='name'>assets</span>
+<span class='arguments'>(type, attrs = OPTS)</span>
+
+</div>
+<div class='description'>
+
+<p>Return a string containing html tags for the given asset type. This will
+use a script tag for the :js type and a link tag for the :css type.</p>
+
+<p>To return the tags for a specific asset group, use an array for the type,
+such as [:css, :frontend].</p>
+
+<p>When the assets are not compiled, this will result in a separate tag for
+each asset file.  When the assets are compiled, this will result in a
+single tag to the compiled asset file.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-assets-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-assets-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 644</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assets</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">attrs</span> = <span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">ltype</span> = <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">type</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>&#x000A;&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:compiled</span>] <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">algo</span> = <span class="ruby-identifier">o</span>[<span class="ruby-value">:sri</span>]) <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">hash</span> = <span class="ruby-identifier">_compiled_assets_hash</span>(<span class="ruby-identifier">type</span>))&#x000A;    <span class="ruby-identifier">attrs</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">attrs</span>]&#x000A;    <span class="ruby-identifier">attrs</span>[<span class="ruby-value">:integrity</span>] = <span class="ruby-node">&quot;#{algo}-#{h([[hash].pack(&#39;H*&#39;)].pack(&#39;m&#39;).tr(&quot;\n&quot;, &#39;&#39;))}&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">attrs</span> = <span class="ruby-identifier">attrs</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{k}=\&quot;#{h(v)}\&quot;&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39; &#39;</span>)&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">ltype</span> <span class="ruby-operator">==</span> <span class="ruby-value">:js</span>&#x000A;    <span class="ruby-identifier">tag_start</span> = <span class="ruby-node">&quot;&lt;script type=\&quot;text/javascript\&quot; #{attrs} src=\&quot;&quot;</span>&#x000A;    <span class="ruby-identifier">tag_end</span> = <span class="ruby-string">&quot;\&quot;&gt;&lt;/script&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">tag_start</span> = <span class="ruby-node">&quot;&lt;link rel=\&quot;stylesheet\&quot; #{attrs} href=\&quot;&quot;</span>&#x000A;    <span class="ruby-identifier">tag_end</span> = <span class="ruby-string">&quot;\&quot; /&gt;&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">assets_paths</span>(<span class="ruby-identifier">type</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{tag_start}#{h(p)}#{tag_end}&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-assets_paths'>
+<a name='method-i-assets_paths'></a>
+<div class='synopsis'>
+<span class='name'>assets_paths</span>
+<span class='arguments'>(type)</span>
+
+</div>
+<div class='description'>
+
+<p>Return an array of paths for the given asset type and optionally asset
+group. See the assets function documentation for details.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-assets_paths-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-assets_paths-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 601</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">assets_paths</span>(<span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Array</span>)&#x000A;    <span class="ruby-identifier">ltype</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">dirs</span> = <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">ltype</span> = <span class="ruby-identifier">type</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">stype</span> = <span class="ruby-identifier">ltype</span>.<span class="ruby-identifier">to_s</span>&#x000A;&#x000A;  <span class="ruby-identifier">url_prefix</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">script_name</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:add_script_name</span>]&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:compiled</span>]&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">ukey</span> = <span class="ruby-identifier">_compiled_assets_hash</span>(<span class="ruby-identifier">type</span>, <span class="ruby-keyword">true</span>)&#x000A;      [<span class="ruby-node">&quot;#{o[:compiled_asset_host]}#{url_prefix}/#{o[:&quot;compiled_#{stype}_prefix&quot;]}.#{ukey}.#{stype}&quot;</span>]&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      []&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">asset_dir</span> = <span class="ruby-identifier">o</span>[<span class="ruby-identifier">ltype</span>]&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">dirs</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">dirs</span>.<span class="ruby-identifier">empty?</span>&#x000A;      <span class="ruby-identifier">dirs</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">asset_dir</span> = <span class="ruby-identifier">asset_dir</span>[<span class="ruby-identifier">f</span>]}&#x000A;      <span class="ruby-identifier">prefix</span> = <span class="ruby-node">&quot;#{dirs.join(&#39;/&#39;)}/&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:group_subdirs</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-constant">Array</span>(<span class="ruby-identifier">asset_dir</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:timestamp_paths</span>]&#x000A;        <span class="ruby-identifier">mtime</span> = <span class="ruby-identifier">asset_last_modified</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">o</span>[<span class="ruby-value">:&quot;#{stype}_path&quot;</span>], <span class="ruby-operator">*</span>[<span class="ruby-identifier">prefix</span>, <span class="ruby-identifier">f</span>].<span class="ruby-identifier">compact</span>))&#x000A;        <span class="ruby-identifier">mtime</span> = <span class="ruby-node">&quot;#{sprintf(&quot;%i%06i&quot;, mtime.to_i, mtime.usec)}/&quot;</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-node">&quot;#{url_prefix}/#{o[:&quot;#{stype}_prefix&quot;]}#{mtime}#{prefix}#{f}#{o[:&quot;#{stype}_suffix&quot;]}&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-read_asset_file'>
+<a name='method-i-read_asset_file'></a>
+<div class='synopsis'>
+<span class='name'>read_asset_file</span>
+<span class='arguments'>(file, type)</span>
+
+</div>
+<div class='description'>
+
+<p>Return the content of the file if it is already of the correct type.
+Otherwise, render the file using the render plugin.  <code>file</code>
+should be the relative path to the file from the current directory.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-read_asset_file-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-read_asset_file-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 695</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">read_asset_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;&#x000A;  <span class="ruby-identifier">content</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">file</span>.<span class="ruby-identifier">end_with?</span>(<span class="ruby-node">&quot;.#{type}&quot;</span>)&#x000A;    <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">render_asset_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-value">:template_opts</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">o</span>[<span class="ruby-value">:&quot;#{type}_opts&quot;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">o</span>[<span class="ruby-value">:postprocessor</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:postprocessor</span>].<span class="ruby-identifier">call</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">content</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-render_asset'>
+<a name='method-i-render_asset'></a>
+<div class='synopsis'>
+<span class='name'>render_asset</span>
+<span class='arguments'>(file, type)</span>
+
+</div>
+<div class='description'>
+
+<p><a href="../Render.html">Render</a> the asset with the given filename. 
+When assets are compiled, or when the file is already of the given type (no
+rendering necessary), this returns the contents of the compiled file. When
+assets are not compiled and the file is not already in the same format,
+this will render the asset using the render plugin. In both cases, if the
+file has not been modified since the last request, this will return a 304
+response.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-render_asset-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-render_asset-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 673</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">render_asset</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-identifier">o</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:compiled</span>]&#x000A;    <span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{o[:&quot;compiled_#{type}_path&quot;]}#{file}&quot;</span>&#x000A;&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">o</span>[<span class="ruby-value">:gzip</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;HTTP_ACCEPT_ENCODING&#39;</span>] <span class="ruby-operator">=~</span> <span class="ruby-regexp">/\bgzip\b/</span>&#x000A;      <span class="ruby-ivar">@_response</span>[<span class="ruby-string">&#39;Content-Encoding&#39;</span>] = <span class="ruby-string">&#39;gzip&#39;</span>&#x000A;      <span class="ruby-identifier">file</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;.gz&#39;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">check_asset_request</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">stat</span>(<span class="ruby-identifier">file</span>).<span class="ruby-identifier">mtime</span>)&#x000A;    <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">file</span> = <span class="ruby-node">&quot;#{o[:&quot;#{type}_path&quot;]}#{file}&quot;</span>&#x000A;    <span class="ruby-identifier">check_asset_request</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">asset_last_modified</span>(<span class="ruby-identifier">file</span>))&#x000A;    <span class="ruby-identifier">read_asset_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

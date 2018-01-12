@@ -1,128 +1,130 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>3.0.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>3.0.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/3.0.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2017-09-15 08:13:40 -0700</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-Major+Changes">Major Changes<span><a href="#label-Major+Changes">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>String matchers now match literally by default, for simplicity,
-            understandability, and performance.  Use the String class matcher or a
-            symbol matcher to match arbitrary segments.</p>
-            
-            <pre class="ruby"><span class="ruby-comment"># Before</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;artists/:name&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># Now</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;artists&quot;</span>, <span class="ruby-constant">String</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># or</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;artists&quot;</span>, :<span class="ruby-identifier">name</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>You can use the placeholder_string_matchers plugin to restore the
-            historical behavior if you don&#39;t want to modify your routes.</p>
-            </li><li>
-            <p>Using an unsupported matcher now raises an error, making it more likely to
-            detect using a unexpected value as a matcher (which previously matched
-            everything).</p>
-            </li><li>
-            <p>Have a route/match block return an unsupported value now raises an error if
-            nothing has been written to the body, making it more likely to detect using
-            an unexpected value as a block result (which previously was ignored).</p>
-            </li></ul>
-            
-            <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>Deprecated plugins, features, and constants have been removed. Before
-            upgrading to 3.0.0, please upgrade to 2.29.0 first and fix any deprecation
-            warnings.</p>
-            </li><li>
-            <p>Ruby 1.8.7 support has been dropped.  Ruby 1.9.2 is the new minimum
-            supported version.</p>
-            </li><li>
-            <p>The :check_paths render plugin option now defaults to true so that
-            generated template paths are checked by default, reducing the risk of
-            rendering arbitrary files.</p>
-            </li><li>
-            <p>The assets plugin now defaults to using subresource integrity with SHA256
-            for compiled assets, and using SHA256 instead of SHA1 for compiled asset
-            hashes.</p>
-            </li><li>
-            <p>Subclassing a <a href="../../../classes/Roda.html">Roda</a> app that uses
-            the render plugin now always uses a copy of the superclass&#39;s template
-            cache.</p>
-            </li><li>
-            <p>Using a <a href="../../../classes/Roda.html">Roda</a> app as middleware now
-            always uses a subclass of the app for the middleware.</p>
-            </li><li>
-            <p>public_send is now used instead of send internally unless it is expected
-            that private methods will be called.</p>
-            </li><li>
-            <p>The match methods added by the symbol_matchers and hash_matchers plugins
-            are now private instead of public.</p>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The streaming plugin has been greatly simplified, by dropping deprecated
-            compatibility for EventMachine.</p>
-            </li><li>
-            <p>It is now possible to reset the :include_request option to false in the
-            json and json_parser plugins by loading the plugin a second time with the
-            option set.</p>
-            </li><li>
-            <p>The precompile_templates plugin now always sorts locals.  This plugin
-            should now be used with Tilt 2.0.1+ (which also sorts locals), though it
-            will still work with earlier Tilt versions.</p>
-            </li><li>
-            <p>The multi_run plugin now recomputes the regexp when freezing the app.</p>
-            </li></ul>
-            
-            <h1 id="label-Deprecated+Features">Deprecated Features<span><a href="#label-Deprecated+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            
-            <p>These features will be removed in <a
-            href="../../../classes/Roda.html">Roda</a> 3.1.0:</p>
-            <ul><li>
-            <p>Roda.thread_safe_cache is now deprecated.  RodaCache is now used as the
-            thread-safe cache class.</p>
-            </li><li>
-            <p>RodaRequest#placeholder_string_matcher? (private method) is now deprecated
-            and always returns false.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>3.0.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.0.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.0.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2017-09-15 08:13:40 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Major+Changes">Major Changes<span><a href="#label-Major+Changes">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>String matchers now match literally by default, for simplicity,
+understandability, and performance.  Use the String class matcher or a
+symbol matcher to match arbitrary segments.</p>
+
+<pre class="ruby"><span class="ruby-comment"># Before</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;artists/:name&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># Now</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;artists&quot;</span>, <span class="ruby-constant">String</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># or</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;artists&quot;</span>, <span class="ruby-value">:name</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">artist_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>You can use the placeholder_string_matchers plugin to restore the
+historical behavior if you don&#39;t want to modify your routes.</p>
+</li><li>
+<p>Using an unsupported matcher now raises an error, making it more likely to
+detect using a unexpected value as a matcher (which previously matched
+everything).</p>
+</li><li>
+<p>Have a route/match block return an unsupported value now raises an error if
+nothing has been written to the body, making it more likely to detect using
+an unexpected value as a block result (which previously was ignored).</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Deprecated plugins, features, and constants have been removed. Before
+upgrading to 3.0.0, please upgrade to 2.29.0 first and fix any deprecation
+warnings.</p>
+</li><li>
+<p>Ruby 1.8.7 support has been dropped.  Ruby 1.9.2 is the new minimum
+supported version.</p>
+</li><li>
+<p>The :check_paths render plugin option now defaults to true so that
+generated template paths are checked by default, reducing the risk of
+rendering arbitrary files.</p>
+</li><li>
+<p>The assets plugin now defaults to using subresource integrity with SHA256
+for compiled assets, and using SHA256 instead of SHA1 for compiled asset
+hashes.</p>
+</li><li>
+<p>Subclassing a <a href="../../../classes/Roda.html">Roda</a> app that uses
+the render plugin now always uses a copy of the superclass&#39;s template
+cache.</p>
+</li><li>
+<p>Using a <a href="../../../classes/Roda.html">Roda</a> app as middleware now
+always uses a subclass of the app for the middleware.</p>
+</li><li>
+<p>public_send is now used instead of send internally unless it is expected
+that private methods will be called.</p>
+</li><li>
+<p>The match methods added by the symbol_matchers and hash_matchers plugins
+are now private instead of public.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The streaming plugin has been greatly simplified, by dropping deprecated
+compatibility for EventMachine.</p>
+</li><li>
+<p>It is now possible to reset the :include_request option to false in the
+json and json_parser plugins by loading the plugin a second time with the
+option set.</p>
+</li><li>
+<p>The precompile_templates plugin now always sorts locals.  This plugin
+should now be used with Tilt 2.0.1+ (which also sorts locals), though it
+will still work with earlier Tilt versions.</p>
+</li><li>
+<p>The multi_run plugin now recomputes the regexp when freezing the app.</p>
+</li></ul>
+
+<h1 id="label-Deprecated+Features">Deprecated Features<span><a href="#label-Deprecated+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>These features will be removed in <a
+href="../../../classes/Roda.html">Roda</a> 3.1.0:</p>
+<ul><li>
+<p>Roda.thread_safe_cache is now deprecated.  RodaCache is now used as the
+thread-safe cache class.</p>
+</li><li>
+<p>RodaRequest#placeholder_string_matcher? (private method) is now deprecated
+and always returns false.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

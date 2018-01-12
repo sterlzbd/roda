@@ -1,204 +1,206 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.29.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.29.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.29.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2017-08-16 07:55:22 -0700</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-Deprecated+Features">Deprecated Features<span><a href="#label-Deprecated+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            
-            <p><a href="../../../classes/Roda.html">Roda</a> 2.29.0 will be the last minor
-            release of <a href="../../../classes/Roda.html">Roda</a> 2.  <a
-            href="../../../classes/Roda.html">Roda</a> 3.0.0 will be released next
-            month and will remove support for the following deprecated features.  All
-            of these features will have deprecation warnings if used in <a
-            href="../../../classes/Roda.html">Roda</a> 2.29.0.</p>
-            <ul><li>
-            <p>The use of placeholders in string matchers is now deprecated. So code such
-            as:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;users/:user_id&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>should be switched to using a class matcher such as String or Integer:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;users&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>or a symbol matcher:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;users&quot;</span>, :<span class="ruby-identifier">user_id</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            
-            <p>If you really want to keep support for placeholders in string matchers, the
-            support is available in the new placeholder_string_matchers plugin.</p>
-            </li><li>
-            <p>The :format, :opt, and :optd default symbol matchers are now deprecated in
-            the symbol_matchers plugin.  These matchers only made sense when
-            placeholder string matchers are used, which will no longer be the default
-            behavior in <a href="../../../classes/Roda.html">Roda</a> 3. These methods
-            can be defined manually if you are going to use the
-            placeholder_string_matchers plugin and still want to use these symbol
-            matchers:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">symbol_matcher</span>(:<span class="ruby-identifier">format</span>, <span class="ruby-regexp">/(?:\.(\w+))?/</span>)&#x000A;<span class="ruby-identifier">symbol_matcher</span>(:<span class="ruby-identifier">opt</span>, <span class="ruby-regexp">/(?:\/([^\/]+))?/</span>)&#x000A;<span class="ruby-identifier">symbol_matcher</span>(:<span class="ruby-identifier">optd</span>, <span class="ruby-regexp">/(?:\/(\d+))?/</span>)</pre>
-            </li><li>
-            <p>Ignoring unsupported match block return values is now deprecated. Doing so
-            can hide errors and make debugging more difficult.  If you get a
-            deprecation warning related to this, just make sure the match block returns
-            nil or false to specify the match block return value should be ignored.</p>
-            </li><li>
-            <p>Treating unsupported matchers as always matching is now deprecated. Doing
-            so can hide errors and make debugging more difficult. If you get a
-            deprecation warning related to this, switch the matcher to true instead of
-            an unsupported object.</p>
-            </li><li>
-            <p>The render plugin&#39;s handling of plugin level locals and merging of
-            template and layout locals is now deprecated.  Users of these features
-            should switch to the new render_locals plugin.</p>
-            </li><li>
-            <p>The view_options plugin&#39;s handling of per-branch view and layout locals
-            is now deprecated.  Users of these feature should switch to the new
-            branch_locals plugin.</p>
-            </li><li>
-            <p>The render plugin&#39;s support for Erubis escaping is now deprecated. In
-            <a href="../../../classes/Roda.html">Roda</a> 3, the render plugin :escape
-            option will use Erubi escaping. Switch to using :escape=&gt;:erubi
-            temporarily to avoid the deprecation warning.</p>
-            </li><li>
-            <p>Using the render plugin to render a template that is outside one of the
-            allowed paths is now deprecated unless the :check_paths option has been set
-            to false.  In <a href="../../../classes/Roda.html">Roda</a> 3, the default
-            behavior will change to checking that template files are in one of the
-            allowed paths.</p>
-            </li><li>
-            <p>The :ext option in the render plugin is now deprecated, users should switch
-            to using the :engine option, which has always had priority.</p>
-            </li><li>
-            <p>Using the :cache=&gt;true option to the view/render method in the render
-            plugin is now deprecated if the :cache=&gt;nil/false option was given when
-            loading the plugin.  In <a href="../../../classes/Roda.html">Roda</a> 3,
-            the default behavior will change so that the :cache=&gt;nil/false plugin
-            option still allows caching via the :cache=&gt;true method option.  Users
-            can use the :explicit_cache=&gt;true render plugin option instead of the
-            :cache=&gt;nil render plugin option to work around the deprecation warning.</p>
-            </li><li>
-            <p>Attempting to use multi_route while routing with a namespace that
-            hasn&#39;t yet been defined is now deprecated.  The previous behavior was
-            to ignore undefined namespaces, but that is more likely to hide an error
-            than be desired behavior.  In <a href="../../../classes/Roda.html">Roda</a>
-            3, using an undefined namespace will raise an error.</p>
-            </li><li>
-            <p>The streaming plugin&#39;s support for EventMachine is now deprecated, as
-            is related support for Stream#callback.  The streaming plugin will be much
-            simpler in <a href="../../../classes/Roda.html">Roda</a> 3 by dropping this
-            support.</p>
-            </li><li>
-            <p>Calling content_for in the content_for plugin multiple times with the same
-            argument is now deprecated unless the content_for plugin :append option is
-            used to specify behavior.  The default behavior in <a
-            href="../../../classes/Roda.html">Roda</a> 3 will change to appending to
-            the existing content instead of overwriting the existing content.</p>
-            </li><li>
-            <p>The :host matcher in the header_matchers plugin is now deprecated when
-            using a regexp value unless the :host_matcher_captures app option is used. 
-            In <a href="../../../classes/Roda.html">Roda</a> 3, the :host matcher will
-            automatically yield any regexp captures to the match block.</p>
-            </li><li>
-            <p>The :header matcher in the header_matchers plugin is now deprecated unless
-            the :header_matcher_prefix app option is used.  In <a
-            href="../../../classes/Roda.html">Roda</a> 3, the :header matcher will
-            always prefix the argument given with HTTP_.</p>
-            </li><li>
-            <p>The websockets plugin is now deprecated.  It was one of the less commonly
-            used plugins, and the tests for it were subject to race conditions and
-            failed occassionally, and even when they worked they almost doubled the
-            testing time.  Anyone wanting to use it should consider maintaining it as
-            an external plugin.</p>
-            </li><li>
-            <p>The per_thread_caching, static_path_info, and view_subdirs plugins are now
-            deprecated.  static_path_info has been a no-op since <a
-            href="../../../classes/Roda.html">Roda</a> 3, view_subdirs is just an alias
-            for view_options, and per_thread_caching doesn&#39;t change behavior and is
-            unlikely to significantly increase performance.</p>
-            </li><li>
-            <p>Additional internal constants are now deprecated. Deprecation warnings for
-            accessing these constants will only be displayed on ruby 2.3+.</p>
-            </li></ul>
-            
-            <h1 id="label-Forward+Compatibility">Forward Compatibility<span><a href="#label-Forward+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            
-            <p><a href="../../../classes/Roda.html">Roda</a> 3.0.0 will also include some
-            behavior changes which will not have deprecation warnings:</p>
-            <ul><li>
-            <p>Ruby 1.8.7 support will be dropped.  Ruby 1.9.2 will be the new minimum
-            supported version.</p>
-            </li><li>
-            <p>Subclassing a <a href="../../../classes/Roda.html">Roda</a> app that uses
-            the render plugin will always use a copy of the superclass&#39;s template
-            cache.</p>
-            </li><li>
-            <p>The assets plugin will default to using subresource integrity using SHA256
-            for compiled assets, and using SHA256 instead of SHA1 for compiled asset
-            hashes.</p>
-            </li><li>
-            <p>Using an <a href="../../../classes/Roda.html">Roda</a> app as middleware
-            will now always use a subclass of the app for the middleware.</p>
-            </li><li>
-            <p>public_send will be used instead of send internally unless it is expected
-            that private methods will be called.</p>
-            </li><li>
-            <p>The match methods added by the symbol_matchers and hash_matchers plugins
-            will be private instead of public.</p>
-            </li></ul>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The render plugin now has the :layout_opts=&gt;:views plugin option respect
-            the :root app option.</p>
-            </li><li>
-            <p>RodaPlugins::OPTS and RodaPlugins::EMPTY_ARRAY have been added. These are a
-            frozen empty hash and a frozen empty array, and they are designed for use
-            in plugins so that similar objects are not needed to be defined separately
-            in each plugin.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.29.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.29.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.29.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2017-08-16 07:55:22 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Deprecated+Features">Deprecated Features<span><a href="#label-Deprecated+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p><a href="../../../classes/Roda.html">Roda</a> 2.29.0 will be the last minor
+release of <a href="../../../classes/Roda.html">Roda</a> 2.  <a
+href="../../../classes/Roda.html">Roda</a> 3.0.0 will be released next
+month and will remove support for the following deprecated features.  All
+of these features will have deprecation warnings if used in <a
+href="../../../classes/Roda.html">Roda</a> 2.29.0.</p>
+<ul><li>
+<p>The use of placeholders in string matchers is now deprecated. So code such
+as:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;users/:user_id&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>should be switched to using a class matcher such as String or Integer:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;users&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>or a symbol matcher:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;users&quot;</span>, <span class="ruby-value">:user_id</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">id</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>If you really want to keep support for placeholders in string matchers, the
+support is available in the new placeholder_string_matchers plugin.</p>
+</li><li>
+<p>The :format, :opt, and :optd default symbol matchers are now deprecated in
+the symbol_matchers plugin.  These matchers only made sense when
+placeholder string matchers are used, which will no longer be the default
+behavior in <a href="../../../classes/Roda.html">Roda</a> 3. These methods
+can be defined manually if you are going to use the
+placeholder_string_matchers plugin and still want to use these symbol
+matchers:</p>
+
+<pre class="ruby"><span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:format</span>, <span class="ruby-regexp">/(?:\.(\w+))?/</span>)&#x000A;<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:opt</span>, <span class="ruby-regexp">/(?:\/([^\/]+))?/</span>)&#x000A;<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:optd</span>, <span class="ruby-regexp">/(?:\/(\d+))?/</span>)</pre>
+</li><li>
+<p>Ignoring unsupported match block return values is now deprecated. Doing so
+can hide errors and make debugging more difficult.  If you get a
+deprecation warning related to this, just make sure the match block returns
+nil or false to specify the match block return value should be ignored.</p>
+</li><li>
+<p>Treating unsupported matchers as always matching is now deprecated. Doing
+so can hide errors and make debugging more difficult. If you get a
+deprecation warning related to this, switch the matcher to true instead of
+an unsupported object.</p>
+</li><li>
+<p>The render plugin&#39;s handling of plugin level locals and merging of
+template and layout locals is now deprecated.  Users of these features
+should switch to the new render_locals plugin.</p>
+</li><li>
+<p>The view_options plugin&#39;s handling of per-branch view and layout locals
+is now deprecated.  Users of these feature should switch to the new
+branch_locals plugin.</p>
+</li><li>
+<p>The render plugin&#39;s support for Erubis escaping is now deprecated. In
+<a href="../../../classes/Roda.html">Roda</a> 3, the render plugin :escape
+option will use Erubi escaping. Switch to using :escape=&gt;:erubi
+temporarily to avoid the deprecation warning.</p>
+</li><li>
+<p>Using the render plugin to render a template that is outside one of the
+allowed paths is now deprecated unless the :check_paths option has been set
+to false.  In <a href="../../../classes/Roda.html">Roda</a> 3, the default
+behavior will change to checking that template files are in one of the
+allowed paths.</p>
+</li><li>
+<p>The :ext option in the render plugin is now deprecated, users should switch
+to using the :engine option, which has always had priority.</p>
+</li><li>
+<p>Using the :cache=&gt;true option to the view/render method in the render
+plugin is now deprecated if the :cache=&gt;nil/false option was given when
+loading the plugin.  In <a href="../../../classes/Roda.html">Roda</a> 3,
+the default behavior will change so that the :cache=&gt;nil/false plugin
+option still allows caching via the :cache=&gt;true method option.  Users
+can use the :explicit_cache=&gt;true render plugin option instead of the
+:cache=&gt;nil render plugin option to work around the deprecation warning.</p>
+</li><li>
+<p>Attempting to use multi_route while routing with a namespace that
+hasn&#39;t yet been defined is now deprecated.  The previous behavior was
+to ignore undefined namespaces, but that is more likely to hide an error
+than be desired behavior.  In <a href="../../../classes/Roda.html">Roda</a>
+3, using an undefined namespace will raise an error.</p>
+</li><li>
+<p>The streaming plugin&#39;s support for EventMachine is now deprecated, as
+is related support for Stream#callback.  The streaming plugin will be much
+simpler in <a href="../../../classes/Roda.html">Roda</a> 3 by dropping this
+support.</p>
+</li><li>
+<p>Calling content_for in the content_for plugin multiple times with the same
+argument is now deprecated unless the content_for plugin :append option is
+used to specify behavior.  The default behavior in <a
+href="../../../classes/Roda.html">Roda</a> 3 will change to appending to
+the existing content instead of overwriting the existing content.</p>
+</li><li>
+<p>The :host matcher in the header_matchers plugin is now deprecated when
+using a regexp value unless the :host_matcher_captures app option is used. 
+In <a href="../../../classes/Roda.html">Roda</a> 3, the :host matcher will
+automatically yield any regexp captures to the match block.</p>
+</li><li>
+<p>The :header matcher in the header_matchers plugin is now deprecated unless
+the :header_matcher_prefix app option is used.  In <a
+href="../../../classes/Roda.html">Roda</a> 3, the :header matcher will
+always prefix the argument given with HTTP_.</p>
+</li><li>
+<p>The websockets plugin is now deprecated.  It was one of the less commonly
+used plugins, and the tests for it were subject to race conditions and
+failed occassionally, and even when they worked they almost doubled the
+testing time.  Anyone wanting to use it should consider maintaining it as
+an external plugin.</p>
+</li><li>
+<p>The per_thread_caching, static_path_info, and view_subdirs plugins are now
+deprecated.  static_path_info has been a no-op since <a
+href="../../../classes/Roda.html">Roda</a> 3, view_subdirs is just an alias
+for view_options, and per_thread_caching doesn&#39;t change behavior and is
+unlikely to significantly increase performance.</p>
+</li><li>
+<p>Additional internal constants are now deprecated. Deprecation warnings for
+accessing these constants will only be displayed on ruby 2.3+.</p>
+</li></ul>
+
+<h1 id="label-Forward+Compatibility">Forward Compatibility<span><a href="#label-Forward+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p><a href="../../../classes/Roda.html">Roda</a> 3.0.0 will also include some
+behavior changes which will not have deprecation warnings:</p>
+<ul><li>
+<p>Ruby 1.8.7 support will be dropped.  Ruby 1.9.2 will be the new minimum
+supported version.</p>
+</li><li>
+<p>Subclassing a <a href="../../../classes/Roda.html">Roda</a> app that uses
+the render plugin will always use a copy of the superclass&#39;s template
+cache.</p>
+</li><li>
+<p>The assets plugin will default to using subresource integrity using SHA256
+for compiled assets, and using SHA256 instead of SHA1 for compiled asset
+hashes.</p>
+</li><li>
+<p>Using an <a href="../../../classes/Roda.html">Roda</a> app as middleware
+will now always use a subclass of the app for the middleware.</p>
+</li><li>
+<p>public_send will be used instead of send internally unless it is expected
+that private methods will be called.</p>
+</li><li>
+<p>The match methods added by the symbol_matchers and hash_matchers plugins
+will be private instead of public.</p>
+</li></ul>
+
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The render plugin now has the :layout_opts=&gt;:views plugin option respect
+the :root app option.</p>
+</li><li>
+<p>RodaPlugins::OPTS and RodaPlugins::EMPTY_ARRAY have been added. These are a
+frozen empty hash and a frozen empty array, and they are designed for use
+in plugins so that similar objects are not needed to be defined separately
+in each plugin.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>

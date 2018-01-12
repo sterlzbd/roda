@@ -1,85 +1,87 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
-  <head>
-    <title>2.15.0.txt</title>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-    <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
-    <script type='text/javascript'>
-      function popupCode(url) {
-        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
-      }
-      
-      function toggleCode(id) {
-        var code = document.getElementById(id)
-      
-        code.style.display = code.style.display != 'block' ? 'block' : 'none'
-        return true
-      }
-      
-      // Make codeblocks hidden by default
-      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
-    </script>
-  </head>
-  <body class='page'>
-    <div class='file' id='wrapper'>
-      <div class='header'>
-        <h1 class='name'>2.15.0.txt</h1>
-        <div class='paths'>
-          doc/release_notes/2.15.0.txt
-        </div>
-        <div class='last-update'>
-          Last Update:
-          <span class='datetime'>2016-06-13 14:04:57 -0700</span>
-        </div>
-      </div>
-      <div id='content'>
-        <div id='text'>
-          <div id='description'>
-            
-            <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>A public plugin has been added.  This adds an r.public method for serving
-            all files in the public directory.  The public plugin can replace usage of
-            the static plugin, and is more flexible.  You can place r.public at any
-            point in the routing tree, and it will use the remaining path to lookup the
-            file in the public directory.  You can also pass the :gzip option when
-            loading the plugin, and it will serve already gzipped files to the client
-            if the client supports gzipped transfer encoding and the file exists with a
-            .gz extension.  Example:</p>
-            
-            <pre class="ruby"><span class="ruby-identifier">plugin</span> :<span class="ruby-identifier">public</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Serve public files before routing</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-            </li><li>
-            <p>The :header matcher added by the header_matchers plugin now automatically
-            prefixes the key with HTTP_ when looking it up in the environment, if the
-            :header_matcher_prefix application option is set.  This behavior will
-            probably be the default in <a href="../../../classes/Roda.html">Roda</a> 3.</p>
-            
-            <pre class="ruby"><span class="ruby-comment"># Before</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">header</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;http_accept&#39;</span>&#x000A;&#x000A;<span class="ruby-comment"># Now, with :header_matcher_prefix=&gt;true application option</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> :<span class="ruby-identifier">header</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;accept&#39;</span></pre>
-            </li><li>
-            <p>The content_for plugin now accepts an :append=&gt;true option to support
-            appending to the existing content instead of overwriting the existing
-            content if called multiple times.  This behavior will probably be the
-            default in <a href="../../../classes/Roda.html">Roda</a> 3.</p>
-            
-            <pre class="ruby"><span class="ruby-comment"># Before</span>&#x000A;<span class="ruby-identifier">content_for</span>(:<span class="ruby-identifier">form</span>, <span class="ruby-string">&#39;a&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(:<span class="ruby-identifier">form</span>, <span class="ruby-string">&#39;b&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(:<span class="ruby-identifier">form</span>) <span class="ruby-comment"># =&gt; &#39;b&#39;</span>&#x000A;&#x000A;<span class="ruby-comment"># Now, with :append=&gt;true option</span>&#x000A;<span class="ruby-identifier">content_for</span>(:<span class="ruby-identifier">form</span>, <span class="ruby-string">&#39;a&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(:<span class="ruby-identifier">form</span>, <span class="ruby-string">&#39;b&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(:<span class="ruby-identifier">form</span>) <span class="ruby-comment"># =&gt; &#39;ab&#39;</span></pre>
-            </li></ul>
-            
-            <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
-            <ul><li>
-            <p>The r.send_file method in the sinatra_helpers plugin now works correctly
-            when using rack 2.</p>
-            </li><li>
-            <p>The specs now run correctly on Windows.</p>
-            </li></ul>
-          </div>
-          <div id='context'>
-          </div>
-        </div>
-      </div>
-      <div id='footer-push'></div>
-    </div>
-    <div id='footer'>
-      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
-    </div>
-  </body>
+<head>
+<title>2.15.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>2.15.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/2.15.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2016-06-13 14:04:57 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A public plugin has been added.  This adds an r.public method for serving
+all files in the public directory.  The public plugin can replace usage of
+the static plugin, and is more flexible.  You can place r.public at any
+point in the routing tree, and it will use the remaining path to lookup the
+file in the public directory.  You can also pass the :gzip option when
+loading the plugin, and it will serve already gzipped files to the client
+if the client supports gzipped transfer encoding and the file exists with a
+.gz extension.  Example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Serve public files before routing</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li><li>
+<p>The :header matcher added by the header_matchers plugin now automatically
+prefixes the key with HTTP_ when looking it up in the environment, if the
+:header_matcher_prefix application option is set.  This behavior will
+probably be the default in <a href="../../../classes/Roda.html">Roda</a> 3.</p>
+
+<pre class="ruby"><span class="ruby-comment"># Before</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:header</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;http_accept&#39;</span>&#x000A;&#x000A;<span class="ruby-comment"># Now, with :header_matcher_prefix=&gt;true application option</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:header</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;accept&#39;</span></pre>
+</li><li>
+<p>The content_for plugin now accepts an :append=&gt;true option to support
+appending to the existing content instead of overwriting the existing
+content if called multiple times.  This behavior will probably be the
+default in <a href="../../../classes/Roda.html">Roda</a> 3.</p>
+
+<pre class="ruby"><span class="ruby-comment"># Before</span>&#x000A;<span class="ruby-identifier">content_for</span>(<span class="ruby-value">:form</span>, <span class="ruby-string">&#39;a&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(<span class="ruby-value">:form</span>, <span class="ruby-string">&#39;b&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(<span class="ruby-value">:form</span>) <span class="ruby-comment"># =&gt; &#39;b&#39;</span>&#x000A;&#x000A;<span class="ruby-comment"># Now, with :append=&gt;true option</span>&#x000A;<span class="ruby-identifier">content_for</span>(<span class="ruby-value">:form</span>, <span class="ruby-string">&#39;a&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(<span class="ruby-value">:form</span>, <span class="ruby-string">&#39;b&#39;</span>)&#x000A;<span class="ruby-identifier">content_for</span>(<span class="ruby-value">:form</span>) <span class="ruby-comment"># =&gt; &#39;ab&#39;</span></pre>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The r.send_file method in the sinatra_helpers plugin now works correctly
+when using rack 2.</p>
+</li><li>
+<p>The specs now run correctly on Windows.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
 </html>
