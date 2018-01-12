@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
   <head>
-    <title>Roda::RodaPlugins::Assets::RequestClassMethods</title>
+    <title>Roda::RodaPlugins::MiddlewareStack::ClassMethods</title>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
     <script type='text/javascript'>
@@ -25,11 +25,11 @@
       <div class='header'>
         <h1 class='name'>
           <span class='type'>module</span>
-          Roda::RodaPlugins::Assets::RequestClassMethods
+          Roda::RodaPlugins::MiddlewareStack::ClassMethods
         </h1>
         <ol class='paths'>
           <li>
-            <a href="../../../../files/lib/roda/plugins/assets_rb.html">lib/roda/plugins/assets.rb</a>
+            <a href="../../../../files/lib/roda/plugins/middleware_stack_rb.html">lib/roda/plugins/middleware_stack.rb</a>
           </li>
         </ol>
       </div>
@@ -40,7 +40,7 @@
             <h2>Methods</h2>
             <h3>Public Instance</h3>
             <ol>
-              <li><a href="#method-i-assets_matchers">assets_matchers</a></li>
+              <li><a href="#method-i-middleware_stack">middleware_stack</a></li>
             </ol>
           </div>
           <div id='context'>
@@ -48,22 +48,22 @@
           <div id='section'>
             <div id='methods'>
               <h2>Public Instance methods</h2>
-              <div class='method public-instance' id='method-method-i-assets_matchers'>
-                <a name='method-i-assets_matchers'></a>
+              <div class='method public-instance' id='method-method-i-middleware_stack'>
+                <a name='method-i-middleware_stack'></a>
                 <div class='synopsis'>
-                  <span class='name'>assets_matchers</span>
+                  <span class='name'>middleware_stack</span>
                   <span class='arguments'>()</span>
                 </div>
                 <div class='description'>
                   
-                  <p>An array of asset type strings and regexps for that type, for all asset
-                  types handled.</p>
+                  <p>Return a new <a href="Stack.html">Stack</a> that allows removing middleware
+                  and inserting middleware at specific places in the stack.</p>
                 </div>
                 <div class='source'>
-                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-assets_matchers-source'); return false">
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-middleware_stack-source'); return false">
                     [show source]
                   </a>
-                  <pre id='method-i-assets_matchers-source'><span class="ruby-comment"># File lib/roda/plugins/assets.rb, line 756</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">assets_matchers</span>&#x000A;  <span class="ruby-ivar">@assets_matchers</span> <span class="ruby-operator">||=</span> [<span class="ruby-value">:css</span>, <span class="ruby-value">:js</span>].<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>&#x000A;    [<span class="ruby-identifier">t</span>, <span class="ruby-identifier">assets_regexp</span>(<span class="ruby-identifier">t</span>)].<span class="ruby-identifier">freeze</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">assets_opts</span>[<span class="ruby-identifier">t</span>]&#x000A;  <span class="ruby-keyword">end</span>.<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                  <pre id='method-i-middleware_stack-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 91</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">middleware_stack</span>&#x000A;  <span class="ruby-constant">Stack</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-ivar">@middleware</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
                 </div>
               </div>
             </div>

@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Roda::RodaPlugins::MiddlewareStack::Stack</title>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+    <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      function popupCode(url) {
+        window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+      }
+      
+      function toggleCode(id) {
+        var code = document.getElementById(id)
+      
+        code.style.display = code.style.display != 'block' ? 'block' : 'none'
+        return true
+      }
+      
+      // Make codeblocks hidden by default
+      document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>class</span>
+          Roda::RodaPlugins::MiddlewareStack::Stack
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a href="../../../../files/lib/roda/plugins/middleware_stack_rb.html">lib/roda/plugins/middleware_stack.rb</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Superclass:
+          <strong>Object</strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            
+            <p>Represents the applications middleware as a stack, allowing for easily
+            removing middleware or finding places to insert new middleware.</p>
+          </div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a href="#method-c-new">new</a></li>
+            </ol>
+            <h3>Public Instance</h3>
+            <ol>
+              <li><a href="#method-i-after">after</a></li>
+              <li><a href="#method-i-before">before</a></li>
+              <li><a href="#method-i-remove">remove</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-new'>
+                <a name='method-c-new'></a>
+                <div class='synopsis'>
+                  <span class='name'>new</span>
+                  <span class='arguments'>(app, middleware)</span>
+                </div>
+                <div class='description'>
+                  
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-new-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 41</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">middleware</span>)&#x000A;  <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>&#x000A;  <span class="ruby-ivar">@middleware</span> = <span class="ruby-identifier">middleware</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <h2>Public Instance methods</h2>
+              <div class='method public-instance' id='method-method-i-after'>
+                <a name='method-i-after'></a>
+                <div class='synopsis'>
+                  <span class='name'>after</span>
+                  <span class='arguments'>(&block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return a <a href="StackPosition.html">StackPosition</a> representing the
+                  position after the middleware where the block returns true. Yields the
+                  middleware and any middleware arguments given, but not the middleware
+                  block. It the block never returns true, returns a <a
+                  href="StackPosition.html">StackPosition</a> that will insert new middleware
+                  at the end of the stack.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-after-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-after-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 51</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">after</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">handle</span>(<span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-before'>
+                <a name='method-i-before'></a>
+                <div class='synopsis'>
+                  <span class='name'>before</span>
+                  <span class='arguments'>(&block)</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Return a <a href="StackPosition.html">StackPosition</a> representing the
+                  position before the middleware where the block returns true. Yields the
+                  middleware and any middleware arguments given, but not the middleware
+                  block. It the block never returns true, returns a <a
+                  href="StackPosition.html">StackPosition</a> that will insert new middleware
+                  at the end of the stack.</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-before-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-before-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 60</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">before</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">handle</span>(<span class="ruby-value">0</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+              <div class='method public-instance' id='method-method-i-remove'>
+                <a name='method-i-remove'></a>
+                <div class='synopsis'>
+                  <span class='name'>remove</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  
+                  <p>Removes any middleware where the block returns true. Yields the middleware
+                  and any middleware arguments given, but not the middleware block</p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-i-remove-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-i-remove-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 66</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier">remove</span>&#x000A;  <span class="ruby-ivar">@middleware</span>.<span class="ruby-identifier">delete_if</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-identifier">_</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">m</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:build_rack_app</span>)&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
