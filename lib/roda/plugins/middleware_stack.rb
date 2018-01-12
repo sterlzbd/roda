@@ -10,7 +10,7 @@ class Roda
     #   plugin :middleware_stack
     #
     #   # Remove csrf middleware
-    #   middleware_stack.remove{|m, *args, &block| m == Rack::Csrf}
+    #   middleware_stack.remove{|m, *args| m == Rack::Csrf}
     #
     #   # Insert csrf middleware
     #   middleware_stack.before{|m, *args| m == Rack::CommonLogger}.use(Rack::Csrf, raise: true)
