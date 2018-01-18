@@ -52,17 +52,17 @@ class Roda
         # under the given key.  If called without a block, retrieve
         # stored content with the given key, or return nil if there
         # is no content stored with that key.
-        def content_for(key, value=nil, &block)
+        def content_for(key, value=nil)
           append = opts[:append_content_for]
 
-          if block || value
-            if block
+          if block_given? || value
+            if block_given?
               outvar = render_opts[:template_opts][:outvar]
               buf_was = instance_variable_get(outvar)
 
               # Use temporary output buffer for ERB-based rendering systems
               instance_variable_set(outvar, String.new)
-              value = Tilt[render_opts[:engine]].new(&block).render
+              value = Tilt[render_opts[:engine]].new{yield.to_s}.render
               instance_variable_set(outvar, buf_was)
             end
 

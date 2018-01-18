@@ -1,3 +1,7 @@
+= master
+
+* Make content_for call with block convert block result to string before passing to tilt (jeremyevans) (#135)
+
 = 3.4.0 (2018-01-12)
 
 * Add middleware_stack plugin for removing middleware and inserting middleware before the end of the stack (jeremyevans)

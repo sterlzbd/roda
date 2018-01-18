@@ -21,6 +21,9 @@ describe "content_for plugin with erb" do
         r.get 'b' do
           view(:inline => '<% content_for(:foo, "foo") %>bar', :layout => { :inline => '<%= yield %> <%= content_for(:foo) %>' })
         end
+        r.get 'e' do
+          view(:inline => 'a<% content_for :foo do %><% end %>b', :layout => { :inline => 'c<%= yield %>d<%= content_for(:foo) %>e' })
+        end
       end
     end
   end
@@ -35,6 +38,10 @@ describe "content_for plugin with erb" do
 
   it "should work if a raw string is set" do
     body('/b').strip.must_equal "bar foo"
+  end
+
+  it "should work for an empty content_for" do
+    body('/e').strip.must_equal "cabde"
   end
 end
 
