@@ -722,9 +722,9 @@ class Roda
           consume(self.class.cached_matcher(re){re})
         end
 
-        # Match the given string to the request path.  Regexp escapes the
-        # string so that regexp metacharacters are not matched, and recognizes
-        # colon tokens for placeholders.
+        # Match the given string to the request path.  Matches only if the
+        # request path ends with the string or if the next character in the
+        # request path is a slash (indicating a new segment).
         def _match_string(str)
           rp = @remaining_path
           if rp.start_with?("/#{str}")

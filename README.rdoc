@@ -274,7 +274,7 @@ The +/+ here is considered the empty segment.
 
 === String
 
-If a string does not contain a colon or slash, it matches a single segment
+If a string does not contain a slash, it matches a single segment
 containing the text of the string, preceded by a slash.
 
   ""    # matches "/"
