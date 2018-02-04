@@ -72,10 +72,12 @@ class Roda
                 res = public_serve(server, gzip_path)
                 headers = res[1]
 
-                if mime_type = ::Rack::Mime.mime_type(::File.extname(path), 'text/plain')
-                  headers['Content-Type'] = mime_type
+                unless res[0] == 304
+                  if mime_type = ::Rack::Mime.mime_type(::File.extname(path), 'text/plain')
+                    headers['Content-Type'] = mime_type
+                  end
+                  headers['Content-Encoding'] = 'gzip'
                 end
-                headers['Content-Encoding'] = 'gzip'
 
                 halt res
               end

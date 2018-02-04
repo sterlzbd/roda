@@ -1,5 +1,7 @@
 = master
 
+* Make public plugin not add Content-Type header when serving 304 response for gzipped file (jeremyevans)
+
 * Make content_for call with block convert block result to string before passing to tilt (jeremyevans) (#135)
 
 = 3.4.0 (2018-01-12)

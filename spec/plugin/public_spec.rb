@@ -75,5 +75,11 @@ describe "public plugin" do
     h = req('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
     h['Content-Encoding'].must_equal 'gzip'
     h['Content-Type'].must_equal 'text/css'
+
+    s, h, b = req('/about/_test.css', 'HTTP_IF_MODIFIED_SINCE'=>h["Last-Modified"], 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')
+    s.must_equal 304
+    h['Content-Encoding'].must_be_nil
+    h['Content-Type'].must_be_nil
+    b.must_equal []
   end
 end
