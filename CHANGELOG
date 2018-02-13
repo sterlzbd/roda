@@ -1,5 +1,7 @@
 = master
 
+* Add request_aref plugin for configuring behavior of request [] and []= methods (jeremyevans)
+
 * Make public plugin not add Content-Type header when serving 304 response for gzipped file (jeremyevans)
 
 * Make content_for call with block convert block result to string before passing to tilt (jeremyevans) (#135)
