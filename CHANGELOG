@@ -1,4 +1,4 @@
-= master
+= 3.5.0 (2018-02-14)
 
 * Add request_aref plugin for configuring behavior of request [] and []= methods (jeremyevans)
 
