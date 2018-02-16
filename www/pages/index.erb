@@ -198,7 +198,7 @@ end
 
 <h3>Faster</h3>
 
-<p>In addition to being more maintainable, Roda's approach is also faster in general.   Sinatra routes requests by testing each of the stored routes against the current request.  With Roda, once one branch of the tree matches, only routes inside that branch are considered, not any routes after that branch.  Roda also has support for a single route that dispatches to multiple branches via the multi_route and multi_run plugins.  For large applications, routing in Sinatra is roughly O(N), where N is the number of routes, while routing in Roda can be close to O(log N), depending on how you structure your routing tree.  For small applications, because Roda has lower per-request overhead, <a href="https://github.com/luislavena/bench-micro#requestssec">Roda is about 3 times faster than Sinatra</a>.</p>
+<p>In addition to being more maintainable, Roda's approach is also faster in general.   Sinatra routes requests by testing each of the stored routes against the current request.  With Roda, once one branch of the tree matches, only routes inside that branch are considered, not any routes after that branch.  Roda also has support for a single route that dispatches to multiple branches via the multi_route and multi_run plugins.  For large applications, routing in Sinatra is roughly O(N), where N is the number of routes, while routing in Roda can be close to O(log N), depending on how you structure your routing tree.  For small applications, because Roda has lower per-request overhead, <a href="https://github.com/luislavena/bench-micro#requestssec">Roda is about 4 times faster than Sinatra</a>.</p>
 
 <h3>Plugin System</h3>
 
