@@ -1,3 +1,9 @@
+= master
+
+* Add :early_hints option to the assets plugin, for supporting sending early hints for calls to assets (jeremyevans)
+
+* Add early_hints plugin for sending 103 Early Hint responses, currently only working on puma (jeremyevans)
+
 = 3.5.0 (2018-02-14)
 
 * Add request_aref plugin for configuring behavior of request [] and []= methods (jeremyevans)

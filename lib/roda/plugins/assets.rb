@@ -267,6 +267,7 @@ class Roda
     # :dependencies :: A hash of dependencies for your asset files.  Keys should be paths to asset files,
     #                  values should be arrays of paths your asset files depends on.  This is used to
     #                  detect changes in your asset files.
+    # :early_hints :: Automatically send early hints for all assets.  Requires the early_hints plugin.
     # :group_subdirs :: Whether a hash used in :css and :js options requires the assets for the
     #                   related group are contained in a subdirectory with the same name (default: true)
     # :gzip :: Store gzipped compiled assets files, and serve those to clients who accept gzip encoding.
@@ -307,6 +308,7 @@ class Roda
         :concat_only      => false,
         :compiled         => false,
         :add_suffix       => false,
+        :early_hints      => false,
         :timestamp_paths  => false,
         :group_subdirs    => true,
         :compiled_css_dir => nil,
@@ -367,6 +369,10 @@ class Roda
         if opts[:precompiled] && !opts[:compiled] && ::File.exist?(opts[:precompiled])
           require 'json'
           opts[:compiled] = ::JSON.parse(::File.read(opts[:precompiled]))
+        end
+
+        if opts[:early_hints]
+          app.plugin :early_hints
         end
 
         DEFAULTS.each do |k, v|
@@ -661,7 +667,12 @@ class Roda
             tag_end = "\" />"
           end
 
-          assets_paths(type).map{|p| "#{tag_start}#{h(p)}#{tag_end}"}.join("\n")
+          paths = assets_paths(type)
+          if o[:early_hints]
+            early_hint_as = ltype == :js ? 'script' : 'style'
+            send_early_hints('Link'=>paths.map{|p| "<#{p}>; rel=preload; as=#{early_hint_as}"}.join("\n"))
+          end
+          paths.map{|p| "#{tag_start}#{h(p)}#{tag_end}"}.join("\n")
         end
 
         # Render the asset with the given filename.  When assets are compiled,

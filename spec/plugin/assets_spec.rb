@@ -196,6 +196,27 @@ if run_tests
       js.must_include('console.log')
     end
 
+    it 'should handle early hints if the :early_hints option is used' do
+      app.plugin :assets, :early_hints=>true
+      eh = []
+      html = body('/test', 'rack.early_hints'=>proc{|h| eh << h})
+      eh.must_equal [
+        {"Link"=>"</assets/css/app.scss>; rel=preload; as=style\n</assets/css/raw.css>; rel=preload; as=style"},
+        {"Link"=>"</assets/js/head/app.js>; rel=preload; as=script"}
+      ]
+      html.scan(/<link/).length.must_equal 2
+      html =~ %r{href="(/assets/css/app\.scss)"}
+      css = body($1)
+      html =~ %r{href="(/assets/css/raw\.css)"}
+      css2 = body($1)
+      html.scan(/<script/).length.must_equal 1
+      html =~ %r{src="(/assets/js/head/app\.js)"}
+      js = body($1)
+      css.must_match(/color: red;/)
+      css2.must_match(/color: blue;/)
+      js.must_include('console.log')
+    end
+
     it 'should handle rendering assets, linking to them, and accepting requests for them when :add_script_name app option is used' do
       app.opts[:add_script_name] = true
       app.plugin :assets
