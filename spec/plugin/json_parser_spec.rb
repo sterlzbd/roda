@@ -18,6 +18,12 @@ describe "json_parser plugin" do
   it "returns 400 for invalid json" do
     req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
   end
+
+  it "raises by default if r.params is called and a non-hash is submitted" do
+    proc do
+      req('rack.input'=>StringIO.new('[1]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST')
+    end.must_raise
+  end
 end
 
 describe "json_parser plugin" do 
@@ -26,6 +32,45 @@ describe "json_parser plugin" do
       r.params.length.to_s
     end
     body('rack.input'=>StringIO.new(''), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '0'
+  end
+
+  it "handles arrays and other non-hash values using r.POST" do
+    app(:json_parser) do |r|
+      r.POST.inspect
+    end
+    body('rack.input'=>StringIO.new('[ 1 ]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '[1]'
+  end
+
+  it "supports :wrap=>:always option" do
+    app(:bare) do
+      plugin(:json_parser, :wrap=>:always)
+      route do |r|
+        r.post 'a' do r.params['_json']['a']['b'].to_s end
+        r.params['_json'][1].to_s
+      end
+    end
+    body('/a', 'rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>StringIO.new('[true, 2]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '2'
+  end
+
+  it "supports :wrap=>:unless_hash option" do
+    app(:bare) do
+      plugin(:json_parser, :wrap=>:unless_hash)
+      route do |r|
+        r.post 'a' do r.params['a']['b'].to_s end
+        r.params['_json'][1].to_s
+      end
+    end
+    body('/a', 'rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>StringIO.new('[true, 2]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '2'
+  end
+
+  it "raises for unsupported :wrap option" do
+    proc do 
+      app(:bare) do
+        plugin(:json_parser, :wrap=>:foo)
+      end
+    end.must_raise Roda::RodaError
   end
 
   it "supports :error_handler option" do

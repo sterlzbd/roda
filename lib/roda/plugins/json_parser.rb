@@ -25,10 +25,24 @@ class Roda
       # :include_request :: If true, the parser will be called with the request
       #                     object as the second argument, so the parser needs
       #                     to respond to +call(str, request)+.
+      # :wrap :: Whether to wrap uploaded JSON data in a hash with a "_json"
+      #          key.  Without this, calls to r.params will fail if a non-Hash
+      #          (such as an array) is uploaded in JSON format.  A value of
+      #          :always will wrap all values, and a value of :unless_hash will
+      #          only wrap values that are not already hashes.
       def self.configure(app, opts=OPTS)
         app.opts[:json_parser_error_handler] = opts[:error_handler] || app.opts[:json_parser_error_handler] || DEFAULT_ERROR_HANDLER
         app.opts[:json_parser_parser] = opts[:parser] || app.opts[:json_parser_parser] || DEFAULT_PARSER
         app.opts[:json_parser_include_request] = opts[:include_request] if opts.has_key?(:include_request)
+
+        case opts[:wrap]
+        when :unless_hash, :always
+          app.opts[:json_parser_wrap] = opts[:wrap]
+        when nil
+          # Nothing
+        else
+          raise RodaError, "unsupported option value for json_parser plugin :wrap option: #{opts[:wrap].inspect} (should be :unless_hash or :always)"
+        end
       end
 
       module RequestMethods
@@ -43,10 +57,16 @@ class Roda
             input.rewind
             return super if str.empty?
             begin
-              json_params = env["roda.json_params"] = parse_json(str)
+              json_params = parse_json(str)
             rescue
               roda_class.opts[:json_parser_error_handler].call(self)
             end
+
+            wrap = roda_class.opts[:json_parser_wrap]
+            if wrap == :always || (wrap == :unless_hash && !json_params.is_a?(Hash))
+              json_params = {"_json"=>json_params}
+            end
+            env["roda.json_params"] = json_params
             env["rack.request.form_input"] = input
             json_params
           else

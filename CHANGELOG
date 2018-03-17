@@ -1,5 +1,7 @@
 = master
 
+* Add :wrap option to json_parser plugin, for whether/how to wrap the uploaded JSON object (jeremyevans) (#142)
+
 * Add :early_hints option to the assets plugin, for supporting sending early hints for calls to assets (jeremyevans)
 
 * Add early_hints plugin for sending 103 Early Hint responses, currently only working on puma (jeremyevans)
