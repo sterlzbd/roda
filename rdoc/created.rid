@@ -1,11 +1,11 @@
-Wed, 14 Feb 2018 09:15:46 -0800
+Mon, 26 Mar 2018 11:03:25 -0700
 README.rdoc	Wed, 31 Jan 2018 16:24:55 -0800
-CHANGELOG	Wed, 14 Feb 2018 09:11:44 -0800
+CHANGELOG	Mon, 26 Mar 2018 10:51:43 -0700
 MIT-LICENSE	Fri, 26 Jan 2018 06:42:44 -0800
 lib/roda.rb	Wed, 31 Jan 2018 16:24:55 -0800
 lib/roda/plugins/_symbol_regexp_matchers.rb	Fri, 04 Aug 2017 14:18:37 -0700
 lib/roda/plugins/all_verbs.rb	Sun, 31 Jan 2016 11:52:33 -0800
-lib/roda/plugins/assets.rb	Mon, 18 Dec 2017 15:57:05 -0800
+lib/roda/plugins/assets.rb	Wed, 28 Feb 2018 15:28:07 -0800
 lib/roda/plugins/assets_preloading.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/backtracking_array.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/branch_locals.rb	Mon, 09 Oct 2017 15:54:49 -0700
@@ -23,6 +23,7 @@ lib/roda/plugins/delegate.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/delete_empty_headers.rb	Sun, 31 Jan 2016 11:53:10 -0800
 lib/roda/plugins/disallow_file_uploads.rb	Tue, 14 Mar 2017 15:49:19 -0700
 lib/roda/plugins/drop_body.rb	Wed, 16 Aug 2017 08:44:25 -0700
+lib/roda/plugins/early_hints.rb	Wed, 28 Feb 2018 15:28:07 -0800
 lib/roda/plugins/empty_root.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/environments.rb	Sun, 31 Jan 2016 11:53:17 -0800
 lib/roda/plugins/error_email.rb	Wed, 16 Aug 2017 08:44:25 -0700
@@ -38,7 +39,7 @@ lib/roda/plugins/heartbeat.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/hooks.rb	Sun, 31 Jan 2016 11:53:41 -0800
 lib/roda/plugins/indifferent_params.rb	Fri, 08 Dec 2017 15:45:27 -0800
 lib/roda/plugins/json.rb	Wed, 16 Aug 2017 08:44:25 -0700
-lib/roda/plugins/json_parser.rb	Wed, 16 Aug 2017 08:44:25 -0700
+lib/roda/plugins/json_parser.rb	Fri, 16 Mar 2018 20:20:07 -0700
 lib/roda/plugins/mailer.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/match_affix.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/middleware.rb	Mon, 25 Sep 2017 09:50:53 -0700
@@ -87,7 +88,7 @@ lib/roda/plugins/type_routing.rb	Fri, 29 Sep 2017 21:38:23 -0700
 lib/roda/plugins/typecast_params.rb	Fri, 08 Dec 2017 10:55:37 -0800
 lib/roda/plugins/unescape_path.rb	Wed, 13 Jul 2016 08:09:00 -0700
 lib/roda/plugins/view_options.rb	Wed, 16 Aug 2017 08:44:25 -0700
-lib/roda/version.rb	Wed, 14 Feb 2018 09:11:44 -0800
+lib/roda/version.rb	Mon, 26 Mar 2018 10:51:43 -0700
 doc/conventions.rdoc	Wed, 16 Aug 2017 08:44:25 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -130,3 +131,4 @@ doc/release_notes/3.2.0.txt	Thu, 16 Nov 2017 15:24:31 -0800
 doc/release_notes/3.3.0.txt	Thu, 14 Dec 2017 07:52:58 -0800
 doc/release_notes/3.4.0.txt	Fri, 12 Jan 2018 08:46:22 -0800
 doc/release_notes/3.5.0.txt	Wed, 14 Feb 2018 09:11:44 -0800
+doc/release_notes/3.6.0.txt	Mon, 26 Mar 2018 10:51:43 -0700
