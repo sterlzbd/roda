@@ -1,4 +1,4 @@
-= master
+= 3.6.0 (2018-03-26)
 
 * Add :wrap option to json_parser plugin, for whether/how to wrap the uploaded JSON object (jeremyevans) (#142)
 
