@@ -1,3 +1,7 @@
+= master
+
+* Add content_security_policy plugin for setting an appropriate Content-Security-Policy header (jeremyevans)
+
 = 3.6.0 (2018-03-26)
 
 * Add :wrap option to json_parser plugin, for whether/how to wrap the uploaded JSON object (jeremyevans) (#142)
