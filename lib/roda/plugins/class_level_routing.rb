@@ -86,7 +86,7 @@ class Roda
           if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
             # Reset the response so it doesn't inherit the status or any headers from
             # the original response.
-            @_response = self.class::RodaResponse.new
+            @_response.send(:initialize)
             super do |r|
               opts[:class_level_routes].each do |meth, args, blk|
                 req.instance_variable_set(:@remaining_path, rp)

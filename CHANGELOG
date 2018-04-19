@@ -1,5 +1,7 @@
 = master
 
+* Make response_request plugin work with error_handler and class_level_routing plugins (jeremyevans)
+
 * Add content_security_policy plugin for setting an appropriate Content-Security-Policy header (jeremyevans)
 
 = 3.6.0 (2018-03-26)

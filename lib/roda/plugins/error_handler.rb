@@ -64,8 +64,8 @@ class Roda
         def call
           super
         rescue *opts[:error_handler_classes] => e
-          res = @_response = self.class::RodaResponse.new
-          res.status = 500
+          @_response.send(:initialize)
+          @_response.status = 500
           super{handle_error(e)}
         end
 
