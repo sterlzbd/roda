@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::ContentSecurityPolicy</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::ContentSecurityPolicy
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/content_security_policy_rb.html">lib/roda/plugins/content_security_policy.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The content_security_policy plugin allows you to easily set a
+Content-Security-Policy header for the application, which modern browsers
+will use to control access to specific types of page content.</p>
+
+<p>You would generally call the plugin with a block to set the default policy:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">default_src</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">img_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">style_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">font_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">form_action</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">frame_ancestors</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">block_all_mixed_content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Then, anywhere in the routing tree, you can customize the policy for just
+that branch or action using the same block syntax:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">object_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">add_style_src</span> <span class="ruby-string">&#39;bar.com&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>In addition to using a block, you can also call methods on the object
+returned by the method:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The following methods are available for configuring the content security
+policy, which specify the setting (substituting _ with -):</p>
+<ul><li>
+<p>base_uri</p>
+</li><li>
+<p>child_src</p>
+</li><li>
+<p>connect_src</p>
+</li><li>
+<p>default_src</p>
+</li><li>
+<p>font_src</p>
+</li><li>
+<p>form_action</p>
+</li><li>
+<p>frame_ancestors</p>
+</li><li>
+<p>frame_src</p>
+</li><li>
+<p>img_src</p>
+</li><li>
+<p>manifest_src</p>
+</li><li>
+<p>media_src</p>
+</li><li>
+<p>object_src</p>
+</li><li>
+<p>plugin_types</p>
+</li><li>
+<p>report_uri</p>
+</li><li>
+<p>require_sri_for</p>
+</li><li>
+<p>sandbox</p>
+</li><li>
+<p>script_src</p>
+</li><li>
+<p>style_src</p>
+</li><li>
+<p>worker_src</p>
+</li></ul>
+
+<p>All of these methods support any number of arguments, and each argument
+should be one of the following types:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>String </td><td>
+<p>used verbatim</p>
+</td></tr><tr><td class='label'>Symbol </td><td>
+<p>Substitutes <code>_</code> with <code>-</code> and surrounds with
+<code>&#39;</code></p>
+</td></tr><tr><td class='label'>Array </td><td>
+<p>only accepts 2 element arrays, joins elements with <code>-</code> and
+surrounds the result with <code>&#39;</code></p>
+</td></tr></tbody></table>
+
+<p>Example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span></pre>
+
+<p>When calling a method with no arguments, the setting is removed from the
+policy instead of being left empty, since all of these setting require at
+least one value.  Likewise, if the policy does not have any settings, the
+header will not be added.</p>
+
+<p>Calling the method overrides any previous setting.  Each of the methods has
+<code>add_*</code> and <code>get_*</code> methods defined. The
+<code>add_*</code> method appends to any existing setting, and the
+<code>get_*</code> method returns the current value for the setting.</p>
+
+<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">add_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>&#x000A;&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">get_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># =&gt; [:self, :unsafe_eval, &#39;example.com&#39;, [:nonce, &#39;foobarbaz&#39;]]</span></pre>
+
+<p>The clear method can be used to remove all settings from the policy.</p>
+
+<p>The following methods to set boolean settings are also defined:</p>
+<ul><li>
+<p>block_all_mixed_content</p>
+</li><li>
+<p>upgrade_insecure_requests</p>
+</li></ul>
+
+<p>Calling these methods will turn on the related setting.  To turn the
+setting off again, you can call them with a <code>false</code> argument.
+There is also a <code>*?</code> method for each setting for returning
+whether the setting is currently enabled.</p>
+
+<p>Likewise there is also a <code>report_only</code> method for turning on
+report only mode (the default is enforcement mode), or turning off report
+only mode if a false argument is given.  Also, there is a
+<code>report_only?</code> method for returning whether report only mode is
+enabled.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="ContentSecurityPolicy/InstanceMethods.html">Roda::RodaPlugins::ContentSecurityPolicy::InstanceMethods</a></li>
+<li><a href="ContentSecurityPolicy/ResponseMethods.html">Roda::RodaPlugins::ContentSecurityPolicy::ResponseMethods</a></li>
+<li><a href="ContentSecurityPolicy/Policy.html">Roda::RodaPlugins::ContentSecurityPolicy::Policy</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span>
+<span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+<p>Yield the current Content Security <a
+href="ContentSecurityPolicy/Policy.html">Policy</a> to the block.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb, line 273</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">policy</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>] = <span class="ruby-keyword">if</span> <span class="ruby-identifier">policy</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>]&#x000A;    <span class="ruby-identifier">policy</span>.<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-constant">Policy</span>.<span class="ruby-identifier">new</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">yield</span> <span class="ruby-identifier">policy</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;  <span class="ruby-identifier">policy</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
