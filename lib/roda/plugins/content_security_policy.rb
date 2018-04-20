@@ -289,7 +289,7 @@ class Roda
         # Unset any content security policy when reinitializing
         def initialize
           super
-          @content_security_policy = nil
+          @content_security_policy &&= nil
         end
 
         # The current content security policy to be used for this response.
