@@ -67,15 +67,19 @@ class Roda
     # be one of the following types:
     #
     # String :: used verbatim
-    # Symbol :: Substitutes +_+ with +-+ and surrounds with +'+
-    # Array :: only accepts 2 element arrays, joins them with +-+ and
-    #          surrounds them with +'+
+    # Symbol :: Substitutes +_+ with +-+ and surrounds with <tt>'</tt>
+    # Array :: only accepts 2 element arrays, joins elements with +-+ and
+    #          surrounds the result with <tt>'</tt>
     #
     # Example:
     #
     #   content_security_policy.script_src :self, :unsafe_eval, 'example.com', [:nonce, 'foobarbaz']
     #   # script-src 'self' 'unsafe-eval' example.com 'nonce-foobarbaz'; 
     #  
+    # When calling a method with no arguments, the setting is removed from the policy instead
+    # of being left empty, since all of these setting require at least one value.  Likewise,
+    # if the policy does not have any settings, the header will not be added.
+    #
     # Calling the method overrides any previous setting.  Each of the methods has +add_*+ and
     # +get_*+ methods defined. The +add_*+ method appends to any existing setting, and the +get_*+ method
     # returns the current value for the setting.
@@ -87,13 +91,15 @@ class Roda
     #   content_security_policy.get_script_src 'example.com', [:nonce, 'foobarbaz']
     #   # => [:self, :unsafe_eval, 'example.com', [:nonce, 'foobarbaz']]
     #
-    # There are also three boolean methods defined:
+    # The clear method can be used to remove all settings from the policy.
+    #
+    # The following methods to set boolean settings are also defined:
     #
     # * block_all_mixed_content
     # * upgrade_insecure_requests
     #
     # Calling these methods will turn on the related setting.  To turn the setting
-    # off again, you can call them with a +false+ argument. There is also a +*?+ method
+    # off again, you can call them with a +false+ argument. There is also a <tt>*?</tt> method
     # for each setting for returning whether the setting is currently enabled.
     #
     # Likewise there is also a +report_only+ method for turning on report only mode (the
@@ -101,6 +107,7 @@ class Roda
     # is given.  Also, there is a +report_only?+ method for returning whether report only
     # mode is enabled.
     module ContentSecurityPolicy
+      # Represents a content security policy.
       class Policy
         '
         base-uri
