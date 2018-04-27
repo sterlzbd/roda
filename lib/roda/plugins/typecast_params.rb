@@ -162,7 +162,7 @@ class Roda
     #     tp.pos_int!('artist_id')
     #     tp.array!(:pos_int, 'album_ids')
     #     tp.convert!('sales') do |stp|
-    #       tp.pos_int!(['num_sold', 'num_shipped'])
+    #       stp.pos_int!(['num_sold', 'num_shipped'])
     #     end
     #     tp.convert!('members') do |mtp|
     #       mtp.convert_each! do |stp|
@@ -197,7 +197,7 @@ class Roda
     #     tp.pos_int!('artist_id')
     #     tp.array!(:pos_int, 'album_ids')
     #     tp.convert!('sales') do |stp|
-    #       tp.pos_int!(['num_sold', 'num_shipped'])
+    #       stp.pos_int!(['num_sold', 'num_shipped'])
     #     end
     #     tp.convert!('members') do |mtp|
     #       mtp.convert_each! do |stp|
