@@ -295,7 +295,7 @@ class Roda
 
         # An array of all other errors that were raised with this error.  If the error
         # was not raised inside Params#convert! or Params#convert_each!, this will just be
-        # an array containing the current the receiver.
+        # an array containing the current receiver.
         # 
         # This allows you to use Params#convert! to process a form input, and if any
         # conversion errors occur inside the block, it can provide an array of all parameter
@@ -585,11 +585,20 @@ class Roda
 
           _capture!(nil, opts) do
             unless keys = opts[:keys]
-              unless @obj.is_a?(Array)
-                handle_error(nil, :invalid_type, "convert_each! called on non-array")
+              keys = (0...@obj.length)
+
+              valid = case @obj
+              when Array
+                true
+              when Hash
+                keys = keys.map(&:to_s)
+                keys.all?{|k| @obj.has_key?(k)}
+              end
+
+              unless valid
+                handle_error(nil, :invalid_type, "convert_each! called on object not an array or hash with keys '0'..'N'")
                 next 
               end
-              keys = (0...@obj.length)
             end
 
             keys.map do |i|

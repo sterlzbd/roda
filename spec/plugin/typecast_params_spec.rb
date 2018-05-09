@@ -581,9 +581,23 @@ describe "typecast_params plugin" do
     end.must_equal [{'b'=>1, 'c'=>2}, {'b'=>3, 'c'=>4}]
   end
 
-  it "#convert_each! with :keys option should convert each named entry in a hash" do
+  it "#convert_each! without :keys option should convert each named entry in a hash when keys are '0'..'N'" do
+    tp = tp('a[0][b]=1&a[0][c]=2&a[1][b]=3&a[1][c]=4')
+    tp['a'].convert_each! do |tp0|
+      tp0.int(%w'b c')
+    end.must_equal [{'b'=>1, 'c'=>2}, {'b'=>3, 'c'=>4}]
+  end
+
+  it "#convert_each! with :keys option should convert each named entry in a hash when keys are '0'..'N'" do
     tp = tp('a[0][b]=1&a[0][c]=2&a[1][b]=3&a[1][c]=4')
     tp['a'].convert_each!(:keys=>%w'0 1') do |tp0|
+      tp0.int(%w'b c')
+    end.must_equal [{'b'=>1, 'c'=>2}, {'b'=>3, 'c'=>4}]
+  end
+
+  it "#convert_each! with :keys option should convert each named entry in a hash" do
+    tp = tp('a[d][b]=1&a[d][c]=2&a[e][b]=3&a[e][c]=4')
+    tp['a'].convert_each!(:keys=>%w'd e') do |tp0|
       tp0.int(%w'b c')
     end.must_equal [{'b'=>1, 'c'=>2}, {'b'=>3, 'c'=>4}]
   end
@@ -596,8 +610,18 @@ describe "typecast_params plugin" do
     end.must_equal("a"=>{"0"=>{'b'=>1, 'c'=>2}, "1"=>{'b'=>3, 'c'=>4}})
   end
 
-  it "#convert_each! should raise if obj is not an array" do
+  it "#convert_each! should raise if obj is a hash without '0' keys" do
     lambda{tp.convert_each!{}}.must_raise @tp_error
+  end
+
+  it "#convert_each! should raise if obj is not a hash with '0' but not '0'..'N' keys" do
+    tp = tp('a[0][b]=1&a[0][c]=2&a[2][b]=3&a[2][c]=4')
+    lambda{tp['b'].convert_each!{}}.must_raise @tp_error
+  end
+
+  it "#convert_each! should raise if obj is a scalar" do
+    tp = tp('a[d][b]=1&a[d][c]=2&a[e][b]=3&a[e][c]=4')
+    lambda{tp['d']['b'].convert_each!{}}.must_raise @tp_error
   end
 
   it "#convert_each! should raise if obj is a array of non-hashes" do
