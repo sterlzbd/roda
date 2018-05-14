@@ -1,5 +1,7 @@
 = master
 
+* Accept convert_each! :keys option that is Proc or Method in typecast_params plugin (jeremyevans)
+
 * Make convert_each! in typecast_params plugin handle hashes with '0'..'N' keys without :keys option (jeremyevans)
 
 = 3.7.0 (2018-04-20)

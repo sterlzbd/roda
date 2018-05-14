@@ -610,6 +610,19 @@ describe "typecast_params plugin" do
     end.must_equal("a"=>{"0"=>{'b'=>1, 'c'=>2}, "1"=>{'b'=>3, 'c'=>4}})
   end
 
+  it "#convert_each! :keys option should accept a Proc" do
+    tp('a[0][b]=1&a[0][c]=2&a[1][b]=3&a[1][c]=4').convert! do |tp|
+      tp['a'].convert_each!(:keys=>proc{|obj| obj.keys}) do |tp0|
+        tp0.int(%w'b c')
+      end
+    end.must_equal("a"=>{"0"=>{'b'=>1, 'c'=>2}, "1"=>{'b'=>3, 'c'=>4}})
+  end
+
+  it "#convert_each! should raise if :keys option is given and not an Array/Proc/Method" do
+    tp = tp('a[0][b]=1&a[0][c]=2&a[2][b]=3&a[2][c]=4')
+    lambda{tp['a'].convert_each!(:keys=>Object.new){}}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
+  end
+
   it "#convert_each! should raise if obj is a hash without '0' keys" do
     lambda{tp.convert_each!{}}.must_raise @tp_error
   end

@@ -574,17 +574,23 @@ class Roda
           end
         end
 
-        # Runs convert! for each key specified by the :keys option.  If no :keys option is given and the object is an array,
-        # runs convert! for all entries in the array.
-        # Raises an Error if the current object is not an array and :keys option is not specified.
+        # Runs convert! for each key specified by the :keys option.  If :keys option is not given
+        # and the object is an array, runs convert! for all entries in the array.  If the :keys
+        # option is not given and the object is a Hash with string keys '0', '1', ..., 'N' (with
+        # no skipped keys), runs convert! for all entries in the hash.  If :keys option is a Proc
+        # or a Method, calls the proc/method with the current object, which should return an
+        # array of keys to use.
         # Passes any options given to #convert!.  Options:
         #
-        # :keys :: The keys to extract from the object
+        # :keys :: The keys to extract from the object. If a proc or method,
+        #          calls the value with the current object, which should return the array of keys
+        #          to use.
         def convert_each!(opts=OPTS, &block)
           np = !@capture
 
           _capture!(nil, opts) do
-            unless keys = opts[:keys]
+            case keys = opts[:keys]
+            when nil
               keys = (0...@obj.length)
 
               valid = case @obj
@@ -599,6 +605,12 @@ class Roda
                 handle_error(nil, :invalid_type, "convert_each! called on object not an array or hash with keys '0'..'N'")
                 next 
               end
+            when Array
+              # nothing to do
+            when Proc, Method
+              keys = keys.call(@obj)
+            else
+              raise ProgrammerError, "unsupported convert_each! :keys option: #{keys.inspect}"
             end
 
             keys.map do |i|
