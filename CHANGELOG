@@ -1,4 +1,4 @@
-= master
+= 3.8.0 (2018-05-17)
 
 * Accept convert_each! :keys option that is Proc or Method in typecast_params plugin (jeremyevans)
 
