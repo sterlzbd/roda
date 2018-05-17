@@ -840,18 +840,40 @@ that all Roda applications that deal with parameters use it or
 another tool to explicitly convert submitted parameters to the
 expected types.
 
-=== Security Related HTTP Headers
+=== Content Security Policy
+
+The Content-Security-Policy HTTP header can be used to instruct
+the browser on what types of content to allow and where content
+can be loaded from.  Roda ships with a +content_security_policy+
+plugin that allows for the easy configuration of the content
+security policy.  Here's an example of a fairly restrictive
+content security policy configuration:
+
+  class App < Roda
+    plugin :content_security_policy do |csp|
+      csp.default_src :none # deny everything by default
+      csp.style_src :self
+      csp.script_src :self
+      csp.connect_src :self
+      csp.img_src :self
+      csp.font_src :self
+      csp.form_action :self
+      csp.base_uri :none
+      csp.frame_ancestors :none
+      csp.block_all_mixed_content
+      csp.report_uri 'CSP_REPORT_URI'
+    end
+  end
+
+=== Other Security Related HTTP Headers
 
 You may want to look into setting the following HTTP headers, which
 can be done at the web server level, but can also be done at the
 application level using using the +default_headers+ plugin:
 
-Content-Security-Policy/X-Content-Security-Policy :: Defines policy for how javascript and other
-                                                     types of content can be used on the page.
-Frame-Options/X-Frame-Options :: Provides click-jacking protection by not allowing usage inside
-                                 a frame.
 Strict-Transport-Security :: Enforces SSL/TLS Connections to the application.
 X-Content-Type-Options :: Forces some browsers to respect a declared Content-Type header.
+X-Frame-Options :: Provides click-jacking protection by not allowing usage inside a frame.
 X-XSS-Protection :: Enables an XSS mitigation filter in some browsers.
 
 Example:
@@ -859,10 +881,9 @@ Example:
   class App < Roda
     plugin :default_headers,
       'Content-Type'=>'text/html',
-      'Content-Security-Policy'=>"default-src 'self'",
       'Strict-Transport-Security'=>'max-age=16070400;',
-      'X-Frame-Options'=>'deny',
       'X-Content-Type-Options'=>'nosniff',
+      'X-Frame-Options'=>'deny',
       'X-XSS-Protection'=>'1; mode=block'
   end
 
