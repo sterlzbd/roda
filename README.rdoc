@@ -897,8 +897,6 @@ location on the file system that users can write files to).
 You can specify which directories are allowed using the +:allowed_paths+ render plugin
 option. If you really want to turn path checking off, you can do so via the
 <tt>check_paths: false</tt> render plugin option.
-not check paths, as it assumes that users and libraries that use this option will be checking
-such paths manually.
 
 == Code Reloading
 
