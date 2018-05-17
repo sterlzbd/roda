@@ -12,4 +12,7 @@ class Roda
 
   # The full version of Roda as a string.
   RodaVersion = "#{RodaMajorVersion}.#{RodaMinorVersion}.#{RodaPatchVersion}".freeze
+
+  # The full version of Roda as a number (3.7.0 => 30070)
+  RodaVersionNumber = RodaMajorVersion*10000 + RodaMinorVersion*10 + RodaPatchVersion
 end
