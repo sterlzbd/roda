@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2018-01-31 16:24:55 -0800</span>
+<span class='datetime'>2018-05-17 13:20:21 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -683,27 +683,35 @@ href="../classes/Roda.html">Roda</a> applications that deal with parameters
 use it or another tool to explicitly convert submitted parameters to the
 expected types.</p>
 
-<h3 id="label-Security+Related+HTTP+Headers">Security Related HTTP Headers<span><a href="#label-Security+Related+HTTP+Headers">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<h3 id="label-Content+Security+Policy">Content Security Policy<span><a href="#label-Content+Security+Policy">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>The Content-Security-Policy HTTP header can be used to instruct the browser
+on what types of content to allow and where content can be loaded from.  <a
+href="../classes/Roda.html">Roda</a> ships with a
+<code>content_security_policy</code> plugin that allows for the easy
+configuration of the content security policy.  Here&#39;s an example of a
+fairly restrictive content security policy configuration:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">default_src</span> <span class="ruby-value">:none</span> <span class="ruby-comment"># deny everything by default</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">style_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">connect_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">img_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">font_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">form_action</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-value">:none</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">frame_ancestors</span> <span class="ruby-value">:none</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">block_all_mixed_content</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">report_uri</span> <span class="ruby-string">&#39;CSP_REPORT_URI&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<h3 id="label-Other+Security+Related+HTTP+Headers">Other Security Related HTTP Headers<span><a href="#label-Other+Security+Related+HTTP+Headers">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>You may want to look into setting the following HTTP headers, which can be
 done at the web server level, but can also be done at the application level
 using using the <code>default_headers</code> plugin:</p>
-<table class="rdoc-list note-list"><tbody><tr><td class='label'>Content-Security-Policy/X-Content-Security-Policy </td><td>
-<p>Defines policy for how javascript and other types of content can be used on
-the page.</p>
-</td></tr><tr><td class='label'>Frame-Options/X-Frame-Options </td><td>
-<p>Provides click-jacking protection by not allowing usage inside a frame.</p>
-</td></tr><tr><td class='label'>Strict-Transport-Security </td><td>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>Strict-Transport-Security </td><td>
 <p>Enforces SSL/TLS Connections to the application.</p>
 </td></tr><tr><td class='label'>X-Content-Type-Options </td><td>
 <p>Forces some browsers to respect a declared Content-Type header.</p>
+</td></tr><tr><td class='label'>X-Frame-Options </td><td>
+<p>Provides click-jacking protection by not allowing usage inside a frame.</p>
 </td></tr><tr><td class='label'>X-XSS-Protection </td><td>
 <p>Enables an XSS mitigation filter in some browsers.</p>
 </td></tr></tbody></table>
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:default_headers</span>,&#x000A;    <span class="ruby-string">&#39;Content-Type&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;text/html&#39;</span>,&#x000A;    <span class="ruby-string">&#39;Content-Security-Policy&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&quot;default-src &#39;self&#39;&quot;</span>,&#x000A;    <span class="ruby-string">&#39;Strict-Transport-Security&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;max-age=16070400;&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Frame-Options&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;deny&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Content-Type-Options&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;nosniff&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-XSS-Protection&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;1; mode=block&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:default_headers</span>,&#x000A;    <span class="ruby-string">&#39;Content-Type&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;text/html&#39;</span>,&#x000A;    <span class="ruby-string">&#39;Strict-Transport-Security&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;max-age=16070400;&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Content-Type-Options&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;nosniff&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-Frame-Options&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;deny&#39;</span>,&#x000A;    <span class="ruby-string">&#39;X-XSS-Protection&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;1; mode=block&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
 <h3 id="label-Rendering+Templates+Derived+From+User+Input">Rendering Templates Derived From User Input<span><a href="#label-Rendering+Templates+Derived+From+User+Input">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
@@ -715,9 +723,7 @@ that users can write files to).</p>
 
 <p>You can specify which directories are allowed using the
 <code>:allowed_paths</code> render plugin option. If you really want to
-turn path checking off, you can do so via the <code>check_paths:&#x000A;false</code> render plugin option. not check paths, as it assumes that
-users and libraries that use this option will be checking such paths
-manually.</p>
+turn path checking off, you can do so via the <code>check_paths:&#x000A;false</code> render plugin option.</p>
 
 <h2 id="label-Code+Reloading">Code Reloading<span><a href="#label-Code+Reloading">&para;</a> <a href="#top">&uarr;</a></span></h2>
 

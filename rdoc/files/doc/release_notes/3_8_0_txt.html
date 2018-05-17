@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.8.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.8.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.8.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2018-05-17 13:49:47 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The convert_each! method in the typecast_params plugin now accepts a Proc
+or Method value for the :keys option. The proc or method is called with the
+current array or hash that typecast params is operating on, and should
+return an array of keys to use for the conversion.</p>
+</li><li>
+<p>The convert_each! method in the typecast_params plugin will now
+automatically handle hashes with keys from &#39;0&#39;..&#39;N&#39;,
+without a :keys option being provided.</p>
+
+<p>This makes it possible to handle parameter names such as <a
+href="0">foo</a>[bar], <a href="0">foo</a>[baz], <a href="1">foo</a>[bar],
+and <a href="1">foo</a>[baz], if you want to avoid the issues related to
+rack&#39;s issues when parsing array parameters.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The Roda::RodaVersionNumber constant has been added for easier version
+comparisons.  It is 30080 for version 3.8.0.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>When an unsupported type is given as value of the :keys option to the
+convert_each! method in the typecast_params plugin, a ProgrammerError
+exception is now raised.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
