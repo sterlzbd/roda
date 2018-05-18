@@ -1,3 +1,7 @@
+= master
+
+* Add route_csrf plugin for CSRF protection, offering more control, better security, and request-specific tokens compared to rack_csrf (jeremyevans)
+
 = 3.8.0 (2018-05-17)
 
 * Accept convert_each! :keys option that is Proc or Method in typecast_params plugin (jeremyevans)

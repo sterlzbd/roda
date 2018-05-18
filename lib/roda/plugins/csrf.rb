@@ -4,6 +4,10 @@ require 'rack/csrf'
 
 class Roda
   module RodaPlugins
+    # This plugin is no longer recommended for use, it exists only for
+    # backwards compatibility.  Consider using the route_csrf plugin
+    # instead, as that provides stronger CSRF protection.
+    #
     # The csrf plugin adds CSRF protection using rack_csrf, along with
     # some csrf helper methods to use in your views.  To use it, load
     # the plugin, with the options hash passed to Rack::Csrf:

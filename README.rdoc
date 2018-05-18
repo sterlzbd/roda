@@ -788,12 +788,24 @@ This means you should not store any secret data in the session.
 
 === Cross Site Request Forgery (CSRF)
 
-CSRF can be prevented by using the +csrf+ plugin that ships with Roda,
-which uses the {rack_csrf}[https://github.com/baldowl/rack_csrf] library.
-Just make sure that you include the CSRF token tags in your HTML, as appropriate.
+CSRF can be prevented by using the +route_csrf+ plugin that ships with Roda.
+The +route_csrf+ plugin uses modern security practices to create CSRF tokens,
+requires request-specific tokens by default, and offers control to the user
+over where in the routing tree that CSRF tokens are checked. For example, if
+you are using the +public+ plugin to serve static files and the +assets+
+plugin to serve assets, you wouldn't need to check for CSRF tokens for either
+of those, so you could put the CSRF check after those in the routing tree,
+but before handling other requests:
 
-It's also possible to use the <tt>Rack::Csrf</tt> middleware directly;
-you don't have to use the +csrf+ plugin.
+  route do |r|
+    r.public
+    r.assets
+
+    check_csrf! # Must call this to check for valid CSRF tokens
+
+    # ...
+  end
+
 
 === Cross Site Scripting (XSS)
 
