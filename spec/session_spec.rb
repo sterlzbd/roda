@@ -1,6 +1,8 @@
 require_relative "spec_helper"
 
 describe "session handling" do
+  include CookieJar
+
   it "should give a warning if session variable is not available" do
     app do |r|
       begin
@@ -27,9 +29,9 @@ describe "session handling" do
 
     _, h, b = req
     b.join.must_equal 'ab'
-    _, h, b = req('HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", ''))
+    _, h, b = req
     b.join.must_equal 'abb'
-    _, h, b = req('HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", ''))
+    _, h, b = req
     b.join.must_equal 'abbb'
   end
 end

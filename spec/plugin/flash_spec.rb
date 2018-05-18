@@ -1,6 +1,8 @@
 require_relative "../spec_helper"
 
 describe "flash plugin" do 
+  include CookieJar
+
   it "flash.now[] sets flash for current page" do
     app(:bare) do
       use Rack::Session::Cookie, :secret => "1"
@@ -37,17 +39,17 @@ describe "flash plugin" do
     env = proc{|h| h['Set-Cookie'] ? {'HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", '')} : {}}
     _, h, b = req
     b.join.must_equal ''
-    _, h, b = req(env[h])
+    _, h, b = req
     b.join.must_equal 'b'
-    _, h, b = req(env[h])
+    _, h, b = req
     b.join.must_equal 'bb'
-    _, h, b = req('/a', env[h])
+    _, h, b = req('/a')
     b.join.must_equal 'cbbb'
-    _, h, b = req(env[h])
+    _, h, b = req
     b.join.must_equal ''
-    _, h, b = req(env[h])
+    _, h, b = req
     b.join.must_equal 'b'
-    _, h, b = req(env[h])
+    _, h, b = req
     b.join.must_equal 'bb'
   end
 end

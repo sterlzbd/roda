@@ -34,6 +34,23 @@ def (Roda::RodaPlugins).warn(s)
   puts caller.grep(/_spec\.rb:\d+:/)
 end
 
+module CookieJar
+  def req(path='/', env={})
+    if path.is_a?(Hash)
+      env = path
+    else
+      env['PATH_INFO'] = path.dup
+    end
+    env['HTTP_COOKIE'] = @cookie if @cookie
+
+    a = super(env)
+    if set = a[1]['Set-Cookie']
+      @cookie = set.sub("; path=/; HttpOnly", '')
+    end
+    a
+  end
+end
+
 class Minitest::Spec
   def self.deprecated(a, &block)
     it("#{a} (deprecated)") do

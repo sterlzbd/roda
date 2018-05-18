@@ -6,6 +6,8 @@ rescue LoadError
   warn "rack_csrf not installed, skipping csrf plugin test"  
 else
 describe "csrf plugin" do 
+  include CookieJar
+
   it "adds csrf protection and csrf helper methods" do
     app(:bare) do
       use Rack::Session::Cookie, :secret=>'1'
@@ -33,7 +35,6 @@ describe "csrf plugin" do
     status('REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 403
     body('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 'bar'
 
-    env = proc{|h| h['Set-Cookie'] ? {'HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", '')} : {}}
     s, h, b = req
     s.must_equal 200
     field = h['FIELD']
@@ -41,7 +42,7 @@ describe "csrf plugin" do
     h['TAG'].must_match(/\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/)
     h['METATAG'].must_match(/\A<meta name="#{field}" content="#{token}" \/>\z/)
     b.must_equal ['g']
-    s, _, b = req('/', env[h].merge('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN']))
+    s, _, b = req('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN'])
     s.must_equal 200
     b.must_equal ['p']
 
@@ -87,7 +88,6 @@ describe "csrf plugin" do
     status('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 403
     body('/foo/bar', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 'foobar'
 
-    env = proc{|h| h['Set-Cookie'] ? {'HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", '')} : {}}
     s, h, b = req('/foo')
     s.must_equal 200
     field = h['FIELD']
@@ -95,7 +95,7 @@ describe "csrf plugin" do
     h['TAG'].must_match(/\A<input type="hidden" name="#{field}" value="#{token}" \/>\z/)
     h['METATAG'].must_match(/\A<meta name="#{field}" content="#{token}" \/>\z/)
     b.must_equal ['g']
-    s, _, b = req('/foo', env[h].merge('REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN']))
+    s, _, b = req('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io, "HTTP_#{h['HEADER']}"=>h['TOKEN'])
     s.must_equal 200
     b.must_equal ['p']
 
