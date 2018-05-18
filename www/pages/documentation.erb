@@ -25,22 +25,33 @@
 <h3 id="included-plugins">Plugins that Ship with Roda</h3>
 
 <ul>
-  <li>Core Routing: <ul>
+  <li>Routing: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/AllVerbs.html">all_verbs</a>: Adds request routing methods for all http verbs.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/BacktrackingArray.html">backtracking_array</a>: Allows array matchers to backtrack if later matchers do not match.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ClassLevelRouting.html">class_level_routing</a>: Adds class level routing methods, for a DSL similar to <a href="https://github.com/sinatra/sinatra">sinatra</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Head.html">head</a>: Treat HEAD requests like GET requests with an empty response body.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows for multiple named route blocks that can be dispatched to inside main route block.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRun.html">multi_run</a>: Adds the ability to dispatch to multiple rack applications based on the request path prefix.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/NotAllowed.html">not_allowed</a>: Adds support for automatically returning 405 Method Not Allowed responses.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/NotFound.html">not_found</a>: Adds not_found method for handling responses not otherwise handled by a route.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/PathRewriter.html">path_rewriter</a>: Adds support for rewriting paths before routing.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/RunAppendSlash.html">run_append_slash</a>: Makes r.run use &quot;/&quot; instead of &quot;&quot; for app's PATH_INFO</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/RunHandler.html">run_handler</a>: Allows for modifying rack response arrays when using r.run, and continuing routing for 404 responses.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/StaticRouting.html">static_routing</a>: Adds class level static routing methods, for maximum performance when handling static routes (routes without placeholders).</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/StatusHandler.html">status_handler</a>: Adds status_handler method for handling responses without bodies for a given status code.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/TypeRouting.html">type_routing</a>: Route based on path extensions and Accept headers.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/UnescapePath.html">unescape_path</a>: Decodes URL-encoded PATH_INFO before routing.</li>
   </ul></li>
-  <li>Rendering: <ul>
+  <li>Rendering/View: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Assets.html">assets</a>: Adds support for rendering CSS/JS javascript assets on the fly in development, or compiling them into a single compressed file in production.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/AssetsPreloading.html">assets_preloading</a>: Adds support for generating browser-hinting preload link tags and headers.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/BranchLocals.html">branch_locals</a>: Adds ability to specify defaults for template locals on a per-branch basis.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Chunked.html">chunked</a>: Adds support for streaming template responses using Transfer-Encoding: chunked.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/ContentFor.html">content_for</a>: Allows storage of content in one template and retrieval of that content in a different template.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/H.html">h</a>: Adds h method for html escaping.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Json.html">json</a>: Allows match blocks to return arrays and hashes, using a json representation as the response body.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/MultiView.html">multi_view</a>: Allows for easily setting up routing for rendering multiple views.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/NamedTemplates.html">named_templates</a>: Adds the ability to create inline templates by name, instead of storing them in the file system.</li>
@@ -49,6 +60,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/PrecompileTemplates.html">precompile_templates</a>: Adds support for precompiling templates, saving memory when using a forking webserver.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Public.html">public</a>: Adds support for serving all files in the public directory.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Render.html">render</a>: Adds render method for rendering templates, using <a href="https://github.com/rtomayko/tilt">tilt</a>.</li>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/RenderEach.html">render_each</a>: Render a template for each value in an enumerable.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/RenderLocals.html">render_locals</a>: Adds ability to specify defaults for template locals.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Static.html">static</a>: Adds support for serving static files using Rack::Static.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Streaming.html">streaming</a>: Adds ability to stream responses.</li>
@@ -56,13 +68,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/TimestampPublic.html">timestamp_public</a>: Adds support for serving files in the public directory, with paths that change based on file modification time.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ViewOptions.html">view_options</a>: Allows for setting view options on a per-request basis.</li>
   </ul></li>
-  <li>View Helpers: <ul>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/ContentFor.html">content_for</a>: Allows storage of content in one template and retrieval of that content in a different template.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/Csrf.html">csrf</a>: Adds CSRF protection and helper methods using <a href="https://github.com/baldowl/rack_csrf">rack_csrf</a>.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/H.html">h</a>: Adds h method for html escaping.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/RenderEach.html">render_each</a>: Render a template for each value in an enumerable.</li>
-  </ul></li>
-  <li>Request/Response Helpers: <ul>
+  <li>Request/Response: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Caching.html">caching</a>: Adds request and response methods related to http caching.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ContentSecurityPolicy.html">content_security_policy</a>: Allows setting an appropriate Content-Security-Policy header for the application/branch/action.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Cookies.html">cookies</a>: Adds response methods for handling cookies.</li>
@@ -82,17 +88,6 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolStatus.html">symbol_status</a>: Allows the use of symbols as status codes, converting them to the appropriate integer.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/TypecastParams.html">typecast_params</a>: Allows for easily converting parameter values to explicit types.</li>
   </ul></li>
-  <li>Routing Helpers: <ul>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/NotFound.html">not_found</a>: Adds not_found method for handling responses not otherwise handled by a route.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/Pass.html">pass</a>: Adds pass method for skipping the current matching route block as if it didn't match.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/PathRewriter.html">path_rewriter</a>: Adds support for rewriting paths before routing.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/RunAppendSlash.html">run_append_slash</a>: Makes r.run use &quot;/&quot; instead of &quot;&quot; for app's PATH_INFO</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/StatusHandler.html">status_handler</a>: Adds status_handler method for handling responses without bodies for a given status code.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/TypeRouting.html">type_routing</a>: Route based on path extensions and Accept headers.</li>
-    <li><a href="rdoc/classes/Roda/RodaPlugins/UnescapePath.html">unescape_path</a>: Decodes URL-encoded PATH_INFO before routing.</li>
-  </ul></li>
   <li>Matchers: <ul>
     <li><a href="rdoc/classes/Roda/RodaPlugins/ClassMatchers.html">class_matchers</a>: Adds support for handling matchers for arbitrary classes, with support for type conversion.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/EmptyRoot.html">empty_root</a>: Makes root matcher match empty string in addition to single slash.</li>
@@ -108,6 +103,7 @@
     <li><a href="rdoc/classes/Roda/RodaPlugins/SymbolMatchers.html">symbol_matchers</a>: Adds support for symbol-specific matching regexps.</li>
   </ul></li>
   <li>Other: <ul>
+    <li><a href="rdoc/classes/Roda/RodaPlugins/Csrf.html">csrf</a>: Older CSRF plugin for backwards compatibility using <a href="https://github.com/baldowl/rack_csrf">rack_csrf</a>.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/DelayBuild.html">delay_build</a>: Delay building the rack app until Roda.app is called.</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/Environments.html">environments</a>: Adds support for handling different execution environments (development/test/production).</li>
     <li><a href="rdoc/classes/Roda/RodaPlugins/EarlyHints.html">early_hints</a>: Adds support for using 103 Early Hints responses when using a compatible server.</li>
