@@ -187,7 +187,7 @@ describe "typecast_params plugin" do
   end
 
   it "#int should convert to integer" do
-    tp('a=-1').int('a').must_equal -1
+    tp('a=-1').int('a').must_equal(-1)
     tp('a=0').int('a').must_equal 0
     tp('a=a').int('a').must_equal 0
     tp.int('a').must_equal 1
@@ -248,7 +248,7 @@ describe "typecast_params plugin" do
   end
 
   it "#Integer should convert to integer strictly" do
-    tp('a=-1').Integer('a').must_equal -1
+    tp('a=-1').Integer('a').must_equal(-1)
     tp('a=0').Integer('a').must_equal 0
     lambda{tp('a=a').Integer('a')}.must_raise @tp_error
     tp.Integer('a').must_equal 1
@@ -277,7 +277,7 @@ describe "typecast_params plugin" do
   end
 
   it "#float should convert to float" do
-    tp('a=-1').float('a').must_equal -1
+    tp('a=-1').float('a').must_equal(-1)
     tp('a=0').float('a').must_equal 0
     tp('a=a').float('a').must_equal 0
     tp.float('a').must_equal 1
@@ -306,7 +306,7 @@ describe "typecast_params plugin" do
   end
 
   it "#Float should convert to float strictly" do
-    tp('a=-1').Float('a').must_equal -1
+    tp('a=-1').Float('a').must_equal(-1)
     tp('a=0').Float('a').must_equal 0
     lambda{tp('a=a').Float('a')}.must_raise @tp_error
     tp.Float('a').must_equal 1
@@ -1108,8 +1108,8 @@ describe "typecast_params plugin with customized params" do
   end
 
   it "should respect custom typecasting methods" do
-    tp.opp_int('a').must_equal -1
-    tp.opp_int!('a').must_equal -1
+    tp.opp_int('a').must_equal(-1)
+    tp.opp_int!('a').must_equal(-1)
     tp.opp_int('d').must_be_nil
     lambda{tp.opp_int!('d')}.must_raise @tp_error
 
@@ -1133,8 +1133,8 @@ describe "typecast_params plugin with customized params" do
       end
     end
 
-    tp.opp_int('a').must_equal -1
-    tp.opp_int!('a').must_equal -1
+    tp.opp_int('a').must_equal(-1)
+    tp.opp_int!('a').must_equal(-1)
     tp.opp_int('d').must_be_nil
     lambda{tp.opp_int!('d')}.must_raise @tp_error
 

@@ -40,7 +40,7 @@ describe "head plugin" do
         r.halt [ 200, {}, body ]
       end
     end
-    s, h, b = req('REQUEST_METHOD' => 'HEAD')
+    s, _, b = req('REQUEST_METHOD' => 'HEAD')
     s.must_equal 200
     res = String.new
     body.closed?.must_equal false

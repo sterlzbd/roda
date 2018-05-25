@@ -665,8 +665,8 @@ class Roda
           v = array(type, key, default)
 
           if key.is_a?(Array)
-            key.zip(v).each do |key, arr|
-              check_array!(key, arr)
+            key.zip(v).each do |k, arr|
+              check_array!(k, arr)
             end
           else
             check_array!(key, v)

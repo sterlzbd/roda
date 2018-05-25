@@ -36,7 +36,6 @@ describe "flash plugin" do
       end
     end
 
-    env = proc{|h| h['Set-Cookie'] ? {'HTTP_COOKIE'=>h['Set-Cookie'].sub("; path=/; HttpOnly", '')} : {}}
     _, h, b = req
     b.join.must_equal ''
     _, h, b = req
