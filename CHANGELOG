@@ -1,4 +1,4 @@
-= master
+= 3.9.0 (2018-06-11)
 
 * Add route_csrf plugin for CSRF protection, offering more control, better security, and request-specific tokens compared to rack_csrf (jeremyevans)
 
