@@ -24,6 +24,8 @@ end
 
 require_relative "../lib/roda"
 require "stringio"
+
+ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
 gem 'minitest'
 require "minitest/autorun"
 
