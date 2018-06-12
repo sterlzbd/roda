@@ -28,7 +28,7 @@ class Roda
     # for an attacker to generate valid CSRF tokens specific to arbitrary
     # request method and request path.
     #
-    # # Usage
+    # == Usage
     #
     # It is recommended to use the plugin defaults, loading the
     # plugin with no options:
@@ -69,7 +69,7 @@ class Roda
     # The plugin also supports a block, in which case the block will be used
     # as the value of the :csrf_failure option.
     #
-    # # Methods
+    # == Methods
     #
     # This adds the following instance methods:
     #
@@ -116,7 +116,7 @@ class Roda
     #                 will not work unless you set the :require_request_specific_tokens option to
     #                 false, which is a bad idea from a security standpoint.
     #
-    # # Token Cryptography
+    # == Token Cryptography
     #
     # route_csrf uses HMAC-SHA-256 to generate all CSRF tokens.  It generates a random 32-byte secret,
     # which is stored base64 encoded in the session.  For each CSRF token, it generates 31 bytes
