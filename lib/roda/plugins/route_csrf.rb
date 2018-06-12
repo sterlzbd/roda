@@ -37,34 +37,34 @@ class Roda
     #
     # This plugin supports the following options:
     #
-    #   :field :: Form input parameter name for CSRF token (default: '_csrf')
-    #   :header :: HTTP header name for CSRF token (default: 'X-CSRF-Token')
-    #   :key :: Session key for CSRF secret (default: '_roda_csrf_secret')
-    #   :require_request_specific_tokens :: Whether request-specific tokens are required (default: true).
-    #                                       A false value will allow tokens that are not request-specific
-    #                                       to also work.  You should only set this to false if it is
-    #                                       impossible to use request-specific tokens.  If you must
-    #                                       use non-request-specific tokens in certain cases, it is best
-    #                                       to leave this option true by default, and override it on a
-    #                                       per call basis in those specific cases.
-    #   :csrf_failure :: The action to taken if a request fails the CSRF check (default: :raise).  Options:
-    #                    :raise :: raise a Roda::RodaPlugins::RouteCsrf::InvalidToken exception
-    #                    :empty_403 :: return a blank 403 page (rack_csrf's default behavior)
-    #                    :clear_session :: Clear the current session
-    #                    Proc :: Treated as a routing block, called with request object
-    #   :check_header :: Whether the HTTP header should be checked for the token value (default: false).
-    #                    If true, checks the HTTP header after checking for the form input parameter.
-    #                    If :only, only checks the HTTP header and doesn't check the form input parameter.
-    #   :check_request_methods :: Which request methods require CSRF protection
-    #                             (default: <tt>['POST', 'DELETE', 'PATCH', 'PUT']</tt>)
-    #   :upgrade_from_rack_csrf_key :: If provided, the session key that should be checked for the
-    #                                  rack_csrf raw token.  If the session key is present, the value
-    #                                  will be checked against the submitted token, and if it matches,
-    #                                  the CSRF check will be passed.  Should only be set temporarily
-    #                                  if upgrading from using rack_csrf to the route_csrf plugin, and
-    #                                  should be removed as soon as you are OK with CSRF forms generated
-    #                                  before the upgrade not longer being usable. The default rack_csrf
-    #                                  key is <tt>'csrf.token'</tt>.
+    # :field :: Form input parameter name for CSRF token (default: '_csrf')
+    # :header :: HTTP header name for CSRF token (default: 'X-CSRF-Token')
+    # :key :: Session key for CSRF secret (default: '_roda_csrf_secret')
+    # :require_request_specific_tokens :: Whether request-specific tokens are required (default: true).
+    #                                     A false value will allow tokens that are not request-specific
+    #                                     to also work.  You should only set this to false if it is
+    #                                     impossible to use request-specific tokens.  If you must
+    #                                     use non-request-specific tokens in certain cases, it is best
+    #                                     to leave this option true by default, and override it on a
+    #                                     per call basis in those specific cases.
+    # :csrf_failure :: The action to taken if a request fails the CSRF check (default: :raise).  Options:
+    #                  :raise :: raise a Roda::RodaPlugins::RouteCsrf::InvalidToken exception
+    #                  :empty_403 :: return a blank 403 page (rack_csrf's default behavior)
+    #                  :clear_session :: Clear the current session
+    #                  Proc :: Treated as a routing block, called with request object
+    # :check_header :: Whether the HTTP header should be checked for the token value (default: false).
+    #                  If true, checks the HTTP header after checking for the form input parameter.
+    #                  If :only, only checks the HTTP header and doesn't check the form input parameter.
+    # :check_request_methods :: Which request methods require CSRF protection
+    #                           (default: <tt>['POST', 'DELETE', 'PATCH', 'PUT']</tt>)
+    # :upgrade_from_rack_csrf_key :: If provided, the session key that should be checked for the
+    #                                rack_csrf raw token.  If the session key is present, the value
+    #                                will be checked against the submitted token, and if it matches,
+    #                                the CSRF check will be passed.  Should only be set temporarily
+    #                                if upgrading from using rack_csrf to the route_csrf plugin, and
+    #                                should be removed as soon as you are OK with CSRF forms generated
+    #                                before the upgrade not longer being usable. The default rack_csrf
+    #                                key is <tt>'csrf.token'</tt>.
     #
     # The plugin also supports a block, in which case the block will be used
     # as the value of the :csrf_failure option.
