@@ -274,6 +274,17 @@ describe "typecast_params plugin" do
     tp.array!(:Integer, 'b').must_equal [2, 3]
     lambda{tp.array!(:Integer, 'd')}.must_raise @tp_error
     lambda{tp.array!(:Integer, 'g')}.must_raise @tp_error
+
+    a = 1
+    @app.plugin :hooks
+    @app.before do
+      request.define_singleton_method(:params){{'a'=>a}}
+    end
+    tp.Integer('a').must_equal 1
+    a = 1.0
+    tp.Integer('a').must_equal 1
+    a = 1.1
+    lambda{tp.Integer('a')}.must_raise @tp_error
   end
 
   it "#float should convert to float" do

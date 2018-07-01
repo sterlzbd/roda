@@ -106,7 +106,9 @@ class Roda
     # int :: Converts value to integer using +to_i+ (note that invalid input strings will be
     #        returned as 0)
     # pos_int :: Converts value using +to_i+, but non-positive values are converted to +nil+
-    # Integer :: Converts value to integer using <tt>Kernel::Integer(value, 10)</tt>
+    # Integer :: Converts value to integer using <tt>Kernel::Integer</tt>, with base 10 for
+    #            string inputs, and a check that the output value is equal to the input
+    #            value for numeric inputs.
     # float :: Converts value to float using +to_f+ (note that invalid input strings will be
     #          returned as 0.0)
     # Float :: Converts value to float using <tt>Kernel::Float(value)</tt>
@@ -453,7 +455,18 @@ class Roda
         end
 
         handle_type(:Integer) do |v|
-          string_or_numeric!(v) && ::Kernel::Integer(v, 10)
+          if string_or_numeric!(v)
+            case v
+            when String
+              ::Kernel::Integer(v, 10)
+            when Integer
+              v
+            else
+              i = ::Kernel::Integer(v)
+              raise Error, "numeric value passed to Integer contains non-Integer part: #{v.inspect}" unless i == v
+              i
+            end
+          end
         end
 
         handle_type(:float) do |v|
