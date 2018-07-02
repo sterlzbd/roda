@@ -146,4 +146,19 @@ describe "middleware plugin" do
     end
     body.must_equal 'bar'
   end
+
+  it "calls :handle_result option with env and response" do
+    app(:bare) do
+      plugin :middleware, :handle_result=>(proc do |env, res|
+        res[2] << env['foo']
+      end)
+      route{}
+    end
+    mid2 = app
+    app(:bare) do
+      use mid2
+      route{env['foo'] = 'bar'; 'baz'}
+    end
+    body.must_equal 'bazbar'
+  end
 end

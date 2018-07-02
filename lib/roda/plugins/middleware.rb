@@ -69,10 +69,15 @@ class Roda
       #             application that the current request is a middleware request.
       #             You should only need to override this if you are using multiple
       #             roda middleware in the same application.
+      # :handle_result :: Callable object that will be called with request environment
+      #                   and rack response for all requests passing through the middleware,
+      #                   after either the middleware or next app handles the request
+      #                   and returns a response.
       def self.configure(app, opts={}, &block)
         app.opts[:middleware_env_var] = opts[:env_var] if opts.has_key?(:env_var)
         app.opts[:middleware_env_var] ||= 'roda.forward_next'
         app.opts[:middleware_configure] = block if block
+        app.opts[:middleware_handle_result] = opts[:handle_result]
       end
 
       # Forwarder instances are what is actually used as middleware.
@@ -102,10 +107,14 @@ class Roda
           end
 
           if call_next
-            @app.call(env)
-          else
-            res
+            res = @app.call(env)
           end
+
+          if handle_result = @mid.opts[:middleware_handle_result]
+            handle_result.call(env, res)
+          end
+
+          res
         end
       end
 

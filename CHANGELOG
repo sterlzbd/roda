@@ -1,5 +1,7 @@
 = master
 
+* Add :handle_result option to middleware plugin for modifying rack result before returning it (jeremyevans)
+
 * Make the flash plugin work correctly when sessions are serialized with JSON (jeremyevans)
 
 * Make Integer in typecast_params handle Numeric input, and require that Numeric input not have fractional parts (jeremyevans) (#146)
