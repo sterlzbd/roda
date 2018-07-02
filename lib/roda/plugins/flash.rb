@@ -91,7 +91,8 @@ class Roda
         # Access the flash hash for the current request, loading
         # it from the session if it is not already loaded.
         def flash
-          @_flash ||= FlashHash.new(session[:_flash])
+          # :_flash to support transparent upgrades from previous key
+          @_flash ||= FlashHash.new(session['_flash'] || session[:_flash])
         end
 
         # If the routing doesn't raise an error, rotate the flash
@@ -100,7 +101,7 @@ class Roda
           res = super
 
           if f = @_flash
-            session[:_flash] = f.next
+            session['_flash'] = f.next
           end
 
           res

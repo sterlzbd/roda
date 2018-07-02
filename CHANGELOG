@@ -1,5 +1,7 @@
 = master
 
+* Make the flash plugin work correctly when sessions are serialized with JSON (jeremyevans)
+
 * Make Integer in typecast_params handle Numeric input, and require that Numeric input not have fractional parts (jeremyevans) (#146)
 
 = 3.9.0 (2018-06-11)
