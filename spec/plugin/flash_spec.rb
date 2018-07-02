@@ -5,7 +5,7 @@ describe "flash plugin" do
 
   it "flash.now[] sets flash for current page" do
     app(:bare) do
-      use Rack::Session::Cookie, :secret => "1"
+      send(*DEFAULT_SESSION_ARGS)
       plugin :flash
 
       route do |r|
@@ -21,8 +21,8 @@ describe "flash plugin" do
 
   it "flash[] sets flash for next page" do
     app(:bare) do
-      use Rack::Session::Cookie, :secret => "1"
       plugin :flash
+      send(*DEFAULT_SESSION_ARGS)
 
       route do |r|
         r.on 'a' do

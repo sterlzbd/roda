@@ -5,7 +5,7 @@ describe "route_csrf plugin" do
 
   def route_csrf_app(opts={}, &block)
     app(:bare) do
-      use Rack::Session::Cookie, :secret=>'1'
+      send(*DEFAULT_SESSION_ARGS) unless opts[:no_sessions_plugin]
       plugin(:route_csrf, opts, &opts[:block])
       route do |r|
         check_csrf! unless env['SKIP']
@@ -257,13 +257,14 @@ rescue LoadError
   warn "rack_csrf not installed, skipping route_csrf plugin test for rack_csrf upgrade"  
 else
   it "supports upgrades from existing rack_csrf token" do
-    route_csrf_app(:upgrade_from_rack_csrf_key=>'csrf.token') do |r|
+    route_csrf_app(:upgrade_from_rack_csrf_key=>'csrf.token', :no_sessions_plugin=>true) do |r|
       r.get 'clear' do
         session.clear
         ''
       end
       Rack::Csrf.token(env)
     end
+    app.use(*DEFAULT_SESSION_MIDDLEWARE_ARGS)
     app.use Rack::Csrf, :skip=>['POST:/foo', 'POST:/bar'], :raise=>true
     token = body
     token.length.wont_equal 84

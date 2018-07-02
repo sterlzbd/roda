@@ -228,7 +228,7 @@ class Roda
         # Add a middleware to use for the rack application.  Must be
         # called before calling #route to have an effect. Example:
         #
-        #   Roda.use Rack::Session::Cookie, secret: ENV['secret']
+        #   Roda.use Rack::ShowExceptions
         def use(*args, &block)
           @middleware << [args, block].freeze
           build_rack_app
@@ -670,7 +670,7 @@ class Roda
         # The session for the current request.  Raises a RodaError if
         # a session handler has not been loaded.
         def session
-          @env['rack.session'] || raise(RodaError, "You're missing a session handler. You can get started by adding use Rack::Session::Cookie")
+          @env['rack.session'] || raise(RodaError, "You're missing a session handler, try using the sessions plugin.")
         end
 
         private

@@ -26,7 +26,9 @@ class Roda
     # sessions, so if the attacker has the ability to read cookie data
     # and you are using Rack::Session::Cookie, it will still be possible
     # for an attacker to generate valid CSRF tokens specific to arbitrary
-    # request method and request path.
+    # request method and request path.  Roda's session plugin uses
+    # encrypted sessions and therefore is safe even if the attacker can
+    # read cookie data.
     #
     # == Usage
     #

@@ -1,5 +1,9 @@
 = master
 
+* Add roda/session_middleware (RodaSessionMiddleware), usable as a middleware by any Rack app to use Roda's session support (jeremyevans)
+
+* Add sessions plugin for more secure (encrypted+signed) sessions (jeremyevans)
+
 * Support :json_parser and :json_serializer application options as default implementations for parsing/serializing JSON (jeremyevans)
 
 * Add :handle_result option to middleware plugin for modifying rack result before returning it (jeremyevans)

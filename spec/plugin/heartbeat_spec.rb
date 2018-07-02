@@ -36,7 +36,7 @@ describe "heartbeat plugin" do
 
   it "should work when using sessions" do
     app(:bare) do
-      use Rack::Session::Cookie, :secret=>'foo'
+      send(*DEFAULT_SESSION_ARGS)
       plugin :heartbeat
 
       route do |r|

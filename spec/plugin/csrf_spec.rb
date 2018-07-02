@@ -10,7 +10,7 @@ describe "csrf plugin" do
 
   it "adds csrf protection and csrf helper methods" do
     app(:bare) do
-      use Rack::Session::Cookie, :secret=>'1'
+      use(*DEFAULT_SESSION_MIDDLEWARE_ARGS)
       plugin :csrf, :skip=>['POST:/foo']
 
       route do |r|
@@ -74,7 +74,7 @@ describe "csrf plugin" do
     end
 
     app(:bare) do
-      use Rack::Session::Cookie, :secret=>'1'
+      use(*DEFAULT_SESSION_MIDDLEWARE_ARGS)
       plugin :csrf, :skip=>['POST:/foo/bar']
 
       route do |r|

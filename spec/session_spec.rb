@@ -12,10 +12,10 @@ describe "session handling" do
       end
     end
 
-    body.must_match(/use Rack::Session::Cookie/)
+    body.must_match("You're missing a session handler, try using the sessions plugin.")
   end
 
-  it "should return session if available" do
+  it "should return session if rack session middleware is used" do
     app(:bare) do
       use Rack::Session::Cookie, :secret=>'1'
 
