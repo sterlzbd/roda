@@ -699,6 +699,10 @@ The following options are respected by the default library or multiple plugins:
 :add_script_name :: Prepend the SCRIPT_NAME for the request to paths.  This is
                     useful if you mount the app as a path under another app.
 :freeze_middleware :: Whether to freeze all middleware when building the rack app.
+:json_parser :: A callable for parsing JSON (+JSON.parse+ in general used by
+                default).
+:json_serializer :: A callable for serializing JSON (+to_json+ in general used
+                    by default).
 :root :: Set the root path for the app.  This defaults to the current working
          directory of the process.
 

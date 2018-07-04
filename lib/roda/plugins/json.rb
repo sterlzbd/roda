@@ -53,8 +53,6 @@ class Roda
     #
     #   plugin :json, content_type: 'application/xml'
     module Json
-      DEFAULT_SERIALIZER = :to_json.to_proc
-
       # Set the classes to automatically convert to JSON, and the serializer to use.
       def self.configure(app, opts=OPTS)
         classes = opts[:classes] || [Array, Hash]
@@ -63,7 +61,7 @@ class Roda
         app.opts[:json_result_classes].uniq!
         app.opts[:json_result_classes].freeze
 
-        app.opts[:json_result_serializer] = opts[:serializer] || app.opts[:json_result_serializer] || DEFAULT_SERIALIZER
+        app.opts[:json_result_serializer] = opts[:serializer] || app.opts[:json_result_serializer] || app.opts[:json_serializer] || :to_json.to_proc
 
         app.opts[:json_result_include_request] = opts[:include_request] if opts.has_key?(:include_request)
 

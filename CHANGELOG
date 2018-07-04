@@ -1,5 +1,7 @@
 = master
 
+* Support :json_parser and :json_serializer application options as default implementations for parsing/serializing JSON (jeremyevans)
+
 * Add :handle_result option to middleware plugin for modifying rack result before returning it (jeremyevans)
 
 * Make the flash plugin work correctly when sessions are serialized with JSON (jeremyevans)

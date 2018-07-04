@@ -12,7 +12,6 @@ class Roda
     # header for the request includes "json".
     module JsonParser
       DEFAULT_ERROR_HANDLER = proc{|r| r.halt [400, {}, []]}
-      DEFAULT_PARSER = JSON.method(:parse)
 
       # Handle options for the json_parser plugin:
       # :error_handler :: A proc to call if an exception is raised when
@@ -32,7 +31,7 @@ class Roda
       #          only wrap values that are not already hashes.
       def self.configure(app, opts=OPTS)
         app.opts[:json_parser_error_handler] = opts[:error_handler] || app.opts[:json_parser_error_handler] || DEFAULT_ERROR_HANDLER
-        app.opts[:json_parser_parser] = opts[:parser] || app.opts[:json_parser_parser] || DEFAULT_PARSER
+        app.opts[:json_parser_parser] = opts[:parser] || app.opts[:json_parser_parser] || app.opts[:json_parser] || JSON.method(:parse)
         app.opts[:json_parser_include_request] = opts[:include_request] if opts.has_key?(:include_request)
 
         case opts[:wrap]
