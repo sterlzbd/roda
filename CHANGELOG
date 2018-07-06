@@ -1,5 +1,7 @@
 = master
 
+* Remove flash key from session if new flash is empty when rotating flash (jeremyevans)
+
 * Speed up RodaRequest initialization by avoiding 1-2 method calls (jeremyevans)
 
 * Add roda/session_middleware (RodaSessionMiddleware), usable as a middleware by any Rack app to use Roda's session support (jeremyevans)

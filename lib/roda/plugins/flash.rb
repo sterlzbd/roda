@@ -101,7 +101,12 @@ class Roda
           res = super
 
           if f = @_flash
-            session['_flash'] = f.next
+            f = f.next
+            if f.empty?
+              session.delete('_flash')
+            else
+              session['_flash'] = f
+            end
           end
 
           res

@@ -25,31 +25,25 @@ describe "flash plugin" do
       send(*DEFAULT_SESSION_ARGS)
 
       route do |r|
-        r.on 'a' do
-          "c#{flash['a']}"
-        end
+        r.get('a'){"c#{flash['a']}"}
+        r.get('f'){flash; session['_flash'].inspect}
 
-        r.on do
-          flash['a'] = "b#{flash['a']}"
-          flash['a'] || ''
-        end
+        flash['a'] = "b#{flash['a']}"
+        flash['a'] || ''
       end
     end
 
-    _, h, b = req
-    b.join.must_equal ''
-    _, h, b = req
-    b.join.must_equal 'b'
-    _, h, b = req
-    b.join.must_equal 'bb'
-    _, h, b = req('/a')
-    b.join.must_equal 'cbbb'
-    _, h, b = req
-    b.join.must_equal ''
-    _, h, b = req
-    b.join.must_equal 'b'
-    _, h, b = req
-    b.join.must_equal 'bb'
+    body.must_equal ''
+    body.must_equal 'b'
+    body.must_equal 'bb'
+
+    body('/a').must_equal 'cbbb'
+    body.must_equal ''
+    body.must_equal 'b'
+    body.must_equal 'bb'
+
+    body('/f').must_equal '{"a"=>"bbb"}'
+    body('/f').must_equal 'nil'
   end
 end
 
