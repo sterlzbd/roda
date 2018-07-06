@@ -92,7 +92,7 @@ class Roda
         # it from the session if it is not already loaded.
         def flash
           # :_flash to support transparent upgrades from previous key
-          @_flash ||= FlashHash.new(session['_flash'] || session[:_flash])
+          @_flash ||= FlashHash.new(session['_flash'] || (session['_flash'] = session.delete(:_flash)))
         end
 
         # If the routing doesn't raise an error, rotate the flash
