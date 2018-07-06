@@ -372,7 +372,7 @@ class Roda
           @scope = scope
           @captures = []
           @remaining_path = _remaining_path(env)
-          super(env)
+          @env = env
         end
 
         # Handle match block return values.  By default, if a string is given
