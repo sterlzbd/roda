@@ -272,7 +272,7 @@ describe "sessions plugin" do
     body('/g/foo').must_equal ''
     errors.must_equal ["Unable to decode session: invalid base64"]
 
-    @cookie = k+Base64.urlsafe_encode64('1'*70)
+    @cookie = k+Base64.urlsafe_encode64('1'*60)
     body('/g/foo').must_equal ''
     errors.must_equal ["Unable to decode session: data too short"]
 
@@ -283,10 +283,6 @@ describe "sessions plugin" do
     @cookie = k+Base64.urlsafe_encode64("\0"*75)
     body('/g/foo').must_equal ''
     errors.must_equal ["Not decoding session: HMAC invalid"]
-
-    data = "\0"*50
-    @cookie = k+Base64.urlsafe_encode64(data + OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, '1'*32, data))
-    proc{body('/g/foo')}.must_raise OpenSSL::Cipher::CipherError
   end
 end
 

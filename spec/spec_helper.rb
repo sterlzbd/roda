@@ -36,7 +36,7 @@ def (Roda::RodaPlugins).warn(s)
   puts caller.grep(/_spec\.rb:\d+:/)
 end
 
-if RUBY_VERSION >= '2'
+if ENV['RODA_RACK_SESSION_COOKIE'] != '1'
   require_relative '../lib/roda/session_middleware'
   DEFAULT_SESSION_MIDDLEWARE_ARGS =  [RodaSessionMiddleware, :secret=>'1'*64]
   DEFAULT_SESSION_ARGS = [:plugin, :sessions, :secret=>'1'*64]

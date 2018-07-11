@@ -1,14 +1,12 @@
 # frozen-string-literal: true
 
-raise LoadError, "Roda sessions plugin is only supported on ruby 2.0+" if RUBY_VERSION < '2'
-
 require 'openssl'
 
 begin
-  OpenSSL::Cipher.new("aes-256-gcm")
+  OpenSSL::Cipher.new("aes-256-ctr")
 rescue OpenSSL::Cipher::CipherError
   # :nocov:
-  raise LoadError, "Roda sessions plugin requires the aes-256-gcm cipher"
+  raise LoadError, "Roda sessions plugin requires the aes-256-ctr cipher"
   # :nocov:
 end
 
@@ -22,7 +20,7 @@ class Roda
     # The sessions plugin adds support for sessions using cookies. It is the recommended
     # way to support sessions in Roda applications.
     #
-    # The session cookies are encrypted with AES-256-GCM and then signed with HMAC-SHA-256.
+    # The session cookies are encrypted with AES-256-CTR and then signed with HMAC-SHA-256.
     # By default, session data over a certain size is compressed to reduced space, and
     # is padded to reduce information leaked based on the session size.
     #
@@ -51,9 +49,6 @@ class Roda
     # While session data will be compressed by default for sessions over a certain size,
     # if the final cookie is too large (>=4096 bytes), a Roda::RodaPlugins::Sessions::CookieTooLarge
     # exception will be raised.
-    #
-    # This plugin is not supported on Ruby 1.9, as it requires support for the AES-256-GCM
-    # cipher in the Ruby openssl library, and that support was not added until Ruby 2.0.
     #
     # If the flash plugin is used, the sessions plugin should be loaded after the flash
     # plugin, so that the flash plugin rotates the flash in the session before the sessions
@@ -122,10 +117,10 @@ class Roda
     # where:
     #
     # version :: 1 byte, currently must be 0, other values reserved for future expansion.
-    # IV :: 12 bytes, initialization vector for AES-256-GCM cipher.
-    # auth tag :: 16 bytes, authentication tag for AES-256-GCM cipher.
-    # encrypted session data :: >=12 bytes of data encrypted with AES-256-GCM cipher, see below.
-    # HMAC :: 32 bytes, HMAC-SHA-256 of all preceding data.
+    # IV :: 16 bytes, initialization vector for AES-256-CTR cipher.
+    # encrypted session data :: >=12 bytes of data encrypted with AES-256-CTR cipher, see below.
+    # HMAC :: 32 bytes, HMAC-SHA-256 of all preceding data plus cookie key (so that a cookie value
+    #         for a different key cannot be used even if the secret is the same).
     #  
     # The encrypted session data uses the following format:
     #
@@ -329,11 +324,10 @@ class Roda
             return _session_serialization_error("Unable to decode session: invalid base64")
           end
           length = data.bytesize
-          if data.length < 73
-            # minimum length (1+12+16+12+32) (version+cipher_iv+auth_tag+minimum session+hmac)
+          if data.length < 61
+            # minimum length (1+16+12+32) (version+cipher_iv+minimum session+hmac)
             # 1 : version
-            # 12 : cipher_iv
-            # 16 : auth_tag
+            # 16 : cipher_iv
             # 12 : minimum_session
             #      2 : bitmap for gzip + padding info
             #      4 : creation time
@@ -349,8 +343,8 @@ class Roda
           end
 
           encrypted_data = data.slice!(0, length-32)
-          unless Rack::Utils.secure_compare(data, OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:hmac_secret], encrypted_data))
-            if opts[:old_hmac_secret] && Rack::Utils.secure_compare(data, OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:old_hmac_secret], encrypted_data))
+          unless Rack::Utils.secure_compare(data, OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:hmac_secret], encrypted_data+opts[:key]))
+            if opts[:old_hmac_secret] && Rack::Utils.secure_compare(data, OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:old_hmac_secret], encrypted_data+opts[:key]))
               use_old_cipher_secret = true
             else
               return _session_serialization_error("Not decoding session: HMAC invalid")
@@ -358,7 +352,7 @@ class Roda
           end
 
           encrypted_data.slice!(0)
-          cipher = OpenSSL::Cipher.new("aes-256-gcm")
+          cipher = OpenSSL::Cipher.new("aes-256-ctr")
 
           # Not rescuing cipher errors.  If there is an error in the decryption, that's
           # either a bug in the plugin that needs to be fixed, or an attacker is already
@@ -366,9 +360,7 @@ class Roda
           # alert the application owner about the problem.
           cipher.decrypt
           cipher.key = opts[use_old_cipher_secret ? :old_cipher_secret : :cipher_secret]
-          cipher_iv = cipher.iv = encrypted_data.slice!(0, 12)
-          cipher.auth_data = opts[:key]
-          cipher.auth_tag = encrypted_data.slice!(0, 16)
+          cipher_iv = cipher.iv = encrypted_data.slice!(0, 16)
           data = cipher.update(encrypted_data) << cipher.final
 
           bitmap, created_at, updated_at = data.unpack('vVV')
@@ -431,19 +423,17 @@ class Roda
           serialized_data << padding_data if padding_data
           serialized_data << json_data
 
-          cipher = OpenSSL::Cipher.new("aes-256-gcm")
+          cipher = OpenSSL::Cipher.new("aes-256-ctr")
           cipher.encrypt
           cipher.key = opts[:cipher_secret]
           cipher_iv = cipher.random_iv
-          cipher.auth_data = opts[:key]
           encrypted_data = cipher.update(serialized_data) << cipher.final
 
           data = String.new
           data << "\0" # version marker
           data << cipher_iv
-          data << cipher.auth_tag
           data << encrypted_data
-          data << OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:hmac_secret], data)
+          data << OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:hmac_secret], data+opts[:key])
 
           data = Base64.urlsafe_encode64(data)
 
