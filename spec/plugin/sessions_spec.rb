@@ -17,7 +17,7 @@ describe "sessions plugin" do
 
   before do
     app(:bare) do
-      plugin :sessions, :cipher_secret=>'1'*32, :hmac_secret=>'2'*32
+      plugin :sessions, :secret=>'1'*64
       route do |r|
         if r.GET['sut']
           session
@@ -34,11 +34,10 @@ describe "sessions plugin" do
     end
   end
 
-  it "requires appropriate :cipher_secret and :hmac_secret options" do
-    proc{app(:bare){plugin :sessions, :hmac_secret=>'2'*32}}.must_raise Roda::RodaError
-    proc{app(:bare){plugin :sessions, :cipher_secret=>'1'*32}}.must_raise Roda::RodaError
-    proc{app(:bare){plugin :sessions, :cipher_secret=>'1'*31, :hmac_secret=>'2'*32}}.must_raise Roda::RodaError
-    proc{app(:bare){plugin :sessions, :cipher_secret=>'1'*32, :hmac_secret=>'2'*31}}.must_raise Roda::RodaError
+  it "requires appropriate :secret option" do
+    proc{app(:bare){plugin :sessions}}.must_raise Roda::RodaError
+    proc{app(:bare){plugin :sessions, :secret=>Object.new}}.must_raise Roda::RodaError
+    proc{app(:bare){plugin :sessions, :secret=>'1'*63}}.must_raise Roda::RodaError
   end
 
   it "has session store data between requests" do
@@ -130,23 +129,23 @@ describe "sessions plugin" do
     h.must_include('; secure')
   end
 
-  it "handles secret rotation using :old_cipher_secret and :old_hmac_secret options" do
+  it "handles secret rotation using :old_secret option" do
     body('/s/foo/bar').must_equal 'bar'
     body('/g/foo').must_equal 'bar'
 
     old_cookie = @cookie
-    @app.plugin(:sessions, :cipher_secret=>'3'*32, :hmac_secret=>'4'*32, :old_cipher_secret=>'1'*32, :old_hmac_secret=>'2'*32)
+    @app.plugin(:sessions, :secret=>'2'*64, :old_secret=>'1'*64)
     body('/g/foo', 'QUERY_STRING'=>'sut=3700').must_equal 'bar'
 
-    @app.plugin(:sessions, :cipher_secret=>'3'*32, :hmac_secret=>'4'*32, :old_cipher_secret=>nil, :old_hmac_secret=>nil)
+    @app.plugin(:sessions, :secret=>'2'*64, :old_secret=>nil)
     body('/g/foo', 'QUERY_STRING'=>'sut=3700').must_equal 'bar'
 
     @cookie = old_cookie
     body('/g/foo').must_equal ''
     errors.must_equal ["Not decoding session: HMAC invalid"]
 
-    proc{app(:bare){plugin :sessions, :old_cipher_secret=>'1'*31, :old_hmac_secret=>'2'*32}}.must_raise Roda::RodaError
-    proc{app(:bare){plugin :sessions, :old_cipher_secret=>'1'*32, :old_hmac_secret=>'2'*31}}.must_raise Roda::RodaError
+    proc{app(:bare){plugin :sessions, :old_secret=>'1'*63}}.must_raise Roda::RodaError
+    proc{app(:bare){plugin :sessions, :old_secret=>Object.new}}.must_raise Roda::RodaError
   end
 
   it "pads data by default to make it more difficult to guess session contents based on size" do
@@ -286,7 +285,7 @@ describe "sessions plugin" do
     errors.must_equal ["Not decoding session: HMAC invalid"]
 
     data = "\0"*50
-    @cookie = k+Base64.urlsafe_encode64(data + OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, '2'*32, data))
+    @cookie = k+Base64.urlsafe_encode64(data + OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, '1'*32, data))
     proc{body('/g/foo')}.must_raise OpenSSL::Cipher::CipherError
   end
 end
@@ -324,7 +323,7 @@ describe "sessions plugin" do
     h['Set-Cookie'].must_be_nil
     b.must_equal ['{:a=>"bar"}']
 
-    @app.plugin :sessions, :cipher_secret=>'1'*32, :hmac_secret=>'2'*32,
+    @app.plugin :sessions, :secret=>'1'*64,
                 :upgrade_from_rack_session_cookie_secret=>'1'
     @app.middleware_stack.remove{|m, *| m == Rack::Session::Cookie}
 

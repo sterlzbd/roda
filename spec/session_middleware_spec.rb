@@ -11,7 +11,7 @@ describe "RodaSessionMiddleware" do
     env = nil
 
     app(:bare) do
-      use RodaSessionMiddleware, :cipher_secret=>'1'*32, :hmac_secret=>'2'*32
+      use RodaSessionMiddleware, :secret=>'1'*64
 
       route do |r|
         r.get('s', String, String){|k, v| session[k.to_sym] = v}
@@ -47,8 +47,7 @@ describe "RodaSessionMiddleware" do
     sess.must_be_kind_of RodaSessionMiddleware::SessionHash
     sess.req.must_be_kind_of Roda::RodaRequest
     sess.data.must_be_nil
-    sess.options[:cipher_secret].must_equal('1'*32)
-    sess.options[:hmac_secret].must_equal('2'*32)
+    sess.options[:secret].must_equal('1'*64)
     sess.inspect.must_include "not yet loaded"
     sess.loaded?.must_equal false
 

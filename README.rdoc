@@ -777,12 +777,10 @@ in the Roda application, then use the sessions plugin:
 
   require 'roda'
   class App < Roda
-    plugin :sessions, cipher_secret: ENV['CIPHER_SECRET'],
-                      hmac_secret: ENV['HMAC_SECRET']
+    plugin :sessions, secret: ENV['SESSION_SECRET']
   end
 
-The +:cipher_secret+ and +:hmac_secret+ options should be distinct 32-byte randomly
-generated strings.
+The +:secret+ option should be a randomly generated string of at least 64 bytes.
 
 If you have middleware that need access to sessions, then use the +RodaSessionMiddleware+
 that ships with Roda:
@@ -790,8 +788,7 @@ that ships with Roda:
   require 'roda'
   require 'roda/session_middleware'
   class App < Roda
-    use RodaSessionMiddleware, cipher_secret: ENV['CIPHER_SECRET'],
-                               hmac_secret: ENV['HMAC_SECRET']
+    use RodaSessionMiddleware, secret: ENV['SESSION_SECRET']
   end
 
 If you need non-cookie based sessions (such as sessions stored in a database), you
@@ -804,9 +801,8 @@ the <tt>Rack::Session::Cookie</tt> middleware are not encrypted, just signed to
 prevent tampering.  This means you should not store any secret data in the session
 when using <tt>Rack::Session::Cookie</tt>.
 
-For any cookie-based sessions, make sure that the necessary secrets (+:cipher_secret+
-and +:hmac_secret+ when using Roda's session support, or +:secret+ when using
-<tt>Rack::Session::Cookie</tt>) are not disclosed to an attacker.  Knowledge of the
+For any cookie-based sessions, make sure that the necessary secrets (+:secret+ option)
+are not disclosed to an attacker.  Knowledge of the
 secret(s) can allow an attacker to inject arbitrary session values.  In the case of
 <tt>Rack::Session::Cookie</tt>, that can also lead remote code execution.
 

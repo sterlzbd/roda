@@ -38,8 +38,8 @@ end
 
 if RUBY_VERSION >= '2'
   require_relative '../lib/roda/session_middleware'
-  DEFAULT_SESSION_MIDDLEWARE_ARGS =  [RodaSessionMiddleware, :cipher_secret=>'1'*32, :hmac_secret=>'2'*32]
-  DEFAULT_SESSION_ARGS = [:plugin, :sessions, :cipher_secret=>'1'*32, :hmac_secret=>'2'*32]
+  DEFAULT_SESSION_MIDDLEWARE_ARGS =  [RodaSessionMiddleware, :secret=>'1'*64]
+  DEFAULT_SESSION_ARGS = [:plugin, :sessions, :secret=>'1'*64]
 else
   DEFAULT_SESSION_MIDDLEWARE_ARGS = [Rack::Session::Cookie, :secret=>'1']
   DEFAULT_SESSION_ARGS = [:use, Rack::Session::Cookie, :secret=>'1']

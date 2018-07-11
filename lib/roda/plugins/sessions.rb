@@ -61,19 +61,11 @@ class Roda
     #
     # = Required Options
     #
-    # The session cookies this plugin uses are both encrypted and signed.  For maximum security,
-    # two separate, unrelated secrets should be used:
-    #
-    # :cipher_secret :: The secret to use for the AES-256-GCM cipher.  Must be exactly 32 bytes.
-    # :hmac_secret :: The secret to use for the HMAC-SHA-256 signature.  Must be at least 32 bytes.
-    #
-    # If you want to use a single secret instead of multiple secrets, consider
-    # the following approach (where +secret+ is your single randomly generated secret):
-    #
-    #   {
-    #     cipher_secret: OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, secret, "roda session cipher secret")
-    #     hash_secret: OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, secret, "roda session hash secret")
-    #   }
+    # The session cookies this plugin uses are both encrypted and signed, so two separate
+    # secrets are used internally.  However, for ease of use, these secrets are combined into
+    # a single +:secret+ option.  The +:secret+ option must be a string of at least 64 bytes
+    # and should be randomly generated.  The first 32 bytes are used as the secret for the
+    # cipher, any remaining bytes are used for the secret for the HMAC.
     #
     # = Other Options
     #
@@ -91,11 +83,8 @@ class Roda
     # :max_idle_sessions :: The maximum number of seconds to allow since the session was last updated.
     #                       Default is <tt>86400*7</tt> (7 days).  Can be set to nil to disable session idleness
     #                       checks.
-    # :old_cipher_secret :: The secret to use for the AES-256-GCM cipher if the signature matches using
-    #                       +:old_hmac_secret+ instead of +:hmac_secret+.  Must be exactly 32 bytes if given.
-    # :old_hmac_secret :: A secondary secret to allow for the HMAC-SHA-256 signature. Must be at least 32 bytes
-    #                     if given.  This allows for secret rotation.  If set, +:old_cipher_secret+ must be
-    #                     set, and +:old_cipher_secret+ will be used instead of +:cipher_secret+ when decrypting.
+    # :old_secret :: The previous secret to use, allowing for secret rotation.  Must be a string of at least 64
+    #                bytes if given.
     # :pad_size :: Pad session data (after possible compression, before encryption), to a multiple of this
     #              many bytes (default: 32).  This can be between 2-4096 bytes, or +nil+ to disable padding.
     # :parser :: The parser for the serialized session data (default: <tt>JSON.method(:parse)</tt>).
@@ -169,6 +158,15 @@ class Roda
       class CookieTooLarge < RodaError
       end
 
+      # Split given secret into a cipher secret and an hmac secret.
+      def self.split_secret(name, secret)
+        raise RodaError, "sessions plugin :#{name} must be a String" unless secret.is_a?(String)
+        raise RodaError, "invalid :#{name} length: #{secret.bytesize}, must be >=32" unless secret.bytesize >= 64
+        hmac_secret = secret = secret.dup.force_encoding('BINARY')
+        cipher_secret = secret.slice!(0, 32)
+        [cipher_secret.freeze, hmac_secret.freeze]
+      end
+
       # Configure the plugin, see Sessions for details on options.
       def self.configure(app, opts=OPTS)
         plugin_opts = opts
@@ -184,14 +182,8 @@ class Roda
           rsco[:domain] ||= co[:domain]
         end
 
-        raise RodaError, "must set :cipher_secret when loading sessions plugin" unless opts[:cipher_secret].is_a?(String)
-        raise RodaError, "must set :hmac_secret when loading sessions plugin" unless opts[:hmac_secret].is_a?(String)
-        raise RodaError, "invalid :cipher_secret length (#{opts[:cipher_secret].bytesize}), must be 32" unless opts[:cipher_secret].bytesize == 32
-        raise RodaError, "invalid :hmac_secret length: #{opts[:hmac_secret].bytesize}, must be >=32" unless opts[:hmac_secret].bytesize >= 32
-
-        raise RodaError, "must set both :old_cipher_secret and :old_hmac_secret if setting either" if (opts[:old_cipher_secret] || opts[:old_hmac_secret]) && !(opts[:old_cipher_secret] && opts[:old_hmac_secret])
-        raise RodaError, "invalid :old_cipher_secret length (#{opts[:old_cipher_secret].bytesize}), must be 32" if opts[:old_cipher_secret] && opts[:old_cipher_secret].bytesize != 32
-        raise RodaError, "invalid :old_hmac_secret length: #{opts[:old_hmac_secret].bytesize}, must be >=32" if opts[:old_hmac_secret] && opts[:old_hmac_secret].bytesize < 32
+        opts[:cipher_secret], opts[:hmac_secret] = split_secret(:secret, opts[:secret])
+        opts[:old_cipher_secret], opts[:old_hmac_secret] = (split_secret(:old_secret, opts[:old_secret]) if opts[:old_secret])
 
         case opts[:pad_size]
         when nil
@@ -431,14 +423,12 @@ class Roda
             padding_bytes = pad_size - padding_bytes
             bitmap |= padding_bytes
             padding_data = SecureRandom.random_bytes(padding_bytes)
-          else
-            padding_data = ""
           end
 
-          session_create_time = env[SESSION_CREATED_AT] unless session.empty?
+          session_create_time = env[SESSION_CREATED_AT]
           serialized_data = [bitmap, session_create_time||now, now].pack('vVV')
 
-          serialized_data << padding_data
+          serialized_data << padding_data if padding_data
           serialized_data << json_data
 
           cipher = OpenSSL::Cipher.new("aes-256-gcm")
