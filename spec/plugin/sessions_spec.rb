@@ -192,7 +192,9 @@ describe "sessions plugin" do
     b.must_equal ['bar2']
     h1['Set-Cookie'].length.must_equal h2['Set-Cookie'].length
     h1['Set-Cookie'].wont_equal h2['Set-Cookie']
-    h1['Set-Cookie'].length.wont_equal h3['Set-Cookie'].length
+    if !defined?(JRUBY_VERSION) || JRUBY_VERSION >= '9.2'
+      h1['Set-Cookie'].length.wont_equal h3['Set-Cookie'].length
+    end
 
     proc{@app.plugin(:sessions, :pad_size=>0)}.must_raise Roda::RodaError
     proc{@app.plugin(:sessions, :pad_size=>1)}.must_raise Roda::RodaError
