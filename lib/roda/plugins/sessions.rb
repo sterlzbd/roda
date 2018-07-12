@@ -155,8 +155,8 @@ class Roda
 
       # Split given secret into a cipher secret and an hmac secret.
       def self.split_secret(name, secret)
-        raise RodaError, "sessions plugin :#{name} must be a String" unless secret.is_a?(String)
-        raise RodaError, "invalid :#{name} length: #{secret.bytesize}, must be >=32" unless secret.bytesize >= 64
+        raise RodaError, "sessions plugin :#{name} option must be a String" unless secret.is_a?(String)
+        raise RodaError, "invalid sessions plugin :#{name} option length: #{secret.bytesize}, must be >=64" unless secret.bytesize >= 64
         hmac_secret = secret = secret.dup.force_encoding('BINARY')
         cipher_secret = secret.slice!(0, 32)
         [cipher_secret.freeze, hmac_secret.freeze]
