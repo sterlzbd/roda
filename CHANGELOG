@@ -1,4 +1,4 @@
-= master
+= 3.10.0 (2018-07-18)
 
 * Remove flash key from session if new flash is empty when rotating flash (jeremyevans)
 
