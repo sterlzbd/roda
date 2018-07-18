@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2018-05-23 10:59:22 -0700</span>
+<span class='datetime'>2018-07-11 16:58:27 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -570,9 +570,19 @@ plugins:</p>
 mount the app as a path under another app.</p>
 </td></tr><tr><td class='label'>:freeze_middleware </td><td>
 <p>Whether to freeze all middleware when building the rack app.</p>
+</td></tr><tr><td class='label'>:json_parser </td><td>
+<p>A callable for parsing JSON (<code>JSON.parse</code> in general used by
+default).</p>
+</td></tr><tr><td class='label'>:json_serializer </td><td>
+<p>A callable for serializing JSON (<code>to_json</code> in general used by
+default).</p>
 </td></tr><tr><td class='label'>:root </td><td>
 <p>Set the root path for the app.  This defaults to the current working
 directory of the process.</p>
+</td></tr><tr><td class='label'>:sessions_convert_symbols </td><td>
+<p>This should be set to <code>true</code> if the sessions in use do not
+support roundtripping of symbols (for example, when sessions are serialized
+via JSON).</p>
 </td></tr></tbody></table>
 
 <p>There may be other options supported by individual plugins, if so it will
@@ -600,15 +610,6 @@ plugin:</p>
 
 <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>,&#x000A;    <span class="ruby-value">escape:</span> <span class="ruby-keyword">true</span>, <span class="ruby-comment"># Automatically escape output in erb templates using Erubi&#39;s escaping support</span>&#x000A;    <span class="ruby-value">views:</span> <span class="ruby-string">&#39;admin_views&#39;</span>, <span class="ruby-comment"># Default views directory</span>&#x000A;    <span class="ruby-value">layout_opts:</span> {<span class="ruby-value">template:</span> <span class="ruby-string">&#39;admin_layout&#39;</span>, <span class="ruby-value">engine:</span> <span class="ruby-string">&#39;html.erb&#39;</span>},    <span class="ruby-comment"># Default layout options</span>&#x000A;    <span class="ruby-value">template_opts:</span> {<span class="ruby-value">default_encoding:</span> <span class="ruby-string">&#39;UTF-8&#39;</span>} <span class="ruby-comment"># Default template options</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<h2 id="label-Sessions">Sessions<span><a href="#label-Sessions">&para;</a> <a href="#top">&uarr;</a></span></h2>
-
-<p>By default, <a href="../classes/Roda.html">Roda</a> doesn&#39;t turn on
-sessions, but most users are going to want to turn on session support. The
-simplest way to do this is to use the <code>Rack::Session::Cookie</code>
-middleware that comes with Rack:</p>
-
-<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&quot;roda&quot;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Session</span><span class="ruby-operator">::</span><span class="ruby-constant">Cookie</span>, <span class="ruby-value">secret:</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;SECRET&#39;</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
-
 <h2 id="label-Security">Security<span><a href="#label-Security">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>Web application security is a very large topic, but here are some things
@@ -617,15 +618,41 @@ common web application vulnerabilities.</p>
 
 <h3 id="label-Session+Security">Session Security<span><a href="#label-Session+Security">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>If you are using sessions, you should also always set a session secret,
-using the <code>:secret</code> option as shown above. Make sure that this
-secret is not disclosed, because if an attacker knows the
-<code>:secret</code> value, they can inject arbitrary session values. In
-the worst case scenario, this can lead to remote code execution.</p>
+<p>By default, <a href="../classes/Roda.html">Roda</a> doesn&#39;t turn on
+sessions, and if you don&#39;t need sessions, you can skip this section. 
+If you do need sessions, <a href="../classes/Roda.html">Roda</a> offers two
+recommended ways to implement cookie-based sessions.</p>
 
-<p>Keep in mind that with <code>Rack::Session::Cookie</code>, the content in
-the session cookie is not encrypted, just signed to prevent tampering. This
-means you should not store any secret data in the session.</p>
+<p>If you do not need any session support in middleware, and only need session
+support in the <a href="../classes/Roda.html">Roda</a> application, then
+use the sessions plugin:</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;roda&#39;</span>&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:sessions</span>, <span class="ruby-value">secret:</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;SESSION_SECRET&#39;</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The <code>:secret</code> option should be a randomly generated string of at
+least 64 bytes.</p>
+
+<p>If you have middleware that need access to sessions, then use the
+<code>RodaSessionMiddleware</code> that ships with Roda:</p>
+
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;roda&#39;</span>&#x000A;<span class="ruby-identifier">require</span> <span class="ruby-string">&#39;roda/session_middleware&#39;</span>&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">RodaSessionMiddleware</span>, <span class="ruby-value">secret:</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;SESSION_SECRET&#39;</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>If you need non-cookie based sessions (such as sessions stored in a
+database), you should use an appropriate external middleware.</p>
+
+<p>It is possible to use other session cookie middleware such as
+<code>Rack::Session::Cookie</code>, but other middleware may not have the
+same security features that Roda&#39;s session support does.  For example,
+the session cookies used by the <code>Rack::Session::Cookie</code>
+middleware are not encrypted, just signed to prevent tampering.  This means
+you should not store any secret data in the session when using
+<code>Rack::Session::Cookie</code>.</p>
+
+<p>For any cookie-based sessions, make sure that the necessary secrets
+(<code>:secret</code> option) are not disclosed to an attacker.  Knowledge
+of the secret(s) can allow an attacker to inject arbitrary session values. 
+In the case of <code>Rack::Session::Cookie</code>, that can also lead
+remote code execution.</p>
 
 <h3 id="label-Cross+Site+Request+Forgery+-28CSRF-29">Cross Site Request Forgery (CSRF)<span><a href="#label-Cross+Site+Request+Forgery+-28CSRF-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 

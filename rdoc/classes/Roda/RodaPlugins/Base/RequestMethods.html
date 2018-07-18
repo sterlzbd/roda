@@ -140,7 +140,7 @@ href="../../../Roda.html">Roda</a> route block.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 370</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;  <span class="ruby-ivar">@captures</span> = []&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-identifier">_remaining_path</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda.rb, line 370</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">scope</span>, <span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;  <span class="ruby-ivar">@captures</span> = []&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-identifier">_remaining_path</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-ivar">@env</span> = <span class="ruby-identifier">env</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -557,7 +557,7 @@ loaded.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-session-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-session-source'><span class="ruby-comment"># File lib/roda.rb, line 671</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">session</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-string">&#39;rack.session&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;You&#39;re missing a session handler. You can get started by adding use Rack::Session::Cookie&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-session-source'><span class="ruby-comment"># File lib/roda.rb, line 671</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">session</span>&#x000A;  <span class="ruby-ivar">@env</span>[<span class="ruby-string">&#39;rack.session&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">raise</span>(<span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;You&#39;re missing a session handler, try using the sessions plugin.&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

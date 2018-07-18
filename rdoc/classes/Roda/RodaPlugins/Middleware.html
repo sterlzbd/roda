@@ -91,6 +91,10 @@ plugin:</p>
 that the current request is a middleware request. You should only need to
 override this if you are using multiple roda middleware in the same
 application.</p>
+</td></tr><tr><td class='label'>:handle_result </td><td>
+<p>Callable object that will be called with request environment and rack
+response for all requests passing through the middleware, after either the
+middleware or next app handles the request and returns a response.</p>
 </td></tr></tbody></table>
 
 </div>
@@ -98,7 +102,7 @@ application.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 71</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:env_var</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:env_var</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;roda.forward_next&#39;</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_configure</span>] = <span class="ruby-identifier">block</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 75</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:env_var</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:env_var</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;roda.forward_next&#39;</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_configure</span>] = <span class="ruby-identifier">block</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_handle_result</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:handle_result</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

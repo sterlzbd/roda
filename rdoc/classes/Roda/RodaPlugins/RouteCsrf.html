@@ -53,9 +53,11 @@ attacker does not have access to the session.  Rack::Session::Cookie uses
 signed sessions, not encrypted sessions, so if the attacker has the ability
 to read cookie data and you are using Rack::Session::Cookie, it will still
 be possible for an attacker to generate valid CSRF tokens specific to
-arbitrary request method and request path.</p>
+arbitrary request method and request path.  Roda&#39;s session plugin uses
+encrypted sessions and therefore is safe even if the attacker can read
+cookie data.</p>
 
-<p># Usage</p>
+<h2 id="module-Roda::RodaPlugins::RouteCsrf-label-Usage">Usage<span><a href="#module-Roda::RodaPlugins::RouteCsrf-label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>It is recommended to use the plugin defaults, loading the plugin with no
 options:</p>
@@ -63,13 +65,55 @@ options:</p>
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:route_csrf</span></pre>
 
 <p>This plugin supports the following options:</p>
-
-<pre>:field :: Form input parameter name for CSRF token (default: &#39;_csrf&#39;)&#x000A;:header :: HTTP header name for CSRF token (default: &#39;X-CSRF-Token&#39;)&#x000A;:key :: Session key for CSRF secret (default: &#39;_roda_csrf_secret&#39;)&#x000A;:require_request_specific_tokens :: Whether request-specific tokens are required (default: true).&#x000A;                                    A false value will allow tokens that are not request-specific&#x000A;                                    to also work.  You should only set this to false if it is&#x000A;                                    impossible to use request-specific tokens.  If you must&#x000A;                                    use non-request-specific tokens in certain cases, it is best&#x000A;                                    to leave this option true by default, and override it on a&#x000A;                                    per call basis in those specific cases.&#x000A;:csrf_failure :: The action to taken if a request fails the CSRF check (default: :raise).  Options:&#x000A;                 :raise :: raise a Roda::RodaPlugins::RouteCsrf::InvalidToken exception&#x000A;                 :empty_403 :: return a blank 403 page (rack_csrf&#39;s default behavior)&#x000A;                 :clear_session :: Clear the current session&#x000A;                 Proc :: Treated as a routing block, called with request object&#x000A;:check_header :: Whether the HTTP header should be checked for the token value (default: false).&#x000A;                 If true, checks the HTTP header after checking for the form input parameter.&#x000A;                 If :only, only checks the HTTP header and doesn&#39;t check the form input parameter.&#x000A;:check_request_methods :: Which request methods require CSRF protection&#x000A;                          (default: &lt;tt&gt;[&#39;POST&#39;, &#39;DELETE&#39;, &#39;PATCH&#39;, &#39;PUT&#39;]&lt;/tt&gt;)&#x000A;:upgrade_from_rack_csrf_key :: If provided, the session key that should be checked for the&#x000A;                               rack_csrf raw token.  If the session key is present, the value&#x000A;                               will be checked against the submitted token, and if it matches,&#x000A;                               the CSRF check will be passed.  Should only be set temporarily&#x000A;                               if upgrading from using rack_csrf to the route_csrf plugin, and&#x000A;                               should be removed as soon as you are OK with CSRF forms generated&#x000A;                               before the upgrade not longer being usable. The default rack_csrf&#x000A;                               key is &lt;tt&gt;&#39;csrf.token&#39;&lt;/tt&gt;.</pre>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:field </td><td>
+<p>Form input parameter name for CSRF token (default: &#39;_csrf&#39;)</p>
+</td></tr><tr><td class='label'>:header </td><td>
+<p>HTTP header name for CSRF token (default: &#39;X-CSRF-Token&#39;)</p>
+</td></tr><tr><td class='label'>:key </td><td>
+<p>Session key for CSRF secret (default: &#39;_roda_csrf_secret&#39;)</p>
+</td></tr><tr><td class='label'>:require_request_specific_tokens </td><td>
+<p>Whether request-specific tokens are required (default: true). A false value
+will allow tokens that are not request-specific to also work.  You should
+only set this to false if it is impossible to use request-specific tokens. 
+If you must use non-request-specific tokens in certain cases, it is best to
+leave this option true by default, and override it on a per call basis in
+those specific cases.</p>
+</td></tr><tr><td class='label'>:csrf_failure </td><td>
+<p>The action to taken if a request fails the CSRF check (default: :raise). 
+Options:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:raise </td><td>
+<p>raise a <a
+href="RouteCsrf/InvalidToken.html">Roda::RodaPlugins::RouteCsrf::InvalidToken</a>
+exception</p>
+</td></tr><tr><td class='label'>:empty_403 </td><td>
+<p>return a blank 403 page (rack_csrf&#39;s default behavior)</p>
+</td></tr><tr><td class='label'>:clear_session </td><td>
+<p>Clear the current session</p>
+</td></tr><tr><td class='label'>Proc </td><td>
+<p>Treated as a routing block, called with request object</p>
+</td></tr></tbody></table>
+</td></tr><tr><td class='label'>:check_header </td><td>
+<p>Whether the HTTP header should be checked for the token value (default:
+false). If true, checks the HTTP header after checking for the form input
+parameter. If :only, only checks the HTTP header and doesn&#39;t check the
+form input parameter.</p>
+</td></tr><tr><td class='label'>:check_request_methods </td><td>
+<p>Which request methods require CSRF protection (default:
+<code>[&#39;POST&#39;, &#39;DELETE&#39;, &#39;PATCH&#39;,&#x000A;&#39;PUT&#39;]</code>)</p>
+</td></tr><tr><td class='label'>:upgrade_from_rack_csrf_key </td><td>
+<p>If provided, the session key that should be checked for the rack_csrf raw
+token.  If the session key is present, the value will be checked against
+the submitted token, and if it matches, the CSRF check will be passed. 
+Should only be set temporarily if upgrading from using rack_csrf to the
+route_csrf plugin, and should be removed as soon as you are OK with CSRF
+forms generated before the upgrade not longer being usable. The default
+rack_csrf key is <code>&#39;csrf.token&#39;</code>.</p>
+</td></tr></tbody></table>
 
 <p>The plugin also supports a block, in which case the block will be used as
 the value of the :csrf_failure option.</p>
 
-<p># Methods</p>
+<h2 id="module-Roda::RodaPlugins::RouteCsrf-label-Methods">Methods<span><a href="#module-Roda::RodaPlugins::RouteCsrf-label-Methods">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>This adds the following instance methods:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>check_csrf!(opts={}) </td><td>
@@ -122,7 +166,7 @@ generated is not request-specific and will not work unless you set the
 a security standpoint.</p>
 </td></tr></tbody></table>
 
-<p># Token Cryptography</p>
+<h2 id="module-Roda::RodaPlugins::RouteCsrf-label-Token+Cryptography">Token Cryptography<span><a href="#module-Roda::RodaPlugins::RouteCsrf-label-Token+Cryptography">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>route_csrf uses HMAC-SHA-256 to generate all CSRF tokens.  It generates a
 random 32-byte secret, which is stored base64 encoded in the session.  For
@@ -209,7 +253,7 @@ generated each time, mitigating compression ratio attacks such as BREACH.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/route_csrf.rb, line 162</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:route_csrf</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:route_csrf</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULTS</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:csrf_failure</span>]&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;Cannot specify both route_csrf plugin block and :csrf_failure option&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-value">:csrf_failure</span>] = <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">options</span>[<span class="ruby-value">:env_header</span>] = <span class="ruby-node">&quot;HTTP_#{options[:header].to_s.gsub(&#39;-&#39;, &#39;_&#39;).upcase}&quot;</span>.<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">options</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/route_csrf.rb, line 164</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">options</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:route_csrf</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:route_csrf</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULTS</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:csrf_failure</span>]&#x000A;      <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;Cannot specify both route_csrf plugin block and :csrf_failure option&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">options</span>[<span class="ruby-value">:csrf_failure</span>] = <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">options</span>[<span class="ruby-value">:env_header</span>] = <span class="ruby-node">&quot;HTTP_#{options[:header].to_s.gsub(&#39;-&#39;, &#39;_&#39;).upcase}&quot;</span>.<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">options</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

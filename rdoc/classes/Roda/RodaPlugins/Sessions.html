@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::Sessions</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::Sessions
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/sessions_rb.html">lib/roda/plugins/sessions.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The sessions plugin adds support for sessions using cookies. It is the
+recommended way to support sessions in <a href="../../Roda.html">Roda</a>
+applications.</p>
+
+<p>The session cookies are encrypted with AES-256-CTR and then signed with
+HMAC-SHA-256. By default, session data over a certain size is compressed to
+reduced space, and is padded to reduce information leaked based on the
+session size.</p>
+
+<p><a href="Sessions.html">Sessions</a> are serialized via JSON, so session
+information should only store data that allows roundtrips via JSON (String,
+Integer, Float, Array, Hash, true, false, and nil). In particular, note
+that Symbol does not round trip via JSON, so symbols should not be used in
+sessions when this plugin is used.  This plugin sets the
+<code>:sessions_convert_symbols</code> application option to
+<code>true</code> if it hasn&#39;t been set yet, for better integration
+with plugins that can use either symbol or string session or  flash keys. 
+Unlike Rack::Session::Cookie, the session is stored as a plain ruby hash,
+and does not convert all keys to strings.</p>
+
+<p>All sessions are timestamped and session expiration is enabled by default,
+with sessions being valid for 30 days maximum and 7 days since last use. 
+Session creation time is reset whenever the session is empty when
+serialized and also whenever <code>clear_session</code> is called while
+processing the request.</p>
+
+<p>Session secrets can be rotated, and if so both the cipher and HMAC secrets
+should be rotated at the same time.  See options below.</p>
+
+<p>The sessions plugin can transparently upgrade sessions from
+Rack::Session::Cookie if the default Rack::Session::Cookie coder and HMAC
+are used, see options below. It is recommended to only enable transparent
+upgrades for a brief transition period, and remove support for them once
+old sessions have converted or timed out.</p>
+
+<p>While session data will be compressed by default for sessions over a
+certain size, if the final cookie is too large (&gt;=4096 bytes), a <a
+href="Sessions/CookieTooLarge.html">Roda::RodaPlugins::Sessions::CookieTooLarge</a>
+exception will be raised.</p>
+
+<p>If the flash plugin is used, the sessions plugin should be loaded after the
+flash plugin, so that the flash plugin rotates the flash in the session
+before the sessions plugin serializes the session.</p>
+
+<h1 id="module-Roda::RodaPlugins::Sessions-label-Required+Options">Required Options<span><a href="#module-Roda::RodaPlugins::Sessions-label-Required+Options">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>The session cookies this plugin uses are both encrypted and signed, so two
+separate secrets are used internally.  However, for ease of use, these
+secrets are combined into a single <code>:secret</code> option.  The
+<code>:secret</code> option must be a string of at least 64 bytes and
+should be randomly generated.  The first 32 bytes are used as the secret
+for the cipher, any remaining bytes are used for the secret for the HMAC.</p>
+
+<h1 id="module-Roda::RodaPlugins::Sessions-label-Other+Options">Other Options<span><a href="#module-Roda::RodaPlugins::Sessions-label-Other+Options">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:cookie_options </td><td>
+<p>Any cookie options to set on the session cookie. By default, uses
+<code>httponly: true, path: &#39;/&#39;, same_site: :lax</code> so that the
+cookie is not accessible to javascript, allowed for all paths, and will not
+be used for cross-site non-GET requests that.  If the <code>:secure</code>
+option is not present in the hash, then <code>secure: true</code> is also
+set if the request is made over HTTPS.  If this option is given, it will be
+merged into the default cookie options.</p>
+</td></tr><tr><td class='label'>:gzip_over </td><td>
+<p>For session data over this many bytes, compress it with the deflate
+algorithm (default: 128).</p>
+</td></tr><tr><td class='label'>:key </td><td>
+<p>The cookie name to use (default: <code>&#39;roda.session&#39;</code>)</p>
+</td></tr><tr><td class='label'>:max_seconds </td><td>
+<p>The maximum number of seconds to allow for total session lifetime, starting
+with when the session was originally created.  Default is
+<code>86400*30</code> (30 days). Can be set to <code>nil</code> to disable
+session lifetime checks.</p>
+</td></tr><tr><td class='label'>:max_idle_sessions </td><td>
+<p>The maximum number of seconds to allow since the session was last updated.
+Default is <code>86400*7</code> (7 days).  Can be set to nil to disable
+session idleness checks.</p>
+</td></tr><tr><td class='label'>:old_secret </td><td>
+<p>The previous secret to use, allowing for secret rotation.  Must be a string
+of at least 64 bytes if given.</p>
+</td></tr><tr><td class='label'>:pad_size </td><td>
+<p>Pad session data (after possible compression, before encryption), to a
+multiple of this many bytes (default: 32).  This can be between 2-4096
+bytes, or <code>nil</code> to disable padding.</p>
+</td></tr><tr><td class='label'>:parser </td><td>
+<p>The parser for the serialized session data (default:
+<code>JSON.method(:parse)</code>).</p>
+</td></tr><tr><td class='label'>:serializer </td><td>
+<p>The serializer for the session data (default
+<code>:to_json.to_proc</code>).</p>
+</td></tr><tr><td class='label'>:skip_within </td><td>
+<p>If the last update time for the session cookie is less than this number of
+seconds from the current time, and the session has not been modified, do
+not set a new session cookie (default: 3600).</p>
+</td></tr><tr><td class='label'>:upgrade_from_rack_session_cookie_key </td><td>
+<p>The cookie name to use for transparently upgrading from
+Rack::Session:Cookie (defaults to <code>&#39;rack.session&#39;</code>).</p>
+</td></tr><tr><td class='label'>:upgrade_from_rack_session_cookie_secret </td><td>
+<p>The secret for the HMAC-SHA1 signature when allowing transparent upgrades
+from Rack::Session::Cookie. Using this option is only recommended during a
+short transition period, and is not enabled by default as it lowers
+security.</p>
+</td></tr><tr><td class='label'>:upgrade_from_rack_session_cookie_options </td><td>
+<p>Options to pass when deleting the cookie used by Rack::Session::Cookie
+after converting it to use the session cookies used by this plugin.</p>
+</td></tr></tbody></table>
+
+<h1 id="module-Roda::RodaPlugins::Sessions-label-Not+a+Rack+Middleware">Not a Rack <a href="Middleware.html">Middleware</a><span><a href="#module-Roda::RodaPlugins::Sessions-label-Not+a+Rack+Middleware">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Unlike some other approaches to sessions, the sessions plugin does not use
+a rack middleware, so session information is not available to other rack
+middleware, only to the application itself, with the session not being
+loaded from the cookie until the <code>session</code> method is called.</p>
+
+<p>If you need rack middleware to access the session information, then
+<code>require &#39;roda/session_middleware&#39;</code> and <code>use&#x000A;RodaSessionMiddleware</code>. <code>RodaSessionMiddleware</code> passes the
+options given to this plugin.</p>
+
+<h1 id="module-Roda::RodaPlugins::Sessions-label-Session+Cookie+Cryptography-2FFormat">Session Cookie Cryptography/Format<span><a href="#module-Roda::RodaPlugins::Sessions-label-Session+Cookie+Cryptography-2FFormat">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Session cookies created by this plugin use the following format:</p>
+
+<pre>urlsafe_base64(version + IV + auth tag + encrypted session data + HMAC)</pre>
+
+<p>where:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>version </td><td>
+<p>1 byte, currently must be 0, other values reserved for future expansion.</p>
+</td></tr><tr><td class='label'>IV </td><td>
+<p>16 bytes, initialization vector for AES-256-CTR cipher.</p>
+</td></tr><tr><td class='label'>encrypted session data </td><td>
+<p>&gt;=12 bytes of data encrypted with AES-256-CTR cipher, see below.</p>
+</td></tr><tr><td class='label'>HMAC </td><td>
+<p>32 bytes, HMAC-SHA-256 of all preceding data plus cookie key (so that a
+cookie value for a different key cannot be used even if the secret is the
+same).</p>
+</td></tr></tbody></table>
+
+<p>The encrypted session data uses the following format:</p>
+
+<pre>bitmap + creation time + update time + padding + serialized data</pre>
+
+<p>where:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>bitmap </td><td>
+<p>2 bytes in little endian format, lower 12 bits storing number of padding
+bytes, 13th bit storing whether serialized data is compressed with deflate.
+Bits 14-16 reserved for future expansion.</p>
+</td></tr><tr><td class='label'>creation time </td><td>
+<p>4 byte integer in unsigned little endian format, storing unix timestamp
+since session initially created.</p>
+</td></tr><tr><td class='label'>update time </td><td>
+<p>4 byte integer in unsigned little endian format, storing unix timestamp
+since session last updated.</p>
+</td></tr><tr><td class='label'>padding </td><td>
+<p>&gt;=0 padding bytes specified in bitmap, filled with random data, can be
+ignored.</p>
+</td></tr><tr><td class='label'>serialized data </td><td>
+<p>&gt;=2 bytes of serialized data in JSON format.  If the bitmap indicates
+deflate compression, this contains the deflate compressed data.</p>
+</td></tr></tbody></table>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+<li><a href="#method-c-split_secret">split_secret</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="Sessions/InstanceMethods.html">Roda::RodaPlugins::Sessions::InstanceMethods</a></li>
+<li><a href="Sessions/RequestMethods.html">Roda::RodaPlugins::Sessions::RequestMethods</a></li>
+<li><a href="Sessions/CookieTooLarge.html">Roda::RodaPlugins::Sessions::CookieTooLarge</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>DEFAULT_COOKIE_OPTIONS</td>
+<td>=</td>
+<td class='context-item-value'>{:httponly=>true, :path=>'/'.freeze, :same_site=>:lax}.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>DEFAULT_OPTIONS</td>
+<td>=</td>
+<td class='context-item-value'>{:key => 'roda.session'.freeze, :max_seconds=>86400*30, :max_idle_seconds=>86400*7, :pad_size=>32, :gzip_over=>128, :skip_within=>3600}.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>DEFLATE_BIT</td>
+<td>=</td>
+<td class='context-item-value'>0x1000</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>PADDING_MASK</td>
+<td>=</td>
+<td class='context-item-value'>0x0fff</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>SESSION_CREATED_AT</td>
+<td>=</td>
+<td class='context-item-value'>'roda.session.created_at'.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>SESSION_DELETE_RACK_COOKIE</td>
+<td>=</td>
+<td class='context-item-value'>'roda.session.delete_rack_session_cookie'.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>SESSION_SERIALIZED</td>
+<td>=</td>
+<td class='context-item-value'>'roda.session.serialized'.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>SESSION_UPDATED_AT</td>
+<td>=</td>
+<td class='context-item-value'>'roda.session.updated_at'.freeze</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span>
+<span class='arguments'>(app, opts=OPTS)</span>
+
+</div>
+<div class='description'>
+
+<p>Configure the plugin, see <a href="Sessions.html">Sessions</a> for details
+on options.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/sessions.rb, line 165</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">plugin_opts</span> = <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">opts</span> = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:sessions</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_OPTIONS</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">co</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookie_options</span>] = <span class="ruby-constant">DEFAULT_COOKIE_OPTIONS</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookie_options</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">OPTS</span>).<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:parser</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_parser</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">method</span>(<span class="ruby-value">:parse</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:serializer</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-value">:to_json</span>.<span class="ruby-identifier">to_proc</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:upgrade_from_rack_session_cookie_secret</span>]&#x000A;    <span class="ruby-identifier">opts</span>[<span class="ruby-value">:upgrade_from_rack_session_cookie_key</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;rack.session&#39;</span>&#x000A;    <span class="ruby-identifier">rsco</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:upgrade_from_rack_session_cookie_options</span>] = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">opts</span>[<span class="ruby-value">:upgrade_from_rack_session_cookie_options</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">OPTS</span>]&#x000A;    <span class="ruby-identifier">rsco</span>[<span class="ruby-value">:path</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">co</span>[<span class="ruby-value">:path</span>]&#x000A;    <span class="ruby-identifier">rsco</span>[<span class="ruby-value">:domain</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">co</span>[<span class="ruby-value">:domain</span>]&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:cipher_secret</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hmac_secret</span>] = <span class="ruby-identifier">split_secret</span>(<span class="ruby-value">:secret</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:secret</span>])&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:old_cipher_secret</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:old_hmac_secret</span>] = (<span class="ruby-identifier">split_secret</span>(<span class="ruby-value">:old_secret</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:old_secret</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:old_secret</span>])&#x000A;&#x000A;  <span class="ruby-keyword">case</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:pad_size</span>]&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-keyword">nil</span>&#x000A;    <span class="ruby-comment"># no changes</span>&#x000A;  <span class="ruby-keyword">when</span> <span class="ruby-constant">Integer</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;invalid :pad_size: #{opts[:pad_size]}, must be &gt;=2, &lt; 4096&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:pad_size</span>] <span class="ruby-operator">&gt;=</span> <span class="ruby-value">2</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:pad_size</span>] <span class="ruby-operator">&lt;</span> <span class="ruby-value">4096</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;invalid :pad_size option: #{opts[:pad_size].inspect}, must be Integer or nil&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  &#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:sessions</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:sessions_convert_symbols</span>] = <span class="ruby-keyword">true</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:sessions_convert_symbols</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-split_secret'>
+<a name='method-c-split_secret'></a>
+<div class='synopsis'>
+<span class='name'>split_secret</span>
+<span class='arguments'>(name, secret)</span>
+
+</div>
+<div class='description'>
+
+<p>Split given secret into a cipher secret and an hmac secret.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-split_secret-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-split_secret-source'><span class="ruby-comment"># File lib/roda/plugins/sessions.rb, line 156</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">split_secret</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">secret</span>)&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;sessions plugin :#{name} option must be a String&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">secret</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;invalid sessions plugin :#{name} option length: #{secret.bytesize}, must be &gt;=64&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">secret</span>.<span class="ruby-identifier">bytesize</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">64</span>&#x000A;  <span class="ruby-identifier">hmac_secret</span> = <span class="ruby-identifier">secret</span> = <span class="ruby-identifier">secret</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">force_encoding</span>(<span class="ruby-string">&#39;BINARY&#39;</span>)&#x000A;  <span class="ruby-identifier">cipher_secret</span> = <span class="ruby-identifier">secret</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>, <span class="ruby-value">32</span>)&#x000A;  [<span class="ruby-identifier">cipher_secret</span>.<span class="ruby-identifier">freeze</span>, <span class="ruby-identifier">hmac_secret</span>.<span class="ruby-identifier">freeze</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
