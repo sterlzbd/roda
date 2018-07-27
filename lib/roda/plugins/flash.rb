@@ -36,6 +36,10 @@ class Roda
     #     flash['a'] # = >'b'
     #   end
     module Flash
+      def self.load_dependencies(app)
+        app.plugin :_after_hook
+      end
+
       # Simple flash hash, where assiging to the hash updates the flash
       # used in the following request.
       class FlashHash < DelegateClass(Hash)
@@ -95,11 +99,11 @@ class Roda
           @_flash ||= FlashHash.new(session['_flash'] || (session['_flash'] = session.delete(:_flash)))
         end
 
+        private
+
         # If the routing doesn't raise an error, rotate the flash
         # hash in the session so the next request has access to it.
-        def call
-          res = super
-
+        def _roda_after_40(_)
           if f = @_flash
             f = f.next
             if f.empty?
@@ -108,8 +112,6 @@ class Roda
               session['_flash'] = f
             end
           end
-
-          res
         end
       end
     end

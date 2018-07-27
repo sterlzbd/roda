@@ -50,10 +50,6 @@ class Roda
     # if the final cookie is too large (>=4096 bytes), a Roda::RodaPlugins::Sessions::CookieTooLarge
     # exception will be raised.
     #
-    # If the flash plugin is used, the sessions plugin should be loaded after the flash
-    # plugin, so that the flash plugin rotates the flash in the session before the sessions
-    # plugin serializes the session.
-    #
     # = Required Options
     #
     # The session cookies this plugin uses are both encrypted and signed, so two separate
@@ -153,6 +149,10 @@ class Roda
       class CookieTooLarge < RodaError
       end
 
+      def self.load_dependencies(app, opts=OPTS)
+        app.plugin :_after_hook
+      end
+
       # Split given secret into a cipher secret and an hmac secret.
       def self.split_secret(name, secret)
         raise RodaError, "sessions plugin :#{name} option must be a String" unless secret.is_a?(String)
@@ -194,19 +194,6 @@ class Roda
       end
 
       module InstanceMethods
-        # If session information has been set in the request environment,
-        # update the rack response headers to set the session cookie in
-        # the response.
-        def call
-          res = super
-
-          if session = env['rack.session']
-            @_request.persist_session(res[1], session)
-          end
-
-          res
-        end
-
         # Clear data from the session, and update the request environment
         # so that the session cookie will use a new creation timestamp
         # instead of the previous creation timestamp.
@@ -215,6 +202,17 @@ class Roda
           env.delete(SESSION_CREATED_AT)
           env.delete(SESSION_UPDATED_AT)
           nil
+        end
+
+        private
+
+        # If session information has been set in the request environment,
+        # update the rack response headers to set the session cookie in
+        # the response.
+        def _roda_after_50(res)
+          if res && (session = env['rack.session'])
+            @_request.persist_session(res[1], session)
+          end
         end
       end
 

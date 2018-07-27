@@ -52,6 +52,10 @@ class Roda
     # the normal +route+ class method to define your routing tree.  This plugin does make it simpler to
     # add additional routes after the routing tree has already been defined, though.
     module ClassLevelRouting
+      def self.load_dependencies(app)
+        app.plugin :_after_hook
+      end
+
       # Initialize the class_routes array when the plugin is loaded.  Also, if the application doesn't
       # currently have a routing block, setup an empty routing block so that things will still work if
       # a routing block isn't added.
@@ -76,28 +80,29 @@ class Roda
       end
 
       module InstanceMethods
+        def initialize(_)
+          super
+          @_original_remaining_path = @_request.remaining_path
+        end
+
+        private
+
         # If the normal routing tree doesn't handle an action, try each class level route
         # to see if it matches.
-        def call
-          req = @_request
-          rp = req.remaining_path
-          result = super
-
-          if result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
+        def _roda_after_10(result)
+          if result && result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
             # Reset the response so it doesn't inherit the status or any headers from
             # the original response.
             @_response.send(:initialize)
-            super do |r|
+            result.replace(_call do |r|
               opts[:class_level_routes].each do |meth, args, blk|
-                req.instance_variable_set(:@remaining_path, rp)
+                r.instance_variable_set(:@remaining_path, @_original_remaining_path)
                 r.public_send(meth, *args) do |*a|
                   instance_exec(*a, &blk)
                 end
               end
               nil
-            end
-          else
-            result
+            end)
           end
         end
       end

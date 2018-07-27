@@ -239,6 +239,7 @@ class Roda
         # Build the rack app to use
         def build_rack_app
           if block = @route_block
+            block = rack_app_route_block(block)
             app = lambda{|env| new(env).call(&block)}
             @middleware.reverse_each do |args, bl|
               mid, *args = args
@@ -247,6 +248,12 @@ class Roda
             end
             @app = app
           end
+        end
+
+        # The route block to use when building the rack app.
+        # Can be modified by plugins.
+        def rack_app_route_block(block)
+          block
         end
       end
 
@@ -276,6 +283,10 @@ class Roda
             @_response.finish
           end
         end
+
+        # Private alias for internal use
+        alias _call call
+        private :_call
 
         # The environment hash for the current request. Example:
         #

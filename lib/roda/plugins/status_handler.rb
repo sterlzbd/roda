@@ -23,6 +23,10 @@ class Roda
     # cleared.  So if you want to be sure the headers are set even in your block,
     # you need to reset them in the block.
     module StatusHandler
+      def self.load_dependencies(app)
+        app.plugin :_after_hook
+      end
+
       def self.configure(app)
         app.opts[:status_handler] ||= {}
       end
@@ -41,15 +45,13 @@ class Roda
       end
 
       module InstanceMethods
-        # If routing returns a response we have a handler for, call that handler.
-        def call
-          result = super
+        private
 
-          if (block = opts[:status_handler][result[0]]) && (v = result[2]).is_a?(Array) && v.empty?
+        # If routing returns a response we have a handler for, call that handler.
+        def _roda_after_20(result)
+          if result && (block = opts[:status_handler][result[0]]) && (v = result[2]).is_a?(Array) && v.empty?
             @_response.headers.clear
-            super(&block)
-          else
-            result
+            result.replace(_call(&block))
           end
         end
       end

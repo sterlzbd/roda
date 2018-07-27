@@ -30,8 +30,14 @@ class Roda
     # Note that the after hook is called with the rack response array
     # of status, headers, and body.  If it wants to change the response,
     # it must mutate this argument, calling <tt>response.status=</tt> inside
-    # an after block will not affect the returned status.
+    # an after block will not affect the returned status. Note that after
+    # hooks can be called with nil if an exception is raised during routing.
     module Hooks
+      def self.load_dependencies(app)
+        app.plugin :_before_hook
+        app.plugin :_after_hook
+      end
+
       def self.configure(app)
         app.opts[:before_hook] ||= nil
         app.opts[:after_hook] ||= nil
@@ -70,19 +76,19 @@ class Roda
       end
 
       module InstanceMethods
-        # Before routing, execute the before hooks, and
-        # execute the after hooks before returning.
-        def call(&block)
-          res = super do |r|
-            if b = opts[:before_hook]
-              instance_exec(&b)
-            end
+        private
 
-            instance_exec(r, &block)
-          end
-        ensure
+        # Run after hooks.
+        def _roda_after_90(res)
           if b = opts[:after_hook]
             instance_exec(res, &b)
+          end
+        end
+
+        # Run before hooks.
+        def _roda_before_10
+          if b = opts[:before_hook]
+            instance_exec(&b)
           end
         end
       end

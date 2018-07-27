@@ -144,6 +144,28 @@ describe "error_handler plugin" do
     proc{req}.must_raise(ArgumentError)
   end
 
+  it "logs exceptions during after processing of error handler" do
+    app(:bare) do
+      plugin :error_handler do |e|
+        e.message * 2
+      end
+      plugin :hooks
+
+      after do
+        raise "foo"
+      end
+
+      route do |r|
+        ''
+      end
+    end
+
+    errors = StringIO.new
+    body('rack.errors'=>errors).must_equal 'foofoo'
+    errors.rewind
+    errors.read.split("\n").first.must_equal "Error in after hook processing of error handler: RuntimeError: foo"
+  end
+
   it "has access to current remaining_path" do
     app(:bare) do
       plugin :error_handler do |e|

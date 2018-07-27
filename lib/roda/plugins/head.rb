@@ -37,6 +37,9 @@ class Roda
     # this plugin those HEAD requests will return a 404 status, which
     # may prevent search engines from crawling your website.
     module Head
+      def self.load_dependencies(app)
+        app.plugin :_after_hook
+      end
 
       # used to ensure proper resource release on HEAD requests
       # we do not respond to a to_path method, here.
@@ -56,11 +59,12 @@ class Roda
       end
 
       module InstanceMethods
+        private
+
         # Always use an empty response body for head requests, with a
         # content length of 0.
-        def call(*)
-          res = super
-          if @_request.head?
+        def _roda_after_30(res)
+          if res && @_request.head?
             body = res[2]
             if body.respond_to?(:close)
               res[2] = CloseLater.new(body)
@@ -68,7 +72,6 @@ class Roda
               res[2] = EMPTY_ARRAY
             end
           end
-          res
         end
       end
 

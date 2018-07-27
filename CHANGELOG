@@ -1,3 +1,9 @@
+= master
+
+* Log but otherwise ignore exceptions raised by after processing of error handler response (jeremyevans)
+
+* Modify internal before/after processing to avoid plugin load order issues (jeremyevans)
+
 = 3.10.0 (2018-07-18)
 
 * Remove flash key from session if new flash is empty when rotating flash (jeremyevans)

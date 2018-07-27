@@ -3,47 +3,49 @@ require_relative "../spec_helper"
 describe "flash plugin" do 
   include CookieJar
 
-  it "flash.now[] sets flash for current page" do
-    app(:bare) do
-      send(*DEFAULT_SESSION_ARGS)
-      plugin :flash
+  [lambda{send(*DEFAULT_SESSION_ARGS); plugin :flash},
+   lambda{plugin :flash; send(*DEFAULT_SESSION_ARGS)}].each do  |config|
 
-      route do |r|
-        r.on do
-          flash.now['a'] = 'b'
-          flash['a']
+    it "flash.now[] sets flash for current page" do
+      app(:bare) do
+        instance_exec(&config)
+
+        route do |r|
+          r.on do
+            flash.now['a'] = 'b'
+            flash['a']
+          end
         end
       end
+
+      body.must_equal 'b'
     end
 
-    body.must_equal 'b'
-  end
+    it "flash[] sets flash for next page" do
+      app(:bare) do
+        instance_exec(&config)
 
-  it "flash[] sets flash for next page" do
-    app(:bare) do
-      plugin :flash
-      send(*DEFAULT_SESSION_ARGS)
+        route do |r|
+          r.get('a'){"c#{flash['a']}"}
+          r.get('f'){flash; session['_flash'].inspect}
 
-      route do |r|
-        r.get('a'){"c#{flash['a']}"}
-        r.get('f'){flash; session['_flash'].inspect}
-
-        flash['a'] = "b#{flash['a']}"
-        flash['a'] || ''
+          flash['a'] = "b#{flash['a']}"
+          flash['a'] || ''
+        end
       end
+
+      body.must_equal ''
+      body.must_equal 'b'
+      body.must_equal 'bb'
+
+      body('/a').must_equal 'cbbb'
+      body.must_equal ''
+      body.must_equal 'b'
+      body.must_equal 'bb'
+
+      body('/f').must_equal '{"a"=>"bbb"}'
+      body('/f').must_equal 'nil'
     end
-
-    body.must_equal ''
-    body.must_equal 'b'
-    body.must_equal 'bb'
-
-    body('/a').must_equal 'cbbb'
-    body.must_equal ''
-    body.must_equal 'b'
-    body.must_equal 'bb'
-
-    body('/f').must_equal '{"a"=>"bbb"}'
-    body('/f').must_equal 'nil'
   end
 end
 

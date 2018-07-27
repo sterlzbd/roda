@@ -100,4 +100,32 @@ describe "hooks plugin" do
     end
     status.must_equal 201
   end
+
+  it "works with error plugin when loaded first" do
+    app.plugin(:error_handler){|e| "error"}
+    app.before do
+      raise "before" if @_request.path == '/b'
+    end
+    app.after do
+      raise "after" if @_request.path == '/a'
+    end
+    body('/a').must_equal "error"
+    body('/b').must_equal "error"
+  end
+
+  it "works with error plugin when loaded after" do
+    app(:bare) do
+      plugin(:error_handler){|e| "error"}
+      plugin :hooks
+      before do
+        raise "before" if @_request.path == '/b'
+      end
+      after do
+        raise "after" if @_request.path == '/a'
+      end
+      route{}
+    end
+    body('/a').must_equal "error"
+    body('/b').must_equal "error"
+  end
 end

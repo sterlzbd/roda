@@ -66,6 +66,26 @@ describe "static_routing plugin" do
     a.must_equal [1,3,2]
   end
 
+  it "works with hooks plugin if loaded before" do
+    a = []
+    app(:bare) do
+      plugin :static_routing
+      plugin :hooks
+
+      before{a << 1}
+      after{a << 2}
+
+      static_route "/foo" do |r|
+        a << 3
+        "bar"
+      end
+
+      route{}
+    end
+    body('/foo').must_equal 'bar'
+    a.must_equal [1,3,2]
+  end
+
   it "does not allow placeholders in static routes" do
     app(:bare) do
       plugin :static_routing

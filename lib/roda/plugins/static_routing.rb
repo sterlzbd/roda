@@ -48,10 +48,11 @@ class Roda
     # As shown above, you can use Roda's routing tree methods inside the
     # static_route block to have shared behavior for different request methods,
     # while still handling the request methods differently.
-    #
-    # Note that if you want to use the static_routing plugin and the hooks
-    # plugin at the same time, you should load the hooks plugin first.
     module StaticRouting
+      def self.load_dependencies(app)
+        app.plugin :_before_hook
+      end
+
       def self.configure(app)
         app.opts[:static_routes] = {}
       end
@@ -104,15 +105,14 @@ class Roda
       end
 
       module InstanceMethods
+        private
+
         # If there is a static routing method for the given path, call it
         # instead having the routing tree handle the request.
-        def call(&block)
-          super do |r|
-            if route = self.class.static_route_for(r.request_method, r.path_info)
-              r.static_route(&route)
-            else
-              instance_exec(r, &block)
-            end
+        def _roda_before_30
+          r = @_request
+          if route = self.class.static_route_for(r.request_method, r.path_info)
+            r.static_route(&route)
           end
         end
       end
