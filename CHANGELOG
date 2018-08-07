@@ -1,5 +1,7 @@
 = master
 
+* Disable default compression of sessions over 128 bytes in the sessions plugin (jeremyevans)
+
 * Log but otherwise ignore exceptions raised by after processing of error handler response (jeremyevans)
 
 * Modify internal before/after processing to avoid plugin load order issues (jeremyevans)

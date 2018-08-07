@@ -205,14 +205,14 @@ describe "sessions plugin" do
 
   it "compresses data over a certain size by default" do
     long = 'b'*8192
+    proc{body("/s/foo/#{long}")}.must_raise Roda::RodaPlugins::Sessions::CookieTooLarge
+
+    @app.plugin(:sessions, :gzip_over=>8000)
     body("/s/foo/#{long}").must_equal long
-    body("/g/foo").must_equal long
+    body("/g/foo", 'QUERY_STRING'=>'sut=3700').must_equal long
 
     @app.plugin(:sessions, :gzip_over=>15000)
     proc{body("/g/foo", 'QUERY_STRING'=>'sut=3700')}.must_raise Roda::RodaPlugins::Sessions::CookieTooLarge
-
-    @app.plugin(:sessions, :gzip_over=>8000)
-    body("/g/foo", 'QUERY_STRING'=>'sut=3700').must_equal long
 
     errors.must_equal []
   end

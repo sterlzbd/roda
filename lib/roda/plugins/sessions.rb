@@ -21,8 +21,7 @@ class Roda
     # way to support sessions in Roda applications.
     #
     # The session cookies are encrypted with AES-256-CTR and then signed with HMAC-SHA-256.
-    # By default, session data over a certain size is compressed to reduced space, and
-    # is padded to reduce information leaked based on the session size.
+    # By default, session data is padded to reduce information leaked based on the session size.
     #
     # Sessions are serialized via JSON, so session information should only store data that
     # allows roundtrips via JSON (String, Integer, Float, Array, Hash, true, false, and nil).
@@ -34,20 +33,18 @@ class Roda
     # and does not convert all keys to strings.
     #
     # All sessions are timestamped and session expiration is enabled by default, with sessions
-    # being valid for 30 days maximum and 7 days since last use.  Session creation time is
+    # being valid for 30 days maximum and 7 days since last use by default.  Session creation time is
     # reset whenever the session is empty when serialized and also whenever +clear_session+
     # is called while processing the request.
     #
-    # Session secrets can be rotated, and if so both the cipher and HMAC secrets should be
-    # rotated at the same time.  See options below.
+    # Session secrets can be rotated.  See options below.
     #
     # The sessions plugin can transparently upgrade sessions from Rack::Session::Cookie
     # if the default Rack::Session::Cookie coder and HMAC are used, see options below.
     # It is recommended to only enable transparent upgrades for a brief transition period,
     # and remove support for them once old sessions have converted or timed out.
     #
-    # While session data will be compressed by default for sessions over a certain size,
-    # if the final cookie is too large (>=4096 bytes), a Roda::RodaPlugins::Sessions::CookieTooLarge
+    # If the final cookie is too large (>=4096 bytes), a Roda::RodaPlugins::Sessions::CookieTooLarge
     # exception will be raised.
     #
     # = Required Options
@@ -66,7 +63,9 @@ class Roda
     #                    that.  If the +:secure+ option is not present in the hash, then
     #                    <tt>secure: true</tt> is also set if the request is made over HTTPS.  If this option is
     #                    given, it will be merged into the default cookie options.
-    # :gzip_over :: For session data over this many bytes, compress it with the deflate algorithm (default: 128).
+    # :gzip_over :: For session data over this many bytes, compress it with the deflate algorithm (default: nil,
+    #               so never compress).  Note that compression should not be enabled if you are storing data in
+    #               the session derived from user input and also storing sensitive data in the session.
     # :key :: The cookie name to use (default: <tt>'roda.session'</tt>)
     # :max_seconds :: The maximum number of seconds to allow for total session lifetime, starting with when
     #                 the session was originally created.  Default is <tt>86400*30</tt> (30 days). Can be set to
@@ -136,7 +135,7 @@ class Roda
     #                    deflate compression, this contains the deflate compressed data.
     module Sessions
       DEFAULT_COOKIE_OPTIONS = {:httponly=>true, :path=>'/'.freeze, :same_site=>:lax}.freeze
-      DEFAULT_OPTIONS = {:key => 'roda.session'.freeze, :max_seconds=>86400*30, :max_idle_seconds=>86400*7, :pad_size=>32, :gzip_over=>128, :skip_within=>3600}.freeze
+      DEFAULT_OPTIONS = {:key => 'roda.session'.freeze, :max_seconds=>86400*30, :max_idle_seconds=>86400*7, :pad_size=>32, :gzip_over=>nil, :skip_within=>3600}.freeze
       DEFLATE_BIT  = 0x1000
       PADDING_MASK = 0x0fff
       SESSION_CREATED_AT = 'roda.session.created_at'.freeze
@@ -399,8 +398,9 @@ class Roda
 
           bitmap = 0
           json_length = json_data.bytesize
+          gzip_over = opts[:gzip_over]
 
-          if json_length > opts[:gzip_over]
+          if gzip_over && json_length > gzip_over
             json_data = Zlib.deflate(json_data)
             json_length = json_data.bytesize
             bitmap |= DEFLATE_BIT
