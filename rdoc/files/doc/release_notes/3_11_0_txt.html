@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.11.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.11.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.11.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2018-08-15 07:42:06 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The order in which internal plugin before and after hooks are run when
+multiple plugins are loaded is now fixed and does not depend on the order
+in which the plugins are loaded.  This can prevent some issues in cases the
+plugins were not loaded in the order previously recommended in the
+documentation.</p>
+
+<p>Internal plugin before hooks are now run in the following order:</p>
+<ul><li>
+<p>hooks</p>
+</li><li>
+<p>heartbeat</p>
+</li><li>
+<p>static_routing</p>
+</li></ul>
+
+<p>and internal plugin after hooks are now run in the following order:</p>
+<ul><li>
+<p>class_level_routing</p>
+</li><li>
+<p>status_handler</p>
+</li><li>
+<p>head</p>
+</li><li>
+<p>flash</p>
+</li><li>
+<p>session</p>
+</li><li>
+<p>hooks</p>
+</li></ul>
+</li><li>
+<p>Default compression of sessions over 128 bytes in length has been disabled
+in the sessions plugin.  Compression of sessions must now be manually
+enabled if it is desired by setting :gzip_over to an integer.</p>
+
+<p>This change is being made to avoid possible compression ratio attacks if
+both sensitive data and user-submitted data are stored in the session. 
+Such attacks were mitigated by the sessions plugin&#39;s default use of
+padding after compression, and the JSON serialization format used, but
+disabling compression avoids the possibility.</p>
+
+<p>This does not affect backwards compatibility, as compressed sessions will
+still be decompressed correctly, unless the size of the session cookie when
+not using compression is over 4096 bytes.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>When using the error_handler plugin, if routing raises an exception that is
+handled by the error handler, but an exception is raised by a plugin
+internal after hook after the error handler has been run, the exception
+will be logged to the rack.errors entry in the environment, but it will be
+otherwise ignored.</p>
+
+<p>Exceptions raised inside the error handler will continue to be be raised to
+the application&#39;s caller.</p>
+
+<p>Additionally, the error_handler plugin no longers call before hooks during
+error handling.</p>
+</li><li>
+<p>A private Roda#_call method has been added.  This could potentially cause
+issues for applications that add their own _call method.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

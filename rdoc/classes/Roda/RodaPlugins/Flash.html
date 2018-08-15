@@ -50,6 +50,13 @@ request) by using the <code>flash.now</code> method:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>&#x000A;  <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] <span class="ruby-comment"># = &gt;&#39;b&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
+</ol>
+</div>
 <div id='context'>
 </div>
 <div id='class-list'>
@@ -60,6 +67,26 @@ request) by using the <code>flash.now</code> method:</p>
 </ol>
 </div>
 <div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
+<div class='synopsis'>
+<span class='name'>load_dependencies</span>
+<span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/flash.rb, line 38</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
 </div>
 
 </div>

@@ -53,7 +53,15 @@ block can return the request body via a string.</p>
 <p>If an exception is raised, a new response will be used, with the default
 status set to 500, before executing the error handler. The error handler
 can change the response status if necessary, as well set headers and/or
-write to the body, just like a regular request.</p>
+write to the body, just like a regular request.  After the error handler
+returns a response, normal after processing of that response occurs, except
+that an exception during after processing is logged to
+<code>env['rack.errors']</code> but otherwise ignored. This avoids
+recursive calls into the error_handler.  Note that if the error_handler
+itself raises an exception, the exception will be raised without normal
+after processing.  This can cause some after processing to run twice (once
+before the error_handler is called and once after) if later after
+processing raises an exception.</p>
 
 <p>By default, this plugin handles StandardError and ScriptError. To override
 the exception classes it will handle, pass a :classes option to the plugin:</p>
@@ -65,6 +73,7 @@ the exception classes it will handle, pass a :classes option to the plugin:</p>
 <h3>Public Class</h3>
 <ol>
 <li><a href="#method-c-configure">configure</a></li>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -110,7 +119,24 @@ the <a href="../../Roda.html">Roda</a> class with it.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/error_handler.rb, line 42</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_ERROR_HANDLER_CLASSES</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">error</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/error_handler.rb, line 54</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_ERROR_HANDLER_CLASSES</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">error</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
+<div class='synopsis'>
+<span class='name'>load_dependencies</span>
+<span class='arguments'>(app, *)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/error_handler.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

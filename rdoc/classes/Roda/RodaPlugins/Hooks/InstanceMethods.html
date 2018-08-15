@@ -35,39 +35,9 @@ Roda::RodaPlugins::Hooks::InstanceMethods
 <div id='content'>
 <div id='text'>
 <div id='description'></div>
-<div id='method-list'>
-<h2>Methods</h2>
-<h3>Public Instance</h3>
-<ol>
-<li><a href="#method-i-call">call</a></li>
-</ol>
-</div>
 <div id='context'>
 </div>
 <div id='section'>
-<div id='methods'>
-<h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-call'>
-<a name='method-i-call'></a>
-<div class='synopsis'>
-<span class='name'>call</span>
-<span class='arguments'>(&block)</span>
-
-</div>
-<div class='description'>
-
-<p>Before routing, execute the before hooks, and execute the after hooks
-before returning.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 74</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">b</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hook</span>]&#x000A;      <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">r</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">ensure</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">b</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hook</span>]&#x000A;    <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">res</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-</div>
 </div>
 
 </div>

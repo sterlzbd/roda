@@ -62,15 +62,13 @@ static_get method call takes precedence over the static_route method call
 for /foo. As shown above, you can use Roda&#39;s routing tree methods
 inside the static_route block to have shared behavior for different request
 methods, while still handling the request methods differently.</p>
-
-<p>Note that if you want to use the static_routing plugin and the hooks plugin
-at the same time, you should load the hooks plugin first.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
 <h3>Public Class</h3>
 <ol>
 <li><a href="#method-c-configure">configure</a></li>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -100,7 +98,24 @@ at the same time, you should load the hooks plugin first.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 54</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>] = {}&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>] = {}&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
+<div class='synopsis'>
+<span class='name'>load_dependencies</span>
+<span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 51</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

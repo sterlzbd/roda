@@ -39,7 +39,6 @@ Roda::RodaPlugins::Sessions::InstanceMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#method-i-call">call</a></li>
 <li><a href="#method-i-clear_session">clear_session</a></li>
 </ol>
 </div>
@@ -48,26 +47,6 @@ Roda::RodaPlugins::Sessions::InstanceMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-call'>
-<a name='method-i-call'></a>
-<div class='synopsis'>
-<span class='name'>call</span>
-<span class='arguments'>()</span>
-
-</div>
-<div class='description'>
-
-<p>If session information has been set in the request environment, update the
-rack response headers to set the session cookie in the response.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/sessions.rb, line 199</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span>&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.session&#39;</span>]&#x000A;    <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">persist_session</span>(<span class="ruby-identifier">res</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">session</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-</div>
-</div>
 <div class='method public-instance' id='method-method-i-clear_session'>
 <a name='method-i-clear_session'></a>
 <div class='synopsis'>
@@ -86,7 +65,7 @@ creation timestamp.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-clear_session-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-clear_session-source'><span class="ruby-comment"># File lib/roda/plugins/sessions.rb, line 212</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">clear_session</span>&#x000A;  <span class="ruby-identifier">session</span>.<span class="ruby-identifier">clear</span>&#x000A;  <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_CREATED_AT</span>)&#x000A;  <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_UPDATED_AT</span>)&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-clear_session-source'><span class="ruby-comment"># File lib/roda/plugins/sessions.rb, line 198</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">clear_session</span>&#x000A;  <span class="ruby-identifier">session</span>.<span class="ruby-identifier">clear</span>&#x000A;  <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_CREATED_AT</span>)&#x000A;  <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_UPDATED_AT</span>)&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

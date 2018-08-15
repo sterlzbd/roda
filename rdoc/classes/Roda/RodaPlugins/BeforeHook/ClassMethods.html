@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>Roda::RodaPlugins::Head::RequestMethods</title>
+<title>Roda::RodaPlugins::BeforeHook::ClassMethods</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -24,11 +24,11 @@
 <div class='class' id='wrapper'>
 <div class='header'>
 <h1 class='name'><span class='type'>module</span>
-Roda::RodaPlugins::Head::RequestMethods
+Roda::RodaPlugins::BeforeHook::ClassMethods
 </h1>
 <ol class='paths'>
 <li>
-<a href="../../../../files/lib/roda/plugins/head_rb.html">lib/roda/plugins/head.rb</a>
+<a href="../../../../files/lib/roda/plugins/_before_hook_rb.html">lib/roda/plugins/_before_hook.rb</a>
 </li>
 </ol>
 </div>
@@ -39,7 +39,7 @@ Roda::RodaPlugins::Head::RequestMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#method-i-is_get-3F">is_get?</a></li>
+<li><a href="#method-i-include">include</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -47,23 +47,24 @@ Roda::RodaPlugins::Head::RequestMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-is_get-3F'>
-<a name='method-i-is_get-3F'></a>
+<div class='method public-instance' id='method-method-i-include'>
+<a name='method-i-include'></a>
 <div class='synopsis'>
-<span class='name'>is_get?</span>
-<span class='arguments'>()</span>
+<span class='name'>include</span>
+<span class='arguments'>(*a)</span>
 
 </div>
 <div class='description'>
 
-<p>Consider HEAD requests as GET requests.</p>
+<p>Rebuild the _roda_before method whenever a plugin might have added a
+<em>roda_before</em>* method.</p>
 
 </div>
 <div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-is_get-3F-source&#39;); return false'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-include-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-is_get-3F-source'><span class="ruby-comment"># File lib/roda/plugins/head.rb, line 79</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">is_get?</span>&#x000A;  <span class="ruby-keyword">super</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">head?</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-include-source'><span class="ruby-comment"># File lib/roda/plugins/_before_hook.rb, line 22</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">include</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">def_roda_before</span>&#x000A;  <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

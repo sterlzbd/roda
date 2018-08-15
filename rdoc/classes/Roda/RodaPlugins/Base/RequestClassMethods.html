@@ -96,7 +96,7 @@ pattern to a pattern that does not partial segments.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-cached_matcher-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-cached_matcher-source'><span class="ruby-comment"># File lib/roda.rb, line 325</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;  <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;    <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">pattern</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-cached_matcher-source'><span class="ruby-comment"># File lib/roda.rb, line 336</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;  <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;    <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">pattern</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inspect'>
@@ -118,7 +118,7 @@ subclass, make inspect reflect the likely name for the class.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inspect-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 338</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>&#x000A;  <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 349</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>&#x000A;  <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

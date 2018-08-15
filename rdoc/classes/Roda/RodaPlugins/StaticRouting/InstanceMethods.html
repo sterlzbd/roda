@@ -35,39 +35,9 @@ Roda::RodaPlugins::StaticRouting::InstanceMethods
 <div id='content'>
 <div id='text'>
 <div id='description'></div>
-<div id='method-list'>
-<h2>Methods</h2>
-<h3>Public Instance</h3>
-<ol>
-<li><a href="#method-i-call">call</a></li>
-</ol>
-</div>
 <div id='context'>
 </div>
 <div id='section'>
-<div id='methods'>
-<h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-call'>
-<a name='method-i-call'></a>
-<div class='synopsis'>
-<span class='name'>call</span>
-<span class='arguments'>(&block)</span>
-
-</div>
-<div class='description'>
-
-<p>If there is a static routing method for the given path, call it instead
-having the routing tree handle the request.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 108</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">super</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">route</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">static_route_for</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">request_method</span>, <span class="ruby-identifier">r</span>.<span class="ruby-identifier">path_info</span>)&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">static_route</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">route</span>)&#x000A;    <span class="ruby-keyword">else</span>&#x000A;      <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">r</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-</div>
 </div>
 
 </div>
