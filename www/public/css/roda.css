@@ -85,6 +85,8 @@ a#logo {width: 290px; display: block; margin-top: 40px;}
 #features strong { font: 1.4em Bold; }
 #features p {margin-top: 0;}
 #compare h2 { font: 1.2em Bold;}
+
+.compare p {font-family: Thin; margin-top: 0;}
 #ecosystem h2{ padding-bottom: 0; margin-bottom: 0; }
 #ecosystem strong {font-size: 1.4em; padding: 20px 0; display: inline-block; position: relative;}
 #ecosystem svg.like {position: absolute; left: -70px; top: 22px;}
@@ -160,4 +162,3 @@ body.index :not(pre) > code[class*="language-"], body.index pre[class*="language
 .token.important, .token.bold { font-weight: bold; }
 .token.italic { font-style: italic; }
 .token.entity { cursor: help; }
-
