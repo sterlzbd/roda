@@ -1,3 +1,7 @@
+= master
+
+* Add common_logger plugin for common log support (jeremyevans)
+
 = 3.11.0 (2018-08-15)
 
 * Disable default compression of sessions over 128 bytes in the sessions plugin (jeremyevans)
