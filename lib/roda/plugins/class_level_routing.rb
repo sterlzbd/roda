@@ -89,7 +89,7 @@ class Roda
 
         # If the normal routing tree doesn't handle an action, try each class level route
         # to see if it matches.
-        def _roda_after_10(result)
+        def _roda_after_10__class_level_routing(result)
           if result && result[0] == 404 && (v = result[2]).is_a?(Array) && v.empty?
             # Reset the response so it doesn't inherit the status or any headers from
             # the original response.

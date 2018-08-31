@@ -63,7 +63,7 @@ class Roda
 
         # Always use an empty response body for head requests, with a
         # content length of 0.
-        def _roda_after_30(res)
+        def _roda_after_30__head(res)
           if res && @_request.head?
             body = res[2]
             if body.respond_to?(:close)

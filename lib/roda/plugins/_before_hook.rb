@@ -31,7 +31,7 @@ class Roda
         # Build a _roda_before method that calls each _roda_before_* method
         # in order.
         def def_roda_before
-          meths = private_instance_methods.grep(/\A_roda_before_\d\d\z/).sort.join(';')
+          meths = private_instance_methods.grep(/\A_roda_before_\d\d/).sort.join(';')
           class_eval("def _roda_before; #{meths} end", __FILE__, __LINE__)
           private :_roda_before
         end

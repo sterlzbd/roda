@@ -79,14 +79,14 @@ class Roda
         private
 
         # Run after hooks.
-        def _roda_after_90(res)
+        def _roda_after_80__hooks(res)
           if b = opts[:after_hook]
             instance_exec(res, &b)
           end
         end
 
         # Run before hooks.
-        def _roda_before_10
+        def _roda_before_10__hooks
           if b = opts[:before_hook]
             instance_exec(&b)
           end

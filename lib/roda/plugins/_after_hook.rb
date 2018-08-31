@@ -13,7 +13,7 @@ class Roda
         # have added a _roda_after_* method.
         def include(*)
           res = super
-          meths = private_instance_methods.grep(/\A_roda_after_\d\d\z/).sort.map{|s| "#{s}(res)"}.join(';')
+          meths = private_instance_methods.grep(/\A_roda_after_\d\d/).sort.map{|s| "#{s}(res)"}.join(';')
           class_eval("def _roda_after(res); #{meths} end", __FILE__, __LINE__)
           private :_roda_after
           res

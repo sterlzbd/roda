@@ -103,7 +103,7 @@ class Roda
 
         # If the routing doesn't raise an error, rotate the flash
         # hash in the session so the next request has access to it.
-        def _roda_after_40(_)
+        def _roda_after_40__flash(_)
           if f = @_flash
             f = f.next
             if f.empty?

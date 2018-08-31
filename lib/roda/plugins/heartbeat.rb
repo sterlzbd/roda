@@ -29,7 +29,7 @@ class Roda
         private
 
         # If the request is for a heartbeat path, return the heartbeat response.
-        def _roda_before_20
+        def _roda_before_20__heartbeat
           if env['PATH_INFO'] == opts[:heartbeat_path]
             response = HEARTBEAT_RESPONSE.dup
             response[1] = Hash[response[1]]

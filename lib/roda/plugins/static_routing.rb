@@ -109,7 +109,7 @@ class Roda
 
         # If there is a static routing method for the given path, call it
         # instead having the routing tree handle the request.
-        def _roda_before_30
+        def _roda_before_30__static_routing
           r = @_request
           if route = self.class.static_route_for(r.request_method, r.path_info)
             r.static_route(&route)

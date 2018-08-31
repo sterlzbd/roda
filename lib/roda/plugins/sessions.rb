@@ -208,7 +208,7 @@ class Roda
         # If session information has been set in the request environment,
         # update the rack response headers to set the session cookie in
         # the response.
-        def _roda_after_50(res)
+        def _roda_after_50__sessions(res)
           if res && (session = env['rack.session'])
             @_request.persist_session(res[1], session)
           end
