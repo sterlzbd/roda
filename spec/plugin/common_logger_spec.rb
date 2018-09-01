@@ -14,26 +14,26 @@ describe "common_logger plugin" do
 
     body.must_equal '/'
     @logger.rewind
-    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d -\d\d\d\d\] "GET \/ " 200 1 0.\d\d\d\d\n\z/
+    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 200 1 0.\d\d\d\d\n\z/
 
     @logger.rewind
     @logger.truncate(0)
     body('', 'HTTP_X_FORWARDED_FOR'=>'1.1.1.1', 'REMOTE_USER'=>'je', 'REQUEST_METHOD'=>'POST', 'QUERY_STRING'=>'', "HTTP_VERSION"=>'HTTP/1.1').must_equal ''
     @logger.rewind
-    @logger.read.must_match /\A1\.1\.1\.1 - je \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d -\d\d\d\d\] "POST  HTTP\/1.1" 200 - 0.\d\d\d\d\n\z/
+    @logger.read.must_match /\A1\.1\.1\.1 - je \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "POST  HTTP\/1.1" 200 - 0.\d\d\d\d\n\z/
 
     @logger.rewind
     @logger.truncate(0)
     body('/b', 'REMOTE_ADDR'=>'1.1.1.2', 'QUERY_STRING'=>'foo=bar', "HTTP_VERSION"=>'HTTP/1.0').must_equal '/b'
     @logger.rewind
-    @logger.read.must_match /\A1\.1\.1\.2 - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d -\d\d\d\d\] "GET \/b\?foo=bar HTTP\/1.0" 200 2 0.\d\d\d\d\n\z/
+    @logger.read.must_match /\A1\.1\.1\.2 - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/b\?foo=bar HTTP\/1.0" 200 2 0.\d\d\d\d\n\z/
 
     @app.plugin :common_logger, Logger.new(@logger)
     @logger.rewind
     @logger.truncate(0)
     body.must_equal '/'
     @logger.rewind
-    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d -\d\d\d\d\] "GET \/ " 200 1 0.\d\d\d\d\n\z/
+    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 200 1 0.\d\d\d\d\n\z/
   end
 
   it 'skips timer information if not available' do
@@ -44,7 +44,7 @@ describe "common_logger plugin" do
 
     body.must_equal '/'
     @logger.rewind
-    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d -\d\d\d\d\] "GET \/ " 200 1 -\n\z/
+    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 200 1 -\n\z/
   end
 
   it 'skips length information if not available' do
@@ -54,6 +54,6 @@ describe "common_logger plugin" do
 
     body.must_equal ''
     @logger.rewind
-    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d -\d\d\d\d\] "GET \/ " 500 - 0.\d\d\d\d\n\z/
+    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 500 - 0.\d\d\d\d\n\z/
   end
 end
