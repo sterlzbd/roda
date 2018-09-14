@@ -50,7 +50,7 @@ class Roda
           elapsed_time = if timer = @_request_timer
             '%0.4f' % (CommonLogger.start_timer - timer)
           else 
-           '-'
+            '-'
           end
 
           env = @_request.env
