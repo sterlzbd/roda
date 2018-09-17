@@ -56,4 +56,30 @@ describe "common_logger plugin" do
     @logger.rewind
     @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 500 - 0.\d\d\d\d\n\z/
   end
+
+  it 'does not log if an error is raised' do
+    cl_app do |r|
+      raise "foo"
+    end
+
+    begin
+      body
+    rescue => e
+    end
+    e.must_be_instance_of(RuntimeError)
+    e.message.must_equal 'foo'
+  end
+
+  it 'logs errors if used with error_handler' do
+    cl_app do |r|
+      raise "foo"
+    end
+    @app.plugin :error_handler do |_|
+      "bad"
+    end
+
+    body.must_equal 'bad'
+    @logger.rewind
+    @logger.read.must_match /\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 500 3 0.\d\d\d\d\n\z/
+  end
 end

@@ -47,6 +47,8 @@ class Roda
 
         # Log request/response information in common log format to logger.
         def _roda_after_90__common_logger(result)
+          return unless result && result[0] && result[1]
+
           elapsed_time = if timer = @_request_timer
             '%0.4f' % (CommonLogger.start_timer - timer)
           else 
