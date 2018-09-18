@@ -1,5 +1,7 @@
 = master
 
+* Add exception_page plugin for showing a page with debugging information for a given exception (jeremyevans)
+
 * Make common_logger plugin handle raised errors (jeremyevans)
 
 = 3.12.0 (2018-09-14)
