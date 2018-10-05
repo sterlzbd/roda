@@ -4,7 +4,10 @@ describe "streaming plugin" do
   it "adds stream method for streaming responses" do
     app(:streaming) do |r|
       stream do |out|
-        %w'a b c'.each{|v| out << v; out.write(v) }
+        %w'a b c'.each do |v|
+          (out << v).must_equal out
+          out.write(v).must_equal 1
+        end
       end
     end
 
@@ -12,6 +15,20 @@ describe "streaming plugin" do
     s.must_equal 200
     h.must_equal('Content-Type'=>'text/html')
     b.to_a.must_equal %w'a a b b c c'
+  end
+
+  it "works with IO.copy_stream" do
+    app(:streaming) do |r|
+      stream do |out|
+        %w'a b c'.each{|v| IO.copy_stream(StringIO.new(v), out) }
+      end
+    end
+
+    s, h, b = req
+    s.must_equal 200
+    h.must_equal('Content-Type'=>'text/html')
+    # dup as copy_stream reuses the buffer
+    b.map(&:dup).must_equal %w'a b c'
   end
 
   it "should handle errors when streaming, and run callbacks" do

@@ -1,5 +1,7 @@
 = master
 
+* Make Stream#write in streaming plugin return number of bytes written instead of self, so it works with IO.copy_stream (jeremyevans)
+
 * Add exception_page plugin for showing a page with debugging information for a given exception (jeremyevans)
 
 * Make common_logger plugin handle raised errors (jeremyevans)

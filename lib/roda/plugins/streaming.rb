@@ -53,12 +53,18 @@ class Roda
           @closed = false
         end
 
-        # Add output to the streaming response body.
+        # Add output to the streaming response body. Returns number of bytes written.
         def write(data)
-          @out.call(data.to_s)
+          data = data.to_s
+          @out.call(data)
+          data.bytesize
+        end
+
+        # Add output to the streaming response body. Returns self.
+        def <<(data)
+          write(data)
           self
         end
-        alias << write
 
         # If not already closed, close the connection, and call
         # any callbacks.
