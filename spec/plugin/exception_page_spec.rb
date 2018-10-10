@@ -66,6 +66,39 @@ describe "exception_page plugin" do
     body.must_include "table td.code"
     body.wont_include "function toggle()"
     body.must_include "\"/foo.js\""
+
+    ep_app{|e| exception_page(e, :assets=>false, :context=>0)}
+    body = body('HTTP_ACCEPT'=>'text/html')
+    body.wont_include "table td.code"
+    body.wont_include "function toggle()"
+    body.wont_include "\"/exception_page.css\""
+    body.wont_include "\"/exception_page.js\""
+
+    ep_app{|e| exception_page(e, :assets=>false, :css_file=>"/foo.css", :context=>0)}
+    body = body('HTTP_ACCEPT'=>'text/html')
+    body.wont_include "table td.code"
+    body.wont_include "function toggle()"
+    body.must_include "\"/foo.css\""
+
+    ep_app{|e| exception_page(e, :assets=>false, :js_file=>"/foo.js", :context=>0)}
+    body = body('HTTP_ACCEPT'=>'text/html')
+    body.wont_include "table td.code"
+    body.wont_include "function toggle()"
+    body.must_include "\"/foo.js\""
+
+    ep_app{|e| exception_page(e, :css_file=>false, :context=>0)}
+    body = body('HTTP_ACCEPT'=>'text/html')
+    body.wont_include "table td.code"
+    body.must_include "function toggle()"
+    body.wont_include "\"/exception_page.css\""
+    body.wont_include "\"/exception_page.js\""
+
+    ep_app{|e| exception_page(e, :js_file=>false, :context=>0)}
+    body = body('HTTP_ACCEPT'=>'text/html')
+    body.must_include "table td.code"
+    body.wont_include "function toggle()"
+    body.wont_include "\"/exception_page.css\""
+    body.wont_include "\"/exception_page.js\""
   end
 
   it "returns plain text page with exception information if text/html is not accepted" do

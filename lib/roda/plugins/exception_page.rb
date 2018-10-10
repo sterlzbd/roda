@@ -181,11 +181,14 @@ END
         #            +/exception_page.js+, assuming that +r.exception_page_assets+ is called
         #            in the route block to serve the exception page assets.  If a String,
         #            uses the string as a prefix, assuming that +r.exception_page_assets+
-        #            is called in a nested block inside the route block.
+        #            is called in a nested block inside the route block. If false, doesn't
+        #            use any CSS or JS.
         # :context :: The number of context lines before and after each line in
         #             the backtrace (default: 7).
-        # :css_file :: A path to the external CSS file for the HTML exception page.
-        # :js_file :: A path to the external javascript file for the HTML exception page.
+        # :css_file :: A path to the external CSS file for the HTML exception page. If false,
+        #              doesn't use any CSS.
+        # :js_file :: A path to the external javascript file for the HTML exception page. If
+        #             false, doesn't use any JS.
         # :json :: Return a hash of exception information.  The hash will have
         #          a single key, "exception", with a value being a hash with
         #          three keys, "class", "message", and "backtrace", which
@@ -204,14 +207,39 @@ END
             }
           elsif env['HTTP_ACCEPT'] =~ /text\/html/
             @_response['Content-Type'] = "text/html"
-            context = opts[:context] || 7
 
+            context = opts[:context] || 7
             css_file = opts[:css_file]
             js_file = opts[:js_file]
-            if prefix = opts[:assets]
+
+            case prefix = opts[:assets]
+            when false
+              css_file = false if css_file.nil?
+              js_file = false if js_file.nil?
+            when nil
+              # nothing
+            else
               prefix = '' if prefix == true
               css_file ||= "#{prefix}/exception_page.css"
               js_file ||= "#{prefix}/exception_page.js"
+            end
+
+            css = case css_file
+            when nil
+              "<style type=\"text/css\">#{ExceptionPage.css}</style>"
+            when false
+              # :nothing
+            else
+              "<link rel=\"stylesheet\" href=\"#{h css_file}\" />"
+            end
+
+            js = case js_file
+            when nil
+              "<script type=\"text/javascript\">\n//<!--\n#{ExceptionPage.js}\n//-->\n</script>"
+            when false
+              # :nothing
+            else
+              "<script type=\"text/javascript\" src=\"#{h js_file}\"></script>"
             end
 
             frames = exception.backtrace.map.with_index do |line, i|
@@ -271,7 +299,7 @@ END
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <title>#{h exception.class} at #{h r.path}</title>
-  #{css_file ? "<link rel=\"stylesheet\"  href=\"#{h css_file}\" />" : "<style type=\"text/css\">#{ExceptionPage.css}</style>"}
+  #{css}
 </head>
 <body>
 
@@ -346,7 +374,7 @@ END1
   </p>
 </div>
 
-#{js_file ? "<script type=\"text/javascript\" src=\"#{h js_file}\"></script>" : "<script type=\"text/javascript\">\n//<!--\n#{ExceptionPage.js}\n//-->\n</script>"}
+#{js}
 </body>
 </html>
 END
