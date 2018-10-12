@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::ExceptionPage</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::ExceptionPage
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/exception_page_rb.html">lib/roda/plugins/exception_page.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The exception_page plugin provides an exception_page method that is
+designed to be called inside the error handler to provide a page to the
+developer with debugging information. It should only be used in developer
+environments with trusted clients, as it can leak source code and other
+information that may be useful for attackers if used in other environments.</p>
+
+<p>Example:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:exception_page</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-keyword">next</span> <span class="ruby-identifier">exception_page</span>(<span class="ruby-identifier">e</span>) <span class="ruby-keyword">if</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;development&#39;</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The exception_page plugin is based on Rack::ShowExceptions, with the
+following differences:</p>
+<ul><li>
+<p>Not a middleware, so it doesn&#39;t handle exceptions itself, and has no
+effect on the callstack unless the exception_page method is called.</p>
+</li><li>
+<p>Supports external javascript and stylesheets, allowing context toggling to
+work in applications that use a content security policy to restrict inline
+javascript and stylesheets (:assets, :css_file, and :js_file options).</p>
+</li><li>
+<p>Has fewer dependencies (does not require ostruct and erb).</p>
+</li><li>
+<p>Sets the Content-Type for the response, and returns the body string, but
+does not modify other headers or the response status.</p>
+</li><li>
+<p>Supports a configurable amount of context lines in backtraces (:context
+option).</p>
+</li><li>
+<p>Supports optional JSON formatted output, if used with the json plugin
+(:json option).</p>
+</li></ul>
+
+<p>To use the external javascript and stylesheets, you can call
+<code>r.exception_page_assets</code> in your routing tree:</p>
+
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;&#x000A;  <span class="ruby-comment"># serve GET /exception_page.{css,js} requests</span>&#x000A;  <span class="ruby-comment"># Use with assets: true +exception_page+ option</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">exception_page_assets</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;static&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># serve GET /static/exception_page.{css,js} requests</span>&#x000A;    <span class="ruby-comment"># Use with assets: &#39;/static&#39; +exception_page+ option</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">exception_page_assets</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>It&#39;s also possible to store the asset information in static files and
+serve those, you can get the current assets by calling:</p>
+
+<pre class="ruby"><span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">ExceptionPage</span>.<span class="ruby-identifier">css</span>&#x000A;<span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">ExceptionPage</span>.<span class="ruby-identifier">js</span></pre>
+
+<p>As the exception_page plugin is based on Rack::ShowExceptions, it is also
+under rack&#39;s license:</p>
+
+<p>Copyright (C) 2007-2018 Christian Neukirchen &lt;<a
+href="http://chneukirchen.org/infopage.html">chneukirchen.org/infopage.html</a>&gt;</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+<p>The HTML template used in Rack::ShowExceptions was based on Django&#39;s
+template and is under the following license:</p>
+
+<p>adapted from Django &lt;<a
+href="www.djangoproject.com">www.djangoproject.com</a>&gt; Copyright ©
+Django Software Foundation and individual contributors. Used under the
+modified BSD license: <a
+href="http://www.xfree86.org/3.3.6/COPYRIGHT2.html#5">www.xfree86.org/3.3.6/COPYRIGHT2.html#5</a></p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-css">css</a></li>
+<li><a href="#method-c-js">js</a></li>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="ExceptionPage/InstanceMethods.html">Roda::RodaPlugins::ExceptionPage::InstanceMethods</a></li>
+<li><a href="ExceptionPage/RequestMethods.html">Roda::RodaPlugins::ExceptionPage::RequestMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-css'>
+<a name='method-c-css'></a>
+<div class='synopsis'>
+<span class='name'>css</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Stylesheet used by the HTML exception page</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-css-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-css-source'><span class="ruby-comment"># File lib/roda/plugins/exception_page.rb, line 91</span>&#x000A;      <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">css</span>&#x000A;        <span class="ruby-identifier">&lt;&lt;END</span>&#x000A;<span class="ruby-value">html * { padding:0; margin:0; }&#x000A;body * { padding:10px 20px; }&#x000A;body * * { padding:0; }&#x000A;body { font:small sans-serif; }&#x000A;body&gt;div { border-bottom:1px solid #ddd; }&#x000A;h1 { font-weight:normal; }&#x000A;h2 { margin-bottom:.8em; }&#x000A;h2 span { font-size:80%; color:#666; font-weight:normal; }&#x000A;h3 { margin:1em 0 .5em 0; }&#x000A;h4 { margin:0 0 .5em 0; font-weight: normal; }&#x000A;table {&#x000A;    border:1px solid #ccc; border-collapse: collapse; background:white; }&#x000A;tbody td, tbody th { vertical-align:top; padding:2px 3px; }&#x000A;thead th {&#x000A;    padding:1px 6px 1px 3px; background:#fefefe; text-align:left;&#x000A;    font-weight:normal; font-size:11px; border:1px solid #ddd; }&#x000A;tbody th { text-align:right; color:#666; padding-right:.5em; }&#x000A;table.vars { margin:5px 0 2px 40px; }&#x000A;table.vars td, table.req td { font-family:monospace; }&#x000A;table td.code { width:100%;}&#x000A;table td.code div { overflow:hidden; }&#x000A;table.source th { color:#666; }&#x000A;table.source td {&#x000A;    font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }&#x000A;ul.traceback { list-style-type:none; }&#x000A;ul.traceback li.frame { margin-bottom:1em; }&#x000A;div.context { margin: 10px 0; }&#x000A;div.context ol {&#x000A;    padding-left:30px; margin:0 10px; list-style-position: inside; }&#x000A;div.context ol li {&#x000A;    font-family:monospace; white-space:pre; color:#666; cursor:pointer; }&#x000A;div.context ol.context-line li { color:black; background-color:#ccc; }&#x000A;div.context ol.context-line li span { float: right; }&#x000A;div.commands { margin-left: 40px; }&#x000A;div.commands a { color:black; text-decoration:none; }&#x000A;#summary { background: #ffc; }&#x000A;#summary h2 { font-weight: normal; color: #666; }&#x000A;#summary ul#quicklinks { list-style-type: none; margin-bottom: 2em; }&#x000A;#summary ul#quicklinks li { float: left; padding: 0 1em; }&#x000A;#summary ul#quicklinks&gt;li+li { border-left: 1px #666 solid; }&#x000A;#explanation { background:#eee; }&#x000A;#traceback { background:#eee; }&#x000A;#requestinfo { background:#f6f6f6; padding-left:120px; }&#x000A;#summary table { border:none; background:transparent; }&#x000A;#requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }&#x000A;#requestinfo h3 { margin-bottom:-1em; }&#x000A;.error { background: #ffc; }&#x000A;.specific { color:#cc3300; font-weight:bold; }&#x000A;</span><span class="ruby-identifier">END</span>&#x000A;      <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-js'>
+<a name='method-c-js'></a>
+<div class='synopsis'>
+<span class='name'>js</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Javascript used by the HTML exception page for context toggling</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-js-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-js-source'><span class="ruby-comment"># File lib/roda/plugins/exception_page.rb, line 145</span>&#x000A;      <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">js</span>&#x000A;        <span class="ruby-identifier">&lt;&lt;END</span>&#x000A;<span class="ruby-value">var contexts = document.getElementsByClassName(&#39;context&#39;);&#x000A;var num_contexts = contexts.length;&#x000A;function toggle() {&#x000A;  for (var i = 0; i &lt; arguments.length; i++) {&#x000A;    var e = document.getElementById(arguments[i]);&#x000A;    if (e) {&#x000A;      e.style.display = e.style.display == &#39;none&#39; ? &#39;block&#39; : &#39;none&#39;;&#x000A;    }&#x000A;  }&#x000A;  return false;&#x000A;}&#x000A;for (var j = 0; j &lt; num_contexts; j++) {&#x000A;  contexts[j].onclick = function(){toggle(&#39;b&#39;+this.id, &#39;a&#39;+this.id);}&#x000A;  contexts[j].onclick();&#x000A;}&#x000A;</span><span class="ruby-identifier">END</span>&#x000A;      <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
+<div class='synopsis'>
+<span class='name'>load_dependencies</span>
+<span class='arguments'>(app)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/exception_page.rb, line 86</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:h</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

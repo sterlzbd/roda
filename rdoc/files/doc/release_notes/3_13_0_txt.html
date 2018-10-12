@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.13.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.13.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.13.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2018-10-12 13:18:35 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>An exception_page plugin has been added for displaying debugging
+information for a given exception.  It is based on Rack::ShowExceptions,
+with the following differences:</p>
+<ul><li>
+<p>Not a middleware, so it doesn&#39;t handle exceptions itself, and has no
+effect on the callstack unless the exception_page method is called.</p>
+</li><li>
+<p>Supports external javascript and stylesheets, allowing context toggling to
+work in applications that use a content security policy to restrict inline
+javascript and stylesheets (:assets, :css_file, and :js_file options).</p>
+</li><li>
+<p>Has fewer dependencies (does not require ostruct and erb).</p>
+</li><li>
+<p>Sets the Content-Type for the response, and returns the body string, but
+does not modify other headers or the response status.</p>
+</li><li>
+<p>Supports a configurable amount of context lines in backtraces (:context
+option).</p>
+</li><li>
+<p>Supports optional JSON formatted output, if used with the json plugin
+(:json option).</p>
+</li></ul>
+
+<p>Because this plugin just adds a method you can call, you can selectively
+choose when to display a debugging page and when not to, as well as
+customize the debugging parameters on a per-call basis (such as returning
+JSON formatted debugging information for JSON requests, and HTML formatted
+debugging information for normal requests).</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The common_logger plugin now correctly handles cases where an exception is
+being raised and there is no rack response to introspect.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Stream#write in the streaming plugin now returns the number of bytes
+written instead of self, so it works with IO.copy_stream.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
