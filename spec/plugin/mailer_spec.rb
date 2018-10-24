@@ -102,7 +102,7 @@ describe "mailer plugin" do
     m.attachments.first.content_type.must_match(/mailer_spec\.rb/)
     m.content_type.must_match(/\Amultipart\/mixed/)
     m.parts.length.must_equal 1
-    m.parts.first.body.must_be :==, File.read(__FILE__)
+    m.parts.first.body.decoded.gsub("\r\n", "\n").must_equal File.read(__FILE__)
   end
 
   it "supports attachments with blocks" do
@@ -120,7 +120,7 @@ describe "mailer plugin" do
     m.attachments.first.content_type.must_equal 'text/foo'
     m.content_type.must_match(/\Amultipart\/mixed/)
     m.parts.length.must_equal 1
-    m.parts.first.body.must_be :==, File.read(__FILE__)
+    m.parts.first.body.decoded.gsub("\r\n", "\n").must_equal File.read(__FILE__)
   end
 
   it "supports plain-text attachments with an email body" do
@@ -242,7 +242,7 @@ describe "mailer plugin" do
     m.parts.first.content_type.must_match(/\Atext\/html/)
     m.parts.first.body.must_be :==, "a"
     m.parts.last.content_type.must_match(/\Atext\/css/)
-    m.parts.last.body.must_be :==, File.read('spec/assets/css/raw.css')
+    m.parts.last.body.decoded.gsub("\r\n", "\n").must_equal File.read('spec/assets/css/raw.css')
   end
 end
 end
