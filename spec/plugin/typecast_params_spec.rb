@@ -663,6 +663,25 @@ describe "typecast_params plugin" do
     end.must_equal(:a=>1, :b=>[2, 3], :c=>{:d=>4, :e=>5})
   end
 
+  it "#convert! with :symbolize option should not persist" do
+    tp = tp()
+    tp.convert!(:symbolize=>true) do |ptp|
+      ptp.int!('a')
+      ptp.array!(:int, 'b')
+      ptp['c'].convert! do |stp|
+        stp.int!(%w'd e')
+      end
+    end.must_equal(:a=>1, :b=>[2, 3], :c=>{:d=>4, :e=>5})
+
+    tp.convert! do |ptp|
+      ptp.int!('a')
+      ptp.array!(:int, 'b')
+      ptp['c'].convert! do |stp|
+        stp.int!(%w'd e')
+      end
+    end.must_equal("a"=>1, "b"=>[2, 3], "c"=>{"d"=>4, "e"=>5})
+  end
+
   it "#convert! with :symbolize option hash should only include changes made inside block" do
     tp = tp()
     tp.convert!(:symbolize=>true) do |ptp|
@@ -780,6 +799,18 @@ describe "typecast_params plugin" do
         tp0.int(%w'b c')
       end
     end.must_equal(:a=>{:'0'=>{:b=>1, :c=>2}, :'1'=>{:b=>3, :c=>4}})
+  end
+
+  it "#convert_each! with :symbolize option should not persist" do
+    tp = tp('a[][b]=1&a[][c]=2&a[][b]=3&a[][c]=4')
+    tp['a'].convert_each!(:symbolize=>true) do |tp0|
+      tp0.int(%w'b c')
+    end.must_equal [{:b=>1, :c=>2}, {:b=>3, :c=>4}]
+
+    tp = tp('a[][b]=1&a[][c]=2&a[][b]=3&a[][c]=4')
+    tp['a'].convert_each! do |tp0|
+      tp0.int(%w'b c')
+    end.must_equal [{'b'=>1, 'c'=>2}, {'b'=>3, 'c'=>4}]
   end
 
   it "#convert! with :symbolize options specified at different levels should work" do

@@ -587,13 +587,13 @@ class Roda
           end
         end
 
-        # Runs convert! for each key specified by the :keys option.  If :keys option is not given
-        # and the object is an array, runs convert! for all entries in the array.  If the :keys
+        # Runs conversions similar to convert! for each key specified by the :keys option.  If :keys option is not given
+        # and the object is an array, runs conversions for all entries in the array.  If the :keys
         # option is not given and the object is a Hash with string keys '0', '1', ..., 'N' (with
-        # no skipped keys), runs convert! for all entries in the hash.  If :keys option is a Proc
+        # no skipped keys), runs conversions for all entries in the hash.  If :keys option is a Proc
         # or a Method, calls the proc/method with the current object, which should return an
         # array of keys to use.
-        # Passes any options given to #convert!.  Options:
+        # Supports options given to #convert!, and this additional option:
         #
         # :keys :: The keys to extract from the object. If a proc or method,
         #          calls the value with the current object, which should return the array of keys
@@ -692,6 +692,8 @@ class Roda
 
         # Recursively descendent into all known subkeys and get the converted params from each.
         def nested_params
+          return @nested_params if @nested_params
+
           params = @params
 
           if @subs
@@ -762,6 +764,8 @@ class Roda
 
         # Internals of convert! and convert_each!.
         def _capture!(ret, opts)
+          previous_symbolize = @symbolize
+
           unless cap = @capture
             @params = @obj.class.new
             @subs.clear if @subs
@@ -793,10 +797,16 @@ class Roda
             end
           end
         ensure
-          # Only unset capturing if capturing was not already started.
           if capturing_started
+            # Unset capturing if capturing was not already started.
             @capture = nil
+          else
+            # If capturing was already started, record nested params
+            # before resetting symbolize setting.
+            @nested_params = nested_params
           end
+
+          @symbolize = previous_symbolize
         end
 
         # Raise an error if the array given does contains nil values.
