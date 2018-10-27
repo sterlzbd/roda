@@ -530,6 +530,18 @@ describe "typecast_params plugin" do
     end.must_equal('a'=>[{'b'=>[{'e'=>1}]}])
   end
 
+  it "#convert! should not raise errors for missing keys if :raise option is false" do
+    tp = tp('a[b]=1')
+    tp.convert! do |tp0|
+      tp0.convert!('a') do |tp1|
+        tp1.convert!('c', raise: false) do |tp2|
+          tp2.convert!('d') do |tp2|
+          end
+        end
+      end
+    end.must_equal('a'=>{})
+  end
+
   it "#convert! should handle #[] without #convert! at each level" do
     tp = tp('a[b][c][d][e]=1')
     tp.convert! do |tp0|

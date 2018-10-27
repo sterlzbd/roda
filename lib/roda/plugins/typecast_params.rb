@@ -572,6 +572,7 @@ class Roda
         # or nil to convert the current object. If +keys+ is given as a hash, it is used as
         # the options hash. Options:
         #
+        # :raise :: If set to false, do not raise errors for missing keys
         # :symbolize :: Convert any string keys in the resulting hash and for any
         #               conversions below
         def convert!(keys=nil, opts=OPTS)
@@ -581,7 +582,7 @@ class Roda
           end
 
           _capture!(:nested_params, opts) do
-            if sub = subkey(Array(keys).dup, true)
+            if sub = subkey(Array(keys).dup, opts.fetch(:raise, true))
               yield sub
             end
           end
