@@ -597,6 +597,19 @@ describe "typecast_params plugin" do
     end.must_equal('a'=>[1], 'd'=>[2], 'g'=>[nil])
   end
 
+  it "#convert! should handle multiple convert! calls inside" do
+    tp = tp('a[b]=1&c[d]=2')
+    tp.convert! do |tp0|
+      tp0.convert!('a'){|d| d.int('b')}
+      tp0.convert!('c'){|d| d.int('d')}
+    end.must_equal('a'=>{'b'=>1}, 'c'=>{'d'=>2})
+
+    tp.convert!(:symbolize=>true) do |tp0|
+      tp0.convert!('a'){|d| d.int('b')}
+      tp0.convert!('c'){|d| d.int('d')}
+    end.must_equal(:a=>{:b=>1}, :c=>{:d=>2})
+  end
+
   it "#convert_each! should convert each entry in an array" do
     tp = tp('a[][b]=1&a[][c]=2&a[][b]=3&a[][c]=4')
     tp['a'].convert_each! do |tp0|
