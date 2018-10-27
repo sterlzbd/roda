@@ -1,6 +1,8 @@
 = master
 
-* Do not persist convert!/convert_each! :symbolize setting in the typecast params plugin (jeremyevans)
+* Add :raise option to convert!/convert_each! in the typecast_params plugin to support not raising for missing keys (celsworth) (#153)
+
+* Do not persist convert!/convert_each! :symbolize setting in the typecast_params plugin (jeremyevans)
 
 = 3.13.0 (2018-10-12)
 
