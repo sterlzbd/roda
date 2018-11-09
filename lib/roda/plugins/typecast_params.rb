@@ -629,7 +629,7 @@ class Roda
 
             keys.map do |i|
               begin
-                if v = subkey([i], true)
+                if v = subkey([i], opts.fetch(:raise, true))
                   yield v
                   v.nested_params if np 
                 end

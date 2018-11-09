@@ -683,6 +683,13 @@ describe "typecast_params plugin" do
     lambda{tp['b'].convert_each!{}}.must_raise @tp_error
   end
 
+  it "#convert_each! should not raise errors for missing keys if :raise option is false" do
+    tp = tp('a[0][b]=1&a[0][c]=2&a[1][b]=3&a[1][c]=4')
+    tp['a'].convert_each!(:keys=>%w'0 2', :raise=>false) do |tp0|
+      tp0.int(%w'b c')
+    end.must_equal [{'b'=>1, 'c'=>2}, nil]
+  end
+
   it "#convert! with :symbolize option should return a hash of converted parameters" do
     tp = tp()
     tp.convert!(:symbolize=>true) do |ptp|
