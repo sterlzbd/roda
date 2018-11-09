@@ -798,13 +798,14 @@ class Roda
             end
           end
         ensure
+          @nested_params = nil
+
           if capturing_started
             # Unset capturing if capturing was not already started.
             @capture = nil
           else
             # If capturing was already started, update cached nested params
             # before resetting symbolize setting. 
-            @nested_params = nil
             @nested_params = nested_params
           end
 

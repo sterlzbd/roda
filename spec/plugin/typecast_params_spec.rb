@@ -534,12 +534,18 @@ describe "typecast_params plugin" do
     tp = tp('a[b]=1')
     tp.convert! do |tp0|
       tp0.convert!('a') do |tp1|
-        tp1.convert!('c', raise: false) do |tp2|
+        tp1.convert!('c', :raise=>false) do |tp2|
           tp2.convert!('d') do |tp2|
           end
         end
       end
     end.must_equal('a'=>{})
+
+    tp.convert!('b', :raise=>false){}.must_equal({})
+
+    tp.convert!('b', :raise=>false) do |tp0|
+        tp1.convert!('c'){}
+    end.must_equal({})
   end
 
   it "#convert! should handle #[] without #convert! at each level" do
