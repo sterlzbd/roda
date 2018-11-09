@@ -1,4 +1,4 @@
-= master
+= 3.14.0 (2018-11-13)
 
 * Add :raise option to convert!/convert_each! in the typecast_params plugin to support not raising for missing keys (celsworth) (#153)
 
