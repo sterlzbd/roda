@@ -17,15 +17,36 @@ class Roda
     #     Some content here.
     #   <% end %>
     #
+    # or:
+    #
+    #   <% content_for :foo do "Some content here." end %>
+    #
     # You can also set the raw content as the second argument,
     # instead of passing a block:
     #
     #   <% content_for :foo, "Some content" %>
     #
     # In the template in which you want to retrieve content,
-    # call content_for without the block:
+    # call content_for without the block or argument:
     #
     #   <%= content_for :foo %>
+    #
+    # Note that when storing content by calling content_for
+    # with a block and embedding template code, the return
+    # value of the block is used as the content (after being
+    # converted to a string).  This can cause issues in some
+    # cases, such as:
+    #
+    #   <% content_for :foo do %>
+    #     <% [1,2,3].each do |i| %>
+    #       Content <%= i %>
+    #     <% end %>
+    #   <% end %>
+    #
+    # In the above example, the return value of the block is
+    # <tt>[1,2,3]</tt>, as Array#each returns the receiver.
+    # If whitespace is not important, you can work around this by
+    # adding an empty line before the end of the content_for block.
     #
     # If content_for is used multiple times with the same key,
     # by default, the last call will append previous calls.
