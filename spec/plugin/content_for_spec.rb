@@ -24,6 +24,12 @@ describe "content_for plugin with erb" do
         r.get 'e' do
           view(:inline => 'a<% content_for :foo do %><% end %>b', :layout => { :inline => 'c<%= yield %>d<%= content_for(:foo) %>e' })
         end
+        r.get 'f' do
+          view(:inline => 'a<% content_for :foo do "f" end %>b', :layout => { :inline => 'c<%= yield %>d<%= content_for(:foo) %>e' })
+        end
+        r.get 'g' do
+          view(:inline => 'a<% content_for :foo do "<" + "%= 1 %" + ">" end %>b', :layout => { :inline => 'c<%= yield %>d<%= content_for(:foo) %>e' })
+        end
       end
     end
   end
@@ -42,6 +48,14 @@ describe "content_for plugin with erb" do
 
   it "should work for an empty content_for" do
     body('/e').strip.must_equal "cabde"
+  end
+
+  it "should work when content_for uses a regular block" do
+    body('/f').strip.must_equal "cabdfe"
+  end
+
+  it "should use content_for output directly" do
+    body('/g').strip.must_equal "cabd<%= 1 %>e"
   end
 end
 

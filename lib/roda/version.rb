@@ -8,7 +8,7 @@ class Roda
 
   # The patch version of Roda, updated only for bug fixes from the last
   # feature release.
-  RodaPatchVersion = 0
+  RodaPatchVersion = 1
 
   # The full version of Roda as a string.
   RodaVersion = "#{RodaMajorVersion}.#{RodaMinorVersion}.#{RodaPatchVersion}".freeze

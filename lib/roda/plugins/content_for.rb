@@ -83,7 +83,7 @@ class Roda
 
               # Use temporary output buffer for ERB-based rendering systems
               instance_variable_set(outvar, String.new)
-              value = Tilt[render_opts[:engine]].new{yield.to_s}.render
+              value = yield.to_s
               instance_variable_set(outvar, buf_was)
             end
 
