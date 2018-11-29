@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.14.1.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.14.1.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.14.1.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2018-11-29 07:52:30 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Security+Fix">Security Fix<span><a href="#label-Security+Fix">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Do not post-process content_for block result with template engine</p>
+
+<p>Since 2.8.0, the content_for block result was post-processed with the
+template engine.  There is no actual need to do so, as content_for is not
+designed to render output, it is designed to store already rendered output.
+This post-processing was introduced when support for haml templates was
+added in 2.8.0.</p>
+
+<p>Post-processing the output with the template engine is generally a no-op
+for most usage as most output does not contain template metaprogramming
+characters, which is why this went undetected for so long.  However, if a
+content_for block return value contained unescaped user input, it was
+probably vulnerable to remote code execution if the default ERB template
+engine is used, the same as if the user input was passed directly to the
+render or view method.</p>
+
+<p>Example of a vulnerable usage (assuming automatic escaping is not enabled)
+would be:</p>
+
+<pre>&lt;% content_for :foo do %&gt;&#x000A;  User name: &lt;%= request.params[&#39;user_name&#39;] %&gt;&#x000A;&lt;% end %&gt;</pre>
+
+<p>Such usage is likely vulnerable to cross site scripting unless the
+content_for output is escaped before being displayed, even without the
+content_for template post-processing. However, the post-processing turned
+it from a cross site scripting vulnerability into a remote code execution
+vulnerability.  For non-ERB template engines, whether the post-processing
+introduced a vulnerability depends on the template engine.</p>
+
+<p>Note that if you were correctly escaping user input in your ERB templates
+(either automatically or manually), you are unlikely to be vulnerable as
+the escaping escaped the ERB template metacharacters (&lt; and &gt;).  For
+non-ERB templates, escaping the output may not have mitigated the
+vulnerability, depending on what metacharacters the template engine uses
+and whether the escaping will modify them.</p>
+
+<p>Calling content_for with an argument was not vulnerable as no
+post-processing was done on the argument, it was only done on the block
+result.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

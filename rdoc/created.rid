@@ -1,6 +1,6 @@
-Fri, 16 Nov 2018 10:20:35 -0800
+Thu, 29 Nov 2018 08:27:32 -0800
 README.rdoc	Wed, 11 Jul 2018 16:58:27 -0700
-CHANGELOG	Fri, 16 Nov 2018 10:17:40 -0800
+CHANGELOG	Wed, 28 Nov 2018 16:15:20 -0800
 MIT-LICENSE	Fri, 26 Jan 2018 06:42:44 -0800
 lib/roda.rb	Mon, 30 Jul 2018 15:58:06 -0700
 lib/roda/plugins/_after_hook.rb	Fri, 31 Aug 2018 15:50:26 -0700
@@ -16,7 +16,7 @@ lib/roda/plugins/chunked.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/class_level_routing.rb	Fri, 31 Aug 2018 15:50:26 -0700
 lib/roda/plugins/class_matchers.rb	Fri, 08 Dec 2017 15:45:27 -0800
 lib/roda/plugins/common_logger.rb	Mon, 17 Sep 2018 16:06:24 -0700
-lib/roda/plugins/content_for.rb	Thu, 18 Jan 2018 10:15:34 -0800
+lib/roda/plugins/content_for.rb	Thu, 29 Nov 2018 07:47:41 -0800
 lib/roda/plugins/content_security_policy.rb	Fri, 20 Apr 2018 11:49:04 -0700
 lib/roda/plugins/cookies.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/csrf.rb	Wed, 23 May 2018 10:59:22 -0700
@@ -96,7 +96,7 @@ lib/roda/plugins/typecast_params.rb	Fri, 09 Nov 2018 13:19:32 -0800
 lib/roda/plugins/unescape_path.rb	Wed, 13 Jul 2016 08:09:00 -0700
 lib/roda/plugins/view_options.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/session_middleware.rb	Fri, 06 Jul 2018 10:45:07 -0700
-lib/roda/version.rb	Fri, 09 Nov 2018 15:52:45 -0800
+lib/roda/version.rb	Thu, 29 Nov 2018 07:49:11 -0800
 doc/conventions.rdoc	Wed, 16 Aug 2017 08:44:25 -0700
 doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
@@ -148,3 +148,4 @@ doc/release_notes/3.11.0.txt	Wed, 15 Aug 2018 07:42:06 -0700
 doc/release_notes/3.12.0.txt	Fri, 14 Sep 2018 09:44:36 -0700
 doc/release_notes/3.13.0.txt	Fri, 12 Oct 2018 13:18:35 -0700
 doc/release_notes/3.14.0.txt	Fri, 09 Nov 2018 15:52:45 -0800
+doc/release_notes/3.14.1.txt	Thu, 29 Nov 2018 07:52:30 -0800
