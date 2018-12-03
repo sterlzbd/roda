@@ -10,7 +10,11 @@ Gem::Specification.new do |s|
   s.license           = "MIT"
   s.required_ruby_version = ">= 1.9.2"
   s.metadata          = { 
-    "source_code_uri" => "https://github.com/jeremyevans/roda" 
+    'bug_tracker_uri'   => 'https://github.com/jeremyevans/roda/issues',
+    'changelog_uri'     => 'http://roda.jeremyevans.net/rdoc/files/CHANGELOG.html',
+    'documentation_uri' => 'http://roda.jeremyevans.net/documentation.html',
+    'mailing_list_uri'  => 'https://groups.google.com/forum/#!forum/ruby-roda',
+    "source_code_uri"   => "https://github.com/jeremyevans/roda" 
   }
 
   s.files = %w'README.rdoc MIT-LICENSE CHANGELOG Rakefile' + Dir['doc/*.rdoc'] + Dir['doc/release_notes/*.txt'] + Dir['{lib,spec}/**/*.rb'] + Dir['spec/views/*'] + Dir['spec/views/about/*'] + Dir['spec/assets/{css/{app.scss,raw.css,no_access.css},js/head/app.js}']
