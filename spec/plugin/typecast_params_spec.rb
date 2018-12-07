@@ -616,6 +616,44 @@ describe "typecast_params plugin" do
     end.must_equal(:a=>{:b=>1}, :c=>{:d=>2})
   end
 
+  it "#convert! should include missing values as nil" do
+    tp = tp()
+    tp.convert! do |ptp|
+      ptp.int('x')
+      ptp.array(:int, 'y')
+      ptp['c'].convert! do |stp|
+        stp.int(%w'x z')
+      end
+    end.must_equal("x"=>nil, "y"=>nil, "c"=>{"x"=>nil, "z"=>nil})
+  end
+
+  it "#convert! with :missing=>:skip should not include missing values" do
+    tp = tp()
+    tp.convert!(:skip_missing=>true) do |ptp|
+      ptp.int('x')
+      ptp.array(:int, 'y')
+      ptp['c'].convert! do |stp|
+        stp.int(%w'x z')
+      end
+    end.must_equal("c"=>{})
+
+    tp.convert! do |ptp|
+      ptp.int('x')
+      ptp.array(:int, 'y')
+      ptp['c'].convert!(:skip_missing=>true) do |stp|
+        stp.int(%w'x z')
+      end
+    end.must_equal("x"=>nil, "y"=>nil, "c"=>{})
+
+    tp.convert!(:skip_missing=>true) do |ptp|
+      ptp.int('x')
+      ptp.array(:int, 'y')
+      ptp['c'].convert!(:skip_missing=>false) do |stp|
+        stp.int(%w'x z')
+      end
+    end.must_equal("c"=>{"x"=>nil, "z"=>nil})
+  end
+
   it "#convert_each! should convert each entry in an array" do
     tp = tp('a[][b]=1&a[][c]=2&a[][b]=3&a[][c]=4')
     tp['a'].convert_each! do |tp0|

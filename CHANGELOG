@@ -1,3 +1,7 @@
+= master
+
+* Add :skip_missing option to convert!/convert_each! in the typecast_params plugin to support not storing keys not present in params (jeremyevans)
+
 = 3.14.1 (2018-11-29)
 
 * SECURITY: content_for plugin no longer post-processes block result with template engine (jeremyevans)

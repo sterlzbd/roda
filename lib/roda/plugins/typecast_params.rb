@@ -557,7 +557,7 @@ class Roda
           end
 
           @subs[key] = sub
-          sub.sub_capture(@capture, @symbolize)
+          sub.sub_capture(@capture, @symbolize, @skip_missing)
           sub
         end
 
@@ -573,6 +573,8 @@ class Roda
         # the options hash. Options:
         #
         # :raise :: If set to false, do not raise errors for missing keys
+        # :skip_missing :: If set to true, does not store values if the key is not
+        #                  present in the params.
         # :symbolize :: Convert any string keys in the resulting hash and for any
         #               conversions below
         def convert!(keys=nil, opts=OPTS)
@@ -748,9 +750,10 @@ class Roda
         end
 
         # Inherit given capturing and symbolize setting from parent object.
-        def sub_capture(capture, symbolize)
+        def sub_capture(capture, symbolize, skip_missing)
           if @capture = capture
             @symbolize = symbolize
+            @skip_missing = skip_missing
             @params = @obj.class.new
           end
         end
@@ -766,6 +769,7 @@ class Roda
         # Internals of convert! and convert_each!.
         def _capture!(ret, opts)
           previous_symbolize = @symbolize
+          previous_skip_missing = @skip_missing
 
           unless cap = @capture
             @params = @obj.class.new
@@ -776,6 +780,9 @@ class Roda
 
           if opts.has_key?(:symbolize)
             @symbolize = !!opts[:symbolize]
+          end
+          if opts.has_key?(:skip_missing)
+            @skip_missing = !!opts[:skip_missing]
           end
 
           begin
@@ -810,6 +817,7 @@ class Roda
           end
 
           @symbolize = previous_symbolize
+          @skip_missing = previous_skip_missing
         end
 
         # Raise an error if the array given does contains nil values.
@@ -906,7 +914,9 @@ class Roda
 
             if @capture
               key = key.to_sym if symbolize?
-              @params[key] = v
+              if !@skip_missing || @obj.has_key?(key)
+                @params[key] = v
+              end
             end
 
             v
