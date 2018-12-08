@@ -1,5 +1,7 @@
 = master
 
+* Support render plugin :escape option to be a string or array of strings and only add :escape option for those template engines (jeremyevans) (#158)
+
 * Add :skip_missing option to convert!/convert_each! in the typecast_params plugin to support not storing keys not present in params (jeremyevans)
 
 = 3.14.1 (2018-11-29)

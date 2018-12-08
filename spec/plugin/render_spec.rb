@@ -632,7 +632,7 @@ describe ":render plugin :escape option" do
 
   it "should escape inside <%= %> and not inside <%== %>, and handle postfix conditionals" do
     app(:bare) do
-      plugin :render, :escape=>:erubi
+      plugin :render, :escape=>true
 
       route do |r|
         render(:inline=>'<%= "<>" %> <%== "<>" %><%= "<>" if false %>')
@@ -644,7 +644,7 @@ describe ":render plugin :escape option" do
 
   it "should allow for per-branch escaping via set_view options" do
     app(:bare) do
-      plugin :render, :escape=>:erubi
+      plugin :render, :escape=>true
       plugin :view_options
 
       route do |r|
@@ -659,6 +659,42 @@ describe ":render plugin :escape option" do
 
     body('/a').must_equal '&lt;&gt;'
     body.must_equal '<>'
+  end
+
+  it "should accept :escape=>String to only escape for that template engine" do
+    app(:bare) do
+      plugin :render, :escape=>'erb'
+
+      route do |r|
+        r.is 'a' do
+          render(:inline=>'<%= "<>" %> <%== "<>" %><%= "<>" if false %>', :engine=>'unescaped.erb')
+        end
+        render(:inline=>'<%= "<>" %> <%== "<>" %><%= "<>" if false %>')
+      end
+    end
+
+    body.must_equal '&lt;&gt; <>'
+    body('/a').must_equal '<> &lt;&gt;'
+  end
+
+  it "should accept :escape=>Array to only escape for those template engines" do
+    app(:bare) do
+      plugin :render, :escape=>%w'erb erubi', :engine_opts=>{'erubi'=>{:bufvar=>'_buf'}}
+
+      route do |r|
+        r.is 'a' do
+          render(:inline=>'<%= "<>" %> <%== "<>" %><%= "<>" if false %>', :engine=>'unescaped.erb')
+        end
+        r.is 'b' do
+          render(:inline=>'<%= _buf.length %><%= "<>" %> <%== "<>" %><%= "<>" if false %>', :engine=>'erubi')
+        end
+        render(:inline=>'<%= "<>" %> <%== "<>" %><%= "<>" if false %>')
+      end
+    end
+
+    body.must_equal '&lt;&gt; <>'
+    body('/a').must_equal '<> &lt;&gt;'
+    body('/b').must_equal '0&lt;&gt; <>'
   end
 end
 end

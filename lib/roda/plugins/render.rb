@@ -56,6 +56,10 @@ class Roda
     #            templates, defaults to 'erb'.
     # :escape :: Use Erubi as the ERB template engine, and enable escaping by default,
     #            which makes <tt><%= %></tt> escape output and  <tt><%== %></tt> not escape output.
+    #            If given, sets the <tt>:escape=>true</tt> option for all template engines, which
+    #            can break some non-ERB template engines.  You can use a string or array of strings
+    #            as the value for this option to only set the <tt>:escape=>true</tt> option for those
+    #            specific template engines.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
     #            with the :template or :inline options.
     # :layout_opts :: The options to use when rendering the layout, if different from the default options.
@@ -184,18 +188,26 @@ class Roda
           template_opts[:default_encoding] = Encoding.default_external
         end
 
-        if opts[:escape]
-          require 'tilt/erubi'
-          template_opts[:escape] = true
-        end
-        template_opts.freeze
-
         engine_opts = opts[:engine_opts] = (opts[:engine_opts] || {}).dup
         engine_opts.to_a.each do |k,v|
           engine_opts[k] = v.dup.freeze
         end
-        engine_opts.freeze
 
+        if escape = opts[:escape]
+          require 'tilt/erubi'
+
+          case escape
+          when String, Array
+            Array(escape).each do |engine|
+              engine_opts[engine] = (engine_opts[engine] || {}).merge(:escape => true).freeze
+            end
+          else
+            template_opts[:escape] = true
+          end
+        end
+
+        template_opts.freeze
+        engine_opts.freeze
         opts.freeze
       end
 
