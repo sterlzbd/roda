@@ -4,11 +4,11 @@ class Roda
   RodaMajorVersion = 3
 
   # The minor version of Roda, updated for new feature releases of Roda.
-  RodaMinorVersion = 14
+  RodaMinorVersion = 15
 
   # The patch version of Roda, updated only for bug fixes from the last
   # feature release.
-  RodaPatchVersion = 1
+  RodaPatchVersion = 0
 
   # The full version of Roda as a string.
   RodaVersion = "#{RodaMajorVersion}.#{RodaMinorVersion}.#{RodaPatchVersion}".freeze

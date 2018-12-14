@@ -1,4 +1,4 @@
-= master
+= 3.15.0 (2018-12-14)
 
 * Support render plugin :escape option to be a string or array of strings and only add :escape option for those template engines (jeremyevans) (#158)
 
