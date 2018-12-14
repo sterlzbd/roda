@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.15.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.15.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.15.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2018-12-14 08:31:10 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The render plugin :escape option value can now be a string or an array of
+strings, and then the plugin will will only add the :escape template option
+for those specific template engines given. By default, the :escape plugin
+option adds the :escape template option for all engines, which breaks the
+usage with some engines (such as the rcsv engine).</p>
+</li><li>
+<p>The convert! and convert_each! methods in the typecast_params plugin now
+support a :skip_missing option to support not storing missing parameters:</p>
+
+<pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;missing&#39;</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># =&gt; {&#39;missing&#39;=&gt;nil}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-value">skip_missing:</span> <span class="ruby-keyword">false</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;missing&#39;</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-comment"># =&gt; {}</span></pre>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
