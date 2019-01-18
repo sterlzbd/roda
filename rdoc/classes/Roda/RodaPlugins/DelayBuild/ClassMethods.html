@@ -64,7 +64,7 @@ Roda::RodaPlugins::DelayBuild::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-app-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-app-source'><span class="ruby-comment"># File lib/roda/plugins/delay_build.rb, line 19</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">app</span>&#x000A;  <span class="ruby-ivar">@app</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">build!</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-app-source'>   <span class="ruby-comment"># File lib/roda/plugins/delay_build.rb</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">app</span>&#x000A;<span class="line-num">21</span>   <span class="ruby-ivar">@app</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">build!</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-build-21'>
@@ -83,7 +83,7 @@ Roda::RodaPlugins::DelayBuild::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-build-21-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-build-21-source'><span class="ruby-comment"># File lib/roda/plugins/delay_build.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build!</span>&#x000A;  <span class="ruby-ivar">@build_app</span> = <span class="ruby-keyword">true</span>&#x000A;  <span class="ruby-identifier">build_rack_app</span>&#x000A;  <span class="ruby-ivar">@app</span>&#x000A;<span class="ruby-keyword">ensure</span>&#x000A;  <span class="ruby-ivar">@build_app</span> = <span class="ruby-keyword">false</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-build-21-source'>   <span class="ruby-comment"># File lib/roda/plugins/delay_build.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">build!</span>&#x000A;<span class="line-num">26</span>   <span class="ruby-ivar">@build_app</span> = <span class="ruby-keyword">true</span>&#x000A;<span class="line-num">27</span>   <span class="ruby-identifier">build_rack_app</span>&#x000A;<span class="line-num">28</span>   <span class="ruby-ivar">@app</span>&#x000A;<span class="line-num">29</span> <span class="ruby-keyword">ensure</span>&#x000A;<span class="line-num">30</span>   <span class="ruby-ivar">@build_app</span> = <span class="ruby-keyword">false</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

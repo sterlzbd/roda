@@ -56,15 +56,14 @@ Roda::RodaPlugins::ContentSecurityPolicy::InstanceMethods
 </div>
 <div class='description'>
 
-<p>If a block is given, yield the current content security policy.  Returns
-the current content security policy.</p>
+<p>If a block is given, yield the current content security policy.  Returns the current content security policy.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-content_security_policy-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-content_security_policy-source'><span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb, line 287</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">content_security_policy</span>&#x000A;  <span class="ruby-identifier">policy</span> = <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">content_security_policy</span>&#x000A;  <span class="ruby-keyword">yield</span> <span class="ruby-identifier">policy</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;  <span class="ruby-identifier">policy</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-content_security_policy-source'>    <span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb</span>&#x000A;<span class="line-num">288</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">content_security_policy</span>&#x000A;<span class="line-num">289</span>   <span class="ruby-identifier">policy</span> = <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">content_security_policy</span>&#x000A;<span class="line-num">290</span>   <span class="ruby-keyword">yield</span> <span class="ruby-identifier">policy</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;<span class="line-num">291</span>   <span class="ruby-identifier">policy</span>&#x000A;<span class="line-num">292</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

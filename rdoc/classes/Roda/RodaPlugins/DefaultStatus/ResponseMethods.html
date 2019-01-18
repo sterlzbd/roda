@@ -56,16 +56,14 @@ Roda::RodaPlugins::DefaultStatus::ResponseMethods
 </div>
 <div class='description'>
 
-<p>instance_exec the <a
-href="ResponseMethods.html#method-i-default_status">#default_status</a>
-plugin block to get the response status.</p>
+<p>instance_exec the <a href="ResponseMethods.html#method-i-default_status"><code>default_status</code></a> plugin block to get the response status.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-default_status-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-default_status-source'><span class="ruby-comment"># File lib/roda/plugins/default_status.rb, line 27</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">default_status</span>&#x000A;  <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_status</span>])&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-default_status-source'>   <span class="ruby-comment"># File lib/roda/plugins/default_status.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">default_status</span>&#x000A;<span class="line-num">29</span>   <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_status</span>])&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -38,27 +38,18 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>A request_aref plugin has been added for configuring the behavior of the []
-and []= request methods.  These methods are deprecated in the current
-version of Rack, but Rack will only print a deprecation warning in verbose
-mode.  With this plugin, you can choose to never warn, always warn, or
-raise an exception:</p>
+<p>A request_aref plugin has been added for configuring the behavior of the [] and []= request methods.  These methods are deprecated in the current version of Rack, but Rack will only print a deprecation warning in verbose mode.  With this plugin, you can choose to never warn, always warn, or raise an exception:</p>
 
 <pre class="ruby"><span class="ruby-comment"># Don&#39;t emit a warning, allowing for the historical Rack</span>&#x000A;<span class="ruby-comment"># behavior</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:allow</span>&#x000A;&#x000A;<span class="ruby-comment"># Always emit a warning when the method is called</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:warn</span>&#x000A;&#x000A;<span class="ruby-comment"># Raise an exception if the method is called</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:raise</span></pre>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>When using the content_for plugin and calling content_for with a block,
-convert the result of the block to a string before passing the result to
-Tilt.  This can fix issues when the template class that Tilt uses does not
-handle non-String input.</p>
+<p>When using the content_for plugin and calling content_for with a block, convert the result of the block to a string before passing the result to Tilt.  This can fix issues when the template class that Tilt uses does not handle non-String input.</p>
 </li><li>
-<p>When using the public plugin with the :gzip option, do not add the
-Content-Type or Content-Encoding headers if a 304 response is returned.</p>
+<p>When using the public plugin with the :gzip option, do not add the Content-Type or Content-Encoding headers if a 304 response is returned.</p>
 </li><li>
-<p>Add the spec/views/about directory to the gem, allowing the specs to run
-correctly using just the files in the gem.</p>
+<p>Add the spec/views/about directory to the gem, allowing the specs to run correctly using just the files in the gem.</p>
 </li></ul>
 </div>
 <div id='context'>

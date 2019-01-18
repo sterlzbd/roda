@@ -39,8 +39,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Class used when the response body is set explicitly, instead of using
-Roda&#39;s default body array and response.write to write to it.</p>
+<p>Class used when the response body is set explicitly, instead of using Roda&#39;s default body array and response.write to write to it.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -70,15 +69,14 @@ Roda&#39;s default body array and response.write to write to it.</p>
 </div>
 <div class='description'>
 
-<p>Save the block that will return the body, it won&#39;t be called until the
-body is needed.</p>
+<p>Save the block that will return the body, it won&#39;t be called until the body is needed.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 231</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@block</span> = <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">232</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">233</span>   <span class="ruby-ivar">@block</span> = <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">234</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -91,15 +89,14 @@ body is needed.</p>
 </div>
 <div class='description'>
 
-<p>If the body is a String, yield it, otherwise yield each string returned by
-calling each on the body.</p>
+<p>If the body is a String, yield it, otherwise yield each string returned by calling each on the body.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-each-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-each-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 237</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each</span>&#x000A;  <span class="ruby-identifier">v</span> = <span class="ruby-identifier">value</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;    <span class="ruby-keyword">yield</span> <span class="ruby-identifier">v</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">v</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">s</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-each-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">238</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each</span>&#x000A;<span class="line-num">239</span>   <span class="ruby-identifier">v</span> = <span class="ruby-identifier">value</span>&#x000A;<span class="line-num">240</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;<span class="line-num">241</span>     <span class="ruby-keyword">yield</span> <span class="ruby-identifier">v</span>&#x000A;<span class="line-num">242</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">243</span>     <span class="ruby-identifier">v</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-keyword">yield</span> <span class="ruby-identifier">s</span>}&#x000A;<span class="line-num">244</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">245</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-empty-3F'>
@@ -118,7 +115,7 @@ calling each on the body.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-empty-3F-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-empty-3F-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 248</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">empty?</span>&#x000A;  <span class="ruby-keyword">false</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-empty-3F-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">249</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">empty?</span>&#x000A;<span class="line-num">250</span>   <span class="ruby-keyword">false</span>&#x000A;<span class="line-num">251</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-join'>
@@ -137,7 +134,7 @@ calling each on the body.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-join-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-join-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 253</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">join</span>&#x000A;  <span class="ruby-identifier">a</span> = []&#x000A;  <span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>}&#x000A;  <span class="ruby-identifier">a</span>.<span class="ruby-identifier">join</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-join-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">254</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">join</span>&#x000A;<span class="line-num">255</span>   <span class="ruby-identifier">a</span> = []&#x000A;<span class="line-num">256</span>   <span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>}&#x000A;<span class="line-num">257</span>   <span class="ruby-identifier">a</span>.<span class="ruby-identifier">join</span>&#x000A;<span class="line-num">258</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-length'>
@@ -156,7 +153,7 @@ calling each on the body.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-length-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-length-source'><span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb, line 260</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">length</span>&#x000A;  <span class="ruby-identifier">length</span> = <span class="ruby-value">0</span>&#x000A;  <span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">length</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">bytesize</span>}&#x000A;  <span class="ruby-identifier">length</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-length-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">261</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">length</span>&#x000A;<span class="line-num">262</span>   <span class="ruby-identifier">length</span> = <span class="ruby-value">0</span>&#x000A;<span class="line-num">263</span>   <span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">length</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">bytesize</span>}&#x000A;<span class="line-num">264</span>   <span class="ruby-identifier">length</span>&#x000A;<span class="line-num">265</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

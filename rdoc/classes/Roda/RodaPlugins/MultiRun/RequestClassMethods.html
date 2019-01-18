@@ -57,16 +57,14 @@ Roda::RodaPlugins::MultiRun::RequestClassMethods
 </div>
 <div class='description'>
 
-<p>Refresh the <a
-href="RequestClassMethods.html#method-i-multi_run_regexp">#multi_run_regexp</a>
-if it hasn&#39;t been loaded yet.</p>
+<p>Refresh the <a href="RequestClassMethods.html#method-i-multi_run_regexp"><code>multi_run_regexp</code></a> if it hasn&#39;t been loaded yet.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_run_regexp-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-multi_run_regexp-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 83</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_run_regexp</span>&#x000A;  <span class="ruby-ivar">@multi_run_regexp</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">refresh_multi_run_regexp!</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-multi_run_regexp-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">84</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_run_regexp</span>&#x000A;<span class="line-num">85</span>   <span class="ruby-ivar">@multi_run_regexp</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">refresh_multi_run_regexp!</span>&#x000A;<span class="line-num">86</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-refresh_multi_run_regexp-21'>
@@ -78,17 +76,14 @@ if it hasn&#39;t been loaded yet.</p>
 </div>
 <div class='description'>
 
-<p>Refresh the <a
-href="RequestClassMethods.html#method-i-multi_run_regexp">#multi_run_regexp</a>,
-using the stored route prefixes, preferring longer routes before shorter
-routes.</p>
+<p>Refresh the <a href="RequestClassMethods.html#method-i-multi_run_regexp"><code>multi_run_regexp</code></a>, using the stored route prefixes, preferring longer routes before shorter routes.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-refresh_multi_run_regexp-21-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-refresh_multi_run_regexp-21-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 78</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">refresh_multi_run_regexp!</span>&#x000A;  <span class="ruby-ivar">@multi_run_regexp</span> = <span class="ruby-regexp">/(#{Regexp.union(roda_class.multi_run_apps.keys.sort.reverse)})/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-refresh_multi_run_regexp-21-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">79</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">refresh_multi_run_regexp!</span>&#x000A;<span class="line-num">80</span>   <span class="ruby-ivar">@multi_run_regexp</span> = <span class="ruby-regexp">/(#{Regexp.union(roda_class.multi_run_apps.keys.sort.reverse)})/</span>&#x000A;<span class="line-num">81</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

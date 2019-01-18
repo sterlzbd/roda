@@ -35,27 +35,21 @@ Roda::RodaPlugins::RenderEach
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The render_each plugin allows you to render a template for each value in an
-enumerable, returning the concatention of all of the template renderings. 
-For example:</p>
+<p>The render_each plugin allows you to render a template for each value in an enumerable, returning the concatention of all of the template renderings.  For example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], <span class="ruby-value">:foo</span>)</pre>
 
-<p>will render the <code>foo</code> template 3 times.  Each time the template
-is rendered, the local variable <code>foo</code> will contain the given
-value (e.g. on the first rendering <code>foo</code> is 1).</p>
+<p>will render the <code>foo</code> template 3 times.  Each time the template is rendered, the local variable <code>foo</code> will contain the given value (e.g. on the first rendering <code>foo</code> is 1).</p>
 
 <p>You can pass additional render options via an options hash:</p>
 
 <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], <span class="ruby-value">:foo</span>, <span class="ruby-value">views:</span> <span class="ruby-string">&#39;partials&#39;</span>)</pre>
 
-<p>One additional option supported by is <code>:local</code>, which sets the
-local variable containing the current value to use.  So:</p>
+<p>One additional option supported by is <code>:local</code>, which sets the local variable containing the current value to use.  So:</p>
 
 <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], <span class="ruby-value">:foo</span>, <span class="ruby-value">local:</span> <span class="ruby-value">:bar</span>)</pre>
 
-<p>Will render the <code>foo</code> template, but the local variable used
-inside the template will be <code>bar</code>.  You can use <code>local:&#x000A;nil</code> to not set a local variable inside the template.</p>
+<p>Will render the <code>foo</code> template, but the local variable used inside the template will be <code>bar</code>.  You can use <code>local: nil</code> to not set a local variable inside the template.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -84,15 +78,14 @@ inside the template will be <code>bar</code>.  You can use <code>local:&#x000A;n
 </div>
 <div class='description'>
 
-<p>Load the render plugin before this plugin, since this plugin calls the
-render method.</p>
+<p>Load the render plugin before this plugin, since this plugin calls the render method.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/render_each.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/render_each.rb</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">32</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

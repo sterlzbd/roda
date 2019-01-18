@@ -57,15 +57,14 @@ Roda::RodaPlugins::TypecastParams::ClassMethods
 </div>
 <div class='description'>
 
-<p>Freeze the <a href="Params.html">Params</a> subclass when freezing the
-class.</p>
+<p>Freeze the <a href="Params.html"><code>Params</code></a> subclass when freezing the class.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-freeze-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-freeze-source'><span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb, line 1001</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>&#x000A;  <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-freeze-source'>     <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>&#x000A;<span class="line-num">1002</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>&#x000A;<span class="line-num">1003</span>   <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">1004</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">1005</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inherited'>
@@ -77,15 +76,14 @@ class.</p>
 </div>
 <div class='description'>
 
-<p>Assign the application subclass a subclass of the current <a
-href="Params.html">Params</a> subclass.</p>
+<p>Assign the application subclass a subclass of the current <a href="Params.html"><code>Params</code></a> subclass.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inherited-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb, line 1007</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>))&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-inherited-source'>     <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>&#x000A;<span class="line-num">1008</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;<span class="line-num">1009</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">1010</span>   <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>))&#x000A;<span class="line-num">1011</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

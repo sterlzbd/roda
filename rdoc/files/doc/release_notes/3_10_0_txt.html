@@ -38,128 +38,58 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>A sessions plugin has been added that supports encrypted and signed
-sessions. This plugin is now the recommended way to implement sessions,
-replacing the previously recommended Rack::Session::Cookie middleware.</p>
+<p>A sessions plugin has been added that supports encrypted and signed sessions. This plugin is now the recommended way to implement sessions, replacing the previously recommended Rack::Session::Cookie middleware.</p>
 
-<p>The sessions plugin encrypts session data using the AES-256-CTR cipher, and
-then signs the encrypted data with HMAC-SHA-256. By doing this, attackers
-must be able to forge a valid HMAC before they can try to exploit possible
-weaknesses in the encryption, such as timing attacks during decryption that
-are dependent on attacker chosen initialization vectors or ciphertext.</p>
+<p>The sessions plugin encrypts session data using the AES-256-CTR cipher, and then signs the encrypted data with HMAC-SHA-256. By doing this, attackers must be able to forge a valid HMAC before they can try to exploit possible weaknesses in the encryption, such as timing attacks during decryption that are dependent on attacker chosen initialization vectors or ciphertext.</p>
 
-<p>In addition to encryption and a stronger default signature algorithm
-compared to Rack::Session::Cookie, the sessions plugin has the following
-benefits:</p>
+<p>In addition to encryption and a stronger default signature algorithm compared to Rack::Session::Cookie, the sessions plugin has the following benefits:</p>
 <ul><li>
-<p>Built in session expiration enabeld by default, to mitigate possible
-session replay issues (default: 30 days since session creation, 7 days
-since last update).</p>
+<p>Built in session expiration enabeld by default, to mitigate possible session replay issues (default: 30 days since session creation, 7 days since last update).</p>
 </li><li>
-<p>Padding by default to minimize information leakage due to differing session
-data sizes (session data padded to a multiple of 32 bytes by default before
-encryption).</p>
+<p>Padding by default to minimize information leakage due to differing session data sizes (session data padded to a multiple of 32 bytes by default before encryption).</p>
 </li><li>
-<p>Automatic deflate compression of large sessions before encryption (by
-default if session data is over 128 bytes).</p>
+<p>Automatic deflate compression of large sessions before encryption (by default if session data is over 128 bytes).</p>
 </li><li>
-<p>JSON is used for serialization instead of Marshal, preventing remote code
-execution vulnerabilities if the session secret is disclosed. Note that
-this means that many ruby types do not round trip in the session, such as
-Symbol and Time instances. This will probably be the largest barrier to
-adoption, as you need to make sure your application only uses types that
-round-trip through JSON before you start using the sessions plugin.</p>
+<p>JSON is used for serialization instead of Marshal, preventing remote code execution vulnerabilities if the session secret is disclosed. Note that this means that many ruby types do not round trip in the session, such as Symbol and Time instances. This will probably be the largest barrier to adoption, as you need to make sure your application only uses types that round-trip through JSON before you start using the sessions plugin.</p>
 </li><li>
-<p>A plain hash is used for the session, instead of a hash-like object. One
-consequence of this is that keys in the session are not automatically
-converted to strings. Rack::Session::Cookie converts session keys to
-strings for keys at the top level, but not for keys in subhashes.</p>
+<p>A plain hash is used for the session, instead of a hash-like object. One consequence of this is that keys in the session are not automatically converted to strings. Rack::Session::Cookie converts session keys to strings for keys at the top level, but not for keys in subhashes.</p>
 </li><li>
-<p>In general sessions are smaller even if deflate compression is not used,
-despite requiring 16 bytes for the cipher initialization vector. The main
-reason for this is that the sessions plugin does not set a session id,
-since one is not needed for cookie sessions.</p>
+<p>In general sessions are smaller even if deflate compression is not used, despite requiring 16 bytes for the cipher initialization vector. The main reason for this is that the sessions plugin does not set a session id, since one is not needed for cookie sessions.</p>
 </li><li>
-<p>The sessions plugin requires a :secret option be set that is at least 64
-bytes, so that users have to make a determined effort to use weak secrets.</p>
+<p>The sessions plugin requires a :secret option be set that is at least 64 bytes, so that users have to make a determined effort to use weak secrets.</p>
 </li><li>
-<p>The HMAC calculation considers the cookie key, so that if the same session
-secret is used for multiple applications with different cookie keys, an
-attacker cannot use the session from one application in a different
-application.</p>
+<p>The HMAC calculation considers the cookie key, so that if the same session secret is used for multiple applications with different cookie keys, an attacker cannot use the session from one application in a different application.</p>
 </li></ul>
 
-<p>The sessions plugin ties into the Roda#session method instead of being a
-rack middleware.  This makes it about twice as fast as
-Rack::Session::Cookie if the session is not accessed. If the session is
-accessed, the sessions plugin is roughly as fast as Rack::Session::Cookie,
-even though it uses a stronger HMAC and has to encrypt and decrypt the
-session.</p>
+<p>The sessions plugin ties into the Roda#session method instead of being a rack middleware.  This makes it about twice as fast as Rack::Session::Cookie if the session is not accessed. If the session is accessed, the sessions plugin is roughly as fast as Rack::Session::Cookie, even though it uses a stronger HMAC and has to encrypt and decrypt the session.</p>
 
-<p>Because the sessions plugin is not a middleware, it does not offer session
-support to other middleware, only to the app itself.  If you would like to
-use the same approach as the sessions plugin uses but would like support
-for middleware to access the sessions, a roda/session_middleware file has
-been added. This file contains <a
-href="../../../classes/RodaSessionMiddleware.html">RodaSessionMiddleware</a>,
-which is a middleware that can be used by any other Rack app for session
-support, and which uses a SessionHash class similar to the one used by
-Rack::Session::Cookie.</p>
+<p>Because the sessions plugin is not a middleware, it does not offer session support to other middleware, only to the app itself.  If you would like to use the same approach as the sessions plugin uses but would like support for middleware to access the sessions, a roda/session_middleware file has been added. This file contains <a href="../../../classes/RodaSessionMiddleware.html"><code>RodaSessionMiddleware</code></a>, which is a middleware that can be used by any other Rack app for session support, and which uses a SessionHash class similar to the one used by Rack::Session::Cookie.</p>
 
-<p>To integrate with other plugins that can optionally use symbols or strings
-in sessions, the sessions plugin sets the :sessions_convert_symbols
-application option to true.  Other plugins can check for this application
-option, and if set, should use strings instead of symbols in the session.</p>
+<p>To integrate with other plugins that can optionally use symbols or strings in sessions, the sessions plugin sets the :sessions_convert_symbols application option to true.  Other plugins can check for this application option, and if set, should use strings instead of symbols in the session.</p>
 
-<p>The sessions plugin should be loaded after the flash plugin if both are
-used in the same application, so that the flash is rotated correctly in the
-session.</p>
+<p>The sessions plugin should be loaded after the flash plugin if both are used in the same application, so that the flash is rotated correctly in the session.</p>
 </li><li>
-<p>The middleware plugin now supports a :handle_result option, which can be
-any callable object.  If set, this object is called with the environment of
-the request and the rack response after either the <a
-href="../../../classes/Roda.html">Roda</a> app or next middleware returns
-the rack response.  The rack response can be modified by the callable
-object, and the response (after possible modification) will be returned to
-the previous middleware.  Example:</p>
+<p>The middleware plugin now supports a :handle_result option, which can be any callable object.  If set, this object is called with the environment of the request and the rack response after either the <a href="../../../classes/Roda.html"><code>Roda</code></a> app or next middleware returns the rack response.  The rack response can be modified by the callable object, and the response (after possible modification) will be returned to the previous middleware.  Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:middleware</span>, <span class="ruby-value">:handle_result</span><span class="ruby-operator">=&gt;</span>(<span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">env</span>, <span class="ruby-identifier">res</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">res</span>[<span class="ruby-value">1</span>][<span class="ruby-string">&#39;MyHeader&#39;</span>] = <span class="ruby-string">&#39;HeaderValue&#39;</span>&#x000A;<span class="ruby-keyword">end</span>)</pre>
 </li><li>
-<p>The :json_parser and :json_serializer application options are now
-supported.  If set, these options are used for parsing and serializing JSON
-instead of the default of JSON.parse and .to_json.</p>
+<p>The :json_parser and :json_serializer application options are now supported.  If set, these options are used for parsing and serializing JSON instead of the default of JSON.parse and .to_json.</p>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>RodaRequest initialization is now faster by avoiding 1-2 method calls.</p>
 </li><li>
-<p>typecast_params.Integer in the typecast_params plugin now handles numeric
-input as long the numeric input does not have fractional parts.  This makes
-it more usable when handling JSON input.</p>
+<p>typecast_params.Integer in the typecast_params plugin now handles numeric input as long the numeric input does not have fractional parts.  This makes it more usable when handling JSON input.</p>
 </li><li>
-<p>If the flash is empty after the request is processed, the flash session key
-is removed from the session instead of being left as an empty hash.  If
-addition to making the session smaller, this makes the session appear empty
-if there are no other keys in the session, which works better with the
-sessions plugin as empty sessions will remove the session cookie
-completely.</p>
+<p>If the flash is empty after the request is processed, the flash session key is removed from the session instead of being left as an empty hash.  If addition to making the session smaller, this makes the session appear empty if there are no other keys in the session, which works better with the sessions plugin as empty sessions will remove the session cookie completely.</p>
 </li></ul>
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The flash plugin now uses &#39;_flash&#39; instead of :_flash as the
-session key.  When using session middleware that uses
-Rack::Session::Abstract::SessionHash to store the session (e.g.
-Rack::Session::Cookie), session keys are converted internally to strings,
-so this change will not affect you unless you are using alternative session
-support.  Even if your session does treat :_flash different than
-&#39;_flash&#39; in keys, the plugin will still work because it will try
-:_flash if there is no value for &#39;_flash&#39;.  This change was made to
-support the sessions plugin, which doesn&#39;t convert keys to strings.</p>
+<p>The flash plugin now uses &#39;_flash&#39; instead of :_flash as the session key.  When using session middleware that uses Rack::Session::Abstract::SessionHash to store the session (e.g. Rack::Session::Cookie), session keys are converted internally to strings, so this change will not affect you unless you are using alternative session support.  Even if your session does treat :_flash different than &#39;_flash&#39; in keys, the plugin will still work because it will try :_flash if there is no value for &#39;_flash&#39;.  This change was made to support the sessions plugin, which doesn&#39;t convert keys to strings.</p>
 </li><li>
-<p>This DEFAULT_PARSER and DEFAULT_SERIALIZER constants from the the
-json_parser and json plugins have been removed.</p>
+<p>This DEFAULT_PARSER and DEFAULT_SERIALIZER constants from the the json_parser and json plugins have been removed.</p>
 </li></ul>
 </div>
 <div id='context'>

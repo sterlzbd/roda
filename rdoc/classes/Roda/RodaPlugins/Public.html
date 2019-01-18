@@ -35,16 +35,9 @@ Roda::RodaPlugins::Public
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The public plugin adds a <code>r.public</code> routing method to serve
-static files from a directory.</p>
+<p>The public plugin adds a <code>r.public</code> routing method to serve static files from a directory.</p>
 
-<p>The public plugin recognizes the application&#39;s :root option, and
-defaults to using the <code>public</code> subfolder of the
-application&#39;s <code>:root</code> option.  If the application&#39;s
-:root option is not set, it defaults to the <code>public</code> folder in
-the working directory.  Additionally, if a relative path is provided as the
-<code>:root</code> option to the plugin, it will be considered relative to
-the application&#39;s <code>:root</code> option.</p>
+<p>The public plugin recognizes the application&#39;s :root option, and defaults to using the <code>public</code> subfolder of the application&#39;s <code>:root</code> option.  If the application&#39;s :root option is not set, it defaults to the <code>public</code> folder in the working directory.  Additionally, if a relative path is provided as the <code>:root</code> option to the plugin, it will be considered relative to the application&#39;s <code>:root</code> option.</p>
 
 <p>Examples:</p>
 
@@ -98,13 +91,11 @@ the application&#39;s <code>:root</code> option.</p>
 </div>
 <div class='description'>
 
-<p>Use options given to setup a Rack::File instance for serving files.
-Options:</p>
+<p>Use options given to setup a Rack::File instance for serving files. Options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:default_mime </td><td>
 <p>The default mime type to use if the mime type is not recognized.</p>
 </td></tr><tr><td class='label'>:gzip </td><td>
-<p>Whether to serve already gzipped files with a .gz extension for clients
-supporting gzipped transfer encoding.</p>
+<p>Whether to serve already gzipped files with a .gz extension for clients supporting gzipped transfer encoding.</p>
 </td></tr><tr><td class='label'>:headers </td><td>
 <p>A hash of headers to use for statically served files</p>
 </td></tr><tr><td class='label'>:root </td><td>
@@ -116,7 +107,7 @@ supporting gzipped transfer encoding.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/public.rb, line 46</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])&#x000A;  <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>]&#x000A;    <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-string">&quot;public&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/public.rb</span>&#x000A;<span class="line-num">47</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">48</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]&#x000A;<span class="line-num">49</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])&#x000A;<span class="line-num">50</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>]&#x000A;<span class="line-num">51</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-string">&quot;public&quot;</span>)&#x000A;<span class="line-num">52</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)&#x000A;<span class="line-num">54</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]&#x000A;<span class="line-num">55</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

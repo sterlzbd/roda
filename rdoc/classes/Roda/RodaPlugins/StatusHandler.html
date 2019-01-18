@@ -35,18 +35,13 @@ Roda::RodaPlugins::StatusHandler
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The status_handler plugin adds a <code>status_handler</code> method which
-sets a block that is called whenever a response with the relevant response
-code with an empty body would be returned.</p>
+<p>The status_handler plugin adds a <code>status_handler</code> method which sets a block that is called whenever a response with the relevant response code with an empty body would be returned.</p>
 
-<p>This plugin does not support providing the blocks with the plugin call; you
-must provide them to status_handler calls afterwards:</p>
+<p>This plugin does not support providing the blocks with the plugin call; you must provide them to status_handler calls afterwards:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_handler</span>&#x000A;&#x000A;<span class="ruby-identifier">status_handler</span>(<span class="ruby-value">403</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;You are forbidden from seeing that!&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">status_handler</span>(<span class="ruby-value">404</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;Where did it go?&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Before a block is called, any existing headers on the response will be
-cleared.  So if you want to be sure the headers are set even in your block,
-you need to reset them in the block.</p>
+<p>Before a block is called, any existing headers on the response will be cleared.  So if you want to be sure the headers are set even in your block, you need to reset them in the block.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -82,7 +77,7 @@ you need to reset them in the block.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/status_handler.rb, line 29</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:status_handler</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/status_handler.rb</span>&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">31</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:status_handler</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">32</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -99,7 +94,7 @@ you need to reset them in the block.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/status_handler.rb, line 25</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/status_handler.rb</span>&#x000A;<span class="line-num">26</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">27</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -56,17 +56,14 @@ Roda::RodaPlugins::EarlyHints::InstanceMethods
 </div>
 <div class='description'>
 
-<p>Send given hash of Early Hints using the rack.early_hints environment
-variable, currenly only supported by puma.  hash given should generally
-have the single key &#39;Link&#39;, and a string or array of strings for
-each of the early hints.</p>
+<p>Send given hash of Early Hints using the rack.early_hints environment variable, currenly only supported by puma.  hash given should generally have the single key &#39;Link&#39;, and a string or array of strings for each of the early hints.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-send_early_hints-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-send_early_hints-source'><span class="ruby-comment"># File lib/roda/plugins/early_hints.rb, line 15</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">send_early_hints</span>(<span class="ruby-identifier">hash</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">eh_proc</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.early_hints&#39;</span>]&#x000A;    <span class="ruby-identifier">eh_proc</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">hash</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-send_early_hints-source'>   <span class="ruby-comment"># File lib/roda/plugins/early_hints.rb</span>&#x000A;<span class="line-num">16</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">send_early_hints</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="line-num">17</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">eh_proc</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.early_hints&#39;</span>]&#x000A;<span class="line-num">18</span>     <span class="ruby-identifier">eh_proc</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="line-num">19</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

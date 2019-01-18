@@ -38,36 +38,25 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Plugins">New Plugins<span><a href="#label-New+Plugins">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>A websocket plugin has been added, for websocket support using
-faye-websocket.  Here&#39;s an example of a simple echo service using
-websockets:</p>
+<p>A websocket plugin has been added, for websocket support using faye-websocket.  Here&#39;s an example of a simple echo service using websockets:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:websockets</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;echo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">websocket</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ws</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># Routing block taken for a websocket request to /echo</span>&#x000A;&#x000A;      <span class="ruby-comment"># ws is a Faye::WebSocket instance, so you can use the</span>&#x000A;      <span class="ruby-comment"># Faye::WebSocket API</span>&#x000A;      <span class="ruby-identifier">ws</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:message</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">event</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">ws</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">event</span>.<span class="ruby-identifier">data</span>)&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># View rendered if a regular GET request to /echo</span>&#x000A;    <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;echo&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </li><li>
-<p>A status_handler plugin has been added, which allows <a
-href="../../../classes/Roda.html">Roda</a> to specially handle arbitrary
-status codes.  Usage is similar to the not_found plugin (which now uses
-status_handler internally):</p>
+<p>A status_handler plugin has been added, which allows <a href="../../../classes/Roda.html"><code>Roda</code></a> to specially handle arbitrary status codes.  Usage is similar to the not_found plugin (which now uses status_handler internally):</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_handler</span>&#x000A;&#x000A;<span class="ruby-identifier">status_handler</span> <span class="ruby-value">403</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;You are forbidden from seeing that!&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">status_handler</span> <span class="ruby-value">404</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;Where did it go?&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </li></ul>
 
 <h1 id="label-Other+New+Features">Other New Features<span><a href="#label-Other+New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The assets plugin now supports a :gzip option, which will save gzipped
-versions when compiling assets.  When serving compiled assets, if the
-request accepts gzip encoding, it will serve the gzipped version.  This
-also plays nicely with nginx&#39;s gzip_static support.</p>
+<p>The assets plugin now supports a :gzip option, which will save gzipped versions when compiling assets.  When serving compiled assets, if the request accepts gzip encoding, it will serve the gzipped version.  This also plays nicely with nginx&#39;s gzip_static support.</p>
 </li><li>
-<p>The assets plugin now supports Google Closure Compiler, Uglifier, and MinJS
-for minifying javascript.  You can now specify which css and js compressors
-to use via the :css_compressor and :js_compressor options.</p>
+<p>The assets plugin now supports Google Closure Compiler, Uglifier, and MinJS for minifying javascript.  You can now specify which css and js compressors to use via the :css_compressor and :js_compressor options.</p>
 </li></ul>
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>Roda.plugin now always returns nil.  Previously the return value could be
-non-nil if the plugin used a configure method.</p>
+<p>Roda.plugin now always returns nil.  Previously the return value could be non-nil if the plugin used a configure method.</p>
 </li></ul>
 </div>
 <div id='context'>

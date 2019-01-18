@@ -35,18 +35,13 @@ Roda::RodaPlugins::Flash
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The flash plugin adds a <code>flash</code> instance method to <a
-href="../../Roda.html">Roda</a>, for typical web application flash
-handling, where values set in the current flash hash are available in the
-next request.</p>
+<p>The flash plugin adds a <code>flash</code> instance method to <a href="../../Roda.html"><code>Roda</code></a>, for typical web application flash handling, where values set in the current flash hash are available in the next request.</p>
 
-<p>With the example below, if a POST request is submitted, it will redirect
-and the resulting GET request will return &#39;b&#39;.</p>
+<p>With the example below, if a POST request is submitted, it will redirect and the resulting GET request will return &#39;b&#39;.</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:flash</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;&#39;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>You can modify the flash for the current request (instead of the next
-request) by using the <code>flash.now</code> method:</p>
+<p>You can modify the flash for the current request (instead of the next request) by using the <code>flash.now</code> method:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>&#x000A;  <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] <span class="ruby-comment"># = &gt;&#39;b&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </div>
@@ -83,7 +78,7 @@ request) by using the <code>flash.now</code> method:</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/flash.rb, line 38</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/flash.rb</span>&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">40</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

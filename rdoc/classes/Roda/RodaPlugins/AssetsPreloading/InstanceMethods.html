@@ -57,15 +57,14 @@ Roda::RodaPlugins::AssetsPreloading::InstanceMethods
 </div>
 <div class='description'>
 
-<p>Return a string suitable for a Link header for the given asset
-types/groups.</p>
+<p>Return a string suitable for a Link header for the given asset types/groups.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-preload_assets_link_header-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-preload_assets_link_header-source'><span class="ruby-comment"># File lib/roda/plugins/assets_preloading.rb, line 66</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">preload_assets_link_header</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;  <span class="ruby-identifier">_preload_assets_array</span>(<span class="ruby-identifier">args</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">path</span>, <span class="ruby-identifier">as</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;&lt;#{path}&gt;;rel=preload;as=#{as}&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-preload_assets_link_header-source'>   <span class="ruby-comment"># File lib/roda/plugins/assets_preloading.rb</span>&#x000A;<span class="line-num">67</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">preload_assets_link_header</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;<span class="line-num">68</span>   <span class="ruby-identifier">_preload_assets_array</span>(<span class="ruby-identifier">args</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">path</span>, <span class="ruby-identifier">as</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;&lt;#{path}&gt;;rel=preload;as=#{as}&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;,&quot;</span>)&#x000A;<span class="line-num">69</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-preload_assets_link_tags'>
@@ -84,7 +83,7 @@ types/groups.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-preload_assets_link_tags-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-preload_assets_link_tags-source'><span class="ruby-comment"># File lib/roda/plugins/assets_preloading.rb, line 60</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">preload_assets_link_tags</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;  <span class="ruby-identifier">_preload_assets_array</span>(<span class="ruby-identifier">args</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">path</span>, <span class="ruby-identifier">as</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;&lt;link href=\&quot;#{h(path)}\&quot; rel=\&quot;preload\&quot; as=\&quot;#{as}\&quot;&gt;&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-preload_assets_link_tags-source'>   <span class="ruby-comment"># File lib/roda/plugins/assets_preloading.rb</span>&#x000A;<span class="line-num">61</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">preload_assets_link_tags</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)&#x000A;<span class="line-num">62</span>   <span class="ruby-identifier">_preload_assets_array</span>(<span class="ruby-identifier">args</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">path</span>, <span class="ruby-identifier">as</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;&lt;link href=\&quot;#{h(path)}\&quot; rel=\&quot;preload\&quot; as=\&quot;#{as}\&quot;&gt;&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)&#x000A;<span class="line-num">63</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

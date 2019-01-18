@@ -38,28 +38,20 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The json plugin now accepts a :content_type option, which will override the
-default Content-Type response header used for responses.</p>
+<p>The json plugin now accepts a :content_type option, which will override the default Content-Type response header used for responses.</p>
 </li><li>
-<p>Stream#write has been added to the streaming plugin, allowing the following
-type of code to work:</p>
+<p>Stream#write has been added to the streaming plugin, allowing the following type of code to work:</p>
 
 <pre class="ruby"><span class="ruby-identifier">stream</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">out</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-constant">IO</span>.<span class="ruby-identifier">copy_stream</span>(<span class="ruby-constant">StringIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">content</span>), <span class="ruby-identifier">out</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p><a href="../../../classes/Roda.html">Roda</a> now works with ruby 2.3&#39;s
-–enable-frozen-string-literal, and all of the library files are set to use
-frozen string literals by default.</p>
+<p><a href="../../../classes/Roda.html"><code>Roda</code></a> now works with ruby 2.3&#39;s –enable-frozen-string-literal, and all of the library files are set to use frozen string literals by default.</p>
 
-<p>Most of roda&#39;s plugin-specific dependencies were found to have issues
-with frozen string literals, and while pull requests have been sent to fix
-the issues, it&#39;s unlikely that you would currently be able to use
-–enable-frozen-string-literal in production.</p>
+<p>Most of roda&#39;s plugin-specific dependencies were found to have issues with frozen string literals, and while pull requests have been sent to fix the issues, it&#39;s unlikely that you would currently be able to use –enable-frozen-string-literal in production.</p>
 </li><li>
-<p>The json plugin will no longer override a Content-Type header if one is
-already set.</p>
+<p>The json plugin will no longer override a Content-Type header if one is already set.</p>
 </li></ul>
 </div>
 <div id='context'>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>Roda::RodaPlugins::H::CGI</title>
+<title>Roda::RodaPlugins::MailProcessor::UnhandledMail</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,18 +23,24 @@
 <body class='page'>
 <div class='class' id='wrapper'>
 <div class='header'>
-<h1 class='name'><span class='type'>module</span>
-Roda::RodaPlugins::H::CGI
+<h1 class='name'><span class='type'>class</span>
+Roda::RodaPlugins::MailProcessor::UnhandledMail
 </h1>
 <ol class='paths'>
 <li>
-<a href="../../../../files/lib/roda/plugins/h_rb.html">lib/roda/plugins/h.rb</a>
+<a href="../../../../files/lib/roda/plugins/mail_processor_rb.html">lib/roda/plugins/mail_processor.rb</a>
 </li>
 </ol>
+<div class='parent'>
+Superclass:
+<strong>StandardError</strong>
+</div>
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<p>Exception class raised when a mail processed is not handled during routing, either implicitly because the <code>r.handle</code> method was not called, or via an explicit call to <code>unhandled_mail</code>.</p>
+</div>
 <div id='context'>
 </div>
 <div id='section'>

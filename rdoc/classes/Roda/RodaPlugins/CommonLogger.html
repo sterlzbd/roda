@@ -35,9 +35,7 @@ Roda::RodaPlugins::CommonLogger
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The common_logger plugin adds common logger support to <a
-href="../../Roda.html">Roda</a> applications, similar to
-Rack::CommonLogger, with the following differences:</p>
+<p>The common_logger plugin adds common logger support to <a href="../../Roda.html"><code>Roda</code></a> applications, similar to Rack::CommonLogger, with the following differences:</p>
 <ul><li>
 <p>Better performance</p>
 </li><li>
@@ -45,11 +43,9 @@ Rack::CommonLogger, with the following differences:</p>
 </li><li>
 <p>Doesn&#39;t proxy the body</p>
 </li><li>
-<p>Doesn&#39;t support different capitalization of the Content-Length response
-header</p>
+<p>Doesn&#39;t support different capitalization of the Content-Length response header</p>
 </li><li>
-<p>Logs to $stderr instead of <a href="'rack.errors'">env</a> if explicit
-logger not passed</p>
+<p>Logs to $stderr instead of <a href="'rack.errors'">env</a> if explicit logger not passed</p>
 </li></ul>
 
 <p>Example:</p>
@@ -90,7 +86,7 @@ logger not passed</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/common_logger.rb, line 26</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">logger</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] = <span class="ruby-identifier">logger</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">$stderr</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger_meth</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>].<span class="ruby-identifier">method</span>(<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:write</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:write</span> <span class="ruby-operator">:</span> <span class="ruby-value">:&lt;&lt;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/common_logger.rb</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">logger</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">28</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] = <span class="ruby-identifier">logger</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">$stderr</span>&#x000A;<span class="line-num">29</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger_meth</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>].<span class="ruby-identifier">method</span>(<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:write</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:write</span> <span class="ruby-operator">:</span> <span class="ruby-value">:&lt;&lt;</span>)&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -107,7 +103,7 @@ logger not passed</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/common_logger.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_</span>=<span class="ruby-keyword">nil</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/common_logger.rb</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">23</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="line-num">24</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-start_timer'>
@@ -126,7 +122,7 @@ logger not passed</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-start_timer-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-start_timer-source'><span class="ruby-comment"># File lib/roda/plugins/common_logger.rb, line 33</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">start_timer</span>&#x000A;  <span class="ruby-constant">Process</span>.<span class="ruby-identifier">clock_gettime</span>(<span class="ruby-constant">Process</span><span class="ruby-operator">::</span><span class="ruby-constant">CLOCK_MONOTONIC</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-start_timer-source'>   <span class="ruby-comment"># File lib/roda/plugins/common_logger.rb</span>&#x000A;<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">start_timer</span>&#x000A;<span class="line-num">35</span>   <span class="ruby-constant">Process</span>.<span class="ruby-identifier">clock_gettime</span>(<span class="ruby-constant">Process</span><span class="ruby-operator">::</span><span class="ruby-constant">CLOCK_MONOTONIC</span>)&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

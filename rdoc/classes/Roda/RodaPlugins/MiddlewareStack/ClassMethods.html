@@ -56,15 +56,14 @@ Roda::RodaPlugins::MiddlewareStack::ClassMethods
 </div>
 <div class='description'>
 
-<p>Return a new <a href="Stack.html">Stack</a> that allows removing middleware
-and inserting middleware at specific places in the stack.</p>
+<p>Return a new <a href="Stack.html"><code>Stack</code></a> that allows removing middleware and inserting middleware at specific places in the stack.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-middleware_stack-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-middleware_stack-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 91</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">middleware_stack</span>&#x000A;  <span class="ruby-constant">Stack</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-ivar">@middleware</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-middleware_stack-source'>   <span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb</span>&#x000A;<span class="line-num">92</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">middleware_stack</span>&#x000A;<span class="line-num">93</span>   <span class="ruby-constant">Stack</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-ivar">@middleware</span>)&#x000A;<span class="line-num">94</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

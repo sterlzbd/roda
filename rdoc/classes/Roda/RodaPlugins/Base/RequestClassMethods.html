@@ -35,7 +35,7 @@ Roda::RodaPlugins::Base::RequestClassMethods
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Class methods for <a href="../../RodaRequest.html">RodaRequest</a></p>
+<p>Class methods for <a href="../../RodaRequest.html"><code>RodaRequest</code></a></p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -69,8 +69,7 @@ Roda::RodaPlugins::Base::RequestClassMethods
 </td>
 <td class='context-item-value'>[RW]</td>
 <td class='context-item-desc'>
-<p>Reference to the <a href="../../../Roda.html">Roda</a> class related to
-this request class.</p>
+<p>Reference to the <a href="../../../Roda.html"><code>Roda</code></a> class related to this request class.</p>
 </td>
 </tr>
 </table>
@@ -87,16 +86,14 @@ this request class.</p>
 </div>
 <div class='description'>
 
-<p>Return the cached pattern for the given object.  If the object is not
-already cached, yield to get the basic pattern, and convert the basic
-pattern to a pattern that does not partial segments.</p>
+<p>Return the cached pattern for the given object.  If the object is not already cached, yield to get the basic pattern, and convert the basic pattern to a pattern that does not partial segments.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-cached_matcher-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-cached_matcher-source'><span class="ruby-comment"># File lib/roda.rb, line 336</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;  <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;    <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">pattern</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-cached_matcher-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">337</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="line-num">338</span>   <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;<span class="line-num">339</span> &#x000A;<span class="line-num">340</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;<span class="line-num">341</span>     <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;<span class="line-num">342</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">343</span> &#x000A;<span class="line-num">344</span>   <span class="ruby-identifier">pattern</span>&#x000A;<span class="line-num">345</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inspect'>
@@ -108,17 +105,14 @@ pattern to a pattern that does not partial segments.</p>
 </div>
 <div class='description'>
 
-<p>Since <a href="../../RodaRequest.html">RodaRequest</a> is anonymously
-subclassed when <a href="../../../Roda.html">Roda</a> is subclassed, and
-then assigned to a constant of the <a href="../../../Roda.html">Roda</a>
-subclass, make inspect reflect the likely name for the class.</p>
+<p>Since <a href="../../RodaRequest.html"><code>RodaRequest</code></a> is anonymously subclassed when <a href="../../../Roda.html"><code>Roda</code></a> is subclassed, and then assigned to a constant of the <a href="../../../Roda.html"><code>Roda</code></a> subclass, make inspect reflect the likely name for the class.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inspect-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-inspect-source'><span class="ruby-comment"># File lib/roda.rb, line 349</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>&#x000A;  <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-inspect-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">350</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>&#x000A;<span class="line-num">351</span>   <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="line-num">352</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

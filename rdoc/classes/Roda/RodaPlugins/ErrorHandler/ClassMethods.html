@@ -56,16 +56,14 @@ Roda::RodaPlugins::ErrorHandler::ClassMethods
 </div>
 <div class='description'>
 
-<p>Install the given block as the error handler, so that if routing the
-request raises an exception, the block will be called with the exception in
-the scope of the <a href="../../../Roda.html">Roda</a> instance.</p>
+<p>Install the given block as the error handler, so that if routing the request raises an exception, the block will be called with the exception in the scope of the <a href="../../../Roda.html"><code>Roda</code></a> instance.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-error-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-error-source'><span class="ruby-comment"># File lib/roda/plugins/error_handler.rb, line 66</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">define_method</span>(<span class="ruby-value">:handle_error</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">private</span> <span class="ruby-value">:handle_error</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-error-source'>   <span class="ruby-comment"># File lib/roda/plugins/error_handler.rb</span>&#x000A;<span class="line-num">67</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">68</span>   <span class="ruby-identifier">define_method</span>(<span class="ruby-value">:handle_error</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">69</span>   <span class="ruby-identifier">private</span> <span class="ruby-value">:handle_error</span>&#x000A;<span class="line-num">70</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

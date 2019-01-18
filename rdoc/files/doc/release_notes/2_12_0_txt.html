@@ -38,37 +38,25 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>An optimized_string_matchers plugin has been added, which contains
-optimized matchers for single strings.  r.on_branch is an optimized version
-of r.on and r.is_exactly is optimized version of r.is:</p>
+<p>An optimized_string_matchers plugin has been added, which contains optimized matchers for single strings.  r.on_branch is an optimized version of r.on and r.is_exactly is optimized version of r.is:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:optimized_string_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_branch</span> <span class="ruby-string">&quot;x&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches /x and paths starting with /x/</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_exactly</span> <span class="ruby-string">&quot;y&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># matches /x/y</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Both of these methods will work even if the strings have placeholders, but
-no captures will be yielded to the blocks.</p>
+<p>Both of these methods will work even if the strings have placeholders, but no captures will be yielded to the blocks.</p>
 </li><li>
-<p>The error_handler plugin now has access to the request&#39;s remaining_path
-when handling an error.  You can then compare the remaining_path to
-path_info to see how much of request was already routed, which can be
-useful when reporting errors.</p>
+<p>The error_handler plugin now has access to the request&#39;s remaining_path when handling an error.  You can then compare the remaining_path to path_info to see how much of request was already routed, which can be useful when reporting errors.</p>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>String matching for strings without placeholders is now 60% faster as it
-uses optimized string operations instead of a regexp match.</p>
+<p>String matching for strings without placeholders is now 60% faster as it uses optimized string operations instead of a regexp match.</p>
 </li><li>
-<p>Symbol matching is now 60% faster as it uses optimized string operations
-instead of a regexp match.</p>
+<p>Symbol matching is now 60% faster as it uses optimized string operations instead of a regexp match. </p>
 </li></ul>
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The match methods no longer automatically reset the remaining_path via
-ensure.  This means that using non-local jumps out of the code such as
-begin/rescue and throw/catch will not reset remaining_path automatically. 
-Users that want to reset remaining path in such cases should use their own
-ensure blocks.</p>
+<p>The match methods no longer automatically reset the remaining_path via ensure.  This means that using non-local jumps out of the code such as begin/rescue and throw/catch will not reset remaining_path automatically.  Users that want to reset remaining path in such cases should use their own ensure blocks.</p>
 </li></ul>
 </div>
 <div id='context'>

@@ -39,8 +39,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Represents the applications middleware as a stack, allowing for easily
-removing middleware or finding places to insert new middleware.</p>
+<p>Represents the applications middleware as a stack, allowing for easily removing middleware or finding places to insert new middleware.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -74,7 +73,7 @@ removing middleware or finding places to insert new middleware.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 41</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">middleware</span>)&#x000A;  <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>&#x000A;  <span class="ruby-ivar">@middleware</span> = <span class="ruby-identifier">middleware</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb</span>&#x000A;<span class="line-num">42</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">middleware</span>)&#x000A;<span class="line-num">43</span>   <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>&#x000A;<span class="line-num">44</span>   <span class="ruby-ivar">@middleware</span> = <span class="ruby-identifier">middleware</span>&#x000A;<span class="line-num">45</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -87,19 +86,14 @@ removing middleware or finding places to insert new middleware.</p>
 </div>
 <div class='description'>
 
-<p>Return a <a href="StackPosition.html">StackPosition</a> representing the
-position after the middleware where the block returns true. Yields the
-middleware and any middleware arguments given, but not the middleware
-block. It the block never returns true, returns a <a
-href="StackPosition.html">StackPosition</a> that will insert new middleware
-at the end of the stack.</p>
+<p>Return a <a href="StackPosition.html"><code>StackPosition</code></a> representing the position after the middleware where the block returns true. Yields the middleware and any middleware arguments given, but not the middleware block. It the block never returns true, returns a <a href="StackPosition.html"><code>StackPosition</code></a> that will insert new middleware at the end of the stack.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-after-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-after-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 51</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">after</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">handle</span>(<span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-after-source'>   <span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb</span>&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">after</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">handle</span>(<span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">54</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-before'>
@@ -111,19 +105,14 @@ at the end of the stack.</p>
 </div>
 <div class='description'>
 
-<p>Return a <a href="StackPosition.html">StackPosition</a> representing the
-position before the middleware where the block returns true. Yields the
-middleware and any middleware arguments given, but not the middleware
-block. It the block never returns true, returns a <a
-href="StackPosition.html">StackPosition</a> that will insert new middleware
-at the end of the stack.</p>
+<p>Return a <a href="StackPosition.html"><code>StackPosition</code></a> representing the position before the middleware where the block returns true. Yields the middleware and any middleware arguments given, but not the middleware block. It the block never returns true, returns a <a href="StackPosition.html"><code>StackPosition</code></a> that will insert new middleware at the end of the stack.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-before-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-before-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 60</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">before</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">handle</span>(<span class="ruby-value">0</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-before-source'>   <span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb</span>&#x000A;<span class="line-num">61</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">before</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">62</span>   <span class="ruby-identifier">handle</span>(<span class="ruby-value">0</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">63</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-remove'>
@@ -135,15 +124,14 @@ at the end of the stack.</p>
 </div>
 <div class='description'>
 
-<p>Removes any middleware where the block returns true. Yields the middleware
-and any middleware arguments given, but not the middleware block</p>
+<p>Removes any middleware where the block returns true. Yields the middleware and any middleware arguments given, but not the middleware block</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-remove-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-remove-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 66</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">remove</span>&#x000A;  <span class="ruby-ivar">@middleware</span>.<span class="ruby-identifier">delete_if</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-identifier">_</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">yield</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">m</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:build_rack_app</span>)&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-remove-source'>   <span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb</span>&#x000A;<span class="line-num">67</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">remove</span>&#x000A;<span class="line-num">68</span>   <span class="ruby-ivar">@middleware</span>.<span class="ruby-identifier">delete_if</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span>, <span class="ruby-identifier">_</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">69</span>     <span class="ruby-keyword">yield</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">m</span>)&#x000A;<span class="line-num">70</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">71</span>   <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:build_rack_app</span>)&#x000A;<span class="line-num">72</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">73</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

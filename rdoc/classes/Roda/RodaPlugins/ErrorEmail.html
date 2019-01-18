@@ -35,16 +35,11 @@ Roda::RodaPlugins::ErrorEmail
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The error_email plugin adds an <code>error_email</code> instance method
-that send an email related to the exception.  This is most useful if you
-are also using the error_handler plugin:</p>
+<p>The error_email plugin adds an <code>error_email</code> instance method that send an email related to the exception.  This is most useful if you are also using the error_handler plugin:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_email</span>, <span class="ruby-value">to:</span> <span class="ruby-string">&#39;to@example.com&#39;</span>, <span class="ruby-value">from:</span> <span class="ruby-string">&#39;from@example.com&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">error_email</span>(<span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-string">&#39;Internal Server Error&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>It is similar to the error_mail plugin, except that it uses net/smtp
-directly instead of using the mail library.  If you are not already using
-the mail library in your application, it makes sense to use error_email
-instead of error_mail.</p>
+<p>It is similar to the error_mail plugin, except that it uses net/smtp directly instead of using the mail library.  If you are not already using the mail library in your application, it makes sense to use error_email instead of error_mail.</p>
 
 <p>Options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:from </td><td>
@@ -59,15 +54,9 @@ instead of error_mail.</p>
 <p>The To address to use in the email (required)</p>
 </td></tr></tbody></table>
 
-<p>The subject of the error email shows the exception class and message. The
-body of the error email shows the backtrace of the error and the request
-environment, as well the request params and session variables (if any). You
-can also call error_email with a plain string instead of an exception, in
-which case the string is used as the subject, and no backtrace is included.</p>
+<p>The subject of the error email shows the exception class and message. The body of the error email shows the backtrace of the error and the request environment, as well the request params and session variables (if any). You can also call error_email with a plain string instead of an exception, in which case the string is used as the subject, and no backtrace is included.</p>
 
-<p>Note that emailing on every error as shown above is only appropriate for
-low traffic web applications.  For high traffic web applications, use an
-error reporting service instead of this plugin.</p>
+<p>Note that emailing on every error as shown above is only appropriate for low traffic web applications.  For high traffic web applications, use an error reporting service instead of this plugin.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -166,15 +155,14 @@ end
 </div>
 <div class='description'>
 
-<p>Set default opts for plugin.  See <a href="ErrorEmail.html">ErrorEmail</a>
-module RDoc for options.</p>
+<p>Set default opts for plugin.  See <a href="ErrorEmail.html"><code>ErrorEmail</code></a> module RDoc for options.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/error_email.rb, line 98</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">DEFAULTS</span>&#x000A;  <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">email_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>] = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>].<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:to</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:from</span>]&#x000A;    <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;must provide :to and :from options to error_email plugin&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] = <span class="ruby-identifier">email_opts</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>][<span class="ruby-value">:headers</span>].<span class="ruby-identifier">freeze</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/error_email.rb</span>&#x000A;<span class="line-num"> 99</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">100</span>   <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">DEFAULTS</span>&#x000A;<span class="line-num">101</span>   <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">email_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">102</span>   <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>] = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>].<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">103</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:to</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:from</span>]&#x000A;<span class="line-num">104</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;must provide :to and :from options to error_email plugin&quot;</span>&#x000A;<span class="line-num">105</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">106</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] = <span class="ruby-identifier">email_opts</span>&#x000A;<span class="line-num">107</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>][<span class="ruby-value">:headers</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">108</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">109</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

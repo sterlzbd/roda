@@ -68,7 +68,7 @@ Roda::RodaPlugins::ContentSecurityPolicy::ResponseMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb, line 296</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-ivar">@content_security_policy</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb</span>&#x000A;<span class="line-num">297</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>&#x000A;<span class="line-num">298</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">299</span>   <span class="ruby-ivar">@content_security_policy</span> <span class="ruby-operator">&amp;&amp;=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">300</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -88,7 +88,7 @@ Roda::RodaPlugins::ContentSecurityPolicy::ResponseMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-content_security_policy-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-content_security_policy-source'><span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb, line 302</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">content_security_policy</span>&#x000A;  <span class="ruby-ivar">@content_security_policy</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>].<span class="ruby-identifier">dup</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-content_security_policy-source'>    <span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb</span>&#x000A;<span class="line-num">303</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">content_security_policy</span>&#x000A;<span class="line-num">304</span>   <span class="ruby-ivar">@content_security_policy</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>].<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">305</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-set_default_headers'>
@@ -107,7 +107,7 @@ Roda::RodaPlugins::ContentSecurityPolicy::ResponseMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-set_default_headers-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-set_default_headers-source'><span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb, line 307</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_default_headers</span>&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  (<span class="ruby-ivar">@content_security_policy</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>]).<span class="ruby-identifier">set_header</span>(<span class="ruby-ivar">@headers</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-set_default_headers-source'>    <span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb</span>&#x000A;<span class="line-num">308</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_default_headers</span>&#x000A;<span class="line-num">309</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">310</span>   (<span class="ruby-ivar">@content_security_policy</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>]).<span class="ruby-identifier">set_header</span>(<span class="ruby-ivar">@headers</span>)&#x000A;<span class="line-num">311</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

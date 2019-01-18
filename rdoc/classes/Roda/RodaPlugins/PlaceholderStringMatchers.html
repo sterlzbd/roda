@@ -35,14 +35,11 @@ Roda::RodaPlugins::PlaceholderStringMatchers
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The placeholder_string_matcher plugin exists for backwards compatibility
-with previous versions of <a href="../../Roda.html">Roda</a> that allowed
-placeholders inside strings if they were prefixed by colons:</p>
+<p>The placeholder_string_matcher plugin exists for backwards compatibility with previous versions of <a href="../../Roda.html"><code>Roda</code></a> that allowed placeholders inside strings if they were prefixed by colons:</p>
 
 <pre>plugin :placeholder_string_matchers&#x000A;route do |r|&#x000A;  r.is(&quot;foo/:bar&quot;) |v|&#x000A;    # matches foo/baz, yielding &quot;baz&quot;&#x000A;    # does not match foo, foo/, or foo/baz/&#x000A;  end&#x000A;end</pre>
 
-<p>It is not recommended to use this in new applications, and it is encouraged
-to use separate string class or symbol matchers instead:</p>
+<p>It is not recommended to use this in new applications, and it is encouraged to use separate string class or symbol matchers instead:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-constant">String</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-value">:bar</span></pre>
 </div>
@@ -78,7 +75,7 @@ to use separate string class or symbol matchers instead:</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/placeholder_string_matchers.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_symbol_regexp_matchers</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/placeholder_string_matchers.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">26</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_symbol_regexp_matchers</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

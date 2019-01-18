@@ -35,39 +35,31 @@ Roda::RodaPlugins::HeaderMatchers
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The header_matchers plugin adds hash matchers for matching on less-common
-HTTP headers.</p>
+<p>The header_matchers plugin adds hash matchers for matching on less-common HTTP headers.</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:header_matchers</span></pre>
 
-<p>It adds a <code>:header</code> matcher for matching on arbitrary headers,
-which matches if the header is present, and yields the header value:</p>
+<p>It adds a <code>:header</code> matcher for matching on arbitrary headers, which matches if the header is present, and yields the header value:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">header:</span> <span class="ruby-string">&#39;HTTP-X-App-Token&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">header_value</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Looks for env[&#39;HTTP_X_APP_TOKEN&#39;] and yields it</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>It adds a <code>:host</code> matcher for matching by the host of the
-request:</p>
+<p>It adds a <code>:host</code> matcher for matching by the host of the request:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">host:</span> <span class="ruby-string">&#39;foo.example.com&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>For regexp values of the <code>:host</code> matcher, any captures are
-yielded to the block:</p>
+<p>For regexp values of the <code>:host</code> matcher, any captures are yielded to the block:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">host:</span> <span class="ruby-regexp">/\A(\w+).example.com\z/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">subdomain</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>It adds a <code>:user_agent</code> matcher for matching on a user agent
-patterns, which yields the regexp captures to the block:</p>
+<p>It adds a <code>:user_agent</code> matcher for matching on a user agent patterns, which yields the regexp captures to the block:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">user_agent:</span> <span class="ruby-regexp">/Chrome\/([.\d]+)/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chrome_version</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>It adds an <code>:accept</code> matcher for matching based on the Accept
-header:</p>
+<p>It adds an <code>:accept</code> matcher for matching based on the Accept header:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">accept:</span> <span class="ruby-string">&#39;text/csv&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Note that the <code>:accept</code> matcher is very simple and cannot handle
-wildcards, priorities, or anything but a simple comma separated list of
-mime types.</p>
+<p>Note that the <code>:accept</code> matcher is very simple and cannot handle wildcards, priorities, or anything but a simple comma separated list of mime types.</p>
 </div>
 <div id='context'>
 </div>

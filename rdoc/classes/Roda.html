@@ -157,6 +157,9 @@ Roda
 <a href="../files/lib/roda/plugins/json_parser_rb.html">lib/roda/plugins/json_parser.rb</a>
 </li>
 <li class='other'>
+<a href="../files/lib/roda/plugins/mail_processor_rb.html">lib/roda/plugins/mail_processor.rb</a>
+</li>
+<li class='other'>
 <a href="../files/lib/roda/plugins/mailer_rb.html">lib/roda/plugins/mailer.rb</a>
 </li>
 <li class='other'>
@@ -321,11 +324,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The main class for <a href="Roda.html">Roda</a>.  <a
-href="Roda.html">Roda</a> is built completely out of plugins, with the
-default plugin being <a
-href="Roda/RodaPlugins/Base.html">Roda::RodaPlugins::Base</a>, so this
-class is mostly empty except for some constants.</p>
+<p>The main class for <a href="Roda.html"><code>Roda</code></a>.  <a href="Roda.html"><code>Roda</code></a> is built completely out of plugins, with the default plugin being <a href="Roda/RodaPlugins/Base.html"><code>Roda::RodaPlugins::Base</code></a>, so this class is mostly empty except for some constants.</p>
 </div>
 <div id='context'>
 </div>
@@ -350,19 +349,16 @@ class is mostly empty except for some constants.</p>
 <td class='context-item-value'>3</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>The major version of <a href="Roda.html">Roda</a>, updated only for major
-changes that are likely to require modification to <a
-href="Roda.html">Roda</a> apps.</p>
+<p>The major version of <a href="Roda.html"><code>Roda</code></a>, updated only for major changes that are likely to require modification to <a href="Roda.html"><code>Roda</code></a> apps.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
 <td class='context-item-name'>RodaMinorVersion</td>
 <td>=</td>
-<td class='context-item-value'>15</td>
+<td class='context-item-value'>16</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>The minor version of <a href="Roda.html">Roda</a>, updated for new feature
-releases of <a href="Roda.html">Roda</a>.</p>
+<p>The minor version of <a href="Roda.html"><code>Roda</code></a>, updated for new feature releases of <a href="Roda.html"><code>Roda</code></a>.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -371,8 +367,7 @@ releases of <a href="Roda.html">Roda</a>.</p>
 <td class='context-item-value'>0</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>The patch version of <a href="Roda.html">Roda</a>, updated only for bug
-fixes from the last feature release.</p>
+<p>The patch version of <a href="Roda.html"><code>Roda</code></a>, updated only for bug fixes from the last feature release.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -381,7 +376,7 @@ fixes from the last feature release.</p>
 <td class='context-item-value'>"#{RodaMajorVersion}.#{RodaMinorVersion}.#{RodaPatchVersion}".freeze</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>The full version of <a href="Roda.html">Roda</a> as a string.</p>
+<p>The full version of <a href="Roda.html"><code>Roda</code></a> as a string.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -390,8 +385,7 @@ fixes from the last feature release.</p>
 <td class='context-item-value'>RodaMajorVersion*10000 + RodaMinorVersion*10 + RodaPatchVersion</td>
 <td>&nbsp;</td>
 <td class='context-item-desc'>
-<p>The full version of <a href="Roda.html">Roda</a> as a number (3.7.0 =&gt;
-30070)</p>
+<p>The full version of <a href="Roda.html"><code>Roda</code></a> as a number (3.7.0 =&gt; 30070)</p>
 </td>
 </tr>
 </table>

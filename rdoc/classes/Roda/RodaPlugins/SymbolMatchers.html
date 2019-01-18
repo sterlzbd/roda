@@ -35,20 +35,15 @@ Roda::RodaPlugins::SymbolMatchers
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The symbol_matchers plugin allows you do define custom regexps to use for
-specific symbols.  For example, if you have a route such as:</p>
+<p>The symbol_matchers plugin allows you do define custom regexps to use for specific symbols.  For example, if you have a route such as:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:username</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>By default this will match all nonempty segments.  However, if your
-usernames must be 6-20 characters, and can only contain <code>a-z</code>
-and <code>0-9</code>, you can do:</p>
+<p>By default this will match all nonempty segments.  However, if your usernames must be 6-20 characters, and can only contain <code>a-z</code> and <code>0-9</code>, you can do:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_matchers</span>&#x000A;<span class="ruby-identifier">symbol_matcher</span> <span class="ruby-value">:username</span>, <span class="ruby-regexp">/([a-z0-9]{6,20})/</span></pre>
 
-<p>Then the route will only if the path is <code>/foobar123</code>, but not if
-it is <code>/foo</code>, <code>/FooBar123</code>, or
-<code>/foobar_123</code>.</p>
+<p>Then the route will only if the path is <code>/foobar123</code>, but not if it is <code>/foo</code>, <code>/FooBar123</code>, or <code>/foobar_123</code>.</p>
 
 <p>By default, this plugin sets up the following symbol matchers:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:d </td><td>
@@ -59,16 +54,13 @@ it is <code>/foo</code>, <code>/FooBar123</code>, or
 <p><code>/(\w+)/</code>, a alphanumeric segment</p>
 </td></tr></tbody></table>
 
-<p>If the placeholder_string_matchers plugin is loaded, this feature also
-applies to placeholders in strings, so the following:</p>
+<p>If the placeholder_string_matchers plugin is loaded, this feature also applies to placeholders in strings, so the following:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users/:username&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Would match <code>/users/foobar123</code>, but not <code>/users/foo</code>,
-<code>/users/FooBar123</code>, or <code>/users/foobar_123</code>.</p>
+<p>Would match <code>/users/foobar123</code>, but not <code>/users/foo</code>, <code>/users/FooBar123</code>, or <code>/users/foobar_123</code>.</p>
 
-<p>If using this plugin with the params_capturing plugin, this plugin should
-be loaded first.</p>
+<p>If using this plugin with the params_capturing plugin, this plugin should be loaded first.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -104,7 +96,7 @@ be loaded first.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 44</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:d</span>, <span class="ruby-regexp">/(\d+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:w</span>, <span class="ruby-regexp">/(\w+)/</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:rest</span>, <span class="ruby-regexp">/(.*)/</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb</span>&#x000A;<span class="line-num">45</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">46</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:d</span>, <span class="ruby-regexp">/(\d+)/</span>)&#x000A;<span class="line-num">47</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:w</span>, <span class="ruby-regexp">/(\w+)/</span>)&#x000A;<span class="line-num">48</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">symbol_matcher</span>(<span class="ruby-value">:rest</span>, <span class="ruby-regexp">/(.*)/</span>)&#x000A;<span class="line-num">49</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -121,7 +113,7 @@ be loaded first.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb, line 40</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_symbol_regexp_matchers</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/symbol_matchers.rb</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">42</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_symbol_regexp_matchers</span>&#x000A;<span class="line-num">43</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

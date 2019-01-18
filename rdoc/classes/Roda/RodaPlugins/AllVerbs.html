@@ -35,21 +35,15 @@ Roda::RodaPlugins::AllVerbs
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The all_verbs plugin adds methods for http verbs other than get and post. 
-The following verbs are added, assuming rack handles them: delete, head,
-options, link, patch, put, trace, unlink.</p>
+<p>The all_verbs plugin adds methods for http verbs other than get and post.  The following verbs are added, assuming rack handles them: delete, head, options, link, patch, put, trace, unlink.</p>
 
-<p>These methods operate just like Roda&#39;s default get and post methods, so
-using them without any arguments just checks for the request method, while
-using them with any arguments also checks that the arguments match the full
-path.</p>
+<p>These methods operate just like Roda&#39;s default get and post methods, so using them without any arguments just checks for the request method, while using them with any arguments also checks that the arguments match the full path.</p>
 
 <p>Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:all_verbs</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">delete</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle DELETE</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">put</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle PUT</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">patch</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Handle PATCH</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>The verb methods are defined via metaprogramming, so there isn&#39;t
-documentation for the individual methods created.</p>
+<p>The verb methods are defined via metaprogramming, so there isn&#39;t documentation for the individual methods created.</p>
 </div>
 <div id='context'>
 </div>

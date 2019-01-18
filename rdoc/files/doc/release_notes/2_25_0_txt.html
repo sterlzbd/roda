@@ -38,11 +38,7 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>An error_mail plugin has been added for reporting exceptions raised via
-email.  This is similar to the existing error_email plugin, but uses the
-mail library instead of net/smtp directly.  If you are already using the
-mail library and the error_email plugin in your application, it&#39;s
-recommended to switch to the error_mail plugin. Example:</p>
+<p>An error_mail plugin has been added for reporting exceptions raised via email.  This is similar to the existing error_email plugin, but uses the mail library instead of net/smtp directly.  If you are already using the mail library and the error_email plugin in your application, it&#39;s recommended to switch to the error_mail plugin. Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_mail</span>, <span class="ruby-value">:to</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;to@example.com&#39;</span>, <span class="ruby-value">:from</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;from@example.com&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">error_mail</span>(<span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-string">&#39;Internal Server Error&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 </li></ul>

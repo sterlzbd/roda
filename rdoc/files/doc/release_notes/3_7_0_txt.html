@@ -38,18 +38,13 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>A content_security_policy plugin has been added for setting up an
-appropriate Content-Security-Policy header.  To configure the default
-policy, load the plugin with a block:</p>
+<p>A content_security_policy plugin has been added for setting up an appropriate Content-Security-Policy header.  To configure the default policy, load the plugin with a block:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">default_src</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">img_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">style_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;fonts.googleapis.com&#39;</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">font_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;fonts.gstatic.com&#39;</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">form_action</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">frame_ancestors</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">block_all_mixed_content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>It&#39;s recommended that use use a default_src of :none at the top of the
-policy, then explicitly change other settings (e.g. img_src) when you want
-to allow content.</p>
+<p>It&#39;s recommended that use use a default_src of :none at the top of the policy, then explicitly change other settings (e.g. img_src) when you want to allow content.</p>
 
-<p>Anywhere in the routing tree, you can use the content_security_policy
-method to override the default policy.  You can pass this method a block:</p>
+<p>Anywhere in the routing tree, you can use the content_security_policy method to override the default policy.  You can pass this method a block:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">object_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">add_style_src</span> <span class="ruby-string">&#39;bar.com&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -57,9 +52,7 @@ method to override the default policy.  You can pass this method a block:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>The following methods exist for configuring the content security policy,
-they set the appropriate directive, with the underscores replaced by a
-dash.</p>
+<p>The following methods exist for configuring the content security policy, they set the appropriate directive, with the underscores replaced by a dash.</p>
 <ul><li>
 <p>base_uri</p>
 </li><li>
@@ -100,30 +93,22 @@ dash.</p>
 <p>worker_src</p>
 </li></ul>
 
-<p>All of these methods support any number of arguments, and each argument
-should be one of the following types:</p>
+<p>All of these methods support any number of arguments, and each argument should be one of the following types:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>String </td><td>
 <p>used verbatim</p>
 </td></tr><tr><td class='label'>Symbol </td><td>
 <p>Substitutes underscore with dash and surrounds with single quotes</p>
 </td></tr><tr><td class='label'>Array </td><td>
-<p>only accepts 2 element arrays, joins elements with a dash and surrounds
-them with single quotes</p>
+<p>only accepts 2 element arrays, joins elements with a dash and surrounds them with single quotes</p>
 </td></tr></tbody></table>
 
 <p>Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>,&#x000A;  <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span></pre>
 
-<p>When calling a method with no arguments, the setting is removed from the
-policy instead of being left empty, since all of these setting require at
-least one value.  Likewise, if the policy does not have any settings, the
-header will not be added.</p>
+<p>When calling a method with no arguments, the setting is removed from the policy instead of being left empty, since all of these setting require at least one value.  Likewise, if the policy does not have any settings, the header will not be added.</p>
 
-<p>Calling the method overrides any previous setting.  Each of the methods has
-a add_* method (e.g. add_script_src) for appending to the current setting,
-and a get_* method (e.g. get_script_src) for retrieving the current value
-of the setting, or nil if it is not defined.</p>
+<p>Calling the method overrides any previous setting.  Each of the methods has a add_* method (e.g. add_script_src) for appending to the current setting, and a get_* method (e.g. get_script_src) for retrieving the current value of the setting, or nil if it is not defined.</p>
 
 <pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39;;</span>&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">add_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>&#x000A;&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">get_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># =&gt; [:self, :unsafe_eval, &#39;example.com&#39;, [:nonce, &#39;foobarbaz&#39;]]</span></pre>
 
@@ -136,24 +121,14 @@ of the setting, or nil if it is not defined.</p>
 <p>upgrade_insecure_requests</p>
 </li></ul>
 
-<p>Calling these methods will turn on the related setting.  To turn the
-setting off again, you can call them with a false argument (e.g.
-block_all_mixed_content(false)).  Each method also an *? method (e.g.
-block_all_mixed_content?) for returning whether the setting is currently
-enabled.</p>
+<p>Calling these methods will turn on the related setting.  To turn the setting off again, you can call them with a false argument (e.g. block_all_mixed_content(false)).  Each method also an *? method (e.g. block_all_mixed_content?) for returning whether the setting is currently enabled.</p>
 
-<p>Likewise there is also a report_only method for turning on report only mode
-(the default is enforcement mode), or turning off report only mode if a
-false argument is given.  Also, there is a report_only? method for
-returning whether report only mode is enabled. In report only mode, the
-Content-Security-Policy-Report-Only header is used.</p>
+<p>Likewise there is also a report_only method for turning on report only mode (the default is enforcement mode), or turning off report only mode if a false argument is given.  Also, there is a report_only? method for returning whether report only mode is enabled. In report only mode, the Content-Security-Policy-Report-Only header is used.</p>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The response_request plugin now integrates with the error_handler and
-class_level_routing plugins.  Those plugins now reinitialize the current
-response object instead of creating a new response object.</p>
+<p>The response_request plugin now integrates with the error_handler and class_level_routing plugins.  Those plugins now reinitialize the current response object instead of creating a new response object.</p>
 </li></ul>
 </div>
 <div id='context'>

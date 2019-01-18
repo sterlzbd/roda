@@ -38,10 +38,7 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>String and Integer class matchers have been added.  The String class
-matches any non-empty segment and yields it as a string.  This is the same
-as the behavior of the symbol matchers, but without the duplication.  So
-instead of:</p>
+<p>String and Integer class matchers have been added.  The String class matches any non-empty segment and yields it as a string.  This is the same as the behavior of the symbol matchers, but without the duplication.  So instead of:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;album&quot;</span>, <span class="ruby-value">:album_name</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -49,24 +46,15 @@ instead of:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;album&quot;</span>, <span class="ruby-constant">String</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_name</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>This makes it a bit more intuitive that you want to match any string, and
-avoids the redundancy between the symbol name and block argument name.</p>
+<p>This makes it a bit more intuitive that you want to match any string, and avoids the redundancy between the symbol name and block argument name.</p>
 
-<p>The Integer class matches any integer segment (d+) and yields it as an
-integer:</p>
+<p>The Integer class matches any integer segment (d+) and yields it as an integer:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;album&quot;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># does not match &quot;/albums/foo&quot;</span>&#x000A;  <span class="ruby-comment"># matches &quot;/albums/1&quot;, yielding 1 (not &quot;1&quot;)</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Previously, the :d matcher in the symbol_matchers plugin could be used to
-only match integer segments, but it yielded results as strings and not
-integers, so you still needed to convert the type manually.  Using Integer
-is a bit more intuitive than using :d, and it handles the type conversion
-for you.</p>
+<p>Previously, the :d matcher in the symbol_matchers plugin could be used to only match integer segments, but it yielded results as strings and not integers, so you still needed to convert the type manually.  Using Integer is a bit more intuitive than using :d, and it handles the type conversion for you.</p>
 </li><li>
-<p>A class_matchers plugin has been added for matching additional classes,
-with user-specified regexps and type conversion.  For example, if you want
-to match YYYY-MM-DD segments and yield them to the match blocks as ruby
-Date objects, you can do:</p>
+<p>A class_matchers plugin has been added for matching additional classes, with user-specified regexps and type conversion.  For example, if you want to match YYYY-MM-DD segments and yield them to the match blocks as ruby Date objects, you can do:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:class_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">class_matcher</span>(<span class="ruby-constant">Date</span>, <span class="ruby-regexp">/(\d\d\d\d)-(\d\d)-(\d\d)/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span>, <span class="ruby-identifier">m</span>, <span class="ruby-identifier">d</span><span class="ruby-operator">|</span>&#x000A;  [<span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">y</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">d</span>.<span class="ruby-identifier">to_i</span>)]&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -77,9 +65,7 @@ Date objects, you can do:</p>
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>If you were using the Integer and String classes as matchers before and
-expected them to always match, you&#39;ll need to change your code to use
-true instead.</p>
+<p>If you were using the Integer and String classes as matchers before and expected them to always match, you&#39;ll need to change your code to use true instead.</p>
 </li></ul>
 </div>
 <div id='context'>

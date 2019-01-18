@@ -35,10 +35,7 @@ Roda::RodaPlugins::Heartbeat
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The heartbeat handles heartbeat/status requests.  If a request for the
-heartbeat path comes in, a 200 response with a text/plain Content-Type and
-a body of “OK” will be returned. The default heartbeat path is
-“/heartbeat”, so to use that:</p>
+<p>The heartbeat handles heartbeat/status requests.  If a request for the heartbeat path comes in, a 200 response with a text/plain Content-Type and a body of “OK” will be returned. The default heartbeat path is “/heartbeat”, so to use that:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:heartbeat</span></pre>
 
@@ -95,7 +92,7 @@ a body of “OK” will be returned. The default heartbeat path is
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/heartbeat.rb, line 23</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;/heartbeat&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/heartbeat.rb</span>&#x000A;<span class="line-num">24</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">25</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;/heartbeat&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">26</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -112,7 +109,7 @@ a body of “OK” will be returned. The default heartbeat path is
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/heartbeat.rb, line 18</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/heartbeat.rb</span>&#x000A;<span class="line-num">19</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">20</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

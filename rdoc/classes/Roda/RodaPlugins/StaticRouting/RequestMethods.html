@@ -56,15 +56,14 @@ Roda::RodaPlugins::StaticRouting::RequestMethods
 </div>
 <div class='description'>
 
-<p>Assume that this request matches a static route, setting the remaining path
-to the emptry string and passing control to the given block.</p>
+<p>Assume that this request matches a static route, setting the remaining path to the emptry string and passing control to the given block.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-static_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-static_route-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 123</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">static_route</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-string">&#39;&#39;</span>&#x000A;&#x000A;  <span class="ruby-identifier">always</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-static_route-source'>    <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">124</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">static_route</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">125</span>   <span class="ruby-ivar">@remaining_path</span> = <span class="ruby-string">&#39;&#39;</span>&#x000A;<span class="line-num">126</span> &#x000A;<span class="line-num">127</span>   <span class="ruby-identifier">always</span> <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">128</span>     <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-keyword">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">129</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">130</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

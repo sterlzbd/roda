@@ -56,15 +56,14 @@ Roda::RodaPlugins::MultiView::ClassMethods
 </div>
 <div class='description'>
 
-<p>Given the array of view template names, return a regexp that will match on
-any of the names and capture the matched name.</p>
+<p>Given the array of view template names, return a regexp that will match on any of the names and capture the matched name.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_view_compile-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-multi_view_compile-source'><span class="ruby-comment"># File lib/roda/plugins/multi_view.rb, line 64</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_view_compile</span>(<span class="ruby-identifier">array</span>)&#x000A;  <span class="ruby-regexp">/(#{Regexp.union(array)})/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-multi_view_compile-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_view.rb</span>&#x000A;<span class="line-num">65</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_view_compile</span>(<span class="ruby-identifier">array</span>)&#x000A;<span class="line-num">66</span>   <span class="ruby-regexp">/(#{Regexp.union(array)})/</span>&#x000A;<span class="line-num">67</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

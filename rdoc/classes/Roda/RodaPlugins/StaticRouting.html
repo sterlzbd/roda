@@ -35,33 +35,15 @@ Roda::RodaPlugins::StaticRouting
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The static_routing plugin adds static_* routing class methods for handling
-static routes (i.e. routes with static paths, no nesting or placeholders). 
-These routes are processed before the normal routing tree and designed for
-maximum performance.  This can be substantially faster than Roda&#39;s
-normal tree based routing if you have large numbers of static routes, about
-3-4x for 100-10000 static routes.  Example:</p>
+<p>The static_routing plugin adds static_* routing class methods for handling static routes (i.e. routes with static paths, no nesting or placeholders).  These routes are processed before the normal routing tree and designed for maximum performance.  This can be substantially faster than Roda&#39;s normal tree based routing if you have large numbers of static routes, about 3-4x for 100-10000 static routes.  Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:static_routing</span>&#x000A;&#x000A;<span class="ruby-identifier">static_route</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@var</span> = <span class="ruby-value">:foo</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;Not actually reached&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span>{<span class="ruby-string">&#39;static POST /#{@var}&#39;</span>}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">static_get</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&#39;static GET /foo&#39;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&#39;Not a static route&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>A few things to note in the above example.  First, unlike most other
-routing methods in <a href="../../Roda.html">Roda</a>, these take the full
-path of the request, and only match if r.path_info matches exactly.  This
-is why you need to include the leading slash in the path argument.</p>
+<p>A few things to note in the above example.  First, unlike most other routing methods in <a href="../../Roda.html"><code>Roda</code></a>, these take the full path of the request, and only match if r.path_info matches exactly.  This is why you need to include the leading slash in the path argument.</p>
 
-<p>Second, the static_* routing methods only take a single string argument for
-the path, they do not acccept other options, and do not handle placeholders
-in strings.  For any routes needing placeholders, you should use Roda&#39;s
-routing tree.</p>
+<p>Second, the static_* routing methods only take a single string argument for the path, they do not acccept other options, and do not handle placeholders in strings.  For any routes needing placeholders, you should use Roda&#39;s routing tree.</p>
 
-<p>There are separate static_* methods for each type of request method, and
-these request method specific routes are tried first.  There is also a
-static_route method that will match regardless of the request method, if
-there is no matching request methods specific route.  This is why the
-static_get method call takes precedence over the static_route method call
-for /foo. As shown above, you can use Roda&#39;s routing tree methods
-inside the static_route block to have shared behavior for different request
-methods, while still handling the request methods differently.</p>
+<p>There are separate static_* methods for each type of request method, and these request method specific routes are tried first.  There is also a static_route method that will match regardless of the request method, if there is no matching request methods specific route.  This is why the static_get method call takes precedence over the static_route method call for /foo. As shown above, you can use Roda&#39;s routing tree methods inside the static_route block to have shared behavior for different request methods, while still handling the request methods differently.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -98,7 +80,7 @@ methods, while still handling the request methods differently.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 55</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>] = {}&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">56</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">57</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>] = {}&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -115,7 +97,7 @@ methods, while still handling the request methods differently.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/static_routing.rb, line 51</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="line-num">54</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

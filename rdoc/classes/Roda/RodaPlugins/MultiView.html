@@ -35,19 +35,9 @@ Roda::RodaPlugins::MultiView
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The multi_view plugin makes it easy to render multiple views, where the
-view template is the same as the matched element.  It adds an
-<code>r.multi_view</code> method, which takes an argument that is passed to
-<code>r.get</code>, and should capture a single argument, which is treated
-as the template name to pass to <code>view</code>.  This makes it possible
-to pass in an array of strings, or a regexp with a single capture.</p>
+<p>The multi_view plugin makes it easy to render multiple views, where the view template is the same as the matched element.  It adds an <code>r.multi_view</code> method, which takes an argument that is passed to <code>r.get</code>, and should capture a single argument, which is treated as the template name to pass to <code>view</code>.  This makes it possible to pass in an array of strings, or a regexp with a single capture.</p>
 
-<p>The advantage of using a regexp over an array of strings is that the regexp
-is generally faster and uses less memory.  However, constructing the
-regexps is more cumbersome.  To make it easier, the multi_view plugin also
-offers a <code>multi_view_compile</code> class method that will take an
-array of view template names and construct a regexp that can be passed to
-<code>r.multi_view</code>.</p>
+<p>The advantage of using a regexp over an array of strings is that the regexp is generally faster and uses less memory.  However, constructing the regexps is more cumbersome.  To make it easier, the multi_view plugin also offers a <code>multi_view_compile</code> class method that will take an array of view template names and construct a regexp that can be passed to <code>r.multi_view</code>.</p>
 
 <p>Example:</p>
 
@@ -81,15 +71,14 @@ array of view template names and construct a regexp that can be passed to
 </div>
 <div class='description'>
 
-<p>Depend on the render plugin, since this plugin only makes sense when the
-render plugin is used.</p>
+<p>Depend on the render plugin, since this plugin only makes sense when the render plugin is used.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/multi_view.rb, line 57</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_view.rb</span>&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::MailProcessor</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::MailProcessor
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/mail_processor_rb.html">lib/roda/plugins/mail_processor.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The mail_processor plugin allows your <a href="../../Roda.html"><code>Roda</code></a> application to process mail using a routing tree. Quick example:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">MailProcessor</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:mail_processor</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># Match based on the To header, extracting the ticket_id</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">to</span> <span class="ruby-regexp">/ticket\+(\d+)@example.com/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ticket_id</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-identifier">ticket</span> = <span class="ruby-constant">Ticket</span>[<span class="ruby-identifier">ticket_id</span>.<span class="ruby-identifier">to_i</span>]&#x000A;        <span class="ruby-comment"># Mark the mail as handled if there is a valid ticket associated</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">handle</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">ticket</span>.<span class="ruby-identifier">add_note</span>(<span class="ruby-value">text:</span> <span class="ruby-identifier">mail_text</span>, <span class="ruby-value">from:</span> <span class="ruby-identifier">from</span>)&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># Match based on the To or CC header</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">rcpt</span> <span class="ruby-string">&quot;post@example.com&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># Match based on the body, capturing the post id and tag</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">body</span>(<span class="ruby-regexp">/^Post: (\d+)-(\w+)/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">post_id</span>, <span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>&#x000A;        <span class="ruby-identifier">unhandled_mail</span>(<span class="ruby-string">&quot;no matching post&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">post</span> = <span class="ruby-constant">Post</span>[<span class="ruby-identifier">post_id</span>.<span class="ruby-identifier">to_i</span>]&#x000A;        <span class="ruby-identifier">unhandled_mail</span>(<span class="ruby-string">&quot;tag doesn&#39;t match for post&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">post</span>.<span class="ruby-identifier">tag</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">tag</span>&#x000A;&#x000A;        <span class="ruby-comment"># Match based on APPROVE somewhere in the mail text,</span>&#x000A;        <span class="ruby-comment"># marking the mail as handled</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">handle_text</span> <span class="ruby-regexp">/\bAPPROVE\b/i</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">post</span>.<span class="ruby-identifier">approve!</span>(<span class="ruby-identifier">from</span>)&#x000A;        <span class="ruby-keyword">end</span>&#x000A;&#x000A;        <span class="ruby-comment"># Match based on DENY somewhere in the mail text,</span>&#x000A;        <span class="ruby-comment"># marking the mail as handled</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">handle_text</span> <span class="ruby-regexp">/\bDENY\b/i</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">post</span>.<span class="ruby-identifier">deny!</span>(<span class="ruby-identifier">from</span>)&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<h1 id="module-Roda::RodaPlugins::MailProcessor-label-Processing+Mail">Processing Mail<span><a href="#module-Roda::RodaPlugins::MailProcessor-label-Processing+Mail">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>To submit a mail for processing via the mail_processor routing tree, call the <code>process_mail</code> method with a <code>Mail</code> instance:</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">process_mail</span>(<span class="ruby-constant">Mail</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span>)</pre>
+
+<p>You can use this to process mail messages from the filesystem:</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">process_mail</span>(<span class="ruby-constant">Mail</span>.<span class="ruby-identifier">read</span>(<span class="ruby-string">&#39;/path/to/message.eml&#39;</span>))</pre>
+
+<p>If you have a service that delivers mail via an HTTP POST request (for realtime processing), you can have your web routes convert the web request into a <code>Mail</code> instance and then call <code>process_mail</code>:</p>
+
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&quot;email&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># check request is submitted by trusted sender</span>&#x000A;&#x000A;  <span class="ruby-comment"># If request body is the raw mail body</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">rewind</span>&#x000A;  <span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">process_mail</span>(<span class="ruby-constant">Mail</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">read</span>))&#x000A;&#x000A;  <span class="ruby-comment"># If request body is in a parameter named content</span>&#x000A;  <span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">process_mail</span>(<span class="ruby-constant">Mail</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;content&#39;</span>]))&#x000A;&#x000A;  <span class="ruby-comment"># If the HTTP request requires a specific response status code (such as 204)</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">204</span>&#x000A;&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Note that when receiving messages via HTTP, you need to make sure you check that the request is trusted.  How to do this depends on the delivery service, but could involve using HTTP basic authentication, checking for valid API tokens, or checking that a message includes a signature/hash that matches the expected value.</p>
+
+<p>If you have setup a default retriever_method for <code>Mail</code>, you can call <code>process_mailbox</code>, which will process all mail in the given mailbox (using <code>Mail.find_and_delete</code>):</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">process_mailbox</span></pre>
+
+<p>You can also use a <code>:retreiver</code> option to provide a specific retriever:</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">process_mailbox</span>(<span class="ruby-value">retreiver:</span> <span class="ruby-constant">Mail</span><span class="ruby-operator">::</span><span class="ruby-constant">POP3</span>.<span class="ruby-identifier">new</span>)</pre>
+
+<h1 id="module-Roda::RodaPlugins::MailProcessor-label-Routing+Mail">Routing Mail<span><a href="#module-Roda::RodaPlugins::MailProcessor-label-Routing+Mail">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>The mail_processor plugin handles routing similar to Roda&#39;s default routing for web requests, but because mail processing may not return a result, the mail_processor plugin uses a more explicit approach to consider whether the message has been handled. If the <code>r.handle</code> method is called during routing, the mail is considered handled, otherwise the mail is considered not handled.  The <code>unhandled_mail</code> method can be called at any point to stop routing and consider the mail as not handled (even if inside an <code>r.handle</code> block).</p>
+
+<p>Here are the mail routing methods and what they use for matching:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>from </td><td>
+<p>match on the mail From address</p>
+</td></tr><tr><td class='label'>to </td><td>
+<p>match on the mail To address</p>
+</td></tr><tr><td class='label'>cc </td><td>
+<p>match on the mail CC address</p>
+</td></tr><tr><td class='label'>rcpt </td><td>
+<p>match on the mail recipients (To and CC addresses by default)</p>
+</td></tr><tr><td class='label'>subject </td><td>
+<p>match on the mail subject</p>
+</td></tr><tr><td class='label'>body </td><td>
+<p>match on the mail body</p>
+</td></tr><tr><td class='label'>text </td><td>
+<p>match on text extracted from the message (same as mail body by default)</p>
+</td></tr><tr><td class='label'>header </td><td>
+<p>match on a mail header</p>
+</td></tr></tbody></table>
+
+<p>All of these routing methods accept a single argument, except for <code>r.header</code>, which can take two arguments.</p>
+
+<p>Each of these routing methods also has a <code>r.handle_*</code> method (e.g. <code>r.handle_from</code>), which will call <code>r.handle</code> implicitly to mark the mail as handled if the routing method matches and control is passed to the block.</p>
+
+<p>The address matchers (from, to, cc, rcpt) perform a case-insensitive match if given a string or array of strings, and a regular regexp match if given a regexp.</p>
+
+<p>The content matchers (subject, body, text) perform a case-sensitive substring search if given a string or array of strings, and a regular regexp match if given a regexp.</p>
+
+<p>The header matcher should be called with a key and an optional value.  If the matcher is called with a key and not a value, it matches if a header matching the key is present in the message, yielding the header value.  If the matcher is called with a key and a value, it matches if a header matching the key is present and the header value matches the value given, using the same criteria as the content matchers.</p>
+
+<p>In all cases for matchers, if a string is given and matches, the match block is called without arguments.  If an array of strings is given, and one of the strings matches, the match block is called with the matching string argument.  If a regexp is given, the match block is called with the regexp captures.  This is the same behavior for Roda&#39;s general string, array, and regexp matchers.</p>
+
+<h1 id="module-Roda::RodaPlugins::MailProcessor-label-Recipient-Specific+Routing">Recipient-Specific Routing<span><a href="#module-Roda::RodaPlugins::MailProcessor-label-Recipient-Specific+Routing">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>To allow splitting up the mail processor routing tree based on recipients, you can use the <code>rcpt</code> class method, which takes any number of string or regexps arguments for recipient addresses, and a block to handle the routing for those addresses instead of using the default routing.</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">rcpt</span>(<span class="ruby-string">&#39;a@example.com&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">text</span> <span class="ruby-regexp">/Post: (\d+)-(\h+)/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">post_id</span>, <span class="ruby-identifier">hmac</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">Post</span>[<span class="ruby-identifier">post_id</span>.<span class="ruby-identifier">to_i</span>]&#x000A;    <span class="ruby-identifier">unhandled_mail</span>(<span class="ruby-string">&quot;no matching Post&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">post</span> = <span class="ruby-constant">Post</span>[<span class="ruby-identifier">post_id</span>.<span class="ruby-identifier">to_i</span>]&#x000A;    <span class="ruby-identifier">unhandled_mail</span>(<span class="ruby-string">&quot;HMAC for doesn&#39;t match for post&quot;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">hmac</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">post</span>.<span class="ruby-identifier">hmac_for_address</span>(<span class="ruby-identifier">from</span>.<span class="ruby-identifier">first</span>)&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">handle_text</span> <span class="ruby-string">&#39;APPROVE&#39;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">post</span>.<span class="ruby-identifier">approved_by</span>(<span class="ruby-identifier">from</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">handle_text</span> <span class="ruby-string">&#39;DENY&#39;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">post</span>.<span class="ruby-identifier">denied_by</span>(<span class="ruby-identifier">from</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The <code>rcpt</code> class method does not mark the messages as handled, because in most cases you will need to do additional matching to extract the information necessary to handle the mail.  You will need to call <code>r.handle</code> or similar method inside the block to mark the mail as handled.</p>
+
+<p>Matching on strings provided to the <code>rcpt</code> class method is an O(1) operation as the strings are stored lowercase in a hash.  Matching on regexps provided to the <code>rcpt</code> class method is an O(n) operation on the number of regexps.</p>
+
+<p>If you would like to break up the routing tree using something other than the recipient address, you can use the multi_route plugin.</p>
+
+<h1 id="module-Roda::RodaPlugins::MailProcessor-label-Hooks"><a href="Hooks.html"><code>Hooks</code></a><span><a href="#module-Roda::RodaPlugins::MailProcessor-label-Hooks">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>The mail_processor plugin offers hooks for processing mail.</p>
+
+<p>For mail that is handled successfully, you can use the handled_mail hook:</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">handled_mail</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># nothing by default</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>For mail that is not handled successfully, either because <code>r.handle</code> was not called during routing or because the <code>unhandled_mail</code> method was called explicitly, you can use the unhandled_mail hook.</p>
+
+<p>The default is to reraise the <a href="MailProcessor/UnhandledMail.html"><code>UnhandledMail</code></a> exception that was raised during routing, so that calling code will not be able to ignore errors when processing mail.  However, you may want to save such mails to a special location or forward them as attachments for manual review, and the unhandled_mail hook allows you to do that:</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">unhandled_mail</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># raise by default</span>&#x000A;&#x000A;  <span class="ruby-comment"># Forward the mail as an attachment to an admin</span>&#x000A;  <span class="ruby-identifier">m</span> = <span class="ruby-constant">Mail</span>.<span class="ruby-identifier">new</span>&#x000A;  <span class="ruby-identifier">m</span>.<span class="ruby-identifier">to</span> <span class="ruby-string">&#39;admin@example.com&#39;</span>&#x000A;  <span class="ruby-identifier">m</span>.<span class="ruby-identifier">subject</span> <span class="ruby-string">&#39;[APP] Unhandled Received Email&#39;</span>&#x000A;  <span class="ruby-identifier">m</span>.<span class="ruby-identifier">add_file</span>(<span class="ruby-value">filename:</span> <span class="ruby-string">&#39;message.eml&#39;</span>, <span class="ruby-value">:content</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">mail</span>.<span class="ruby-identifier">encoded</span>)&#x000A;  <span class="ruby-identifier">m</span>.<span class="ruby-identifier">deliver</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Finally, for all processed mail, regardless of whether it was handled or not, there is an after_mail hook, which can be used to archive all processed mail:</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">after_mail</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># nothing by default</span>&#x000A;&#x000A;  <span class="ruby-comment"># Add it to a received_mail table using Sequel</span>&#x000A;  <span class="ruby-constant">DB</span>[<span class="ruby-value">:received_mail</span>].<span class="ruby-identifier">insert</span>(<span class="ruby-value">:message</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">mail</span>.<span class="ruby-identifier">encoded</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The after_mail hook is called after the handled_mail or unhandled_mail hook is called, even if routing, the handled_mail hook, or the unhandled_mail hook raises an exception.  The handled_mail and unhandled_mail hooks are not called if an exception is raised during routing (other than for <a href="MailProcessor/UnhandledMail.html"><code>UnhandledMail</code></a> exceptions).</p>
+
+<h1 id="module-Roda::RodaPlugins::MailProcessor-label-Extracting+Text+from+Mail">Extracting Text from Mail<span><a href="#module-Roda::RodaPlugins::MailProcessor-label-Extracting+Text+from+Mail">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>The most common use of the mail_processor plugin is to handle replies to mails sent out by the application, so that recipients can reply to mail to make changes without having to access the application directly.  When handling replies, it is common to want to extract only the text of the reply, and ignore the text of the message that was replied to.  Because there is no consistent way to format replies in mail, there have evolved various approaches to do this, with some gems devoted to extracting the reply text from a message.</p>
+
+<p>The mail_processor plugin does not choose any particular approach for extracting text from mail, but it includes the ability to configure how to do that via the <code>mail_text</code> class method. This method affects the <code>r.text</code> match method, as well as <code>mail_text</code> instance method. By default, the decoded body of the mail is used as the mail text.</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">mail_text</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># mail.body.decoded by default</span>&#x000A;&#x000A;  <span class="ruby-comment"># https://github.com/github/email_reply_parser</span>&#x000A;  <span class="ruby-constant">EmailReplyParser</span>.<span class="ruby-identifier">parse_reply</span>(<span class="ruby-identifier">mail</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">decoded</span>)&#x000A;&#x000A;  <span class="ruby-comment"># https://github.com/fiedl/extended_email_reply_parser</span>&#x000A;  <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">parse</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<h1 id="module-Roda::RodaPlugins::MailProcessor-label-Security">Security<span><a href="#module-Roda::RodaPlugins::MailProcessor-label-Security">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>Note that due to the way mail delivery works via SMTP, the actual sender and recipient of the mail (the SMTP envelope MAIL FROM and RCPT TO addresses) may not match the sender and receiver embedded in the message.  Because mail_processor routing relies on parsing the mail,  it does not have access to the actual sender and recipient used at the SMTP level, unless a mail server adds that information as a header to the mail (and clears any existing header to prevent spoofing).  Keep that in mind when you are setting up your mail routes.  If you have setup your mail server to add the SMTP RCPT TO information to a header, you may want to only consider that header when looking for the recipients of the message, instead of looking at the To and CC headers.  You can override the default behavior for determining the recipients (this will affect the <code>rcpt</code> class method, <code>r.rcpt</code> match method, and <code>mail_recipients</code> instance method):</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">mail_recipients</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># Assuming the information is in the X-SMTP-To header</span>&#x000A;  <span class="ruby-constant">Array</span>(<span class="ruby-identifier">header</span>[<span class="ruby-string">&#39;X-SMTP-To&#39;</span>].<span class="ruby-identifier">decoded</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>Also note that unlike when handling web requests where you can rely on storing authentication information in the session, when processing mail, you should manually authenticate each message, as email is trivially forged.  One way to do this is assigning and storing a unique identifier when sending each message, and checking for a matching identifier when receiving a response. Another option is including a computable authentication code (e.g. HMAC) in the message, and then when receiving a response, recomputing the authentication code and seeing if it matches the authentication code in the message.  The unique identifier approach requires storing a large number of identifiers, but allows you to remove the identifier after a reply is received (to ensure only one response is handled).  The authentication code approach does not require additional storage, but does not allow you to ensure only a single response is handled.</p>
+
+<h1 id="module-Roda::RodaPlugins::MailProcessor-label-Avoiding+Mail+Loops">Avoiding Mail Loops<span><a href="#module-Roda::RodaPlugins::MailProcessor-label-Avoiding+Mail+Loops">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>If processing the mail results in sending out additional mail, be careful not to send a response to the sender of the email, otherwise if the sender of the email has an auto-responder, you can end up with a mail loop, where every mail you send results in a response, which you then process and send out a response to.</p>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="MailProcessor/ClassMethods.html">Roda::RodaPlugins::MailProcessor::ClassMethods</a></li>
+<li><a href="MailProcessor/InstanceMethods.html">Roda::RodaPlugins::MailProcessor::InstanceMethods</a></li>
+<li><a href="MailProcessor/RequestMethods.html">Roda::RodaPlugins::MailProcessor::RequestMethods</a></li>
+<li><a href="MailProcessor/UnhandledMail.html">Roda::RodaPlugins::MailProcessor::UnhandledMail</a></li>
+</ol>
+</div>
+<div id='section'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

@@ -35,11 +35,7 @@ Roda::RodaPlugins::DefaultStatus
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The default_status plugin accepts a block which should return a response
-status integer. This integer will be used as the default response status
-(usually 200) if the body has been written to, and you have not explicitly
-set a response status. The block given to the block is instance_execed in
-the context of the response.</p>
+<p>The default_status plugin accepts a block which should return a response status integer. This integer will be used as the default response status (usually 200) if the body has been written to, and you have not explicitly set a response status. The block given to the block is instance_execed in the context of the response.</p>
 
 <p>Example:</p>
 
@@ -77,7 +73,7 @@ the context of the response.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/default_status.rb, line 19</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;default_status plugin requires a block&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_status</span>] = <span class="ruby-identifier">block</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/default_status.rb</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">21</span>   <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;default_status plugin requires a block&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">22</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_status</span>] = <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">23</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

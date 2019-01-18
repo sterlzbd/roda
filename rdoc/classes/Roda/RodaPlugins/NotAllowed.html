@@ -35,40 +35,27 @@ Roda::RodaPlugins::NotAllowed
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The not_allowed plugin makes <a href="../../Roda.html">Roda</a> attempt to
-automatically support the 405 Method Not Allowed response status. The
-plugin changes the <code>r.get</code> and <code>r.post</code> verb methods
-to automatically return a 405 status if they are called with any arguments,
-and the arguments match but the request method does not match. So this
-code:</p>
+<p>The not_allowed plugin makes <a href="../../Roda.html"><code>Roda</code></a> attempt to automatically support the 405 Method Not Allowed response status. The plugin changes the <code>r.get</code> and <code>r.post</code> verb methods to automatically return a 405 status if they are called with any arguments, and the arguments match but the request method does not match. So this code:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;a&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>will return a 200 response for <code>GET /</code> and a 405 response for
-<code>POST /</code>.</p>
+<p>will return a 200 response for <code>GET /</code> and a 405 response for <code>POST /</code>.</p>
 
-<p>This plugin also changes the <code>r.is</code> method so that if you use a
-verb method inside <code>r.is</code>, it returns a 405 status if none of
-the verb methods match.  So this code:</p>
+<p>This plugin also changes the <code>r.is</code> method so that if you use a verb method inside <code>r.is</code>, it returns a 405 status if none of the verb methods match.  So this code:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;a&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;b&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>will return a 200 response for <code>GET /</code> and <code>POST /</code>,
-but a 405 response for <code>PUT /</code>.</p>
+<p>will return a 200 response for <code>GET /</code> and <code>POST /</code>, but a 405 response for <code>PUT /</code>.</p>
 
 <p>Note that this plugin will probably not do what you want for code such as:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;a&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;b&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Since for a <code>POST /</code> request, when <code>r.get</code> method
-matches the path but not the request method, it will return an immediate
-405 response.  You must DRY up this code for it work correctly, like this:</p>
+<p>Since for a <code>POST /</code> request, when <code>r.get</code> method matches the path but not the request method, it will return an immediate 405 response.  You must DRY up this code for it work correctly, like this:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;a&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;b&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>In all cases where it uses a 405 response, it also sets the
-<code>Allow</code> header in the response to contain the request methods
-supported.</p>
+<p>In all cases where it uses a 405 response, it also sets the <code>Allow</code> header in the response to contain the request methods supported.</p>
 
 <p>This plugin depends on the all_verbs plugin.</p>
 </div>
@@ -99,15 +86,14 @@ supported.</p>
 </div>
 <div class='description'>
 
-<p>Depend on the all_verbs plugin, as this plugin overrides methods defined by
-it and calls super.</p>
+<p>Depend on the all_verbs plugin, as this plugin overrides methods defined by it and calls super.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/not_allowed.rb, line 69</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:all_verbs</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/not_allowed.rb</span>&#x000A;<span class="line-num">70</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">71</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:all_verbs</span>&#x000A;<span class="line-num">72</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

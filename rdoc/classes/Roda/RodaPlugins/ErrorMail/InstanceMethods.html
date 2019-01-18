@@ -57,16 +57,14 @@ Roda::RodaPlugins::ErrorMail::InstanceMethods
 </div>
 <div class='description'>
 
-<p>Send an email for the given error.  <code>exception</code> is usually an
-exception instance, but it can be a plain string which is used as the
-subject for the email.</p>
+<p>Send an email for the given error.  <code>exception</code> is usually an exception instance, but it can be a plain string which is used as the subject for the email.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-error_mail-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-error_mail-source'><span class="ruby-comment"># File lib/roda/plugins/error_mail.rb, line 50</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error_mail</span>(<span class="ruby-identifier">exception</span>)&#x000A;  <span class="ruby-identifier">_error_mail</span>(<span class="ruby-identifier">exception</span>).<span class="ruby-identifier">deliver!</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-error_mail-source'>   <span class="ruby-comment"># File lib/roda/plugins/error_mail.rb</span>&#x000A;<span class="line-num">51</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error_mail</span>(<span class="ruby-identifier">exception</span>)&#x000A;<span class="line-num">52</span>   <span class="ruby-identifier">_error_mail</span>(<span class="ruby-identifier">exception</span>).<span class="ruby-identifier">deliver!</span>&#x000A;<span class="line-num">53</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-error_mail_content'>
@@ -78,16 +76,14 @@ subject for the email.</p>
 </div>
 <div class='description'>
 
-<p>The content of the email to send, include the headers and the body. Takes
-the same argument as <a
-href="InstanceMethods.html#method-i-error_mail">error_mail</a>.</p>
+<p>The content of the email to send, include the headers and the body. Takes the same argument as <a href="InstanceMethods.html#method-i-error_mail"><code>error_mail</code></a>.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-error_mail_content-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-error_mail_content-source'><span class="ruby-comment"># File lib/roda/plugins/error_mail.rb, line 56</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error_mail_content</span>(<span class="ruby-identifier">exception</span>)&#x000A;  <span class="ruby-identifier">_error_mail</span>(<span class="ruby-identifier">exception</span>).<span class="ruby-identifier">to_s</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-error_mail_content-source'>   <span class="ruby-comment"># File lib/roda/plugins/error_mail.rb</span>&#x000A;<span class="line-num">57</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error_mail_content</span>(<span class="ruby-identifier">exception</span>)&#x000A;<span class="line-num">58</span>   <span class="ruby-identifier">_error_mail</span>(<span class="ruby-identifier">exception</span>).<span class="ruby-identifier">to_s</span>&#x000A;<span class="line-num">59</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

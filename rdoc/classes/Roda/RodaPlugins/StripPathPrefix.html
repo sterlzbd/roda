@@ -35,13 +35,7 @@ Roda::RodaPlugins::StripPathPrefix
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The strip_path_prefix plugin makes <a href="../../Roda.html">Roda</a> strip
-a given prefix off internal absolute paths, turning them to relative paths.
-<a href="../../Roda.html">Roda</a> by default stores internal paths as
-absolute paths. The main reason to use this plugin is when the internal
-absolute path could change at runtime, either due to a symlink change or
-chroot call, or you really want to use relative paths instead of absolute
-paths.</p>
+<p>The strip_path_prefix plugin makes <a href="../../Roda.html"><code>Roda</code></a> strip a given prefix off internal absolute paths, turning them to relative paths.  <a href="../../Roda.html"><code>Roda</code></a> by default stores internal paths as absolute paths. The main reason to use this plugin is when the internal absolute path could change at runtime, either due to a symlink change or chroot call, or you really want to use relative paths instead of absolute paths.</p>
 
 <p>Examples:</p>
 
@@ -81,7 +75,7 @@ paths.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/strip_path_prefix.rb, line 17</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>=<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>)&#x000A;  <span class="ruby-identifier">prefix</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;/&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">prefix</span><span class="ruby-operator">=~</span> <span class="ruby-regexp">/\/\z/</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip_path_prefix</span>] = <span class="ruby-regexp">/\A#{Regexp.escape(prefix)}/</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/strip_path_prefix.rb</span>&#x000A;<span class="line-num">18</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>=<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>)&#x000A;<span class="line-num">19</span>   <span class="ruby-identifier">prefix</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;/&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">prefix</span><span class="ruby-operator">=~</span> <span class="ruby-regexp">/\/\z/</span>&#x000A;<span class="line-num">20</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip_path_prefix</span>] = <span class="ruby-regexp">/\A#{Regexp.escape(prefix)}/</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

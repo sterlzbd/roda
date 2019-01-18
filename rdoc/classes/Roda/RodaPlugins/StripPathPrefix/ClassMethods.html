@@ -63,7 +63,7 @@ Roda::RodaPlugins::StripPathPrefix::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-expand_path-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-expand_path-source'><span class="ruby-comment"># File lib/roda/plugins/strip_path_prefix.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expand_path</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">root</span>=<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])&#x000A;  <span class="ruby-keyword">super</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip_path_prefix</span>], <span class="ruby-string">&#39;&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-expand_path-source'>   <span class="ruby-comment"># File lib/roda/plugins/strip_path_prefix.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expand_path</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">root</span>=<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])&#x000A;<span class="line-num">26</span>   <span class="ruby-keyword">super</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip_path_prefix</span>], <span class="ruby-string">&#39;&#39;</span>)&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

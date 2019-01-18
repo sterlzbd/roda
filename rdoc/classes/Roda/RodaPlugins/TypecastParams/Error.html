@@ -39,8 +39,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Exception class for errors that are due to the submitted parameters not
-matching what is expected.  Should probably be treated as a 4xx error.</p>
+<p>Exception class for errors that are due to the submitted parameters not matching what is expected.  Should probably be treated as a 4xx error.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -71,18 +70,9 @@ matching what is expected.  Should probably be treated as a 4xx error.</p>
 </td>
 <td class='context-item-value'>[W]</td>
 <td class='context-item-desc'>
-<p>An array of all other errors that were raised with this error.  If the
-error was not raised inside <a
-href="Params.html#method-i-convert-21">Roda::RodaPlugins::TypecastParams::Params#convert!</a>
-or <a
-href="Params.html#method-i-convert_each-21">Roda::RodaPlugins::TypecastParams::Params#convert_each!</a>,
-this will just be an array containing the current receiver.</p>
+<p>An array of all other errors that were raised with this error.  If the error was not raised inside <a href="Params.html#method-i-convert-21"><code>Params#convert!</code></a> or <a href="Params.html#method-i-convert_each-21"><code>Params#convert_each!</code></a>, this will just be an array containing the current receiver.</p>
 
-<p>This allows you to use <a
-href="Params.html#method-i-convert-21">Roda::RodaPlugins::TypecastParams::Params#convert!</a>
-to process a form input, and if any conversion errors occur inside the
-block, it can provide an array of all parameter names and reasons for
-parameters with problems.</p>
+<p>This allows you to use <a href="Params.html#method-i-convert-21"><code>Params#convert!</code></a> to process a form input, and if any conversion errors occur inside the block, it can provide an array of all parameter names and reasons for parameters with problems.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -91,9 +81,7 @@ parameters with problems.</p>
 </td>
 <td class='context-item-value'>[RW]</td>
 <td class='context-item-desc'>
-<p>The keys used to access the parameter that caused the error.  This is an
-array that can be splatted to <code>dig</code> to get the value of the
-parameter causing the error.</p>
+<p>The keys used to access the parameter that caused the error.  This is an array that can be splatted to <code>dig</code> to get the value of the parameter causing the error.</p>
 </td>
 </tr>
 <tr class='top-aligned-row context-row'>
@@ -102,11 +90,7 @@ parameter causing the error.</p>
 </td>
 <td class='context-item-value'>[RW]</td>
 <td class='context-item-desc'>
-<p>The reason behind this error.  If this error was caused by a conversion
-method, this will be the the conversion method symbol.  If this error was
-caused because a value was missing, then it will be <code>:missing</code>. 
-If this error was caused because a value was not the correct type, then it
-will be <code>:invalid_type</code>.</p>
+<p>The reason behind this error.  If this error was caused by a conversion method, this will be the the conversion method symbol.  If this error was caused because a value was missing, then it will be <code>:missing</code>.  If this error was caused because a value was not the correct type, then it will be <code>:invalid_type</code>.</p>
 </td>
 </tr>
 </table>
@@ -123,15 +107,14 @@ will be <code>:invalid_type</code>.</p>
 </div>
 <div class='description'>
 
-<p>Set the keys in the given exception.  If the exception is not already an
-instance of the class, create a new instance to wrap it.</p>
+<p>Set the keys in the given exception.  If the exception is not already an instance of the class, create a new instance to wrap it.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-create-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-create-source'><span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb, line 278</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">create</span>(<span class="ruby-identifier">keys</span>, <span class="ruby-identifier">reason</span>, <span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-keyword">self</span>)&#x000A;    <span class="ruby-identifier">e</span>.<span class="ruby-identifier">keys</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">keys</span>&#x000A;    <span class="ruby-identifier">e</span>.<span class="ruby-identifier">reason</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">reason</span>&#x000A;    <span class="ruby-identifier">e</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">backtrace</span> = <span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span>&#x000A;    <span class="ruby-identifier">e</span> = <span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;#{e.class}: #{e.message}&quot;</span>)&#x000A;    <span class="ruby-identifier">e</span>.<span class="ruby-identifier">keys</span> = <span class="ruby-identifier">keys</span>&#x000A;    <span class="ruby-identifier">e</span>.<span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>&#x000A;    <span class="ruby-identifier">e</span>.<span class="ruby-identifier">set_backtrace</span>(<span class="ruby-identifier">backtrace</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">backtrace</span>&#x000A;    <span class="ruby-identifier">e</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-create-source'>    <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>&#x000A;<span class="line-num">279</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">create</span>(<span class="ruby-identifier">keys</span>, <span class="ruby-identifier">reason</span>, <span class="ruby-identifier">e</span>)&#x000A;<span class="line-num">280</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-keyword">self</span>)&#x000A;<span class="line-num">281</span>     <span class="ruby-identifier">e</span>.<span class="ruby-identifier">keys</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">keys</span>&#x000A;<span class="line-num">282</span>     <span class="ruby-identifier">e</span>.<span class="ruby-identifier">reason</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">reason</span>&#x000A;<span class="line-num">283</span>     <span class="ruby-identifier">e</span>&#x000A;<span class="line-num">284</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">285</span>     <span class="ruby-identifier">backtrace</span> = <span class="ruby-identifier">e</span>.<span class="ruby-identifier">backtrace</span>&#x000A;<span class="line-num">286</span>     <span class="ruby-identifier">e</span> = <span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;#{e.class}: #{e.message}&quot;</span>)&#x000A;<span class="line-num">287</span>     <span class="ruby-identifier">e</span>.<span class="ruby-identifier">keys</span> = <span class="ruby-identifier">keys</span>&#x000A;<span class="line-num">288</span>     <span class="ruby-identifier">e</span>.<span class="ruby-identifier">reason</span> = <span class="ruby-identifier">reason</span>&#x000A;<span class="line-num">289</span>     <span class="ruby-identifier">e</span>.<span class="ruby-identifier">set_backtrace</span>(<span class="ruby-identifier">backtrace</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">backtrace</span>&#x000A;<span class="line-num">290</span>     <span class="ruby-identifier">e</span>&#x000A;<span class="line-num">291</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">292</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -149,7 +132,7 @@ instance of the class, create a new instance to wrap it.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-all_errors-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-all_errors-source'><span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb, line 306</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">all_errors</span>&#x000A;  <span class="ruby-ivar">@all_errors</span> <span class="ruby-operator">||=</span> [<span class="ruby-keyword">self</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-all_errors-source'>    <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>&#x000A;<span class="line-num">307</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">all_errors</span>&#x000A;<span class="line-num">308</span>   <span class="ruby-ivar">@all_errors</span> <span class="ruby-operator">||=</span> [<span class="ruby-keyword">self</span>]&#x000A;<span class="line-num">309</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-param_name'>
@@ -161,12 +144,7 @@ instance of the class, create a new instance to wrap it.</p>
 </div>
 <div class='description'>
 
-<p>The likely parameter name where the contents were not expected.  This is
-designed for cases where the parameter was submitted with the typical
-application/x-www-form-urlencoded or multipart/form-data content types, and
-assumes the typical rack parsing of these content types into parameters.  #
-If the parameters were submitted via JSON, <a
-href="Error.html#attribute-i-keys">keys</a> should be used directly.</p>
+<p>The likely parameter name where the contents were not expected.  This is designed for cases where the parameter was submitted with the typical application/x-www-form-urlencoded or multipart/form-data content types, and assumes the typical rack parsing of these content types into parameters.  # If the parameters were submitted via JSON, <a href="Error.html#attribute-i-keys"><code>keys</code></a> should be used directly.</p>
 
 <p>Example:</p>
 
@@ -177,7 +155,7 @@ href="Error.html#attribute-i-keys">keys</a> should be used directly.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-param_name-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-param_name-source'><span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb, line 333</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_name</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>&#x000A;    <span class="ruby-identifier">first</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">rest</span> = <span class="ruby-identifier">keys</span>&#x000A;    <span class="ruby-identifier">v</span> = <span class="ruby-identifier">first</span>.<span class="ruby-identifier">dup</span>&#x000A;    <span class="ruby-identifier">rest</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">param</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">v</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;[&quot;</span>&#x000A;      <span class="ruby-identifier">v</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">param</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">param</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>)&#x000A;      <span class="ruby-identifier">v</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;]&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">v</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">first</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-param_name-source'>    <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>&#x000A;<span class="line-num">334</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_name</span>&#x000A;<span class="line-num">335</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">1</span>&#x000A;<span class="line-num">336</span>     <span class="ruby-identifier">first</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">rest</span> = <span class="ruby-identifier">keys</span>&#x000A;<span class="line-num">337</span>     <span class="ruby-identifier">v</span> = <span class="ruby-identifier">first</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">338</span>     <span class="ruby-identifier">rest</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">param</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">339</span>       <span class="ruby-identifier">v</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;[&quot;</span>&#x000A;<span class="line-num">340</span>       <span class="ruby-identifier">v</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">param</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">param</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Integer</span>)&#x000A;<span class="line-num">341</span>       <span class="ruby-identifier">v</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&quot;]&quot;</span>&#x000A;<span class="line-num">342</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">343</span>     <span class="ruby-identifier">v</span>&#x000A;<span class="line-num">344</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">345</span>     <span class="ruby-identifier">keys</span>.<span class="ruby-identifier">first</span>&#x000A;<span class="line-num">346</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">347</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-param_names'>
@@ -189,21 +167,14 @@ href="Error.html#attribute-i-keys">keys</a> should be used directly.</p>
 </div>
 <div class='description'>
 
-<p>An array of all parameter names for parameters where the context were not
-expected.  If <a
-href="Params.html#method-i-convert-21">Roda::RodaPlugins::TypecastParams::Params#convert!</a>
-was not used, this will be an array containing <a
-href="Error.html#method-i-param_name">param_name</a>.  If <a
-href="Params.html#method-i-convert-21">Roda::RodaPlugins::TypecastParams::Params#convert!</a>
-was used and multiple exceptions were captured inside the convert! block,
-this will contain the parameter names related to all captured exceptions.</p>
+<p>An array of all parameter names for parameters where the context were not expected.  If <a href="Params.html#method-i-convert-21"><code>Params#convert!</code></a> was not used, this will be an array containing <a href="Error.html#method-i-param_name"><code>param_name</code></a>.  If <a href="Params.html#method-i-convert-21"><code>Params#convert!</code></a> was used and multiple exceptions were captured inside the convert! block, this will contain the parameter names related to all captured exceptions.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-param_names-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-param_names-source'><span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb, line 353</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_names</span>&#x000A;  <span class="ruby-identifier">all_errors</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:param_name</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-param_names-source'>    <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>&#x000A;<span class="line-num">354</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">param_names</span>&#x000A;<span class="line-num">355</span>   <span class="ruby-identifier">all_errors</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:param_name</span>)&#x000A;<span class="line-num">356</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

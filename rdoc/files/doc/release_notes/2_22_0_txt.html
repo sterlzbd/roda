@@ -38,25 +38,11 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>An :unsupported_block_result =&gt; :raise option is now supported for <a
-href="../../../classes/Roda.html">Roda</a> applications.  This will raise a
-RodaError if an unsupported value is returned from a match block or the
-route block.  This can make it easier to discover potential problems in the
-routing tree.  This option may become the default behavior in <a
-href="../../../classes/Roda.html">Roda</a> 3.</p>
+<p>An :unsupported_block_result =&gt; :raise option is now supported for <a href="../../../classes/Roda.html"><code>Roda</code></a> applications.  This will raise a RodaError if an unsupported value is returned from a match block or the route block.  This can make it easier to discover potential problems in the routing tree.  This option may become the default behavior in <a href="../../../classes/Roda.html"><code>Roda</code></a> 3.</p>
 </li><li>
-<p>An :unsupported_matcher =&gt; :raise option is now supported for <a
-href="../../../classes/Roda.html">Roda</a> applications.  This will raise a
-RodaError if you use an unsupported value as a matcher.  This can make it
-easier to discover potential problems in the routing tree. This option may
-become the default behavior in <a
-href="../../../classes/Roda.html">Roda</a> 3.</p>
+<p>An :unsupported_matcher =&gt; :raise option is now supported for <a href="../../../classes/Roda.html"><code>Roda</code></a> applications.  This will raise a RodaError if you use an unsupported value as a matcher.  This can make it easier to discover potential problems in the routing tree. This option may become the default behavior in <a href="../../../classes/Roda.html"><code>Roda</code></a> 3.</p>
 </li><li>
-<p>A :verbatim_string_matcher option is now supported for <a
-href="../../../classes/Roda.html">Roda</a> applications.  This will make
-all string matchers only match the path verbatim, disallowing the use of a
-colon for placeholders in the string.  It&#39;s recommended that users
-switch to using separate symbol arguments for placeholders.</p>
+<p>A :verbatim_string_matcher option is now supported for <a href="../../../classes/Roda.html"><code>Roda</code></a> applications.  This will make all string matchers only match the path verbatim, disallowing the use of a colon for placeholders in the string.  It&#39;s recommended that users switch to using separate symbol arguments for placeholders.</p>
 
 <p>If you enable this option, you need to change code such as:</p>
 
@@ -66,16 +52,11 @@ switch to using separate symbol arguments for placeholders.</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-value">:bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>If you are looking to convert an existing routing tree from using
-placeholders in strings to separate symbol arguments, you can scan your
-routing tree for potential usage of placeholders in strings:</p>
+<p>If you are looking to convert an existing routing tree from using placeholders in strings to separate symbol arguments, you can scan your routing tree for potential usage of placeholders in strings:</p>
 
 <pre>grep &#39; r\..*[&#39;\&#39;&#39;&quot;].*:.*[&#39;\&#39;&#39;&quot;]&#39; app.rb</pre>
 
-<p>This option may become the default behavior in <a
-href="../../../classes/Roda.html">Roda</a> 3, with a plugin added to
-support the current default behavior of allowing placeholders in string
-matchers.</p>
+<p>This option may become the default behavior in <a href="../../../classes/Roda.html"><code>Roda</code></a> 3, with a plugin added to support the current default behavior of allowing placeholders in string matchers.</p>
 </li></ul>
 </div>
 <div id='context'>

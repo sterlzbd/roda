@@ -56,15 +56,14 @@ Roda::RodaPlugins::AfterHook::ClassMethods
 </div>
 <div class='description'>
 
-<p>Rebuild the _roda_after method whenever a plugin might have added a
-<em>roda_after</em>* method.</p>
+<p>Rebuild the _roda_after method whenever a plugin might have added a <em>roda_after</em>* method.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-include-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-include-source'><span class="ruby-comment"># File lib/roda/plugins/_after_hook.rb, line 13</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">include</span>(<span class="ruby-operator">*</span>)&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">meths</span> = <span class="ruby-identifier">private_instance_methods</span>.<span class="ruby-identifier">grep</span>(<span class="ruby-regexp">/\A_roda_after_\d\d/</span>).<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{s}(res)&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;;&#39;</span>)&#x000A;  <span class="ruby-identifier">class_eval</span>(<span class="ruby-node">&quot;def _roda_after(res); #{meths} end&quot;</span>, <span class="ruby-keyword">__FILE__</span>, <span class="ruby-keyword">__LINE__</span>)&#x000A;  <span class="ruby-identifier">private</span> <span class="ruby-value">:_roda_after</span>&#x000A;  <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-include-source'>   <span class="ruby-comment"># File lib/roda/plugins/_after_hook.rb</span>&#x000A;<span class="line-num">14</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">include</span>(<span class="ruby-operator">*</span>)&#x000A;<span class="line-num">15</span>   <span class="ruby-identifier">res</span> = <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">16</span>   <span class="ruby-identifier">meths</span> = <span class="ruby-identifier">private_instance_methods</span>.<span class="ruby-identifier">grep</span>(<span class="ruby-regexp">/\A_roda_after_\d\d/</span>).<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{s}(res)&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;;&#39;</span>)&#x000A;<span class="line-num">17</span>   <span class="ruby-identifier">class_eval</span>(<span class="ruby-node">&quot;def _roda_after(res); #{meths} end&quot;</span>, <span class="ruby-keyword">__FILE__</span>, <span class="ruby-keyword">__LINE__</span>)&#x000A;<span class="line-num">18</span>   <span class="ruby-identifier">private</span> <span class="ruby-value">:_roda_after</span>&#x000A;<span class="line-num">19</span>   <span class="ruby-identifier">res</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

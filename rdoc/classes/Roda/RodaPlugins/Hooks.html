@@ -39,19 +39,13 @@ Roda::RodaPlugins::Hooks
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:hooks</span>&#x000A;&#x000A;<span class="ruby-identifier">before</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;/login&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>&#x000A;  <span class="ruby-ivar">@time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">after</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">notice</span>(<span class="ruby-node">&quot;Took #{Time.now - @time} seconds&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Note that in general, before hooks are not needed, since you can just run
-code at the top of the route block:</p>
+<p>Note that in general, before hooks are not needed, since you can just run code at the top of the route block:</p>
 
 <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;/login&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>However, this code makes it easier to write after hooks, as well as handle
-cases where before hooks are added after the route block.</p>
+<p>However, this code makes it easier to write after hooks, as well as handle cases where before hooks are added after the route block.</p>
 
-<p>Note that the after hook is called with the rack response array of status,
-headers, and body.  If it wants to change the response, it must mutate this
-argument, calling <code>response.status=</code> inside an after block will
-not affect the returned status. Note that after hooks can be called with
-nil if an exception is raised during routing.</p>
+<p>Note that the after hook is called with the rack response array of status, headers, and body.  If it wants to change the response, it must mutate this argument, calling <code>response.status=</code> inside an after block will not affect the returned status. Note that after hooks can be called with nil if an exception is raised during routing.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -87,7 +81,7 @@ nil if an exception is raised during routing.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 40</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/hooks.rb</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">42</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">43</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">44</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -104,7 +98,7 @@ nil if an exception is raised during routing.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/hooks.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/hooks.rb</span>&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">37</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="line-num">38</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

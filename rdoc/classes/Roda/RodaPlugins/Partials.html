@@ -35,8 +35,7 @@ Roda::RodaPlugins::Partials
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The partials plugin adds a <code>partial</code> method, which renders 
-templates without the layout.</p>
+<p>The partials plugin adds a <code>partial</code> method, which renders  templates without the layout.</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:partials</span>, <span class="ruby-value">views:</span> <span class="ruby-string">&#39;path/2/views&#39;</span></pre>
 
@@ -84,7 +83,7 @@ templates without the layout.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/partials.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/partials.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">26</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

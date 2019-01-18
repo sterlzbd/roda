@@ -58,15 +58,14 @@ Roda::RodaPlugins::PathMatchers::RequestMethods
 </div>
 <div class='description'>
 
-<p>Match when the current segment ends with the given extension. request path
-end with the extension.</p>
+<p>Match when the current segment ends with the given extension. request path end with the extension.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-match_extension-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-match_extension-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 35</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">match_extension</span>(<span class="ruby-identifier">ext</span>)&#x000A;  <span class="ruby-identifier">match_suffix</span>(<span class="ruby-node">&quot;.#{ext}&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-match_extension-source'>   <span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb</span>&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">match_extension</span>(<span class="ruby-identifier">ext</span>)&#x000A;<span class="line-num">37</span>   <span class="ruby-identifier">match_suffix</span>(<span class="ruby-node">&quot;.#{ext}&quot;</span>)&#x000A;<span class="line-num">38</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-match_prefix'>
@@ -85,7 +84,7 @@ end with the extension.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-match_prefix-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-match_prefix-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 40</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">match_prefix</span>(<span class="ruby-identifier">prefix</span>)&#x000A;  <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:prefix</span>, <span class="ruby-identifier">prefix</span>]){<span class="ruby-regexp">/#{prefix}([^\\\/]+)/</span>})&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-match_prefix-source'>   <span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">match_prefix</span>(<span class="ruby-identifier">prefix</span>)&#x000A;<span class="line-num">42</span>   <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:prefix</span>, <span class="ruby-identifier">prefix</span>]){<span class="ruby-regexp">/#{prefix}([^\\\/]+)/</span>})&#x000A;<span class="line-num">43</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-match_suffix'>
@@ -104,7 +103,7 @@ end with the extension.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-match_suffix-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-match_suffix-source'><span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb, line 45</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">match_suffix</span>(<span class="ruby-identifier">suffix</span>)&#x000A;  <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:suffix</span>, <span class="ruby-identifier">suffix</span>]){<span class="ruby-regexp">/([^\\\/]+)#{suffix}/</span>})&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-match_suffix-source'>   <span class="ruby-comment"># File lib/roda/plugins/path_matchers.rb</span>&#x000A;<span class="line-num">46</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">match_suffix</span>(<span class="ruby-identifier">suffix</span>)&#x000A;<span class="line-num">47</span>   <span class="ruby-identifier">consume</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">cached_matcher</span>([<span class="ruby-value">:suffix</span>, <span class="ruby-identifier">suffix</span>]){<span class="ruby-regexp">/([^\\\/]+)#{suffix}/</span>})&#x000A;<span class="line-num">48</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

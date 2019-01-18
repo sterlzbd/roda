@@ -70,15 +70,14 @@ Roda::RodaPlugins::DropBody::ResponseMethods
 </div>
 <div class='description'>
 
-<p>If the response status indicates a body should not be returned, use an
-empty body and remove the Content-Length and Content-Type headers.</p>
+<p>If the response status indicates a body should not be returned, use an empty body and remove the Content-Length and Content-Type headers.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-finish-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-finish-source'><span class="ruby-comment"># File lib/roda/plugins/drop_body.rb, line 17</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">finish</span>&#x000A;  <span class="ruby-identifier">r</span> = <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-constant">DROP_BODY_STATUSES</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">r</span>[<span class="ruby-value">0</span>])&#x000A;    <span class="ruby-identifier">r</span>[<span class="ruby-value">2</span>] = <span class="ruby-constant">EMPTY_ARRAY</span>&#x000A;    <span class="ruby-identifier">h</span> = <span class="ruby-identifier">r</span>[<span class="ruby-value">1</span>]&#x000A;    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Length&quot;</span>)&#x000A;    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Type&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-finish-source'>   <span class="ruby-comment"># File lib/roda/plugins/drop_body.rb</span>&#x000A;<span class="line-num">18</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">finish</span>&#x000A;<span class="line-num">19</span>   <span class="ruby-identifier">r</span> = <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">20</span>   <span class="ruby-keyword">if</span> <span class="ruby-constant">DROP_BODY_STATUSES</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">r</span>[<span class="ruby-value">0</span>])&#x000A;<span class="line-num">21</span>     <span class="ruby-identifier">r</span>[<span class="ruby-value">2</span>] = <span class="ruby-constant">EMPTY_ARRAY</span>&#x000A;<span class="line-num">22</span>     <span class="ruby-identifier">h</span> = <span class="ruby-identifier">r</span>[<span class="ruby-value">1</span>]&#x000A;<span class="line-num">23</span>     <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Length&quot;</span>)&#x000A;<span class="line-num">24</span>     <span class="ruby-identifier">h</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-string">&quot;Content-Type&quot;</span>)&#x000A;<span class="line-num">25</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">26</span>   <span class="ruby-identifier">r</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -35,15 +35,9 @@ Roda::RodaPlugins::Path
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The path plugin adds support for named paths.  Using the <code>path</code>
-class method, you can easily create <code>*_path</code> instance methods
-for each named path.  Those instance methods can then be called if you need
-to get the path for a form action, link, redirect, or anything else.</p>
+<p>The path plugin adds support for named paths.  Using the <code>path</code> class method, you can easily create <code>*_path</code> instance methods for each named path.  Those instance methods can then be called if you need to get the path for a form action, link, redirect, or anything else.</p>
 
-<p>Additionally, you can call the <code>path</code> class method with a class
-and a block, and it will register the class.  You can then call the
-<code>path</code> instance method with an instance of that class, and it
-will instance_exec the block with the arguments provided to path.</p>
+<p>Additionally, you can call the <code>path</code> class method with a class and a block, and it will register the class.  You can then call the <code>path</code> instance method with an instance of that class, and it will instance_exec the block with the arguments provided to path.</p>
 
 <p>Example:</p>
 
@@ -51,24 +45,16 @@ will instance_exec the block with the arguments provided to path.</p>
 
 <p>The path method accepts the following options when not called with a class:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_script_name </td><td>
-<p>Prefix the path generated with SCRIPT_NAME. This defaults to the app&#39;s
-:add_script_name option.</p>
+<p>Prefix the path generated with SCRIPT_NAME. This defaults to the app&#39;s :add_script_name option.</p>
 </td></tr><tr><td class='label'>:name </td><td>
-<p>Provide a different name for the method, instead of using
-<code>*_path</code>.</p>
+<p>Provide a different name for the method, instead of using <code>*_path</code>.</p>
 </td></tr><tr><td class='label'>:url </td><td>
-<p>Create a url method in addition to the path method, which will prefix the
-string generated with the appropriate scheme, host, and port.  If true,
-creates a <code>*_url</code> method.  If a Symbol or String, uses the value
-as the url method name.</p>
+<p>Create a url method in addition to the path method, which will prefix the string generated with the appropriate scheme, host, and port.  If true, creates a <code>*_url</code> method.  If a Symbol or String, uses the value as the url method name.</p>
 </td></tr><tr><td class='label'>:url_only </td><td>
 <p>Do not create a path method, just a url method.</p>
 </td></tr></tbody></table>
 
-<p>Note that if :add_script_name, :url, or :url_only is used, will also create
-a <code>_*_path</code> method.  This is necessary in order to support path
-methods that accept blocks, as you can&#39;t pass a block to a block that
-is instance_execed.</p>
+<p>Note that if :add_script_name, :url, or :url_only is used, will also create a <code>_*_path</code> method.  This is necessary in order to support path methods that accept blocks, as you can&#39;t pass a block to a block that is instance_execed.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -114,8 +100,7 @@ is instance_execed.</p>
 
 <p>Initialize the path classes when loading the plugin. Options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:by_name </td><td>
-<p>Register classes by name, which is friendlier when reloading code (defaults
-to true in development mode)</p>
+<p>Register classes by name, which is friendlier when reloading code (defaults to true in development mode)</p>
 </td></tr></tbody></table>
 
 </div>
@@ -123,7 +108,7 @@ to true in development mode)</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/path.rb, line 71</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_by_name</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:by_name</span>, <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;development&#39;</span>)&#x000A;    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_classes</span>] <span class="ruby-operator">||=</span> {}&#x000A;    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">path_block</span>(<span class="ruby-constant">String</span>)&#x000A;      <span class="ruby-identifier">path</span>(<span class="ruby-constant">String</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>}&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/path.rb</span>&#x000A;<span class="line-num">72</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">73</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">74</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_by_name</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:by_name</span>, <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;development&#39;</span>)&#x000A;<span class="line-num">75</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_classes</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">76</span>     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">path_block</span>(<span class="ruby-constant">String</span>)&#x000A;<span class="line-num">77</span>       <span class="ruby-identifier">path</span>(<span class="ruby-constant">String</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>}&#x000A;<span class="line-num">78</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">79</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">80</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

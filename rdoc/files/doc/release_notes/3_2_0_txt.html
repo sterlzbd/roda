@@ -38,18 +38,14 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>A timestamp_public plugin has been added for serving static files with
-paths that change based on the modification timestamp of the file.  By
-using a new path, cached versions of the file will not be used, fixing
-staleness issues.  Example:</p>
+<p>A timestamp_public plugin has been added for serving static files with paths that change based on the modification timestamp of the file.  By using a new path, cached versions of the file will not be used, fixing staleness issues.  Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:timestamp_public</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># serves requests for /static/\d+/.*</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">timestamp_public</span>&#x000A;&#x000A;  <span class="ruby-comment"># /static/1234567890/path/to/file</span>&#x000A;  <span class="ruby-identifier">timestamp_path</span>(<span class="ruby-string">&quot;path/to/file&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>When using the assets plugin :timestamp_paths option, the timestamps now
-include microseconds, to make cache poisoning more difficult.</p>
+<p>When using the assets plugin :timestamp_paths option, the timestamps now include microseconds, to make cache poisoning more difficult.</p>
 </li></ul>
 </div>
 <div id='context'>

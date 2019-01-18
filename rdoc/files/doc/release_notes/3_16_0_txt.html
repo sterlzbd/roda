@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.16.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.16.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.16.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2019-01-18 09:03:43 -0800</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A mail_processor plugin has been added for processing mail using a routing tree. Quick example:</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">MailProcessor</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:mail_processor</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># Match based on the To header, extracting the ticket_id</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">to</span> <span class="ruby-regexp">/ticket\+(\d+)@example.com/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ticket_id</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">if</span> <span class="ruby-identifier">ticket</span> = <span class="ruby-constant">Ticket</span>[<span class="ruby-identifier">ticket_id</span>.<span class="ruby-identifier">to_i</span>]&#x000A;        <span class="ruby-comment"># Mark the mail as handled if there is a valid ticket</span>&#x000A;        <span class="ruby-comment"># associated</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">handle</span> <span class="ruby-keyword">do</span>&#x000A;          <span class="ruby-identifier">ticket</span>.<span class="ruby-identifier">add_note</span>(<span class="ruby-value">text:</span> <span class="ruby-identifier">mail_text</span>, <span class="ruby-value">from:</span> <span class="ruby-identifier">from</span>)&#x000A;        <span class="ruby-keyword">end</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>You can submit mail for processing by calling the process_mail method with a Mail instance:</p>
+
+<pre class="ruby"><span class="ruby-constant">MailProcessor</span>.<span class="ruby-identifier">process_mail</span>(<span class="ruby-constant">Mail</span>.<span class="ruby-identifier">read</span>(<span class="ruby-string">&#39;/path/to/message.eml&#39;</span>))</pre>
+
+<p>The mail_processor routing tree uses routing methods specific to mail:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>r.from </td><td>
+<p>match on the mail From address</p>
+</td></tr><tr><td class='label'>r.to </td><td>
+<p>match on the mail To address</p>
+</td></tr><tr><td class='label'>r.cc </td><td>
+<p>match on the mail CC address</p>
+</td></tr><tr><td class='label'>r.rcpt </td><td>
+<p>match on the mail recipients (To and CC addresses by default)</p>
+</td></tr><tr><td class='label'>r.subject </td><td>
+<p>match on the mail subject</p>
+</td></tr><tr><td class='label'>r.body </td><td>
+<p>match on the mail body</p>
+</td></tr><tr><td class='label'>r.text </td><td>
+<p>match on text extracted from the message (same as mail body by default)</p>
+</td></tr><tr><td class='label'>r.header </td><td>
+<p>match on a mail header</p>
+</td></tr></tbody></table>
+
+<p>To mark a mail as having been handled, you call the r.handle method with a block, or one of the above methods prefixed by handle_ (e.g. r.handle_text).</p>
+
+<p>The mail_processor plugin supports hooks that are called for handled mail, unhandled mail, and all mail (for archiving).  It also supports the ability to configure how reply text is parsed out of mail, who to consider as the recipients of the email, and the ability to have separate routing blocks per recipient email address (with O(1) delegation to the appropriate block if the recipient addresses to match is a string).</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

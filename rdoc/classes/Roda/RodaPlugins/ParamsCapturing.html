@@ -35,34 +35,25 @@ Roda::RodaPlugins::ParamsCapturing
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The params_capturing plugin makes symbol matchers update the request params
-with the value of the captured segments, using the matcher as the key:</p>
+<p>The params_capturing plugin makes symbol matchers update the request params with the value of the captured segments, using the matcher as the key:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:params_capturing</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># GET /foo/123/abc/67</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-value">:bar</span>, <span class="ruby-value">:baz</span>, <span class="ruby-value">:quux</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;bar&#39;</span>] <span class="ruby-comment">#=&gt; &#39;123&#39;</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;baz&#39;</span>] <span class="ruby-comment">#=&gt; &#39;abc&#39;</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;quux&#39;</span>] <span class="ruby-comment">#=&gt; &#39;67&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Note that this updating of the request params using the matcher as the key
-is only done if all arguments to the matcher are symbols or strings.</p>
+<p>Note that this updating of the request params using the matcher as the key is only done if all arguments to the matcher are symbols or strings.</p>
 
-<p>All matchers will update the request params by adding all captured segments
-to the <code>captures</code> key:</p>
+<p>All matchers will update the request params by adding all captured segments to the <code>captures</code> key:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:x</span>, <span class="ruby-regexp">/(\d+)\/(\w+)/</span>, <span class="ruby-value">:y</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;x&#39;</span>] <span class="ruby-comment">#=&gt; nil</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;y&#39;</span>] <span class="ruby-comment">#=&gt; nil</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;captures&#39;</span>] <span class="ruby-comment">#=&gt; [&quot;foo&quot;, &quot;123&quot;, &quot;abc&quot;, &quot;67&quot;]</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Note that the request params <code>captures</code> entry will be appended
-to with each nested match:</p>
+<p>Note that the request params <code>captures</code> entry will be appended to with each nested match:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:w</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:x</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:y</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:z</span>) <span class="ruby-keyword">do</span>&#x000A;        <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;captures&#39;</span>] <span class="ruby-comment"># =&gt; [&quot;foo&quot;, &quot;123&quot;, &quot;abc&quot;, &quot;67&quot;]</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Note that any existing params captures entry will be overwritten by this
-plugin.  You can use <code>r.GET</code> or <code>r.POST</code> to get the
-underlying entry, depending on how it was submitted.</p>
+<p>Note that any existing params captures entry will be overwritten by this plugin.  You can use <code>r.GET</code> or <code>r.POST</code> to get the underlying entry, depending on how it was submitted.</p>
 
-<p>This plugin will also handle string matchers with placeholders if the
-placeholder_string_matchers plugin is loaded before this plugin.</p>
+<p>This plugin will also handle string matchers with placeholders if the placeholder_string_matchers plugin is loaded before this plugin.</p>
 
-<p>Also note that this plugin will not work correctly if you are using the
-symbol_matchers plugin with custom symbol matching and are using symbols
-that capture multiple values or no values.</p>
+<p>Also note that this plugin will not work correctly if you are using the symbol_matchers plugin with custom symbol matching and are using symbols that capture multiple values or no values.</p>
 </div>
 <div id='context'>
 </div>

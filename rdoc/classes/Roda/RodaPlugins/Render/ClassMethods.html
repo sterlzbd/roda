@@ -57,15 +57,14 @@ Roda::RodaPlugins::Render::ClassMethods
 </div>
 <div class='description'>
 
-<p>Copy the rendering options into the subclass, duping them as necessary to
-prevent changes in the subclass affecting the parent class.</p>
+<p>Copy the rendering options into the subclass, duping them as necessary to prevent changes in the subclass affecting the parent class.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inherited-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-inherited-source'><span class="ruby-comment"># File lib/roda/plugins/render.rb, line 217</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;  <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>] = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>].<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:cache</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:cache</span>].<span class="ruby-identifier">dup</span>&#x000A;  <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-inherited-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">218</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;<span class="line-num">219</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">220</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>] = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>].<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">221</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:cache</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:cache</span>].<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">222</span>   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">223</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-render_opts'>
@@ -84,7 +83,7 @@ prevent changes in the subclass affecting the parent class.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-render_opts-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-render_opts-source'><span class="ruby-comment"># File lib/roda/plugins/render.rb, line 225</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">render_opts</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-render_opts-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">226</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">render_opts</span>&#x000A;<span class="line-num">227</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>]&#x000A;<span class="line-num">228</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

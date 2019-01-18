@@ -35,8 +35,7 @@ Roda::RodaPlugins::MultiRun
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The multi_run plugin provides the ability to easily dispatch to other rack
-applications based on the request path prefix. First, load the plugin:</p>
+<p>The multi_run plugin provides the ability to easily dispatch to other rack applications based on the request path prefix. First, load the plugin:</p>
 
 <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -44,31 +43,19 @@ applications based on the request path prefix. First, load the plugin:</p>
 
 <pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ra&quot;</span>, <span class="ruby-constant">PlainRackApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ro&quot;</span>, <span class="ruby-constant">OtherRodaApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;si&quot;</span>, <span class="ruby-constant">SinatraApp</span></pre>
 
-<p>Inside your route block, you can call r.multi_run to dispatch to all three
-rack applications based on the prefix:</p>
+<p>Inside your route block, you can call r.multi_run to dispatch to all three rack applications based on the prefix:</p>
 
 <pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>This will dispatch routes starting with <code>/ra</code> to
-<code>PlainRackApp</code>, routes starting with <code>/ro</code> to
-<code>OtherRodaApp</code>, and routes starting with <code>/si</code> to
-SinatraApp.</p>
+<p>This will dispatch routes starting with <code>/ra</code> to <code>PlainRackApp</code>, routes starting with <code>/ro</code> to <code>OtherRodaApp</code>, and routes starting with <code>/si</code> to SinatraApp.</p>
 
-<p>You can pass a block to <code>multi_run</code> that will be called with the
-prefix, before dispatching to the rack app:</p>
+<p>You can pass a block to <code>multi_run</code> that will be called with the prefix, before dispatching to the rack app:</p>
 
 <pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># do something based on prefix before the request is passed further</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>This is useful for modifying the environment before passing it to the rack
-app.</p>
+<p>This is useful for modifying the environment before passing it to the rack app.</p>
 
-<p>The multi_run plugin is similar to the multi_route plugin, with the
-difference being the multi_route plugin keeps all routing subtrees in the
-same <a href="../../Roda.html">Roda</a> app/class, while multi_run
-dispatches to other rack apps.  If you want to isolate your routing
-subtrees, multi_run is a better approach, but it does not let you set
-instance variables in the main <a href="../../Roda.html">Roda</a> app and
-have those instance variables usable in the routing subtrees.</p>
+<p>The multi_run plugin is similar to the multi_route plugin, with the difference being the multi_route plugin keeps all routing subtrees in the same <a href="../../Roda.html"><code>Roda</code></a> app/class, while multi_run dispatches to other rack apps.  If you want to isolate your routing subtrees, multi_run is a better approach, but it does not let you set instance variables in the main <a href="../../Roda.html"><code>Roda</code></a> app and have those instance variables usable in the routing subtrees.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -106,7 +93,7 @@ have those instance variables usable in the routing subtrees.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/multi_run.rb, line 49</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">50</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">51</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

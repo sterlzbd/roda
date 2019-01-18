@@ -58,15 +58,14 @@ Roda::RodaPlugins::Environments::ClassMethods
 </div>
 <div class='description'>
 
-<p>If no environments are given or one of the given environments matches the
-current environment, yield the receiver to the block.</p>
+<p>If no environments are given or one of the given environments matches the current environment, yield the receiver to the block.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-configure-source'><span class="ruby-comment"># File lib/roda/plugins/environments.rb, line 52</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">envs</span>)&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">envs</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">envs</span>.<span class="ruby-identifier">any?</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">environment</span>}&#x000A;    <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/environments.rb</span>&#x000A;<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">envs</span>)&#x000A;<span class="line-num">54</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">envs</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">envs</span>.<span class="ruby-identifier">any?</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">environment</span>}&#x000A;<span class="line-num">55</span>     <span class="ruby-keyword">yield</span> <span class="ruby-keyword">self</span>&#x000A;<span class="line-num">56</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">57</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-environment'>
@@ -78,15 +77,14 @@ current environment, yield the receiver to the block.</p>
 </div>
 <div class='description'>
 
-<p>The current environment for the application, which should be stored as a
-symbol.</p>
+<p>The current environment for the application, which should be stored as a symbol.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-environment-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-environment-source'><span class="ruby-comment"># File lib/roda/plugins/environments.rb, line 60</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">environment</span>&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:environment</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-environment-source'>   <span class="ruby-comment"># File lib/roda/plugins/environments.rb</span>&#x000A;<span class="line-num">61</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">environment</span>&#x000A;<span class="line-num">62</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:environment</span>]&#x000A;<span class="line-num">63</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-environment-3D'>
@@ -105,7 +103,7 @@ symbol.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-environment-3D-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-environment-3D-source'><span class="ruby-comment"># File lib/roda/plugins/environments.rb, line 66</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">environment=</span>(<span class="ruby-identifier">v</span>)&#x000A;  <span class="ruby-identifier">opts</span>[<span class="ruby-value">:environment</span>] = <span class="ruby-identifier">v</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-environment-3D-source'>   <span class="ruby-comment"># File lib/roda/plugins/environments.rb</span>&#x000A;<span class="line-num">67</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">environment=</span>(<span class="ruby-identifier">v</span>)&#x000A;<span class="line-num">68</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:environment</span>] = <span class="ruby-identifier">v</span>&#x000A;<span class="line-num">69</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

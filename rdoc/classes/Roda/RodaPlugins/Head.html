@@ -35,26 +35,17 @@ Roda::RodaPlugins::Head
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The head plugin attempts to automatically handle HEAD requests, by treating
-them as GET requests and returning an empty body without modifying the
-response status or response headers.</p>
+<p>The head plugin attempts to automatically handle HEAD requests, by treating them as GET requests and returning an empty body without modifying the response status or response headers.</p>
 
 <p>So for the following routes,</p>
 
 <pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;root&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;a&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-value">method:</span> [<span class="ruby-value">:get</span>, <span class="ruby-value">:post</span>] <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;b&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>HEAD requests for <code>/</code>, <code>/a</code>, and <code>/b</code> will
-all return 200 status with an empty body.</p>
+<p>HEAD requests for <code>/</code>, <code>/a</code>, and <code>/b</code> will all return 200 status with an empty body.</p>
 
-<p>This plugin also works with the not_allowed plugin if it is loaded after
-the not_allowed plugin.  In that case, if GET is one of Allow header
-options, then HEAD will be as well.</p>
+<p>This plugin also works with the not_allowed plugin if it is loaded after the not_allowed plugin.  In that case, if GET is one of Allow header options, then HEAD will be as well.</p>
 
-<p>NOTE: if you have a public facing website it is recommended that you enable
-this plugin, or manually handle HEAD anywhere you would handle GET. Search
-engines and other bots may send a HEAD request prior to crawling a page
-with a GET request. Without this plugin those HEAD requests will return a
-404 status, which may prevent search engines from crawling your website.</p>
+<p>NOTE: if you have a public facing website it is recommended that you enable this plugin, or manually handle HEAD anywhere you would handle GET. Search engines and other bots may send a HEAD request prior to crawling a page with a GET request. Without this plugin those HEAD requests will return a 404 status, which may prevent search engines from crawling your website.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -90,7 +81,7 @@ with a GET request. Without this plugin those HEAD requests will return a
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'><span class="ruby-comment"># File lib/roda/plugins/head.rb, line 39</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/head.rb</span>&#x000A;<span class="line-num">40</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">41</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="line-num">42</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

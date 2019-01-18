@@ -35,19 +35,9 @@ Roda::RodaPlugins::TimestampPublic
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The timestamp_public plugin adds a <code>timestamp_path</code> method for
-constructing timestamp paths, and a <code>r.timestamp_public</code> routing
-method to serve static files from a directory (using the public plugin). 
-This plugin is useful when you want to modify the path to static files when
-the modify timestamp on the file changes, ensuring that requests for the
-static file will not be cached.</p>
+<p>The timestamp_public plugin adds a <code>timestamp_path</code> method for constructing timestamp paths, and a <code>r.timestamp_public</code> routing method to serve static files from a directory (using the public plugin).  This plugin is useful when you want to modify the path to static files when the modify timestamp on the file changes, ensuring that requests for the static file will not be cached.</p>
 
-<p>Note that while this plugin will not serve files outside of the public
-directory, for performance reasons it does not check the path of the file
-is inside the public directory when getting the modify timestamp.  If the
-<code>timestamp_path</code> method is called with untrusted input, it is
-possible for an attacker to get the modify timestamp for any file on the
-file system.</p>
+<p>Note that while this plugin will not serve files outside of the public directory, for performance reasons it does not check the path of the file is inside the public directory when getting the modify timestamp.  If the <code>timestamp_path</code> method is called with untrusted input, it is possible for an attacker to get the modify timestamp for any file on the file system.</p>
 
 <p>Examples:</p>
 
@@ -81,8 +71,7 @@ file system.</p>
 </div>
 <div class='description'>
 
-<p>Use options given to setup timestamped file serving.  The following option
-is recognized by the plugin:</p>
+<p>Use options given to setup timestamped file serving.  The following option is recognized by the plugin:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:prefix </td><td>
 <p>The prefix for paths, before the timestamp segment</p>
 </td></tr></tbody></table>
@@ -94,7 +83,7 @@ is recognized by the plugin:</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/timestamp_public.rb, line 43</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>, <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;static&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/timestamp_public.rb</span>&#x000A;<span class="line-num">44</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">45</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">46</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;static&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">47</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

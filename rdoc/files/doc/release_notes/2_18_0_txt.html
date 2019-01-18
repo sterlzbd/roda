@@ -38,51 +38,31 @@ Last Update:
 <div id='description'>
 <h1 id="label-New+Plugins+">New Plugins <span><a href="#label-New+Plugins+">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>A static_routing plugin has been added, which can give a 3-4x increase in
-performance for large number of static routes, and makes routing O(1) for
-static routes.  Static routes are routes that match full paths, with no
-placeholders, and are checked before using the normal routing tree.</p>
+<p>A static_routing plugin has been added, which can give a 3-4x increase in performance for large number of static routes, and makes routing O(1) for static routes.  Static routes are routes that match full paths, with no placeholders, and are checked before using the normal routing tree.</p>
 
-<p>Static routes are defined via class-level static_* routing methods. There
-is a static_* routing method for each HTTP verb (e.g. static_get), as well
-as a static_route method, which will work for any HTTP verb, with the
-verb-specific method taking priority. By using static_route, you can get
-significantly faster performance while retaining some of the benefits of
-Roda&#39;s routing tree design (simple shared logic with verb specific
-behavior). Example:</p>
+<p>Static routes are defined via class-level static_* routing methods. There is a static_* routing method for each HTTP verb (e.g. static_get), as well as a static_route method, which will work for any HTTP verb, with the verb-specific method taking priority. By using static_route, you can get significantly faster performance while retaining some of the benefits of Roda&#39;s routing tree design (simple shared logic with verb specific behavior). Example:</p>
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:static_routing</span>&#x000A;&#x000A;<span class="ruby-identifier">static_route</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@var</span> = <span class="ruby-value">:foo</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;Not actually reached&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span>{<span class="ruby-string">&#39;static POST /#{@var}&#39;</span>}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">static_get</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&#39;static GET /foo&#39;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&#39;Not a static route&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Because static routing routes on the full path instead of by path segment,
-the methods takes the full path as a string, including the leading slash.</p>
+<p>Because static routing routes on the full path instead of by path segment, the methods takes the full path as a string, including the leading slash.</p>
 </li><li>
-<p>An assets_preloading plugin has been added, which makes it simple to
-generate HTML link tags or a Link header value to tell the browser to
-preload assets for performance reasons.</p>
+<p>An assets_preloading plugin has been added, which makes it simple to generate HTML link tags or a Link header value to tell the browser to preload assets for performance reasons.</p>
 
 <pre># In routes, using the Link header:&#x000A;response.headers[&#39;Link&#39;] = preload_assets_link_header(:css)&#x000A;# In templates, using a link tag:&#x000A;&lt;%= preload_assets_link_tags(:css) %&gt;</pre>
 </li></ul>
 
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>RodaRequest#real_remaining_path has been added.  This is designed to be
-overridden by plugins that modify remaining_path for internal routing
-purposes.  RodaRequest#run now uses real_remaining_path when passing
-requests to other rack applications.</p>
+<p>RodaRequest#real_remaining_path has been added.  This is designed to be overridden by plugins that modify remaining_path for internal routing purposes.  RodaRequest#run now uses real_remaining_path when passing requests to other rack applications.</p>
 </li><li>
-<p>An assets_paths method has been added to the assets plugin.  This is
-similar to the assets method, but it returns an array of paths to the
-assets, instead of a HTML link/script tag.</p>
+<p>An assets_paths method has been added to the assets plugin.  This is similar to the assets method, but it returns an array of paths to the assets, instead of a HTML link/script tag.</p>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The public plugin now works correctly when used with the type_routing
-plugin, for paths ending in extensions that type_routing is configured to
-handle.</p>
+<p>The public plugin now works correctly when used with the type_routing plugin, for paths ending in extensions that type_routing is configured to handle.</p>
 </li><li>
-<p>The head plugin now works with the not_allowed plugin if it is loaded after
-the not_allowed plugin.</p>
+<p>The head plugin now works with the not_allowed plugin if it is loaded after the not_allowed plugin.</p>
 </li></ul>
 </div>
 <div id='context'>

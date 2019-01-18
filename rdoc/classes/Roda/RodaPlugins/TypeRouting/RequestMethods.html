@@ -58,15 +58,14 @@ Roda::RodaPlugins::TypeRouting::RequestMethods
 </div>
 <div class='description'>
 
-<p>Yields if the given <code>type</code> matches the requested data type and
-halts the request afterwards, returning the result of the block.</p>
+<p>Yields if the given <code>type</code> matches the requested data type and halts the request afterwards, returning the result of the block.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-on_type-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-on_type-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 147</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">on_type</span>(<span class="ruby-identifier">type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">requested_type</span>&#x000A;  <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>][<span class="ruby-value">:types</span>][<span class="ruby-identifier">type</span>]&#x000A;  <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-on_type-source'>    <span class="ruby-comment"># File lib/roda/plugins/type_routing.rb</span>&#x000A;<span class="line-num">148</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">on_type</span>(<span class="ruby-identifier">type</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">149</span>   <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">requested_type</span>&#x000A;<span class="line-num">150</span>   <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] <span class="ruby-operator">||=</span> <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>][<span class="ruby-value">:types</span>][<span class="ruby-identifier">type</span>]&#x000A;<span class="line-num">151</span>   <span class="ruby-identifier">always</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">152</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-real_remaining_path'>
@@ -78,15 +77,14 @@ halts the request afterwards, returning the result of the block.</p>
 </div>
 <div class='description'>
 
-<p>Append the type routing extension back to the path if it was removed before
-routing.</p>
+<p>Append the type routing extension back to the path if it was removed before routing.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-real_remaining_path-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-real_remaining_path-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 164</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">real_remaining_path</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@type_routing_extension</span>)&#x000A;    <span class="ruby-node">&quot;#{super}.#{@type_routing_extension}&quot;</span>&#x000A;  <span class="ruby-keyword">else</span>&#x000A;    <span class="ruby-keyword">super</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-real_remaining_path-source'>    <span class="ruby-comment"># File lib/roda/plugins/type_routing.rb</span>&#x000A;<span class="line-num">165</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">real_remaining_path</span>&#x000A;<span class="line-num">166</span>   <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@type_routing_extension</span>)&#x000A;<span class="line-num">167</span>     <span class="ruby-node">&quot;#{super}.#{@type_routing_extension}&quot;</span>&#x000A;<span class="line-num">168</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">169</span>     <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">170</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">171</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-requested_type'>
@@ -105,7 +103,7 @@ routing.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-requested_type-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-requested_type-source'><span class="ruby-comment"># File lib/roda/plugins/type_routing.rb, line 154</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">requested_type</span>&#x000A;  <span class="ruby-keyword">return</span> <span class="ruby-ivar">@requested_type</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@requested_type</span>)&#x000A;&#x000A;  <span class="ruby-identifier">opts</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>]&#x000A;  <span class="ruby-ivar">@requested_type</span> = <span class="ruby-identifier">accept_response_type</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:use_header</span>]&#x000A;  <span class="ruby-ivar">@requested_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_type</span>]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-requested_type-source'>    <span class="ruby-comment"># File lib/roda/plugins/type_routing.rb</span>&#x000A;<span class="line-num">155</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">requested_type</span>&#x000A;<span class="line-num">156</span>   <span class="ruby-keyword">return</span> <span class="ruby-ivar">@requested_type</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-ivar">@requested_type</span>)&#x000A;<span class="line-num">157</span> &#x000A;<span class="line-num">158</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:type_routing</span>]&#x000A;<span class="line-num">159</span>   <span class="ruby-ivar">@requested_type</span> = <span class="ruby-identifier">accept_response_type</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:use_header</span>]&#x000A;<span class="line-num">160</span>   <span class="ruby-ivar">@requested_type</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_type</span>]&#x000A;<span class="line-num">161</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

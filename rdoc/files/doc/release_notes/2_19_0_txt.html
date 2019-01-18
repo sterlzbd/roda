@@ -38,34 +38,22 @@ Last Update:
 <div id='description'>
 <h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The indifferent_params plugin is now optimized when using Rack 2, using
-Rack 2&#39;s query_parser API, and it no longer needs to do a deep copy of
-the params.</p>
+<p>The indifferent_params plugin is now optimized when using Rack 2, using Rack 2&#39;s query_parser API, and it no longer needs to do a deep copy of the params.</p>
 </li><li>
-<p>The Content-Type and Content-Length headers are no longer added for 1xx,
-204, 205, and 304 responses.</p>
+<p>The Content-Type and Content-Length headers are no longer added for 1xx, 204, 205, and 304 responses.</p>
 </li><li>
-<p>The assets_paths method in the assets plugin now works correctly when
-subresource integrity is enabled.</p>
+<p>The assets_paths method in the assets plugin now works correctly when subresource integrity is enabled.</p>
 </li><li>
-<p>The asset paths are now escaped in tags by the assets and assets_preloading
-plugins.  While it&#39;s unlikely a developer would use an asset path that
-requires escaping, that case is now handled correctly.</p>
+<p>The asset paths are now escaped in tags by the assets and assets_preloading plugins.  While it&#39;s unlikely a developer would use an asset path that requires escaping, that case is now handled correctly.</p>
 </li><li>
-<p>The h plugin no longer calls Rack::Utils.escape_html, instead implementing
-it&#39;s own html escaping.</p>
+<p>The h plugin no longer calls Rack::Utils.escape_html, instead implementing it&#39;s own html escaping.</p>
 </li><li>
-<p>The assets plugin now uses the h plugin, instead of calling
-Rack::Utils.escape_html.</p>
+<p>The assets plugin now uses the h plugin, instead of calling Rack::Utils.escape_html.</p>
 </li></ul>
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The h plugin&#39;s html escaping no longer escapes “/”, which is a behavior
-change if you are using any recent version of rack. The security arguments
-made to escape “/” could be applied to many other characters, so if you
-want to escape “/”, you should probably use a separate method that escapes
-all W characters.</p>
+<p>The h plugin&#39;s html escaping no longer escapes “/”, which is a behavior change if you are using any recent version of rack. The security arguments made to escape “/” could be applied to many other characters, so if you want to escape “/”, you should probably use a separate method that escapes all W characters.</p>
 </li></ul>
 </div>
 <div id='context'>

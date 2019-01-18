@@ -39,10 +39,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Session middleware that can be used in any Rack application that uses
-Roda&#39;s sessions plugin for encrypted and signed cookies. See <a
-href="Roda/RodaPlugins/Sessions.html">Roda::RodaPlugins::Sessions</a> for
-details on options.</p>
+<p>Session middleware that can be used in any Rack application that uses Roda&#39;s sessions plugin for encrypted and signed cookies. See <a href="Roda/RodaPlugins/Sessions.html"><code>Roda::RodaPlugins::Sessions</code></a> for details on options.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -75,15 +72,14 @@ details on options.</p>
 </div>
 <div class='description'>
 
-<p>Setup the middleware, passing <code>opts</code> as the <a
-href="Roda.html">Roda</a> sessions plugin options.</p>
+<p>Setup the middleware, passing <code>opts</code> as the <a href="Roda.html"><code>Roda</code></a> sessions plugin options.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/session_middleware.rb, line 153</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>)&#x000A;  <span class="ruby-identifier">mid</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Roda</span>)&#x000A;  <span class="ruby-identifier">mid</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:sessions</span>, <span class="ruby-identifier">opts</span>&#x000A;  <span class="ruby-ivar">@req_class</span> = <span class="ruby-identifier">mid</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>&#x000A;  <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/session_middleware.rb</span>&#x000A;<span class="line-num">154</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">155</span>   <span class="ruby-identifier">mid</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Roda</span>)&#x000A;<span class="line-num">156</span>   <span class="ruby-identifier">mid</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:sessions</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">157</span>   <span class="ruby-ivar">@req_class</span> = <span class="ruby-identifier">mid</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>&#x000A;<span class="line-num">158</span>   <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>&#x000A;<span class="line-num">159</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -96,16 +92,14 @@ href="Roda.html">Roda</a> sessions plugin options.</p>
 </div>
 <div class='description'>
 
-<p>Initialize the session hash in the environment before calling the next
-application, and if the session has been loaded after the result has been
-returned, then persist the session in the cookie.</p>
+<p>Initialize the session hash in the environment before calling the next application, and if the session has been loaded after the result has been returned, then persist the session in the cookie.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-call-source'><span class="ruby-comment"># File lib/roda/session_middleware.rb, line 163</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">env</span>)&#x000A;  <span class="ruby-identifier">session</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.session&#39;</span>] = <span class="ruby-constant">SessionHash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@req_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">env</span>))&#x000A;&#x000A;  <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)&#x000A;&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">loaded?</span>&#x000A;    <span class="ruby-identifier">session</span>.<span class="ruby-identifier">req</span>.<span class="ruby-identifier">persist_session</span>(<span class="ruby-identifier">res</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">session</span>.<span class="ruby-identifier">data</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">res</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>    <span class="ruby-comment"># File lib/roda/session_middleware.rb</span>&#x000A;<span class="line-num">164</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">165</span>   <span class="ruby-identifier">session</span> = <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.session&#39;</span>] = <span class="ruby-constant">SessionHash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@req_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">env</span>))&#x000A;<span class="line-num">166</span> &#x000A;<span class="line-num">167</span>   <span class="ruby-identifier">res</span> = <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">168</span> &#x000A;<span class="line-num">169</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">session</span>.<span class="ruby-identifier">loaded?</span>&#x000A;<span class="line-num">170</span>     <span class="ruby-identifier">session</span>.<span class="ruby-identifier">req</span>.<span class="ruby-identifier">persist_session</span>(<span class="ruby-identifier">res</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">session</span>.<span class="ruby-identifier">data</span>)&#x000A;<span class="line-num">171</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">172</span> &#x000A;<span class="line-num">173</span>   <span class="ruby-identifier">res</span>&#x000A;<span class="line-num">174</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

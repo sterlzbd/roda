@@ -56,18 +56,14 @@ Roda::RodaPlugins::TimestampPublic::RequestMethods
 </div>
 <div class='description'>
 
-<p>Serve files from the public directory if the file exists, it includes the
-<a
-href="RequestMethods.html#method-i-timestamp_public">#timestamp_public</a>
-prefix segment followed by a integer segment for the timestamp, and this is
-a GET request.</p>
+<p>Serve files from the public directory if the file exists, it includes the <a href="RequestMethods.html#method-i-timestamp_public"><code>timestamp_public</code></a> prefix segment followed by a integer segment for the timestamp, and this is a GET request.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-timestamp_public-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-timestamp_public-source'><span class="ruby-comment"># File lib/roda/plugins/timestamp_public.rb, line 62</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">timestamp_public</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_get?</span>&#x000A;    <span class="ruby-identifier">on</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>], <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">public</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-timestamp_public-source'>   <span class="ruby-comment"># File lib/roda/plugins/timestamp_public.rb</span>&#x000A;<span class="line-num">63</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">timestamp_public</span>&#x000A;<span class="line-num">64</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_get?</span>&#x000A;<span class="line-num">65</span>     <span class="ruby-identifier">on</span> <span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_public_prefix</span>], <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">_</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">66</span>       <span class="ruby-identifier">public</span>&#x000A;<span class="line-num">67</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">68</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">69</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

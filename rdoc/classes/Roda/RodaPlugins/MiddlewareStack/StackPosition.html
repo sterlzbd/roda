@@ -39,8 +39,7 @@ Superclass:
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>Represents a specific position in the application&#39;s middleware stack
-where new middleware can be inserted.</p>
+<p>Represents a specific position in the application&#39;s middleware stack where new middleware can be inserted.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -72,7 +71,7 @@ where new middleware can be inserted.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 21</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">middleware</span>, <span class="ruby-identifier">position</span>)&#x000A;  <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>&#x000A;  <span class="ruby-ivar">@middleware</span> = <span class="ruby-identifier">middleware</span>&#x000A;  <span class="ruby-ivar">@position</span> = <span class="ruby-identifier">position</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">middleware</span>, <span class="ruby-identifier">position</span>)&#x000A;<span class="line-num">23</span>   <span class="ruby-ivar">@app</span> = <span class="ruby-identifier">app</span>&#x000A;<span class="line-num">24</span>   <span class="ruby-ivar">@middleware</span> = <span class="ruby-identifier">middleware</span>&#x000A;<span class="line-num">25</span>   <span class="ruby-ivar">@position</span> = <span class="ruby-identifier">position</span>&#x000A;<span class="line-num">26</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -85,17 +84,14 @@ where new middleware can be inserted.</p>
 </div>
 <div class='description'>
 
-<p>Insert a new middleware into the current position in the middleware stack.
-Increments the position so that calling this multiple times adds later
-middleware after earlier middleware, similar to how <code>Roda.use</code>
-works.</p>
+<p>Insert a new middleware into the current position in the middleware stack. Increments the position so that calling this multiple times adds later middleware after earlier middleware, similar to how <code>Roda.use</code> works.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-use-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-use-source'><span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb, line 30</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">use</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;  <span class="ruby-ivar">@middleware</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-ivar">@position</span>, [<span class="ruby-identifier">args</span>, <span class="ruby-identifier">block</span>])&#x000A;  <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:build_rack_app</span>)&#x000A;  <span class="ruby-ivar">@position</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;  <span class="ruby-keyword">nil</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-use-source'>   <span class="ruby-comment"># File lib/roda/plugins/middleware_stack.rb</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">use</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">32</span>   <span class="ruby-ivar">@middleware</span>.<span class="ruby-identifier">insert</span>(<span class="ruby-ivar">@position</span>, [<span class="ruby-identifier">args</span>, <span class="ruby-identifier">block</span>])&#x000A;<span class="line-num">33</span>   <span class="ruby-ivar">@app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:build_rack_app</span>)&#x000A;<span class="line-num">34</span>   <span class="ruby-ivar">@position</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>&#x000A;<span class="line-num">35</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

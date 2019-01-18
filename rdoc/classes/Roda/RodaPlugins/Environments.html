@@ -35,14 +35,9 @@ Roda::RodaPlugins::Environments
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The environments plugin adds a environment class accessor to get the
-environment for the application, 3 predicate class methods to check for the
-current environment (development?, test? and production?), and a class
-configure method that takes environment(s) and yields to the block if the
-given environment(s) match the current environment.</p>
+<p>The environments plugin adds a environment class accessor to get the environment for the application, 3 predicate class methods to check for the current environment (development?, test? and production?), and a class configure method that takes environment(s) and yields to the block if the given environment(s) match the current environment.</p>
 
-<p>The default environment for the application is based on
-<code>ENV['RACK_ENV']</code>.</p>
+<p>The default environment for the application is based on <code>ENV['RACK_ENV']</code>.</p>
 
 <p>Example:</p>
 
@@ -75,17 +70,14 @@ given environment(s) match the current environment.</p>
 </div>
 <div class='description'>
 
-<p>Set the environment to use for the app.  Default to <a
-href="'RACK_ENV'">ENV</a> if no environment is given.  If <a
-href="'RACK_ENV'">ENV</a> is not set and no environment is given, assume
-the development environment.</p>
+<p>Set the environment to use for the app.  Default to <a href="'RACK_ENV'">ENV</a> if no environment is given.  If <a href="'RACK_ENV'">ENV</a> is not set and no environment is given, assume the development environment.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/environments.rb, line 45</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">env</span>=<span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;RACK_ENV&quot;</span>])&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">environment</span> = (<span class="ruby-identifier">env</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;development&#39;</span>).<span class="ruby-identifier">to_sym</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/environments.rb</span>&#x000A;<span class="line-num">46</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">env</span>=<span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;RACK_ENV&quot;</span>])&#x000A;<span class="line-num">47</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">environment</span> = (<span class="ruby-identifier">env</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;development&#39;</span>).<span class="ruby-identifier">to_sym</span>&#x000A;<span class="line-num">48</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -35,14 +35,11 @@ Roda::RodaPlugins::ClassMatchers
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The class_matchers plugin allows you do define custom regexps and
-conversion procs to use for specific classes.  For example, if you have
-multiple routes similar to:</p>
+<p>The class_matchers plugin allows you do define custom regexps and conversion procs to use for specific classes.  For example, if you have multiple routes similar to:</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-regexp">/(\d\d\d\d)-(\d\d)-(\d\d)/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span>, <span class="ruby-identifier">m</span>, <span class="ruby-identifier">d</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">date</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">y</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">d</span>.<span class="ruby-identifier">to_i</span>)&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>You can register a Date class matcher for that regexp (note that the block
-must return an array):</p>
+<p>You can register a Date class matcher for that regexp (note that the block must return an array):</p>
 
 <pre class="ruby"><span class="ruby-identifier">class_matcher</span>(<span class="ruby-constant">Date</span>, <span class="ruby-regexp">/(\d\d\d\d)-(\d\d)-(\d\d)/</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span>, <span class="ruby-identifier">m</span>, <span class="ruby-identifier">d</span><span class="ruby-operator">|</span>&#x000A;  [<span class="ruby-constant">Date</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">y</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">m</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">d</span>.<span class="ruby-identifier">to_i</span>)]&#x000A;<span class="ruby-keyword">end</span></pre>
 
@@ -50,11 +47,9 @@ must return an array):</p>
 
 <pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Date</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">date</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>This is useful to DRY up code if you are using the same type of pattern and
-type conversion in multiple places in your application.</p>
+<p>This is useful to DRY up code if you are using the same type of pattern and type conversion in multiple places in your application.</p>
 
-<p>This plugin does not work with the params_capturing plugin, as it does not
-offer the ability to associate block arguments with named keys.</p>
+<p>This plugin does not work with the params_capturing plugin, as it does not offer the ability to associate block arguments with named keys.</p>
 </div>
 <div id='context'>
 </div>

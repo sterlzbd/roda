@@ -35,18 +35,11 @@ Roda::RodaPlugins::EmptyRoot
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The empty_root plugin makes <code>r.root</code> match both on
-<code>/</code> and on the empty string.  This is mostly useful when using
-multiple rack applications, where the initial PATH_INFO has been moved to
-SCRIPT_NAME.  For example, if you have the following applications:</p>
+<p>The empty_root plugin makes <code>r.root</code> match both on <code>/</code> and on the empty string.  This is mostly useful when using multiple rack applications, where the initial PATH_INFO has been moved to SCRIPT_NAME.  For example, if you have the following applications:</p>
 
 <pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App1</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;albums&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">run</span> <span class="ruby-constant">App2</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App2</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:empty_root</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-string">&quot;root&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Then requests for both <code>/albums/</code> and <code>/albums</code> will
-return “root”.  Without this plugin loaded into App2, only requests for
-<code>/albums/</code> will return “root”, since by default,
-<code>r.root</code> matches only when the current PATH_INFO is
-<code>/</code> and not when it is empty.</p>
+<p>Then requests for both <code>/albums/</code> and <code>/albums</code> will return “root”.  Without this plugin loaded into App2, only requests for <code>/albums/</code> will return “root”, since by default, <code>r.root</code> matches only when the current PATH_INFO is <code>/</code> and not when it is empty.</p>
 </div>
 <div id='context'>
 </div>

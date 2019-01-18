@@ -56,15 +56,14 @@ Roda::RodaPlugins::Middleware::RequestMethods
 </div>
 <div class='description'>
 
-<p>Whether to forward the request to the next application.  Set only if this
-request is being performed for middleware.</p>
+<p>Whether to forward the request to the next application.  Set only if this request is being performed for middleware.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-forward_next-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-forward_next-source'><span class="ruby-comment"># File lib/roda/plugins/middleware.rb, line 144</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forward_next</span>&#x000A;  <span class="ruby-identifier">env</span>[<span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>]]&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-forward_next-source'>    <span class="ruby-comment"># File lib/roda/plugins/middleware.rb</span>&#x000A;<span class="line-num">145</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">forward_next</span>&#x000A;<span class="line-num">146</span>   <span class="ruby-identifier">env</span>[<span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:middleware_env_var</span>]]&#x000A;<span class="line-num">147</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

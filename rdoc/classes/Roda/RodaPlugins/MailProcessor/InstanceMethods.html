@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::MailProcessor::InstanceMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::MailProcessor::InstanceMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/mail_processor_rb.html">lib/roda/plugins/mail_processor.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-after_mail_hook">after_mail_hook</a></li>
+<li><a href="#method-i-handled_mail_hook">handled_mail_hook</a></li>
+<li><a href="#method-i-mail">mail</a></li>
+<li><a href="#method-i-mail_recipients">mail_recipients</a></li>
+<li><a href="#method-i-mail_text">mail_text</a></li>
+<li><a href="#method-i-process_mail">process_mail</a></li>
+<li><a href="#method-i-unhandled_mail">unhandled_mail</a></li>
+<li><a href="#method-i-unhandled_mail_hook">unhandled_mail_hook</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-after_mail_hook'>
+<a name='method-i-after_mail_hook'></a>
+<div class='synopsis'>
+<span class='name'>after_mail_hook</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Hook called after processing any mail, whether the mail was handled or not.  Does nothing by default.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-after_mail_hook-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-after_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">407</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">after_mail_hook</span>&#x000A;<span class="line-num">408</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">409</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-handled_mail_hook'>
+<a name='method-i-handled_mail_hook'></a>
+<div class='synopsis'>
+<span class='name'>handled_mail_hook</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Hook called after processing a mail, when the mail was handled. Does nothing by default.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-handled_mail_hook-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-handled_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">413</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handled_mail_hook</span>&#x000A;<span class="line-num">414</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">415</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-mail'>
+<a name='method-i-mail'></a>
+<div class='synopsis'>
+<span class='name'>mail</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>The mail instance being processed.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-mail-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">425</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail</span>&#x000A;<span class="line-num">426</span>   <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;roda.mail&#39;</span>]&#x000A;<span class="line-num">427</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-mail_recipients'>
+<a name='method-i-mail_recipients'></a>
+<div class='synopsis'>
+<span class='name'>mail_recipients</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>The recipients of the mail instance being processed, uses the To and CC headers by default.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-mail_recipients-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-mail_recipients-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">437</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail_recipients</span>&#x000A;<span class="line-num">438</span>   <span class="ruby-constant">Array</span>(<span class="ruby-identifier">to</span>) <span class="ruby-operator">+</span> <span class="ruby-constant">Array</span>(<span class="ruby-identifier">cc</span>)&#x000A;<span class="line-num">439</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-mail_text'>
+<a name='method-i-mail_text'></a>
+<div class='synopsis'>
+<span class='name'>mail_text</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>The text of the mail instance being processed, uses the decoded body of the mail by default.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-mail_text-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-mail_text-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">431</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail_text</span>&#x000A;<span class="line-num">432</span>   <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">decoded</span>&#x000A;<span class="line-num">433</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-process_mail'>
+<a name='method-i-process_mail'></a>
+<div class='synopsis'>
+<span class='name'>process_mail</span>
+<span class='arguments'>(&block)</span>
+
+</div>
+<div class='description'>
+
+<p>Perform the processing of mail for this request, first considering routes defined via the the class-level <code>rcpt</code> method, and then the normal routing tree passed in as the block.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-process_mail-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-process_mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">377</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">process_mail</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">378</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">string_routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:mail_processor_string_routes</span>]&#x000A;<span class="line-num">379</span>     <span class="ruby-identifier">addresses</span> = <span class="ruby-identifier">mail_recipients</span>&#x000A;<span class="line-num">380</span> &#x000A;<span class="line-num">381</span>     <span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">address</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">382</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">blk</span> = <span class="ruby-identifier">string_routes</span>[<span class="ruby-identifier">address</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>]&#x000A;<span class="line-num">383</span>         <span class="ruby-identifier">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;<span class="line-num">384</span>         <span class="ruby-keyword">return</span>&#x000A;<span class="line-num">385</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">386</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">387</span> &#x000A;<span class="line-num">388</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:mail_processor_regexp_routes</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">regexp</span>, <span class="ruby-identifier">blk</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">389</span>       <span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">address</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">390</span>         <span class="ruby-keyword">if</span> <span class="ruby-identifier">md</span> = <span class="ruby-identifier">regexp</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">address</span>)&#x000A;<span class="line-num">391</span>           <span class="ruby-identifier">call</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">392</span>             <span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">r</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">md</span>.<span class="ruby-identifier">captures</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)&#x000A;<span class="line-num">393</span>           <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">394</span>           <span class="ruby-keyword">return</span> &#x000A;<span class="line-num">395</span>         <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">396</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">397</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">398</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">399</span> &#x000A;<span class="line-num">400</span>   <span class="ruby-identifier">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">401</span> &#x000A;<span class="line-num">402</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">403</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-unhandled_mail'>
+<a name='method-i-unhandled_mail'></a>
+<div class='synopsis'>
+<span class='name'>unhandled_mail</span>
+<span class='arguments'>(reason)</span>
+
+</div>
+<div class='description'>
+
+<p>Raise an <a href="UnhandledMail.html"><code>UnhandledMail</code></a> exception with the given reason, used to mark the mail as not handled.  A reason why the mail was not handled must be provided, which will be used as the exception message.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-unhandled_mail-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-unhandled_mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">444</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unhandled_mail</span>(<span class="ruby-identifier">reason</span>)&#x000A;<span class="line-num">445</span>   <span class="ruby-identifier">raise</span> <span class="ruby-constant">UnhandledMail</span>, <span class="ruby-identifier">reason</span>&#x000A;<span class="line-num">446</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-unhandled_mail_hook'>
+<a name='method-i-unhandled_mail_hook'></a>
+<div class='synopsis'>
+<span class='name'>unhandled_mail_hook</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Hook called after processing a mail, when the mail was not handled. Reraises the <a href="UnhandledMail.html"><code>UnhandledMail</code></a> exception raised during mail processing by default.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-unhandled_mail_hook-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-unhandled_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">420</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unhandled_mail_hook</span>&#x000A;<span class="line-num">421</span>   <span class="ruby-identifier">raise</span>&#x000A;<span class="line-num">422</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

@@ -35,11 +35,9 @@ Roda::RodaPlugins::DefaultHeaders
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The default_headers plugin accepts a hash of headers, and overrides the
-default_headers method in the response class to be a copy of the headers.</p>
+<p>The default_headers plugin accepts a hash of headers, and overrides the default_headers method in the response class to be a copy of the headers.</p>
 
-<p>Note that when using this module, you should not attempt to mutate of the
-values set in the default headers hash.</p>
+<p>Note that when using this module, you should not attempt to mutate of the values set in the default headers hash.</p>
 
 <p>Example:</p>
 
@@ -84,7 +82,7 @@ values set in the default headers hash.</p>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'><span class="ruby-comment"># File lib/roda/plugins/default_headers.rb, line 24</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">headers</span>={})&#x000A;  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_headers</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">default_headers</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaResponse</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_HEADERS</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">headers</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/default_headers.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">headers</span>={})&#x000A;<span class="line-num">26</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_headers</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">default_headers</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaResponse</span><span class="ruby-operator">::</span><span class="ruby-constant">DEFAULT_HEADERS</span>).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">headers</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

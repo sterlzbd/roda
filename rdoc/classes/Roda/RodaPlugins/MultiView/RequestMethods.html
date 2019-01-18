@@ -56,16 +56,14 @@ Roda::RodaPlugins::MultiView::RequestMethods
 </div>
 <div class='description'>
 
-<p><a href="../Pass.html">Pass</a> the argument to <code>get</code>, and
-assume if the matchers match that there is one capture, and call view with
-that capture.</p>
+<p><a href="../Pass.html"><code>Pass</code></a> the argument to <code>get</code>, and assume if the matchers match that there is one capture, and call view with that capture.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_view-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-multi_view-source'><span class="ruby-comment"># File lib/roda/plugins/multi_view.rb, line 72</span>&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_view</span>(<span class="ruby-identifier">arg</span>)&#x000A;  <span class="ruby-identifier">get</span>(<span class="ruby-identifier">arg</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">page</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">view</span>(<span class="ruby-identifier">page</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre id='method-i-multi_view-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_view.rb</span>&#x000A;<span class="line-num">73</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_view</span>(<span class="ruby-identifier">arg</span>)&#x000A;<span class="line-num">74</span>   <span class="ruby-identifier">get</span>(<span class="ruby-identifier">arg</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">page</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">75</span>     <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">view</span>(<span class="ruby-identifier">page</span>)&#x000A;<span class="line-num">76</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">77</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
