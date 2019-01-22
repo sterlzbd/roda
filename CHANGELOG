@@ -1,3 +1,7 @@
+= master
+
+* Add route_block_args plugin to control which arguments are yielded to the route block (jeremyevans, chrisfrank) (#159)
+
 = 3.16.0 (2019-01-18)
 
 * Add mail_processor plugin for processing mail using a routing tree (jeremyevans)
