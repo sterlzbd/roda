@@ -11,7 +11,7 @@ class Roda
     #
     #   class App < Roda
     #     plugin :route_block_args do
-    #       [request, params, response]
+    #       [request, request.params, response]
     #     end
     #
     #     route do |r, params, res|
