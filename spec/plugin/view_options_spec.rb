@@ -60,6 +60,50 @@ describe "view_options plugin" do
     body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Subdir: About Roda</h1>"
   end
 
+  it "should allow overriding :layout plugin option with set_layout_options :template" do
+    app(:bare) do
+      plugin :render, :views=>'spec/views', :allowed_paths=>['spec/views']
+      plugin :view_options
+
+      route do
+        set_view_options :views=>'spec/views/about'
+        set_layout_options :template=>'layout-alternative'
+        view('_test', :locals=>{:title=>'About Roda'}, :layout_opts=>{:locals=>{:title=>'Home'}})
+      end
+    end
+
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Subdir: About Roda</h1>"
+  end
+
+  it "should allow overriding :layout_opts :template plugin option with set_layout_options :template" do
+    app(:bare) do
+      plugin :render, :views=>'spec/views', :allowed_paths=>['spec/views'], :layout_opts=>{:template=>'layout'}
+      plugin :view_options
+
+      route do
+        set_view_options :views=>'spec/views/about', :layout=>'layout-alternative'
+        set_layout_options :template=>'layout-alternative'
+        view('_test', :locals=>{:title=>'About Roda'}, :layout_opts=>{:locals=>{:title=>'Home'}})
+      end
+    end
+
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Subdir: About Roda</h1>"
+  end
+
+  it "should allow overriding :layout plugin option with set_view_options :layout" do
+    app(:bare) do
+      plugin :render, :views=>'spec/views', :allowed_paths=>['spec/views'], :layout=>'layout'
+      plugin :view_options
+
+      route do
+        set_view_options :views=>'spec/views/about', :layout=>'layout-alternative'
+        view('_test', :locals=>{:title=>'About Roda'}, :layout_opts=>{:locals=>{:title=>'Home'}})
+      end
+    end
+
+    body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Subdir: About Roda</h1>"
+  end
+
   it "should set view and layout options to use" do
     app(:bare) do
       plugin :render, :allowed_paths=>['spec/views']

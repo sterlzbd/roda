@@ -515,9 +515,9 @@ describe "render plugin" do
 
   it "render plugin call should not override existing options" do
     c = Class.new(Roda)
-    c.plugin :render, :layout=>:foo
+    c.plugin :render, :layout_opts=>{:template=>'foo'}
     c.plugin :render
-    c.render_opts[:layout].must_equal :foo
+    c.render_opts[:layout_opts][:template].must_equal 'foo'
   end
 
   it "should not use cache by default in subclass if not caching by default in superclass" do

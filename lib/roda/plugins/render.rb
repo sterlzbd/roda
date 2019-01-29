@@ -169,7 +169,7 @@ class Roda
         end
 
         if layout = opts.fetch(:layout, true)
-          opts[:layout] = true unless opts.has_key?(:layout)
+          opts[:layout] = true
 
           case layout
           when Hash
