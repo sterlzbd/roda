@@ -21,7 +21,6 @@ class Roda
     module CommonLogger
       def self.load_dependencies(app, _=nil)
         app.plugin :_after_hook
-        app.plugin :_before_hook
       end
 
       def self.configure(app, logger=nil)

@@ -16,10 +16,6 @@ class Roda
     module Heartbeat
       HEARTBEAT_RESPONSE = [200, {'Content-Type'=>'text/plain'}.freeze, ['OK'.freeze].freeze].freeze
 
-      def self.load_dependencies(app, opts=OPTS)
-        app.plugin :_before_hook
-      end
-
       # Set the heartbeat path to the given path.
       def self.configure(app, opts=OPTS)
         app.opts[:heartbeat_path] = (opts[:path] || app.opts[:heartbeat_path] || "/heartbeat").dup.freeze

@@ -34,7 +34,6 @@ class Roda
     # hooks can be called with nil if an exception is raised during routing.
     module Hooks
       def self.load_dependencies(app)
-        app.plugin :_before_hook
         app.plugin :_after_hook
       end
 

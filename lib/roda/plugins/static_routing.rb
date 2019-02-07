@@ -49,10 +49,6 @@ class Roda
     # static_route block to have shared behavior for different request methods,
     # while still handling the request methods differently.
     module StaticRouting
-      def self.load_dependencies(app)
-        app.plugin :_before_hook
-      end
-
       def self.configure(app)
         app.opts[:static_routes] = {}
       end

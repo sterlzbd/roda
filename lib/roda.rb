@@ -163,6 +163,14 @@ class Roda
           super
         end
 
+        # Rebuild the _roda_before method whenever a plugin might
+        # have added a _roda_before_* method.
+        def include(*a)
+          res = super
+          def_roda_before
+          res
+        end
+
         # When inheriting Roda, copy the shared data into the subclass,
         # and setup the request and response subclasses.
         def inherited(subclass)
@@ -261,11 +269,33 @@ class Roda
           block
         end
 
+        # Build a _roda_before method that calls each _roda_before_* method
+        # in order, if any _roda_before_* methods are defined.
+        def def_roda_before
+          meths = private_instance_methods.grep(/\A_roda_before_\d\d/).sort.join(';')
+          unless meths.empty?
+            class_eval("def _roda_before; #{meths} end", __FILE__, __LINE__)
+            private :_roda_before
+            if @raw_route_block
+              route(&@raw_route_block)
+            end
+          end
+        end
+
         # The route block to use when building the rack app (or other initial
         # entry point to the route block).
+        # By default, modifies the rack app route block to support before hooks
+        # if any before hooks are defined.
         # Can be modified by plugins.
         def rack_app_route_block(block)
-          block
+          if method_defined?(:_roda_before) || private_method_defined?(:_roda_before)
+            lambda do |r|
+              _roda_before
+              instance_exec(r, &block)
+            end
+          else
+            block
+          end
         end
       end
 
