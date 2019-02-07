@@ -23,10 +23,6 @@ class Roda
     # cleared.  So if you want to be sure the headers are set even in your block,
     # you need to reset them in the block.
     module StatusHandler
-      def self.load_dependencies(app)
-        app.plugin :_after_hook
-      end
-
       def self.configure(app)
         app.opts[:status_handler] ||= {}
       end

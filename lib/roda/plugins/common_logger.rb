@@ -19,10 +19,6 @@ class Roda
     #   plugin :common_logger, $stdout
     #   plugin :common_logger, Logger.new('filename')
     module CommonLogger
-      def self.load_dependencies(app, _=nil)
-        app.plugin :_after_hook
-      end
-
       def self.configure(app, logger=nil)
         app.opts[:common_logger] = logger || app.opts[:common_logger] || $stderr
         app.opts[:common_logger_meth] = app.opts[:common_logger].method(logger.respond_to?(:write) ? :write : :<<)

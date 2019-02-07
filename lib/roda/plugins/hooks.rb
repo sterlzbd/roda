@@ -33,10 +33,6 @@ class Roda
     # an after block will not affect the returned status. Note that after
     # hooks can be called with nil if an exception is raised during routing.
     module Hooks
-      def self.load_dependencies(app)
-        app.plugin :_after_hook
-      end
-
       def self.configure(app)
         app.opts[:before_hook] ||= nil
         app.opts[:after_hook] ||= nil

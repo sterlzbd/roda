@@ -7,25 +7,23 @@ class Roda
     # Allows for plugins to configure the order in which
     # after processing is done by using _roda_after_*
     # private instance methods that are called in sorted order.
+    # Loaded automatically by the base library if any _roda_after_*
+    # methods are defined.
     module AfterHook # :nodoc:
-      module ClassMethods
-        # Rebuild the _roda_after method whenever a plugin might
-        # have added a _roda_after_* method.
-        def include(*)
-          res = super
-          meths = private_instance_methods.grep(/\A_roda_after_\d\d/).sort.map{|s| "#{s}(res)"}.join(';')
-          class_eval("def _roda_after(res); #{meths} end", __FILE__, __LINE__)
-          private :_roda_after
-          res
-        end
-      end
-
+      # Module for internal after hook support.
       module InstanceMethods
         # Run internal after hooks with the response
         def call
           res = super
         ensure
           _roda_after(res)
+        end
+
+        private
+
+        # Empty roda_after method, so nothing breaks if the module is included.
+        # This method will be overridden in most classes using this module.
+        def _roda_after(res)
         end
       end
     end

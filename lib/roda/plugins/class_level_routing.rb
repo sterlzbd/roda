@@ -52,10 +52,6 @@ class Roda
     # the normal +route+ class method to define your routing tree.  This plugin does make it simpler to
     # add additional routes after the routing tree has already been defined, though.
     module ClassLevelRouting
-      def self.load_dependencies(app)
-        app.plugin :_after_hook
-      end
-
       # Initialize the class_routes array when the plugin is loaded.  Also, if the application doesn't
       # currently have a routing block, setup an empty routing block so that things will still work if
       # a routing block isn't added.

@@ -163,11 +163,12 @@ class Roda
           super
         end
 
-        # Rebuild the _roda_before method whenever a plugin might
-        # have added a _roda_before_* method.
+        # Rebuild the _roda_before and _roda_after methods whenever a plugin might
+        # have added a _roda_before_* or _roda_after_* method.
         def include(*a)
           res = super
           def_roda_before
+          def_roda_after
           res
         end
 
@@ -270,7 +271,8 @@ class Roda
         end
 
         # Build a _roda_before method that calls each _roda_before_* method
-        # in order, if any _roda_before_* methods are defined.
+        # in order, if any _roda_before_* methods are defined. Also, rebuild
+        # the route block if a _roda_before method is defined.
         def def_roda_before
           meths = private_instance_methods.grep(/\A_roda_before_\d\d/).sort.join(';')
           unless meths.empty?
@@ -282,13 +284,25 @@ class Roda
           end
         end
 
+        # Build a _roda_after method that calls each _roda_after_* method
+        # in order, if any _roda_after_* methods are defined. Also, use
+        # the internal after hook plugin if the _roda_after method is defined.
+        def def_roda_after
+          meths = private_instance_methods.grep(/\A_roda_after_\d\d/).sort.map{|s| "#{s}(res)"}.join(';')
+          unless meths.empty?
+            plugin :_after_hook unless private_method_defined?(:_roda_after)
+            class_eval("def _roda_after(res); #{meths} end", __FILE__, __LINE__)
+            private :_roda_after
+          end
+        end
+
         # The route block to use when building the rack app (or other initial
         # entry point to the route block).
         # By default, modifies the rack app route block to support before hooks
         # if any before hooks are defined.
         # Can be modified by plugins.
         def rack_app_route_block(block)
-          if method_defined?(:_roda_before) || private_method_defined?(:_roda_before)
+          if private_method_defined?(:_roda_before)
             lambda do |r|
               _roda_before
               instance_exec(r, &block)

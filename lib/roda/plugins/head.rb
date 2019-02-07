@@ -37,10 +37,6 @@ class Roda
     # this plugin those HEAD requests will return a 404 status, which
     # may prevent search engines from crawling your website.
     module Head
-      def self.load_dependencies(app)
-        app.plugin :_after_hook
-      end
-
       # used to ensure proper resource release on HEAD requests
       # we do not respond to a to_path method, here.
       class CloseLater

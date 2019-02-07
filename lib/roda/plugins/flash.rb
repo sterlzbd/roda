@@ -36,10 +36,6 @@ class Roda
     #     flash['a'] # = >'b'
     #   end
     module Flash
-      def self.load_dependencies(app)
-        app.plugin :_after_hook
-      end
-
       # Simple flash hash, where assiging to the hash updates the flash
       # used in the following request.
       class FlashHash < DelegateClass(Hash)

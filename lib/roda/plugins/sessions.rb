@@ -148,10 +148,6 @@ class Roda
       class CookieTooLarge < RodaError
       end
 
-      def self.load_dependencies(app, opts=OPTS)
-        app.plugin :_after_hook
-      end
-
       # Split given secret into a cipher secret and an hmac secret.
       def self.split_secret(name, secret)
         raise RodaError, "sessions plugin :#{name} option must be a String" unless secret.is_a?(String)
