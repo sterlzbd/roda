@@ -13,6 +13,7 @@ class Roda
       # route block.
       def self.configure(app)
         app.instance_exec do
+          @rack_app_route_block = rack_app_route_block(@route_block) if @route_block
           build_rack_app if @app
         end
       end

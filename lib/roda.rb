@@ -60,7 +60,9 @@ class Roda
   @inherit_middleware = true
   @middleware = []
   @opts = {}
+  @raw_route_block = nil
   @route_block = nil
+  @rack_app_route_block = nil
 
   # Module in which all Roda plugins should be stored. Also contains logic for
   # registering and loading plugins.
@@ -174,8 +176,9 @@ class Roda
               subclass.opts[k] = v.dup
             end
           end
-          subclass.instance_variable_set(:@route_block, @route_block)
-          subclass.send(:build_rack_app)
+          if block = @raw_route_block
+            subclass.route(&block)
+          end
           
           request_class = Class.new(self::RodaRequest)
           request_class.roda_class = subclass
@@ -221,7 +224,9 @@ class Roda
         # This should only be called once per class, and if called multiple
         # times will overwrite the previous routing.
         def route(&block)
-          @route_block = block
+          @raw_route_block = block
+          @route_block = block = convert_route_block(block)
+          @rack_app_route_block = rack_app_route_block(block)
           build_rack_app
         end
 
@@ -238,8 +243,7 @@ class Roda
 
         # Build the rack app to use
         def build_rack_app
-          if block = @route_block
-            block = rack_app_route_block(block)
+          if block = @rack_app_route_block
             app = lambda{|env| new(env).call(&block)}
             @middleware.reverse_each do |args, bl|
               mid, *args = args
@@ -250,7 +254,15 @@ class Roda
           end
         end
 
-        # The route block to use when building the rack app.
+        # Modify the route block to use for any route block provided as input,
+        # which can include route blocks that are delegated to by the main route block.
+        # Can be modified by plugins.
+        def convert_route_block(block)
+          block
+        end
+
+        # The route block to use when building the rack app (or other initial
+        # entry point to the route block).
         # Can be modified by plugins.
         def rack_app_route_block(block)
           block
