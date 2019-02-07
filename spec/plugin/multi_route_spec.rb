@@ -234,27 +234,23 @@ describe "multi_route plugin" do
   end
 
   it "handles namespaces in r.multi_route" do
-    app.route("foo") do |r|
-      @p = 'f'
+    app(:multi_route) do |path|
+      request.multi_route
+      path
+    end
+    app.plugin :route_block_args do
+      [request.path, request]
+    end
+    app.route("foo") do |path, r|
       r.multi_route("foo")
-      @p
+      "f-#{path}" 
+    end
+    app.route("bar", "foo") do |path|
+      "b-#{path}" 
     end
 
-    app.route("bar") do |r|
-      @p = 'b'
-      r.multi_route("bar")
-      @p
-    end
-
-    app.route do |r|
-      r.multi_route
-    end
-
-    body('/foo').must_equal 'f'
-    body('/foo/foo').must_equal 'fff'
-    body('/foo/bar').must_equal 'ffb'
-    body('/bar').must_equal 'b'
-    body('/bar/foo').must_equal 'bbf'
-    body('/bar/bar').must_equal 'bbb'
+    body.must_equal '/'
+    body('/foo').must_equal 'f-/foo'
+    body('/foo/bar').must_equal 'b-/foo/bar'
   end
 end

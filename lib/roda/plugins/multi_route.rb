@@ -170,7 +170,7 @@ class Roda
         def route(name=nil, namespace=nil, &block)
           if name
             opts[:namespaced_routes][namespace] ||= {}
-            opts[:namespaced_routes][namespace][name] = block
+            opts[:namespaced_routes][namespace][name] = convert_route_block(block)
             self::RodaRequest.clear_named_route_regexp!(namespace)
           else
             super(&block)

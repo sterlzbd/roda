@@ -145,4 +145,26 @@ describe "static_routing plugin" do
       end.must_raise
     end
   end
+
+  it 'works with route_block_args plugin' do
+    app(:bare) do 
+      plugin :static_routing
+      plugin :route_block_args do
+        [request.request_method, request.path]
+      end
+      
+      static_route "/foo" do |meth, path|
+        "#{path}-#{meth}"
+      end
+
+      static_get "/bar" do |meth, path|
+        "#{path}-#{meth}-bar"
+      end
+
+      route{'a'}
+    end
+
+    body('/foo').must_equal '/foo-GET'
+    body('/bar').must_equal '/bar-GET-bar'
+  end
 end

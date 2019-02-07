@@ -64,7 +64,7 @@ class Roda
         # Define routing methods that will store class level routes.
         [:root, :on, :is, :get, :post, :delete, :head, :options, :link, :patch, :put, :trace, :unlink].each do |meth|
           define_method(meth) do |*args, &block|
-            opts[:class_level_routes] << [meth, args, block].freeze
+            opts[:class_level_routes] << [meth, args, convert_route_block(block)].freeze
           end
         end
 

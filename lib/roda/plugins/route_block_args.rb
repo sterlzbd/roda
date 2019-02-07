@@ -24,16 +24,20 @@ class Roda
     #   end
     module RouteBlockArgs
       def self.configure(app, &block)
-        app.opts[:route_block_args] = block
-        app.route(&app.route_block) if app.route_block
+        app.instance_exec do 
+          opts[:route_block_args] = block
+          route(&@raw_route_block) if @raw_route_block
+        end
       end
 
       # Override the route block input so that the block
       # given is passed the arguments specified by the
       # block given to the route_block_args plugin.
       module ClassMethods
-        def route(&block)
-          super do |r|
+        private
+
+        def convert_route_block(block)
+          proc do |r|
             instance_exec(*instance_exec(&opts[:route_block_args]), &block)
           end
         end

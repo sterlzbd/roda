@@ -96,7 +96,7 @@ class Roda
 
         # Add a static route for the given method.
         def add_static_route(method, path, &block)
-          (opts[:static_routes][path] ||= {})[method] = block
+          (opts[:static_routes][path] ||= {})[method] = convert_route_block(block)
         end
       end
 

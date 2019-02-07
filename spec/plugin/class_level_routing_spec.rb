@@ -161,4 +161,31 @@ describe "class_level_routing plugin" do
 
     proc{app.on{}}.must_raise
   end
+
+  it 'works with route_block_args plugin' do
+    app(:bare) do 
+      plugin :class_level_routing
+      plugin :route_block_args do
+        [request.path]
+      end
+
+      root do |path|
+        "root-#{path}"
+      end
+
+      get do |path|
+        "GET-#{path}"
+      end
+
+      route do |path|
+        request.get('foo') do
+          path
+        end
+      end
+    end
+
+    body.must_equal 'root-/'
+    body('/a').must_equal 'GET-/a'
+    body('/foo').must_equal '/foo'
+  end
 end
