@@ -301,7 +301,7 @@ class Roda
 
           begin
             begin
-              scope.process_mail(&route_block)
+              scope.process_mail(&@rack_app_route_block)
             rescue UnhandledMail
               scope.unhandled_mail_hook
             else

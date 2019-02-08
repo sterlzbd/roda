@@ -398,5 +398,54 @@ describe "mail_processor plugin" do
     check{app.process_mail(new_mail{|m| m.body "Found bar\n--\nFound foo"})}.must_equal [:f, 'foo']
     check{app.process_mail(new_mail{|m| m.body "> Found baz\nFound quux"})}.must_equal [:f2, 'quux', "Found quux"]
   end
+
+  it "works with route_block_args plugin" do
+    @processed = processed = []
+    app(:bare) do
+      plugin :mail_processor
+      plugin :route_block_args do
+        [to, from]
+      end
+      route do |t, f|
+        request.handle do
+          processed << t << f
+        end
+      end
+      handled_mail do
+#      processed << :h << mail.to.first
+      end
+    end
+    check{app.process_mail(new_mail)}.must_equal [["a@example.com"], ["b@example.com"]]
+  end
+
+  it "works with hooks plugin, calling after hook before *_mail hooks" do
+    @processed = processed = []
+    app(:bare) do
+      plugin :mail_processor
+      plugin :hooks
+      before do 
+        processed << 1
+      end
+      after do
+        processed << 2
+      end
+      route do |r|
+        processed << 3
+        r.handle_to('a@example.com') do
+        end
+      end
+      handled_mail do
+        processed << 4
+      end
+      unhandled_mail do
+        processed << 5
+      end
+      after_mail do
+        processed << 6
+      end
+    end
+    check{app.process_mail(new_mail)}.must_equal [1, 3, 2, 4, 6]
+    check{app.process_mail(new_mail{|m| m.to 'x@example.com'})}.must_equal [1, 3, 2, 5, 6]
+  end
 end
 end

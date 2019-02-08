@@ -244,5 +244,39 @@ describe "mailer plugin" do
     m.parts.last.content_type.must_match(/\Atext\/css/)
     m.parts.last.body.decoded.gsub("\r\n", "\n").must_equal File.read('spec/assets/css/raw.css')
   end
+
+  it "works with route_block_args plugin" do
+    app(:bare) do
+      plugin :mailer
+      plugin :route_block_args do
+        [request.path]
+      end
+      route do |path|
+        path
+      end
+    end
+    app.mail('/').body.decoded.must_equal '/'
+    app.mail('/foo').body.decoded.must_equal '/foo'
+  end
+
+  it "works with hooks plugin" do
+    x = []
+    app(:bare) do
+      plugin :mailer
+      plugin :hooks
+      before do 
+        x << 1
+      end
+      after do
+        x << 2
+      end
+      route do
+        x << 3
+        ''
+      end
+    end
+    app.mail('/').body.decoded.must_equal ''
+    x.must_equal [1, 3, 2]
+  end
 end
 end

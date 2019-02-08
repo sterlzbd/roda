@@ -1,5 +1,7 @@
 = master
 
+* Support before hooks in the hooks plugin in the mailer and mail_processor plugins (jeremyevans)
+
 * Allow set_layout_opts in view_options plugin to override layout if render plugin :layout option is given (jeremyevans)
 
 * Add route_block_args plugin to control which arguments are yielded to the route block (jeremyevans, chrisfrank) (#159)
