@@ -1,5 +1,7 @@
 = master
 
+* Improve performance in the common case for RodaResponse#finish (jeremyevans)
+
 * Support before hooks in the hooks plugin in the mailer and mail_processor plugins (jeremyevans)
 
 * Allow set_layout_opts in view_options plugin to override layout if render plugin :layout option is given (jeremyevans)

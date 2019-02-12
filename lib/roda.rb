@@ -1041,14 +1041,18 @@ class Roda
         #   #      []]
         def finish
           b = @body
-          empty = b.empty?
-          s = (@status ||= empty ? 404 : default_status)
           set_default_headers
           h = @headers
 
-          if empty && (s == 304 || s == 204 || s == 205 || (s >= 100 && s <= 199))
-            h.delete("Content-Type")
+          if b.empty?
+            s = @status || 404
+            if (s == 304 || s == 204 || s == 205 || (s >= 100 && s <= 199))
+              h.delete("Content-Type")
+            else
+              h["Content-Length"] ||= '0'
+            end
           else
+            s = @status || default_status
             h["Content-Length"] ||= @length.to_s
           end
 

@@ -46,7 +46,9 @@ class Roda
         # If routing returns a response we have a handler for, call that handler.
         def _roda_after_20__status_handler(result)
           if result && (block = opts[:status_handler][result[0]]) && (v = result[2]).is_a?(Array) && v.empty?
-            @_response.headers.clear
+            res = @_response
+            res.headers.clear
+            res.status = result[0]
             result.replace(_call(&block))
           end
         end
