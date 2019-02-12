@@ -992,7 +992,6 @@ class Roda
 
         # Set the default headers when creating a response.
         def initialize
-          @status  = nil
           @headers = {}
           @body    = []
           @length  = 0

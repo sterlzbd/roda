@@ -90,6 +90,7 @@ class Roda
             # Reset the response so it doesn't inherit the status or any headers from
             # the original response.
             @_response.send(:initialize)
+            @_response.status = nil
             result.replace(_call do |r|
               opts[:class_level_routes].each do |meth, args, blk|
                 r.instance_variable_set(:@remaining_path, @_original_remaining_path)
