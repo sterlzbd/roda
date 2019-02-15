@@ -52,7 +52,6 @@ Roda::RodaPlugins::Hooks
 <h3>Public Class</h3>
 <ol>
 <li><a href="#method-c-configure">configure</a></li>
-<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -81,24 +80,7 @@ Roda::RodaPlugins::Hooks
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/hooks.rb</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">42</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">43</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">44</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-class' id='method-method-c-load_dependencies'>
-<a name='method-c-load_dependencies'></a>
-<div class='synopsis'>
-<span class='name'>load_dependencies</span>
-<span class='arguments'>(app)</span>
-
-</div>
-<div class='description'>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/hooks.rb</span>&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">37</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_before_hook</span>&#x000A;<span class="line-num">38</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/hooks.rb</span>&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">37</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">38</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hook</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

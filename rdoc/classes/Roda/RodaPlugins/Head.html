@@ -47,13 +47,6 @@ Roda::RodaPlugins::Head
 
 <p>NOTE: if you have a public facing website it is recommended that you enable this plugin, or manually handle HEAD anywhere you would handle GET. Search engines and other bots may send a HEAD request prior to crawling a page with a GET request. Without this plugin those HEAD requests will return a 404 status, which may prevent search engines from crawling your website.</p>
 </div>
-<div id='method-list'>
-<h2>Methods</h2>
-<h3>Public Class</h3>
-<ol>
-<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
-</ol>
-</div>
 <div id='context'>
 </div>
 <div id='class-list'>
@@ -65,26 +58,6 @@ Roda::RodaPlugins::Head
 </ol>
 </div>
 <div id='section'>
-<div id='methods'>
-<h2>Public Class methods</h2>
-<div class='method public-class' id='method-method-c-load_dependencies'>
-<a name='method-c-load_dependencies'></a>
-<div class='synopsis'>
-<span class='name'>load_dependencies</span>
-<span class='arguments'>(app)</span>
-
-</div>
-<div class='description'>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/head.rb</span>&#x000A;<span class="line-num">40</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">41</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:_after_hook</span>&#x000A;<span class="line-num">42</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-</div>
 </div>
 
 </div>
