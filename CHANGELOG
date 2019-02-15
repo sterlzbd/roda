@@ -1,4 +1,4 @@
-= master
+= 3.17.0 (2019-02-15)
 
 * Improve performance in the common case for RodaResponse#finish (jeremyevans)
 
