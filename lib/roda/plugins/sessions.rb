@@ -231,7 +231,7 @@ class Roda
           if session.empty?
             if env[SESSION_SERIALIZED]
               # If session was submitted and is now empty, remove the cookie
-              Rack::Utils.delete_cookie_header!(headers, opts[:key])
+              Rack::Utils.delete_cookie_header!(headers, opts[:key], opts[:cookie_options])
             # else
               # If no session was submitted, and the session is empty
               # then there is no need to do anything
