@@ -98,6 +98,24 @@ describe "sessions plugin" do
     errors.must_equal []
   end
 
+  it "removes session cookie even when max-age and expires are in cookie options" do
+    app.plugin :sessions, :cookie_options=>{:max_age=>1000, :expires=>Time.now+1000}
+    body('/s/foo/bar').must_equal 'bar'
+    sct = body('/sct').to_i
+    body('/g/foo').must_equal 'bar'
+
+    _, h, b = req('/sc')
+
+    # Parameters can come in any order, and only the final parameter may omit the ;
+    ['roda.session=', 'max-age=0', 'expires=Thu, 01 Jan 1970 00:00:00 -0000', 'path=/'].each do |param|
+      h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|$)/
+    end
+
+    b.must_equal ['c']
+
+    errors.must_equal []
+  end
+
   it "sets new session create time when clear_session is called even when session is not empty when serializing" do
     body('/s/foo/bar').must_equal 'bar'
     sct = body('/sct').to_i

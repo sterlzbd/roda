@@ -162,6 +162,7 @@ class Roda
         plugin_opts = opts
         opts = (app.opts[:sessions] || DEFAULT_OPTIONS).merge(opts)
         co = opts[:cookie_options] = DEFAULT_COOKIE_OPTIONS.merge(opts[:cookie_options] || OPTS).freeze
+        opts[:remove_cookie_options] = co.merge(:max_age=>0, :expires=>Time.at(0))
         opts[:parser] ||= app.opts[:json_parser] || JSON.method(:parse)
         opts[:serializer] ||= app.opts[:json_serializer] || :to_json.to_proc
 
@@ -231,7 +232,7 @@ class Roda
           if session.empty?
             if env[SESSION_SERIALIZED]
               # If session was submitted and is now empty, remove the cookie
-              Rack::Utils.delete_cookie_header!(headers, opts[:key], opts[:cookie_options])
+              Rack::Utils.delete_cookie_header!(headers, opts[:key], opts[:remove_cookie_options])
             # else
               # If no session was submitted, and the session is empty
               # then there is no need to do anything
