@@ -87,7 +87,12 @@ describe "sessions plugin" do
     body('/g/foo').must_equal 'bar'
 
     _, h, b = req('/sc')
-    h['Set-Cookie'].must_include "roda.session=; max-age=0; expires=Thu, 01 Jan 1970 00:00:00"
+
+    # Parameters can come in any order, and only the final parameter may omit the ;
+    ['roda.session=', 'max-age=0', 'expires=Thu, 01 Jan 1970 00:00:00 -0000', 'path=/'].each do |param|
+      h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|$)/
+    end
+
     b.must_equal ['c']
 
     errors.must_equal []
