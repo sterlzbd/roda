@@ -44,6 +44,15 @@ describe "hooks plugin" do
     @a.must_equal [[200, 'baz', ['bar']]]
   end
 
+  it "works when freezing the app" do
+    app.freeze
+    s, h, b = req
+    s.must_equal 201
+    h['foo'].must_equal 'baz'
+    b.join.must_equal 'bar'
+    @a.must_equal [[200, 'baz', ['bar']]]
+  end
+
   it "after hooks are still called if an exception is raised" do
     a = @a
     @app.before do
@@ -127,5 +136,17 @@ describe "hooks plugin" do
     end
     body('/a').must_equal "error"
     body('/b').must_equal "error"
+  end
+
+  deprecated "should work if #call is overridden" do
+    app.class_eval do
+      def call; super end
+    end
+    app.route(&app.route_block)
+    s, h, b = req
+    s.must_equal 201
+    h['foo'].must_equal 'baz'
+    b.join.must_equal 'bar'
+    @a.must_equal [[200, 'baz', ['bar']]]
   end
 end
