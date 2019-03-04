@@ -140,7 +140,7 @@ class Roda
         def mail(path, *args)
           mail = ::Mail.new
           catch(:no_mail) do
-            unless mail.equal?(new("PATH_INFO"=>path, 'SCRIPT_NAME'=>'', "REQUEST_METHOD"=>"MAIL", 'rack.input'=>StringIO.new, 'roda.mail'=>mail, 'roda.mail_args'=>args).call(&@rack_app_route_block))
+            unless mail.equal?(new("PATH_INFO"=>path, 'SCRIPT_NAME'=>'', "REQUEST_METHOD"=>"MAIL", 'rack.input'=>StringIO.new, 'roda.mail'=>mail, 'roda.mail_args'=>args)._roda_handle_main_route)
               raise Error, "route did not return mail instance for #{path.inspect}, #{args.inspect}"
             end
             mail
