@@ -10,7 +10,7 @@ class Roda
     #
     # Additionally, you can call the +path+ class method with a class and a block, and it will register
     # the class.  You can then call the +path+ instance method with an instance of that class, and it will
-    # instance_exec the block with the arguments provided to path.
+    # execute the block in the context of the route block scope with the arguments provided to path.
     #
     # Example:
     #
@@ -60,9 +60,8 @@ class Roda
     #         method.  If a Symbol or String, uses the value as the url method name.
     # :url_only :: Do not create a path method, just a url method.
     #
-    # Note that if :add_script_name, :url, or :url_only is used, will also create a <tt>_*_path</tt>
-    # method.  This is necessary in order to support path methods that accept blocks, as you can't pass
-    # a block to a block that is instance_execed.
+    # Note that if :add_script_name, :url, or :url_only is used, the path method will also create a
+    # <tt>_*_path</tt> private method.
     module Path
       DEFAULT_PORTS = {'http' => 80, 'https' => 443}.freeze
 
@@ -73,6 +72,7 @@ class Roda
         app.instance_eval do
           self.opts[:path_class_by_name] = opts.fetch(:by_name, ENV['RACK_ENV'] == 'development')
           self.opts[:path_classes] ||= {}
+          self.opts[:path_class_methods] ||= {}
           unless path_block(String)
             path(String){|str| str}
           end
@@ -88,6 +88,7 @@ class Roda
         # Freeze the path classes when freezing the app.
         def freeze
           path_classes.freeze
+          opts[:path_classes_methods].freeze
           super
         end
 
@@ -100,6 +101,7 @@ class Roda
               name = name.name
             end
             path_classes[name] = block
+            self.opts[:path_class_methods][name] = define_roda_method("path_#{name}", :any, &block)
             return
           end
 
@@ -164,6 +166,7 @@ class Roda
         
         # Return the block related to the given class, or nil if there is no block.
         def path_block(klass)
+          # RODA4: Remove
           if opts[:path_class_by_name]
             klass = klass.name
           end
@@ -175,14 +178,16 @@ class Roda
         # Return a path based on the class of the object.  The object passed must have
         # had its class previously registered with the application.  If the app's
         # :add_script_name option is true, this prepends the SCRIPT_NAME to the path.
-        def path(obj, *args)
+        def path(obj, *args, &block)
           app = self.class
-          unless blk = app.path_block(obj.class)
+          opts = app.opts
+          klass =  opts[:path_class_by_name] ? obj.class.name : obj.class
+          unless meth = opts[:path_class_methods][klass]
             raise RodaError, "unrecognized object given to Roda#path: #{obj.inspect}"
           end
 
-          path = instance_exec(obj, *args, &blk)
-          path = request.script_name.to_s + path if app.opts[:add_script_name]
+          path = send(meth, obj, *args, &block)
+          path = request.script_name.to_s + path if opts[:add_script_name]
           path
         end
       end
