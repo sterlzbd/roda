@@ -25,7 +25,7 @@ class Roda
     module RouteBlockArgs
       def self.configure(app, &block)
         app.instance_exec do 
-          opts[:route_block_args] = block
+          define_roda_method(:_roda_route_block_args, 0, &block)
           route(&@raw_route_block) if @raw_route_block
         end
       end
@@ -37,8 +37,9 @@ class Roda
         private
 
         def convert_route_block(block)
-          proc do |r|
-            instance_exec(*instance_exec(&opts[:route_block_args]), &block)
+          meth = define_roda_method("convert_route_block_args", :any, &super(block))
+          lambda do |_|
+            send(meth, *_roda_route_block_args)
           end
         end
       end

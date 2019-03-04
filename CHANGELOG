@@ -1,5 +1,7 @@
 = master
 
+* Improve performance of the route_block_args plugin by using a method instead of instance_exec (jeremyevans)
+
 * Improve performance of the path plugin by using methods instead of instance_exec (jeremyevans)
 
 * Improve performance of the named_templates plugin by using methods instead of instance_exec (jeremyevans)
