@@ -1,5 +1,9 @@
 = master
 
+* Integrate internal after hook with error_handler plugin (jeremyevans)
+
+* Improve performance of internal before and after hooks (jeremyevans)
+
 * Improve performance by using method instead of instance_exec for main route block (jeremyevans)
 
 * Add Roda.define_roda_method for defining instance methods instead of using instance_exec (jeremyevans)

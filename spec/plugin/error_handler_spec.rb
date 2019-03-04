@@ -24,6 +24,33 @@ describe "error_handler plugin" do
     status.must_equal 500
   end
 
+  deprecated "works if #call is overridden" do
+    app(:bare) do
+      plugin :error_handler
+
+      def call
+        super
+      end
+
+      error do |e|
+        e.message
+      end
+
+      route do |r|
+        r.on "a" do
+          "found"
+        end
+
+        raise ArgumentError, "bad idea"
+      end
+    end
+
+    body("/a").must_equal 'found'
+    status("/a").must_equal 200
+    body.must_equal 'bad idea'
+    status.must_equal 500
+  end
+
   it "executes on SyntaxError exceptions" do
     app(:bare) do
       plugin :error_handler

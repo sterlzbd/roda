@@ -432,13 +432,15 @@ WARNING
         # in order, if any _roda_before_* methods are defined. Also, rebuild
         # the route block if a _roda_before method is defined.
         def def_roda_before
-          meths = private_instance_methods.grep(/\A_roda_before_\d\d/).sort.join(';')
+          meths = private_instance_methods.grep(/\A_roda_before_\d\d/).sort
           unless meths.empty?
-            class_eval("def _roda_before; #{meths} end", __FILE__, __LINE__)
-            private :_roda_before
-            if @raw_route_block
-              route(&@raw_route_block)
+            plugin :_before_hook unless private_method_defined?(:_roda_before)
+            if meths.length == 1
+              class_eval("alias _roda_before #{meths.first}", __FILE__, __LINE__)
+            else
+              class_eval("def _roda_before; #{meths.join(';')} end", __FILE__, __LINE__)
             end
+            private :_roda_before
           end
         end
 
@@ -446,10 +448,14 @@ WARNING
         # in order, if any _roda_after_* methods are defined. Also, use
         # the internal after hook plugin if the _roda_after method is defined.
         def def_roda_after
-          meths = private_instance_methods.grep(/\A_roda_after_\d\d/).sort.map{|s| "#{s}(res)"}.join(';')
+          meths = private_instance_methods.grep(/\A_roda_after_\d\d/).sort
           unless meths.empty?
-            plugin :_after_hook unless private_method_defined?(:_roda_after)
-            class_eval("def _roda_after(res); #{meths} end", __FILE__, __LINE__)
+            plugin :error_handler unless private_method_defined?(:_roda_after)
+            if meths.length == 1
+              class_eval("alias _roda_after #{meths.first}", __FILE__, __LINE__)
+            else
+              class_eval("def _roda_after(res); #{meths.map{|s| "#{s}(res)"}.join(';')} end", __FILE__, __LINE__)
+            end
             private :_roda_after
           end
         end
@@ -460,14 +466,7 @@ WARNING
         # if any before hooks are defined.
         # Can be modified by plugins.
         def rack_app_route_block(block)
-          if private_method_defined?(:_roda_before)
-            lambda do |r|
-              _roda_before
-              instance_exec(r, &block)
-            end
-          else
-            block
-          end
+          block
         end
 
         method_num = 0

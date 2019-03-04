@@ -44,10 +44,6 @@ class Roda
     #
     #   plugin :error_handler, classes: [StandardError, ScriptError, NoMemoryError]
     module ErrorHandler
-      def self.load_dependencies(app, *)
-        app.plugin :_after_hook
-      end
-
       DEFAULT_ERROR_HANDLER_CLASSES = [StandardError, ScriptError].freeze
 
       # If a block is given, automatically call the +error+ method on
@@ -72,13 +68,45 @@ class Roda
 
       module InstanceMethods
         # If an error occurs, set the response status to 500 and call
-        # the error handler.
+        # the error handler. Old Dispatch API.
         def call
-          super
+          # RODA4: Remove
+          begin
+            res = super
+          ensure
+            _roda_after(res)
+          end
         rescue *opts[:error_handler_classes] => e
-          @_response.send(:initialize)
-          @_response.status = 500
-          res = _call{handle_error(e)}
+          _handle_error(e)
+        end
+
+        # If an error occurs, set the response status to 500 and call
+        # the error handler. 
+        def _roda_handle_main_route
+          begin
+            res = super
+          ensure
+            _roda_after(res)
+          end
+        rescue *opts[:error_handler_classes] => e
+          _handle_error(e)
+        end
+
+        private
+
+        # Default empty implementation of _roda_after, usually
+        # overridden by Roda.def_roda_before.
+        def _roda_after(res)
+        end
+
+        # Handle the given exception using handle_error, using a default status
+        # of 500.  Run after hooks on the rack response, but if any error occurs
+        # when doing so, log the error using rack.errors and return the response.
+        def _handle_error(e)
+          res = @_response
+          res.send(:initialize)
+          res.status = 500
+          res = _roda_handle_route{handle_error(e)}
           begin
             _roda_after(res)
           rescue => e2
@@ -89,8 +117,6 @@ class Roda
           end
           res
         end
-
-        private
 
         # By default, have the error handler reraise the error, so using
         # the plugin without installing an error handler doesn't change
