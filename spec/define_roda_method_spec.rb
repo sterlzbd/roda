@@ -172,7 +172,7 @@ describe "Roda.define_roda_method" do
     @scope.send(m7, 2, 3, 4).must_equal [3, 2, [4], 3]
   end
 
-  if RUBY_VERSION > '2'
+  if RUBY_VERSION > '2.1'
     it "should raise for required keyword arguments for expected_arity 0 or 1" do
       proc{eval("app.define_roda_method('x', 0){|b:| [b, 1]}", binding)}.must_raise Roda::RodaError
       proc{eval("app.define_roda_method('x', 0){|c=1, b:| [c, b, 1]}", binding)}.must_raise Roda::RodaError
@@ -201,7 +201,6 @@ describe "Roda.define_roda_method" do
       @scope.send(eval("app.define_roda_method('x', 1){|x, c=1, b:2| [x, c, b, 1]}", binding), 3).must_equal [3, 1, 2, 1]
       @scope.send(eval("app.define_roda_method('x', 1){|x, c=1, **b| [x, c, b, 1]}", binding), 3).must_equal [3, 1, {}, 1]
     end
-  end
 
     it "should handle expected_arity :any with keyword arguments" do
       m = eval('app.define_roda_method("x", :any){|b:2| b}', binding)
@@ -254,4 +253,5 @@ describe "Roda.define_roda_method" do
       @scope.send(m, 2, b: 4).must_equal [2, 4, 2]
       @scope.send(m, 2, 3, b: 4).must_equal [2, 4, 2]
     end
+  end
 end
