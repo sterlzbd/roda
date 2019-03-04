@@ -301,7 +301,7 @@ class Roda
 
           begin
             begin
-              scope.process_mail(&@rack_app_route_block)
+              scope.process_mail
             rescue UnhandledMail
               scope.unhandled_mail_hook
             else
@@ -329,16 +329,23 @@ class Roda
         def rcpt(*addresses, &block)
           opts[:mail_processor_string_routes] ||= {}
           opts[:mail_processor_regexp_routes] ||= {}
+          string_meth = nil
+          regexp_meth = nil
           addresses.each do |address|
             key = case address
             when String
-              :mail_processor_string_routes
+              unless string_meth
+                string_meth = define_roda_method("mail_processor_string_route_#{address}", 1, &convert_route_block(block))
+              end
+              opts[:mail_processor_string_routes][address] = string_meth 
             when Regexp
-              :mail_processor_regexp_routes
+              unless regexp_meth
+                regexp_meth = define_roda_method("mail_processor_regexp_route_#{address}", :any, &convert_route_block(block))
+              end
+              opts[:mail_processor_regexp_routes][address] = regexp_meth
             else
               raise RodaError, "invalid address format passed to rcpt, should be Array or String"
             end
-            opts[key][address] = block
           end
           nil
         end
@@ -379,25 +386,23 @@ class Roda
             addresses = mail_recipients
 
             addresses.each do |address|
-              if blk = string_routes[address.to_s.downcase]
-                call(&blk)
+              if meth = string_routes[address.to_s.downcase]
+                _roda_handle_route{send(meth, @_request)}
                 return
               end
             end
 
-            opts[:mail_processor_regexp_routes].each do |regexp, blk|
+            opts[:mail_processor_regexp_routes].each do |regexp, meth|
               addresses.each do |address|
                 if md = regexp.match(address)
-                  call do |r|
-                    instance_exec(r, *md.captures, &blk)
-                  end
+                  _roda_handle_route{send(meth, @_request, *md.captures)}
                   return 
                 end
               end
             end
           end
 
-          call(&block)
+          _roda_handle_main_route
 
           nil
         end
