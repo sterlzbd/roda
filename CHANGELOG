@@ -1,5 +1,7 @@
 = master
 
+* Add direct_call plugin for making Roda.call skip middleware, allowing more optimization when dispatching routes (jeremyevans)
+
 * Improve performance of default_headers plugin by directly defining set_default_headers (jeremyevans)
 
 * Improve performance when freezing app if certain methods have not been overridden (jeremyevans)

@@ -406,9 +406,19 @@ class Roda
           [required_args, optional_args, rest, keyword]
         end
 
+        # The base rack app to use, before middleware is added.
+        def base_rack_app_callable(new_api=true)
+          if new_api
+            lambda{|env| new(env)._roda_handle_main_route}
+          else
+            block = @rack_app_route_block
+            lambda{|env| new(env).call(&block)}
+          end
+        end
+
         # Build the rack app to use
         def build_rack_app
-          if block = @rack_app_route_block
+          if @rack_app_route_block
             # RODA4: Assume optimize is true
             optimize = ancestors.each do |mod|
               break true if mod == InstanceMethods
@@ -422,11 +432,7 @@ WARNING
               end
             end
 
-            app = if optimize
-              lambda{|env| new(env)._roda_handle_main_route}
-            else
-              lambda{|env| new(env).call(&block)}
-            end
+            app = base_rack_app_callable(optimize)
 
             @middleware.reverse_each do |args, bl|
               mid, *args = args
