@@ -72,4 +72,11 @@ describe "default_headers plugin" do
 
     req[1].must_equal h
   end
+
+  it "should offer default_headers method on class and response instance" do
+    h = {'Content-Type'=>'text/json', 'Foo'=>'bar'}
+    app.plugin :default_headers, h
+    app.default_headers.must_equal h
+    app::RodaResponse.new.default_headers.must_equal h
+  end
 end
