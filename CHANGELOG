@@ -1,5 +1,7 @@
 = master
 
+* Improve performance of the named_templates plugin by using methods instead of instance_exec (jeremyevans)
+
 * Improve performance of the multi_route plugin by using methods instead of instance_exec (jeremyevans)
 
 * Improve performance of the hooks plugin by using methods instead of instance_exec (jeremyevans)
