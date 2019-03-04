@@ -169,8 +169,8 @@ class Roda
         # call super.
         def route(name=nil, namespace=nil, &block)
           if name
-            opts[:namespaced_routes][namespace] ||= {}
-            opts[:namespaced_routes][namespace][name] = convert_route_block(block)
+            routes = opts[:namespaced_routes][namespace] ||= {}
+            routes[name] = define_roda_method(routes[name] || "multi_route_#{namespace}_#{name}", 1, &convert_route_block(block))
             self::RodaRequest.clear_named_route_regexp!(namespace)
           else
             super(&block)
@@ -213,7 +213,7 @@ class Roda
 
         # Dispatch to the named route with the given name.
         def route(name, namespace=nil)
-          scope.instance_exec(self, &roda_class.named_route(name, namespace))
+          scope.send(roda_class.named_route(name, namespace), self)
         end
       end
     end

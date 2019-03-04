@@ -171,6 +171,18 @@ describe "multi_route plugin" do
 end
 
 describe "multi_route plugin" do
+  it "r.multi_route handles loading the same route more than once" do
+    app(:multi_route) do |r|
+      r.multi_route
+    end
+    app.route('foo'){'bar'}
+    body('/foo').must_equal 'bar'
+    app.route('foo'){'baz'}
+    body('/foo').must_equal 'baz'
+  end
+end
+
+describe "multi_route plugin" do
   it "r.multi_route raises error for invalid namespace" do
     app(:multi_route) do |r|
       r.is('a'){r.multi_route('foo')}
