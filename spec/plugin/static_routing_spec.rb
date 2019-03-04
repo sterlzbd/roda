@@ -95,6 +95,19 @@ describe "static_routing plugin" do
     body('/foo').must_equal 'baz'
   end
 
+  it "keeps existing routes when loading the plugin" do
+    app(:bare) do
+      plugin :static_routing
+      static_route "/foo" do |r|
+        "#{r.path}:#{r.remaining_path}"
+      end
+      plugin :static_routing
+
+      route{}
+    end
+    body('/foo').must_equal '/foo:'
+  end
+
   it "does not allow placeholders in static routes" do
     app(:bare) do
       plugin :static_routing

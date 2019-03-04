@@ -50,7 +50,7 @@ class Roda
     # while still handling the request methods differently.
     module StaticRouting
       def self.configure(app)
-        app.opts[:static_routes] = {}
+        app.opts[:static_routes] ||= {}
       end
 
       module ClassMethods
