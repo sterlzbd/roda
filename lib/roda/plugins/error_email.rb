@@ -123,7 +123,7 @@ END
         def error_email_content(exception)
           email_opts = self.class.opts[:error_email]
           headers = email_opts[:default_headers].call(email_opts, exception)
-          headers = Hash[headers].merge!(email_opts[:headers])
+          headers = headers.merge(email_opts[:headers])
           headers = headers.map{|k,v| "#{k}: #{v.gsub(/\r?\n/m, "\r\n ")}"}.sort.join("\r\n")
           body = email_opts[:body].call(self, exception)
           "#{headers}\r\n\r\n#{body}"

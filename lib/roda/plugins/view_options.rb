@@ -107,7 +107,7 @@ class Roda
         # Set branch/route options to use when rendering the layout
         def set_layout_options(opts)
           if options = @_layout_options
-            @_layout_options = Hash[options].merge!(opts)
+            @_layout_options = options.merge!(opts)
           else
             @_layout_options = opts
           end
@@ -116,7 +116,7 @@ class Roda
         # Set branch/route options to use when rendering the view
         def set_view_options(opts)
           if options = @_view_options
-            @_view_options = Hash[options].merge!(opts)
+            @_view_options = options.merge!(opts)
           else
             @_view_options = opts
           end

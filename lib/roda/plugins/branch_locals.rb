@@ -31,7 +31,7 @@ class Roda
         # Update the default layout locals to use in this branch.
         def set_layout_locals(opts)
           if locals = @_layout_locals
-            @_layout_locals = Hash[locals].merge!(opts)
+            @_layout_locals = locals.merge!(opts)
           else
             @_layout_locals = opts
           end
@@ -40,7 +40,7 @@ class Roda
         # Update the default view locals to use in this branch.
         def set_view_locals(opts)
           if locals = @_view_locals
-            @_view_locals = Hash[locals].merge!(opts)
+            @_view_locals = locals.merge!(opts)
           else
             @_view_locals = opts
           end

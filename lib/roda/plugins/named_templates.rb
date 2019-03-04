@@ -82,7 +82,7 @@ class Roda
         def find_template(options)
           if options[:template] && (template_opts, meth = opts[:named_templates][template_name(options)]; meth)
             if template_opts
-              options = Hash[template_opts].merge!(options)
+              options = template_opts.merge(options)
             else
               options = Hash[options]
             end

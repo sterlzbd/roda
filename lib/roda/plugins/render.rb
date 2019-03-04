@@ -342,10 +342,10 @@ class Roda
             opts = found_template_opts || find_template(opts)
             template_opts = render_opts[:template_opts]
             if engine_opts = render_opts[:engine_opts][opts[:engine]]
-              template_opts = Hash[template_opts].merge!(engine_opts)
+              template_opts = template_opts.merge(engine_opts)
             end
             if current_template_opts = opts[:template_opts]
-              template_opts = Hash[template_opts].merge!(current_template_opts)
+              template_opts = template_opts.merge(current_template_opts)
             end
             opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
           end
