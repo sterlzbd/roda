@@ -1,5 +1,7 @@
 = master
 
+* Improve performance of default_headers plugin by directly defining set_default_headers (jeremyevans)
+
 * Improve performance when freezing app if certain methods have not been overridden (jeremyevans)
 
 * Support :check_arity and :check_dynamic_arity app options for whether/how to check arity for blocks used to define methods (jeremyevans)
