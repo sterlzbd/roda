@@ -89,9 +89,10 @@ describe "sessions plugin" do
     _, h, b = req('/sc')
 
     # Parameters can come in any order, and only the final parameter may omit the ;
-    ['roda.session=', 'max-age=0', 'expires=Thu, 01 Jan 1970 00:00:00 -0000', 'path=/'].each do |param|
-      h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|$)/
+    ['roda.session=', 'max-age=0', 'path=/'].each do |param|
+      h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|\z)/
     end
+    h['Set-Cookie'].must_match /expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/
 
     b.must_equal ['c']
 
@@ -99,7 +100,7 @@ describe "sessions plugin" do
   end
 
   it "removes session cookie even when max-age and expires are in cookie options" do
-    app.plugin :sessions, :cookie_options=>{:max_age=>1000, :expires=>Time.now+1000}
+    app.plugin :sessions, :cookie_options=>{:max_age=>'1000', :expires=>Time.now+1000}
     body('/s/foo/bar').must_equal 'bar'
     sct = body('/sct').to_i
     body('/g/foo').must_equal 'bar'
@@ -107,9 +108,10 @@ describe "sessions plugin" do
     _, h, b = req('/sc')
 
     # Parameters can come in any order, and only the final parameter may omit the ;
-    ['roda.session=', 'max-age=0', 'expires=Thu, 01 Jan 1970 00:00:00 -0000', 'path=/'].each do |param|
-      h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|$)/
+    ['roda.session=', 'max-age=0', 'path=/'].each do |param|
+      h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|\z)/
     end
+    h['Set-Cookie'].must_match /expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/
 
     b.must_equal ['c']
 
