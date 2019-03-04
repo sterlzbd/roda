@@ -1,5 +1,9 @@
 = master
 
+* Remove r.static_route method from the static_routing plugin (jeremyevans)
+
+* Improve performance of the static_routing plugin by using methods instead of instance_exec (jeremyevans)
+
 * Add support for the route_block_args plugin to the route_csrf plugin (jeremyevans)
 
 * Improve performance of the route_csrf plugin by using a method instead of instance_exec (jeremyevans)

@@ -86,6 +86,15 @@ describe "static_routing plugin" do
     a.must_equal [1,3,2]
   end
 
+  it "supports overridding static routes" do
+    app(:static_routing) do |r|
+    end
+    app.static_route('/foo'){'bar'}
+    body('/foo').must_equal 'bar'
+    app.static_route('/foo'){'baz'}
+    body('/foo').must_equal 'baz'
+  end
+
   it "does not allow placeholders in static routes" do
     app(:bare) do
       plugin :static_routing
@@ -133,15 +142,15 @@ describe "static_routing plugin" do
   it "freezes static routes when app is frozen" do
     app(:bare) do
       plugin :static_routing
-      static_route "/foo"
+      static_route("/foo"){}
       freeze
 
       proc do
-        static_get "/foo"
+        static_get("/foo"){}
       end.must_raise
 
       proc do
-        static_route "/bar"
+        static_route("/bar"){}
       end.must_raise
     end
   end

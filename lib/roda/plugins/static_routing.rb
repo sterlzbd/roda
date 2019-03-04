@@ -96,7 +96,8 @@ class Roda
 
         # Add a static route for the given method.
         def add_static_route(method, path, &block)
-          (opts[:static_routes][path] ||= {})[method] = convert_route_block(block)
+          routes = opts[:static_routes][path] ||= {}
+          routes[method] = define_roda_method(routes[method] || "static_route_#{method}_#{path}", 1, &convert_route_block(block))
         end
       end
 
@@ -107,21 +108,10 @@ class Roda
         # instead having the routing tree handle the request.
         def _roda_before_30__static_routing
           r = @_request
-          if route = self.class.static_route_for(r.request_method, r.path_info)
-            r.static_route(&route)
-          end
-        end
-      end
-
-      module RequestMethods
-        # Assume that this request matches a static route, setting
-        # the remaining path to the emptry string and passing
-        # control to the given block.
-        def static_route(&block)
-          @remaining_path = ''
-
-          always do
-            scope.instance_exec(self, &block)
+          if meth = self.class.static_route_for(r.request_method, r.path_info)
+            r.instance_variable_set(:@remaining_path, '')
+            r.send(:block_result, send(meth, r))
+            throw :halt, @_response.finish
           end
         end
       end
