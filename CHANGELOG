@@ -1,5 +1,7 @@
 = master
 
+* Improve performance of the default_status plugin by directly defining the default_status method (jeremyevans)
+
 * Improve performance of class_level_routing plugin using methods instead of instance_exec (jeremyevans)
 
 * Do not have route_block_args plugin affect class_level_routes plugin (jeremyevans)
