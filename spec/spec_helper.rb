@@ -77,7 +77,7 @@ class Minitest::Spec
   def app(type=nil, &block)
     case type
     when :new
-      @app = _app{route(&block)}
+      @app = _app{route(&block) if block}
     when :bare
       @app = _app(&block)
     when Symbol
@@ -89,7 +89,7 @@ class Minitest::Spec
       if block
         @app = _app{route(&block)}
       else
-        @app ||= _app{route(&block)}
+        @app ||= _app{}
       end
     end
   end

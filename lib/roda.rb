@@ -333,9 +333,15 @@ class Roda
         # This should only be called once per class, and if called multiple
         # times will overwrite the previous routing.
         def route(&block)
+          unless block
+            RodaPlugins.warn "no block passed to Roda.route"
+            return
+          end
+
           @raw_route_block = block
           @route_block = block = convert_route_block(block)
-          @rack_app_route_block = rack_app_route_block(block)
+          @rack_app_route_block = block = rack_app_route_block(block)
+          public define_roda_method(:_roda_main_route, 1, &block)
           build_rack_app
         end
 
@@ -387,7 +393,25 @@ class Roda
         # Build the rack app to use
         def build_rack_app
           if block = @rack_app_route_block
-            app = lambda{|env| new(env).call(&block)}
+            # RODA4: Assume optimize is true
+            optimize = ancestors.each do |mod|
+              break true if mod == InstanceMethods
+              meths = mod.instance_methods(false)
+              if meths.include?(:call) && !(meths.include?(:_roda_handle_main_route) || meths.include?(:_roda_run_main_route))
+              RodaPlugins.warn <<WARNING
+Falling back to using #call for dispatching for #{self}, due to #call override in #{mod}.
+#{mod} should be fixed to adjust to Roda's new dispatch API, and override _roda_handle_main_route or _roda_run_main_route
+WARNING
+                break false
+              end
+            end
+
+            app = if optimize
+              lambda{|env| new(env)._roda_handle_main_route}
+            else
+              lambda{|env| new(env).call(&block)}
+            end
+
             @middleware.reverse_each do |args, bl|
               mid, *args = args
               app = mid.new(app, *args, &bl)
@@ -469,20 +493,49 @@ class Roda
           @_response = klass::RodaResponse.new
         end
 
-        # instance_exec the route block in the scope of the
-        # receiver, with the related request.  Catch :halt so that
-        # the route block can throw :halt at any point with the
-        # rack response to use.
-        def call(&block)
+        # Handle dispatching to the main route, catching :halt and handling
+        # the result of the block.
+        def _roda_handle_main_route
           catch(:halt) do
             r = @_request
-            r.block_result(instance_exec(r, &block))
+            r.block_result(_roda_run_main_route(r))
             @_response.finish
           end
         end
 
-        # Private alias for internal use
+        # Treat the given block as a routing block, catching :halt if
+        # thrown by the block.
+        def _roda_handle_route
+          catch(:halt) do
+            @_request.block_result(yield)
+            @_response.finish
+          end
+        end
+
+        # Default implementation of the main route, usually overridden
+        # by Roda.route.
+        def _roda_main_route(_)
+        end
+
+        # Run the main route block with the request.  Designed for
+        # extension by plugins
+        def _roda_run_main_route(r)
+          _roda_main_route(r)
+        end
+
+        # Deprecated method for the previous main route dispatch API.
+        def call(&block)
+          # RODA4: Remove
+          catch(:halt) do
+            r = @_request
+            r.block_result(instance_exec(r, &block)) # Fallback
+            @_response.finish
+          end
+        end
+
+        # Deprecated private alias for internal use
         alias _call call
+        # RODA4: Remove
         private :_call
 
         # The environment hash for the current request. Example:
