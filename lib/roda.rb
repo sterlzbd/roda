@@ -260,6 +260,22 @@ class Roda
         def freeze
           @opts.freeze
           @middleware.freeze
+
+          # If the _roda_run_main_route instance method has not been overridden,
+          # make it an alias to _roda_main_route for performance
+          if instance_method(:_roda_run_main_route).owner == InstanceMethods
+            class_eval("alias _roda_run_main_route _roda_main_route")
+          end
+          self::RodaResponse.class_eval do
+            if instance_method(:set_default_headers).owner == ResponseMethods &&
+               instance_method(:default_headers).owner == ResponseMethods
+
+              def set_default_headers
+                @headers['Content-Type'] ||= 'text/html'
+              end
+            end
+          end
+
           super
         end
 

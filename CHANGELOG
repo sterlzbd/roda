@@ -1,5 +1,7 @@
 = master
 
+* Improve performance when freezing app if certain methods have not been overridden (jeremyevans)
+
 * Support :check_arity and :check_dynamic_arity app options for whether/how to check arity for blocks used to define methods (jeremyevans)
 
 * Improve performance of the status_handler plugin by using methods instead of instance_exec (jeremyevans)
