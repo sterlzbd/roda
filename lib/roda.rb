@@ -1097,7 +1097,7 @@ WARNING
           path = @remaining_path
           # For every block, we make sure to reset captures so that
           # nesting matchers won't mess with each other's captures.
-          @captures.clear
+          captures = @captures.clear
 
           if match_all(args)
             block_result(yield(*captures))
