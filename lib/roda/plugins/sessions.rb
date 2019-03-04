@@ -162,7 +162,7 @@ class Roda
         plugin_opts = opts
         opts = (app.opts[:sessions] || DEFAULT_OPTIONS).merge(opts)
         co = opts[:cookie_options] = DEFAULT_COOKIE_OPTIONS.merge(opts[:cookie_options] || OPTS).freeze
-        opts[:remove_cookie_options] = co.merge(:max_age=>0, :expires=>Time.at(0))
+        opts[:remove_cookie_options] = co.merge(:max_age=>'0', :expires=>Time.at(0))
         opts[:parser] ||= app.opts[:json_parser] || JSON.method(:parse)
         opts[:serializer] ||= app.opts[:json_serializer] || :to_json.to_proc
 
