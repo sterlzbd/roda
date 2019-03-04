@@ -109,6 +109,25 @@ describe "route_csrf plugin" do
     body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new).must_equal '/foo2'
   end
 
+  it "allows plugin block to integrate with route_block_args plugin" do
+    app(:bare) do
+      send(*DEFAULT_SESSION_ARGS)
+      plugin :route_block_args do
+        [request, request.path, response]
+      end
+      plugin(:route_csrf){|r, path, res| res.write(path); res.write('2')}
+      route do |r|
+        check_csrf!
+        r.post('foo'){'f'}
+        r.get "token", String do |s|
+          csrf_token("/#{s}")
+        end
+      end
+    end
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new).must_equal '/foo2'
+  end
+
   it "raises Error if configuring plugin with invalid :csrf_failure option" do
     route_csrf_app(:csrf_failure=>:foo)
     proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new)}.must_raise Roda::RodaError
@@ -116,6 +135,14 @@ describe "route_csrf plugin" do
 
   it "raises Error if configuring plugin with block and :csrf_failure option" do
     proc{route_csrf_app(:block=>proc{|r| r.path + '2'}, :csrf_failure=>:raise)}.must_raise Roda::RodaError
+  end
+
+  deprecated "supports check_csrf! :csrf_failure option as a Proc" do
+    pr = proc{env['BAD'] == '1' ? 't' : 'f'}
+    route_csrf_app{check_csrf!(:csrf_failure=>pr); ''}
+    token = body("/token/foo")
+    body("SKIP"=>"1", "BAD"=>'1', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 't'
+    body("SKIP"=>"1", "BAD"=>'0', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
   end
 
   it "supports valid_csrf? method" do

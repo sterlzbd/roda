@@ -164,11 +164,13 @@ class Roda
 
       def self.configure(app, opts=OPTS, &block)
         options = app.opts[:route_csrf] = (app.opts[:route_csrf] || DEFAULTS).merge(opts)
-        if block
-          if opts[:csrf_failure]
+        if block || opts[:csrf_failure].is_a?(Proc)
+          if block && opts[:csrf_failure]
             raise RodaError, "Cannot specify both route_csrf plugin block and :csrf_failure option"
           end
-          options[:csrf_failure] = block
+          block ||= opts[:csrf_failure]
+          options[:csrf_failure] = :csrf_failure_method
+          app.define_roda_method(:_roda_route_csrf_failure, 1, &app.send(:convert_route_block, block))
         end
         options[:env_header] = "HTTP_#{options[:header].to_s.gsub('-', '_').upcase}".freeze
         options.freeze
@@ -192,8 +194,11 @@ class Roda
               throw :halt, [403, {'Content-Type'=>'text/html', 'Content-Length'=>'0'}, []]
             when :clear_session
               session.clear
+            when :csrf_failure_method
+              @_request.on{_roda_route_csrf_failure(@_request)}
             when Proc
-              @_request.on{instance_exec(@_request, &failure_action)}
+              RodaPlugins.warn "Passing a Proc as the :csrf_failure option value to check_csrf! is deprecated"
+              @_request.on{instance_exec(@_request, &failure_action)} # Deprecated
             else
               raise RodaError, "Unsupported :csrf_failure option: #{failure_action.inspect}"
             end
