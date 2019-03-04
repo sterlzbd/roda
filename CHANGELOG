@@ -1,5 +1,7 @@
 = master
 
+* Add Roda.define_roda_method for defining instance methods instead of using instance_exec (jeremyevans)
+
 * Include cookie_options when clearing the cookie (#162, #163) (eiko, jeremyevans)
 
 = 3.17.0 (2019-02-15)

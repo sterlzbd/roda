@@ -145,6 +145,106 @@ class Roda
           build_rack_app
         end
 
+        # Define an instance method using the block with the provided name and
+        # expected arity.  If the name is given as a Symbol, it is used directly.
+        # If the name is given as a String, a unique name will be generated using
+        # that string.  The expected arity should be either 0 (no arguments),
+        # 1 (single argument), or :any (any number of arguments).
+        #
+        # If the :check_arity app option is not set to false, Roda will check that
+        # the arity of the block matches the expected arity, and compensate for
+        # cases where it does not.  If it is set to :warn, Roda will warn in the
+        # cases where the arity does not match what is expected.
+        #
+        # If the expected arity is :any, Roda must perform a dynamic arity check
+        # when the method is called, which can hurt performance even in the case
+        # where the arity matches.  The :check_dynamic_arity app option can be
+        # set to false to turn off the dynamic arity checks.  The
+        # :check_dynamic_arity app option can be to :warn to warn if Roda needs
+        # to adjust arity dynamically.
+        #
+        # Roda only checks arity for regular blocks, not lambda blocks, as the
+        # fixes Roda uses for regular blocks would not work for lambda blocks.
+        #
+        # Roda does not support blocks with required keyword arguments if the
+        # expected arity is 0 or 1.
+        def define_roda_method(meth, expected_arity, &block)
+          if meth.is_a?(String)
+            meth = roda_method_name(meth)
+          end
+
+          if (check_arity = opts.fetch(:check_arity, true)) && !block.lambda?
+            required_args, optional_args, rest, keyword = _define_roda_method_arg_numbers(block)
+
+            if keyword == :required && (expected_arity == 0 || expected_arity == 1)
+              raise RodaError, "cannot use block with required keyword arguments when calling define_roda_method with expected arity #{expected_arity}"
+            end
+
+            case expected_arity
+            when 0
+              unless required_args == 0
+                if check_arity == :warn
+                  RodaPlugins.warn "Arity mismatch in block passed to define_roda_method. Expected Arity 0, but arguments required for #{block.inspect}"
+                end
+                b = block
+                block = lambda{instance_exec(&b)} # Fallback
+              end
+            when 1
+              if required_args == 0 && optional_args == 0 && !rest
+                if check_arity == :warn
+                  RodaPlugins.warn "Arity mismatch in block passed to define_roda_method. Expected Arity 1, but no arguments accepted for #{block.inspect}"
+                end
+                b = block
+                block = lambda{|_| instance_exec(&b)} # Fallback
+              end
+            when :any
+              if check_dynamic_arity = opts.fetch(:check_dynamic_arity, true)
+                if keyword
+                  # Complexity of handling keyword arguments using define_method is too high,
+                  # Fallback to instance_exec in this case.
+                  b = block
+                  block = lambda{|*a| instance_exec(*a, &b)} # Keyword arguments fallback
+                else
+                  arity_meth = meth
+                  meth = :"#{meth}_arity"
+                end
+              end
+            else
+              raise RodaError, "unexpected arity passed to define_roda_method: #{expected_arity.inspect}"
+            end
+          end
+
+          define_method(meth, &block)
+          private meth
+
+          if arity_meth
+            required_args, optional_args, rest, keyword = _define_roda_method_arg_numbers(instance_method(meth))
+            max_args = required_args + optional_args
+            define_method(arity_meth) do |*a|
+              arity = a.length
+              if arity > required_args
+                if arity > max_args && !rest
+                  if check_dynamic_arity == :warn
+                    RodaPlugins.warn "Dynamic arity mismatch in block passed to define_roda_method. At most #{max_args} arguments accepted, but #{arity} arguments given for #{block.inspect}"
+                  end
+                  a = a.slice(0, max_args)
+                end
+              elsif arity < required_args
+                if check_dynamic_arity == :warn
+                  RodaPlugins.warn "Dynamic arity mismatch in block passed to define_roda_method. #{required_args} args required, but #{arity} arguments given for #{block.inspect}"
+                end
+                a.concat([nil] * (required_args - arity))
+              end
+
+              send(meth, *a)
+            end
+            private arity_meth
+            arity_meth
+          else
+            meth
+          end
+        end
+
         # Expand the given path, using the root argument as the base directory.
         def expand_path(path, root=opts[:root])
           ::File.expand_path(path, root)
@@ -250,6 +350,40 @@ class Roda
 
         private
 
+        # Return the number of required argument, optional arguments,
+        # whether the callable accepts any additional arguments,
+        # and whether the callable accepts keyword arguments (true, false
+        # or :required).
+        def _define_roda_method_arg_numbers(callable)
+          optional_args = 0
+          rest = false
+          keyword = false
+          callable.parameters.map(&:first).each do |arg_type, _|
+            case arg_type
+            when :opt
+              optional_args += 1
+            when :rest
+              rest = true
+            when :keyreq
+              keyword = :required
+            when :key, :keyrest
+              keyword ||= true
+            end
+          end
+          arity = callable.arity
+          if arity < 0
+            arity = arity.abs - 1
+          end
+          required_args = arity
+          arity -= 1 if keyword == :required
+
+          if callable.is_a?(Proc) && !callable.lambda?
+            optional_args -= arity
+          end
+
+          [required_args, optional_args, rest, keyword]
+        end
+
         # Build the rack app to use
         def build_rack_app
           if block = @rack_app_route_block
@@ -310,6 +444,13 @@ class Roda
           else
             block
           end
+        end
+
+        method_num = 0
+        method_num_mutex = Mutex.new
+        # Return a unique method name symbol for the given suffix.
+        define_method(:roda_method_name) do |suffix|
+          :"_roda_#{suffix}_#{method_num_mutex.synchronize{method_num += 1}}"
         end
       end
 
