@@ -22,6 +22,23 @@ describe "status_handler plugin" do
     status("/a").must_equal 200
   end
 
+  it "passes request if block accepts argument" do
+    app(:bare) do
+      plugin :status_handler
+
+      status_handler(404) do |r|
+        r.path + 'foo'
+      end
+
+      route do |r|
+      end
+    end
+
+    body('/').must_equal '/foo'
+    body("/a").must_equal '/afoo'
+    status("/").must_equal 404
+  end
+
   it "allows overriding status inside status_handler" do
     app(:bare) do
       plugin :status_handler

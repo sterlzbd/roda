@@ -1,5 +1,7 @@
 = master
 
+* Improve performance of the status_handler plugin by using methods instead of instance_exec (jeremyevans)
+
 * Remove r.static_route method from the static_routing plugin (jeremyevans)
 
 * Improve performance of the static_routing plugin by using methods instead of instance_exec (jeremyevans)
