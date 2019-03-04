@@ -127,15 +127,25 @@ class Roda
             Forwarder.new(self, app, *args, &block)
           end
         end
+      end
 
+      module InstanceMethods
         # Override the route block so that if no route matches, we throw so
-        # that the next middleware is called.
-        def route(*args, &block)
+        # that the next middleware is called. Old Dispatch API.
+        def call(&block)
           super do |r|
-            res = instance_exec(r, &block)
+            res = instance_exec(r, &block) # call Fallback
             throw :next, true if r.forward_next
             res
           end
+        end
+
+        # Override the route block so that if no route matches, we throw so
+        # that the next middleware is called.
+        def _roda_run_main_route(r)
+          res = super
+          throw :next, true if r.forward_next
+          res
         end
       end
 

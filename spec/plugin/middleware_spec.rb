@@ -1,59 +1,83 @@
 require_relative "../spec_helper"
 
 describe "middleware plugin" do 
-  it "turns Roda app into middlware" do
-    a2 = app(:bare) do
-      plugin :middleware
+  [false, true].each do |def_call|
+    meth = def_call ? :deprecated : :it
+    send meth, "turns Roda app into middlware" do
+      a2 = app(:bare) do
+        plugin :middleware
 
-      route do |r|
-        r.is "a" do
-          "a2"
+        if def_call
+          def call
+            super
+          end
         end
-        r.post "b" do
-          "b2"
-        end
-      end
-    end
 
-    a3 = app(:bare) do
-      plugin :middleware
-
-      route do |r|
-        r.get "a" do
-          "a3"
-        end
-        r.get "b" do
-          "b3"
+        route do |r|
+          r.is "a" do
+            "a2"
+          end
+          r.post "b" do
+            "b2"
+          end
         end
       end
-    end
 
-    app(:bare) do
-      use a3
-      use a2
+      a3 = app(:bare) do
+        plugin :middleware
 
-      route do |r|
-        r.is "a" do
-          "a1"
-        end
-        r.is "b" do
-          "b1"
+        route do |r|
+          r.get "a" do
+            "a3"
+          end
+          r.get "b" do
+            "b3"
+          end
         end
       end
-    end
 
-    body('/a').must_equal 'a3'
-    body('/b').must_equal 'b3'
-    body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'a2'
-    body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'b2'
-    body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
-    body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
+      app(:bare) do
+        use a3
+        use a2
+
+        route do |r|
+          r.is "a" do
+            "a1"
+          end
+          r.is "b" do
+            "b1"
+          end
+        end
+      end
+
+      body('/a').must_equal 'a3'
+      body('/b').must_equal 'b3'
+      body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'a2'
+      body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'b2'
+      body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
+      body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
+    end
   end
 
   it "makes it still possible to use the Roda app normally" do
     app(:middleware) do
       "a"
     end
+    body.must_equal 'a'
+  end
+
+  deprecated "makes it still possible to use the Roda app normally when #call is overwritten" do
+    app(:bare) do
+      plugin :middleware
+      def call
+        super
+      end
+
+      route do
+        "a"
+      end
+    end
+    app
     body.must_equal 'a'
   end
 
@@ -160,5 +184,53 @@ describe "middleware plugin" do
       route{env['foo'] = 'bar'; 'baz'}
     end
     body.must_equal 'bazbar'
+  end
+
+  it "works with the route_block_args block when loaded before" do
+    app(:bare) do
+      plugin :middleware
+      plugin :route_block_args do
+        [request.path, response]
+      end
+
+      route do |path, res|
+        request.get 'a' do
+          res.write(path + '2')
+        end
+      end
+    end
+    a = app
+
+    app(:bare) do
+      use a
+      route{|r| 'b'}
+    end
+
+    body('/a').must_equal '/a2'
+    body('/x').must_equal 'b'
+  end
+
+  it "works with the route_block_args block when loaded after" do
+    app(:bare) do
+      plugin :route_block_args do
+        [request.path, response]
+      end
+      plugin :middleware
+
+      route do |path, res|
+        request.get 'a' do
+          res.write(path + '2')
+        end
+      end
+    end
+    a = app
+
+    app(:bare) do
+      use a
+      route{|r| 'b'}
+    end
+
+    body('/a').must_equal '/a2'
+    body('/x').must_equal 'b'
   end
 end
