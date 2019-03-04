@@ -62,9 +62,10 @@ class Roda
 
       module ClassMethods
         # Define routing methods that will store class level routes.
-        [:root, :on, :is, :get, :post, :delete, :head, :options, :link, :patch, :put, :trace, :unlink].each do |meth|
-          define_method(meth) do |*args, &block|
-            opts[:class_level_routes] << [meth, args, convert_route_block(block)].freeze
+        [:root, :on, :is, :get, :post, :delete, :head, :options, :link, :patch, :put, :trace, :unlink].each do |request_meth|
+          define_method(request_meth) do |*args, &block|
+            meth = define_roda_method("class_level_routing_#{request_meth}", :any, &block)
+            opts[:class_level_routes] << [request_meth, args, meth].freeze
           end
         end
 
@@ -91,11 +92,12 @@ class Roda
             # the original response.
             @_response.send(:initialize)
             @_response.status = nil
-            result.replace(_call do |r|
-              opts[:class_level_routes].each do |meth, args, blk|
+            result.replace(_roda_handle_route do
+              r = @_request
+              opts[:class_level_routes].each do |request_meth, args, meth|
                 r.instance_variable_set(:@remaining_path, @_original_remaining_path)
-                r.public_send(meth, *args) do |*a|
-                  instance_exec(*a, &blk)
+                r.public_send(request_meth, *args) do |*a|
+                  send(meth, *a)
                 end
               end
               nil
