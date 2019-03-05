@@ -261,17 +261,19 @@ class Roda
           @opts.freeze
           @middleware.freeze
 
-          # If the _roda_run_main_route instance method has not been overridden,
-          # make it an alias to _roda_main_route for performance
-          if instance_method(:_roda_run_main_route).owner == InstanceMethods
-            class_eval("alias _roda_run_main_route _roda_main_route")
-          end
-          self::RodaResponse.class_eval do
-            if instance_method(:set_default_headers).owner == ResponseMethods &&
-               instance_method(:default_headers).owner == ResponseMethods
+          unless opts[:subclassed]
+            # If the _roda_run_main_route instance method has not been overridden,
+            # make it an alias to _roda_main_route for performance
+            if instance_method(:_roda_run_main_route).owner == InstanceMethods
+              class_eval("alias _roda_run_main_route _roda_main_route")
+            end
+            self::RodaResponse.class_eval do
+              if instance_method(:set_default_headers).owner == ResponseMethods &&
+                 instance_method(:default_headers).owner == ResponseMethods
 
-              def set_default_headers
-                @headers['Content-Type'] ||= 'text/html'
+                def set_default_headers
+                  @headers['Content-Type'] ||= 'text/html'
+                end
               end
             end
           end
@@ -292,6 +294,11 @@ class Roda
         # and setup the request and response subclasses.
         def inherited(subclass)
           raise RodaError, "Cannot subclass a frozen Roda class" if frozen?
+
+          # Mark current class as having been subclassed, as some optimizations
+          # depend on the class not being subclassed
+          opts[:subclassed] = true
+
           super
           subclass.instance_variable_set(:@inherit_middleware, @inherit_middleware)
           subclass.instance_variable_set(:@middleware, @inherit_middleware ? @middleware.dup : [])

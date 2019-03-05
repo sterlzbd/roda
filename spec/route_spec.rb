@@ -8,6 +8,17 @@ describe "Roda.route" do
     body.must_equal '123'
   end
 
+  it "should work if called in subclass and parent class later frozen" do
+    a = app
+    @app = Class.new(a)
+    @app.route{|r| "OK"}
+    body.must_equal "OK"
+    a.freeze
+    body.must_equal "OK"
+    app.freeze
+    body.must_equal "OK"
+  end
+
   deprecated "should support #call being overridden" do
     app.class_eval do
       def call; super end
