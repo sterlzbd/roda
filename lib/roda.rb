@@ -198,7 +198,7 @@ class Roda
                 block = lambda{|_| instance_exec(&b)} # Fallback
               end
             when :any
-              if check_dynamic_arity = opts.fetch(:check_dynamic_arity, true)
+              if check_dynamic_arity = opts.fetch(:check_dynamic_arity, check_arity)
                 if keyword
                   # Complexity of handling keyword arguments using define_method is too high,
                   # Fallback to instance_exec in this case.
