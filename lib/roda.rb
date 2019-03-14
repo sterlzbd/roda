@@ -303,6 +303,7 @@ class Roda
           subclass.instance_variable_set(:@inherit_middleware, @inherit_middleware)
           subclass.instance_variable_set(:@middleware, @inherit_middleware ? @middleware.dup : [])
           subclass.instance_variable_set(:@opts, opts.dup)
+          subclass.opts.delete(:subclassed)
           subclass.opts.to_a.each do |k,v|
             if (v.is_a?(Array) || v.is_a?(Hash)) && !v.frozen?
               subclass.opts[k] = v.dup
