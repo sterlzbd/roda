@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.18.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.18.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.18.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2019-03-15 09:27:33 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A direct_call plugin has been added.  This plugin makes Roda.call call the app directly, skipping any middleware.  This plugin can be used for performance reasons, as the class itself can be used as the base rack app, instead of using a lambda as the base rack app.  Roda.app.call will still call all middleware when using this plugin.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Blocks that are given during application configuration, and previously executed with instance_exec, instead now define methods, and <a href="../../../classes/Roda.html"><code>Roda</code></a> now calls these methods. This is a much faster approach. This new approach, combined with the direct_call plugin and the Roda.freeze optimizations, can be over 80% faster for trivial applications, with measureable improvements in most applications.</p>
+
+<p>As methods are strict in regards to arity and instance_exec is not, <a href="../../../classes/Roda.html"><code>Roda</code></a> now checks all such blocks for arity mismatches, and attempts to compensate for arity mismatches.  In case of an arity mismatch, <a href="../../../classes/Roda.html"><code>Roda</code></a> will define a method that will call instance_exec, in which case there will not be a performance improvement.</p>
+
+<p>For some methods, <a href="../../../classes/Roda.html"><code>Roda</code></a> may not know the expected arity until runtime.  In that case, <a href="../../../classes/Roda.html"><code>Roda</code></a> will check the arity at runtime and try to call the method with the arity that it supports if there is an arity mismatch.</p>
+
+<p>You can control the checking of arity via two options:</p>
+<table class="rdoc-list note-list"><tbody><tr><td class='label'>:check_arity </td><td>
+<p>Set to false to turn off all arity checking. Set to :warn to issue a warning when defining the method if there is an arity mismatch (for methods where the expected arity is known in advance).</p>
+</td></tr><tr><td class='label'>:check_dynamic_arity </td><td>
+<p>Set to false to turn off arity checking for methods defined where the arity is not known at compile time.  Set to :warn to issue a warning at runtime every time the method is called and there is an arity mismatch (for methods where the expected arity is not known in advance).  Note that checking the arity at runtime has a performance cost, so for maximum performance this should be set to false.</p>
+</td></tr></tbody></table>
+
+<p>Note that this arity checking is only done to keep backwards compatibility.  Since lambdas already used strict arity, no arity checking is done if the block is a lambda and not a regular proc.</p>
+
+<p><a href="../../../classes/Roda.html"><code>Roda</code></a> has a new dispatch API that works with these defined methods. The new dispatch API uses the following methods:</p>
+<ul><li>
+<p>_roda_handle_main_route: Entry point for normal request dispatch.</p>
+</li><li>
+<p>_roda_handle_route: Yields to the routing block, catching any halts inside the block, treating the block as a routing block.</p>
+</li><li>
+<p>_roda_main_route: Roda.route defines this method using the block provided, it accepts the request as an argument.</p>
+</li><li>
+<p>_roda_run_main_route: Calls _roda_main_route with the request, allowing for plugins to execute code around the main routing, while still being able to throw :halt to return a response.</p>
+</li></ul>
+
+<p>All instance methods defined by <a href="../../../classes/Roda.html"><code>Roda</code></a> use the <em>roda</em> prefix.</p>
+</li><li>
+<p>When deleting the session cookie in the sessions plugin, the Set-Cookie response header now uses the same path and domain  that was originally used to set the cookie.  This can fix cases where the cookie was not being cleared as expected.</p>
+</li><li>
+<p>Freezing a <a href="../../../classes/Roda.html"><code>Roda</code></a> app now can add performance improvements in addition to reliability improvements. When freezing the class, if certain methods in the class have not been overridden, <a href="../../../classes/Roda.html"><code>Roda</code></a> now defines aliases or more optimized methods to improve performance.</p>
+</li><li>
+<p><a href="../../../classes/Roda.html"><code>Roda</code></a> now warns if the Roda#call method is overridden in a module, without the module also overridding _roda_handle_main_route or _roda_run_main_route.  This indicates that the module needs to be updated to use Roda&#39;s new dispatch API.  <a href="../../../classes/Roda.html"><code>Roda</code></a> will continue to work in this case, but it will be slower than the Roda&#39;s now default behavior, as it will force usage of the old dispatch API. This check will be removed in <a href="../../../classes/Roda.html"><code>Roda</code></a> 4, which will remove support for Roda#call (and Roda#_call).</p>
+</li><li>
+<p>When there is only a single internal before or after hook defined, the hook is now faster by using a method alias.</p>
+</li><li>
+<p>The route_csrf plugin block or :csrf_failure option proc now integrates with the route_block_args plugin.</p>
+</li><li>
+<p>The default_status plugin is now faster by defining the default_status method directly.</p>
+</li><li>
+<p>The default_headers plugin is now faster by defining an optimized set_default_headers method directly.</p>
+</li><li>
+<p>The hooks plugin is now faster by defining methods for each hook block, with a main hook method that dispatches to each of the hook block methods.  If only a single hook block is used, the main hook method is an alias to the hook block method to avoid an extra method call.</p>
+</li><li>
+<p>The following plugins now use define_method instead of instance_exec for better performance:</p>
+<ul><li>
+<p>defaults_setter</p>
+</li><li>
+<p>mail_processor</p>
+</li><li>
+<p>multi_route</p>
+</li><li>
+<p>named_templates</p>
+</li><li>
+<p>path</p>
+</li><li>
+<p>route_block_args</p>
+</li><li>
+<p>route_csrf</p>
+</li><li>
+<p>static_routing</p>
+</li><li>
+<p>status_handler</p>
+</li></ul>
+</li><li>
+<p>The internal after hook implementation has now been merged into the error_handler plugin. This is faster in cases where the error_handler plugin is used, and slower in cases where the internal after hook plugin was used without the error_handler plugin.</p>
+</li><li>
+<p>The route_block_args plugin now handles cases where Roda.convert_route_block has already been overridden.</p>
+</li><li>
+<p>Performance of routing methods that can yield captures has been improved.</p>
+</li><li>
+<p>Hash#merge is now used in preference to Hash[].merge! in cases where the receiver of Hash#merge would not be provided by the user.  This is because Hash#merge is faster than Hash[].merge! in recent ruby versions.  If the receiver of merge is provided by the user, then Hash[].merge! is still used to ensure that the resulting value is plain hash.</p>
+</li><li>
+<p>The static_routing plugin no longer removes existing static routes if loaded more than once.</p>
+</li><li>
+<p><a href="../../../classes/Roda.html"><code>Roda</code></a> now warns when calling Roda.route without a block.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The route_block_args plugin no longer affects the class_level_routing plugin.  Support for this was added in <a href="../../../classes/Roda.html"><code>Roda</code></a> 3.17.0 when the route_block_args plugin was added, but this was a mistake as class_level_routing blocks should be called with the captures for their matchers, not with the route block args.</p>
+</li><li>
+<p>Some of the internal state was changed in the following plugins:</p>
+<ul><li>
+<p>class_level_routing</p>
+</li><li>
+<p>mail_processor</p>
+</li><li>
+<p>multi_route</p>
+</li><li>
+<p>named_templates</p>
+</li><li>
+<p>static_routing</p>
+</li><li>
+<p>status_handler</p>
+</li></ul>
+
+<p>This only affects you if you were accessing the internal state via the opts hash.</p>
+</li><li>
+<p>The static_routing plugin no longer defines the r.static_route method.</p>
+</li><li>
+<p>The mailer plugin was switched to use the new dispatch API, and will no longer handle cases where the old dispatch API (Roda#call) was overrridden.</p>
+</li><li>
+<p>The static_route method in the static_routing plugin must now be called with a block.  Previously, that would not cause a failure until runtime, where it would fail when you tried to execute the route.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>Roda::RodaPlugins::DefaultStatus::ResponseMethods</title>
+<title>Roda::RodaPlugins::DirectCall::ClassMethods</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -24,11 +24,11 @@
 <div class='class' id='wrapper'>
 <div class='header'>
 <h1 class='name'><span class='type'>module</span>
-Roda::RodaPlugins::DefaultStatus::ResponseMethods
+Roda::RodaPlugins::DirectCall::ClassMethods
 </h1>
 <ol class='paths'>
 <li>
-<a href="../../../../files/lib/roda/plugins/default_status_rb.html">lib/roda/plugins/default_status.rb</a>
+<a href="../../../../files/lib/roda/plugins/direct_call_rb.html">lib/roda/plugins/direct_call.rb</a>
 </li>
 </ol>
 </div>
@@ -39,7 +39,7 @@ Roda::RodaPlugins::DefaultStatus::ResponseMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#method-i-default_status">default_status</a></li>
+<li><a href="#method-i-call">call</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -47,23 +47,23 @@ Roda::RodaPlugins::DefaultStatus::ResponseMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-default_status'>
-<a name='method-i-default_status'></a>
+<div class='method public-instance' id='method-method-i-call'>
+<a name='method-i-call'></a>
 <div class='synopsis'>
-<span class='name'>default_status</span>
-<span class='arguments'>()</span>
+<span class='name'>call</span>
+<span class='arguments'>(env)</span>
 
 </div>
 <div class='description'>
 
-<p>instance_exec the <a href="ResponseMethods.html#method-i-default_status"><code>default_status</code></a> plugin block to get the response status.</p>
+<p>Call the application without middlware.</p>
 
 </div>
 <div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-default_status-source&#39;); return false'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-default_status-source'>   <span class="ruby-comment"># File lib/roda/plugins/default_status.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">default_status</span>&#x000A;<span class="line-num">29</span>   <span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_status</span>])&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/roda/plugins/direct_call.rb</span>&#x000A;<span class="line-num">17</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">18</span>   <span class="ruby-identifier">new</span>(<span class="ruby-identifier">env</span>).<span class="ruby-identifier">_roda_handle_main_route</span>&#x000A;<span class="line-num">19</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

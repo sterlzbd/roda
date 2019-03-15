@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2018-07-11 16:58:27 -0700</span>
+<span class='datetime'>2019-03-04 16:26:49 -0800</span>
 </div>
 </div>
 <div id='content'>
@@ -96,7 +96,7 @@ Last Update:
 
 <p>The primary way routes are matched in <a href="../classes/Roda.html"><code>Roda</code></a> is by calling <code>r.on</code>, <code>r.is</code>, <code>r.root</code>, <code>r.get</code>, or <code>r.post</code>. Each of these “routing methods” takes a “match block”.</p>
 
-<p>Each routing method takes each of the arguments (called matchers) that is given and tries to match it to the current request. If the method is able to match all of the arguments, it yields to the match block; otherwise, the block is skipped and execution continues.</p>
+<p>Each routing method takes each of the arguments (called matchers) that are given and tries to match it to the current request. If the method is able to match all of the arguments, it yields to the match block; otherwise, the block is skipped and execution continues.</p>
 <ul><li>
 <p><code>r.on</code> matches if all of the arguments match.</p>
 </li><li>
@@ -350,7 +350,7 @@ Last Update:
 <ul><li>
 <p>The only instance variables defined by default in the scope of the <code>route</code> block are <code>@_request</code> and <code>@_response</code>.  All instance variables in the scope of the <code>route</code> block used by plugins that ship with <a href="../classes/Roda.html"><code>Roda</code></a> are prefixed with an underscore.</p>
 </li><li>
-<p>The only methods defined (beyond the default methods for <code>Object</code>) are: <code>call</code>, <code>env</code>, <code>opts</code>, <code>request</code>, <code>response</code>, and <code>session</code>.</p>
+<p>The main methods defined, beyond the default methods for <code>Object</code>, are <code>env</code>, <code>opts</code>, <code>request</code>, <code>response</code>, and <code>session</code>.  <code>call</code> and <code>_call</code> are also defined, but are deprecated.  All other methods defined are prefixed with <code><em>roda</em></code></p>
 </li><li>
 <p>Constants inside the <a href="../classes/Roda.html"><code>Roda</code></a> namespace are all prefixed with <code>Roda</code> (e.g., <code>Roda::RodaRequest</code>).</p>
 </li></ul>
@@ -394,6 +394,10 @@ Last Update:
 <p>The following options are respected by the default library or multiple plugins:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_script_name </td><td>
 <p>Prepend the SCRIPT_NAME for the request to paths.  This is useful if you mount the app as a path under another app.</p>
+</td></tr><tr><td class='label'>:check_arity </td><td>
+<p>Whether arity for blocks passed to <a href="../classes/Roda.html"><code>Roda</code></a> should be checked to determine if they can be used directly to define methods or need to be wrapped. By default, for backwards compatibility, this is true, so <a href="../classes/Roda.html"><code>Roda</code></a> will check blocks and handle cases where the arity of the block does not match the expected arity.  This can be set to <code>:warn</code> to issue warnings whenever <a href="../classes/Roda.html"><code>Roda</code></a> detects an arity mismatch.  If set to <code>false</code>, <a href="../classes/Roda.html"><code>Roda</code></a> does not check the arity of blocks, which can result in failures at runtime if the arity of the block does not match what <a href="../classes/Roda.html"><code>Roda</code></a> expects.  Note that <a href="../classes/Roda.html"><code>Roda</code></a> does not check the arity for lambda blocks, as those are strict by default.</p>
+</td></tr><tr><td class='label'>:check_dynamic_arity </td><td>
+<p>Similar to :check_arity, but used for checking blocks where the number of arguments <a href="../classes/Roda.html"><code>Roda</code></a> will call the blocks with is not possible to determine when defining the method.  By default, <a href="../classes/Roda.html"><code>Roda</code></a> checks arity for such methods, but doing so actually slows the method down even if the number of arguments matches the expected number of arguments.</p>
 </td></tr><tr><td class='label'>:freeze_middleware </td><td>
 <p>Whether to freeze all middleware when building the rack app.</p>
 </td></tr><tr><td class='label'>:json_parser </td><td>
@@ -454,7 +458,7 @@ Last Update:
 
 <h3 id="label-Cross+Site+Scripting+-28XSS-29">Cross Site Scripting (XSS)<span><a href="#label-Cross+Site+Scripting+-28XSS-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>The easiest way to prevent XSS with <a href="../classes/Roda.html"><code>Roda</code></a> is to use a template library that automatically escapes output by default. The <code>:escape</code> option to the <code>render</code> plugin sets the ERb template processor to escape by default, so that in your templates:</p>
+<p>The easiest way to prevent XSS with <a href="../classes/Roda.html"><code>Roda</code></a> is to use a template library that automatically escapes output by default. The <code>:escape</code> option to the <code>render</code> plugin sets the ERB template processor to escape by default, so that in your templates:</p>
 
 <pre>&lt;%= &#39;&lt;&gt;&#39; %&gt;  # outputs &amp;lt;&amp;gt; &#x000A;&lt;%== &#39;&lt;&gt;&#39; %&gt; # outputs &lt;&gt;</pre>
 

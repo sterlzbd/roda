@@ -59,7 +59,6 @@ Roda::RodaPlugins::StaticRouting
 <ol>
 <li><a href="StaticRouting/ClassMethods.html">Roda::RodaPlugins::StaticRouting::ClassMethods</a></li>
 <li><a href="StaticRouting/InstanceMethods.html">Roda::RodaPlugins::StaticRouting::InstanceMethods</a></li>
-<li><a href="StaticRouting/RequestMethods.html">Roda::RodaPlugins::StaticRouting::RequestMethods</a></li>
 </ol>
 </div>
 <div id='section'>
@@ -79,7 +78,7 @@ Roda::RodaPlugins::StaticRouting
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>] = {}&#x000A;<span class="line-num">54</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">54</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
