@@ -1,4 +1,4 @@
-= master
+= 3.18.0 (2019-03-15)
 
 * Add direct_call plugin for making Roda.call skip middleware, allowing more optimization when dispatching routes (jeremyevans)
 
