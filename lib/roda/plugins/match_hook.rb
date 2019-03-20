@@ -3,6 +3,14 @@
 #
 class Roda
   module RodaPlugins
+    # The match_hook plugin adds hooks that are called upon a successful match
+    # by any of the matchers.
+    #
+    #   plugin :match_hook
+    #
+    #   match_hook do
+    #     logger.debug("#{request.matched_path} matched. #{request.remaining_path} remaining.")
+    #   end
     module MatchHook
       def self.configure(app)
         app.opts[:match_hooks] ||= []
@@ -15,6 +23,7 @@ class Roda
           super
         end
 
+        # Add a match hook.
         def match_hook(&block)
           opts[:match_hooks] << define_roda_method("match_hook", 0, &block)
 
