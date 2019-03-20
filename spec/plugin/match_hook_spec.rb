@@ -1,25 +1,56 @@
 require_relative "../spec_helper"
 
 describe "match hook plugin" do
-  before do
-    hooks = 0
-
+  it "matches verbs" do
+    matches = []
     app(:bare) do
       plugin :match_hook
-
       match_hook do
-        hooks += 1
+        matches.push request.matched_path
       end
-
       route do |r|
         r.get "foo" do
-          hooks.to_s
+          "true"
+        end
+
+        r.post "bar" do
+          "true"
         end
       end
     end
+
+    req("/foo")
+    matches.must_equal ["/foo"]
+
+    matches.clear
+
+    req("/bar", { "REQUEST_METHOD" => "POST" })
+    matches.must_equal ["/bar"]
   end
 
-  it "calls match_hook on a successful match" do
-    body("/foo").must_equal "1"
+  it "matches on deep nesting" do
+    matches = []
+    app(:bare) do
+      plugin :match_hook
+      match_hook do
+        matches.push request.matched_path
+      end
+      route do |r|
+        r.on "foo" do
+          r.on "bar" do
+            r.get "baz" do
+              "foo/bar/baz"
+            end
+          end
+
+          r.get "baz" do
+            "baz"
+          end
+        end
+      end
+    end
+
+    req("/foo/bar/baz")
+    matches.must_equal ["/foo", "/foo/bar", "/foo/bar/baz"]
   end
 end
