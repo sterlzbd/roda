@@ -40,7 +40,7 @@ class Roda
       end
 
       module InstanceMethods
-        # Default method if no match hooks are defined.
+        # Default empty method if no match hooks are defined.
         def _match_hook
         end
       end
@@ -48,13 +48,15 @@ class Roda
       module RequestMethods
         private
 
-        def if_match(*)
-          super { |*a|
+        # Call the match hook if yielding to the block before yielding to the block.
+        def if_match(_)
+          super do |*a|
             scope._match_hook
-            yield *a
-          }
+            yield(*a)
+          end
         end
 
+        # Call the match hook before yielding to the block
         def always
           scope._match_hook
           super
