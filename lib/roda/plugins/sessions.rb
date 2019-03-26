@@ -20,8 +20,9 @@ class Roda
     # The sessions plugin adds support for sessions using cookies. It is the recommended
     # way to support sessions in Roda applications.
     #
-    # The session cookies are encrypted with AES-256-CTR and then signed with HMAC-SHA-256.
-    # By default, session data is padded to reduce information leaked based on the session size.
+    # The session cookies are encrypted with AES-256-CTR using a separate encryption key per cookie,
+    # and then signed with HMAC-SHA-256.  By default, session data is padded to reduce information
+    # leaked based on the session size.
     #
     # Sessions are serialized via JSON, so session information should only store data that
     # allows roundtrips via JSON (String, Integer, Float, Array, Hash, true, false, and nil).
@@ -77,6 +78,12 @@ class Roda
     #                bytes if given.
     # :pad_size :: Pad session data (after possible compression, before encryption), to a multiple of this
     #              many bytes (default: 32).  This can be between 2-4096 bytes, or +nil+ to disable padding.
+    # :per_cookie_cipher_secret :: Uses a separate cipher key for every cookie, with the key used generated using
+    #                              HMAC-SHA-256 of 32 bytes of random data with the default cipher secret. This
+    #                              offers additional protection in case the random initialization vector used when
+    #                              encrypting the session data has been reused. Odds of that are 1 in 2**64 if
+    #                              initialization vector is truly random, but weaknesses in the random number
+    #                              generator could make the odds much higher.  Default is +true+.
     # :parser :: The parser for the serialized session data (default: <tt>JSON.method(:parse)</tt>).
     # :serializer :: The serializer for the session data (default +:to_json.to_proc+).
     # :skip_within :: If the last update time for the session cookie is less than this number of seconds from the
@@ -105,13 +112,18 @@ class Roda
     #
     # = Session Cookie Cryptography/Format
     #
-    # Session cookies created by this plugin use the following format:
+    # Session cookies created by this plugin by default use the following format:
     #
-    #   urlsafe_base64(version + IV + auth tag + encrypted session data + HMAC)
+    #   urlsafe_base64("\1" + random_data + IV + encrypted session data + HMAC)
+    #
+    # If +:per_cookie_cipher_secret+ option is set to +false+, an older format is used:
+    #
+    #   urlsafe_base64("\0" + IV + encrypted session data + HMAC)
     #
     # where:
     #
-    # version :: 1 byte, currently must be 0, other values reserved for future expansion.
+    # version :: 1 byte, currently must be 1 or 0, other values reserved for future expansion.
+    # random_data :: 32 bytes, used for generating the per-cookie secret
     # IV :: 16 bytes, initialization vector for AES-256-CTR cipher.
     # encrypted session data :: >=12 bytes of data encrypted with AES-256-CTR cipher, see below.
     # HMAC :: 32 bytes, HMAC-SHA-256 of all preceding data plus cookie key (so that a cookie value
@@ -141,6 +153,7 @@ class Roda
       SESSION_CREATED_AT = 'roda.session.created_at'.freeze
       SESSION_UPDATED_AT = 'roda.session.updated_at'.freeze
       SESSION_SERIALIZED = 'roda.session.serialized'.freeze
+      SESSION_VERSION_NUM = 'roda.session.version'.freeze
       SESSION_DELETE_RACK_COOKIE = 'roda.session.delete_rack_session_cookie'.freeze
 
       # Exception class used when creating a session cookie that would exceed the
@@ -165,6 +178,9 @@ class Roda
         opts[:remove_cookie_options] = co.merge(:max_age=>'0', :expires=>Time.at(0))
         opts[:parser] ||= app.opts[:json_parser] || JSON.method(:parse)
         opts[:serializer] ||= app.opts[:json_serializer] || :to_json.to_proc
+
+        opts[:per_cookie_cipher_secret] = true unless opts.has_key?(:per_cookie_cipher_secret)
+        opts[:session_version_num] = opts[:per_cookie_cipher_secret] ? 1 : 0
 
         if opts[:upgrade_from_rack_session_cookie_secret]
           opts[:upgrade_from_rack_session_cookie_key] ||= 'rack.session'
@@ -317,10 +333,13 @@ class Roda
           rescue ArgumentError
             return _session_serialization_error("Unable to decode session: invalid base64")
           end
-          length = data.bytesize
-          if data.length < 61
-            # minimum length (1+16+12+32) (version+cipher_iv+minimum session+hmac)
+
+          case version = data.getbyte(0)
+          when 1
+            per_cookie_secret = true
+            # minimum length (1+32+16+12+32) (version+random_data+cipher_iv+minimum session+hmac)
             # 1 : version
+            # 32 : random_data (if per_cookie_cipher_secret)
             # 16 : cipher_iv
             # 12 : minimum_session
             #      2 : bitmap for gzip + padding info
@@ -328,12 +347,20 @@ class Roda
             #      4 : update time
             #      2 : data
             # 32 : HMAC-SHA-256
-            return _session_serialization_error("Unable to decode session: data too short")
+            min_data_length = 93
+          when 0
+            per_cookie_secret = false
+            # minimum length (1+16+12+32) (version+cipher_iv+minimum session+hmac)
+            min_data_length = 61
+          when nil
+            return _session_serialization_error("Unable to decode session: no data")
+          else
+            return _session_serialization_error("Unable to decode session: version marker unsupported")
           end
 
-          unless data.getbyte(0) == 0
-            # version marker
-            return _session_serialization_error("Unable to decode session: version marker unsupported")
+          length = data.bytesize
+          if data.length < min_data_length
+            return _session_serialization_error("Unable to decode session: data too short")
           end
 
           encrypted_data = data.slice!(0, length-32)
@@ -345,7 +372,15 @@ class Roda
             end
           end
 
+          # Remove version
           encrypted_data.slice!(0)
+
+          cipher_secret = opts[use_old_cipher_secret ? :old_cipher_secret : :cipher_secret]
+          if per_cookie_secret
+            cipher_secret = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, cipher_secret, encrypted_data.slice!(0, 32))
+          end
+          cipher_iv = encrypted_data.slice!(0, 16)
+
           cipher = OpenSSL::Cipher.new("aes-256-ctr")
 
           # Not rescuing cipher errors.  If there is an error in the decryption, that's
@@ -353,8 +388,8 @@ class Roda
           # able to forge a valid HMAC, in which case the error should be raised to
           # alert the application owner about the problem.
           cipher.decrypt
-          cipher.key = opts[use_old_cipher_secret ? :old_cipher_secret : :cipher_secret]
-          cipher_iv = cipher.iv = encrypted_data.slice!(0, 16)
+          cipher.key = cipher_secret
+          cipher.iv = cipher_iv
           data = cipher.update(encrypted_data) << cipher.final
 
           bitmap, created_at, updated_at = data.unpack('vVV')
@@ -376,6 +411,7 @@ class Roda
           env[SESSION_CREATED_AT] = created_at
           env[SESSION_UPDATED_AT] = updated_at
           env[SESSION_SERIALIZED] = data
+          env[SESSION_VERSION_NUM] = version
 
           opts[:parser].call(data)
         end
@@ -387,6 +423,7 @@ class Roda
           json_data = opts[:serializer].call(session).force_encoding('BINARY')
 
           if (serialized_session = env[SESSION_SERIALIZED]) &&
+             (opts[:session_version_num] == env[SESSION_VERSION_NUM]) &&
              (updated_at = env[SESSION_UPDATED_AT]) &&
              (now - updated_at < opts[:skip_within]) &&
              (serialized_session == json_data)
@@ -418,14 +455,24 @@ class Roda
           serialized_data << padding_data if padding_data
           serialized_data << json_data
 
+          cipher_secret = opts[:cipher_secret]
+          if per_cookie_secret = opts[:per_cookie_cipher_secret]
+            version = "\1"
+            per_cookie_secret_base = SecureRandom.random_bytes(32)
+            cipher_secret = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, cipher_secret, per_cookie_secret_base)
+          else
+            version = "\0"
+          end
+
           cipher = OpenSSL::Cipher.new("aes-256-ctr")
           cipher.encrypt
-          cipher.key = opts[:cipher_secret]
+          cipher.key = cipher_secret
           cipher_iv = cipher.random_iv
           encrypted_data = cipher.update(serialized_data) << cipher.final
 
           data = String.new
-          data << "\0" # version marker
+          data << version
+          data << per_cookie_secret_base if per_cookie_secret_base
           data << cipher_iv
           data << encrypted_data
           data << OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:hmac_secret], data+opts[:key])

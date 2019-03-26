@@ -1,5 +1,7 @@
 = master
 
+* Add support for per-cookie cipher secrets in the sessions plugin, and enable them by default (jeremyevans)
+
 * Add match_hook plugin for calling hooks when there is a successful match block (adam12) (#164)
 
 = 3.18.0 (2019-03-15)
