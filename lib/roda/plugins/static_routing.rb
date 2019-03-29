@@ -36,7 +36,7 @@ class Roda
     # leading slash in the path argument.
     #
     # Second, the static_* routing methods only take a single string argument for
-    # the path, they do not acccept other options, and do not handle placeholders
+    # the path, they do not accept other options, and do not handle placeholders
     # in strings.  For any routes needing placeholders, you should use Roda's
     # routing tree.
     #
