@@ -13,6 +13,10 @@ class Roda
     # if the first segment in the path matches a named route, and dispatch
     # to that named route.
     #
+    # The hash_routes plugin offers a +r.hash_routes+ method that is similar to
+    # and performs better than the +r.multi_route+ method, and it is recommended
+    # to consider using that instead of this plugin.
+    #
     # Example:
     #
     #   plugin :multi_route

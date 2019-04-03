@@ -633,25 +633,23 @@ If you have a lot of rack applications that you want to dispatch to, and
 which one to dispatch to is based on the request path prefix, look into the
 +multi_run+ plugin.
 
-=== multi_route plugin
+=== hash_routes plugin
 
 If you are just looking to split up the main route block up by branches,
-you should use the +multi_route+ plugin,
+you should use the +hash_routes+ plugin,
 which keeps the current scope of the +route+ block:
 
   class App < Roda
-    plugin :multi_route
+    plugin hash_routes:
 
-    route "api" do |r|
+    hash_branch "api" do |r|
       r.is do
         # ...
       end
     end
 
     route do |r|
-      r.on "api" do
-        r.route "api"
-      end
+      r.hash_routes
     end
   end
 
