@@ -660,8 +660,8 @@ and still have access to them inside the +api+ +route+ block.
 
 == Testing
 
-It is very easy to test Roda with {Rack::Test}[https://github.com/brynary/rack-test]
-or {Capybara}[https://github.com/jnicklas/capybara].
+It is very easy to test Roda with {Rack::Test}[https://github.com/rack-test/rack-test]
+or {Capybara}[https://github.com/teamcapybara/capybara].
 Roda's own tests use {minitest/spec}[https://github.com/seattlerb/minitest].
 The default Rake task will run the specs for Roda.
 
