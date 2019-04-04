@@ -118,7 +118,9 @@ class Roda
       # Class methods for the Roda class.
       module ClassMethods
         # The rack application that this class uses.
-        attr_reader :app
+        def app
+          @app || build_rack_app
+        end
 
         # Whether middleware from the current class should be inherited by subclasses.
         # True by default, should be set to false when using a design where the parent
@@ -142,7 +144,7 @@ class Roda
         # Clear the middleware stack
         def clear_middleware!
           @middleware.clear
-          build_rack_app
+          @app = nil
         end
 
         # Define an instance method using the block with the provided name and
@@ -258,6 +260,7 @@ class Roda
         # Note that freezing the class prevents you from subclassing it, mostly because
         # it would cause some plugins to break.
         def freeze
+          build_rack_app
           @opts.freeze
           @middleware.freeze
 
@@ -340,7 +343,7 @@ class Roda
           self::RodaResponse.send(:include, plugin::ResponseMethods) if defined?(plugin::ResponseMethods)
           self::RodaResponse.extend(plugin::ResponseClassMethods) if defined?(plugin::ResponseClassMethods)
           plugin.configure(self, *args, &block) if plugin.respond_to?(:configure)
-          nil
+          @app = nil
         end
 
         # Setup routing tree for the current Roda application, and build the
@@ -366,7 +369,7 @@ class Roda
           @route_block = block = convert_route_block(block)
           @rack_app_route_block = block = rack_app_route_block(block)
           public define_roda_method(:_roda_main_route, 1, &block)
-          build_rack_app
+          @app = nil
         end
 
         # Add a middleware to use for the rack application.  Must be
@@ -375,7 +378,7 @@ class Roda
         #   Roda.use Rack::ShowExceptions
         def use(*args, &block)
           @middleware << [args, block].freeze
-          build_rack_app
+          @app = nil
         end
 
         private
@@ -426,29 +429,28 @@ class Roda
 
         # Build the rack app to use
         def build_rack_app
-          if @rack_app_route_block
-            # RODA4: Assume optimize is true
-            optimize = ancestors.each do |mod|
-              break true if mod == InstanceMethods
-              meths = mod.instance_methods(false)
-              if meths.include?(:call) && !(meths.include?(:_roda_handle_main_route) || meths.include?(:_roda_run_main_route))
-              RodaPlugins.warn <<WARNING
+          # RODA4: Assume optimize is true
+          optimize = ancestors.each do |mod|
+            break true if mod == InstanceMethods
+            meths = mod.instance_methods(false)
+            if meths.include?(:call) && !(meths.include?(:_roda_handle_main_route) || meths.include?(:_roda_run_main_route))
+            RodaPlugins.warn <<WARNING
 Falling back to using #call for dispatching for #{self}, due to #call override in #{mod}.
 #{mod} should be fixed to adjust to Roda's new dispatch API, and override _roda_handle_main_route or _roda_run_main_route
 WARNING
-                break false
-              end
+              break false
             end
-
-            app = base_rack_app_callable(optimize)
-
-            @middleware.reverse_each do |args, bl|
-              mid, *args = args
-              app = mid.new(app, *args, &bl)
-              app.freeze if opts[:freeze_middleware]
-            end
-            @app = app
           end
+
+          app = base_rack_app_callable(optimize)
+
+          @middleware.reverse_each do |args, bl|
+            mid, *args = args
+            app = mid.new(app, *args, &bl)
+            app.freeze if opts[:freeze_middleware]
+          end
+
+          @app = app
         end
 
         # Modify the route block to use for any route block provided as input,

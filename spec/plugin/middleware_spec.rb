@@ -91,6 +91,7 @@ describe "middleware plugin" do
       use a
       route{}
     end
+    body.must_equal 'a'
     a.opts[:a] = 'b'
     body.must_equal 'a'
   end

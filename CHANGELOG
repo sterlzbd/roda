@@ -1,5 +1,7 @@
 = master
 
+* Delay building rack app until Roda.app is called (jeremyevans)
+
 * Add hash_routes plugin for O(1) route dispatching at any level in the routing tree (jeremyevans)
 
 * Add support for per-cookie cipher secrets in the sessions plugin, and enable them by default (jeremyevans)

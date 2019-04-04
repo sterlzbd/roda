@@ -195,7 +195,7 @@ describe "integration" do
   end
 
   it "should have app return the rack application to call" do
-    app(:bare){}.app.must_be_nil
+    app(:bare){}.app.must_be_kind_of(Proc)
     app.route{|r|}
     app.app.must_be_kind_of(Proc)
     c = Class.new{def initialize(app) @app = app end; def call(env) @app.call(env) end} 
