@@ -2,7 +2,16 @@ require_relative "spec_helper"
 
 describe "Roda.freeze" do
   before do
-    app{}.freeze
+    app{'a'}.freeze
+  end
+
+  it "should result in a working application" do
+    body.must_equal 'a'
+  end
+
+  it "should not break if called more than once" do
+    app.freeze
+    body.must_equal 'a'
   end
 
   it "should make opts not be modifiable after calling finalize!" do

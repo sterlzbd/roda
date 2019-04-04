@@ -260,6 +260,8 @@ class Roda
         # Note that freezing the class prevents you from subclassing it, mostly because
         # it would cause some plugins to break.
         def freeze
+          return self if frozen?
+
           build_rack_app
           @opts.freeze
           @middleware.freeze
