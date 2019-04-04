@@ -1,5 +1,7 @@
 = master
 
+* Automatically load the direct_call plugin when freezing if no middleware is used for better performance (jeremyevans)
+
 * Delay building rack app until Roda.app is called (jeremyevans)
 
 * Add hash_routes plugin for O(1) route dispatching at any level in the routing tree (jeremyevans)

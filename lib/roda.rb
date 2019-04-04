@@ -262,10 +262,6 @@ class Roda
         def freeze
           return self if frozen?
 
-          build_rack_app
-          @opts.freeze
-          @middleware.freeze
-
           unless opts[:subclassed]
             # If the _roda_run_main_route instance method has not been overridden,
             # make it an alias to _roda_main_route for performance
@@ -281,7 +277,15 @@ class Roda
                 end
               end
             end
+
+            if @middleware.empty? && use_new_dispatch_api?
+              plugin :direct_call
+            end
           end
+
+          build_rack_app
+          @opts.freeze
+          @middleware.freeze
 
           super
         end
