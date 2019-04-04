@@ -431,20 +431,7 @@ class Roda
 
         # Build the rack app to use
         def build_rack_app
-          # RODA4: Assume optimize is true
-          optimize = ancestors.each do |mod|
-            break true if mod == InstanceMethods
-            meths = mod.instance_methods(false)
-            if meths.include?(:call) && !(meths.include?(:_roda_handle_main_route) || meths.include?(:_roda_run_main_route))
-            RodaPlugins.warn <<WARNING
-Falling back to using #call for dispatching for #{self}, due to #call override in #{mod}.
-#{mod} should be fixed to adjust to Roda's new dispatch API, and override _roda_handle_main_route or _roda_run_main_route
-WARNING
-              break false
-            end
-          end
-
-          app = base_rack_app_callable(optimize)
+          app = base_rack_app_callable(use_new_dispatch_api?)
 
           @middleware.reverse_each do |args, bl|
             mid, *args = args
@@ -501,6 +488,24 @@ WARNING
         # Can be modified by plugins.
         def rack_app_route_block(block)
           block
+        end
+
+        # Whether the new dispatch API should be used.
+        def use_new_dispatch_api?
+          # RODA4: remove this method
+          ancestors.each do |mod|
+            break if mod == InstanceMethods
+            meths = mod.instance_methods(false)
+            if meths.include?(:call) && !(meths.include?(:_roda_handle_main_route) || meths.include?(:_roda_run_main_route))
+            RodaPlugins.warn <<WARNING
+Falling back to using #call for dispatching for #{self}, due to #call override in #{mod}.
+#{mod} should be fixed to adjust to Roda's new dispatch API, and override _roda_handle_main_route or _roda_run_main_route
+WARNING
+              return false
+            end
+          end
+
+          true
         end
 
         method_num = 0
