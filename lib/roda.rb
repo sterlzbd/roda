@@ -1030,13 +1030,34 @@ WARNING
         # request path is a slash (indicating a new segment).
         def _match_string(str)
           rp = @remaining_path
-          if rp.start_with?("/#{str}")
-            last = str.length + 1
-            case rp[last]
-            when "/"
-              @remaining_path = rp[last, rp.length]
+          length = str.length
+
+          match = case rp.rindex(str, length)
+          when nil
+            # segment does not match, most common case
+            return
+          when 1
+            # segment matches, check first character is /
+            rp.getbyte(0) == 47
+          else # must be 0
+            # segment matches at first character, only a match if
+            # empty string given and first character is /
+            length == 0 && rp.getbyte(0) == 47
+          end
+
+          if match 
+            length += 1
+            case rp.getbyte(length)
+            when 47
+              # next character is /, update remaining path to rest of string
+              @remaining_path = rp[length, 100000000]
             when nil
+              # end of string, so remaining path is empty
               @remaining_path = ""
+            # else
+              # Any other value means this was partial segment match,
+              # so we return nil in that case without updating the
+              # remaining_path.  No need for explicit else clause.
             end
           end
         end

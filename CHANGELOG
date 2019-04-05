@@ -1,5 +1,7 @@
 = master
 
+* Improve string matching by 10-20% (jeremyevans)
+
 * Automatically load the direct_call plugin when freezing if no middleware is used for better performance (jeremyevans)
 
 * Delay building rack app until Roda.app is called (jeremyevans)
