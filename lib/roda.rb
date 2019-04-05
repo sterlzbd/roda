@@ -1065,7 +1065,7 @@ WARNING
         # Match the given symbol if any segment matches.
         def _match_symbol(sym=nil)
           rp = @remaining_path
-          if rp[0] == "/"
+          if rp.getbyte(0) == 47
             if last = rp.index('/', 1)
               if last > 1
                 @captures << rp[1, last-1]
