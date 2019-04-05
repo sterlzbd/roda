@@ -1182,18 +1182,20 @@ WARNING
             _match_class(matcher)
           when TERM
             empty_path?
-          when Symbol
-            _match_symbol(matcher)
           when Regexp
             _match_regexp(matcher)
-          when Hash
-            _match_hash(matcher)
+          when true
+            matcher
           when Array
             _match_array(matcher)
+          when Hash
+            _match_hash(matcher)
+          when Symbol
+            _match_symbol(matcher)
+          when false, nil
+            matcher
           when Proc
             matcher.call
-          when true, false, nil
-            matcher
           else
             unsupported_matcher(matcher)
           end
