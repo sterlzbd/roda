@@ -417,7 +417,7 @@ class Roda
         def hash_branches(namespace=matched_path)
           rp = @remaining_path
 
-          return unless rp[0] == '/'
+          return unless rp.getbyte(0) == 47 # "/"
 
           if routes = roda_class.opts[:hash_branches][namespace]
             if segment_end = rp.index('/', 1)
