@@ -55,6 +55,9 @@ describe "Roda.define_roda_method" do
 
     m1 = app.define_roda_method("x", 1){2}
     @scope.send(m1, 3).must_equal 2
+
+    m1 = app.define_roda_method("x", 1){|x, y| [x, y]}
+    @scope.send(m1, 4).must_equal [4, nil]
   end
 
   it "should raise for unexpected expected_arity" do

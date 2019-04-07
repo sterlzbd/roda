@@ -203,6 +203,9 @@ class Roda
                 undef_method temp_method
                 private meth
                 meth = :"#{meth}_arity"
+              elsif required_args > 1
+                b = block
+                block = lambda{|r| instance_exec(r, &b)} # Fallback
               end
             when :any
               if check_dynamic_arity = opts.fetch(:check_dynamic_arity, check_arity)
