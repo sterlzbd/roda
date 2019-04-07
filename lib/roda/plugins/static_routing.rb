@@ -49,55 +49,25 @@ class Roda
     # static_route block to have shared behavior for different request methods,
     # while still handling the request methods differently.
     module StaticRouting
-      def self.configure(app)
-        app.opts[:static_routes] ||= {}
+      def self.load_dependencies(app)
+        app.plugin :hash_routes
       end
 
       module ClassMethods
-        # Freeze the static route metadata when freezing the app.
-        def freeze
-          opts[:static_routes].freeze.each_value(&:freeze)
-          super
-        end
-
-        # Duplicate static route metadata in subclass.
-        def inherited(subclass)
-          super
-          static_routes = subclass.opts[:static_routes]
-          opts[:static_routes].each do |k, v|
-            static_routes[k] = v.dup
-          end
-        end
-
         # Add a static route for any request method.  These are
         # tried after the request method specific static routes (e.g.
         # static_get), but allow you to use Roda's routing tree
         # methods inside the route for handling shared behavior while
         # still allowing request method specific handling.
         def static_route(path, &block)
-          add_static_route(nil, path, &block)
+          hash_path(:static_routing, path, &block)
         end
         
-        # Return the static route for the given request method and path.
-        def static_route_for(method, path)
-          if h = opts[:static_routes][path]
-            h[method] || h[nil]
-          end
-        end
-
         [:get, :post, :delete, :head, :options, :link, :patch, :put, :trace, :unlink].each do |meth|
           request_method = meth.to_s.upcase
           define_method("static_#{meth}") do |path, &block|
-            add_static_route(request_method, path, &block)
+            hash_path(request_method, path, &block)
           end
-        end
-
-        private
-
-        # Add a static route for the given method.
-        def add_static_route(method, path, &block)
-          routes = opts[:static_routes][path] ||= {}
-          routes[method] = define_roda_method(routes[method] || "static_route_#{method}_#{path}", 1, &convert_route_block(block))
         end
       end
 
@@ -108,11 +78,8 @@ class Roda
         # instead having the routing tree handle the request.
         def _roda_before_30__static_routing
           r = @_request
-          if meth = self.class.static_route_for(r.request_method, r.path_info)
-            r.instance_variable_set(:@remaining_path, '')
-            r.send(:block_result, send(meth, r))
-            throw :halt, @_response.finish
-          end
+          r.hash_paths(r.request_method)
+          r.hash_paths(:static_routing)
         end
       end
     end
