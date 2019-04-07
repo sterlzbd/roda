@@ -174,6 +174,7 @@ class Roda
           if meth.is_a?(String)
             meth = roda_method_name(meth)
           end
+          call_meth = meth
 
           if (check_arity = opts.fetch(:check_arity, true)) && !block.lambda?
             required_args, optional_args, rest, keyword = _define_roda_method_arg_numbers(block)
@@ -196,8 +197,12 @@ class Roda
                 if check_arity == :warn
                   RodaPlugins.warn "Arity mismatch in block passed to define_roda_method. Expected Arity 1, but no arguments accepted for #{block.inspect}"
                 end
-                b = block
-                block = lambda{|_| instance_exec(&b)} # Fallback
+                temp_method = roda_method_name("temp")
+                class_eval("def #{temp_method}(_) #{meth =~ /\A\w+\z/ ? "#{meth}_arity" : "send(:\"#{meth}_arity\")"} end", __FILE__, __LINE__)
+                alias_method meth, temp_method
+                undef_method temp_method
+                private meth
+                meth = :"#{meth}_arity"
               end
             when :any
               if check_dynamic_arity = opts.fetch(:check_dynamic_arity, check_arity)
@@ -241,10 +246,9 @@ class Roda
               send(meth, *a)
             end
             private arity_meth
-            arity_meth
-          else
-            meth
           end
+
+          call_meth
         end
 
         # Expand the given path, using the root argument as the base directory.

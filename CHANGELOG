@@ -1,5 +1,7 @@
 = master
 
+* Improve performance for handling blocks with arity 0 where expected arity is 1 by avoiding instance_exec (jeremyevans)
+
 * Improve terminal maching by around 4x (jeremyevans)
 
 * Improve symbol matching by 10-20% (jeremyevans)
