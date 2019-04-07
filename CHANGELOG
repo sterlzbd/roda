@@ -1,5 +1,7 @@
 = master
 
+* Improve terminal maching by around 4x (jeremyevans)
+
 * Improve symbol matching by 10-20% (jeremyevans)
 
 * Improve string matching by 10-20% (jeremyevans)

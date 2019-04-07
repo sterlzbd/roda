@@ -1151,7 +1151,7 @@ WARNING
 
         # Whether the current path is considered empty.
         def empty_path?
-          remaining_path == ""
+          remaining_path.empty?
         end
 
         # If all of the arguments match, yields to the match block and

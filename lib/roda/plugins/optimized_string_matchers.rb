@@ -34,7 +34,7 @@ class Roda
         def is_exactly(s)
           rp = @remaining_path
           if _match_string(s)
-            if @remaining_path == ''
+            if @remaining_path.empty?
               always{yield}
             else
               @remaining_path = rp
