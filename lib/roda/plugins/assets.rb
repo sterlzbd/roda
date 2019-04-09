@@ -298,7 +298,9 @@ class Roda
     # :timestamp_paths :: Include the timestamp of assets in asset paths in non-compiled mode. Doing this can
     #                     slow down development requests due to additional requests to get last modified times,
     #                     put it will make sure the paths change in development when there are modifications,
-    #                     which can fix issues when using a caching proxy in non-compiled mode.
+    #                     which can fix issues when using a caching proxy in non-compiled mode. This can also
+    #                     be specified as a string to use that string to separate the timestamp from the asset.
+    #                     By default, <tt>/</tt> is used as the separator if timestamp paths are enabled.
     module Assets
       DEFAULTS = {
         :compiled_name    => 'app'.freeze,
@@ -373,6 +375,10 @@ class Roda
 
         if opts[:early_hints]
           app.plugin :early_hints
+        end
+
+        if opts[:timestamp_paths] && !opts[:timestamp_paths].is_a?(String)
+          opts[:timestamp_paths] = '/'
         end
 
         DEFAULTS.each do |k, v|
@@ -629,9 +635,9 @@ class Roda
               prefix = "#{dirs.join('/')}/" if o[:group_subdirs]
             end
             Array(asset_dir).map do |f|
-              if o[:timestamp_paths]
+              if ts = o[:timestamp_paths]
                 mtime = asset_last_modified(File.join(o[:"#{stype}_path"], *[prefix, f].compact))
-                mtime = "#{sprintf("%i%06i", mtime.to_i, mtime.usec)}/"
+                mtime = "#{sprintf("%i%06i", mtime.to_i, mtime.usec)}#{ts}"
               end
               "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{mtime}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"
             end
@@ -784,7 +790,8 @@ class Roda
             /#{o[:"compiled_#{type}_prefix"]}(#{Regexp.union(assets)})/
           else
             assets = unnest_assets_hash(o[type])
-            /#{o[:"#{type}_prefix"]}#{"\\d+\/" if o[:timestamp_paths]}(#{Regexp.union(assets.uniq)})#{o[:"#{type}_suffix"]}/
+            ts = o[:timestamp_paths]
+            /#{o[:"#{type}_prefix"]}#{"\\d+#{ts}" if ts}(#{Regexp.union(assets.uniq)})#{o[:"#{type}_suffix"]}/
           end
         end
 

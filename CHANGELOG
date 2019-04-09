@@ -1,5 +1,7 @@
 = master
 
+* Allow assets plugin :timestamp_paths option to be a string to specify a custom separator (jeremyevans)
+
 * Fix handling for blocks with arity > 1 where expected arity is 1 (jeremyevans)
 
 * Improve performance for handling blocks with arity 0 where expected arity is 1 by avoiding instance_exec (jeremyevans)
