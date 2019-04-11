@@ -191,7 +191,7 @@ class Roda
     # +views+ method for setting up routes for multiple views in a single call, which
     # is a good replacement for the +multi_view+ plugin.
     # +is+, +view+, and the verb methods can use a value of +true+ for the empty
-    # remaining path (as the empty string specifies the "/" remaining path).
+    # remaining path (as the empty string specifies the <tt>"/"</tt> remaining path).
     # It also supports a +dispatch_from+ method, allowing you to setup dispatching to
     # current group of routes from a higher-level namespace.
     # The +hash_routes+ class method will return the DSL instance, so you are not
