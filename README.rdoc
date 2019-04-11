@@ -640,7 +640,7 @@ you should use the +hash_routes+ plugin,
 which keeps the current scope of the +route+ block:
 
   class App < Roda
-    plugin hash_routes:
+    plugin :hash_routes
 
     hash_branch "api" do |r|
       r.is do
