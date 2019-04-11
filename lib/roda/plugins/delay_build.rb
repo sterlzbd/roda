@@ -4,6 +4,11 @@
 class Roda
   module RodaPlugins
     module DelayBuild
+      module ClassMethods
+        # No-op for backwards compatibility
+        def build!
+        end
+      end
     end
 
     # RODA4: Remove plugin
