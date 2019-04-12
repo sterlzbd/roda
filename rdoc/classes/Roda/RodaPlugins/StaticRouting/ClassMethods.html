@@ -39,10 +39,7 @@ Roda::RodaPlugins::StaticRouting::ClassMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#method-i-freeze">freeze</a></li>
-<li><a href="#method-i-inherited">inherited</a></li>
 <li><a href="#method-i-static_route">static_route</a></li>
-<li><a href="#method-i-static_route_for">static_route_for</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -50,44 +47,6 @@ Roda::RodaPlugins::StaticRouting::ClassMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-freeze'>
-<a name='method-i-freeze'></a>
-<div class='synopsis'>
-<span class='name'>freeze</span>
-<span class='arguments'>()</span>
-
-</div>
-<div class='description'>
-
-<p>Freeze the static route metadata when freezing the app.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-freeze-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-freeze-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>&#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>].<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)&#x000A;<span class="line-num">60</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">61</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-instance' id='method-method-i-inherited'>
-<a name='method-i-inherited'></a>
-<div class='synopsis'>
-<span class='name'>inherited</span>
-<span class='arguments'>(subclass)</span>
-
-</div>
-<div class='description'>
-
-<p>Duplicate static route metadata in subclass.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inherited-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-inherited-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">64</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;<span class="line-num">65</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">66</span>   <span class="ruby-identifier">static_routes</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>]&#x000A;<span class="line-num">67</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">68</span>     <span class="ruby-identifier">static_routes</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">69</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">70</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
 <div class='method public-instance' id='method-method-i-static_route'>
 <a name='method-i-static_route'></a>
 <div class='synopsis'>
@@ -104,26 +63,7 @@ Roda::RodaPlugins::StaticRouting::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-static_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-static_route-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">77</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">static_route</span>(<span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">78</span>   <span class="ruby-identifier">add_static_route</span>(<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">79</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-instance' id='method-method-i-static_route_for'>
-<a name='method-i-static_route_for'></a>
-<div class='synopsis'>
-<span class='name'>static_route_for</span>
-<span class='arguments'>(method, path)</span>
-
-</div>
-<div class='description'>
-
-<p>Return the static route for the given request method and path.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-static_route_for-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-static_route_for-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">82</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">static_route_for</span>(<span class="ruby-identifier">method</span>, <span class="ruby-identifier">path</span>)&#x000A;<span class="line-num">83</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>][<span class="ruby-identifier">path</span>]&#x000A;<span class="line-num">84</span>     <span class="ruby-identifier">h</span>[<span class="ruby-identifier">method</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">h</span>[<span class="ruby-keyword">nil</span>]&#x000A;<span class="line-num">85</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">86</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-static_route-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">62</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">static_route</span>(<span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">63</span>   <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:static_routing</span>, <span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">64</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

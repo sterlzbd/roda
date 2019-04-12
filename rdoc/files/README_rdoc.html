@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-03-04 16:26:49 -0800</span>
+<span class='datetime'>2019-04-11 11:55:17 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -367,17 +367,17 @@ Last Update:
 
 <p>If you have a lot of rack applications that you want to dispatch to, and which one to dispatch to is based on the request path prefix, look into the <code>multi_run</code> plugin.</p>
 
-<h3 id="label-multi_route+plugin">multi_route plugin<span><a href="#label-multi_route+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
+<h3 id="label-hash_routes+plugin">hash_routes plugin<span><a href="#label-hash_routes+plugin">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>If you are just looking to split up the main route block up by branches, you should use the <code>multi_route</code> plugin, which keeps the current scope of the <code>route</code> block:</p>
+<p>If you are just looking to split up the main route block up by branches, you should use the <code>hash_routes</code> plugin, which keeps the current scope of the <code>route</code> block:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_route</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-string">&quot;api&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># ...</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;api&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;api&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>.<span class="ruby-identifier">app</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_branch</span> <span class="ruby-string">&quot;api&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># ...</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>.<span class="ruby-identifier">app</span></pre>
 
 <p>This allows you to set instance variables in the main <code>route</code> block and still have access to them inside the <code>api</code> <code>route</code> block.</p>
 
 <h2 id="label-Testing">Testing<span><a href="#label-Testing">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
-<p>It is very easy to test <a href="../classes/Roda.html"><code>Roda</code></a> with <a href="https://github.com/brynary/rack-test">Rack::Test</a> or <a href="https://github.com/jnicklas/capybara">Capybara</a>. Roda&#39;s own tests use <a href="https://github.com/seattlerb/minitest">minitest/spec</a>. The default Rake task will run the specs for <a href="../classes/Roda.html"><code>Roda</code></a>.</p>
+<p>It is very easy to test <a href="../classes/Roda.html"><code>Roda</code></a> with <a href="https://github.com/rack-test/rack-test">Rack::Test</a> or <a href="https://github.com/teamcapybara/capybara">Capybara</a>. Roda&#39;s own tests use <a href="https://github.com/seattlerb/minitest">minitest/spec</a>. The default Rake task will run the specs for <a href="../classes/Roda.html"><code>Roda</code></a>.</p>
 
 <h2 id="label-Settings">Settings<span><a href="#label-Settings">&para;</a> <a href="#top">&uarr;</a></span></h2>
 

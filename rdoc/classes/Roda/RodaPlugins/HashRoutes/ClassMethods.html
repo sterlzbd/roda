@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::HashRoutes::ClassMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::HashRoutes::ClassMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/hash_routes_rb.html">lib/roda/plugins/hash_routes.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-freeze">freeze</a></li>
+<li><a href="#method-i-hash_branch">hash_branch</a></li>
+<li><a href="#method-i-hash_path">hash_path</a></li>
+<li><a href="#method-i-hash_routes">hash_routes</a></li>
+<li><a href="#method-i-inherited">inherited</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-freeze'>
+<a name='method-i-freeze'></a>
+<div class='synopsis'>
+<span class='name'>freeze</span>
+<span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Freeze the <a href="ClassMethods.html#method-i-hash_routes"><code>hash_routes</code></a> metadata when freezing the app.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-freeze-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-freeze-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>&#x000A;<span class="line-num">361</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>&#x000A;<span class="line-num">362</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>].<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)&#x000A;<span class="line-num">363</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>].<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)&#x000A;<span class="line-num">364</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_routes_methods</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">365</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">366</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-hash_branch'>
+<a name='method-i-hash_branch'></a>
+<div class='synopsis'>
+<span class='name'>hash_branch</span>
+<span class='arguments'>(namespace='', segment, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Add branch handler for the given namespace and segment.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-hash_branch-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-hash_branch-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>&#x000A;<span class="line-num">398</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_branch</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-identifier">segment</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">399</span>   <span class="ruby-identifier">segment</span> = <span class="ruby-node">&quot;/#{segment}&quot;</span>&#x000A;<span class="line-num">400</span>   <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">401</span>   <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">segment</span>] = <span class="ruby-identifier">define_roda_method</span>(<span class="ruby-identifier">routes</span>[<span class="ruby-identifier">segment</span>] <span class="ruby-operator">||</span> <span class="ruby-node">&quot;hash_branch_#{namespace}_#{segment}&quot;</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">convert_route_block</span>(<span class="ruby-identifier">block</span>))&#x000A;<span class="line-num">402</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-hash_path'>
+<a name='method-i-hash_path'></a>
+<div class='synopsis'>
+<span class='name'>hash_path</span>
+<span class='arguments'>(namespace='', path, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Add path handler for the given namespace and path. When the r.hash_paths method is called, checks the matching namespace for the full remaining path, and dispatch to that block if there is one.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-hash_path-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-hash_path-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>&#x000A;<span class="line-num">408</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_path</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-identifier">path</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">409</span>   <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">410</span>   <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">path</span>] = <span class="ruby-identifier">define_roda_method</span>(<span class="ruby-identifier">routes</span>[<span class="ruby-identifier">path</span>] <span class="ruby-operator">||</span> <span class="ruby-node">&quot;hash_path_#{namespace}_#{path}&quot;</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">convert_route_block</span>(<span class="ruby-identifier">block</span>))&#x000A;<span class="line-num">411</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-hash_routes'>
+<a name='method-i-hash_routes'></a>
+<div class='synopsis'>
+<span class='name'>hash_routes</span>
+<span class='arguments'>(namespace='', &block)</span>
+
+</div>
+<div class='description'>
+
+<p>Invoke the <a href="DSL.html"><code>DSL</code></a> for configuring hash routes, see <a href="DSL.html"><code>DSL</code></a> for methods inside the block.  If the block accepts an argument, yield the <a href="DSL.html"><code>DSL</code></a> instance.  If the block does not accept an argument, instance_exec the block in the context of the <a href="DSL.html"><code>DSL</code></a> instance.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-hash_routes-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-hash_routes-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>&#x000A;<span class="line-num">384</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">hash_routes</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">385</span>   <span class="ruby-identifier">dsl</span> = <span class="ruby-constant">DSL</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">namespace</span>)&#x000A;<span class="line-num">386</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">387</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>&#x000A;<span class="line-num">388</span>       <span class="ruby-keyword">yield</span> <span class="ruby-identifier">dsl</span>&#x000A;<span class="line-num">389</span>     <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">390</span>       <span class="ruby-identifier">dsl</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">391</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">392</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">393</span> &#x000A;<span class="line-num">394</span>   <span class="ruby-identifier">dsl</span>&#x000A;<span class="line-num">395</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-inherited'>
+<a name='method-i-inherited'></a>
+<div class='synopsis'>
+<span class='name'>inherited</span>
+<span class='arguments'>(subclass)</span>
+
+</div>
+<div class='description'>
+
+<p>Duplicate <a href="ClassMethods.html#method-i-hash_routes"><code>hash_routes</code></a> metadata in subclass.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inherited-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-inherited-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>&#x000A;<span class="line-num">369</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;<span class="line-num">370</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">371</span> &#x000A;<span class="line-num">372</span>   [<span class="ruby-value">:hash_branches</span>, <span class="ruby-value">:hash_paths</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">373</span>     <span class="ruby-identifier">h</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>]&#x000A;<span class="line-num">374</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">namespace</span>, <span class="ruby-identifier">routes</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">375</span>       <span class="ruby-identifier">h</span>[<span class="ruby-identifier">namespace</span>] = <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">376</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">377</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">378</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

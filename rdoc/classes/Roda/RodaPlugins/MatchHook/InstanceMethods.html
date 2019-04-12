@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>Roda::RodaPlugins::MultiView::ClassMethods</title>
+<title>Roda::RodaPlugins::MatchHook::InstanceMethods</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -24,11 +24,11 @@
 <div class='class' id='wrapper'>
 <div class='header'>
 <h1 class='name'><span class='type'>module</span>
-Roda::RodaPlugins::MultiView::ClassMethods
+Roda::RodaPlugins::MatchHook::InstanceMethods
 </h1>
 <ol class='paths'>
 <li>
-<a href="../../../../files/lib/roda/plugins/multi_view_rb.html">lib/roda/plugins/multi_view.rb</a>
+<a href="../../../../files/lib/roda/plugins/match_hook_rb.html">lib/roda/plugins/match_hook.rb</a>
 </li>
 </ol>
 </div>
@@ -39,7 +39,7 @@ Roda::RodaPlugins::MultiView::ClassMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#method-i-multi_view_compile">multi_view_compile</a></li>
+<li><a href="#method-i-_match_hook">_match_hook</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -47,23 +47,23 @@ Roda::RodaPlugins::MultiView::ClassMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-multi_view_compile'>
-<a name='method-i-multi_view_compile'></a>
+<div class='method public-instance' id='method-method-i-_match_hook'>
+<a name='method-i-_match_hook'></a>
 <div class='synopsis'>
-<span class='name'>multi_view_compile</span>
-<span class='arguments'>(array)</span>
+<span class='name'>_match_hook</span>
+<span class='arguments'>()</span>
 
 </div>
 <div class='description'>
 
-<p>Given the array of view template names, return a regexp that will match on any of the names and capture the matched name.</p>
+<p>Default empty method if no match hooks are defined.</p>
 
 </div>
 <div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_view_compile-source&#39;); return false'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_match_hook-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-multi_view_compile-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_view.rb</span>&#x000A;<span class="line-num">69</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_view_compile</span>(<span class="ruby-identifier">array</span>)&#x000A;<span class="line-num">70</span>   <span class="ruby-regexp">/(#{Regexp.union(array)})/</span>&#x000A;<span class="line-num">71</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_match_hook-source'>   <span class="ruby-comment"># File lib/roda/plugins/match_hook.rb</span>&#x000A;<span class="line-num">44</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_match_hook</span>&#x000A;<span class="line-num">45</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

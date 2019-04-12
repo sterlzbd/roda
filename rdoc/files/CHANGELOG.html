@@ -30,12 +30,37 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-03-15 09:27:33 -0700</span>
+<span class='datetime'>2019-04-12 07:25:27 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h1 id="label-3.19.0+-282019-04-12-29">3.19.0 (2019-04-12)<span><a href="#label-3.19.0+-282019-04-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Allow assets plugin :timestamp_paths option to be a string to specify a custom separator (jeremyevans)</p>
+</li><li>
+<p>Fix handling for blocks with arity &gt; 1 where expected arity is 1 (jeremyevans)</p>
+</li><li>
+<p>Improve performance for handling blocks with arity 0 where expected arity is 1 by avoiding instance_exec (jeremyevans)</p>
+</li><li>
+<p>Improve terminal maching by around 4x (jeremyevans)</p>
+</li><li>
+<p>Improve symbol matching by 10-20% (jeremyevans)</p>
+</li><li>
+<p>Improve string matching by 10-20% (jeremyevans)</p>
+</li><li>
+<p>Automatically load the direct_call plugin when freezing if no middleware is used for better performance (jeremyevans)</p>
+</li><li>
+<p>Delay building rack app until Roda.app is called (jeremyevans)</p>
+</li><li>
+<p>Add hash_routes plugin for O(1) route dispatching at any level in the routing tree (jeremyevans)</p>
+</li><li>
+<p>Add support for per-cookie cipher secrets in the sessions plugin, and enable them by default (jeremyevans)</p>
+</li><li>
+<p>Add match_hook plugin for calling hooks when there is a successful match block (adam12) (#164)</p>
+</li></ul>
+
 <h1 id="label-3.18.0+-282019-03-15-29">3.18.0 (2019-03-15)<span><a href="#label-3.18.0+-282019-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add direct_call plugin for making Roda.call skip middleware, allowing more optimization when dispatching routes (jeremyevans)</p>

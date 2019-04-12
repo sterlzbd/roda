@@ -41,7 +41,7 @@ Roda::RodaPlugins::StaticRouting
 
 <p>A few things to note in the above example.  First, unlike most other routing methods in <a href="../../Roda.html"><code>Roda</code></a>, these take the full path of the request, and only match if r.path_info matches exactly.  This is why you need to include the leading slash in the path argument.</p>
 
-<p>Second, the static_* routing methods only take a single string argument for the path, they do not acccept other options, and do not handle placeholders in strings.  For any routes needing placeholders, you should use Roda&#39;s routing tree.</p>
+<p>Second, the static_* routing methods only take a single string argument for the path, they do not accept other options, and do not handle placeholders in strings.  For any routes needing placeholders, you should use Roda&#39;s routing tree.</p>
 
 <p>There are separate static_* methods for each type of request method, and these request method specific routes are tried first.  There is also a static_route method that will match regardless of the request method, if there is no matching request methods specific route.  This is why the static_get method call takes precedence over the static_route method call for /foo. As shown above, you can use Roda&#39;s routing tree methods inside the static_route block to have shared behavior for different request methods, while still handling the request methods differently.</p>
 </div>
@@ -49,7 +49,7 @@ Roda::RodaPlugins::StaticRouting
 <h2>Methods</h2>
 <h3>Public Class</h3>
 <ol>
-<li><a href="#method-c-configure">configure</a></li>
+<li><a href="#method-c-load_dependencies">load_dependencies</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -64,10 +64,10 @@ Roda::RodaPlugins::StaticRouting
 <div id='section'>
 <div id='methods'>
 <h2>Public Class methods</h2>
-<div class='method public-class' id='method-method-c-configure'>
-<a name='method-c-configure'></a>
+<div class='method public-class' id='method-method-c-load_dependencies'>
+<a name='method-c-load_dependencies'></a>
 <div class='synopsis'>
-<span class='name'>configure</span>
+<span class='name'>load_dependencies</span>
 <span class='arguments'>(app)</span>
 
 </div>
@@ -75,10 +75,10 @@ Roda::RodaPlugins::StaticRouting
 
 </div>
 <div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:static_routes</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">54</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/static_routing.rb</span>&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">53</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;<span class="line-num">54</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

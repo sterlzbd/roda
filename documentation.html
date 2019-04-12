@@ -21,7 +21,7 @@
       </nav>
     
     <div class="content"><div class="contain">    
-  <h1>Documentation for Roda (v3.18.0)</h1>
+  <h1>Documentation for Roda (v3.19.0)</h1>
 
   <h2><a href="rdoc/files/README_rdoc.html">README</a> <small>(Introduction to Roda, start here if new)</small></h2>
 
@@ -51,8 +51,10 @@
       <li><a href="rdoc/classes/Roda/RodaPlugins/BacktrackingArray.html">backtracking_array</a>: Allows array matchers to backtrack if later matchers do not match.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ClassLevelRouting.html">class_level_routing</a>: Adds class level routing methods, for a DSL similar to <a href="https://github.com/sinatra/sinatra">sinatra</a>.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/ErrorHandler.html">error_handler</a>: Adds ability to automatically handle errors raised by the application.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/HashRoutes.html">hash_routes</a>: Supports fast dispatching to multiple routes using static segments or paths, at all levels in the routing tree.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Head.html">head</a>: Treat HEAD requests like GET requests with an empty response body.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Hooks.html">hooks</a>: Adds before/after hook methods.</li>
+      <li><a href="rdoc/classes/Roda/RodaPlugins/MatchHook.html">match_hook</a>: Adds a hook method which is called when a path segment is matched.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRoute.html">multi_route</a>: Allows for multiple named route blocks that can be dispatched to inside main route block.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/MultiRun.html">multi_run</a>: Adds the ability to dispatch to multiple rack applications based on the request path prefix.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/NotAllowed.html">not_allowed</a>: Adds support for automatically returning 405 Method Not Allowed responses.</li>
@@ -139,7 +141,6 @@
     <li>Other: <ul>
       <li><a href="rdoc/classes/Roda/RodaPlugins/CommonLogger.html">common_logger</a>: Adds support for logging in common log format.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Csrf.html">csrf</a>: Older CSRF plugin for backwards compatibility using <a href="https://github.com/baldowl/rack_csrf">rack_csrf</a>.</li>
-      <li><a href="rdoc/classes/Roda/RodaPlugins/DelayBuild.html">delay_build</a>: Delay building the rack app until Roda.app is called.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Environments.html">environments</a>: Adds support for handling different execution environments (development/test/production).</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/EarlyHints.html">early_hints</a>: Adds support for using 103 Early Hints responses when using a compatible server.</li>
       <li><a href="rdoc/classes/Roda/RodaPlugins/Flash.html">flash</a>: Adds flash handling.</li>
@@ -210,7 +211,7 @@
     
         
           <li>
-            <a href='rdoc/files/doc/release_notes/3_18_0_txt.html'>3.18</a> | <a href='rdoc/files/doc/release_notes/3_17_0_txt.html'>3.17</a> | <a href='rdoc/files/doc/release_notes/3_16_0_txt.html'>3.16</a> | <a href='rdoc/files/doc/release_notes/3_15_0_txt.html'>3.15</a> | <a href='rdoc/files/doc/release_notes/3_14_1_txt.html'>3.14.1</a> | <a href='rdoc/files/doc/release_notes/3_14_0_txt.html'>3.14</a> | <a href='rdoc/files/doc/release_notes/3_13_0_txt.html'>3.13</a> | <a href='rdoc/files/doc/release_notes/3_12_0_txt.html'>3.12</a> | <a href='rdoc/files/doc/release_notes/3_11_0_txt.html'>3.11</a> | <a href='rdoc/files/doc/release_notes/3_10_0_txt.html'>3.10</a>
+            <a href='rdoc/files/doc/release_notes/3_19_0_txt.html'>3.19</a> | <a href='rdoc/files/doc/release_notes/3_18_0_txt.html'>3.18</a> | <a href='rdoc/files/doc/release_notes/3_17_0_txt.html'>3.17</a> | <a href='rdoc/files/doc/release_notes/3_16_0_txt.html'>3.16</a> | <a href='rdoc/files/doc/release_notes/3_15_0_txt.html'>3.15</a> | <a href='rdoc/files/doc/release_notes/3_14_1_txt.html'>3.14.1</a> | <a href='rdoc/files/doc/release_notes/3_14_0_txt.html'>3.14</a> | <a href='rdoc/files/doc/release_notes/3_13_0_txt.html'>3.13</a> | <a href='rdoc/files/doc/release_notes/3_12_0_txt.html'>3.12</a> | <a href='rdoc/files/doc/release_notes/3_11_0_txt.html'>3.11</a> | <a href='rdoc/files/doc/release_notes/3_10_0_txt.html'>3.10</a>
           </li>
         
           <li>
