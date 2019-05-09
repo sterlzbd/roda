@@ -1312,8 +1312,11 @@ WARNING
 
           if b.empty?
             s = @status || 404
-            if (s == 304 || s == 204 || s == 205 || (s >= 100 && s <= 199))
+            if (s == 304 || s == 204 || (s >= 100 && s <= 199))
               h.delete("Content-Type")
+            elsif s == 205
+              h.delete("Content-Type")
+              h["Content-Length"] = '0'
             else
               h["Content-Length"] ||= '0'
             end

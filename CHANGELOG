@@ -1,3 +1,7 @@
+= master
+
+* Set Content-Length header to 0 for empty 205 responses (jeremyevans)
+
 = 3.19.0 (2019-04-12)
 
 * Allow assets plugin :timestamp_paths option to be a string to specify a custom separator (jeremyevans)

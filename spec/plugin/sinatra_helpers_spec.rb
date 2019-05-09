@@ -8,7 +8,6 @@ describe "sinatra_helpers plugin" do
   end
 
   def status_app(code, &block)
-    #code += 2 if [204, 205, 304].include? code
     block ||= proc{}
     sin_app do |r|
       status code
