@@ -62,6 +62,66 @@ describe "render plugin" do
 end
 
 describe "render plugin" do
+  file = 'spec/iv.erb'
+  before do
+    File.binwrite(file, File.binread('spec/views/iv.erb'))
+  end
+  after do
+    File.delete(file) if File.file?(file)
+  end
+
+  [{:cache=>false}, {:explicit_cache=>true}, {:check_template_mtime=>true}].each do |cache_plugin_opts|
+    it "checks mtime if #{cache_plugin_opts} plugin option is used" do
+      app(:bare) do
+        plugin :render, {:views=>"./spec"}.merge!(cache_plugin_opts)
+
+        route do |r|
+          @a = 'a'
+          render('iv')
+        end
+      end
+
+      t = Time.now
+      body.strip.must_equal "a"
+
+      File.binwrite(file, File.binread(file) + "b")
+      File.utime(t, t+1, file)
+      body.gsub("\n", '').must_equal "ab"
+
+      File.binwrite(file, File.binread(file) + "c")
+      File.utime(t, t+2, file)
+      body.gsub("\n", '').must_equal "abc"
+
+      mtime = File.mtime(file)
+      File.binwrite(file, File.binread(file) + "d")
+      File.utime(t, mtime, file)
+      body.gsub("\n", '').must_equal "abc"
+
+      File.delete(file)
+      body.gsub("\n", '').must_equal "abc"
+    end
+  end
+
+  it "does not check mtime if :cache render option is used" do
+    app(:bare) do
+      plugin :render, :views=>"./spec", :cache=>false
+
+      route do |r|
+        @a = 'a'
+        render('iv', :cache=>true)
+      end
+    end
+
+    t = Time.now+1
+    body.strip.must_equal "a"
+
+    File.binwrite(file, File.binread(file) + "b")
+    File.utime(t, t+1, file)
+    body.gsub("\n", '').must_equal "a"
+  end
+end
+
+describe "render plugin" do
   it "simple layout support" do
     app(:bare) do
       plugin :render
@@ -322,13 +382,13 @@ describe "render plugin" do
     body('/c').must_equal "3"
   end
 
-  it "Default to :explicit_cache=>true in development mode" do
+  it "Default to :check_template_mtime=>true in development mode" do
     with_rack_env('development') do
       app(:render){}
     end
-    app.render_opts[:explicit_cache].must_equal true
+    app.render_opts[:check_template_mtime].must_equal true
     app(:render){}
-    app.render_opts[:explicit_cache].must_equal false
+    app.render_opts[:check_template_mtime].must_equal false
   end
 
   it "Support :cache=>false plugin option to disable template caching by default, except :cache=>true method option is given" do
@@ -365,7 +425,7 @@ describe "render plugin" do
     body('/a').strip.must_equal "a"
     app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_be_nil
     body('/b').strip.must_equal "a"
-    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_equal nil
+    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_be_nil
   end
 
   it "Support :cache=>false option to disable template caching even when :cache_key is given" do
@@ -382,41 +442,28 @@ describe "render plugin" do
     body('/a').strip.must_equal "a"
     app.render_opts[:cache][:foo].must_be_nil
     body('/b').strip.must_equal "a"
-    app.render_opts[:cache][:foo].wont_equal nil
+    app.render_opts[:cache][:foo].wont_be_nil
   end
 
-  it "Support :explicit_cache option to disable caching by default, but still allow caching on a per-call basis" do
-    app(:bare) do
-      plugin :render, :views=>"./spec/views", :explicit_cache=>true
+  [{}, {:cache=>true}].each do |cache_val_opts|
+    [{}, {:cache_key=>:foo}].each do |cache_key_opts|
+      cache_opts = cache_key_opts.merge(cache_val_opts)
+      it "Support :explicit_cache plugin option with #{cache_opts} render option" do
+        app(:bare) do
+          plugin :render, :views=>"./spec/views", :explicit_cache=>true
 
-      route do |r|
-        @a = 'a'
-        r.is('a'){render('iv')}
-        render('iv', :cache=>true)
+          route do |r|
+            @a = 'a'
+            render('iv', cache_opts)
+          end
+        end
+
+        body('/a').strip.must_equal "a"
+        template = app.render_opts[:cache][cache_opts[:cache_key] || File.expand_path("spec/views/iv.erb")]
+        template.must_be_kind_of(cache_val_opts.empty? ? Roda::RodaPlugins::Render::TemplateMtimeWrapper : Tilt::Template)
+        body('/a').strip.must_equal "a"
       end
     end
-
-    body('/a').strip.must_equal "a"
-    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].must_be_nil
-    body('/b').strip.must_equal "a"
-    app.render_opts[:cache][File.expand_path('spec/views/iv.erb')].wont_equal nil
-  end
-
-  it "Support :explicit_cache plugin option with :cache_key render option" do
-    app(:bare) do
-      plugin :render, :views=>"./spec/views", :explicit_cache=>true
-
-      route do |r|
-        @a = 'a'
-        r.is('a'){render('iv', :cache_key=>:foo)}
-        render('iv', :cache=>true, :cache_key=>:foo)
-      end
-    end
-
-    body('/a').strip.must_equal "a"
-    app.render_opts[:cache][:foo].must_be_nil
-    body('/b').strip.must_equal "a"
-    app.render_opts[:cache][:foo].wont_equal nil
   end
 
   it "Support :cache=>true option to enable template caching when :template_block is used" do
@@ -445,7 +492,7 @@ describe "render plugin" do
     body('/a').strip.must_equal "iv-a"
     app.render_opts[:cache][['iv', c, nil, nil, proca]].must_be_nil
     body('/b').strip.must_equal "iv-a"
-    app.render_opts[:cache][['iv', c, nil, nil, proca]].wont_equal nil
+    app.render_opts[:cache][['iv', c, nil, nil, proca]].wont_be_nil
   end
 
   it "Support :cache_key option to force the key used when caching, unless :cache=>false option is used" do
@@ -500,17 +547,17 @@ describe "render plugin" do
     c = Class.new(Roda)
     c.plugin :render
     cache = c.render_opts[:cache]
-    c.render_opts[:explicit_cache].must_equal false
+    c.render_opts[:check_template_mtime].must_equal false
     c.plugin :render
     c.render_opts[:cache].must_be_same_as cache
-    c.render_opts[:explicit_cache].must_equal false
+    c.render_opts[:check_template_mtime].must_equal false
 
     c.plugin :render, :cache=>false
     c.render_opts[:cache].must_be_same_as cache
-    c.render_opts[:explicit_cache].must_equal true
+    c.render_opts[:check_template_mtime].must_equal true
     c.plugin :render
     c.render_opts[:cache].must_be_same_as cache
-    c.render_opts[:explicit_cache].must_equal true
+    c.render_opts[:check_template_mtime].must_equal true
   end
 
   it "render plugin call should not override existing options" do
@@ -530,7 +577,7 @@ describe "render plugin" do
     end
 
     body("/inline").strip.must_equal "Hello Agent Smith"
-    Class.new(app).render_opts[:cache][:a].must_be_nil
+    Class.new(app).render_opts[:check_template_mtime].must_equal true
   end
 
   it "with :check_paths=>true plugin option used" do

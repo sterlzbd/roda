@@ -48,8 +48,11 @@ class Roda
     #
     # :allowed_paths :: Set the template paths to allow.  Attempts to render paths outside
     #                   of this directory will raise an error.  Defaults to the +:views+ directory.
-    # :cache :: nil/false to disable template caching by default.  By default, caching
-    #           is disabled by default if RACK_ENV is development.
+    # :cache :: nil/false to explicitly disable premanent template caching.  By default, permanent
+    #           template caching is disabled by default if RACK_ENV is development.  When permanent
+    #           template caching is disabled, for templates with paths in the file system, the
+    #           modification time of the file will be checked on every render, and if it has changed,
+    #           a new template will be created for the current content of the file.
     # :cache_class :: A class to use as the template cache instead of the default.
     # :check_paths :: Can be set to false to turn off template path checking.
     # :engine :: The tilt engine to use for rendering, also the default file extension for
@@ -83,7 +86,7 @@ class Roda
     #
     # :cache :: Set to false to not cache this template, even when
     #           caching is on by default.  Set to true to force caching for
-    #           this template, even when the default is to not cache (e.g.
+    #           this template, even when the default is to not permantently cache (e.g.
     #           when using the :template_block option).
     # :cache_key :: Explicitly set the hash key to use when caching.
     # :content :: Only respected by +view+, provides the content to render
@@ -152,11 +155,11 @@ class Roda
         opts[:allowed_paths] = opts[:allowed_paths].map{|f| app.expand_path(f, nil)}.uniq.freeze
         opts[:check_paths] = true unless opts.has_key?(:check_paths)
 
-        unless opts.has_key?(:explicit_cache)
-          opts[:explicit_cache] = if opts.fetch(:cache, true)
-            ENV['RACK_ENV'] == 'development'
-          else
+        unless opts.has_key?(:check_template_mtime)
+          opts[:check_template_mtime] = if opts[:cache] == false || opts[:explicit_cache]
             true
+          else
+            ENV['RACK_ENV'] == 'development'
           end
         end
 
@@ -209,6 +212,34 @@ class Roda
         template_opts.freeze
         engine_opts.freeze
         opts.freeze
+      end
+
+      # Wrapper object for the Tilt template, that checks the modified
+      # time of the template file, and rebuilds the template if the
+      # template file has been modified.
+      class TemplateMtimeWrapper
+        def initialize(template_class, path, *template_args)
+          @template_class = template_class
+          @path = path
+          @template_args = template_args
+
+          @mtime = (File.mtime(path) if File.file?(path))
+          @template = template_class.new(path, *template_args)
+        end
+
+        # If the template file exists and the modification time has
+        # changed, rebuild the template file, then call render on it.
+        def render(*args, &block)
+          if File.file?(path = @path)
+            mtime = File.mtime(path)
+            if mtime != @mtime
+              @mtime = mtime
+              @template = @template_class.new(path, *@template_args)
+            end
+          end
+
+          @template.render(*args, &block)
+        end
       end
 
       module ClassMethods
@@ -268,7 +299,7 @@ class Roda
         # If caching templates, attempt to retrieve the template from the cache.  Otherwise, just yield
         # to get the template.
         def cached_template(opts, &block)
-          if (!render_opts[:explicit_cache] || opts[:cache]) && (key = opts[:cache_key])
+          if key = opts[:cache_key]
             cache = render_opts[:cache]
             unless template = cache[key]
               template = cache[key] = yield
@@ -335,7 +366,8 @@ class Roda
 
         # Retrieve the Tilt::Template object for the given template and opts.
         def retrieve_template(opts)
-          unless opts[:cache_key] && opts[:cache] != false
+          cache = opts[:cache]
+          if !opts[:cache_key] || cache == false
             found_template_opts = opts = find_template(opts)
           end
           cached_template(opts) do
@@ -347,7 +379,12 @@ class Roda
             if current_template_opts = opts[:template_opts]
               template_opts = template_opts.merge(current_template_opts)
             end
-            opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+
+            if render_opts[:check_template_mtime] && !opts[:template_block] && !cache
+              TemplateMtimeWrapper.new(opts[:template_class], opts[:path], 1, template_opts)
+            else
+              opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+            end
           end
         end
 
