@@ -1,5 +1,7 @@
 # frozen-string-literal: true
 
+require_relative 'render'
+
 #
 class Roda
   module RodaPlugins
@@ -123,6 +125,32 @@ class Roda
         end
 
         private
+
+        if Render::COMPILED_METHOD_SUPPORT
+          # Return nil if using custom view or layout options.
+          # If using a view subdir, prefix the template key with the subdir.
+          def _cached_template_method_key(template)
+            return if @_view_options || @_layout_options
+
+            if subdir = @_view_subdir
+              template = [subdir, template]
+            end
+
+            super
+          end
+
+          # Return nil if using custom view or layout options.
+          # If using a view subdir, prefix the template key with the subdir.
+          def _cached_template_method_lookup(method_cache, template)
+            return if @_view_options || @_layout_options
+
+            if subdir = @_view_subdir
+              template = [subdir, template]
+            end
+
+            super
+          end
+        end
 
         # If view options or locals have been set and this
         # template isn't a layout template, merge the options

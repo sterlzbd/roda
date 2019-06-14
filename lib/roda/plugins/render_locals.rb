@@ -1,5 +1,7 @@
 # frozen-string-literal: true
 
+require_relative 'render'
+
 #
 class Roda
   module RodaPlugins
@@ -40,6 +42,14 @@ class Roda
 
       module InstanceMethods
         private
+
+        if Render::COMPILED_METHOD_SUPPORT
+          # Disable use of cached templates, since it assumes a render/view call with no
+          # options will have no locals.
+          def _cached_template_method(template)
+            nil
+          end
+        end
 
         def render_locals
           opts[:render_locals]

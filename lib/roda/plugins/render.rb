@@ -120,29 +120,27 @@ class Roda
     #
     # = Speeding Up Template Rendering
     #
-    # By default, determining the cache key to use for the template can be a lot
-    # of work.  If you specify the +:cache_key+ option, you can save Roda from
-    # having to do that work, which will make your application faster.  However,
-    # if you do this, you need to make sure you choose a correct key.
+    # The render/view method calls are optimized for usage with a single symbol/string
+    # argument specifying the template name.  So for fastest rendering, pass only a
+    # symbol/string to render/view.
     #
-    # If your application uses a unique template per path, in that the same
-    # path never uses more than one template, you can use the +view_options+ plugin
-    # and do:
-    #
-    #   set_view_options cache_key: r.path_info
-    #
-    # at the top of your route block.  You can even do this if you do have paths
-    # that use more than one template, as long as you specify +:cache_key+
-    # specifically when rendering in those paths.
-    #
-    # If you use a single layout in your application, you can also make layout
-    # rendering faster by specifying +:cache_key+ inside the +:layout_opts+
-    # plugin option.
+    # If you must pass a hash to render/view, either as a second argument or as the
+    # only argument, you can speed things up by specifying a +:cache_key+ option in
+    # the hash, making sure the +:cache_key+ is unique to the template you are
+    # rendering.
     module Render
+      # Support for using compiled methods directly requires Ruby 2.3 for the
+      # method binding to work, and Tilt 1.2 for Tilt::Template#compiled_method.
+      COMPILED_METHOD_SUPPORT = RUBY_VERSION >= '2.3' &&
+        defined?(Tilt::VERSION) &&
+        Tilt::VERSION >= '1.2' &&
+        (Tilt::Template.instance_method(:compiled_method).arity rescue false) == 1
+
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=OPTS)
         if app.opts[:render]
           orig_cache = app.opts[:render][:cache]
+          orig_method_cache = app.opts[:render][:template_method_cache]
           opts = app.opts[:render][:orig_opts].merge(opts)
         end
         app.opts[:render] = opts.dup
@@ -161,6 +159,20 @@ class Roda
           else
             ENV['RACK_ENV'] == 'development'
           end
+        end
+
+        if opts[:check_template_mtime]
+          opts.delete(:template_method_cache)
+        elsif COMPILED_METHOD_SUPPORT
+          opts[:template_method_cache] = orig_method_cache || (opts[:cache_class] || RodaCache).new
+          begin
+            app.const_get(:RodaCompiledTemplates, false)
+          rescue NameError
+            compiled_templates_module = Module.new
+            app.send(:include, compiled_templates_module)
+            app.const_set(:RodaCompiledTemplates, compiled_templates_module)
+          end
+          opts[:template_method_cache] = orig_method_cache || (opts[:cache_class] || RodaCache).new
         end
 
         opts[:cache] = orig_cache || (opts[:cache_class] || RodaCache).new
@@ -182,6 +194,8 @@ class Roda
           else
             opts[:layout_opts][:template] = layout
           end
+
+          opts[:optimize_layout] = (opts[:layout_opts][:template] if opts[:layout_opts].keys.sort == [:_is_layout, :template])
         end
         opts[:layout_opts].freeze
 
@@ -249,6 +263,9 @@ class Roda
         def inherited(subclass)
           super
           opts = subclass.opts[:render] = subclass.opts[:render].dup
+          if COMPILED_METHOD_SUPPORT
+            opts[:template_method_cache] = (opts[:cache_class] || RodaCache).new
+          end
           opts[:cache] = opts[:cache].dup
           opts.freeze
         end
@@ -261,9 +278,13 @@ class Roda
 
       module InstanceMethods
         # Render the given template. See Render for details.
-        def render(template, opts = OPTS, &block)
-          opts = render_template_opts(template, opts)
-          retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
+        def render(template, opts = (optimized_template = _cached_template_method(template); OPTS), &block)
+          if optimized_template
+            send(optimized_template, OPTS, &block)
+          else
+            opts = render_template_opts(template, opts)
+            retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
+          end
         end
 
         # Return the render options for the instance's class.
@@ -274,9 +295,26 @@ class Roda
         # Render the given template.  If there is a default layout
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
-        def view(template, opts=OPTS)
-          opts = parse_template_opts(template, opts)
-          content = opts[:content] || render_template(opts)
+        def view(template, opts = (optimized_template = _cached_template_method(template); OPTS))
+          if optimized_template
+            content = send(optimized_template, OPTS)
+
+            render_opts = self.class.opts[:render]
+            if layout_template = render_opts[:optimize_layout]
+              method_cache = render_opts[:template_method_cache]
+              unless layout_method = method_cache[:_roda_layout]
+                retrieve_template(:template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
+                layout_method = method_cache[:_roda_layout]
+              end
+
+              if layout_method
+                return send(layout_method, OPTS){content}
+              end
+            end
+          else
+            opts = parse_template_opts(template, opts)
+            content = opts[:content] || render_template(opts)
+          end
 
           if layout_opts  = view_layout_opts(opts)
             content = render_template(layout_opts){content}
@@ -286,6 +324,41 @@ class Roda
         end
 
         private
+
+        if COMPILED_METHOD_SUPPORT
+          # If there is an instance method for the template, return the instance
+          # method symbol.  This optimization is only used for render/view calls
+          # with a single string or symbol argument.
+          def _cached_template_method(template)
+            case template
+            when String, Symbol
+              if (method_cache = render_opts[:template_method_cache])
+                _cached_template_method_lookup(method_cache, template)
+              end
+            end
+          end
+
+          # The key to use in the template method cache for the given template.
+          def _cached_template_method_key(template)
+            template
+          end
+
+          # Return the instance method symbol for the template in the method cache.
+          def _cached_template_method_lookup(method_cache, template)
+            method_cache[template]
+          end
+        else
+          # :nocov:
+          def _cached_template_method(template)
+            nil
+          end
+
+          def _cached_template_method_key(template)
+            nil
+          end
+          # :nocov:
+        end
+
 
         # Convert template options to single hash when rendering templates using render.
         def render_template_opts(template, opts)
@@ -313,7 +386,7 @@ class Roda
         # Given the template name and options, set the template class, template path/content,
         # template block, and locals to use for the render in the passed options.
         def find_template(opts)
-          render_opts = render_opts()
+          render_opts = self.class.opts[:render]
           engine_override = opts[:engine]
           engine = opts[:engine] ||= render_opts[:engine]
           if content = opts[:inline]
@@ -332,13 +405,15 @@ class Roda
           end
 
           if cache
-            template_block = opts[:template_block] unless content
-            template_opts = opts[:template_opts]
+            unless opts.has_key?(:cache_key)
+              template_block = opts[:template_block] unless content
+              template_opts = opts[:template_opts]
 
-            opts[:cache_key] ||= if template_class || engine_override || template_opts || template_block
-              [path, template_class, engine_override, template_opts, template_block]
-            else
-              path
+              opts[:cache_key] = if template_class || engine_override || template_opts || template_block
+                [path, template_class, engine_override, template_opts, template_block]
+              else
+                path
+              end
             end
           else
             opts.delete(:cache_key)
@@ -353,6 +428,9 @@ class Roda
           if template.is_a?(Hash)
             opts.merge!(template)
           else
+            if opts.empty? && (key = _cached_template_method_key(template))
+              opts[:template_method_cache_key] = key
+            end
             opts[:template] = template
             opts
           end
@@ -372,6 +450,7 @@ class Roda
           end
           cached_template(opts) do
             opts = found_template_opts || find_template(opts)
+            render_opts = self.class.opts[:render]
             template_opts = render_opts[:template_opts]
             if engine_opts = render_opts[:engine_opts][opts[:engine]]
               template_opts = template_opts.merge(engine_opts)
@@ -383,7 +462,28 @@ class Roda
             if render_opts[:check_template_mtime] && !opts[:template_block] && !cache
               TemplateMtimeWrapper.new(opts[:template_class], opts[:path], 1, template_opts)
             else
-              opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+              template = opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+
+              if COMPILED_METHOD_SUPPORT &&
+                 (method_cache_key = opts[:template_method_cache_key]) &&
+                 (method_cache = render_opts[:template_method_cache]) &&
+                 (method_cache[method_cache_key] != false) &&
+                 !opts[:inline] &&
+                 cache != false
+
+                begin
+                  unbound_method = template.send(:compiled_method, OPTS)
+                rescue ::NotImplementedError
+                  method_cache[method_cache_key] = false
+                else
+                  method_name = :"_roda_template_#{self.class.object_id}_#{method_cache_key}"
+                  self.class::RodaCompiledTemplates.send(:define_method, method_name, unbound_method)
+                  self.class::RodaCompiledTemplates.send(:private, method_name)
+                  method_cache[method_cache_key] = method_name
+                end
+              end
+
+              template
             end
           end
         end

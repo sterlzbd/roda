@@ -21,11 +21,22 @@ describe "view_options plugin view subdirs" do
 
         r.on "about" do
           append_view_subdir 'views'
+          r.on 'test' do
+            append_view_subdir 'about'
+            r.is('view'){view("comp_test")}
+            r.is{render("comp_test")}
+          end
           render("about", :locals=>{:title => "About Roda"})
         end
 
         r.on "path" do
           render('spec/views/about', :locals=>{:title => "Path"}, :layout_opts=>{:locals=>{:title=>"Home"}})
+        end
+
+        r.on 'test' do
+          set_view_subdir 'spec/views'
+          r.is('view'){view("comp_test")}
+          r.is{render("comp_test")}
         end
       end
     end
@@ -41,6 +52,22 @@ describe "view_options plugin view subdirs" do
 
   it "should not change behavior when subdir is not set" do
     body("/path").strip.must_equal "<h1>Path</h1>"
+  end
+
+  it "should handle template compilation correctly" do
+    @app.plugin :render, :layout=>'./spec/views/comp_layout'
+    3.times do
+      body("/test").strip.must_equal "ct"
+      body("/about/test").strip.must_equal "about-ct"
+      body("/test/view").strip.must_equal "act\nb"
+      body("/about/test/view").strip.must_equal "aabout-ct\nb"
+    end
+    if Roda::RodaPlugins::Render::COMPILED_METHOD_SUPPORT
+      method_cache = @app.opts[:render][:template_method_cache]
+      method_cache[['spec/views', 'comp_test']].must_be_kind_of(Symbol)
+      method_cache[['spec/views/about', 'comp_test']].must_be_kind_of(Symbol)
+      method_cache[:_roda_layout].must_be_kind_of(Symbol)
+    end
   end
 end
 
