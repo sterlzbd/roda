@@ -1,4 +1,4 @@
-= master
+= 3.21.0 (2019-06-14)
 
 * Cache compiled templates in development mode, until the template files are modified (jeremyevans)
 
