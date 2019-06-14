@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::Render::TemplateMtimeWrapper</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>class</span>
+Roda::RodaPlugins::Render::TemplateMtimeWrapper
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/render_rb.html">lib/roda/plugins/render.rb</a>
+</li>
+</ol>
+<div class='parent'>
+Superclass:
+<strong>Object</strong>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>Wrapper object for the Tilt template, that checks the modified time of the template file, and rebuilds the template if the template file has been modified.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-new">new</a></li>
+</ol>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-render">render</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-new'>
+<a name='method-c-new'></a>
+<div class='synopsis'>
+<span class='name'>new</span>
+<span class='arguments'>(template_class, path, *template_args)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">221</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">template_class</span>, <span class="ruby-identifier">path</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">template_args</span>)&#x000A;<span class="line-num">222</span>   <span class="ruby-ivar">@template_class</span> = <span class="ruby-identifier">template_class</span>&#x000A;<span class="line-num">223</span>   <span class="ruby-ivar">@path</span> = <span class="ruby-identifier">path</span>&#x000A;<span class="line-num">224</span>   <span class="ruby-ivar">@template_args</span> = <span class="ruby-identifier">template_args</span>&#x000A;<span class="line-num">225</span> &#x000A;<span class="line-num">226</span>   <span class="ruby-ivar">@mtime</span> = (<span class="ruby-constant">File</span>.<span class="ruby-identifier">mtime</span>(<span class="ruby-identifier">path</span>) <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">path</span>))&#x000A;<span class="line-num">227</span>   <span class="ruby-ivar">@template</span> = <span class="ruby-identifier">template_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">path</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">template_args</span>)&#x000A;<span class="line-num">228</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-render'>
+<a name='method-i-render'></a>
+<div class='synopsis'>
+<span class='name'>render</span>
+<span class='arguments'>(*args, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>If the template file exists and the modification time has changed, rebuild the template file, then call render on it.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-render-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-render-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">232</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">render</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">233</span>   <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">path</span> = <span class="ruby-ivar">@path</span>)&#x000A;<span class="line-num">234</span>     <span class="ruby-identifier">mtime</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">mtime</span>(<span class="ruby-identifier">path</span>)&#x000A;<span class="line-num">235</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">mtime</span> <span class="ruby-operator">!=</span> <span class="ruby-ivar">@mtime</span>&#x000A;<span class="line-num">236</span>       <span class="ruby-ivar">@mtime</span> = <span class="ruby-identifier">mtime</span>&#x000A;<span class="line-num">237</span>       <span class="ruby-ivar">@template</span> = <span class="ruby-ivar">@template_class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">path</span>, <span class="ruby-operator">*</span><span class="ruby-ivar">@template_args</span>)&#x000A;<span class="line-num">238</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">239</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">240</span> &#x000A;<span class="line-num">241</span>   <span class="ruby-ivar">@template</span>.<span class="ruby-identifier">render</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">242</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
