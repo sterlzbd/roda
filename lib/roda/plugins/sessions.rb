@@ -394,10 +394,11 @@ class Roda
 
           bitmap, created_at, updated_at = data.unpack('vVV')
           padding_bytes = bitmap & PADDING_MASK
-          if (max = opts[:max_seconds]) && Time.now.to_i > created_at + max
+          now = Time.now.to_i
+          if (max = opts[:max_seconds]) && now > created_at + max
             return _session_serialization_error("Not returning session: maximum session time expired")
           end
-          if (max = opts[:max_idle_seconds]) && Time.now.to_i > updated_at + max
+          if (max = opts[:max_idle_seconds]) && now > updated_at + max
             return _session_serialization_error("Not returning session: maximum session idle time expired")
           end
 
