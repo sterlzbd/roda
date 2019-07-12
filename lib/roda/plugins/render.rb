@@ -161,20 +161,14 @@ class Roda
           end
         end
 
-        if opts[:check_template_mtime]
-          opts.delete(:template_method_cache)
-        elsif COMPILED_METHOD_SUPPORT
-          opts[:template_method_cache] = orig_method_cache || (opts[:cache_class] || RodaCache).new
-          begin
-            app.const_get(:RodaCompiledTemplates, false)
-          rescue NameError
-            compiled_templates_module = Module.new
-            app.send(:include, compiled_templates_module)
-            app.const_set(:RodaCompiledTemplates, compiled_templates_module)
-          end
-          opts[:template_method_cache] = orig_method_cache || (opts[:cache_class] || RodaCache).new
+        begin
+          app.const_get(:RodaCompiledTemplates, false)
+        rescue NameError
+          compiled_templates_module = Module.new
+          app.send(:include, compiled_templates_module)
+          app.const_set(:RodaCompiledTemplates, compiled_templates_module)
         end
-
+        opts[:template_method_cache] = orig_method_cache || (opts[:cache_class] || RodaCache).new
         opts[:cache] = orig_cache || (opts[:cache_class] || RodaCache).new
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
@@ -244,15 +238,68 @@ class Roda
         # If the template file exists and the modification time has
         # changed, rebuild the template file, then call render on it.
         def render(*args, &block)
-          if File.file?(path = @path)
-            mtime = File.mtime(path)
+          modified?
+          @template.render(*args, &block)
+        end
+
+        # If the template file has been updated, return true and update
+        # the template object and the modification time. Other return false.
+        def modified?
+          begin
+            mtime = File.mtime(path = @path)
+          rescue
+            # ignore errors
+          else
             if mtime != @mtime
               @mtime = mtime
               @template = @template_class.new(path, *@template_args)
+              return true
             end
           end
 
-          @template.render(*args, &block)
+          false
+        end
+
+        if COMPILED_METHOD_SUPPORT
+          # Compile a method in the given module with the given name that will
+          # call the compiled template method, updating the compiled template method
+          def define_compiled_method(roda_class, method_name)
+            mod = roda_class::RodaCompiledTemplates
+            internal_method_name = :"_#{method_name}"
+            begin
+              mod.send(:define_method, internal_method_name, send(:compiled_method, OPTS))
+            rescue ::NotImplementedError
+              return false
+            end
+
+            mod.send(:private, internal_method_name)
+            mod.send(:define_method, method_name, &compiled_method_lambda(self, roda_class, internal_method_name))
+            mod.send(:private, method_name)
+
+            method_name
+          end
+
+          private
+
+          # Return the compiled method for the current template object.
+          def compiled_method(_)
+            @template.send(:compiled_method, OPTS)
+          end
+
+          # Return the lambda used to define the compiled template method.  This
+          # is separated into its own method so the lambda does not capture any
+          # unnecessary local variables
+          def compiled_method_lambda(template, roda_class, method_name)
+            mod = roda_class::RodaCompiledTemplates
+            lambda do |_, &block|
+              if template.modified?
+                mod.send(:define_method, method_name, template.send(:compiled_method, OPTS))
+                mod.send(:private, method_name)
+              end
+
+              send(method_name, OPTS, &block)
+            end
+          end
         end
       end
 
@@ -459,18 +506,23 @@ class Roda
               template_opts = template_opts.merge(current_template_opts)
             end
 
+            define_compiled_method = COMPILED_METHOD_SUPPORT &&
+               (method_cache_key = opts[:template_method_cache_key]) &&
+               (method_cache = render_opts[:template_method_cache]) &&
+               (method_cache[method_cache_key] != false) &&
+               !opts[:inline]
+
             if render_opts[:check_template_mtime] && !opts[:template_block] && !cache
-              TemplateMtimeWrapper.new(opts[:template_class], opts[:path], 1, template_opts)
+              template = TemplateMtimeWrapper.new(opts[:template_class], opts[:path], 1, template_opts)
+
+              if define_compiled_method
+                method_name = :"_roda_template_#{self.class.object_id}_#{method_cache_key}"
+                method_cache[method_cache_key] = template.define_compiled_method(self.class, method_name)
+              end
             else
               template = opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
 
-              if COMPILED_METHOD_SUPPORT &&
-                 (method_cache_key = opts[:template_method_cache_key]) &&
-                 (method_cache = render_opts[:template_method_cache]) &&
-                 (method_cache[method_cache_key] != false) &&
-                 !opts[:inline] &&
-                 cache != false
-
+              if define_compiled_method && cache != false
                 begin
                   unbound_method = template.send(:compiled_method, OPTS)
                 rescue ::NotImplementedError
@@ -482,9 +534,9 @@ class Roda
                   method_cache[method_cache_key] = method_name
                 end
               end
-
-              template
             end
+
+            template
           end
         end
 

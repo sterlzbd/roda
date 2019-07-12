@@ -261,157 +261,160 @@ describe "render plugin" do
   end
 
   if Roda::RodaPlugins::Render::COMPILED_METHOD_SUPPORT
-    it "does not cache template renders when using a template library that doesn't support it" do
-      begin
-        require 'tilt/rdoc'
-      rescue
-        next
-      end
-
-      app(:bare) do
-        plugin :render, :views=>'spec/views', :engine=>'rdoc'
-        route do
-          render('a')
+    [true, false].each do |cache_plugin_option|
+      multiplier = cache_plugin_option ? 1 : 2
+      it "does not cache template renders when using a template library that doesn't support it with plugin option :cache=>#{cache_plugin_option}" do
+        begin
+          require 'tilt/rdoc'
+        rescue
+          next
         end
-      end
 
-      app.render_opts[:template_method_cache]['a'].must_be_nil
-      body.strip.must_equal "<p># a # * b</p>"
-      app.render_opts[:template_method_cache]['a'].must_equal false
-      body.strip.must_equal "<p># a # * b</p>"
-      app.render_opts[:template_method_cache]['a'].must_equal false
-      body.strip.must_equal "<p># a # * b</p>"
-      app.render_opts[:template_method_cache]['a'].must_equal false
-      app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
-    end
-
-    ['comp_test', :comp_test].each do |template|
-      it "does not cache template renders when given a hash" do
         app(:bare) do
-          plugin :render, :views=>'spec/views'
+          plugin :render, :views=>'spec/views', :engine=>'rdoc', :cache=>cache_plugin_option
           route do
-            render(:template=>template)
+            render('a')
           end
         end
 
-        app.render_opts[:template_method_cache][template].must_be_nil
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_nil
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_nil
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_nil
+        app.render_opts[:template_method_cache]['a'].must_be_nil
+        body.strip.must_equal "<p># a # * b</p>"
+        app.render_opts[:template_method_cache]['a'].must_equal false
+        body.strip.must_equal "<p># a # * b</p>"
+        app.render_opts[:template_method_cache]['a'].must_equal false
+        body.strip.must_equal "<p># a # * b</p>"
+        app.render_opts[:template_method_cache]['a'].must_equal false
         app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
       end
 
-      it "caches template renders when given a #{template.class}" do
-        app(:bare) do
-          plugin :render, :views=>'spec/views'
-          route do
-            render(template)
+      ['comp_test', :comp_test].each do |template|
+        it "does not cache template renders when given a hash with #{template.class} value with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            plugin :render, :views=>'spec/views', :cache=>cache_plugin_option
+            route do
+              render(:template=>template)
+            end
           end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_nil
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_nil
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
         end
 
-        app.render_opts[:template_method_cache][template].must_be_nil
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app::RodaCompiledTemplates.private_instance_methods.length.must_equal 1
-      end
-
-      it "does not cache template views or layout when given a hash" do
-        app(:bare) do
-          layout = template.to_s.sub('test', 'layout')
-          layout = layout.to_sym if template.is_a?(Symbol)
-          plugin :render, :views=>'spec/views', :layout=>layout
-          route do
-            view(:template=>template)
+        it "caches template renders when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            plugin :render, :views=>'spec/views', :cache=>cache_plugin_option
+            route do
+              render(template)
+            end
           end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
         end
 
-        app.render_opts[:template_method_cache][template].must_be_nil
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "act\nb"
-        app.render_opts[:template_method_cache][template].must_be_nil
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "act\nb"
-        app.render_opts[:template_method_cache][template].must_be_nil
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "act\nb"
-        app.render_opts[:template_method_cache][template].must_be_nil
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
-      end
-
-      it "caches template views with layout when given a #{template.class}" do
-        app(:bare) do
-          layout = template.to_s.sub('test', 'layout')
-          layout = layout.to_sym if template.is_a?(Symbol)
-          plugin :render, :views=>'spec/views', :layout=>layout
-          route do
-            view(template)
+        it "does not cache template views or layout when given a hash with #{template.class} value with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            layout = template.to_s.sub('test', 'layout')
+            layout = layout.to_sym if template.is_a?(Symbol)
+            plugin :render, :views=>'spec/views', :layout=>layout, :cache=>cache_plugin_option
+            route do
+              view(:template=>template)
+            end
           end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
         end
 
-        app.render_opts[:template_method_cache][template].must_be_nil
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "act\nb"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "act\nb"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
-        body.strip.must_equal "act\nb"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
-        app::RodaCompiledTemplates.private_instance_methods.length.must_equal 2
-      end
-
-      it "caches template views without layout when additional layout options given when given a #{template.class}" do
-        app(:bare) do
-          plugin :render, :views=>'spec/views', :layout=>nil
-          route do
-            view(template)
+        it "caches template views with layout when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            layout = template.to_s.sub('test', 'layout')
+            layout = layout.to_sym if template.is_a?(Symbol)
+            plugin :render, :views=>'spec/views', :layout=>layout, :cache=>cache_plugin_option
+            route do
+              view(template)
+            end
           end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal(2*multiplier)
         end
 
-        app.render_opts[:template_method_cache][template].must_be_nil
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "ct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        app::RodaCompiledTemplates.private_instance_methods.length.must_equal 1
-      end
-
-      it "caches template views without layout when additional layout options given when given a #{template.class}" do
-        app(:bare) do
-          plugin :render, :views=>'spec/views', :layout_opts=>{:locals=>{:title=>"Home"}}
-          route do
-            view(template)
+        it "caches template views without layout when additional layout options given when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            plugin :render, :views=>'spec/views', :layout=>nil, :cache=>cache_plugin_option
+            route do
+              view(template)
+            end
           end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "ct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
         end
 
-        app.render_opts[:template_method_cache][template].must_be_nil
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "<title>Roda: Home</title>\nct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "<title>Roda: Home</title>\nct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        body.strip.must_equal "<title>Roda: Home</title>\nct"
-        app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
-        app::RodaCompiledTemplates.private_instance_methods.length.must_equal 1
+        it "caches template views without layout when additional layout options given when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            plugin :render, :views=>'spec/views', :layout_opts=>{:locals=>{:title=>"Home"}}, :cache=>cache_plugin_option
+            route do
+              view(template)
+            end
+          end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "<title>Roda: Home</title>\nct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "<title>Roda: Home</title>\nct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "<title>Roda: Home</title>\nct"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
+        end
       end
     end
   end
