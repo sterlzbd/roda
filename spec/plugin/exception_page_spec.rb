@@ -139,6 +139,17 @@ describe "exception_page plugin" do
     body.wont_include 'id="c0"'
   end
 
+  it "should still show line numbers if the line content cannot be displayed" do
+    app(:exception_page) do |r|
+      instance_eval('raise "foo"', 'foo-bar.rb', 424000+242) rescue exception_page($!)
+    end
+    body = body('HTTP_ACCEPT'=>'text/html')
+    body.must_include "RuntimeError: foo"
+    body.must_include "foo-bar.rb:#{424000+242}"
+    body.must_include __FILE__
+    body.wont_include 'id="c0"'
+  end
+
   it "should serve exception page assets" do
     app(:exception_page) do |r|
       r.exception_page_assets

@@ -330,7 +330,7 @@ END
   <ul class="traceback">
 #{frames.map{|frame| id = frame[:id]; (<<END1)}.join
       <li class="frame">
-        <code>#{h frame[:filename]}</code>: in <code>#{h frame[:function]}</code>
+        <code>#{h frame[:filename]}:#{frame[:lineno]}</code> in <code>#{h frame[:function]}</code>
 
           #{frame[:context_line] ? (<<END2) : '</li>'
           <div class="context" id="c#{id}">

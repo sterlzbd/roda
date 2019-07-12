@@ -1,5 +1,7 @@
 = master
 
+* Always show line number in exception_page output in exception_page plugin (jeremyevans)
+
 * Improve render/view performance up to 2x in development mode in the default case by calling compiled template methods directly (jeremyevans)
 
 = 3.22.0 (2019-07-12)
