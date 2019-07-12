@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.22.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.22.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.22.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2019-07-12 07:25:10 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The render/view methods in the render plugin, when called with a single string/symbol argument (the most common case), are now up to 2.5x/4x faster by directly calling compiled template methods. This works by extracting the UnboundMethod objects that Tilt creates, and defining real methods for them, then calling those methods using send. This avoids most of the overhead of the render and view methods.  The compiled template methods are defined inside a module included in the <a href="../../../classes/Roda.html"><code>Roda</code></a> app&#39;s class, so this support works even if the <a href="../../../classes/Roda.html"><code>Roda</code></a> app itself is frozen.</p>
+
+<p>Some plugins, such as render_locals, do not work with this optimization, and disable the use of it.  The view_options plugin does work with this optimization if you are using set_view_subdir or append_view_subdir, but not if using set_view_options or set_layout_options.</p>
+
+<p>This optimization depends on Ruby 2.3+ and Tilt 1.2+, and will not be used on earlier versions, or if an API change in Tilt is detected.</p>
+</li><li>
+<p>Session deserialization is now slightly faster in the sessions plugin.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
