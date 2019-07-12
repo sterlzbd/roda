@@ -1,4 +1,4 @@
-= master
+= 3.22.0 (2019-07-12)
 
 * Improve render performance up to 4x in the default case by calling compiled template methods directly (jeremyevans)
 
