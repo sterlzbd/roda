@@ -131,7 +131,7 @@ class Roda
         mimes.freeze
 
         type_keys = config[:types].keys
-        config[:extension_regexp] = /(.+?)\.(#{Regexp.union(type_keys.map(&:to_s))})\z/
+        config[:extension_regexp] = /(.*?)\.(#{Regexp.union(type_keys.map(&:to_s))})\z/
 
         type_keys.each do |type|
           app::RodaRequest.send(:define_method, type) do |&block|

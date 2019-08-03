@@ -63,6 +63,38 @@ describe "type_routing plugin" do
     body('/a.html', 'HTTP_ACCEPT' => 'application/xml').must_equal 'HTML: html'
   end
 
+  it "works correctly in sub apps when sub app also handles extensions on empty paths" do
+    sup_app = app
+    @app = Class.new(sup_app)
+    sup_app.route do |r|
+      r.is do
+        r.get do
+          r.html { 'a' }
+          r.json { '{b:1}' }
+        end
+      end
+
+      r.on 'test' do
+        r.get do
+          r.html { 'c' }
+          r.json { '{d:2}' }
+        end
+      end
+    end
+    app.route do |r|
+      r.on "subpath" do
+        r.run(sup_app)
+      end
+    end
+
+    body('/subpath').must_equal 'a'
+    body('/subpath.html').must_equal 'a'
+    body('/subpath.json').must_equal '{b:1}'
+    body('/subpath/test').must_equal 'c'
+    body('/subpath/test.html').must_equal 'c'
+    body('/subpath/test.json').must_equal '{d:2}'
+  end
+
   it "uses the default if neither file extension nor Accept header are given" do
     body('/a').must_equal 'HTML: html'
     header('Content-Type', '/a').must_equal 'text/html'
