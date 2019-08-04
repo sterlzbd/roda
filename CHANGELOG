@@ -1,5 +1,7 @@
 = master
 
+* Make roda/session_middleware work if type_routing plugin is loaded into Roda itself (jeremyevans) (#169)
+
 * Handle requests with nothing before extension in the path in the type_routing plugin (jeremyevans) (#168)
 
 * Always show line number in exception_page output in exception_page plugin (jeremyevans)

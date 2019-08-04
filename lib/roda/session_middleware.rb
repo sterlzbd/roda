@@ -150,11 +150,18 @@ class RodaSessionMiddleware
     end
   end
 
+  module RequestMethods
+    # Work around for if type_routing plugin is loaded into Roda class itself.
+    def _remaining_path(_)
+    end
+  end
+
   # Setup the middleware, passing +opts+ as the Roda sessions plugin options.
   def initialize(app, opts)
     mid = Class.new(Roda)
     mid.plugin :sessions, opts
     @req_class = mid::RodaRequest
+    @req_class.send(:include, RequestMethods)
     @app = app
   end
 
