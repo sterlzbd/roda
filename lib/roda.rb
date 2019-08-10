@@ -340,8 +340,11 @@ class Roda
         end
 
         # Load a new plugin into the current class.  A plugin can be a module
-        # which is used directly, or a symbol represented a registered plugin
+        # which is used directly, or a symbol representing a registered plugin
         # which will be required and then used. Returns nil.
+        #
+        # Note that you should not load plugins into a Roda class after the
+        # class has been subclassed, as doing so can break the subclasses.
         #
         #   Roda.plugin PluginModule
         #   Roda.plugin :csrf
