@@ -224,7 +224,8 @@ class Roda
 
       # Wrapper object for the Tilt template, that checks the modified
       # time of the template file, and rebuilds the template if the
-      # template file has been modified.
+      # template file has been modified.  This is an internal class and
+      # the API is subject to change at any time.
       class TemplateMtimeWrapper
         def initialize(template_class, path, *template_args)
           @template_class = template_class
