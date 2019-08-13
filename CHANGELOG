@@ -1,4 +1,4 @@
-= master
+= 3.23.0 (2019-08-13)
 
 * Make roda/session_middleware work if type_routing plugin is loaded into Roda itself (jeremyevans) (#169)
 
