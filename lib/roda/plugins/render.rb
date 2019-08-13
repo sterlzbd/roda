@@ -263,17 +263,17 @@ class Roda
         if COMPILED_METHOD_SUPPORT
           # Compile a method in the given module with the given name that will
           # call the compiled template method, updating the compiled template method
-          def define_compiled_method(roda_class, method_name)
+          def define_compiled_method(roda_class, method_name, locals_keys=EMPTY_ARRAY)
             mod = roda_class::RodaCompiledTemplates
             internal_method_name = :"_#{method_name}"
             begin
-              mod.send(:define_method, internal_method_name, send(:compiled_method, OPTS))
+              mod.send(:define_method, internal_method_name, send(:compiled_method, locals_keys))
             rescue ::NotImplementedError
               return false
             end
 
             mod.send(:private, internal_method_name)
-            mod.send(:define_method, method_name, &compiled_method_lambda(self, roda_class, internal_method_name))
+            mod.send(:define_method, method_name, &compiled_method_lambda(self, roda_class, internal_method_name, locals_keys))
             mod.send(:private, method_name)
 
             method_name
@@ -282,22 +282,22 @@ class Roda
           private
 
           # Return the compiled method for the current template object.
-          def compiled_method(_)
-            @template.send(:compiled_method, OPTS)
+          def compiled_method(locals_keys=EMPTY_ARRAY)
+            @template.send(:compiled_method, locals_keys)
           end
 
           # Return the lambda used to define the compiled template method.  This
           # is separated into its own method so the lambda does not capture any
           # unnecessary local variables
-          def compiled_method_lambda(template, roda_class, method_name)
+          def compiled_method_lambda(template, roda_class, method_name, locals_keys=EMPTY_ARRAY)
             mod = roda_class::RodaCompiledTemplates
-            lambda do |_, &block|
+            lambda do |locals, &block|
               if template.modified?
-                mod.send(:define_method, method_name, template.send(:compiled_method, OPTS))
+                mod.send(:define_method, method_name, template.send(:compiled_method, locals_keys))
                 mod.send(:private, method_name)
               end
 
-              send(method_name, OPTS, &block)
+              send(method_name, locals, &block)
             end
           end
         end
@@ -524,7 +524,7 @@ class Roda
 
               if define_compiled_method && cache != false
                 begin
-                  unbound_method = template.send(:compiled_method, OPTS)
+                  unbound_method = template.send(:compiled_method, EMPTY_ARRAY)
                 rescue ::NotImplementedError
                   method_cache[method_cache_key] = false
                 else
