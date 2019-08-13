@@ -62,12 +62,18 @@ describe "render_each plugin" do
           plugin :render_each
 
           route do |r|
-            render_each([1], :a)
+            r.root do
+              render_each([1], :a)
+            end
+            r.is 'a' do
+              render_each([1], :a, :local=>:b)
+            end
           end
         end
 
         3.times do
           body.strip.must_equal "<p># a # * b</p>"
+          body('/a').strip.must_equal "<p># a # * b</p>"
         end
       end
     end

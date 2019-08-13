@@ -36,6 +36,7 @@ class Roda
 
       COMPILED_METHOD_SUPPORT = Render::COMPILED_METHOD_SUPPORT
       NO_CACHE = {:cache=>false}.freeze
+      ALLOWED_KEYS = [:locals, :local].freeze
 
       module InstanceMethods
         # For each value in enum, render the given template using the
@@ -48,7 +49,7 @@ class Roda
           if optimized_template
             as = template.to_s.to_sym
             return enum.map{|v| send(optimized_template, as=>v)}.join
-          elsif as = opts.has_key?(:local)
+          elsif opts.has_key?(:local)
             as = opts[:local]
           else
             as = template.to_s.to_sym
@@ -89,6 +90,60 @@ class Roda
               locals = opts[:locals] = Hash[locals]
             else
               locals = opts[:locals] = {}
+            end
+          end
+
+          if COMPILED_METHOD_SUPPORT &&
+             !no_opts &&
+             as &&
+             (opts.keys - ALLOWED_KEYS).empty? &&
+             (method_cache = render_opts[:template_method_cache])
+
+            locals_keys = (locals.keys << as).sort
+            key = [:_render_each, template, locals_keys]
+
+            optimized_template = case template
+            when String, Symbol
+              _cached_template_method_lookup(method_cache, key)
+            else
+              false
+            end
+
+            case optimized_template
+            when Symbol
+              return enum.map do |v|
+                locals[as] = v
+                send(optimized_template, locals)
+              end.join
+            when false
+              # nothing
+            else
+              if method_cache_key = _cached_template_method_key(key)
+                template_obj = retrieve_template(render_template_opts(template, NO_CACHE))
+                method_name = :"_roda_render_each_#{self.class.object_id}_#{method_cache_key}"
+
+                case template_obj
+                when Render::TemplateMtimeWrapper
+                  optimized_template = method_cache[method_cache_key] = template_obj.define_compiled_method(self.class, method_name, locals_keys)
+                else
+                  begin
+                    unbound_method = template_obj.send(:compiled_method, locals_keys)
+                  rescue ::NotImplementedError
+                    method_cache[method_cache_key] = false
+                  else
+                    self.class::RodaCompiledTemplates.send(:define_method, method_name, unbound_method)
+                    self.class::RodaCompiledTemplates.send(:private, method_name)
+                    optimized_template = method_cache[method_cache_key] = method_name
+                  end
+                end
+
+                if optimized_template
+                  return enum.map do |v|
+                    locals[as] = v
+                    send(optimized_template, locals)
+                  end.join
+                end
+              end
             end
           end
 
