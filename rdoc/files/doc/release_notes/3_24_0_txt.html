@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>module_include.rb</title>
+<title>3.24.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
   function popupCode(url) {
     window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
@@ -23,19 +23,28 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>module_include.rb
+<h1 class='name'>3.24.0.txt
 </h1>
 <div class='paths'>
-lib/roda/plugins/module_include.rb
+doc/release_notes/3.24.0.txt
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-09-07 11:41:40 -0700</span>
+<span class='datetime'>2019-09-13 16:25:33 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The performance of the render_each plugin has been dramatically improved by calling compiled template methods directly. For a simple template, render_each performance with a single object can be about 2x faster, and render_each performance for 100 objects can be 3x (cache: false) to 9x (cache: true) faster.</p>
+
+<p>This optimization can be used if no options are provided to render_each, or if :local and/or :locals options are provided. Use of other options will disable this optimization.</p>
+</li><li>
+<p>The module_include plugin no longer calls Proc.new without a block, fixing a warning on Ruby 2.7.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 

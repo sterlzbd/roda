@@ -1,8 +1,8 @@
-Tue, 13 Aug 2019 08:48:09 -0700
+Fri, 13 Sep 2019 16:32:00 -0700
 README.rdoc	Thu, 11 Apr 2019 11:55:17 -0700
-CHANGELOG	Tue, 13 Aug 2019 08:40:01 -0700
+CHANGELOG	Fri, 13 Sep 2019 16:25:33 -0700
 MIT-LICENSE	Sat, 23 Feb 2019 12:16:46 -0800
-lib/roda.rb	Sat, 10 Aug 2019 07:29:08 -0700
+lib/roda.rb	Tue, 13 Aug 2019 09:15:27 -0700
 lib/roda/plugins/_after_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/_before_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/_symbol_regexp_matchers.rb	Fri, 04 Aug 2017 14:18:37 -0700
@@ -53,7 +53,7 @@ lib/roda/plugins/match_affix.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/match_hook.rb	Thu, 21 Mar 2019 10:31:23 -0700
 lib/roda/plugins/middleware.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/middleware_stack.rb	Fri, 12 Jan 2018 08:46:22 -0800
-lib/roda/plugins/module_include.rb	Sun, 31 Jan 2016 11:53:56 -0800
+lib/roda/plugins/module_include.rb	Sat, 07 Sep 2019 11:41:40 -0700
 lib/roda/plugins/multi_route.rb	Wed, 03 Apr 2019 11:02:20 -0700
 lib/roda/plugins/multi_run.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/multi_view.rb	Wed, 03 Apr 2019 11:02:20 -0700
@@ -72,8 +72,8 @@ lib/roda/plugins/path_rewriter.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/placeholder_string_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/precompile_templates.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/public.rb	Sun, 04 Feb 2018 08:09:29 -0800
-lib/roda/plugins/render.rb	Fri, 12 Jul 2019 14:47:17 -0700
-lib/roda/plugins/render_each.rb	Wed, 16 Aug 2017 08:44:25 -0700
+lib/roda/plugins/render.rb	Tue, 13 Aug 2019 15:42:12 -0700
+lib/roda/plugins/render_each.rb	Tue, 13 Aug 2019 15:42:12 -0700
 lib/roda/plugins/render_locals.rb	Tue, 18 Jun 2019 12:20:05 -0700
 lib/roda/plugins/request_aref.rb	Mon, 12 Feb 2018 17:16:16 -0800
 lib/roda/plugins/request_headers.rb	Wed, 16 Aug 2017 08:44:25 -0700
@@ -101,7 +101,7 @@ lib/roda/plugins/typecast_params.rb	Fri, 07 Dec 2018 09:09:22 -0800
 lib/roda/plugins/unescape_path.rb	Wed, 13 Jul 2016 08:09:00 -0700
 lib/roda/plugins/view_options.rb	Tue, 18 Jun 2019 12:20:05 -0700
 lib/roda/session_middleware.rb	Sun, 04 Aug 2019 14:34:46 -0700
-lib/roda/version.rb	Tue, 13 Aug 2019 08:40:01 -0700
+lib/roda/version.rb	Fri, 13 Sep 2019 16:25:33 -0700
 doc/conventions.rdoc	Wed, 03 Apr 2019 11:02:20 -0700
 doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
@@ -163,3 +163,4 @@ doc/release_notes/3.20.0.txt	Thu, 16 May 2019 08:32:54 -0700
 doc/release_notes/3.21.0.txt	Fri, 14 Jun 2019 08:35:57 -0700
 doc/release_notes/3.22.0.txt	Fri, 12 Jul 2019 07:25:10 -0700
 doc/release_notes/3.23.0.txt	Tue, 13 Aug 2019 08:40:01 -0700
+doc/release_notes/3.24.0.txt	Fri, 13 Sep 2019 16:25:33 -0700
