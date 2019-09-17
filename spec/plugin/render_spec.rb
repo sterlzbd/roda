@@ -763,22 +763,26 @@ describe "render plugin" do
     req("/a")
     req("/c")
 
+    @app = Class.new(app)
     app.plugin :render, :allowed_paths=>[]
     proc{req}.must_raise Roda::RodaError
     proc{req("/a")}.must_raise Roda::RodaError
     proc{req("/c")}.must_raise Roda::RodaError
 
+    @app = Class.new(app)
     app.plugin :render, :allowed_paths=>['spec/views/about']
     proc{req}.must_raise Roda::RodaError
     proc{req("/a")}.must_raise Roda::RodaError
     req("/c")
 
+    @app = Class.new(app)
     app.plugin :render, :allowed_paths=>%w'spec/views/about spec/views/b'
     body.strip.must_equal "b"
     proc{req("/a")}.must_raise Roda::RodaError
     req("/c")
 
     render_opts[:check_paths] = true
+    @app = Class.new(app)
     app.plugin :render, :check_paths=>false
     body.strip.must_equal "b"
     proc{req("/a")}.must_raise Roda::RodaError

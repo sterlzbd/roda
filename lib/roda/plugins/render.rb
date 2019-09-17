@@ -122,7 +122,9 @@ class Roda
     #
     # The render/view method calls are optimized for usage with a single symbol/string
     # argument specifying the template name.  So for fastest rendering, pass only a
-    # symbol/string to render/view.
+    # symbol/string to render/view.  Next best optimized are template calls with a
+    # single :locals option.  Use of other options disables the compiled template
+    # method optimizations and can be significantly slower.
     #
     # If you must pass a hash to render/view, either as a second argument or as the
     # only argument, you can speed things up by specifying a +:cache_key+ option in
@@ -135,6 +137,7 @@ class Roda
         defined?(Tilt::VERSION) &&
         Tilt::VERSION >= '1.2' &&
         (Tilt::Template.instance_method(:compiled_method).arity rescue false) == 1
+      NO_CACHE = {:cache=>false}.freeze
 
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=OPTS)
@@ -326,9 +329,11 @@ class Roda
 
       module InstanceMethods
         # Render the given template. See Render for details.
-        def render(template, opts = (optimized_template = _cached_template_method(template); OPTS), &block)
+        def render(template, opts = (no_opts = true; optimized_template = _cached_template_method(template); OPTS), &block)
           if optimized_template
             send(optimized_template, OPTS, &block)
+          elsif !no_opts && opts.length == 1 && (locals = opts[:locals]) && (optimized_template = _optimized_render_method_for_locals(template, locals))
+            send(optimized_template, locals, &block)
           else
             opts = render_template_opts(template, opts)
             retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
@@ -395,6 +400,48 @@ class Roda
           def _cached_template_method_lookup(method_cache, template)
             method_cache[template]
           end
+
+          # Use an optimized render path for templates with a hash of locals.  Returns the result
+          # of the template render if the optimized path is used, or nil if the optimized
+          # path is not used and the long method needs to be used.
+          def _optimized_render_method_for_locals(template, locals)
+            return unless method_cache = render_opts[:template_method_cache]
+
+            locals_keys = locals.keys.sort
+            key = [:_render_locals, template, locals_keys]
+
+            optimized_template = case template
+            when String, Symbol
+              _cached_template_method_lookup(method_cache, key)
+            else
+              return
+            end
+
+            case optimized_template
+            when Symbol
+              optimized_template
+            else
+              if method_cache_key = _cached_template_method_key(key)
+                template_obj = retrieve_template(render_template_opts(template, NO_CACHE))
+                method_name = :"_roda_template_locals_#{self.class.object_id}_#{method_cache_key}"
+
+                method_cache[method_cache_key] = case template_obj
+                when Render::TemplateMtimeWrapper
+                  template_obj.define_compiled_method(self.class, method_name, locals_keys)
+                else
+                  begin
+                    unbound_method = template_obj.send(:compiled_method, locals_keys)
+                  rescue ::NotImplementedError
+                    false
+                  else
+                    self.class::RodaCompiledTemplates.send(:define_method, method_name, unbound_method)
+                    self.class::RodaCompiledTemplates.send(:private, method_name)
+                    method_name
+                  end
+                end
+              end
+            end
+          end
         else
           # :nocov:
           def _cached_template_method(template)
@@ -402,6 +449,10 @@ class Roda
           end
 
           def _cached_template_method_key(template)
+            nil
+          end
+
+          def _optimized_render_method_for_locals(_, _)
             nil
           end
           # :nocov:

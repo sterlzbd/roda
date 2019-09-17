@@ -1,3 +1,7 @@
+= master
+
+* Improve render performance with :locals option up to 75% by calling compiled template methods directly (jeremyevans)
+
 = 3.24.0 (2019-09-13)
 
 * Fix Proc.new warning in module_include plugin on Ruby 2.7+ (jeremyevans)
