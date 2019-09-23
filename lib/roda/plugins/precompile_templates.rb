@@ -68,7 +68,7 @@ class Roda
           instance = allocate
           compile_opts.each do |compile_opt|
             template = instance.send(:retrieve_template, compile_opt)
-            template.send(:compiled_method, locals)
+            Render.tilt_template_compiled_method(template, locals, self)
           end
 
           nil

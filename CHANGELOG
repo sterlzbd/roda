@@ -1,5 +1,7 @@
 = master
 
+* Support change in tilt 2.0.10 private API to continue to support compiled templates, with up to 33% performance improvement (jeremyevans)
+
 * Improve render performance with :locals option up to 75% by calling compiled template methods directly (jeremyevans)
 
 = 3.24.0 (2019-09-13)

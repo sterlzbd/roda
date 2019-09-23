@@ -136,8 +136,18 @@ class Roda
       COMPILED_METHOD_SUPPORT = RUBY_VERSION >= '2.3' &&
         defined?(Tilt::VERSION) &&
         Tilt::VERSION >= '1.2' &&
-        (Tilt::Template.instance_method(:compiled_method).arity rescue false) == 1
+        ([1, -2].include?(((compiled_method_arity = Tilt::Template.instance_method(:compiled_method).arity) rescue false)))
       NO_CACHE = {:cache=>false}.freeze
+
+      if compiled_method_arity == -2
+        def self.tilt_template_compiled_method(template, locals_keys, scope_class)
+          template.send(:compiled_method, locals_keys, scope_class)
+        end
+      else
+        def self.tilt_template_compiled_method(template, locals_keys, scope_class)
+          template.send(:compiled_method, locals_keys)
+        end
+      end
 
       # Setup default rendering options.  See Render for details.
       def self.configure(app, opts=OPTS)
@@ -271,7 +281,7 @@ class Roda
             mod = roda_class::RodaCompiledTemplates
             internal_method_name = :"_#{method_name}"
             begin
-              mod.send(:define_method, internal_method_name, send(:compiled_method, locals_keys))
+              mod.send(:define_method, internal_method_name, send(:compiled_method, locals_keys, roda_class))
             rescue ::NotImplementedError
               return false
             end
@@ -286,8 +296,8 @@ class Roda
           private
 
           # Return the compiled method for the current template object.
-          def compiled_method(locals_keys=EMPTY_ARRAY)
-            @template.send(:compiled_method, locals_keys)
+          def compiled_method(locals_keys=EMPTY_ARRAY, roda_class=nil)
+            Render.tilt_template_compiled_method(@template, locals_keys, roda_class)
           end
 
           # Return the lambda used to define the compiled template method.  This
@@ -297,7 +307,7 @@ class Roda
             mod = roda_class::RodaCompiledTemplates
             lambda do |locals, &block|
               if template.modified?
-                mod.send(:define_method, method_name, template.send(:compiled_method, locals_keys))
+                mod.send(:define_method, method_name, Render.tilt_template_compiled_method(template, locals_keys, roda_class))
                 mod.send(:private, method_name)
               end
 
@@ -430,7 +440,7 @@ class Roda
                   template_obj.define_compiled_method(self.class, method_name, locals_keys)
                 else
                   begin
-                    unbound_method = template_obj.send(:compiled_method, locals_keys)
+                    unbound_method = Render.tilt_template_compiled_method(template_obj, locals_keys, self.class)
                   rescue ::NotImplementedError
                     false
                   else
@@ -576,7 +586,7 @@ class Roda
 
               if define_compiled_method && cache != false
                 begin
-                  unbound_method = template.send(:compiled_method, EMPTY_ARRAY)
+                  unbound_method = Render.tilt_template_compiled_method(template, EMPTY_ARRAY, self.class)
                 rescue ::NotImplementedError
                   method_cache[method_cache_key] = false
                 else
