@@ -133,11 +133,10 @@ class Roda
     module Render
       # Support for using compiled methods directly requires Ruby 2.3 for the
       # method binding to work, and Tilt 1.2 for Tilt::Template#compiled_method.
-      COMPILED_METHOD_SUPPORT = RUBY_VERSION >= '2.3' &&
-        defined?(Tilt::VERSION) &&
-        Tilt::VERSION >= '1.2' &&
+      tilt_compiled_method_support = defined?(Tilt::VERSION) && Tilt::VERSION >= '1.2' &&
         ([1, -2].include?(((compiled_method_arity = Tilt::Template.instance_method(:compiled_method).arity) rescue false)))
       NO_CACHE = {:cache=>false}.freeze
+      COMPILED_METHOD_SUPPORT = RUBY_VERSION >= '2.3' && tilt_compiled_method_support
 
       if compiled_method_arity == -2
         def self.tilt_template_compiled_method(template, locals_keys, scope_class)
