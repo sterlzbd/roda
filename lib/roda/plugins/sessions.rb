@@ -71,7 +71,7 @@ class Roda
     # :max_seconds :: The maximum number of seconds to allow for total session lifetime, starting with when
     #                 the session was originally created.  Default is <tt>86400*30</tt> (30 days). Can be set to
     #                 +nil+ to disable session lifetime checks.
-    # :max_idle_sessions :: The maximum number of seconds to allow since the session was last updated.
+    # :max_idle_seconds :: The maximum number of seconds to allow since the session was last updated.
     #                       Default is <tt>86400*7</tt> (7 days).  Can be set to nil to disable session idleness
     #                       checks.
     # :old_secret :: The previous secret to use, allowing for secret rotation.  Must be a string of at least 64
