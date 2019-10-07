@@ -206,6 +206,20 @@ describe "Roda.define_roda_method" do
     end
 
     it "should handle expected_arity :any with keyword arguments" do
+      if RUBY_VERSION >= '2.7' && RUBY_VERSION < '3'
+        suppress = proc do |&b|
+          begin
+            stderr = $stderr
+            $stderr = StringIO.new
+            b.call
+          ensure
+            $stderr = stderr
+          end
+        end
+      else
+        suppress = proc{|&b| b.call}
+      end
+
       m = eval('app.define_roda_method("x", :any){|b:2| b}', binding)
       @scope.send(m).must_equal 2
       @scope.send(m, 4).must_equal 2
@@ -225,26 +239,26 @@ describe "Roda.define_roda_method" do
       @scope.send(m, 4, b: 3).must_equal(b: 3)
 
       m = eval('app.define_roda_method("x", :any){|x, b:9| [x, b, 1]}', binding)
-      @scope.send(m).must_equal [nil, 9, 1]
+      suppress.call{@scope.send(m)[1..-1]}.must_equal [9, 1]
       @scope.send(m, 2).must_equal [2, 9, 1]
       @scope.send(m, 2, 3).must_equal [2, 9, 1]
-      @scope.send(m, b: 4).must_equal [{b: 4}, 9, 1]
+      eval("@scope.send(m, {b: 4}#{', **{}' if RUBY_VERSION > '2'})").must_equal [{b: 4}, 9, 1]
       @scope.send(m, 2, b: 4).must_equal [2, 4, 1]
       @scope.send(m, 2, 3, b: 4).must_equal [2, 4, 1]
 
       m = eval('app.define_roda_method("x", :any){|x, b:| [x, b, 1]}', binding)
-      proc{@scope.send(m)}.must_raise ArgumentError
+      proc{suppress.call{@scope.send(m)}}.must_raise ArgumentError
       proc{@scope.send(m, 2)}.must_raise ArgumentError
       proc{@scope.send(m, 2, 3)}.must_raise ArgumentError
-      proc{@scope.send(m, b: 4)}.must_raise ArgumentError
+      proc{eval("@scope.send(m, {b: 4}#{', **{}' if RUBY_VERSION > '2'})")}.must_raise ArgumentError
       @scope.send(m, 2, b: 4).must_equal [2, 4, 1]
       @scope.send(m, 2, 3, b: 4).must_equal [2, 4, 1]
 
       m = eval('app.define_roda_method("x", :any){|x, **b| [x, b, 1]}', binding)
-      @scope.send(m).must_equal [nil, {}, 1]
+      suppress.call{@scope.send(m)[1..-1]}.must_equal [{}, 1]
       @scope.send(m, 2).must_equal [2, {}, 1]
       @scope.send(m, 2, 3).must_equal [2, {}, 1]
-      @scope.send(m, b: 4).must_equal [{b: 4}, {}, 1]
+      eval("@scope.send(m, {b: 4}#{', **{}' if RUBY_VERSION > '2'})").must_equal [{b: 4}, {}, 1]
       @scope.send(m, 2, b: 4).must_equal [2, {b: 4}, 1]
       @scope.send(m, 2, 3, b: 4).must_equal [2, {b: 4}, 1]
 

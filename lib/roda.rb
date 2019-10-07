@@ -213,7 +213,11 @@ class Roda
                   # Complexity of handling keyword arguments using define_method is too high,
                   # Fallback to instance_exec in this case.
                   b = block
-                  block = lambda{|*a| instance_exec(*a, &b)} # Keyword arguments fallback
+                  if RUBY_VERSION >= '2.7'
+                    block = eval('lambda{|*a, **kw| instance_exec(*a, **kw, &b)}', nil, __FILE__, __LINE__) # Keyword arguments fallback
+                  else
+                    block = lambda{|*a| instance_exec(*a, &b)} # Keyword arguments fallback
+                  end
                 else
                   arity_meth = meth
                   meth = :"#{meth}_arity"
