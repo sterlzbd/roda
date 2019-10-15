@@ -62,7 +62,7 @@ Roda::RodaPlugins::Sessions
 <p>The cookie name to use (default: <code>&#39;roda.session&#39;</code>)</p>
 </td></tr><tr><td class='label'>:max_seconds </td><td>
 <p>The maximum number of seconds to allow for total session lifetime, starting with when the session was originally created.  Default is <code>86400*30</code> (30 days). Can be set to <code>nil</code> to disable session lifetime checks.</p>
-</td></tr><tr><td class='label'>:max_idle_sessions </td><td>
+</td></tr><tr><td class='label'>:max_idle_seconds </td><td>
 <p>The maximum number of seconds to allow since the session was last updated. Default is <code>86400*7</code> (7 days).  Can be set to nil to disable session idleness checks.</p>
 </td></tr><tr><td class='label'>:old_secret </td><td>
 <p>The previous secret to use, allowing for secret rotation.  Must be a string of at least 64 bytes if given.</p>
