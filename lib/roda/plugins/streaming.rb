@@ -21,6 +21,8 @@ class Roda
     #
     # :callback :: A callback proc to call when the connection is closed.
     # :loop :: Whether to call the stream block continuously until the connection is closed.
+    # :async :: Whether to call the stream block in a separate thread (default: false).
+    # :queue :: A queue object to use for asynchronous streaming (default: `SizedQueue.new(10)`).
     #
     # If the :loop option is used, you can override the
     # handle_stream_error method to change how exceptions
@@ -88,6 +90,51 @@ class Roda
         end
       end
 
+      # Class of the response body if you use #stream with :async set to true.
+      class AsyncStream
+        include Enumerable
+
+        def initialize(opts=OPTS, &block)
+          @stream = Stream.new(opts, &block)
+          @queue = opts[:queue] || SizedQueue.new(10) # have some default backpressure
+          @thread = Thread.new { enqueue_chunks }
+        end
+
+        def each(&out)
+          dequeue_chunks(&out)
+          @thread.join
+        end
+
+        def close
+          @queue.close # terminate the producer thread
+          @stream.close
+        end
+
+        private
+
+        def enqueue_chunks
+          @stream.each do |chunk|
+            @queue.push(chunk)
+          end
+        rescue ClosedQueueError
+          # connection was closed
+        ensure
+          @queue.close
+        end
+
+        def dequeue_chunks
+          loop do
+            chunk = @queue.pop
+
+            if chunk
+              yield chunk
+            else
+              break
+            end
+          end
+        end
+      end
+
       module InstanceMethods
         # Immediately return a streaming response using the current response
         # status and headers, calling the block to get the streaming response.
@@ -105,7 +152,9 @@ class Roda
             end
           end
 
-          throw :halt, @_response.finish_with_body(Stream.new(opts, &block))
+          stream_class = opts[:async] ? AsyncStream : Stream
+
+          throw :halt, @_response.finish_with_body(stream_class.new(opts, &block))
         end
 
         # Handle exceptions raised while streaming when using :loop
