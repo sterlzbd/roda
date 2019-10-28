@@ -21,7 +21,7 @@ class Roda
     #
     # :callback :: A callback proc to call when the connection is closed.
     # :loop :: Whether to call the stream block continuously until the connection is closed.
-    # :async :: Whether to call the stream block in a separate thread (default: false).
+    # :async :: Whether to call the stream block in a separate thread (default: false). Only supported on Ruby 2.3+.
     # :queue :: A queue object to use for asynchronous streaming (default: `SizedQueue.new(10)`).
     #
     # If the :loop option is used, you can override the
@@ -91,20 +91,25 @@ class Roda
       end
 
       # Class of the response body if you use #stream with :async set to true.
+      # Uses a separate thread that pushes streaming results to a queue, so that
+      # data can be streamed to clients while it is being prepared by the application.
       class AsyncStream
         include Enumerable
 
+        # Handle streaming options, see Streaming for details.
         def initialize(opts=OPTS, &block)
           @stream = Stream.new(opts, &block)
           @queue = opts[:queue] || SizedQueue.new(10) # have some default backpressure
           @thread = Thread.new { enqueue_chunks }
         end
 
+        # Continue streaming data until the stream is finished.
         def each(&out)
           dequeue_chunks(&out)
           @thread.join
         end
 
+        # Stop streaming.
         def close
           @queue.close # terminate the producer thread
           @stream.close
@@ -112,6 +117,7 @@ class Roda
 
         private
 
+        # Push each streaming chunk onto the queue.
         def enqueue_chunks
           @stream.each do |chunk|
             @queue.push(chunk)
@@ -122,15 +128,10 @@ class Roda
           @queue.close
         end
 
+        # Pop each streaming chunk from the queue and yield it.
         def dequeue_chunks
-          loop do
-            chunk = @queue.pop
-
-            if chunk
-              yield chunk
-            else
-              break
-            end
+          while chunk = @queue.pop
+            yield chunk
           end
         end
       end
@@ -152,7 +153,7 @@ class Roda
             end
           end
 
-          stream_class = opts[:async] ? AsyncStream : Stream
+          stream_class = (opts[:async] && RUBY_VERSION >= '2.3') ? AsyncStream : Stream
 
           throw :halt, @_response.finish_with_body(stream_class.new(opts, &block))
         end

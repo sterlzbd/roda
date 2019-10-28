@@ -242,5 +242,5 @@ describe "streaming plugin" do
       q.deq
       a.must_equal %w'a b c d e'
     end
-  end
+  end if RUBY_VERSION >= '2.3'
 end
