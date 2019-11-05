@@ -494,7 +494,7 @@ class Roda
             file = "#{dirs.join('/')}/#{file}" if dirs && o[:group_subdirs]
             file = "#{o[:"#{type}_path"]}#{file}"
             app.read_asset_file(file, type)
-          end.join
+          end.join("\n")
 
           unless o[:concat_only]
             content = compress_asset(content, type)
