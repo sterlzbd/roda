@@ -333,6 +333,21 @@ if run_tests
     end
 
     it 'should handle compiling assets, linking to them, and accepting requests for them' do
+      app.plugin :assets, :js=>{:head => %w'comment_1.js comment_2.js'}
+      app.compile_assets
+      html = body('/test')
+      html.scan(/<script/).length.must_equal 1
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
+      js = body($1)
+      js.must_equal <<END
+// test
+/*
+a = 1;
+*/
+END
+    end
+
+    it 'should separate compiled assets with new lines' do
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
