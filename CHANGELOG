@@ -2,6 +2,8 @@
 
 * Combine multiple asset files with a newline when compiling them, avoiding corner cases with comments (ameuret) (#176)
 
+* Add asychronous streaming support to the streaming plugin (janko) (#175)
+
 = 3.25.0 (2019-10-15)
 
 * Support change in tilt 2.0.10 private API to continue to support compiled templates, with up to 33% performance improvement (jeremyevans)
