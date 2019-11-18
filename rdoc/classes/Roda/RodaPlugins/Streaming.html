@@ -46,6 +46,10 @@ Roda::RodaPlugins::Streaming
 <p>A callback proc to call when the connection is closed.</p>
 </td></tr><tr><td class='label'>:loop </td><td>
 <p>Whether to call the stream block continuously until the connection is closed.</p>
+</td></tr><tr><td class='label'>:async </td><td>
+<p>Whether to call the stream block in a separate thread (default: false). Only supported on Ruby 2.3+.</p>
+</td></tr><tr><td class='label'>:queue </td><td>
+<p>A queue object to use for asynchronous streaming (default: `SizedQueue.new(10)`).</p>
 </td></tr></tbody></table>
 
 <p>If the :loop option is used, you can override the handle_stream_error method to change how exceptions are handled during streaming. This method is passed the exception and the stream.  By default, this method just reraises the exception, but you can choose to output the an error message to the stream, before raising:</p>
@@ -64,6 +68,7 @@ Roda::RodaPlugins::Streaming
 <h2>Classes and Modules</h2>
 <ol>
 <li><a href="Streaming/InstanceMethods.html">Roda::RodaPlugins::Streaming::InstanceMethods</a></li>
+<li><a href="Streaming/AsyncStream.html">Roda::RodaPlugins::Streaming::AsyncStream</a></li>
 <li><a href="Streaming/Stream.html">Roda::RodaPlugins::Streaming::Stream</a></li>
 </ol>
 </div>
