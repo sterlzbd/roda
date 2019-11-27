@@ -2,7 +2,7 @@ require_relative "spec_helper"
 
 describe "Roda.define_roda_method" do
   before do
-    @scope = app.new({})
+    @scope = app.new({'PATH_INFO'=>'/'})
   end
 
   it "should define methods using block" do

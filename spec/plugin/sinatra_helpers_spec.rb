@@ -228,7 +228,7 @@ describe "sinatra_helpers plugin" do
 
   describe 'mime_type' do
     before do
-      sin_app{|r| mime_type(r.path).to_s}
+      sin_app{|r| mime_type((r.path unless r.path.empty?)).to_s}
     end
 
     it "looks up mime types in Rack's MIME registry" do
@@ -238,7 +238,7 @@ describe "sinatra_helpers plugin" do
     end
 
     it 'returns nil when given nil' do
-      body('PATH_INFO'=>nil).must_equal ''
+      body('PATH_INFO'=>'').must_equal ''
     end
 
     it 'returns nil when media type not registered' do
