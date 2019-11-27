@@ -1,3 +1,7 @@
+= master
+
+* Split roda.rb into separate files (janko) (#177)
+
 = 3.26.0 (2019-11-18)
 
 * Combine multiple asset files with a newline when compiling them, avoiding corner cases with comments (ameuret) (#176)
