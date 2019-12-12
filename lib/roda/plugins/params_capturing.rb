@@ -56,9 +56,11 @@ class Roda
     # symbols that capture multiple values or no values.
     module ParamsCapturing
       module RequestMethods
-        def initialize(*)
-          super
-          params['captures'] = []
+        # Lazily initialize captures entry when params is called.
+        def params
+          ret = super
+          ret['captures'] ||= []
+          ret
         end
 
         private

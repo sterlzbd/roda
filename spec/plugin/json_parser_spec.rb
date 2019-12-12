@@ -19,6 +19,11 @@ describe "json_parser plugin" do
     req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
   end
 
+  it "returns 400 for invalid json when using params_capturing plugin" do
+    @app.plugin :params_capturing
+    req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
+  end
+
   it "raises by default if r.params is called and a non-hash is submitted" do
     proc do
       req('rack.input'=>StringIO.new('[1]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST')

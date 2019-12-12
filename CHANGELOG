@@ -1,5 +1,7 @@
 = master
 
+* Allow json_parser return correct result for invalid JSON if the params_capturing plugin is used (jeremyevans) (#180)
+
 * Add multibyte_string_matcher plugin for matching multibyte characters (jeremyevans)
 
 * Split roda.rb into separate files (janko) (#177)
