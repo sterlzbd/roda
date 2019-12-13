@@ -1,4 +1,4 @@
-= master
+= 3.27.0 (2019-12-13)
 
 * Allow json_parser return correct result for invalid JSON if the params_capturing plugin is used (jeremyevans) (#180)
 
