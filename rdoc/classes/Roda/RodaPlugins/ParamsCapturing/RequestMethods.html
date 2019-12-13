@@ -37,31 +37,33 @@ Roda::RodaPlugins::ParamsCapturing::RequestMethods
 <div id='description'></div>
 <div id='method-list'>
 <h2>Methods</h2>
-<h3>Public Class</h3>
+<h3>Public Instance</h3>
 <ol>
-<li><a href="#method-c-new">new</a></li>
+<li><a href="#method-i-params">params</a></li>
 </ol>
 </div>
 <div id='context'>
 </div>
 <div id='section'>
 <div id='methods'>
-<h2>Public Class methods</h2>
-<div class='method public-class' id='method-method-c-new'>
-<a name='method-c-new'></a>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-params'>
+<a name='method-i-params'></a>
 <div class='synopsis'>
-<span class='name'>new</span>
-<span class='arguments'>(*)</span>
+<span class='name'>params</span>
+<span class='arguments'>()</span>
 
 </div>
 <div class='description'>
 
+<p>Lazily initialize captures entry when params is called.</p>
+
 </div>
 <div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-params-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/plugins/params_capturing.rb</span>&#x000A;<span class="line-num">59</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-operator">*</span>)&#x000A;<span class="line-num">60</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">61</span>   <span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;captures&#39;</span>] = []&#x000A;<span class="line-num">62</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-params-source'>   <span class="ruby-comment"># File lib/roda/plugins/params_capturing.rb</span>&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">params</span>&#x000A;<span class="line-num">61</span>   <span class="ruby-identifier">ret</span> = <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">62</span>   <span class="ruby-identifier">ret</span>[<span class="ruby-string">&#39;captures&#39;</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">63</span>   <span class="ruby-identifier">ret</span>&#x000A;<span class="line-num">64</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

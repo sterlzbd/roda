@@ -28,7 +28,7 @@ Roda::RodaPlugins::Base::RequestClassMethods
 </h1>
 <ol class='paths'>
 <li>
-<a href="../../../../files/lib/roda_rb.html">lib/roda.rb</a>
+<a href="../../../../files/lib/roda/request_rb.html">lib/roda/request.rb</a>
 </li>
 </ol>
 </div>
@@ -93,7 +93,7 @@ Roda::RodaPlugins::Base::RequestClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-cached_matcher-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-cached_matcher-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">643</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="line-num">644</span>   <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;<span class="line-num">645</span> &#x000A;<span class="line-num">646</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;<span class="line-num">647</span>     <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;<span class="line-num">648</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">649</span> &#x000A;<span class="line-num">650</span>   <span class="ruby-identifier">pattern</span>&#x000A;<span class="line-num">651</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-cached_matcher-source'>   <span class="ruby-comment"># File lib/roda/request.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">cached_matcher</span>(<span class="ruby-identifier">obj</span>)&#x000A;<span class="line-num">29</span>   <span class="ruby-identifier">cache</span> = <span class="ruby-ivar">@match_pattern_cache</span>&#x000A;<span class="line-num">30</span> &#x000A;<span class="line-num">31</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>]&#x000A;<span class="line-num">32</span>     <span class="ruby-identifier">pattern</span> = <span class="ruby-identifier">cache</span>[<span class="ruby-identifier">obj</span>] = <span class="ruby-identifier">consume_pattern</span>(<span class="ruby-keyword">yield</span>)&#x000A;<span class="line-num">33</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">34</span> &#x000A;<span class="line-num">35</span>   <span class="ruby-identifier">pattern</span>&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-inspect'>
@@ -112,7 +112,7 @@ Roda::RodaPlugins::Base::RequestClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inspect-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-inspect-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">656</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>&#x000A;<span class="line-num">657</span>   <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="line-num">658</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-inspect-source'>   <span class="ruby-comment"># File lib/roda/request.rb</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inspect</span>&#x000A;<span class="line-num">42</span>   <span class="ruby-node">&quot;#{roda_class.inspect}::RodaRequest&quot;</span>&#x000A;<span class="line-num">43</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

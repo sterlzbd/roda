@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>halt.rb</title>
+<title>3.27.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
   function popupCode(url) {
     window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
@@ -23,19 +23,31 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>halt.rb
+<h1 class='name'>3.27.0.txt
 </h1>
 <div class='paths'>
-lib/roda/plugins/halt.rb
+doc/release_notes/3.27.0.txt
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-12-11 10:39:49 -0800</span>
+<span class='datetime'>2019-12-13 08:19:02 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A multibyte_string_matcher plugin has been added that supports multibyte characters in strings used as matchers.  It uses a slower string matching implementation that supports multibyte characters. As multibyte strings in paths must be escaped, this also loads the unescape_path plugin.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The json_parser plugin now returns expected results for invalid JSON if the params_capturing plugin is used.</p>
+</li><li>
+<p>lib/roda.rb has been split into multiple files for easier code navigation.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 
