@@ -52,6 +52,7 @@ class Roda
           if post_params = (env["roda.json_params"] || env["rack.request.form_hash"])
             post_params
           elsif (input = env["rack.input"]) && content_type =~ /json/
+            input.rewind
             str = input.read
             input.rewind
             return super if str.empty?

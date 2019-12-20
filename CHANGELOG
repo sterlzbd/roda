@@ -1,3 +1,7 @@
+= master
+
+* Make json_parser parse request body as json even if request body has already been read (jeremyevans)
+
 = 3.27.0 (2019-12-13)
 
 * Allow json_parser return correct result for invalid JSON if the params_capturing plugin is used (jeremyevans) (#180)

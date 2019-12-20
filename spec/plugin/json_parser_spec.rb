@@ -15,6 +15,14 @@ describe "json_parser plugin" do
     body('rack.input'=>StringIO.new('a[b]=1'), 'REQUEST_METHOD'=>'POST').must_equal '1'
   end
 
+  it "parses incoming json if content type specifies json and body is already read" do
+    @app.route do |r|
+      r.body.read
+      r.params['a']['b'].to_s
+    end
+    body('rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+  end
+
   it "returns 400 for invalid json" do
     req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
   end
