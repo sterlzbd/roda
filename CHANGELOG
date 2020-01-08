@@ -1,5 +1,7 @@
 = master
 
+* Make upgrading from rack session cookie in sessions plugin work with rack 2.0.8 (jeremyevans)
+
 * Make json_parser parse request body as json even if request body has already been read (jeremyevans)
 
 = 3.27.0 (2019-12-13)

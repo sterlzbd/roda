@@ -315,6 +315,11 @@ class Roda
           # Mark rack session cookie for deletion on success
           env[SESSION_DELETE_RACK_COOKIE] = true
 
+          # Delete the session id before serializing it.  Starting in rack 2.0.8,
+          # this is an object and not just a string, and calling to_s on it raises
+          # a RuntimeError.
+          session.delete("session_id")
+
           # Convert the rack session by roundtripping it through
           # the parser and serializer, so that you would get the
           # same result as you would if the session was handled
