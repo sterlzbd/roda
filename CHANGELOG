@@ -1,5 +1,7 @@
 = master
 
+* Add session_created_at and session_updated_at methods to the sessions plugin (jeremyevans)
+
 * Make upgrading from rack session cookie in sessions plugin work with rack 2.0.8 (jeremyevans)
 
 * Make json_parser parse request body as json even if request body has already been read (jeremyevans)

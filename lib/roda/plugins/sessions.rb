@@ -239,6 +239,18 @@ class Roda
           @env['rack.session'] ||= _load_session
         end
 
+        # The time the session was originally created. nil if there is no active session.
+        def session_created_at
+          session
+          Time.at(@env[SESSION_CREATED_AT]) if @env[SESSION_SERIALIZED]
+        end
+
+        # The time the session was last updated. nil if there is no active session.
+        def session_updated_at
+          session
+          Time.at(@env[SESSION_UPDATED_AT]) if @env[SESSION_SERIALIZED]
+        end
+
         # Persist the session data as a cookie.  If transparently upgrading from
         # Rack::Session::Cookie, mark the related cookie for expiration so it isn't
         # sent in the future.

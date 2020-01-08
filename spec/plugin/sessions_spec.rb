@@ -28,8 +28,11 @@ if RUBY_VERSION >= '2'
           r.get('g',  String){|k| session[k].to_s}
           r.get('sct'){|i| session; env['roda.session.created_at'].to_s}
           r.get('ssct', Integer){|i| session; (env['roda.session.created_at'] -= i).to_s}
+          r.get('ssct2', Integer, String, String){|i, k, v| session[k] = v; (env['roda.session.created_at'] -= i).to_s}
           r.get('sc'){session.clear; 'c'}
           r.get('cs', String, String){|k, v| clear_session; session[k] = v}
+          r.get('cat'){t = r.session_created_at; t.strftime("%F") if t}
+          r.get('uat'){t = r.session_updated_at; t.strftime("%F") if t}
           ''
         end
       end
@@ -66,6 +69,16 @@ if RUBY_VERSION >= '2'
       body('/g/foo').must_equal 'baz'
 
       errors.must_equal []
+    end
+
+    it "allows accessing session creation and last update times" do
+      status('/cat').must_equal 404
+      status('/uat').must_equal 404
+      status('/s/foo/bar').must_equal 200
+      body('/cat').must_equal Date.today.strftime("%F")
+      body('/uat').must_equal Date.today.strftime("%F")
+      status('/ssct2/172800/bar/baz').must_equal 200
+      body('/cat').must_equal((Date.today - 2).strftime("%F"))
     end
 
     it "does not add Set-Cookie header if session does not change, unless outside :skip_within seconds" do
