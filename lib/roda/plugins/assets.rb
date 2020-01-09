@@ -297,7 +297,7 @@ class Roda
     #         can use nil to disable subresource integrity.
     # :timestamp_paths :: Include the timestamp of assets in asset paths in non-compiled mode. Doing this can
     #                     slow down development requests due to additional requests to get last modified times,
-    #                     put it will make sure the paths change in development when there are modifications,
+    #                     but it will make sure the paths change in development when there are modifications,
     #                     which can fix issues when using a caching proxy in non-compiled mode. This can also
     #                     be specified as a string to use that string to separate the timestamp from the asset.
     #                     By default, <tt>/</tt> is used as the separator if timestamp paths are enabled.
