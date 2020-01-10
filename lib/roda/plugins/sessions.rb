@@ -172,7 +172,6 @@ class Roda
 
       # Configure the plugin, see Sessions for details on options.
       def self.configure(app, opts=OPTS)
-        plugin_opts = opts
         opts = (app.opts[:sessions] || DEFAULT_OPTIONS).merge(opts)
         co = opts[:cookie_options] = DEFAULT_COOKIE_OPTIONS.merge(opts[:cookie_options] || OPTS).freeze
         opts[:remove_cookie_options] = co.merge(:max_age=>'0', :expires=>Time.at(0))
@@ -308,8 +307,6 @@ class Roda
         # hmac and coder.
         def _deserialize_rack_session(data)
           opts = roda_class.opts[:sessions]
-          key = opts[:upgrade_from_rack_session_cookie_key]
-          secret = opts[:upgrade_from_rack_session_cookie_secret]
           data, digest = data.split("--", 2)
           unless digest
             return _session_serialization_error("Not decoding Rack::Session::Cookie session: invalid format")

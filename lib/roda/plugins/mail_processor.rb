@@ -332,7 +332,7 @@ class Roda
           string_meth = nil
           regexp_meth = nil
           addresses.each do |address|
-            key = case address
+            case address
             when String
               unless string_meth
                 string_meth = define_roda_method("mail_processor_string_route_#{address}", 1, &convert_route_block(block))

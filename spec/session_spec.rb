@@ -27,11 +27,11 @@ describe "session handling" do
       end
     end
 
-    _, h, b = req
+    _, _, b = req
     b.join.must_equal 'ab'
-    _, h, b = req
+    _, _, b = req
     b.join.must_equal 'abb'
-    _, h, b = req
+    _, _, b = req
     b.join.must_equal 'abbb'
   end
 end

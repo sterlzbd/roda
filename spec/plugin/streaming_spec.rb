@@ -216,7 +216,7 @@ describe "streaming plugin" do
         end
       end
 
-      *, b = req
+      req
       q.deq
       a.must_equal %w'a b c d e f g h i j'
     end
@@ -238,7 +238,7 @@ describe "streaming plugin" do
         end
       end
 
-      *, b = req
+      req
       q.deq
       a.must_equal %w'a b c d e'
     end

@@ -110,16 +110,16 @@ if RUBY_VERSION >= '2'
 
     it "removes session cookie when session is submitted but empty after request" do
       body('/s/foo/bar').must_equal 'bar'
-      sct = body('/sct').to_i
+      body('/sct').to_i
       body('/g/foo').must_equal 'bar'
 
       _, h, b = req('/sc')
 
       # Parameters can come in any order, and only the final parameter may omit the ;
       ['roda.session=', 'max-age=0', 'path=/'].each do |param|
-        h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|\z)/
+        h['Set-Cookie'].must_match(/#{Regexp.escape(param)}(;|\z)/)
       end
-      h['Set-Cookie'].must_match /expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/
+      h['Set-Cookie'].must_match(/expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/)
 
       b.must_equal ['c']
 
@@ -129,16 +129,16 @@ if RUBY_VERSION >= '2'
     it "removes session cookie even when max-age and expires are in cookie options" do
       app.plugin :sessions, :cookie_options=>{:max_age=>'1000', :expires=>Time.now+1000}
       body('/s/foo/bar').must_equal 'bar'
-      sct = body('/sct').to_i
+      body('/sct').to_i
       body('/g/foo').must_equal 'bar'
 
       _, h, b = req('/sc')
 
       # Parameters can come in any order, and only the final parameter may omit the ;
       ['roda.session=', 'max-age=0', 'path=/'].each do |param|
-        h['Set-Cookie'].must_match /#{Regexp.escape(param)}(;|\z)/
+        h['Set-Cookie'].must_match(/#{Regexp.escape(param)}(;|\z)/)
       end
-      h['Set-Cookie'].must_match /expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/
+      h['Set-Cookie'].must_match(/expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/)
 
       b.must_equal ['c']
 
