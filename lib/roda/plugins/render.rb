@@ -143,9 +143,11 @@ class Roda
           template.send(:compiled_method, locals_keys, scope_class)
         end
       else
+        # :nocov:
         def self.tilt_template_compiled_method(template, locals_keys, scope_class)
           template.send(:compiled_method, locals_keys)
         end
+        # :nocov:
       end
 
       # Setup default rendering options.  See Render for details.
