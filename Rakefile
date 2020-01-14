@@ -77,6 +77,11 @@ task "spec_cov" do
   spec.call('COVERAGE'=>'1')
 end
   
+desc "Run specs with branch coverage"
+task "spec_branch_cov" do
+  spec.call('COVERAGE'=>'1', 'BRANCH_COVERAGE'=>'1')
+end
+  
 desc "Run specs with -w, some warnings filtered"
 task "spec_w" do
   rubyopt = ENV['RUBYOPT']

@@ -11,6 +11,7 @@ if ENV['COVERAGE']
 
   def SimpleCov.roda_coverage(opts = {})
     start do
+      enable_coverage :branch if ENV['BRANCH_COVERAGE']
       add_filter "/spec/"
       add_group('Missing'){|src| src.covered_percent < 100}
       add_group('Covered'){|src| src.covered_percent == 100}
