@@ -30,12 +30,21 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-12-13 08:19:02 -0800</span>
+<span class='datetime'>2020-01-15 09:06:41 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h1 id="label-3.28.0+-282020-01-15-29">3.28.0 (2020-01-15)<span><a href="#label-3.28.0+-282020-01-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Add session_created_at and session_updated_at methods to the sessions plugin (jeremyevans)</p>
+</li><li>
+<p>Make upgrading from rack session cookie in sessions plugin work with rack 2.0.8 (jeremyevans)</p>
+</li><li>
+<p>Make json_parser parse request body as json even if request body has already been read (jeremyevans)</p>
+</li></ul>
+
 <h1 id="label-3.27.0+-282019-12-13-29">3.27.0 (2019-12-13)<span><a href="#label-3.27.0+-282019-12-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Allow json_parser return correct result for invalid JSON if the params_capturing plugin is used (jeremyevans) (#180)</p>
@@ -230,7 +239,7 @@ Last Update:
 </li><li>
 <p>Speed up RodaRequest initialization by avoiding 1-2 method calls (jeremyevans)</p>
 </li><li>
-<p>Add roda/session_middleware (RodaSessionMiddleware), usable as a middleware by any Rack app to use Roda&#39;s session support (jeremyevans)</p>
+<p>Add roda/session_middleware (<a href="../classes/RodaSessionMiddleware.html"><code>RodaSessionMiddleware</code></a>), usable as a middleware by any Rack app to use Roda&#39;s session support (jeremyevans)</p>
 </li><li>
 <p>Add sessions plugin for more secure (encrypted+signed) sessions (jeremyevans)</p>
 </li><li>

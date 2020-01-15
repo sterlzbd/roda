@@ -249,7 +249,7 @@ Roda::RodaPlugins::Assets
 </td></tr><tr><td class='label'>:sri </td><td>
 <p>Enables subresource integrity when setting up references to compiled assets. The value should be :sha256, :sha384, or :sha512 depending on which hash algorithm you want to use.  This changes the hash algorithm that <a href="../../Roda.html"><code>Roda</code></a> will use when naming compiled asset files. The default is :sha256, you can use nil to disable subresource integrity.</p>
 </td></tr><tr><td class='label'>:timestamp_paths </td><td>
-<p>Include the timestamp of assets in asset paths in non-compiled mode. Doing this can slow down development requests due to additional requests to get last modified times, put it will make sure the paths change in development when there are modifications, which can fix issues when using a caching proxy in non-compiled mode. This can also be specified as a string to use that string to separate the timestamp from the asset. By default, <code>/</code> is used as the separator if timestamp paths are enabled.</p>
+<p>Include the timestamp of assets in asset paths in non-compiled mode. Doing this can slow down development requests due to additional requests to get last modified times, but it will make sure the paths change in development when there are modifications, which can fix issues when using a caching proxy in non-compiled mode. This can also be specified as a string to use that string to separate the timestamp from the asset. By default, <code>/</code> is used as the separator if timestamp paths are enabled.</p>
 </td></tr></tbody></table>
 </div>
 <div id='method-list'>

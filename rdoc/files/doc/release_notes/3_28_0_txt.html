@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>assets.rb</title>
+<title>3.28.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
   function popupCode(url) {
     window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
@@ -23,34 +23,32 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>assets.rb
+<h1 class='name'>3.28.0.txt
 </h1>
 <div class='paths'>
-lib/roda/plugins/assets.rb
+doc/release_notes/3.28.0.txt
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2020-01-09 08:32:34 -0800</span>
+<span class='datetime'>2020-01-15 09:06:41 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
-<div id='context'>
-<div id='requires'>
-<h2>Required files</h2>
-<ol>
-<li>json</li>
-<li>fileutils</li>
-<li>json</li>
-<li>zlib</li>
-<li>closure-compiler</li>
-<li>minjs</li>
-<li>uglifier</li>
-<li>yuicompressor</li>
-<li>digest/sha2</li>
-</ol>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The sessions plugin now supports RodaRequest#session_created_at and RodaRequest#session_updated_at for the times of session creation and last update.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The json_parser plugin now correctly parses the request body even if the request body has already been read.</p>
+</li><li>
+<p>The sessions plugin now correctly handles upgrading rack cookie sessions when using rack 2.0.8+.</p>
+</li></ul>
 </div>
+<div id='context'>
 </div>
 
 </div>
