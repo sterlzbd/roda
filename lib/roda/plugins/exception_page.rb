@@ -267,6 +267,12 @@ END
             end.compact
 
             r = @_request
+            begin 
+              post_data = r.POST
+              missing_post = "No POST data"
+            rescue
+              missing_post = "Invalid POST data"
+            end
             info = lambda do |title, id, var, none|
               <<END
   <h3 id="#{id}">#{title}</h3>
@@ -363,7 +369,7 @@ END1
   <h2>Request information</h2>
 
   #{info.call('GET', 'get-info', r.GET, 'No GET data')}
-  #{info.call('POST', 'post-info', r.POST, 'No POST data')}
+  #{info.call('POST', 'post-info', post_data, missing_post)}
   #{info.call('Cookies', 'cookie-info', r.cookies, 'No cookie data')}
   #{info.call('Rack ENV', 'env-info', r.env, 'No Rack env?')}
 </div>

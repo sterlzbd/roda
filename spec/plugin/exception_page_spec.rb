@@ -9,9 +9,9 @@ describe "exception_page plugin" do
 
   def req(path = '/', headers={})
     if path.is_a?(Hash)
-      super(path.merge('rack.input'=>StringIO.new))
+      super({'rack.input'=>StringIO.new}.merge(path))
     else
-      super(path, headers.merge('rack.input'=>StringIO.new))
+      super(path, {'rack.input'=>StringIO.new}.merge(headers))
     end
   end
 
@@ -36,6 +36,11 @@ describe "exception_page plugin" do
     body.must_include "function toggle()"
     body.wont_include "\"/exception_page.css\""
     body.wont_include "\"/exception_page.js\""
+
+    s, h, body = req('HTTP_ACCEPT'=>'text/html', 'REQUEST_METHOD'=>'POST', 'rack.input'=>StringIO.new('(%bad-params%)'))
+    s.must_equal 200
+    h['Content-Type'].must_equal 'text/html'
+    body.join.must_include "Invalid POST data"
 
     size = body.size
     ep_app{|e| exception_page(e, :context=>10)}

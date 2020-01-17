@@ -1,3 +1,7 @@
+= master
+
+* Handle invalid POST data when using the exception_page plugin (jeremyevans)
+
 = 3.28.0 (2020-01-15)
 
 * Add session_created_at and session_updated_at methods to the sessions plugin (jeremyevans)
