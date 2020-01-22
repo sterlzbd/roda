@@ -137,6 +137,16 @@ in your application.  It is recommended to freeze the app in production and
 during testing.  The +.app+ is an optimization, which saves a few method calls
 for every request.
 
+== Running the Application
+
+Running a Roda application is similar to running any other rack-based application
+that uses a +config.ru+ file.  You can start a basic server using +rackup+:
+
+  $ rackup
+
+Ruby web servers such as Unicorn and Puma also ship with their own programs
+that you can use to run a Roda application.
+
 == The Routing Tree
 
 Roda is called a routing tree web toolkit because the way most sites are structured,
