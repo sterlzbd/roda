@@ -52,7 +52,7 @@ class Roda
 
           env = @_request.env
 
-          opts[:common_logger_meth].call("#{env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"] || "-"} - #{env["REMOTE_USER"] || "-"} [#{Time.now.strftime("%d/%b/%Y:%H:%M:%S %z")}] \"#{env["REQUEST_METHOD"]} #{env["PATH_INFO"]}#{"?#{env["QUERY_STRING"]}" if ((qs = env["QUERY_STRING"]) && !qs.empty?)} #{env["HTTP_VERSION"]}\" #{result[0]} #{((length = result[1]['Content-Length']) && (length unless length == '0')) || '-'} #{elapsed_time}\n")
+          opts[:common_logger_meth].call("#{env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"] || "-"} - #{env["REMOTE_USER"] || "-"} [#{Time.now.strftime("%d/%b/%Y:%H:%M:%S %z")}] \"#{env["REQUEST_METHOD"]} #{env["SCRIPT_NAME"]}#{env["PATH_INFO"]}#{"?#{env["QUERY_STRING"]}" if ((qs = env["QUERY_STRING"]) && !qs.empty?)} #{env["HTTP_VERSION"]}\" #{result[0]} #{((length = result[1]['Content-Length']) && (length unless length == '0')) || '-'} #{elapsed_time}\n")
         end
 
         # Create timer instance used for timing

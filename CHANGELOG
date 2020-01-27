@@ -1,5 +1,7 @@
 = master
 
+* Include SCRIPT_NAME when logging in common logger plugin (jeremyevans)
+
 * Handle invalid POST data when using the exception_page plugin (jeremyevans)
 
 = 3.28.0 (2020-01-15)
