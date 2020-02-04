@@ -1,5 +1,7 @@
 require_relative "spec_helper"
 
+require 'tmpdir'
+
 describe "plugins" do
   it "should be able to override class, instance, response, and request methods, and execute configure method" do
     c = Module.new do
@@ -67,5 +69,24 @@ describe "plugins" do
     end
 
     body.must_equal '1'
+  end
+
+  it "should raise error if attempting to load an invalid plugin" do
+    proc{app(:banana)}.must_raise LoadError
+
+    Dir.mktmpdir do |dir|
+      begin
+        $:.unshift(dir)
+        Dir.mkdir(File.join(dir, 'roda'))
+        Dir.mkdir(File.join(dir, 'roda', 'plugins'))
+        File.write(File.join(dir, 'roda', 'plugins', 'banana.rb'), '')
+        proc{app(:banana)}.must_raise Roda::RodaError
+
+        c = Class.new(Roda)
+        proc{c.plugin('banana')}.must_raise Roda::RodaError
+      ensure
+        $:.delete(dir)
+      end
+    end
   end
 end

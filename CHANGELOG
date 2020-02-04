@@ -1,5 +1,7 @@
 = master
 
+* Raise RodaError if trying to load a plugin that is not a module (jeremyevans)
+
 * Include SCRIPT_NAME when logging in common logger plugin (jeremyevans)
 
 * Handle invalid POST data when using the exception_page plugin (jeremyevans)
