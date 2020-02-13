@@ -1,5 +1,7 @@
 # frozen-string-literal: true
 
+require 'time'
+
 #
 class Roda
   module RodaPlugins
