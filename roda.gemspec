@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
     "source_code_uri"   => "https://github.com/jeremyevans/roda" 
   }
 
-  s.files = %w'README.rdoc MIT-LICENSE CHANGELOG Rakefile' + Dir['doc/*.rdoc'] + Dir['doc/release_notes/*.txt'] + Dir['{lib,spec}/**/*.rb'] + Dir['spec/views/*'] + Dir['spec/views/about/*'] + Dir['spec/assets/{css/{app.scss,raw.css,no_access.css},js/head/app.js}']
-  s.extra_rdoc_files = %w'README.rdoc MIT-LICENSE CHANGELOG' + Dir["doc/*.rdoc"] + Dir['doc/release_notes/*.txt']
+  s.files = %w'README.rdoc MIT-LICENSE CHANGELOG' + Dir['doc/*.rdoc'] + Dir['doc/release_notes/3.*.txt'] + Dir['lib/**/*.rb']
+  s.extra_rdoc_files = %w'README.rdoc MIT-LICENSE CHANGELOG' + Dir["doc/*.rdoc"] + Dir['doc/release_notes/3.*.txt']
 
   s.add_dependency "rack"
   s.add_development_dependency "rake"

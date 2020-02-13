@@ -1,5 +1,7 @@
 = master
 
+* Remove specs and old release notes from the gem to reduce gem size by over 35% (jeremyevans)
+
 * Raise RodaError if trying to load a plugin that is not a module (jeremyevans)
 
 * Include SCRIPT_NAME when logging in common logger plugin (jeremyevans)
