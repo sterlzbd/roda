@@ -42,6 +42,8 @@ class Roda
       INDIFFERENT_PROC = lambda{|h,k| h[k.to_s] if k.is_a?(Symbol)}
 
       if Rack.release > '2'
+        require 'rack/query_parser'
+
         class QueryParser < Rack::QueryParser
           # Work around for invalid optimization in rack
           def parse_nested_query(qs, d=nil)
