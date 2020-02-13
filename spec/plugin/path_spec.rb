@@ -107,7 +107,7 @@ describe "path plugin" do
 
   it "handles non-default ports in url methods" do
     path_app(:foo, :url=>true){"/bar/foo"}
-    body("foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>81).must_equal "http://example.org:81/bar/foo"
+    body("foo_url", 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>81).must_equal "http://example.org:81/bar/foo"
   end
 end
 
