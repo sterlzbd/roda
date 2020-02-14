@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2019-04-11 11:55:17 -0700</span>
+<span class='datetime'>2020-01-22 08:58:49 -0800</span>
 </div>
 </div>
 <div id='content'>
@@ -116,6 +116,14 @@ Last Update:
 <p><code>r.redirect</code> immediately returns the response, allowing for code such as <code>r.redirect(path) if some_condition</code>. If <code>r.redirect</code> is called without arguments and the current request method is not <code>GET</code>, it redirects to the current path.</p>
 
 <p>The <code>.freeze.app</code> at the end is optional.  Freezing the app makes modifying app-level settings raise an error, alerting you to possible thread-safety issues in your application.  It is recommended to freeze the app in production and during testing.  The <code>.app</code> is an optimization, which saves a few method calls for every request.</p>
+
+<h2 id="label-Running+the+Application">Running the Application<span><a href="#label-Running+the+Application">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>Running a <a href="../classes/Roda.html"><code>Roda</code></a> application is similar to running any other rack-based application that uses a <code>config.ru</code> file.  You can start a basic server using <code>rackup</code>:</p>
+
+<pre>$ rackup</pre>
+
+<p>Ruby web servers such as Unicorn and Puma also ship with their own programs that you can use to run a <a href="../classes/Roda.html"><code>Roda</code></a> application.</p>
 
 <h2 id="label-The+Routing+Tree">The Routing Tree<span><a href="#label-The+Routing+Tree">&para;</a> <a href="#top">&uarr;</a></span></h2>
 

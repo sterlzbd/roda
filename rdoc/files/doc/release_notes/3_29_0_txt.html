@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>roda.rb</title>
+<title>3.29.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<link href='../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
   function popupCode(url) {
     window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
@@ -23,26 +23,31 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>roda.rb
+<h1 class='name'>3.29.0.txt
 </h1>
 <div class='paths'>
-lib/roda.rb
+doc/release_notes/3.29.0.txt
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2020-02-04 08:34:19 -0800</span>
+<span class='datetime'>2020-02-14 08:23:28 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
-<div id='context'>
-<div id='requires'>
-<h2>Required files</h2>
-<ol>
-<li>thread</li>
-</ol>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The common_logger plugin now includes the SCRIPT_NAME when logging, for greater compatibility with typical web server logs.</p>
+</li><li>
+<p>The exception_page plugin now handles invalid POST data. Previously, invalid POST data would cause the exception page display to raise an exception.</p>
+</li><li>
+<p>An error is now raised if trying to load a plugin that is not a module or a recognized plugin symbol.</p>
+</li><li>
+<p>Specs and older release notes are no longer shipped in the gem, reducing gem size by over 35%.</p>
+</li></ul>
 </div>
+<div id='context'>
 </div>
 
 </div>
