@@ -1,3 +1,7 @@
+=master
+
+* Make :header matcher in header_matchers plugin work for Content-Type and Content-Length (jeremyevans) (#184)
+
 = 3.29.0 (2020-02-14)
 
 * Remove specs and old release notes from the gem to reduce gem size by over 35% (jeremyevans)

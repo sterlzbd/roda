@@ -37,6 +37,19 @@ describe "header matcher" do
     body("HTTP_ACCEPT" => "application/xml").must_equal  "bar-application/xml"
     status.must_equal 404
   end
+
+  it "should match content-type and content-length headers" do
+    app(:header_matchers) do |r|
+      r.on :header=>"content-type" do |x|
+        r.on :header=>"content-length" do |y|
+          "bar-#{x}-#{y}"
+        end
+      end
+    end
+
+    body("CONTENT_TYPE" => "application/xml", "CONTENT_LENGTH" => "1234").must_equal  "bar-application/xml-1234"
+    status.must_equal 404
+  end
 end
 
 describe "host matcher" do
