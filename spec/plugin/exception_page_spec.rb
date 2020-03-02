@@ -135,13 +135,14 @@ describe "exception_page plugin" do
   it "should handle backtrace lines in unexpected forms" do
     ep_app do |e|
       e.backtrace.first.upcase!
-      e.backtrace[-1] = ''
+      e.backtrace[0] = ''
       exception_page(e)
     end
     body = body('HTTP_ACCEPT'=>'text/html')
     body.must_include "RuntimeError: foo"
     body.must_include __FILE__
     body.wont_include 'id="c0"'
+    body.must_include 'id="c1"'
   end
 
   it "should still show line numbers if the line content cannot be displayed" do
@@ -153,6 +154,9 @@ describe "exception_page plugin" do
     body.must_include "foo-bar.rb:#{4200+42}"
     body.must_include __FILE__
     body.wont_include 'id="c0"'
+    # On JRuby, instance_eval uses two frames, and the second one is an internal
+    # JRuby one with no context line.
+    body.must_include "id=\"c#{RUBY_ENGINE == 'jruby' ? 2 : 1}\""
   end
 
   it "should serve exception page assets" do
