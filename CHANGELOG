@@ -1,4 +1,6 @@
-=master
+= master
+
+* Make run_append_slash and run_handler plugins work when used together (janko) (#185)
 
 * Make :header matcher in header_matchers plugin work for Content-Type and Content-Length (jeremyevans) (#184)
 
