@@ -244,10 +244,10 @@ END
 
             frames = exception.backtrace.map.with_index do |line, i|
               frame = {:id=>i}
-              if line =~ /(.*?):(\d+)(:in `(.*)')?/
+              if line =~ /\A(.*?):(\d+)(?::in `(.*)')?\Z/
                 filename = frame[:filename] = $1
                 lineno = frame[:lineno] = $2.to_i
-                frame[:function] = $4
+                frame[:function] = $3
 
                 begin
                   lineno -= 1
@@ -261,8 +261,6 @@ END
                 end
 
                 frame
-              else
-                nil
               end
             end.compact
 
