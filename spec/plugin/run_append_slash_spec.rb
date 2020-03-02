@@ -74,4 +74,23 @@ describe "run_append_slash plugin" do
     body('/sub/bar/baz').must_equal 'sub-bar-baz'
     status('/sub/bar/baz/').must_equal 404
   end
+
+  it "works with run_handler plugin" do
+    sub = app(:bare) { }
+
+    app(:bare) do
+      plugin :run_handler
+      plugin :run_append_slash
+
+      route do |r|
+        r.run sub, not_found: :pass
+
+        r.root do
+          "main"
+        end
+      end
+    end
+
+    body("/").must_equal 'main'
+  end
 end
