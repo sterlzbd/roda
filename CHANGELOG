@@ -1,5 +1,7 @@
 = master
 
+* Support :relative_paths assets plugin option to use relative paths for the assets (jeremyevans)
+
 * Make run_append_slash and run_handler plugins work when used together (janko) (#185)
 
 * Make :header matcher in header_matchers plugin work for Content-Type and Content-Length (jeremyevans) (#184)

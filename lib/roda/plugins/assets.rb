@@ -291,6 +291,8 @@ class Roda
     #                 non-compiled mode, but will write the metadata to the file if compile_assets is called.
     # :public :: Path to your public folder, in which compiled files are placed (default: 'public').  Relative
     #            paths will be considered relative to the application's :root option.
+    # :relative_paths :: Use relative paths instead of absolute paths when setting up link and script tags for
+    #                    assets.
     # :sri :: Enables subresource integrity when setting up references to compiled assets. The value should be
     #         :sha256, :sha384, or :sha512 depending on which hash algorithm you want to use.  This changes the
     #         hash algorithm that Roda will use when naming compiled asset files. The default is :sha256, you
@@ -621,8 +623,10 @@ class Roda
           stype = ltype.to_s
 
           url_prefix = request.script_name if self.class.opts[:add_script_name]
+          relative_paths = o[:relative_paths]
 
-          if o[:compiled]
+          paths = if o[:compiled]
+            relative_paths = false if o[:compiled_asset_host]
             if ukey = _compiled_assets_hash(type, true)
               ["#{o[:compiled_asset_host]}#{url_prefix}/#{o[:"compiled_#{stype}_prefix"]}.#{ukey}.#{stype}"]
             else
@@ -642,6 +646,15 @@ class Roda
               "#{url_prefix}/#{o[:"#{stype}_prefix"]}#{mtime}#{prefix}#{f}#{o[:"#{stype}_suffix"]}"
             end
           end
+
+          if relative_paths && (slash_count = request.path.count('/')) >= 1
+            relative_prefix = "../" * (slash_count - 1)
+            paths.map! do |path|
+              "#{relative_prefix}#{path.slice(1,100000000)}"
+            end
+          end
+
+          paths
         end
 
         # Return a string containing html tags for the given asset type.

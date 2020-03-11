@@ -44,7 +44,7 @@ if run_tests
             "#{assets(:css)}\n#{assets([:js, :head])}"
           end
 
-          r.is 'paths_test' do
+          r.on 'paths_test' do
             css_paths = assets_paths(:css)
             js_paths = assets_paths([:js, :head])
             empty_paths = assets_paths(:empty)
@@ -162,6 +162,52 @@ if run_tests
       js_hash = app.assets_opts[:compiled]['js.head']
       html.scan("css:Array:1:/assets/app.#{css_hash}.css").length.must_equal 1
       html.scan("js:Array:1:/assets/app.head.#{js_hash}.js").length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+    end
+
+    it 'assets_paths should return arrays of relative source paths if the :relative_paths plugin option is used' do
+      app.plugin :assets, :relative_paths=>true
+
+      html = body('/paths_test')
+      html.scan('css:Array:2:assets/css/app.scss,assets/css/raw.css').length.must_equal 1
+      html.scan('js:Array:1:assets/js/head/app.js').length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+
+      html = body('/paths_test/foo')
+      html.scan('css:Array:2:../assets/css/app.scss,../assets/css/raw.css').length.must_equal 1
+      html.scan('js:Array:1:../assets/js/head/app.js').length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+
+      html = body('/paths_test/foo/')
+      html.scan('css:Array:2:../../assets/css/app.scss,../../assets/css/raw.css').length.must_equal 1
+      html.scan('js:Array:1:../../assets/js/head/app.js').length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+
+      html = body('/paths_test/foo/bar')
+      html.scan('css:Array:2:../../assets/css/app.scss,../../assets/css/raw.css').length.must_equal 1
+      html.scan('js:Array:1:../../assets/js/head/app.js').length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+    end
+
+    it 'assets_paths should use relative paths for compiled paths if the :relative_paths plugin option is used' do
+      app.plugin :assets, :relative_paths=>true
+      app.compile_assets
+      css_hash = app.assets_opts[:compiled]['css']
+      js_hash = app.assets_opts[:compiled]['js.head']
+
+      html = body('/paths_test')
+      html.scan("css:Array:1:assets/app.#{css_hash}.css").length.must_equal 1
+      html.scan("js:Array:1:assets/app.head.#{js_hash}.js").length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+
+      html = body('/paths_test/foo')
+      html.scan("css:Array:1:../assets/app.#{css_hash}.css").length.must_equal 1
+      html.scan("js:Array:1:../assets/app.head.#{js_hash}.js").length.must_equal 1
+      html.scan('empty:Array:0').length.must_equal 1
+
+      html = body('/paths_test/foo/')
+      html.scan("css:Array:1:../../assets/app.#{css_hash}.css").length.must_equal 1
+      html.scan("js:Array:1:../../assets/app.head.#{js_hash}.js").length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
     end
 
@@ -400,6 +446,26 @@ END
       css.must_match(/color: ?red/)
       css.must_match(/color: ?blue/)
       js.must_include('console.log')
+    end
+
+    it 'should handle linking to compiled assets when a compiled asset host is used' do
+      app.plugin :assets, :compiled_asset_host=>'https://cdn.example.com'
+      app.compile_assets
+      html = body('/test')
+      html.scan(/<link/).length.must_equal 1
+      html.must_match %r{href="https://cdn\.example\.com/assets/app\.[a-f0-9]{64}\.css"}
+      html.scan(/<script/).length.must_equal 1
+      html.must_match %r{src="https://cdn\.example\.com/assets/app\.head\.[a-f0-9]{64}\.js"}
+    end
+
+    it 'should not use relative paths when a compiled asset host is used' do
+      app.plugin :assets, :compiled_asset_host=>'https://cdn.example.com', :relative_paths=>true
+      app.compile_assets
+      html = body('/test')
+      html.scan(/<link/).length.must_equal 1
+      html.must_match %r{href="https://cdn\.example\.com/assets/app\.[a-f0-9]{64}\.css"}
+      html.scan(/<script/).length.must_equal 1
+      html.must_match %r{src="https://cdn\.example\.com/assets/app\.head\.[a-f0-9]{64}\.js"}
     end
 
     it 'should handle linking to compiled assets when a compiled asset host is used' do
