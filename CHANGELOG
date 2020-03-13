@@ -1,4 +1,4 @@
-= master
+= 3.30.0 (2020-03-13)
 
 * Support :relative_paths assets plugin option to use relative paths for the assets (jeremyevans)
 
