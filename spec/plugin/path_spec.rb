@@ -82,6 +82,25 @@ describe "path plugin" do
     body("foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo/c"
   end
 
+  it "supports :relative option for returning paths relative to the current request" do
+    app(:bare) do
+      plugin :path
+      path("bar", :relative=>true){"/bar/foo"}
+      route{|r| bar_path}
+    end
+    body.must_equal "./bar/foo"
+    body('/a').must_equal "./bar/foo"
+    body('/a/').must_equal "../bar/foo"
+    body('/a/b/c/d').must_equal "../../../bar/foo"
+    body('/a/b/c/d', "SCRIPT_NAME"=>"/e").must_equal "../../../../e/bar/foo"
+  end
+
+  it "raises Error if :relative option to be used with :url or :url_only options" do
+    app.plugin :path
+    proc{app.path("bar", :relative=>true, :url=>true){"/bar/foo"}}.must_raise Roda::RodaError
+    proc{app.path("bar", :relative=>true, :url_only=>true){"/bar/foo"}}.must_raise Roda::RodaError
+  end
+
   it "supports :url option for also creating a *_url method" do
     path_app(:foo, :url=>true){"/bar/foo"}
     body("foo_path", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "/bar/foo"

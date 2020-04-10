@@ -55,6 +55,8 @@ class Roda
     # :add_script_name :: Prefix the path generated with SCRIPT_NAME. This defaults to the app's
     #                     :add_script_name option.
     # :name :: Provide a different name for the method, instead of using <tt>*_path</tt>.
+    # :relative :: Generate paths relative to the current request instead of absolute paths by prepending
+    #              an appropriate prefix.  This implies :add_script_name.
     # :url :: Create a url method in addition to the path method, which will prefix the string generated
     #         with the appropriate scheme, host, and port.  If true, creates a <tt>*_url</tt>
     #         method.  If a Symbol or String, uses the value as the url method name.
@@ -121,16 +123,31 @@ class Roda
 
           meth = opts[:name] || "#{name}_path"
           url = opts[:url]
+          url_only = opts[:url_only]
+          relative = opts[:relative]
           add_script_name = opts.fetch(:add_script_name, self.opts[:add_script_name])
 
-          if add_script_name || url || opts[:url_only]
+          if relative
+            if (url || url_only)
+              raise RodaError,  "cannot provide :url or :url_only option if using :relative option"
+            end
+            add_script_name = true
+            plugin :relative_path
+          end
+
+          if add_script_name || url || url_only || relative
             _meth = "_#{meth}"
             define_method(_meth, &block)
             private _meth
           end
 
-          unless opts[:url_only]
-            if add_script_name
+          unless url_only
+            if relative
+              define_method(meth) do |*a, &blk|
+                # Allow calling private _method to get path
+                relative_path(request.script_name.to_s + send(_meth, *a, &blk))
+              end
+            elsif add_script_name
               define_method(meth) do |*a, &blk|
                 # Allow calling private _method to get path
                 request.script_name.to_s + send(_meth, *a, &blk)
@@ -140,7 +157,7 @@ class Roda
             end
           end
 
-          if url || opts[:url_only]
+          if url || url_only
             url_meth = if url.is_a?(String) || url.is_a?(Symbol)
               url
             else

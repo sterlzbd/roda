@@ -1,5 +1,7 @@
 = master
 
+* Add :relative option to path method in path plugin, for generating a method returning relative paths (jeremyevans)
+
 * Add relative_path plugin, for turning absolute paths to paths relative to the current request (jeremyevans)
 
 = 3.30.0 (2020-03-13)
