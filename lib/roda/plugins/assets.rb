@@ -325,10 +325,14 @@ class Roda
 
       # Load the render, caching, and h plugins, since the assets plugin
       # depends on them.
-      def self.load_dependencies(app, _opts = nil)
+      def self.load_dependencies(app, opts = OPTS)
         app.plugin :render
         app.plugin :caching
         app.plugin :h
+
+        if opts[:relative_paths]
+          app.plugin :relative_path
+        end
       end
 
       # Setup the options for the plugin.  See the Assets module RDoc
@@ -647,10 +651,9 @@ class Roda
             end
           end
 
-          if relative_paths && (slash_count = request.path.count('/')) >= 1
-            relative_prefix = "../" * (slash_count - 1)
+          if relative_paths
             paths.map! do |path|
-              "#{relative_prefix}#{path.slice(1,100000000)}"
+              "#{relative_prefix}#{path}"
             end
           end
 

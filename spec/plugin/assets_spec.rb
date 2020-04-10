@@ -169,8 +169,8 @@ if run_tests
       app.plugin :assets, :relative_paths=>true
 
       html = body('/paths_test')
-      html.scan('css:Array:2:assets/css/app.scss,assets/css/raw.css').length.must_equal 1
-      html.scan('js:Array:1:assets/js/head/app.js').length.must_equal 1
+      html.scan('css:Array:2:./assets/css/app.scss,./assets/css/raw.css').length.must_equal 1
+      html.scan('js:Array:1:./assets/js/head/app.js').length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
 
       html = body('/paths_test/foo')
@@ -196,8 +196,8 @@ if run_tests
       js_hash = app.assets_opts[:compiled]['js.head']
 
       html = body('/paths_test')
-      html.scan("css:Array:1:assets/app.#{css_hash}.css").length.must_equal 1
-      html.scan("js:Array:1:assets/app.head.#{js_hash}.js").length.must_equal 1
+      html.scan("css:Array:1:./assets/app.#{css_hash}.css").length.must_equal 1
+      html.scan("js:Array:1:./assets/app.head.#{js_hash}.js").length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
 
       html = body('/paths_test/foo')
