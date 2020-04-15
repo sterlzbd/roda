@@ -1,6 +1,6 @@
 = New Features
 
-* A relative_paths plugin has been added, adding a relative_path
+* A relative_path plugin has been added, adding a relative_path
   method that will take an absolute path and make it relative to the
   current request by prepending an appropriate prefix.  This is
   helpful when using Roda as a static site generator to generate a
