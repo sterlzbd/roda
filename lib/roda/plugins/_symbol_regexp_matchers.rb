@@ -8,6 +8,8 @@ class Roda
     # using a regexp.
     module SymbolRegexpMatchers
       module RequestMethods
+        private
+
         # The regular expression to use for matching symbols.  By default, any non-empty
         # segment matches.
         def _match_symbol_regexp(s)

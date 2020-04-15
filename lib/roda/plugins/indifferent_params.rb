@@ -64,6 +64,8 @@ class Roda
         module RequestMethods
           QUERY_PARSER = Rack::Utils.default_query_parser = QueryParser.new(QueryParser::Params, 65536, 100)
 
+          private
+
           def query_parser
             QUERY_PARSER
           end

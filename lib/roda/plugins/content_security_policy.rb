@@ -304,6 +304,8 @@ class Roda
           @content_security_policy ||= roda_class.opts[:content_security_policy].dup
         end
 
+        private
+
         # Set the appropriate content security policy header.
         def set_default_headers
           super

@@ -31,6 +31,22 @@ ENV['MT_NO_PLUGINS'] = '1' # Work around stupid autoloading of plugins
 gem 'minitest'
 require "minitest/global_expectations/autorun"
 
+if ENV['CHECK_METHOD_VISIBILITY']
+  require 'visibility_checker'
+  VISIBILITY_CHANGES = []
+  Minitest.after_run do
+    if VISIBILITY_CHANGES.empty?
+      puts "No visibility changes"
+    else
+      puts "Visibility changes:"
+      VISIBILITY_CHANGES.uniq!{|v,| v}
+      puts(*VISIBILITY_CHANGES.map do |v, caller|
+        "#{caller}: #{v.new_visibility} method #{v.overridden_by}##{v.method} overrides #{v.original_visibility} method in #{v.defined_in}"
+      end.sort)
+    end
+  end
+end
+
 $RODA_WARN = true
 def (Roda::RodaPlugins).warn(s)
   return unless $RODA_WARN
@@ -94,6 +110,13 @@ class Minitest::Spec
         @app ||= _app{}
       end
     end
+    if ENV['CHECK_METHOD_VISIBILITY']
+      caller = caller_locations(1, 1)[0]
+      [@app, @app::RodaRequest, @app::RodaResponse].each do |c|
+        VISIBILITY_CHANGES.concat(VisibilityChecker.visibility_changes(c).map{|v| [v, "#{caller.path}:#{caller.lineno}"]})
+      end
+    end
+    @app
   end
 
   def req(path='/', env={})

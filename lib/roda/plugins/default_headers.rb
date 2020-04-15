@@ -31,6 +31,8 @@ class Roda
           if owner == Base::ResponseMethods || (owner == response_class && app.opts[:set_default_headers_overridder] == response_class)
             app.opts[:set_default_headers_overridder] = response_class
             response_class.class_eval(<<-END, __FILE__, __LINE__+1)
+              private
+
               def set_default_headers
                 h = @headers
                 #{headers.map{|k,v| "h[#{k.inspect}] ||= #{v.inspect}"}.join('; ')}

@@ -27,6 +27,8 @@ class Roda
       end
 
       module RequestMethods
+        private
+
         def _match_string(str)
           if str.index(":")
             consume(self.class.cached_matcher(str){Regexp.escape(str).gsub(/:(\w+)/){|m| _match_symbol_regexp($1)}})

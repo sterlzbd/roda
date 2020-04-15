@@ -197,6 +197,8 @@ class Roda
               if instance_method(:set_default_headers).owner == ResponseMethods &&
                  instance_method(:default_headers).owner == ResponseMethods
 
+                private
+
                 def set_default_headers
                   @headers['Content-Type'] ||= 'text/html'
                 end
