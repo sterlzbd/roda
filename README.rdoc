@@ -418,6 +418,10 @@ You can provide an array to specify multiple request methods and match on any of
   {method: :post}             # matches POST
   {method: ['post', 'patch']} # matches POST and PATCH
 
+=== true
+
+If +true+ is given directly as a matcher, it always matches.
+
 === false, nil
 
 If +false+ or +nil+ is given directly as a matcher, it doesn't match anything.
