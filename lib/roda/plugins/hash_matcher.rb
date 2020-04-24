@@ -8,7 +8,7 @@ class Roda
     #
     #   class App < Roda
     #     hash_matcher(:foo) do |v|
-    #       self['foo'] == v
+    #       params['foo'] == v
     #     end
     #
     #     route do
