@@ -1,5 +1,7 @@
 = master
 
+* Add each_partial to the partials plugin for rendering a partial for each element in an enumerable (jeremyevans)
+
 * Make render_each in render_each plugin handle template names with directories and extensions (jeremyevans)
 
 = 3.31.0 (2020-04-15)
