@@ -42,6 +42,14 @@ describe "render_each plugin" do
           r.is 'e' do
             render_each([1,2,3], o)
           end
+
+          r.is 'f' do
+            render_each([1,2,3], "views/each", :views=>'spec')
+          end
+
+          r.is 'g' do
+            render_each([1,2,3], "each.foo")
+          end
         end
       end
 
@@ -52,6 +60,25 @@ describe "render_each plugin" do
         body("/c").must_equal "r-1-4\nr-2-4\nr-3-4\n"
         body("/d").must_equal "r-1-\nr-2-\nr-3-\n"
         body("/e").must_equal "r-1-\nr-2-\nr-3-\n"
+        body("/f").must_equal "r-1-\nr-2-\nr-3-\n"
+        body("/g").must_equal "r-1-\nr-2-\nr-3-\n"
+      end
+    end
+
+    it "bases local name on basename of template in cache: #{cache} mode" do
+      app(:bare) do
+        plugin :render, :views=>'spec', :engine=>'str', :cache=>cache
+        plugin :render_each
+
+        route do |r|
+          r.root do
+            render_each([1,2,3], "views/each")
+          end
+        end
+      end
+
+      3.times do
+        body.must_equal "r-1-\nr-2-\nr-3-\n"
       end
     end
 

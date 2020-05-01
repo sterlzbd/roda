@@ -26,7 +26,9 @@ class Roda
     #
     # Will render the +foo+ template, but the local variable used inside
     # the template will be +bar+.  You can use <tt>local: nil</tt> to
-    # not set a local variable inside the template.
+    # not set a local variable inside the template. By default, the
+    # local variable name is based on the template name, with any
+    # directories and file extensions removed.
     module RenderEach
       # Load the render plugin before this plugin, since this plugin
       # calls the render method.
@@ -45,11 +47,11 @@ class Roda
         #           set a local variable.  If not set, uses the template name.
         def render_each(enum, template, opts=(no_opts = true; optimized_template = _cached_render_each_template_method(template); OPTS))
           if optimized_template
-            return _optimized_render_each(enum, optimized_template, template.to_s.to_sym, {})
+            return _optimized_render_each(enum, optimized_template, render_each_default_local(template), {})
           elsif opts.has_key?(:local)
             as = opts[:local]
           else
-            as = template.to_s.to_sym
+            as = render_each_default_local(template)
             if no_opts && optimized_template.nil? && (optimized_template = _optimized_render_method_for_locals(template, (locals = {as=>nil})))
               return _optimized_render_each(enum, optimized_template, as, locals)
             end
@@ -76,6 +78,12 @@ class Roda
         end
         
         private
+
+        # The default local variable name to use for the template, if the :local option
+        # is not used when calling render_each.
+        def render_each_default_local(template)
+          File.basename(template.to_s).sub(/\..+\z/, '').to_sym
+        end
 
         if Render::COMPILED_METHOD_SUPPORT
           # If compiled method support is enabled in the render plugin, return the

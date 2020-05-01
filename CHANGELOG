@@ -1,3 +1,7 @@
+= master
+
+* Make render_each in render_each plugin handle template names with directories and extensions (jeremyevans)
+
 = 3.31.0 (2020-04-15)
 
 * Add :relative option to path method in path plugin, for generating a method returning relative paths (jeremyevans)
