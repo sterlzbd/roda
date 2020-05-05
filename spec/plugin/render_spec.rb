@@ -65,11 +65,36 @@ end
 
 describe "render plugin" do
   file = 'spec/iv.erb'
+  dependent_file = 'spec/tmp.txt'
   before do
     File.binwrite(file, File.binread('spec/views/iv.erb'))
   end
   after do
-    File.delete(file) if File.file?(file)
+    [file, dependent_file].each do |f|
+      File.delete(f) if File.file?(f)
+    end
+  end
+
+  it "checks mtime of dependent files if :dependcies render option is used" do
+    File.write(dependent_file, '')
+
+    app(:bare) do
+      plugin :render, {:views=>"./spec", :dependencies=>[dependent_file]}
+
+      route do |r|
+        @a = 'a'
+        render('iv')
+      end
+    end
+
+    t = Time.now+1
+    body.strip.must_equal "a"
+
+    File.binwrite(file, File.binread(file) + "b")
+    File.utime(t, t+1, dependent_file)
+    body.gsub("\n", '').must_equal "ab"
+
+    File.delete(dependent_file)
   end
 
   [{:cache=>false}, {:explicit_cache=>true}, {:check_template_mtime=>true}].each do |cache_plugin_opts|
