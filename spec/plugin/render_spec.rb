@@ -75,15 +75,15 @@ describe "render plugin" do
     end
   end
 
-  it "checks mtime of dependent files if :dependcies render option is used" do
+  it "checks mtime of dependent files if :dependencies render method option is used" do
     File.write(dependent_file, '')
 
     app(:bare) do
-      plugin :render, {:views=>"./spec", :dependencies=>[dependent_file]}
+      plugin :render, :views=>"./spec", :cache=>false
 
       route do |r|
         @a = 'a'
-        render('iv')
+        render('iv', :dependencies=>[dependent_file])
       end
     end
 
@@ -93,8 +93,6 @@ describe "render plugin" do
     File.binwrite(file, File.binread(file) + "b")
     File.utime(t, t+1, dependent_file)
     body.gsub("\n", '').must_equal "ab"
-
-    File.delete(dependent_file)
   end
 
   [{:cache=>false}, {:explicit_cache=>true}, {:check_template_mtime=>true}].each do |cache_plugin_opts|

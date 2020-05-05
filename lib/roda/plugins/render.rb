@@ -245,9 +245,9 @@ class Roda
           @template_class = template_class
           @path = path
           @template_args = template_args
-          @dependencies = dependencies
+          @dependencies = ([path] + Array(dependencies)) if dependencies
 
-          @mtime = template_last_modified(path) if File.file?(path)
+          @mtime = template_last_modified if File.file?(path)
           @template = template_class.new(path, *template_args)
         end
 
@@ -261,11 +261,11 @@ class Roda
         # Return when the template was last modified.  If the template depends on any
         # other files, check the modification times of all dependencies and
         # return the maximum.
-        def template_last_modified(file)
+        def template_last_modified
           if deps = @dependencies
-            ([file] + Array(deps)).map{|f| File.mtime(f)}.max
+            deps.map{|f| File.mtime(f)}.max
           else
-            File.mtime(file)
+            File.mtime(@path)
           end
         end
 
@@ -273,13 +273,13 @@ class Roda
         # the template object and the modification time. Other return false.
         def modified?
           begin
-            mtime = template_last_modified(path = @path)
+            mtime = template_last_modified
           rescue
             # ignore errors
           else
             if mtime != @mtime
               @mtime = mtime
-              @template = @template_class.new(path, *@template_args)
+              @template = @template_class.new(@path, *@template_args)
               return true
             end
           end
@@ -587,8 +587,8 @@ class Roda
                (method_cache[method_cache_key] != false) &&
                !opts[:inline]
 
-            if (render_opts[:check_template_mtime] || render_opts[:dependencies]) && !opts[:template_block] && !cache
-              template = TemplateMtimeWrapper.new(opts[:template_class], opts[:path], render_opts[:dependencies], 1, template_opts)
+            if render_opts[:check_template_mtime] && !opts[:template_block] && !cache
+              template = TemplateMtimeWrapper.new(opts[:template_class], opts[:path], opts[:dependencies], 1, template_opts)
 
               if define_compiled_method
                 method_name = :"_roda_template_#{self.class.object_id}_#{method_cache_key}"

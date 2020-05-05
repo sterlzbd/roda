@@ -19,6 +19,7 @@ end
 
 if run_tests
   metadata_file = File.expand_path('spec/assets/tmp/precompiled.json')
+  importdep_file = File.expand_path('spec/assets/css/importdep.scss')
   js_file = File.expand_path('spec/assets/js/head/app.js')
   css_file = File.expand_path('spec/assets/css/no_access.css')
   js_mtime = File.mtime(js_file)
@@ -59,6 +60,7 @@ if run_tests
       File.utime(js_atime, js_mtime, js_file)
       File.utime(css_atime, css_mtime, css_file)
       File.delete(metadata_file) if File.file?(metadata_file)
+      File.delete(importdep_file) if File.file?(importdep_file)
     end
     after(:all) do
       FileUtils.rm_r('spec/assets/tmp') if File.directory?('spec/assets/tmp')
@@ -706,6 +708,21 @@ END
       File.utime(css_atime, [css_mtime+2, js_mtime+2].max, css_file)
       status(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal 200
       body(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_include('console.log')
+    end
+
+    it 'requests for assets should include modifications to content of dependencies' do
+      File.open('spec/assets/css/importdep.scss', 'wb'){|f| f.write('body{color:blue}')}
+      app.plugin :assets, :css=>['import.scss'],
+        :dependencies=>{'spec/assets/css/import.scss'=>'spec/assets/css/importdep.scss'}
+      app.plugin :render, :cache=>false
+      3.times do
+        body('/assets/css/import.scss').must_include('color: blue;')
+      end
+      File.open('spec/assets/css/importdep.scss', 'wb'){|f| f.write('body{color:red}')}
+      File.utime(Time.now+2, Time.now+4, 'spec/assets/css/importdep.scss')
+      3.times do
+        body('/assets/css/import.scss').must_include('color: red;')
+      end
     end
 
     it 'should do a terminal match for assets' do

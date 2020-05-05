@@ -1,5 +1,9 @@
 = master
 
+* Make :dependencies option in assets plugin work correctly with render plugin template caching (jeremyevans) (#191)
+
+* Support render method :dependencies option for specifying which files to check for modification (jgarth, jeremyevans) (#192)
+
 * Add each_partial to the partials plugin for rendering a partial for each element in an enumerable (jeremyevans)
 
 * Make render_each in render_each plugin handle template names with directories and extensions (jeremyevans)

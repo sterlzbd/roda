@@ -405,6 +405,11 @@ class Roda
           opts[s] ||= {} 
         end
 
+        expanded_deps = opts[:expanded_dependencies] = {}
+        opts[:dependencies].each do |file, deps|
+          expanded_deps[File.expand_path(file)] = Array(deps)
+        end
+
         if headers = opts[:headers]
           opts[:css_headers] = headers.merge(opts[:css_headers])
           opts[:js_headers]  = headers.merge(opts[:js_headers])
@@ -412,7 +417,7 @@ class Roda
         opts[:css_headers]['Content-Type'] ||= "text/css; charset=UTF-8".freeze
         opts[:js_headers]['Content-Type']  ||= "application/javascript; charset=UTF-8".freeze
 
-        [:css_headers, :js_headers, :css_opts, :js_opts, :dependencies].each do |s|
+        [:css_headers, :js_headers, :css_opts, :js_opts, :dependencies, :expanded_dependencies].each do |s|
           opts[s].freeze
         end
         [:headers, :css, :js].each do |s|
@@ -732,7 +737,7 @@ class Roda
           content = if file.end_with?(".#{type}")
             ::File.read(file)
           else
-            render_asset_file(file, :template_opts=>o[:"#{type}_opts"])
+            render_asset_file(file, :template_opts=>o[:"#{type}_opts"], :dependencies=>o[:expanded_dependencies][file])
           end
 
           o[:postprocessor] ? o[:postprocessor].call(file, type, content) : content
@@ -762,7 +767,7 @@ class Roda
         # other files, check the modification times of all dependencies and
         # return the maximum.
         def asset_last_modified(file)
-          if deps = self.class.assets_opts[:dependencies][file]
+          if deps = self.class.assets_opts[:expanded_dependencies][file]
             ([file] + Array(deps)).map{|f| ::File.stat(f).mtime}.max
           else
             ::File.stat(file).mtime
