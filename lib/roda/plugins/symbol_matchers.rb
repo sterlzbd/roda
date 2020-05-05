@@ -6,7 +6,7 @@ class Roda
     # The symbol_matchers plugin allows you do define custom regexps to use
     # for specific symbols.  For example, if you have a route such as:
     #
-    #   r.on :username do
+    #   r.on :username do |username|
     #     # ...
     #   end
     #
@@ -28,7 +28,7 @@ class Roda
     # If the placeholder_string_matchers plugin is loaded, this feature also applies to
     # placeholders in strings, so the following:
     #
-    #   r.on "users/:username" do
+    #   r.on "users/:username" do |username|
     #     # ...
     #   end
     #
