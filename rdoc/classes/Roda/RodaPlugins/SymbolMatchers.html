@@ -37,7 +37,7 @@ Roda::RodaPlugins::SymbolMatchers
 <div id='description'>
 <p>The symbol_matchers plugin allows you do define custom regexps to use for specific symbols.  For example, if you have a route such as:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:username</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:username</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">username</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
 <p>By default this will match all nonempty segments.  However, if your usernames must be 6-20 characters, and can only contain <code>a-z</code> and <code>0-9</code>, you can do:</p>
 
@@ -56,7 +56,7 @@ Roda::RodaPlugins::SymbolMatchers
 
 <p>If the placeholder_string_matchers plugin is loaded, this feature also applies to placeholders in strings, so the following:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users/:username&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users/:username&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">username</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
 <p>Would match <code>/users/foobar123</code>, but not <code>/users/foo</code>, <code>/users/FooBar123</code>, or <code>/users/foobar_123</code>.</p>
 

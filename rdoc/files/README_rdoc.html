@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2020-03-06 12:07:48 -0800</span>
+<span class='datetime'>2020-04-23 11:17:42 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -244,6 +244,10 @@ Last Update:
 <p>The <code>:method</code> matcher matches the method of the request. You can provide an array to specify multiple request methods and match on any of them:</p>
 
 <pre class="ruby">{<span class="ruby-value">method:</span> <span class="ruby-value">:post</span>}             <span class="ruby-comment"># matches POST</span>&#x000A;{<span class="ruby-value">method:</span> [<span class="ruby-string">&#39;post&#39;</span>, <span class="ruby-string">&#39;patch&#39;</span>]} <span class="ruby-comment"># matches POST and PATCH</span></pre>
+
+<h3 id="label-true">true<span><a href="#label-true">&para;</a> <a href="#top">&uarr;</a></span></h3>
+
+<p>If <code>true</code> is given directly as a matcher, it always matches.</p>
 
 <h3 id="label-false-2C+nil">false, nil<span><a href="#label-false-2C+nil">&para;</a> <a href="#top">&uarr;</a></span></h3>
 

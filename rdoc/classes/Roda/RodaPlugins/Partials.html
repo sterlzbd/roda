@@ -47,7 +47,15 @@ Roda::RodaPlugins::Partials
 
 <pre class="ruby"><span class="ruby-identifier">render</span>(<span class="ruby-string">&#39;_test&#39;</span>)&#x000A;<span class="ruby-identifier">render</span>(<span class="ruby-string">&#39;dir/_test&#39;</span>)</pre>
 
-<p>Note that this plugin automatically loads the :render plugin.</p>
+<p>To render the same template once for each object in an enumerable, you can use the <code>render_partials</code> method:</p>
+
+<pre class="ruby"><span class="ruby-identifier">each_partial</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], <span class="ruby-value">:foo</span>) <span class="ruby-comment"># uses _foo.erb</span></pre>
+
+<p>This is basically equivalent to:</p>
+
+<pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], <span class="ruby-string">&quot;_foo&quot;</span>, <span class="ruby-value">local:</span> <span class="ruby-value">:foo</span>)</pre>
+
+<p>This plugin depends on the render and render_each plugins.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -76,14 +84,14 @@ Roda::RodaPlugins::Partials
 </div>
 <div class='description'>
 
-<p>Depend on the render plugin, since this overrides some of its methods.</p>
+<p>Depend on the render plugin, passing received options to it. Also depend on the render_each plugin.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/partials.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">26</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/partials.rb</span>&#x000A;<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">35</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">36</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render_each</span>&#x000A;<span class="line-num">37</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

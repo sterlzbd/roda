@@ -49,7 +49,7 @@ Roda::RodaPlugins::RenderEach
 
 <pre class="ruby"><span class="ruby-identifier">render_each</span>([<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>], <span class="ruby-value">:foo</span>, <span class="ruby-value">local:</span> <span class="ruby-value">:bar</span>)</pre>
 
-<p>Will render the <code>foo</code> template, but the local variable used inside the template will be <code>bar</code>.  You can use <code>local: nil</code> to not set a local variable inside the template.</p>
+<p>Will render the <code>foo</code> template, but the local variable used inside the template will be <code>bar</code>.  You can use <code>local: nil</code> to not set a local variable inside the template. By default, the local variable name is based on the template name, with any directories and file extensions removed.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -99,7 +99,7 @@ Roda::RodaPlugins::RenderEach
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/render_each.rb</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">34</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">35</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/render_each.rb</span>&#x000A;<span class="line-num">35</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">36</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">37</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
