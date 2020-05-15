@@ -1,3 +1,7 @@
+= master
+
+* Add url method to path plugin, similar to path but returning the entire URL (jeremyevans)
+
 = 3.32.0 (2020-05-15)
 
 * Make :dependencies option in assets plugin work correctly with render plugin template caching (jeremyevans) (#191)

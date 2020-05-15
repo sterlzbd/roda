@@ -10,7 +10,8 @@ class Roda
     #
     # Additionally, you can call the +path+ class method with a class and a block, and it will register
     # the class.  You can then call the +path+ instance method with an instance of that class, and it will
-    # execute the block in the context of the route block scope with the arguments provided to path.
+    # execute the block in the context of the route block scope with the arguments provided to path. You
+    # can call the +url+ instance method with the same arguments as the +path+ method to get the full URL.
     #
     # Example:
     #
@@ -46,11 +47,11 @@ class Roda
     #
     #     r.post 'quux' do
     #       bar = Quux[1]
-    #       r.redirect path(quux, '/bar') # /quux/1/bar
+    #       r.redirect url(quux, '/bar') # http://example.com/quux/1/bar
     #     end
     #   end
     #
-    # The path method accepts the following options when not called with a class:
+    # The path class method accepts the following options when not called with a class:
     #
     # :add_script_name :: Prefix the path generated with SCRIPT_NAME. This defaults to the app's
     #                     :add_script_name option.
@@ -62,7 +63,7 @@ class Roda
     #         method.  If a Symbol or String, uses the value as the url method name.
     # :url_only :: Do not create a path method, just a url method.
     #
-    # Note that if :add_script_name, :url, or :url_only is used, the path method will also create a
+    # Note that if :add_script_name, :relative, :url, or :url_only is used, the path method will also create a
     # <tt>_*_path</tt> private method.
     module Path
       DEFAULT_PORTS = {'http' => 80, 'https' => 443}.freeze
@@ -165,14 +166,8 @@ class Roda
             end
 
             url_block = lambda do |*a, &blk|
-              r = request
-              scheme = r.scheme
-              port = r.port
-              uri = ["#{scheme}://#{r.host}#{":#{port}" unless DEFAULT_PORTS[scheme] == port}"]
-              uri << request.script_name.to_s if add_script_name
               # Allow calling private _method to get path
-              uri << send(_meth, *a, &blk)
-              File.join(uri)
+              "#{_base_url}#{request.script_name if add_script_name}#{send(_meth, *a, &blk)}"
             end
 
             define_method(url_meth, &url_block)
@@ -206,6 +201,21 @@ class Roda
           path = send(meth, obj, *args, &block)
           path = request.script_name.to_s + path if opts[:add_script_name]
           path
+        end
+
+        # Similar to #path, but returns a complete URL.
+        def url(*args, &block)
+          "#{_base_url}#{path(*args, &block)}"
+        end
+
+        private
+
+        # The string to prepend to the path to make the path a URL.
+        def _base_url
+          r = @_request
+          scheme = r.scheme
+          port = r.port
+          "#{scheme}://#{r.host}#{":#{port}" unless DEFAULT_PORTS[scheme] == port}"
         end
       end
     end

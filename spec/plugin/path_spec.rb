@@ -134,9 +134,11 @@ describe "path plugin" do
   before do
     app(:bare) do
       plugin :path
-      route{|r| path(*env['path'])}
+      route do |r|
+        r.get("url"){url(*env['path'])}
+        path(*env['path'])
+      end
     end
-
 
     c = Class.new{attr_accessor :a}
     app.path(c){|obj, *args| "/d/#{obj.a}/#{File.join(*args)}"}
@@ -182,6 +184,12 @@ describe "path plugin" do
 
     @app = old_app
     body('path'=>'/a').must_equal '/a'
+  end
+
+  it "Roda#url works similar to Roda#path but turns it into a full URL" do
+    body("/url", 'path'=>@obj, 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal 'http://example.org/d/1/'
+    body("/url", 'path'=>[@obj, 'foo'], 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'https', 'SERVER_PORT'=>443).must_equal 'https://example.org/d/1/foo'
+    body("/url", 'path'=>[@obj, 'foo', 'bar'], 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>81).must_equal 'http://example.org:81/d/1/foo/bar'
   end
 
   it "registers classes by reference by default" do
