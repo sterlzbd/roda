@@ -154,7 +154,7 @@ For larger applications, there are some slight changes to the Roda application f
 
     use SomeMiddleware
 
-    plugin :render, escape: true
+    plugin :render, escape: true, layout: './layout'
     plugin :assets
     plugin :view_options
     plugin :hash_routes
