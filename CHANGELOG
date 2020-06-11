@@ -1,8 +1,8 @@
 = master
 
-* Add url method to path plugin, similar to path but returning the entire URL (jeremyevans)
+* Add :brotli option to public plugin to supplement it to serve brotli-compressed files like :gzip does for gzipped files (hmdne) (#194)
 
-* Add :brotli option to public plugin to supplement it to serve brotli-compressed files like :gzip does for gzipped files (hmdne)
+* Add url method to path plugin, similar to path but returning the entire URL (jeremyevans)
 
 = 3.32.0 (2020-05-15)
 
