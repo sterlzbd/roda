@@ -82,4 +82,34 @@ describe "public plugin" do
     h['Content-Type'].must_be_nil
     b.must_equal []
   end
+
+  it "handles serving brotli files in brotli mode if client supports brotli and falls back gracefully" do
+    app(:bare) do
+      plugin :public, :root=>'spec/views', :gzip=>true, :brotli=>true
+
+      route do |r|
+        r.public
+      end
+    end
+    
+    body('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br').must_equal File.binread('spec/views/about/_test2.css.br')
+    h = req('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br')[1]
+    h['Content-Encoding'].must_equal 'br'
+    h['Content-Type'].must_equal 'text/css'
+
+    body('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test2.css.gz')
+    h = req('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
+    h['Content-Encoding'].must_equal 'gzip'
+    h['Content-Type'].must_equal 'text/css'
+
+    body('/about/_test2.css').must_equal File.binread('spec/views/about/_test2.css')
+    h = req('/about/_test2.css')[1]
+    h['Content-Encoding'].must_be_nil
+    h['Content-Type'].must_equal 'text/css'
+
+    body('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br').must_equal File.binread('spec/views/about/_test.css.gz')
+    h = req('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br')[1]
+    h['Content-Encoding'].must_equal 'gzip'
+    h['Content-Type'].must_equal 'text/css'
+  end
 end
