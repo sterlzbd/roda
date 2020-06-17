@@ -453,6 +453,10 @@ describe "typecast_params plugin" do
     lambda{tp('b[]=1&c[]=').array!(:int, %w'b c')}.must_raise @tp_error
   end
 
+  it "#array should raise ProgrammerError for invalid types" do
+    proc{tp('b[]=1').array(:int2, 'b')}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
+  end
+
   it "#[] should access nested values" do
     tp['c'].must_be_kind_of tp.class
     tp['c'].int('d').must_equal 4
@@ -721,6 +725,17 @@ describe "typecast_params plugin" do
     lambda{tp['b'].convert_each!{}}.must_raise @tp_error
   end
 
+  it "#convert_each! should not include duplicate errors if there is an internal rescue" do
+    tp = tp('a=')
+    begin
+      tp.convert! do |tp0|
+        tp0['a'].convert_each!{} rescue nil; tp0['a'].convert_each!{}
+      end
+    rescue @tp_error => e
+    end
+    e.all_errors.length.must_equal 1
+  end
+
   it "#convert_each! should not raise errors for missing keys if :raise option is false" do
     tp = tp('a[0][b]=1&a[0][c]=2&a[1][b]=3&a[1][c]=4')
     tp['a'].convert_each!(:keys=>%w'0 2', :raise=>false) do |tp0|
@@ -915,6 +930,19 @@ describe "typecast_params plugin" do
         end
       end
     end.must_equal(:a=>[{'b'=>[{:e=>1}]}])
+  end
+
+  it "#convert! should add Error if raised and not also the last capture" do
+    tp = tp()
+    begin
+      tp.convert! do |ptp|
+        raise @tp_error.create('a', 'b', ArgumentError.new('c'))
+      end
+    rescue @tp_error => e
+    end
+    e.must_be_instance_of  @tp_error
+    e.all_errors.length.must_equal 1
+    e.all_errors.first.message.must_equal 'ArgumentError: c'
   end
 
   it "#dig should return nested values or nil if there is no value" do
@@ -1180,6 +1208,21 @@ describe "typecast_params plugin" do
     e.param_names.must_equal %w'a[2] a[3]'
     e.all_errors.map(&:reason).must_equal [:missing, :missing]
   end
+
+  it "Error.create should handle existing errors with a backtrace" do
+    e = ArgumentError.new('a')
+    e.set_backtrace(nil)
+    e = @tp_error.create('a', 'b', e)
+    e.must_be_instance_of @tp_error
+    e.message.must_equal "ArgumentError: a"
+    e.keys.must_equal 'a'
+    e.reason.must_equal 'b'
+    e.backtrace.must_be_nil
+  end
+
+  it "should raise error invalid params format" do
+    proc{Roda::RodaPlugins::TypecastParams::Params.new([]).int('a')}.must_raise @tp_error
+  end
 end
 
 describe "typecast_params plugin with customized params" do 
@@ -1358,7 +1401,7 @@ describe "typecast_params plugin with strip: :all option" do
     @tp_error = Roda::RodaPlugins::TypecastParams::Error
   end
 
-  it "#file should require an uploaded file" do
+  it "#should strip String values" do
     tp.str('a').must_equal '1'
     tp.nonempty_str('a').must_equal '1'
     tp.int('a').must_equal 1
@@ -1366,5 +1409,9 @@ describe "typecast_params plugin with strip: :all option" do
     tp.Integer('a').must_equal 1
     tp.float('a').must_equal 1.0
     tp.Float('a').must_equal 1.0
+  end
+
+  it "#should not attempt to strip non-String values" do
+    @tp.call("a[]=1").any('a').must_equal ["1"]
   end
 end

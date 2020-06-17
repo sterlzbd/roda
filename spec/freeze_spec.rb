@@ -34,4 +34,19 @@ describe "Roda.freeze" do
   it "should freeze app" do
     app.frozen?.must_equal true
   end
+
+  it "should work after adding middleware" do
+    app(:bare) do
+      use(Class.new do
+        def initialize(app) @app = app end
+        def call(env) @app.call(env) end
+      end)
+      route do |_|
+        'a'
+      end
+    end
+
+    app.freeze
+    body.must_equal 'a'
+  end
 end

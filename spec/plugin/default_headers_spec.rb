@@ -79,4 +79,23 @@ describe "default_headers plugin" do
     app.default_headers.must_equal h
     app::RodaResponse.new.default_headers.must_equal h
   end
+
+  it "should work correctly when frozen" do
+    h = {'Content-Type'=>'text/json', 'Foo'=>'bar'}
+
+    app(:bare) do
+      plugin :default_headers, h
+      route do |r|
+        r.halt response.finish_with_body([])
+      end
+    end
+
+    req[1].must_equal h
+    req[1].wont_be_same_as h 
+
+    app.freeze
+    req[1].must_equal h
+    req[1].wont_be_same_as h 
+  end
+
 end
