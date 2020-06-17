@@ -876,7 +876,7 @@ class Roda
         def handle_error(key, reason, e, do_raise=false)
           case e
           when String
-            handle_error(key, reason, Error.new(e), do_raise=false)
+            handle_error(key, reason, Error.new(e), do_raise)
           when Error, ArgumentError
             if @capture && (le = @capture.last) && le == e
               raise e if do_raise
