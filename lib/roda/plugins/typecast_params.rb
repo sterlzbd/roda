@@ -742,9 +742,7 @@ class Roda
             return
           end
 
-          if v = self[key]
-            v.subkey(keys, do_raise)
-          end
+          self[key].subkey(keys, do_raise)
         rescue => e
           handle_error(key, reason, e)
         end
