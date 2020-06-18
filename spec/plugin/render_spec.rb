@@ -310,6 +310,19 @@ describe "render plugin" do
         app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
       end
 
+      it "raises an exception and does not cache if trying to render a directory with :cache=>#{cache_plugin_option}" do
+        app(:bare) do
+          plugin :render, :views=>'spec', :cache=>cache_plugin_option
+          route do
+            render('views')
+          end
+        end
+
+        app.render_opts[:template_method_cache]['views'].must_be_nil
+        proc{body}.must_raise SystemCallError
+        app.render_opts[:template_method_cache]['views'].must_be_nil
+      end
+
       ['comp_test', :comp_test].each do |template|
         it "does not cache template renders when given a hash with #{template.class} value with plugin option :cache=>#{cache_plugin_option}" do
           app(:bare) do
@@ -345,6 +358,38 @@ describe "render plugin" do
           body.strip.must_equal "ct"
           app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
+        end
+
+        it "does not cache template renders when there is no template method cache with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            plugin :render, :views=>'spec/views', :cache=>cache_plugin_option
+            route do
+              render(template)
+            end
+          end
+
+          app.opts[:render] = app.opts[:render].dup
+          app.opts[:render].delete(:template_method_cache)
+          3.times do
+            body.strip.must_equal "ct"
+          end
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
+        end
+
+        it "does not cache template renders with locals when there is no template method cache with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            plugin :render, :views=>'spec/views', :cache=>cache_plugin_option
+            route do
+              render(template, :locals => {:a=>1})
+            end
+          end
+
+          app.opts[:render] = app.opts[:render].dup
+          app.opts[:render].delete(:template_method_cache)
+          3.times do
+            body.strip.must_equal "ct"
+          end
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal 0
         end
 
         it "does not cache template views or layout when given a hash with #{template.class} value with plugin option :cache=>#{cache_plugin_option}" do
@@ -393,6 +438,47 @@ describe "render plugin" do
           app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal(2*multiplier)
+        end
+
+        it "caches template views with inline layout when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            plugin :render, :views=>'spec/views', :layout=>{:inline=>"a<%= yield %>b"}, :cache=>cache_plugin_option
+            route do
+              view(template)
+            end
+          end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier)
+        end
+
+        it "caches template views with inline layout when given a #{template.class} with explicitly not caching layout when using plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            layout = template.to_s.sub('test', 'layout')
+            layout = layout.to_sym if template.is_a?(Symbol)
+            plugin :render, :views=>'spec/views', :layout=>layout, :cache=>cache_plugin_option
+            route do
+              view(template)
+            end
+          end
+
+          3.times do
+            app.render_opts[:template_method_cache][:_roda_layout] = false
+            body.strip.must_equal "act\nb"
+            app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+            app.render_opts[:template_method_cache][:_roda_layout].must_equal false
+          end
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier)
         end
 
         it "caches template views without layout when additional layout options given when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
@@ -848,6 +934,13 @@ describe "render plugin" do
     Class.new(app).render_opts[:cache].must_respond_to :test_method
   end
 
+  it "supports template_opts default_encoding option" do
+    app(:bare){}
+    app.plugin :render
+    app.render_opts[:template_opts][:default_encoding].must_equal Encoding.default_external
+    app.plugin :render, :template_opts=>{:default_encoding=>'ISO-8859-1'}
+    app.render_opts[:template_opts][:default_encoding].must_equal 'ISO-8859-1'
+  end
 end
 end
 

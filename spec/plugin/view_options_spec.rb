@@ -87,6 +87,22 @@ describe "view_options plugin" do
     body.strip.must_equal "<title>Alternative Layout: Home</title>\n<h1>Subdir: About Roda</h1>"
   end
 
+  it "should skip template compilation when only :locals key is given when using view options" do
+    app(:bare) do
+      plugin :render, :views=>'spec/views', :allowed_paths=>['spec/views']
+      plugin :view_options
+
+      route do
+        set_view_options :views=>'spec/views/about'
+        render('_test', :locals=>{:title=>'About Roda'})
+      end
+    end
+
+    3.times do
+      body.strip.must_equal "<h1>Subdir: About Roda</h1>"
+    end
+  end
+
   it "should allow overriding :layout plugin option with set_layout_options :template" do
     app(:bare) do
       plugin :render, :views=>'spec/views', :allowed_paths=>['spec/views']

@@ -75,6 +75,19 @@ describe "sinatra_helpers plugin" do
     body.must_equal 'false'
   end
 
+  it 'status predicate methods return nil if status is not set' do
+    sin_app{informational?.inspect}
+    body.must_equal 'nil'
+    sin_app{success?.inspect}
+    body.must_equal 'nil'
+    sin_app{redirect?.inspect}
+    body.must_equal 'nil'
+    sin_app{client_error?.inspect}
+    body.must_equal 'nil'
+    sin_app{server_error?.inspect}
+    body.must_equal 'nil'
+  end
+
   describe 'body' do
     it 'takes a block for deferred body generation' do
       sin_app{body{'Hello World'}; nil}
@@ -99,6 +112,15 @@ describe "sinatra_helpers plugin" do
       o = Object.new
       def o.each; yield 'Hello World' end
       sin_app{body o; nil}
+      body.must_equal 'Hello World'
+      header('Content-Length').must_equal '11'
+    end
+
+    it 'returns previously set body' do
+      sin_app do
+        response.body 'Hello World'
+        response.body.join.must_equal 'Hello World'
+      end
       body.must_equal 'Hello World'
       header('Content-Length').must_equal '11'
     end

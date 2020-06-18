@@ -260,6 +260,19 @@ if run_tests
       js.must_include('console.log')
     end
 
+    it 'should not handle non-GET requests for asset rouets' do
+      html = body('/test')
+      html =~ %r{href="(/assets/css/app\.scss)"}
+      html.scan(/<link/).length.must_equal 2
+      html =~ %r{href="(/assets/css/app\.scss)"}
+      status($1, 'REQUEST_METHOD'=>'POST').must_equal 404
+      html =~ %r{href="(/assets/css/raw\.css)"}
+      status($1, 'REQUEST_METHOD'=>'POST').must_equal 404
+      html.scan(/<script/).length.must_equal 1
+      html =~ %r{src="(/assets/js/head/app\.js)"}
+      status($1, 'REQUEST_METHOD'=>'POST').must_equal 404
+    end
+
     it 'should handle early hints if the :early_hints option is used' do
       app.plugin :assets, :early_hints=>true
       eh = []
@@ -380,8 +393,48 @@ if run_tests
       try_compressor.call(:none, :minjs)
     end
 
+    it 'should not try compressing if concat_only option is used' do
+      try_compressor = proc do |css, js|
+        app.plugin :assets, :css_compressor=>css, :js_compressor=>js, :concat_only=>true
+        app.compile_assets
+        File.read("spec/assets/app.#{app.assets_opts[:compiled]['css']}.css").must_include('color: blue')
+        File.read("spec/assets/app.head.#{app.assets_opts[:compiled]['js.head']}.js").must_include('console.log')
+      end
+
+      try_compressor.call(nil, nil)
+      try_compressor.call(:yui, :yui)
+      try_compressor.call(:none, :closure)
+      try_compressor.call(:none, :uglifier)
+      try_compressor.call(:none, :minjs)
+    end
+
+    it 'should handle custom compression methods that return nil by using uncompressed output' do
+      app.plugin :assets, :css_compressor=>nil, :js_compressor=>nil
+      app.define_singleton_method(:compress_js_yui){|*|}
+      app.define_singleton_method(:compress_css_yui){|*|}
+      app.compile_assets
+      File.read("spec/assets/app.#{app.assets_opts[:compiled]['css']}.css").must_include('color: blue')
+      File.read("spec/assets/app.head.#{app.assets_opts[:compiled]['js.head']}.js").must_include('console.log')
+    end
+
     it 'should handle compiling assets, linking to them, and accepting requests for them' do
       app.plugin :assets, :js=>{:head => %w'comment_1.js comment_2.js'}
+      app.compile_assets
+      html = body('/test')
+      html.scan(/<script/).length.must_equal 1
+      html =~ %r{src="(/assets/app\.head\.[a-f0-9]{64}\.js)"}
+      js = body($1)
+      js.must_equal <<END
+// test
+/*
+a = 1;
+*/
+END
+    end
+
+    it 'should handle calling compile_assets multiple times' do
+      app.plugin :assets, :js=>{:head => %w'comment_1.js comment_2.js'}
+      app.compile_assets
       app.compile_assets
       html = body('/test')
       html.scan(/<script/).length.must_equal 1
