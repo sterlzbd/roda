@@ -287,7 +287,9 @@ class Roda
           false
         end
 
+        # :nocov:
         if COMPILED_METHOD_SUPPORT
+        # :nocov:
           # Compile a method in the given module with the given name that will
           # call the compiled template method, updating the compiled template method
           def define_compiled_method(roda_class, method_name, locals_keys=EMPTY_ARRAY)
@@ -337,7 +339,9 @@ class Roda
         def inherited(subclass)
           super
           opts = subclass.opts[:render] = subclass.opts[:render].dup
+          # :nocov:
           if COMPILED_METHOD_SUPPORT
+          # :nocov:
             opts[:template_method_cache] = (opts[:cache_class] || RodaCache).new
           end
           opts[:cache] = opts[:cache].dup
