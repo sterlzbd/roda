@@ -50,6 +50,8 @@ describe "exception_page plugin" do
     body = body('HTTP_ACCEPT'=>'text/html')
     body.wont_include "table td.code"
     body.wont_include "function toggle()"
+    body.wont_include "id=\"bc"
+    body.wont_include "id=\"ac"
     body.must_include "\"/exception_page.css\""
     body.must_include "\"/exception_page.js\""
 

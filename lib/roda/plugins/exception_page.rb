@@ -252,11 +252,19 @@ END
                 begin
                   lineno -= 1
                   lines = ::File.readlines(filename)
-                  pre_lineno = frame[:pre_context_lineno] = [lineno-context, 0].max
-                  frame[:pre_context] = lines[pre_lineno...lineno]
-                  frame[:context_line] = lines[lineno].chomp
-                  post_lineno = frame[:post_context_lineno] = [lineno+context, lines.size].min
-                  frame[:post_context] = lines[lineno+1..post_lineno]
+                  if frame[:context_line] = lines[lineno].chomp
+                    pre_lineno = [lineno-context, 0].max
+                    if (pre_context = lines[pre_lineno...lineno]) && !pre_context.empty?
+                      frame[:pre_context_lineno] = pre_lineno
+                      frame[:pre_context] = pre_context
+                    end
+
+                    post_lineno = [lineno+context, lines.size].min
+                    if (post_context = lines[lineno+1..post_lineno]) && !post_context.empty?
+                      frame[:post_context_lineno] = post_lineno
+                      frame[:post_context] = post_context
+                    end
+                  end
                 rescue
                 end
 
