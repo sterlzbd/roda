@@ -252,7 +252,7 @@ END
                 begin
                   lineno -= 1
                   lines = ::File.readlines(filename)
-                  if frame[:context_line] = lines[lineno].chomp
+                  if line = lines[lineno]
                     pre_lineno = [lineno-context, 0].max
                     if (pre_context = lines[pre_lineno...lineno]) && !pre_context.empty?
                       frame[:pre_context_lineno] = pre_lineno
@@ -264,6 +264,8 @@ END
                       frame[:post_context_lineno] = post_lineno
                       frame[:post_context] = post_context
                     end
+
+                    frame[:context_line] = line.chomp
                   end
                 rescue
                 end
