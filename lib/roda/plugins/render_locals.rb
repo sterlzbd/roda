@@ -43,7 +43,9 @@ class Roda
       module InstanceMethods
         private
 
+        # :nocov:
         if Render::COMPILED_METHOD_SUPPORT
+        # :nocov:
           # Disable use of cached templates, since it assumes a render/view call with no
           # options will have no locals.
           def _cached_template_method(template)

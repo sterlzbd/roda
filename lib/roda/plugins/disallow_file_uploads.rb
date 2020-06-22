@@ -1,6 +1,8 @@
 # frozen-string-literal: true
 
+# :nocov:
 raise LoadError, "disallow_file_uploads plugin not supported on Rack <1.6" if Rack.release < '1.6'
+# :nocov:
 
 #
 class Roda

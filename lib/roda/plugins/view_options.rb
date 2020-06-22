@@ -126,7 +126,9 @@ class Roda
 
         private
 
+        # :nocov:
         if Render::COMPILED_METHOD_SUPPORT
+        # :nocov:
           # Return nil if using custom view or layout options.
           # If using a view subdir, prefix the template key with the subdir.
           def _cached_template_method_key(template)
