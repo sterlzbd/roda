@@ -40,4 +40,23 @@ describe "match_affix plugin" do
     body("/albums/b").must_equal 'albums/b:'
     body("/albums/b/").must_equal 'albums/b:'
   end
+
+  it "allows changing the match prefix without suffix" do
+    app(:bare) do
+      plugin :match_affix, ""
+
+      route do |r|
+        r.on "/albums" do
+          r.on "/b" do
+            "albums-b-#{r.remaining_path}"
+          end
+
+          "albums-#{r.remaining_path}"
+        end
+      end
+    end
+
+    body("/albums/a/1").must_equal 'albums-/a/1'
+    body("/albums/b/1").must_equal 'albums-b-/1'
+  end
 end

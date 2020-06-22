@@ -28,7 +28,7 @@ class Roda
     #
     # This plugin automatically loads the placeholder_string_matchers plugin.
     module MatchAffix
-      def self.load_dependencies(app, _prefix, _suffix)
+      def self.load_dependencies(app, _prefix, _suffix=nil)
         app.plugin :placeholder_string_matchers
       end
 
