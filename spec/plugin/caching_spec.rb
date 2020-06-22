@@ -14,6 +14,13 @@ describe 'response.cache_control' do
     end
     header('Cache-Control').must_be_nil
   end
+
+  it 'skips Cache-Control nil parameters' do
+    app(:caching) do |r|
+      response.cache_control(:max_age=>nil)
+    end
+    header('Cache-Control').must_be_nil
+  end
 end
 
 describe 'response.expires' do

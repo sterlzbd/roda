@@ -82,4 +82,16 @@ describe "timestamp_public plugin" do
     h['Content-Encoding'].must_equal 'gzip'
     h['Content-Type'].must_equal 'text/css'
   end
+
+  it "returns 404 for non-GET requests" do
+    app(:bare) do
+      plugin :timestamp_public, :root=>'spec/views', :prefix=>'foo'
+
+      route do |r|
+        r.timestamp_public
+      end
+    end
+
+    status("/foo/1/about/_test.erb", "REQUEST_METHOD"=>"POST").must_equal 404
+  end
 end

@@ -192,6 +192,18 @@ describe "hash_routes plugin - hash_routes DSL" do
     body('/d', 'REQUEST_METHOD'=>'POST').must_equal ''
     body('/d/').must_equal 'n'
   end
+
+  it "r.hash_routes with verb handles true" do
+    app.hash_routes "" do
+      get true do
+        'dg'
+      end
+    end
+
+    body('').must_equal 'dg'
+    body('', 'REQUEST_METHOD'=>'POST').must_equal ''
+    body('/').must_equal 'n'
+  end
 end
 
 describe "hash_routes plugin - hash_branch" do 

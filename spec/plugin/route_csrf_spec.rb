@@ -85,6 +85,24 @@ describe "route_csrf plugin" do
     proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'HTTP_X_CSRF_TOKEN'=>token)}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
   end
 
+  it "allows tokens specified via :token option to check_csrf" do
+    app(:bare) do
+      send(*DEFAULT_SESSION_ARGS) unless opts[:no_sessions_plugin]
+      plugin(:route_csrf)
+      route do |r|
+        check_csrf!(:token=>env['TOKEN'])
+        r.post('foo'){'f'}
+        r.get "token", String do |s|
+          csrf_token("/#{s}")
+        end
+      end
+    end
+    token = body("/token/foo")
+    token.length.must_equal 84
+    body("/foo", "REQUEST_METHOD"=>'POST', 'TOKEN'=>token).must_equal 'f'
+    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'TOKEN'=>token+'1')}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+  end
+
   it "allows configuring CSRF failure action with :csrf_failure => :empty_403 option" do
     route_csrf_app(:csrf_failure=>:empty_403)
     body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'

@@ -19,6 +19,14 @@ describe "strip_path_prefix plugin" do
 
     app.opts[:root] = '/foo/bar'
     app.expand_path('baz').must_equal 'bar/baz'
+
+    app(:bare){}
+    app.opts[:root] = '/foo'
+    app.expand_path('bar').must_equal '/foo/bar'
+    app.plugin :strip_path_prefix, '/foo/'
+    app.expand_path('bar').must_equal 'bar'
+
+    app.opts[:root] = '/foo/bar'
+    app.expand_path('baz').must_equal 'bar/baz'
   end
 end
-

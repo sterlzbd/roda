@@ -19,6 +19,10 @@ describe "params_capturing plugin" do
         "y-#{r.params['y']}-#{q}-#{y}-#{r.params['captures'].length}"
       end
 
+      r.on('z') do
+        r.send(:match, :y) ? 'yes' : 'no'
+      end
+
       r.on(:x) do |x|
         "x-#{x}-#{r.params['x']}-#{r.params['captures'].length}"
       end
@@ -29,5 +33,7 @@ describe "params_capturing plugin" do
     body('/quux/foobar', 'rack.input'=>StringIO.new).must_equal 'y-quuxfoobar-quux-foo-bar'
     body('/quux/asdf', 'rack.input'=>StringIO.new).must_equal 'y--quux-asdf-2'
     body('/quux/asdf/890', 'rack.input'=>StringIO.new).must_equal 'y--890-quux-asdf-890-3'
+    body('/z', 'rack.input'=>StringIO.new).must_equal 'no'
+    body('/z/x', 'rack.input'=>StringIO.new).must_equal 'yes'
   end
 end

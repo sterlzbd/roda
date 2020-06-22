@@ -77,6 +77,16 @@ describe "path plugin" do
     body("foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/bar/foo"
   end
 
+  it "respects :add_script_name app option for automatically adding the script name for url methods" do
+    path_script_name_app(:foo, :url=>true){"/bar/foo"}
+    body("foo_url", 'SCRIPT_NAME'=>'/baz', 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/baz/bar/foo"
+  end
+
+  it "supports :add_script_name=>false option for not automatically adding the script name for url methods" do
+    path_script_name_app(:foo, :add_script_name=>false, :url=>true){"/bar/foo"}
+    body("foo_url", 'SCRIPT_NAME'=>'/baz', 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/bar/foo"
+  end
+
   it "supports path method accepting a block when using :add_script_name" do
     path_block_app(lambda{"c"}, :foo, :add_script_name=>true){|&block| "/bar/foo/#{block.call}"}
     body("foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo/c"
@@ -244,6 +254,20 @@ describe "path plugin" do
   it "Roda.path doesn't work after freezing the app" do
     app.freeze
     proc{app.path(Class.new){|obj| ''}}.must_raise
+  end
+
+  it "works if the plugin is loaded twice" do
+    app(:bare) do
+      plugin :path
+      plugin :path
+      path :foo, "/foo"
+
+      route do |r|
+        "#{foo_path}"
+      end
+    end
+
+    body.must_equal '/foo'
   end
 end
 

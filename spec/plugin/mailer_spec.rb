@@ -143,6 +143,29 @@ describe "mailer plugin" do
     m.content_type.must_match(/\Amultipart\/mixed/)
   end
 
+  it "does not override explicit content type for non-plain/text bodies in multipart emails" do
+    app(:mailer) do |r|
+      r.mail do
+        instance_exec(&setup_email)
+        response.headers['Content-Type'] = 'text/plain'
+        response.mail.body 'c'
+        response.mail.add_file :filename=>'a.html', :content=>'b'
+        response.mail.parts.first.content_type = 'text/html'
+        nil
+      end
+    end
+
+    m = app.mail('foo')
+    m.parts.length.must_equal 2
+    m.parts.first.content_type.must_match(/text\/html/)
+    m.parts.first.body.must_be :==, 'c'
+    m.parts.last.content_type.must_match(/text\/html/)
+    m.parts.last.body.must_be :==, 'b'
+    m.attachments.length.must_equal 1
+    m.attachments.first.content_type.must_match(/a\.html/)
+    m.content_type.must_match(/\Amultipart\/mixed/)
+  end
+
   it "supports regular web requests in same application" do
     app(:mailer) do |r|
       r.get "foo", :bar do |bar|
@@ -156,6 +179,20 @@ describe "mailer plugin" do
 
     body("/foo/baz", 'rack.input'=>StringIO.new).must_equal 'foobaz'
     app.mail('/bar').body.must_be :==, 'b'
+  end
+
+  it "should not have r.mail handle non-mail requests" do
+    app(:mailer) do |r|
+      r.mail "bar" do
+        instance_exec(&setup_email)
+        "b"
+      end
+      r.get "bar" do
+        "foo"
+      end
+    end
+
+    body("/bar").must_equal 'foo'
   end
 
   it "supports multipart email using text_part/html_pat" do

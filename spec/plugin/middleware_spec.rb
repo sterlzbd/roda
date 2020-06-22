@@ -234,4 +234,54 @@ describe "middleware plugin" do
     body('/a').must_equal '/a2'
     body('/x').must_equal 'b'
   end
+
+  it "supports :env_var middleware option" do
+    a2 = app(:bare) do
+      plugin :middleware, :env_var=>'roda.fn'
+
+      route do |r|
+        r.is "a" do
+          "a2"
+        end
+        r.post "b" do
+          "b2"
+        end
+      end
+    end
+
+    a3 = app(:bare) do
+      plugin :middleware, :env_var=>'roda.fn2'
+
+      route do |r|
+        r.get "a" do
+          "a3"
+        end
+        r.get "b" do
+          "b3"
+        end
+      end
+    end
+
+    app(:bare) do
+      use a3
+      use a2
+
+      route do |r|
+        r.is "a" do
+          "a1"
+        end
+        r.is "b" do
+          "b1"
+        end
+      end
+    end
+
+    body('/a').must_equal 'a3'
+    body('/b').must_equal 'b3'
+    body('/a', 'REQUEST_METHOD'=>'POST').must_equal 'a2'
+    body('/b', 'REQUEST_METHOD'=>'POST').must_equal 'b2'
+    body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
+    body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
+  end
 end
+

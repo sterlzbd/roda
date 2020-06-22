@@ -120,6 +120,33 @@ describe "exception_page plugin" do
     bt.first.must_include __FILE__
   end
 
+  it "handles exceptions without a backtrace" do
+    app(:exception_page) do |r|
+      e = ArgumentError.new("foo")
+      e.set_backtrace([])
+      raise e rescue exception_page($!)
+    end
+    s, h, body = req('HTTP_ACCEPT'=>'text/html')
+
+    s.must_equal 200
+    h['Content-Type'].must_equal 'text/html'
+    body = body.join
+    body.must_include "<title>ArgumentError at /"
+    body.must_include "<h1>ArgumentError at /</h1>"
+    body.must_include "<h2>foo</h2>"
+    body.must_include "unknown location"
+    body.must_include "No GET data"
+    body.must_include "No POST data"
+    body.must_include "No cookie data"
+    body.must_include "Rack ENV"
+    body.must_include "HTTP_ACCEPT"
+    body.must_include "text/html"
+    body.must_include "table td.code"
+    body.must_include "function toggle()"
+    body.wont_include "\"/exception_page.css\""
+    body.wont_include "\"/exception_page.js\""
+  end
+
   it "handles exceptions with invalid line numbers in a backtrace" do
     app(:exception_page) do |r|
       e = ArgumentError.new("foo")

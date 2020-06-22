@@ -112,4 +112,16 @@ describe "public plugin" do
     h['Content-Encoding'].must_equal 'gzip'
     h['Content-Type'].must_equal 'text/css'
   end
+
+  it "does not handle non-GET requests" do
+    app(:bare) do
+      plugin :public, :root=>'spec/views'
+
+      route do |r|
+        r.public
+      end
+    end
+
+    status("/about/_test.erb", "REQUEST_METHOD"=>"POST").must_equal 404
+  end
 end

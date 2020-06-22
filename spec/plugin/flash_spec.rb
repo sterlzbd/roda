@@ -46,6 +46,14 @@ describe "flash plugin" do
       body('/f').must_equal '{"a"=>"bbb"}'
       body('/f').must_equal 'nil'
     end
+
+    it "works correctly if flash not accessed" do
+      app(:bare) do
+        instance_exec(&config)
+        route{'a'}
+      end
+      body.must_equal 'a'
+    end
   end
 end
 

@@ -1,12 +1,21 @@
 require_relative "../spec_helper"
 
 describe "halt plugin" do
+  it "should still have halt return current response if no arguments given" do
+    app(:halt) do |r|
+      response.write 'foo'
+      r.halt
+    end
+
+    body.must_equal "foo"
+  end
+
   it "should still have halt return rack response as argument given it as argument" do
     app(:halt) do |r|
       r.halt [200, {}, ['foo']]
     end
 
-    body.must_equal  "foo"
+    body.must_equal "foo"
   end
 
   it "should consider string argument as response body" do
@@ -14,7 +23,7 @@ describe "halt plugin" do
       r.halt "foo"
     end
 
-    body.must_equal  "foo"
+    body.must_equal "foo"
   end
 
   it "should consider integer argument as response status" do

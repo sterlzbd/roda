@@ -12,6 +12,10 @@ describe "view_options plugin view subdirs" do
       plugin :view_options
 
       route do |r|
+        r.on "default" do
+          render("spec/views/comp_test")
+        end
+
         append_view_subdir 'spec' 
 
         r.on "home" do
@@ -52,6 +56,12 @@ describe "view_options plugin view subdirs" do
 
   it "should not change behavior when subdir is not set" do
     body("/path").strip.must_equal "<h1>Path</h1>"
+  end
+
+  it "should not affect behavior if methods not called during routing" do
+    3.times do
+      body("/default").strip.must_equal "ct"
+    end
   end
 
   it "should handle template compilation correctly" do

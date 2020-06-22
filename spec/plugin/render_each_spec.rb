@@ -53,15 +53,19 @@ describe "render_each plugin" do
         end
       end
 
-      3.times do
-        body.must_equal "r-1-\nr-2-\nr-3-\n"
-        body("/a").must_equal "r--1\nr--2\nr--3\n"
-        body("/b").must_equal "r--\nr--\nr--\n"
-        body("/c").must_equal "r-1-4\nr-2-4\nr-3-4\n"
-        body("/d").must_equal "r-1-\nr-2-\nr-3-\n"
-        body("/e").must_equal "r-1-\nr-2-\nr-3-\n"
-        body("/f").must_equal "r-1-\nr-2-\nr-3-\n"
-        body("/g").must_equal "r-1-\nr-2-\nr-3-\n"
+      2.times do
+        3.times do
+          body.must_equal "r-1-\nr-2-\nr-3-\n"
+          body("/a").must_equal "r--1\nr--2\nr--3\n"
+          body("/b").must_equal "r--\nr--\nr--\n"
+          body("/c").must_equal "r-1-4\nr-2-4\nr-3-4\n"
+          body("/d").must_equal "r-1-\nr-2-\nr-3-\n"
+          body("/e").must_equal "r-1-\nr-2-\nr-3-\n"
+          body("/f").must_equal "r-1-\nr-2-\nr-3-\n"
+          body("/g").must_equal "r-1-\nr-2-\nr-3-\n"
+        end
+        app.opts[:render] = app.opts[:render].dup
+        app.opts[:render].delete(:template_method_cache)
       end
     end
 

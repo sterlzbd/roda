@@ -308,7 +308,7 @@ describe "mail_processor plugin" do
         processed << :a
       end
     end
-    app.rcpt(/(.*[bcd])@example.com/i) do |r, x|
+    app.rcpt(/(.*[bcd])@example.com/, /(.*[bcd]2)@example.com/) do |r, x|
       r.handle do
         processed << :bcd << x
       end
@@ -337,6 +337,8 @@ describe "mail_processor plugin" do
     check{app.process_mail(new_mail{|m| m.to 'd@example.com'; m.cc 'a@example.com'})}.must_equal [:a]
     check{app.process_mail(new_mail{|m| m.to 'd@example.com'; m.cc []})}.must_equal [:bcd, 'd']
     check{app.process_mail(new_mail{|m| m.to '123d@example.com123'; m.cc []})}.must_equal [:bcd, '123d']
+    check{app.process_mail(new_mail{|m| m.to 'd2@example.com'; m.cc []})}.must_equal [:bcd, 'd2']
+    check{app.process_mail(new_mail{|m| m.to '123d2@example.com123'; m.cc []})}.must_equal [:bcd, '123d2']
     check{app.process_mail(new_mail{|m| m.to 'e@example.com'; m.cc []})}.must_equal [:cde, 'e', '']
     check{app.process_mail(new_mail{|m| m.to '123e@example.com123'; m.cc []})}.must_equal [:cde, 'e', '123']
     check{proc{app.process_mail(new_mail{|m| m.to 'x@example.com'})}.must_raise Roda::RodaPlugins::MailProcessor::UnhandledMail}.must_equal [:x]
