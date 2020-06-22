@@ -56,7 +56,6 @@ class Roda
       # currently have a routing block, setup an empty routing block so that things will still work if
       # a routing block isn't added.
       def self.configure(app)
-        app.route{} unless app.route_block
         app.opts[:class_level_routes] ||= []
       end
 
