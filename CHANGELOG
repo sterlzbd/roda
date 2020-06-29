@@ -1,3 +1,11 @@
+= master
+
+* Remove unnecessary conditionals (jeremyevans)
+
+* Allow loading the match_affix plugin with a single argument (jeremyevans)
+
+* Do not include pre/post context sections if empty in the exception_page plugin (jeremyevans)
+
 = 3.33.0 (2020-06-16)
 
 * Add :brotli option to public plugin to supplement it to serve brotli-compressed files like :gzip does for gzipped files (hmdne) (#194)
