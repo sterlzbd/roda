@@ -374,7 +374,7 @@ class Roda
 
       module ResponseMethods
         # Set or retrieve the response status code.
-        def status(value = (return @status; nil))
+        def status(value = nil || (return @status))
           @status = value
         end
 
@@ -401,7 +401,7 @@ class Roda
 
         # Set multiple response headers with Hash, or return the headers if no
         # argument is given.
-        def headers(hash = (return @headers; nil))
+        def headers(hash = nil || (return @headers))
           @headers.merge!(hash)
         end
 
@@ -412,7 +412,7 @@ class Roda
 
         # Set the Content-Type of the response body given a media type or file
         # extension.  See plugin documentation for options.
-        def content_type(type = (return @headers["Content-Type"]; nil), opts = OPTS)
+        def content_type(type = nil || (return @headers["Content-Type"]), opts = OPTS)
           unless (mime_type = mime_type(type) || opts[:default])
             raise RodaError, "Unknown media type: #{type}"
           end
@@ -478,7 +478,7 @@ class Roda
         # If a type and value are given, set the value in Rack's MIME registry.
         # If only a type is given, lookup the type in Rack's MIME registry and
         # return it.
-        def mime_type(type=(return; nil), value = nil)
+        def mime_type(type=nil || (return), value = nil)
           return type.to_s if type.to_s.include?('/')
           type = ".#{type}" unless type.to_s[0] == ?.
           if value
