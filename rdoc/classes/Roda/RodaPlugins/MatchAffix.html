@@ -76,8 +76,7 @@ Roda::RodaPlugins::MatchAffix
 <div class='method public-class' id='method-method-c-configure'>
 <a name='method-c-configure'></a>
 <div class='synopsis'>
-<span class='name'>configure</span>
-<span class='arguments'>(app, prefix, suffix=nil)</span>
+<span class='name'>configure</span><span class='arguments'>(app, prefix, suffix=nil)</span>
 
 </div>
 <div class='description'>
@@ -95,8 +94,7 @@ Roda::RodaPlugins::MatchAffix
 <div class='method public-class' id='method-method-c-load_dependencies'>
 <a name='method-c-load_dependencies'></a>
 <div class='synopsis'>
-<span class='name'>load_dependencies</span>
-<span class='arguments'>(app, _prefix, _suffix)</span>
+<span class='name'>load_dependencies</span><span class='arguments'>(app, _prefix, _suffix=nil)</span>
 
 </div>
 <div class='description'>
@@ -106,7 +104,7 @@ Roda::RodaPlugins::MatchAffix
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/match_affix.rb</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_prefix</span>, <span class="ruby-identifier">_suffix</span>)&#x000A;<span class="line-num">32</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:placeholder_string_matchers</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/match_affix.rb</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_prefix</span>, <span class="ruby-identifier">_suffix</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">32</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:placeholder_string_matchers</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -1,9 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>disallow_file_uploads.rb</title>
+<title>3.34.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
   function popupCode(url) {
     window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
@@ -23,20 +23,31 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>disallow_file_uploads.rb
+<h1 class='name'>3.34.0.txt
 </h1>
 <div class='paths'>
-lib/roda/plugins/disallow_file_uploads.rb
+doc/release_notes/3.34.0.txt
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2020-06-22 15:56:02 -0700</span>
+<span class='datetime'>2020-07-14 07:50:23 -0700</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>:nocov:</p>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Multiple unneeded conditionals have been removed.</p>
+</li><li>
+<p>pre_content and post_context sections in backtraces are no longer included in the exception_page plugin output if they would be empty.</p>
+</li><li>
+<p>The match_affix plugin can be loaded again with a single argument. It was originally designed to accept a single argument, but a bug introduced in 2.29.0 made it require two arguments.</p>
+</li><li>
+<p>Core <a href="../../../classes/Roda.html"><code>Roda</code></a> and all plugins that ship with <a href="../../../classes/Roda.html"><code>Roda</code></a> now have 100% branch coverage.</p>
+</li><li>
+<p>The sinatra_helpers plugin no longer emits statement not reached warnings in verbose mode.</p>
+</li></ul>
 </div>
 <div id='context'>
 </div>

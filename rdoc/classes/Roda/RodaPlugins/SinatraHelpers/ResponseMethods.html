@@ -63,8 +63,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-attachment'>
 <a name='method-i-attachment'></a>
 <div class='synopsis'>
-<span class='name'>attachment</span>
-<span class='arguments'>(filename = nil, disposition='attachment')</span>
+<span class='name'>attachment</span><span class='arguments'>(filename = nil, disposition='attachment')</span>
 
 </div>
 <div class='description'>
@@ -82,8 +81,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-body'>
 <a name='method-i-body'></a>
 <div class='synopsis'>
-<span class='name'>body</span>
-<span class='arguments'>(value = (return @body unless block_given?; nil), &block)</span>
+<span class='name'>body</span><span class='arguments'>(value = (return @body unless block_given?; nil), &block)</span>
 
 </div>
 <div class='description'>
@@ -101,8 +99,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-body-3D'>
 <a name='method-i-body-3D'></a>
 <div class='synopsis'>
-<span class='name'>body=</span>
-<span class='arguments'>(body)</span>
+<span class='name'>body=</span><span class='arguments'>(body)</span>
 
 </div>
 <div class='description'>
@@ -120,8 +117,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-client_error-3F'>
 <a name='method-i-client_error-3F'></a>
 <div class='synopsis'>
-<span class='name'>client_error?</span>
-<span class='arguments'>()</span>
+<span class='name'>client_error?</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>
@@ -139,8 +135,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-content_type'>
 <a name='method-i-content_type'></a>
 <div class='synopsis'>
-<span class='name'>content_type</span>
-<span class='arguments'>(type = (return @headers["Content-Type"]; nil), opts = OPTS)</span>
+<span class='name'>content_type</span><span class='arguments'>(type = nil || (return @headers["Content-Type"]), opts = OPTS)</span>
 
 </div>
 <div class='description'>
@@ -152,14 +147,13 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-content_type-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-content_type-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">415</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">content_type</span>(<span class="ruby-identifier">type</span> = (<span class="ruby-keyword">return</span> <span class="ruby-ivar">@headers</span>[<span class="ruby-string">&quot;Content-Type&quot;</span>]; <span class="ruby-keyword">nil</span>), <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">416</span>   <span class="ruby-keyword">unless</span> (<span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">mime_type</span>(<span class="ruby-identifier">type</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default</span>])&#x000A;<span class="line-num">417</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Unknown media type: #{type}&quot;</span>&#x000A;<span class="line-num">418</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">419</span> &#x000A;<span class="line-num">420</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="line-num">421</span>     <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">422</span>       <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">==</span> <span class="ruby-value">:default</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">key</span> <span class="ruby-operator">==</span> <span class="ruby-value">:charset</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&#39;charset&#39;</span>))&#x000A;<span class="line-num">423</span>       <span class="ruby-identifier">val</span> = <span class="ruby-identifier">val</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">val</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/[&quot;;,]/</span>&#x000A;<span class="line-num">424</span>       <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{mime_type.include?(&#39;;&#39;) ? &#39;, &#39; : &#39;;&#39;}#{key}=#{val}&quot;</span>&#x000A;<span class="line-num">425</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">426</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">427</span> &#x000A;<span class="line-num">428</span>   <span class="ruby-ivar">@headers</span>[<span class="ruby-string">&quot;Content-Type&quot;</span>] = <span class="ruby-identifier">mime_type</span>&#x000A;<span class="line-num">429</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-content_type-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">415</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">content_type</span>(<span class="ruby-identifier">type</span> = <span class="ruby-keyword">nil</span> <span class="ruby-operator">||</span> (<span class="ruby-keyword">return</span> <span class="ruby-ivar">@headers</span>[<span class="ruby-string">&quot;Content-Type&quot;</span>]), <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">416</span>   <span class="ruby-keyword">unless</span> (<span class="ruby-identifier">mime_type</span> = <span class="ruby-identifier">mime_type</span>(<span class="ruby-identifier">type</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default</span>])&#x000A;<span class="line-num">417</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Unknown media type: #{type}&quot;</span>&#x000A;<span class="line-num">418</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">419</span> &#x000A;<span class="line-num">420</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="line-num">421</span>     <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">422</span>       <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">==</span> <span class="ruby-value">:default</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">key</span> <span class="ruby-operator">==</span> <span class="ruby-value">:charset</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">mime_type</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-string">&#39;charset&#39;</span>))&#x000A;<span class="line-num">423</span>       <span class="ruby-identifier">val</span> = <span class="ruby-identifier">val</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">val</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp">/[&quot;;,]/</span>&#x000A;<span class="line-num">424</span>       <span class="ruby-identifier">mime_type</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;#{mime_type.include?(&#39;;&#39;) ? &#39;, &#39; : &#39;;&#39;}#{key}=#{val}&quot;</span>&#x000A;<span class="line-num">425</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">426</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">427</span> &#x000A;<span class="line-num">428</span>   <span class="ruby-ivar">@headers</span>[<span class="ruby-string">&quot;Content-Type&quot;</span>] = <span class="ruby-identifier">mime_type</span>&#x000A;<span class="line-num">429</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-finish'>
 <a name='method-i-finish'></a>
 <div class='synopsis'>
-<span class='name'>finish</span>
-<span class='arguments'>()</span>
+<span class='name'>finish</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>
@@ -177,8 +171,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-headers'>
 <a name='method-i-headers'></a>
 <div class='synopsis'>
-<span class='name'>headers</span>
-<span class='arguments'>(hash = (return @headers; nil))</span>
+<span class='name'>headers</span><span class='arguments'>(hash = nil || (return @headers))</span>
 
 </div>
 <div class='description'>
@@ -190,14 +183,13 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-headers-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-headers-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">404</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">headers</span>(<span class="ruby-identifier">hash</span> = (<span class="ruby-keyword">return</span> <span class="ruby-ivar">@headers</span>; <span class="ruby-keyword">nil</span>))&#x000A;<span class="line-num">405</span>   <span class="ruby-ivar">@headers</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="line-num">406</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-headers-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">404</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">headers</span>(<span class="ruby-identifier">hash</span> = <span class="ruby-keyword">nil</span> <span class="ruby-operator">||</span> (<span class="ruby-keyword">return</span> <span class="ruby-ivar">@headers</span>))&#x000A;<span class="line-num">405</span>   <span class="ruby-ivar">@headers</span>.<span class="ruby-identifier">merge!</span>(<span class="ruby-identifier">hash</span>)&#x000A;<span class="line-num">406</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-informational-3F'>
 <a name='method-i-informational-3F'></a>
 <div class='synopsis'>
-<span class='name'>informational?</span>
-<span class='arguments'>()</span>
+<span class='name'>informational?</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>
@@ -215,8 +207,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-mime_type'>
 <a name='method-i-mime_type'></a>
 <div class='synopsis'>
-<span class='name'>mime_type</span>
-<span class='arguments'>(type)</span>
+<span class='name'>mime_type</span><span class='arguments'>(type)</span>
 
 </div>
 <div class='description'>
@@ -234,8 +225,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-not_found-3F'>
 <a name='method-i-not_found-3F'></a>
 <div class='synopsis'>
-<span class='name'>not_found?</span>
-<span class='arguments'>()</span>
+<span class='name'>not_found?</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>
@@ -253,8 +243,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-redirect-3F'>
 <a name='method-i-redirect-3F'></a>
 <div class='synopsis'>
-<span class='name'>redirect?</span>
-<span class='arguments'>()</span>
+<span class='name'>redirect?</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>
@@ -272,8 +261,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-server_error-3F'>
 <a name='method-i-server_error-3F'></a>
 <div class='synopsis'>
-<span class='name'>server_error?</span>
-<span class='arguments'>()</span>
+<span class='name'>server_error?</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>
@@ -291,8 +279,7 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <div class='method public-instance' id='method-method-i-status'>
 <a name='method-i-status'></a>
 <div class='synopsis'>
-<span class='name'>status</span>
-<span class='arguments'>(value = (return @status; nil))</span>
+<span class='name'>status</span><span class='arguments'>(value = nil || (return @status))</span>
 
 </div>
 <div class='description'>
@@ -304,14 +291,13 @@ Roda::RodaPlugins::SinatraHelpers::ResponseMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-status-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-status-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">377</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">status</span>(<span class="ruby-identifier">value</span> = (<span class="ruby-keyword">return</span> <span class="ruby-ivar">@status</span>; <span class="ruby-keyword">nil</span>))&#x000A;<span class="line-num">378</span>   <span class="ruby-ivar">@status</span> = <span class="ruby-identifier">value</span>&#x000A;<span class="line-num">379</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-status-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">377</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">status</span>(<span class="ruby-identifier">value</span> = <span class="ruby-keyword">nil</span> <span class="ruby-operator">||</span> (<span class="ruby-keyword">return</span> <span class="ruby-ivar">@status</span>))&#x000A;<span class="line-num">378</span>   <span class="ruby-ivar">@status</span> = <span class="ruby-identifier">value</span>&#x000A;<span class="line-num">379</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-success-3F'>
 <a name='method-i-success-3F'></a>
 <div class='synopsis'>
-<span class='name'>success?</span>
-<span class='arguments'>()</span>
+<span class='name'>success?</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>

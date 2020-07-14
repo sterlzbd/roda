@@ -65,8 +65,7 @@ Superclass:
 <div class='method public-class' id='method-method-c-new'>
 <a name='method-c-new'></a>
 <div class='synopsis'>
-<span class='name'>new</span>
-<span class='arguments'>(template_class, path, dependencies, *template_args)</span>
+<span class='name'>new</span><span class='arguments'>(template_class, path, dependencies, *template_args)</span>
 
 </div>
 <div class='description'>
@@ -83,8 +82,7 @@ Superclass:
 <div class='method public-instance' id='method-method-i-compiled_method'>
 <a name='method-i-compiled_method'></a>
 <div class='synopsis'>
-<span class='name'>compiled_method</span>
-<span class='arguments'>(locals_keys=EMPTY_ARRAY, roda_class=nil)</span>
+<span class='name'>compiled_method</span><span class='arguments'>(locals_keys=EMPTY_ARRAY, roda_class=nil)</span>
 
 </div>
 <div class='description'>
@@ -96,14 +94,13 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-compiled_method-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-compiled_method-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">312</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method</span>(<span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>, <span class="ruby-identifier">roda_class</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">313</span>   <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-ivar">@template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>)&#x000A;<span class="line-num">314</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-compiled_method-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">314</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method</span>(<span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>, <span class="ruby-identifier">roda_class</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">315</span>   <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-ivar">@template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>)&#x000A;<span class="line-num">316</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-compiled_method_lambda'>
 <a name='method-i-compiled_method_lambda'></a>
 <div class='synopsis'>
-<span class='name'>compiled_method_lambda</span>
-<span class='arguments'>(template, roda_class, method_name, locals_keys=EMPTY_ARRAY)</span>
+<span class='name'>compiled_method_lambda</span><span class='arguments'>(template, roda_class, method_name, locals_keys=EMPTY_ARRAY)</span>
 
 </div>
 <div class='description'>
@@ -115,33 +112,31 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-compiled_method_lambda-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-compiled_method_lambda-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">319</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method_lambda</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)&#x000A;<span class="line-num">320</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>&#x000A;<span class="line-num">321</span>   <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">322</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">template</span>.<span class="ruby-identifier">modified?</span>&#x000A;<span class="line-num">323</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))&#x000A;<span class="line-num">324</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)&#x000A;<span class="line-num">325</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">326</span> &#x000A;<span class="line-num">327</span>     <span class="ruby-identifier">send</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">328</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">329</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-compiled_method_lambda-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">321</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">compiled_method_lambda</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)&#x000A;<span class="line-num">322</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>&#x000A;<span class="line-num">323</span>   <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">324</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">template</span>.<span class="ruby-identifier">modified?</span>&#x000A;<span class="line-num">325</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))&#x000A;<span class="line-num">326</span>       <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)&#x000A;<span class="line-num">327</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">328</span> &#x000A;<span class="line-num">329</span>     <span class="ruby-identifier">send</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">330</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">331</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-define_compiled_method'>
 <a name='method-i-define_compiled_method'></a>
 <div class='synopsis'>
-<span class='name'>define_compiled_method</span>
-<span class='arguments'>(roda_class, method_name, locals_keys=EMPTY_ARRAY)</span>
+<span class='name'>define_compiled_method</span><span class='arguments'>(roda_class, method_name, locals_keys=EMPTY_ARRAY)</span>
 
 </div>
 <div class='description'>
 
-<p>Compile a method in the given module with the given name that will call the compiled template method, updating the compiled template method</p>
+<p>:nocov:  Compile a method in the given module with the given name that will call the compiled template method, updating the compiled template method</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-define_compiled_method-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-define_compiled_method-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">293</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">define_compiled_method</span>(<span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)&#x000A;<span class="line-num">294</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>&#x000A;<span class="line-num">295</span>   <span class="ruby-identifier">internal_method_name</span> = <span class="ruby-value">:&quot;_#{method_name}&quot;</span>&#x000A;<span class="line-num">296</span>   <span class="ruby-keyword">begin</span>&#x000A;<span class="line-num">297</span>     <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">send</span>(<span class="ruby-value">:compiled_method</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))&#x000A;<span class="line-num">298</span>   <span class="ruby-keyword">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NotImplementedError</span>&#x000A;<span class="line-num">299</span>     <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>&#x000A;<span class="line-num">300</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">301</span> &#x000A;<span class="line-num">302</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">internal_method_name</span>)&#x000A;<span class="line-num">303</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">compiled_method_lambda</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">locals_keys</span>))&#x000A;<span class="line-num">304</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)&#x000A;<span class="line-num">305</span> &#x000A;<span class="line-num">306</span>   <span class="ruby-identifier">method_name</span>&#x000A;<span class="line-num">307</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-define_compiled_method-source'>    <span class="ruby-comment"># File lib/roda/plugins/render.rb</span>&#x000A;<span class="line-num">295</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">define_compiled_method</span>(<span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-identifier">locals_keys</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)&#x000A;<span class="line-num">296</span>   <span class="ruby-identifier">mod</span> = <span class="ruby-identifier">roda_class</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>&#x000A;<span class="line-num">297</span>   <span class="ruby-identifier">internal_method_name</span> = <span class="ruby-value">:&quot;_#{method_name}&quot;</span>&#x000A;<span class="line-num">298</span>   <span class="ruby-keyword">begin</span>&#x000A;<span class="line-num">299</span>     <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">send</span>(<span class="ruby-value">:compiled_method</span>, <span class="ruby-identifier">locals_keys</span>, <span class="ruby-identifier">roda_class</span>))&#x000A;<span class="line-num">300</span>   <span class="ruby-keyword">rescue</span> <span class="ruby-operator">::</span><span class="ruby-constant">NotImplementedError</span>&#x000A;<span class="line-num">301</span>     <span class="ruby-keyword">return</span> <span class="ruby-keyword">false</span>&#x000A;<span class="line-num">302</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">303</span> &#x000A;<span class="line-num">304</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">internal_method_name</span>)&#x000A;<span class="line-num">305</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:define_method</span>, <span class="ruby-identifier">method_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">compiled_method_lambda</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">roda_class</span>, <span class="ruby-identifier">internal_method_name</span>, <span class="ruby-identifier">locals_keys</span>))&#x000A;<span class="line-num">306</span>   <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:private</span>, <span class="ruby-identifier">method_name</span>)&#x000A;<span class="line-num">307</span> &#x000A;<span class="line-num">308</span>   <span class="ruby-identifier">method_name</span>&#x000A;<span class="line-num">309</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-modified-3F'>
 <a name='method-i-modified-3F'></a>
 <div class='synopsis'>
-<span class='name'>modified?</span>
-<span class='arguments'>()</span>
+<span class='name'>modified?</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>
@@ -159,8 +154,7 @@ Superclass:
 <div class='method public-instance' id='method-method-i-render'>
 <a name='method-i-render'></a>
 <div class='synopsis'>
-<span class='name'>render</span>
-<span class='arguments'>(*args, &block)</span>
+<span class='name'>render</span><span class='arguments'>(*args, &block)</span>
 
 </div>
 <div class='description'>
@@ -178,8 +172,7 @@ Superclass:
 <div class='method public-instance' id='method-method-i-template_last_modified'>
 <a name='method-i-template_last_modified'></a>
 <div class='synopsis'>
-<span class='name'>template_last_modified</span>
-<span class='arguments'>()</span>
+<span class='name'>template_last_modified</span><span class='arguments'>()</span>
 
 </div>
 <div class='description'>

@@ -50,8 +50,7 @@ Roda::RodaPlugins::DisallowFileUploads::RequestMethods
 <div class='method public-class' id='method-method-c-new'>
 <a name='method-c-new'></a>
 <div class='synopsis'>
-<span class='name'>new</span>
-<span class='arguments'>(_, env)</span>
+<span class='name'>new</span><span class='arguments'>(_, env)</span>
 
 </div>
 <div class='description'>
@@ -63,7 +62,7 @@ Roda::RodaPlugins::DisallowFileUploads::RequestMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/plugins/disallow_file_uploads.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_</span>, <span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">29</span>   <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.multipart.tempfile_factory&#39;</span>] = <span class="ruby-constant">NO_TEMPFILE</span>&#x000A;<span class="line-num">30</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/plugins/disallow_file_uploads.rb</span>&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_</span>, <span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">31</span>   <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.multipart.tempfile_factory&#39;</span>] = <span class="ruby-constant">NO_TEMPFILE</span>&#x000A;<span class="line-num">32</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

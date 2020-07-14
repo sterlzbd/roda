@@ -67,8 +67,7 @@ Roda::RodaPlugins::ClassLevelRouting
 <div class='method public-class' id='method-method-c-configure'>
 <a name='method-c-configure'></a>
 <div class='synopsis'>
-<span class='name'>configure</span>
-<span class='arguments'>(app)</span>
+<span class='name'>configure</span><span class='arguments'>(app)</span>
 
 </div>
 <div class='description'>
@@ -80,7 +79,7 @@ Roda::RodaPlugins::ClassLevelRouting
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/class_level_routing.rb</span>&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">route</span>{} <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">route_block</span>&#x000A;<span class="line-num">60</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:class_level_routes</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">61</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/class_level_routing.rb</span>&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:class_level_routes</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
