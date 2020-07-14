@@ -272,6 +272,12 @@ class Roda
           raise RodaError, "Cannot add a plugin to a frozen Roda class" if frozen?
           plugin = RodaPlugins.load_plugin(plugin) if plugin.is_a?(Symbol)
           raise RodaError, "Invalid plugin type: #{plugin.class.inspect}" unless plugin.is_a?(Module)
+
+          if !plugin.respond_to?(:load_dependencies) && !plugin.respond_to?(:configure) && (!args.empty? || block)
+            # RODA4: switch from warning to error
+            RodaPlugins.warn("Plugin #{plugin} does not accept arguments or a block, but arguments or a block was passed when loading this. This will raise an error in Roda 4.")
+          end
+
           plugin.load_dependencies(self, *args, &block) if plugin.respond_to?(:load_dependencies)
           include(plugin::InstanceMethods) if defined?(plugin::InstanceMethods)
           extend(plugin::ClassMethods) if defined?(plugin::ClassMethods)

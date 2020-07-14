@@ -71,6 +71,13 @@ describe "plugins" do
     body.must_equal '1'
   end
 
+  it "should warn if attempting to load a plugin with arguments or a block" do
+    Roda::RodaPlugins.register_plugin(:foo, Module.new)
+    proc{app.plugin :foo, 1}.must_output(nil, /does not accept arguments or a block/)
+    @app = nil
+    proc{app.plugin(:foo){}}.must_output(nil, /does not accept arguments or a block/)
+  end
+
   it "should raise error if attempting to load an invalid plugin" do
     proc{app(:banana)}.must_raise LoadError
 
