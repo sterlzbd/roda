@@ -1,8 +1,8 @@
-Tue, 14 Jul 2020 08:06:14 -0700
+Fri, 14 Aug 2020 08:02:03 -0700
 README.rdoc	Thu, 23 Apr 2020 11:17:42 -0700
-CHANGELOG	Tue, 14 Jul 2020 07:50:23 -0700
+CHANGELOG	Fri, 14 Aug 2020 07:53:58 -0700
 MIT-LICENSE	Wed, 08 Jan 2020 20:03:32 -0800
-lib/roda.rb	Thu, 16 Apr 2020 13:01:43 -0700
+lib/roda.rb	Tue, 14 Jul 2020 12:46:25 -0700
 lib/roda/cache.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/plugins.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/plugins/_after_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
@@ -75,6 +75,7 @@ lib/roda/plugins/path_rewriter.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/placeholder_string_matchers.rb	Thu, 16 Apr 2020 13:01:43 -0700
 lib/roda/plugins/precompile_templates.rb	Mon, 23 Sep 2019 12:58:36 -0700
 lib/roda/plugins/public.rb	Mon, 22 Jun 2020 15:56:02 -0700
+lib/roda/plugins/r.rb	Thu, 13 Aug 2020 12:32:01 -0700
 lib/roda/plugins/relative_path.rb	Fri, 10 Apr 2020 14:26:39 -0700
 lib/roda/plugins/render.rb	Thu, 18 Jun 2020 12:50:59 -0700
 lib/roda/plugins/render_each.rb	Fri, 01 May 2020 14:00:10 -0700
@@ -107,7 +108,7 @@ lib/roda/plugins/view_options.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/request.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/response.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/session_middleware.rb	Sun, 04 Aug 2019 14:34:46 -0700
-lib/roda/version.rb	Tue, 14 Jul 2020 07:50:23 -0700
+lib/roda/version.rb	Fri, 14 Aug 2020 07:53:58 -0700
 doc/conventions.rdoc	Mon, 18 May 2020 13:38:21 -0700
 doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
@@ -180,3 +181,4 @@ doc/release_notes/3.31.0.txt	Wed, 15 Apr 2020 08:02:48 -0700
 doc/release_notes/3.32.0.txt	Fri, 15 May 2020 08:44:53 -0700
 doc/release_notes/3.33.0.txt	Tue, 16 Jun 2020 08:00:17 -0700
 doc/release_notes/3.34.0.txt	Tue, 14 Jul 2020 07:50:23 -0700
+doc/release_notes/3.35.0.txt	Fri, 14 Aug 2020 07:53:58 -0700
