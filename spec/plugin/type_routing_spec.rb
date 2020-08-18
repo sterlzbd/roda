@@ -44,6 +44,22 @@ describe "type_routing plugin" do
     header('Content-Type', '/a', 'HTTP_ACCEPT' => 'some/thing').must_equal 'text/html'
   end
 
+  it "sets Vary header when using Accept header value" do
+    body('/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'HTML: html'
+    header('Vary', '/a', 'HTTP_ACCEPT' => 'text/html').must_equal 'Accept'
+
+    app(:type_routing) do |r|
+      response['Vary'] = 'User-Agent'
+      r.is 'a' do
+        r.html{ "HTML: #{r.requested_type}" }
+        r.json{ "JSON: #{r.requested_type}" }
+        "No match"
+      end
+    end
+    body('/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'JSON: json'
+    header('Vary', '/a', 'HTTP_ACCEPT' => 'application/json').must_equal 'User-Agent, Accept'
+  end
+
   it "favors the file extension over the Accept header" do
     body('/a.json', 'HTTP_ACCEPT' => 'text/html').must_equal 'JSON: json'
     body('/a.xml', 'HTTP_ACCEPT' => 'application/json').must_equal 'XML: xml'

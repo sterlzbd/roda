@@ -4,7 +4,7 @@
 class Roda
   module RodaPlugins
     # This plugin makes it easier to to respond to specific request data types. User agents can request
-    # specific data types by either supplying an appropriate +Accept+ header
+    # specific data types by either supplying an appropriate +Accept+ request header
     # or by appending it as file extension to the path.
     #
     # Example:
@@ -49,6 +49,10 @@ class Roda
     # used for html responses, since you aren't using an +r.html+ block.  Instead, the
     # Content-Type header will be set to Roda's default (which you can override via
     # the default_headers plugin).
+    #
+    # If the type routing is based on the +Accept+ request header and not the file extension,
+    # then an appropriate +Vary+ header will be set or appended to, so that HTTP caches do
+    # not serve the same result for requests with different +Accept+ headers.
     #
     # To match custom extensions, use the :types option:
     #
@@ -195,6 +199,7 @@ class Roda
           @env['HTTP_ACCEPT'].to_s.split(/\s*,\s*/).map do |part|
             mime, _= part.split(/\s*;\s*/, 2)
             if sym = mimes[mime]
+              response['Vary'] = (vary = response['Vary']) ? "#{vary}, Accept" : 'Accept'
               return sym
             end
           end
