@@ -56,6 +56,7 @@ class Roda
     # * media_src
     # * object_src
     # * plugin_types
+    # * report_to
     # * report_uri
     # * require_sri_for
     # * sandbox
@@ -123,6 +124,7 @@ class Roda
         media-src
         object-src
         plugin-types
+        report-to
         report-uri
         require-sri-for
         sandbox

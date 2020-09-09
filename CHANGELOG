@@ -1,5 +1,7 @@
 = master
 
+* Support report-to directive in the content_security_policy plugin (jeremyevans)
+
 * Add Vary response header when using type_routing plugin with Accept request header to prevent caching issues (jeremyevans)
 
 = 3.35.0 (2020-08-14)

@@ -128,6 +128,7 @@ describe "content_security_policy plugin" do
     media_src
     object_src
     plugin_types
+    report_to
     report_uri
     require_sri_for
     sandbox
