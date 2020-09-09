@@ -44,6 +44,36 @@ describe "public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
+    header('Content-Type', '/about/_test.erb').must_equal 'text/plain'
+    header('X-Foo', '/about/_test.erb').must_be_nil
+  end
+
+  it "support :headers options for custom headers" do
+    app(:bare) do
+      plugin :public, :root=>'spec/views', :headers=>{'X-Foo' => 'bar'}
+
+      route do |r|
+        r.public
+      end
+    end
+
+    body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
+    header('Content-Type', '/about/_test.erb').must_equal 'text/plain'
+    header('X-Foo', '/about/_test.erb').must_equal 'bar'
+  end
+
+  it "support :default_mime options for default mime type" do
+    app(:bare) do
+      plugin :public, :root=>'spec/views', :default_mime=>'foo/bar'
+
+      route do |r|
+        r.public
+      end
+    end
+
+    body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
+    header('Content-Type', '/about/_test.erb').must_equal 'foo/bar'
+    header('X-Foo', '/about/_test.erb').must_be_nil
   end
 
   it "assumes public directory as default :root option" do
