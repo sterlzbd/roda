@@ -147,9 +147,7 @@ class Roda
           # add_* method name adds to the setting value, or clears setting if no values
           # are given.
           define_method("add_#{meth}") do |*args|
-            if args.empty?
-              @opts[setting]
-            else
+            unless args.empty?
               @opts[setting] ||= EMPTY_ARRAY
               @opts[setting] += args
               @opts[setting].freeze
