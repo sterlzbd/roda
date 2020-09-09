@@ -60,21 +60,7 @@ class Roda
       module RequestMethods
         # Serve files from the public directory if the file exists and this is a GET request.
         def public
-          if is_get?
-            path = PARSER.unescape(real_remaining_path)
-            return if path.include?("\0")
-
-            roda_opts = roda_class.opts
-            server = roda_opts[:public_server]
-            path = ::File.join(server.root, *public_path_segments(path))
-
-            public_serve_compressed(server, path, '.br', 'br') if roda_opts[:public_brotli]
-            public_serve_compressed(server, path, '.gz', 'gzip') if roda_opts[:public_gzip]
-
-            if public_file_readable?(path)
-              halt public_serve(server, path)
-            end
-          end
+          public_serve_with(roda_class.opts[:public_server])
         end
 
         private
@@ -99,6 +85,22 @@ class Roda
           # :nocov:
           false
           # :nocov:
+        end
+
+        def public_serve_with(server)
+          return unless is_get?
+          path = PARSER.unescape(real_remaining_path)
+          return if path.include?("\0")
+
+          roda_opts = roda_class.opts
+          path = ::File.join(server.root, *public_path_segments(path))
+
+          public_serve_compressed(server, path, '.br', 'br') if roda_opts[:public_brotli]
+          public_serve_compressed(server, path, '.gz', 'gzip') if roda_opts[:public_gzip]
+
+          if public_file_readable?(path)
+            halt public_serve(server, path)
+          end
         end
 
         def public_serve_compressed(server, path, suffix, encoding)
