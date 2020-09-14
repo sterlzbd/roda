@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>Roda::RodaPlugins::Public::RequestMethods</title>
+<title>Roda::RodaPlugins::MultiPublic::RequestMethods</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -24,11 +24,11 @@
 <div class='class' id='wrapper'>
 <div class='header'>
 <h1 class='name'><span class='type'>module</span>
-Roda::RodaPlugins::Public::RequestMethods
+Roda::RodaPlugins::MultiPublic::RequestMethods
 </h1>
 <ol class='paths'>
 <li>
-<a href="../../../../files/lib/roda/plugins/public_rb.html">lib/roda/plugins/public.rb</a>
+<a href="../../../../files/lib/roda/plugins/multi_public_rb.html">lib/roda/plugins/multi_public.rb</a>
 </li>
 </ol>
 </div>
@@ -39,7 +39,7 @@ Roda::RodaPlugins::Public::RequestMethods
 <h2>Methods</h2>
 <h3>Public Instance</h3>
 <ol>
-<li><a href="#method-i-public">public</a></li>
+<li><a href="#method-i-multi_public">multi_public</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -47,22 +47,22 @@ Roda::RodaPlugins::Public::RequestMethods
 <div id='section'>
 <div id='methods'>
 <h2>Public Instance methods</h2>
-<div class='method public-instance' id='method-method-i-public'>
-<a name='method-i-public'></a>
+<div class='method public-instance' id='method-method-i-multi_public'>
+<a name='method-i-multi_public'></a>
 <div class='synopsis'>
-<span class='name'>public</span><span class='arguments'>()</span>
+<span class='name'>multi_public</span><span class='arguments'>(key)</span>
 
 </div>
 <div class='description'>
 
-<p>Serve files from the public directory if the file exists and this is a GET request.</p>
+<p>Serve files from the directory corresponding to the given key if the file exists and this is a GET request.</p>
 
 </div>
 <div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-public-source&#39;); return false'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_public-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-public-source'>   <span class="ruby-comment"># File lib/roda/plugins/public.rb</span>&#x000A;<span class="line-num">62</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">public</span>&#x000A;<span class="line-num">63</span>   <span class="ruby-identifier">public_serve_with</span>(<span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>])&#x000A;<span class="line-num">64</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-multi_public-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_public.rb</span>&#x000A;<span class="line-num">78</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_public</span>(<span class="ruby-identifier">key</span>)&#x000A;<span class="line-num">79</span>   <span class="ruby-identifier">public_serve_with</span>(<span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_public_servers</span>].<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">key</span>))&#x000A;<span class="line-num">80</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

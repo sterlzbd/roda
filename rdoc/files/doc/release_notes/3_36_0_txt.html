@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>version.rb</title>
+<title>3.36.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,10 +23,10 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>version.rb
+<h1 class='name'>3.36.0.txt
 </h1>
 <div class='paths'>
-lib/roda/version.rb
+doc/release_notes/3.36.0.txt
 </div>
 <div class='last-update'>
 Last Update:
@@ -35,7 +35,19 @@ Last Update:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A multi_public plugin has been added, which allows serving static files from multiple separate directories.  This is especially useful when there are different access control requirements per directory.</p>
+</li><li>
+<p>The content_security_policy now supports a content_security_policy.report_to method to set the report-to directive.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>When using the type_routing plugin and performing type routing using the Accept request header, the Vary response header will be added or updated so that http caches do not cache a response for one type and serve it for a different type.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 
