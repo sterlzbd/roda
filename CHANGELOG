@@ -1,3 +1,7 @@
+= master
+
+* Add custom_matchers plugin, for supporting arbitrary objects as matchers (jeremyevans)
+
 = 3.36.0 (2020-09-14)
 
 * Add multi_public plugin, for serving files from multiple public directories (jeremyevans)
