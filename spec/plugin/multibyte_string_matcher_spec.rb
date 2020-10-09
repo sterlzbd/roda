@@ -23,6 +23,7 @@ describe "multibyte_string_matcher plugin" do
 
     body('/%D0%B8').must_equal str
     body('/1/%D0%B8').must_equal str
+    status('/1/%D0%B82').must_equal 404
     status('/1/2/%D0%B8').must_equal 404
     status('/1/%D0%B8/2').must_equal 404
 
@@ -37,6 +38,7 @@ describe "multibyte_string_matcher plugin" do
     body('/1/2/%D0%B8').must_equal 'm'
     body('/1/%D0%B8/2').must_equal 'n'
 
+    status('/1/%D0%B82').must_equal 404
     status('/1/%D0%B9').must_equal 404
     status('/1/2/%D0%B9').must_equal 404
     status('/1/%D0%B9/2').must_equal 404
