@@ -609,10 +609,9 @@ class Roda
             when nil
               keys = (0...@obj.length)
 
-              valid = case @obj
-              when Array
+              valid = if @obj.is_a?(Array)
                 true
-              when Hash
+              else
                 keys = keys.map(&:to_s)
                 keys.all?{|k| @obj.has_key?(k)}
               end
