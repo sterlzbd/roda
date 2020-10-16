@@ -1,4 +1,4 @@
-= master
+= 3.37.0 (2020-10-16)
 
 * Add custom_matchers plugin, for supporting arbitrary objects as matchers (jeremyevans)
 
