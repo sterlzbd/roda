@@ -22,7 +22,7 @@ class Roda
     #
     #   plugin :custom_matchers
     #   method_segment = Struct.new(:request_method, :next_segment)
-    #   custom_matcher(c) do |matcher|
+    #   custom_matcher(method_segment) do |matcher|
     #     # self is the request instance ("r" yielded in the route block below)
     #     if matcher.request_method == self.request_method
     #       match(matcher.next_segment)
