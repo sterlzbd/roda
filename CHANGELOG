@@ -1,3 +1,7 @@
+= master
+
+* Make error_email and error_mail plugins rescue invalid parameter errors when preparing the email body (jeremyevans)
+
 = 3.37.0 (2020-10-16)
 
 * Add custom_matchers plugin, for supporting arbitrary objects as matchers (jeremyevans)

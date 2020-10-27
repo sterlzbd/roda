@@ -48,6 +48,15 @@ describe "error_email plugin" do
     b.must_match(/^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^"b" => "c"$\s+^Session:$\s+^"d" => "e"$/m)
   end
 
+  it "handles invalid parameters in error_email_content" do
+    app.route do |r|
+      raise ArgumentError, 'bad foo' rescue error_email_content($!)
+    end
+    b = body('rack.input'=>StringIO.new, 'QUERY_STRING'=>"b=%c", 'rack.session'=>{'d'=>'e'})
+    b.must_match(/^Subject: ArgumentError: bad foo/)
+    b.must_match(/^Backtrace:$.+^ENV:$.+^"rack\.input" => .+^Params:$\s+^Invalid Parameters!$\s+^Session:$\s+^"d" => "e"$/m)
+  end
+
   it "uses :host option" do
     app(:host=>'foo.bar.com')
     body('rack.input'=>StringIO.new).must_equal 'e'

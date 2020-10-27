@@ -71,6 +71,13 @@ class Roda
 
           format = lambda{|h| h.map{|k, v| "#{k.inspect} => #{v.inspect}"}.sort.join("\n")}
 
+          begin
+            params = request.params
+            params = (format[params] unless params.empty?)
+          rescue
+            params = 'Invalid Parameters!'
+          end
+
           message = String.new
           message << <<END
 Path: #{request.path}
@@ -91,12 +98,12 @@ ENV:
 #{format[env]}
 END
 
-          unless request.params.empty?
+          if params
             message << <<END
 
 Params:
 
-#{format[request.params]}
+#{params}
 END
           end
 
