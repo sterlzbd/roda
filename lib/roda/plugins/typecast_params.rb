@@ -724,7 +724,7 @@ class Roda
               raise Error, "parameter #{param_name(nil)} is not a hash" if do_raise
               return
             end
-            present = @obj.has_key?(key)
+            present = !@obj[key].nil?
           when Integer
             unless @obj.is_a?(Array)
               raise Error, "parameter #{param_name(nil)} is not an array" if do_raise

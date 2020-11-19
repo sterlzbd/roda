@@ -1,3 +1,7 @@
+= master
+
+* Make typecast_params.convert! handle explicit nil values the same as missing values (jeremyevans)
+
 = 3.38.0 (2020-11-16)
 
 * Make error_email and error_mail plugins rescue invalid parameter errors when preparing the email body (jeremyevans)

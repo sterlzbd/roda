@@ -15,12 +15,19 @@ describe "typecast_params plugin" do
   before do
     res = nil
     app(:typecast_params) do |r|
+      if r.env['rack.params']
+        r.define_singleton_method(:params){r.env['rack.params']}
+      end
       res = typecast_params
       nil
     end
 
     @tp = lambda do |params|
-      req('QUERY_STRING'=>params, 'rack.input'=>StringIO.new)
+      if params.is_a?(Hash)
+        req('rack.params'=>params)
+      else
+        req('QUERY_STRING'=>params, 'rack.input'=>StringIO.new)
+      end
       res
     end
 
@@ -549,6 +556,20 @@ describe "typecast_params plugin" do
 
     tp.convert!('b', :raise=>false) do |tp0|
         tp1.convert!('c'){}
+    end.must_equal({})
+  end
+
+  it "#convert! should not raise errors for explicit nil values if :raise option is false" do
+    tp = tp("id"=>1)
+    tp.convert!("price", :raise=>false) do |tp0|
+      tp0.convert!('d') do |tp2|
+      end
+    end.must_equal({})
+
+    tp = tp("id"=>1, "price"=>nil)
+    tp.convert!("price", :raise=>false) do |tp0|
+      tp0.convert!('d') do |tp2|
+      end
     end.must_equal({})
   end
 
