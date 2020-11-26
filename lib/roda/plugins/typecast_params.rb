@@ -229,7 +229,7 @@ class Roda
     #
     # Note that if there are multiple conversion Error raised inside a +convert!+ or +convert_each!+ 
     # block, they are recorded and a single TypecastParams::Error instance is raised after
-    # processing the block.  TypecastParams::Error#params_names can be called on the exception to
+    # processing the block.  TypecastParams::Error#param_names can be called on the exception to
     # get an array of all parameter names with conversion issues, and TypecastParams::Error#all_errors
     # can be used to get an array of all Error instances.
     #
