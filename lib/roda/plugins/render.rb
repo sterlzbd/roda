@@ -106,7 +106,7 @@ class Roda
     # :template_block :: Pass this block when creating the underlying template,
     #                    ignored when using :inline.  Disables caching of the
     #                    template by default.
-    # :template_class :: Provides the template class to use, inside of using
+    # :template_class :: Provides the template class to use, instead of using
     #                    Tilt or <tt>Tilt[:engine]</tt>.
     #
     # Here's an example of using these options:
