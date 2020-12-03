@@ -476,6 +476,8 @@ class Roda
 
         undef_method :match_rcpt
         undef_method :match_text
+        undef_method :match_body
+        undef_method :match_subject
 
         # Same as +header+, but also mark the message as being handled.
         def handle_header(key, value=nil)

@@ -114,6 +114,7 @@ class Roda
                 alias_method meth, temp_method
                 undef_method temp_method
                 private meth
+                alias_method meth, meth
                 meth = :"#{meth}_arity"
               elsif required_args > 1
                 b = block
@@ -144,6 +145,7 @@ class Roda
 
           define_method(meth, &block)
           private meth
+          alias_method meth, meth
 
           if arity_meth
             required_args, optional_args, rest, keyword = _define_roda_method_arg_numbers(instance_method(meth))
@@ -167,6 +169,7 @@ class Roda
               send(meth, *a)
             end
             private arity_meth
+            alias_method arity_meth, arity_meth
           end
 
           call_meth
@@ -199,6 +202,7 @@ class Roda
 
                 private
 
+                alias set_default_headers set_default_headers
                 def set_default_headers
                   @headers['Content-Type'] ||= 'text/html'
                 end
@@ -403,6 +407,7 @@ class Roda
               class_eval("def _roda_before; #{meths.join(';')} end", __FILE__, __LINE__)
             end
             private :_roda_before
+            alias_method :_roda_before, :_roda_before
           end
         end
 

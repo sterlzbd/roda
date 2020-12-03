@@ -33,6 +33,7 @@ class Roda
             response_class.class_eval(<<-END, __FILE__, __LINE__+1)
               private
 
+              alias set_default_headers set_default_headers
               def set_default_headers
                 h = @headers
                 #{headers.map{|k,v| "h[#{k.inspect}] ||= #{v.inspect}"}.join('; ')}

@@ -141,6 +141,7 @@ class Roda
           app::RodaRequest.send(:define_method, type) do |&block|
             on_type(type, &block)
           end
+          app::RodaRequest.send(:alias_method, type, type)
         end
 
         app.opts[:type_routing] = config.freeze

@@ -1,5 +1,7 @@
 = master
 
+* Avoid method redefinition warnings in verbose warning mode (jeremyevans)
+
 * Make typecast_params.convert! handle explicit nil values the same as missing values (jeremyevans)
 
 = 3.38.0 (2020-11-16)
