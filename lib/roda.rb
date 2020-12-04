@@ -424,6 +424,7 @@ class Roda
               class_eval("def _roda_after(res); #{meths.map{|s| "#{s}(res)"}.join(';')} end", __FILE__, __LINE__)
             end
             private :_roda_after
+            alias_method :_roda_after, :_roda_after
           end
         end
 
