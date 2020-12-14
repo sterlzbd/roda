@@ -1,5 +1,7 @@
 = master
 
+* Speed up relative_path plugin if relative_path or relative_prefix is called more than once (jeremyevans)
+
 * Avoid method redefinition warnings in verbose warning mode (jeremyevans)
 
 * Make typecast_params.convert! handle explicit nil values the same as missing values (jeremyevans)

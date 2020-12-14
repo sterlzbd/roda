@@ -41,6 +41,7 @@ class Roda
         # Return a relative prefix to append to an absolute path to a relative path
         # based on the current path of the request.
         def relative_prefix
+          return @_relative_prefix if @_relative_prefix
           env = @_request.env
           script_name = env["SCRIPT_NAME"]
           path_info = env["PATH_INFO"]
@@ -50,16 +51,16 @@ class Roda
           case script_name.getbyte(0)
           when nil # SCRIPT_NAME empty
             unless path_info.getbyte(0) == 47 # PATH_INFO starts with /
-              return ''
+              return(@_relative_prefix = '')
             end
           when 47 # SCRIPT_NAME starts with /
             # nothing
           else
-            return ''
+            return(@_relative_prefix = '')
           end
 
           slash_count = script_name.count('/') + path_info.count('/')
-          if slash_count > 1
+          @_relative_prefix = if slash_count > 1
             ("../" * (slash_count - 2)) << ".."
           else
             "."

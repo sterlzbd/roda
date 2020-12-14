@@ -34,4 +34,21 @@ describe "relative_plath plugin" do
     body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
     body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
   end
+
+  it "supports multiple calls to relative_prefix while routing same request" do
+    app(:relative_path) do
+      3.times.map{"#{relative_prefix}/a"}[0]
+    end
+
+    body.must_equal './a'
+    body('/a').must_equal './a'
+    body('/a/').must_equal '../a'
+    body('/a/b').must_equal '../a'
+    body('/a/b/c').must_equal '../../a'
+    body('/a/b/c', 'SCRIPT_NAME'=>'/d').must_equal '../../../a'
+    body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
+    body('', 'SCRIPT_NAME'=>'').must_equal '/a'
+    body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
+    body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
+  end
 end
