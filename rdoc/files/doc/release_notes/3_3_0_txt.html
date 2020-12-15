@@ -30,7 +30,7 @@ doc/release_notes/3.3.0.txt
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2017-12-14 07:52:58 -0800</span>
+<span class='datetime'>2020-11-26 10:47:03 -0800</span>
 </div>
 </div>
 <div id='content'>
@@ -170,7 +170,7 @@ Last Update:
 
 <p>Using the :symbolize option makes it simpler to transition from untrusted external data (string keys), to trusted data that can be used internally (trusted in the sense that the expected types are used).</p>
 
-<p>Note that if there are multiple conversion errors raised inside a convert! or convert_each!  block, they are recorded and a single <a href="../../../classes/Roda/RodaPlugins/TypecastParams/Error.html"><code>Roda::RodaPlugins::TypecastParams::Error</code></a> instance is raised after processing the block.  TypecastParams::Error#params_names can be called on the exception to get an array of all parameter names with conversion issues, and TypecastParams::Error#all_errors can be used to get an array of all Error instances.</p>
+<p>Note that if there are multiple conversion errors raised inside a convert! or convert_each!  block, they are recorded and a single <a href="../../../classes/Roda/RodaPlugins/TypecastParams/Error.html"><code>Roda::RodaPlugins::TypecastParams::Error</code></a> instance is raised after processing the block.  TypecastParams::Error#param_names can be called on the exception to get an array of all parameter names with conversion issues, and TypecastParams::Error#all_errors can be used to get an array of all Error instances.</p>
 
 <p>Because of how convert! and convert_each! work, you should avoid calling TypecastParams::Params#[] inside the block you pass to these methods, because if the [] call fails, it will skip the reminder of the block.</p>
 
