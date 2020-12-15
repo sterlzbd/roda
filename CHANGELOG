@@ -1,4 +1,4 @@
-= master
+= 3.39.0 (2020-12-15)
 
 * Speed up relative_path plugin if relative_path or relative_prefix is called more than once (jeremyevans)
 
