@@ -379,15 +379,19 @@ class Roda
           if optimized_template
             content = send(optimized_template, OPTS)
 
-            render_opts = self.class.opts[:render]
-            if layout_template = render_opts[:optimize_layout]
-              method_cache = render_opts[:template_method_cache]
-              unless layout_method = method_cache[:_roda_layout]
-                retrieve_template(:template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
-                layout_method = method_cache[:_roda_layout]
-              end
+            # First, check if the optimized layout method has already been created,
+            # and use it if so.  This way avoids the extra conditional and local variable
+            # assignments in the next section.
+            if layout_method = _layout_method
+              return send(layout_method, OPTS){content}
+            end
 
-              if layout_method
+            # If we have an optimized template method but no optimized layout method, create the
+            # optimized layout method if possible and use it.  If you can't create the optimized
+            # layout method, fall through to the slower approach.
+            if layout_template = self.class.opts[:render][:optimize_layout]
+              retrieve_template(:template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
+              if layout_method = _layout_method
                 return send(layout_method, OPTS){content}
               end
             end
@@ -426,6 +430,11 @@ class Roda
           # Return the instance method symbol for the template in the method cache.
           def _cached_template_method_lookup(method_cache, template)
             method_cache[template]
+          end
+
+          # Return a symbol containing the optimized layout method
+          def _layout_method
+            self.class.opts[:render][:template_method_cache][:_roda_layout]
           end
 
           # Use an optimized render path for templates with a hash of locals.  Returns the result
@@ -471,11 +480,15 @@ class Roda
           end
         else
           # :nocov:
-          def _cached_template_method(template)
+          def _cached_template_method(_)
             nil
           end
 
-          def _cached_template_method_key(template)
+          def _cached_template_method_key(_)
+            nil
+          end
+
+          def _layout_method
             nil
           end
 
