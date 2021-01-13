@@ -333,6 +333,25 @@ class Roda
       end
 
       module ClassMethods
+        # :nocov:
+        if COMPILED_METHOD_SUPPORT
+        # :nocov:
+          # If using compiled methods and there is an optimized layout, speed up
+          # access to the layout method to improve the performance of view.
+          def freeze
+            begin
+              _freeze_layout_method
+            rescue
+              # This is only for optimization, if any errors occur, they can be ignored.
+              # One possibility for error is the app doesn't use a layout, but doesn't
+              # specifically set the :layout=>false plugin option.
+              nil
+            end
+
+            super
+          end
+        end
+
         # Copy the rendering options into the subclass, duping
         # them as necessary to prevent changes in the subclass
         # affecting the parent class.
@@ -351,6 +370,27 @@ class Roda
         # Return the render options for this class.
         def render_opts
           opts[:render]
+        end
+
+        private
+
+        # Precompile the layout method, to reduce method calls to look it up at runtime.
+        def _freeze_layout_method
+          if render_opts[:layout]
+            instance = allocate
+            instance.send(:retrieve_template, instance.send(:view_layout_opts, OPTS))
+
+            # :nocov:
+            if COMPILED_METHOD_SUPPORT
+            # :nocov:
+              if (layout_template = render_opts[:optimize_layout]) && !opts[:render][:optimized_layout_method_created]
+                instance.send(:retrieve_template, :template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
+                layout_method = opts[:render][:template_method_cache][:_roda_layout]
+                define_method(:_layout_method){layout_method}
+                opts[:render] = opts[:render].merge(:optimized_layout_method_created=>true)
+              end
+            end
+          end
         end
       end
 

@@ -172,6 +172,8 @@ describe "render plugin" do
     end
 
     body.strip.must_equal "<title>Roda: Home</title>\na"
+    app.freeze
+    body.strip.must_equal "<title>Roda: Home</title>\na"
   end
 
   it "views without default layouts" do
@@ -183,6 +185,8 @@ describe "render plugin" do
       end
     end
 
+    body.strip.must_equal "<h1>Home</h1>\n<p>Hello Agent Smith</p>"
+    app.freeze
     body.strip.must_equal "<h1>Home</h1>\n<p>Hello Agent Smith</p>"
   end
 
@@ -440,6 +444,35 @@ describe "render plugin" do
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal(2*multiplier)
         end
 
+        it "caches layout template automatically when freezeing when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
+          app(:bare) do
+            layout = template.to_s.sub('test', 'layout')
+            layout = layout.to_sym if template.is_a?(Symbol)
+            plugin :render, :views=>'spec/views', :layout=>layout, :cache=>cache_plugin_option
+            route do
+              view(template)
+            end
+          end
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+
+          app.freeze
+
+          app.render_opts[:template_method_cache][template].must_be_nil
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          body.strip.must_equal "act\nb"
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app::RodaCompiledTemplates.private_instance_methods.length.must_equal(2*multiplier)
+        end
+
         it "caches template views with inline layout when given a #{template.class} with plugin option :cache=>#{cache_plugin_option}" do
           app(:bare) do
             plugin :render, :views=>'spec/views', :layout=>{:inline=>"a<%= yield %>b"}, :cache=>cache_plugin_option
@@ -534,6 +567,8 @@ describe "render plugin" do
     end
 
     body.strip.must_equal "Foo: bar"
+    app.freeze
+    body.strip.must_equal "Foo: bar"
   end
 
   it "inline renders with opts" do
@@ -541,6 +576,8 @@ describe "render plugin" do
       render({:inline=>'<%= bar %>'}, {:engine=>'str'})
     end
 
+    body.strip.must_equal '<%= bar %>'
+    app.freeze
     body.strip.must_equal '<%= bar %>'
   end
 

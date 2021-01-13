@@ -1,5 +1,7 @@
 = master
 
+* Speed up the view method in the render plugin even more when freezing the application (jeremyevans)
+
 * Speed up the view method in the render plugin when called with a single argument (jeremyevans)
 
 = 3.39.0 (2020-12-15)
