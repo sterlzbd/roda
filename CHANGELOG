@@ -1,5 +1,9 @@
 = master
 
+* Add freeze_template_caches! to the precompile_templates plugin, which ensures all templates are precompiled, and speeds up template access (jeremyevans)
+
+* Add precompile_views to the precompile_templates plugin, which precompiles the optimized render methods (jeremyevans)
+
 * Have RodaCache#freeze return the frozen internal hash (which no longer needs a mutex for thread-safety) (jeremyevans)
 
 * Speed up the view method in the render plugin even more when freezing the application (jeremyevans)
