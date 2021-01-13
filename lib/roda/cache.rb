@@ -22,6 +22,13 @@ class Roda
       @mutex.synchronize{@hash[key] = value}
     end
 
+    # Return the frozen internal hash.  The internal hash can then
+    # be accessed directly since it is frozen and there are no
+    # thread safety issues.
+    def freeze
+      @hash.freeze
+    end
+
     private
 
     # Create a copy of the cache with a separate mutex.

@@ -1,5 +1,7 @@
 = master
 
+* Have RodaCache#freeze return the frozen internal hash (which no longer needs a mutex for thread-safety) (jeremyevans)
+
 * Speed up the view method in the render plugin even more when freezing the application (jeremyevans)
 
 * Speed up the view method in the render plugin when called with a single argument (jeremyevans)
