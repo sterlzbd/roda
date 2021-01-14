@@ -85,7 +85,7 @@ Last Update:
 
 <p>Note that because of the way the sessions plugin is designed, even if the cipher secret was leaked and you are not using per-cookie cipher secrets, it would not allow an attacker to forge a session, it would only allow them to read the contents of an existing session.</p>
 
-<p>If you are currently using the sessions plugin, and performing rolling restarts, you should temporarily disable per-cookie session secrets until all processes have been restarted and are able to support per-cookie session secrets.  You can do so by setting the :per_cookie_cipher_secret sessions plugin option to false temporarily until all processes have restarted and are running <a href="../../../classes/Roda.html"><code>Roda</code></a> 3.19.0+.</p>
+<p>If you are currently using the sessions plugin, and performing rolling restarts, you should temporarily disable per-cookie session secrets until all processes have been restarted and are able to support per-cookie session secrets.  You can do so by setting the :per_cookie_cipher_secret sessions plugin option to false temporarily until all processes have restarted and are running <a href="../../../classes/Roda.html"><code>Roda</code></a> <a href="3_19_0_txt.html">3.19.0</a>+.</p>
 </li><li>
 <p>When passing route blocks to <a href="../../../classes/Roda.html"><code>Roda</code></a> that have 0 arity instead of the expected arity of 1, emulate an arity of 1 using an approach that is about 2.75-8x faster.  This emulation is still about 20% slower than using the expected arity.</p>
 </li><li>

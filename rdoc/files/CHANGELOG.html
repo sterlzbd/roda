@@ -30,13 +30,26 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2020-12-15 09:43:53 -0800</span>
+<span class='datetime'>2021-01-14 08:40:25 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<h1 id="label-3.39.0+-282020-12-15-29">3.39.0 (2020-12-15)<span><a href="#label-3.39.0+-282020-12-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.40.0+-282021-01-14-29"><a href="doc/release_notes/3_40_0_txt.html">3.40.0</a> (2021-01-14)<span><a href="#label-3.40.0+-282021-01-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Add freeze_template_caches! to the precompile_templates plugin, which ensures all templates are precompiled, and speeds up template access (jeremyevans)</p>
+</li><li>
+<p>Add precompile_views to the precompile_templates plugin, which precompiles the optimized render methods (jeremyevans)</p>
+</li><li>
+<p>Have RodaCache#freeze return the frozen internal hash (which no longer needs a mutex for thread-safety) (jeremyevans)</p>
+</li><li>
+<p>Speed up the view method in the render plugin even more when freezing the application (jeremyevans)</p>
+</li><li>
+<p>Speed up the view method in the render plugin when called with a single argument (jeremyevans)</p>
+</li></ul>
+
+<h1 id="label-3.39.0+-282020-12-15-29"><a href="doc/release_notes/3_39_0_txt.html">3.39.0</a> (2020-12-15)<span><a href="#label-3.39.0+-282020-12-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Speed up relative_path plugin if relative_path or relative_prefix is called more than once (jeremyevans)</p>
 </li><li>
@@ -45,17 +58,17 @@ Last Update:
 <p>Make typecast_params.convert! handle explicit nil values the same as missing values (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.38.0+-282020-11-16-29">3.38.0 (2020-11-16)<span><a href="#label-3.38.0+-282020-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.38.0+-282020-11-16-29"><a href="doc/release_notes/3_38_0_txt.html">3.38.0</a> (2020-11-16)<span><a href="#label-3.38.0+-282020-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make error_email and error_mail plugins rescue invalid parameter errors when preparing the email body (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.37.0+-282020-10-16-29">3.37.0 (2020-10-16)<span><a href="#label-3.37.0+-282020-10-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.37.0+-282020-10-16-29"><a href="doc/release_notes/3_37_0_txt.html">3.37.0</a> (2020-10-16)<span><a href="#label-3.37.0+-282020-10-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add custom_matchers plugin, for supporting arbitrary objects as matchers (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.36.0+-282020-09-14-29">3.36.0 (2020-09-14)<span><a href="#label-3.36.0+-282020-09-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.36.0+-282020-09-14-29"><a href="doc/release_notes/3_36_0_txt.html">3.36.0</a> (2020-09-14)<span><a href="#label-3.36.0+-282020-09-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add multi_public plugin, for serving files from multiple public directories (jeremyevans)</p>
 </li><li>
@@ -64,14 +77,14 @@ Last Update:
 <p>Add Vary response header when using type_routing plugin with Accept request header to prevent caching issues (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.35.0+-282020-08-14-29">3.35.0 (2020-08-14)<span><a href="#label-3.35.0+-282020-08-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.35.0+-282020-08-14-29"><a href="doc/release_notes/3_35_0_txt.html">3.35.0</a> (2020-08-14)<span><a href="#label-3.35.0+-282020-08-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add r plugin for r method for accessing request, useful when r local variable is not in scope (jeremyevans)</p>
 </li><li>
 <p>Warn when loading a plugin with arguments or a block if the plugin does not accept arguments or block (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.34.0+-282020-07-14-29">3.34.0 (2020-07-14)<span><a href="#label-3.34.0+-282020-07-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.34.0+-282020-07-14-29"><a href="doc/release_notes/3_34_0_txt.html">3.34.0</a> (2020-07-14)<span><a href="#label-3.34.0+-282020-07-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Remove unnecessary conditionals (jeremyevans)</p>
 </li><li>
@@ -80,14 +93,14 @@ Last Update:
 <p>Do not include pre/post context sections if empty in the exception_page plugin (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.33.0+-282020-06-16-29">3.33.0 (2020-06-16)<span><a href="#label-3.33.0+-282020-06-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.33.0+-282020-06-16-29"><a href="doc/release_notes/3_33_0_txt.html">3.33.0</a> (2020-06-16)<span><a href="#label-3.33.0+-282020-06-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :brotli option to public plugin to supplement it to serve brotli-compressed files like :gzip does for gzipped files (hmdne) (#194)</p>
 </li><li>
 <p>Add url method to path plugin, similar to path but returning the entire URL (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.32.0+-282020-05-15-29">3.32.0 (2020-05-15)<span><a href="#label-3.32.0+-282020-05-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.32.0+-282020-05-15-29"><a href="doc/release_notes/3_32_0_txt.html">3.32.0</a> (2020-05-15)<span><a href="#label-3.32.0+-282020-05-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make :dependencies option in assets plugin work correctly with render plugin template caching (jeremyevans) (#191)</p>
 </li><li>
@@ -98,14 +111,14 @@ Last Update:
 <p>Make render_each in render_each plugin handle template names with directories and extensions (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.31.0+-282020-04-15-29">3.31.0 (2020-04-15)<span><a href="#label-3.31.0+-282020-04-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.31.0+-282020-04-15-29"><a href="doc/release_notes/3_31_0_txt.html">3.31.0</a> (2020-04-15)<span><a href="#label-3.31.0+-282020-04-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :relative option to path method in path plugin, for generating a method returning relative paths (jeremyevans)</p>
 </li><li>
 <p>Add relative_path plugin, for turning absolute paths to paths relative to the current request (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.30.0+-282020-03-13-29">3.30.0 (2020-03-13)<span><a href="#label-3.30.0+-282020-03-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.30.0+-282020-03-13-29"><a href="doc/release_notes/3_30_0_txt.html">3.30.0</a> (2020-03-13)<span><a href="#label-3.30.0+-282020-03-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Support :relative_paths assets plugin option to use relative paths for the assets (jeremyevans)</p>
 </li><li>
@@ -114,7 +127,7 @@ Last Update:
 <p>Make :header matcher in header_matchers plugin work for Content-Type and Content-Length (jeremyevans) (#184)</p>
 </li></ul>
 
-<h1 id="label-3.29.0+-282020-02-14-29">3.29.0 (2020-02-14)<span><a href="#label-3.29.0+-282020-02-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.29.0+-282020-02-14-29"><a href="doc/release_notes/3_29_0_txt.html">3.29.0</a> (2020-02-14)<span><a href="#label-3.29.0+-282020-02-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Remove specs and old release notes from the gem to reduce gem size by over 35% (jeremyevans)</p>
 </li><li>
@@ -125,7 +138,7 @@ Last Update:
 <p>Handle invalid POST data when using the exception_page plugin (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.28.0+-282020-01-15-29">3.28.0 (2020-01-15)<span><a href="#label-3.28.0+-282020-01-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.28.0+-282020-01-15-29"><a href="doc/release_notes/3_28_0_txt.html">3.28.0</a> (2020-01-15)<span><a href="#label-3.28.0+-282020-01-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add session_created_at and session_updated_at methods to the sessions plugin (jeremyevans)</p>
 </li><li>
@@ -134,7 +147,7 @@ Last Update:
 <p>Make json_parser parse request body as json even if request body has already been read (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.27.0+-282019-12-13-29">3.27.0 (2019-12-13)<span><a href="#label-3.27.0+-282019-12-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.27.0+-282019-12-13-29"><a href="doc/release_notes/3_27_0_txt.html">3.27.0</a> (2019-12-13)<span><a href="#label-3.27.0+-282019-12-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Allow json_parser return correct result for invalid JSON if the params_capturing plugin is used (jeremyevans) (#180)</p>
 </li><li>
@@ -143,28 +156,28 @@ Last Update:
 <p>Split roda.rb into separate files (janko) (#177)</p>
 </li></ul>
 
-<h1 id="label-3.26.0+-282019-11-18-29">3.26.0 (2019-11-18)<span><a href="#label-3.26.0+-282019-11-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.26.0+-282019-11-18-29"><a href="doc/release_notes/3_26_0_txt.html">3.26.0</a> (2019-11-18)<span><a href="#label-3.26.0+-282019-11-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Combine multiple asset files with a newline when compiling them, avoiding corner cases with comments (ameuret) (#176)</p>
 </li><li>
 <p>Add asychronous streaming support to the streaming plugin (janko) (#175)</p>
 </li></ul>
 
-<h1 id="label-3.25.0+-282019-10-15-29">3.25.0 (2019-10-15)<span><a href="#label-3.25.0+-282019-10-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.25.0+-282019-10-15-29"><a href="doc/release_notes/3_25_0_txt.html">3.25.0</a> (2019-10-15)<span><a href="#label-3.25.0+-282019-10-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Support change in tilt 2.0.10 private API to continue to support compiled templates, with up to 33% performance improvement (jeremyevans)</p>
 </li><li>
 <p>Improve render performance with :locals option up to 75% by calling compiled template methods directly (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.24.0+-282019-09-13-29">3.24.0 (2019-09-13)<span><a href="#label-3.24.0+-282019-09-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.24.0+-282019-09-13-29"><a href="doc/release_notes/3_24_0_txt.html">3.24.0</a> (2019-09-13)<span><a href="#label-3.24.0+-282019-09-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Fix Proc.new warning in module_include plugin on Ruby 2.7+ (jeremyevans)</p>
 </li><li>
 <p>Improve render_each performance by calling compiled template methods directly (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.23.0+-282019-08-13-29">3.23.0 (2019-08-13)<span><a href="#label-3.23.0+-282019-08-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.23.0+-282019-08-13-29"><a href="doc/release_notes/3_23_0_txt.html">3.23.0</a> (2019-08-13)<span><a href="#label-3.23.0+-282019-08-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make roda/session_middleware work if type_routing plugin is loaded into <a href="../classes/Roda.html"><code>Roda</code></a> itself (jeremyevans) (#169)</p>
 </li><li>
@@ -175,22 +188,22 @@ Last Update:
 <p>Improve render/view performance up to 2x in development mode in the default case by calling compiled template methods directly (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.22.0+-282019-07-12-29">3.22.0 (2019-07-12)<span><a href="#label-3.22.0+-282019-07-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.22.0+-282019-07-12-29"><a href="doc/release_notes/3_22_0_txt.html">3.22.0</a> (2019-07-12)<span><a href="#label-3.22.0+-282019-07-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Improve render performance up to 4x in the default case by calling compiled template methods directly (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.21.0+-282019-06-14-29">3.21.0 (2019-06-14)<span><a href="#label-3.21.0+-282019-06-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.21.0+-282019-06-14-29"><a href="doc/release_notes/3_21_0_txt.html">3.21.0</a> (2019-06-14)<span><a href="#label-3.21.0+-282019-06-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Cache compiled templates in development mode, until the template files are modified (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.20.0+-282019-05-16-29">3.20.0 (2019-05-16)<span><a href="#label-3.20.0+-282019-05-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.20.0+-282019-05-16-29"><a href="doc/release_notes/3_20_0_txt.html">3.20.0</a> (2019-05-16)<span><a href="#label-3.20.0+-282019-05-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Set Content-Length header to 0 for empty 205 responses (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.19.0+-282019-04-12-29">3.19.0 (2019-04-12)<span><a href="#label-3.19.0+-282019-04-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.19.0+-282019-04-12-29"><a href="doc/release_notes/3_19_0_txt.html">3.19.0</a> (2019-04-12)<span><a href="#label-3.19.0+-282019-04-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Allow assets plugin :timestamp_paths option to be a string to specify a custom separator (jeremyevans)</p>
 </li><li>
@@ -215,7 +228,7 @@ Last Update:
 <p>Add match_hook plugin for calling hooks when there is a successful match block (adam12) (#164)</p>
 </li></ul>
 
-<h1 id="label-3.18.0+-282019-03-15-29">3.18.0 (2019-03-15)<span><a href="#label-3.18.0+-282019-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.18.0+-282019-03-15-29"><a href="doc/release_notes/3_18_0_txt.html">3.18.0</a> (2019-03-15)<span><a href="#label-3.18.0+-282019-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add direct_call plugin for making Roda.call skip middleware, allowing more optimization when dispatching routes (jeremyevans)</p>
 </li><li>
@@ -264,7 +277,7 @@ Last Update:
 <p>Include cookie_options when clearing the cookie (#162, #163) (eiko, jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.17.0+-282019-02-15-29">3.17.0 (2019-02-15)<span><a href="#label-3.17.0+-282019-02-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.17.0+-282019-02-15-29"><a href="doc/release_notes/3_17_0_txt.html">3.17.0</a> (2019-02-15)<span><a href="#label-3.17.0+-282019-02-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Improve performance in the common case for RodaResponse#finish (jeremyevans)</p>
 </li><li>
@@ -275,31 +288,31 @@ Last Update:
 <p>Add route_block_args plugin to control which arguments are yielded to the route block (jeremyevans, chrisfrank) (#159)</p>
 </li></ul>
 
-<h1 id="label-3.16.0+-282019-01-18-29">3.16.0 (2019-01-18)<span><a href="#label-3.16.0+-282019-01-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.16.0+-282019-01-18-29"><a href="doc/release_notes/3_16_0_txt.html">3.16.0</a> (2019-01-18)<span><a href="#label-3.16.0+-282019-01-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add mail_processor plugin for processing mail using a routing tree (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.15.0+-282018-12-14-29">3.15.0 (2018-12-14)<span><a href="#label-3.15.0+-282018-12-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.15.0+-282018-12-14-29"><a href="doc/release_notes/3_15_0_txt.html">3.15.0</a> (2018-12-14)<span><a href="#label-3.15.0+-282018-12-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Support render plugin :escape option to be a string or array of strings and only add :escape option for those template engines (jeremyevans) (#158)</p>
 </li><li>
 <p>Add :skip_missing option to convert!/convert_each! in the typecast_params plugin to support not storing keys not present in params (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.14.1+-282018-11-29-29">3.14.1 (2018-11-29)<span><a href="#label-3.14.1+-282018-11-29-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.14.1+-282018-11-29-29"><a href="doc/release_notes/3_14_1_txt.html">3.14.1</a> (2018-11-29)<span><a href="#label-3.14.1+-282018-11-29-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>SECURITY: content_for plugin no longer post-processes block result with template engine (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.14.0+-282018-11-16-29">3.14.0 (2018-11-16)<span><a href="#label-3.14.0+-282018-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.14.0+-282018-11-16-29"><a href="doc/release_notes/3_14_0_txt.html">3.14.0</a> (2018-11-16)<span><a href="#label-3.14.0+-282018-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :raise option to convert!/convert_each! in the typecast_params plugin to support not raising for missing keys (celsworth) (#153)</p>
 </li><li>
 <p>Do not persist convert!/convert_each! :symbolize setting in the typecast_params plugin (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.13.0+-282018-10-12-29">3.13.0 (2018-10-12)<span><a href="#label-3.13.0+-282018-10-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.13.0+-282018-10-12-29"><a href="doc/release_notes/3_13_0_txt.html">3.13.0</a> (2018-10-12)<span><a href="#label-3.13.0+-282018-10-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make Stream#write in streaming plugin return number of bytes written instead of self, so it works with IO.copy_stream (jeremyevans)</p>
 </li><li>
@@ -308,12 +321,12 @@ Last Update:
 <p>Make common_logger plugin handle raised errors (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.12.0+-282018-09-14-29">3.12.0 (2018-09-14)<span><a href="#label-3.12.0+-282018-09-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.12.0+-282018-09-14-29"><a href="doc/release_notes/3_12_0_txt.html">3.12.0</a> (2018-09-14)<span><a href="#label-3.12.0+-282018-09-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add common_logger plugin for common log support (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.11.0+-282018-08-15-29">3.11.0 (2018-08-15)<span><a href="#label-3.11.0+-282018-08-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.11.0+-282018-08-15-29"><a href="doc/release_notes/3_11_0_txt.html">3.11.0</a> (2018-08-15)<span><a href="#label-3.11.0+-282018-08-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Disable default compression of sessions over 128 bytes in the sessions plugin (jeremyevans)</p>
 </li><li>
@@ -322,7 +335,7 @@ Last Update:
 <p>Modify internal before/after processing to avoid plugin load order issues (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.10.0+-282018-07-18-29">3.10.0 (2018-07-18)<span><a href="#label-3.10.0+-282018-07-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.10.0+-282018-07-18-29"><a href="doc/release_notes/3_10_0_txt.html">3.10.0</a> (2018-07-18)<span><a href="#label-3.10.0+-282018-07-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Remove flash key from session if new flash is empty when rotating flash (jeremyevans)</p>
 </li><li>
@@ -341,26 +354,26 @@ Last Update:
 <p>Make Integer in typecast_params handle Numeric input, and require that Numeric input not have fractional parts (jeremyevans) (#146)</p>
 </li></ul>
 
-<h1 id="label-3.9.0+-282018-06-11-29">3.9.0 (2018-06-11)<span><a href="#label-3.9.0+-282018-06-11-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.9.0+-282018-06-11-29"><a href="doc/release_notes/3_9_0_txt.html">3.9.0</a> (2018-06-11)<span><a href="#label-3.9.0+-282018-06-11-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add route_csrf plugin for CSRF protection, offering more control, better security, and request-specific tokens compared to rack_csrf (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.8.0+-282018-05-17-29">3.8.0 (2018-05-17)<span><a href="#label-3.8.0+-282018-05-17-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.8.0+-282018-05-17-29"><a href="doc/release_notes/3_8_0_txt.html">3.8.0</a> (2018-05-17)<span><a href="#label-3.8.0+-282018-05-17-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Accept convert_each! :keys option that is Proc or Method in typecast_params plugin (jeremyevans)</p>
 </li><li>
 <p>Make convert_each! in typecast_params plugin handle hashes with &#39;0&#39;..&#39;N&#39; keys without :keys option (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.7.0+-282018-04-20-29">3.7.0 (2018-04-20)<span><a href="#label-3.7.0+-282018-04-20-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.7.0+-282018-04-20-29"><a href="doc/release_notes/3_7_0_txt.html">3.7.0</a> (2018-04-20)<span><a href="#label-3.7.0+-282018-04-20-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make response_request plugin work with error_handler and class_level_routing plugins (jeremyevans)</p>
 </li><li>
 <p>Add content_security_policy plugin for setting an appropriate Content-Security-Policy header (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.6.0+-282018-03-26-29">3.6.0 (2018-03-26)<span><a href="#label-3.6.0+-282018-03-26-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.6.0+-282018-03-26-29"><a href="doc/release_notes/3_6_0_txt.html">3.6.0</a> (2018-03-26)<span><a href="#label-3.6.0+-282018-03-26-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :wrap option to json_parser plugin, for whether/how to wrap the uploaded JSON object (jeremyevans) (#142)</p>
 </li><li>
@@ -369,7 +382,7 @@ Last Update:
 <p>Add early_hints plugin for sending 103 Early Hint responses, currently only working on puma (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.5.0+-282018-02-14-29">3.5.0 (2018-02-14)<span><a href="#label-3.5.0+-282018-02-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.5.0+-282018-02-14-29"><a href="doc/release_notes/3_5_0_txt.html">3.5.0</a> (2018-02-14)<span><a href="#label-3.5.0+-282018-02-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add request_aref plugin for configuring behavior of request [] and []= methods (jeremyevans)</p>
 </li><li>
@@ -378,26 +391,26 @@ Last Update:
 <p>Make content_for call with block convert block result to string before passing to tilt (jeremyevans) (#135)</p>
 </li></ul>
 
-<h1 id="label-3.4.0+-282018-01-12-29">3.4.0 (2018-01-12)<span><a href="#label-3.4.0+-282018-01-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.4.0+-282018-01-12-29"><a href="doc/release_notes/3_4_0_txt.html">3.4.0</a> (2018-01-12)<span><a href="#label-3.4.0+-282018-01-12-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add middleware_stack plugin for removing middleware and inserting middleware before the end of the stack (jeremyevans)</p>
 </li><li>
 <p>Make head plugin handle closing existing response bodies if the body responds to close (Eric Wong)</p>
 </li></ul>
 
-<h1 id="label-3.3.0+-282017-12-14-29">3.3.0 (2017-12-14)<span><a href="#label-3.3.0+-282017-12-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.3.0+-282017-12-14-29"><a href="doc/release_notes/3_3_0_txt.html">3.3.0</a> (2017-12-14)<span><a href="#label-3.3.0+-282017-12-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add typecast_params plugin for converting param values to explicit types (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.2.0+-282017-11-16-29">3.2.0 (2017-11-16)<span><a href="#label-3.2.0+-282017-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.2.0+-282017-11-16-29"><a href="doc/release_notes/3_2_0_txt.html">3.2.0</a> (2017-11-16)<span><a href="#label-3.2.0+-282017-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Use microseconds in assets plugin :timestamp_paths timestamps (jeremyevans)</p>
 </li><li>
 <p>Add timestamp_public plugin for serving static files with paths that change based on modify timestamp (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.1.0+-282017-10-13-29">3.1.0 (2017-10-13)<span><a href="#label-3.1.0+-282017-10-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.1.0+-282017-10-13-29"><a href="doc/release_notes/3_1_0_txt.html">3.1.0</a> (2017-10-13)<span><a href="#label-3.1.0+-282017-10-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make set_layout_locals and set_view_locals in branch_locals plugin work when the other is not called (jeremyevans)</p>
 </li><li>
@@ -408,7 +421,7 @@ Last Update:
 <p>Remove deprecated Roda.thread_safe_cache and RodaRequest#placeholder_string_matcher? methods (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-3.0.0+-282017-09-15-29">3.0.0 (2017-09-15)<span><a href="#label-3.0.0+-282017-09-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-3.0.0+-282017-09-15-29"><a href="doc/release_notes/3_0_0_txt.html">3.0.0</a> (2017-09-15)<span><a href="#label-3.0.0+-282017-09-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make defined symbol_matcher and hash_matcher match methods private (jeremyevans)</p>
 </li><li>
@@ -461,7 +474,7 @@ Last Update:
 <p>Remove deprecated constants and plugins (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.29.0+-282017-08-16-29">2.29.0 (2017-08-16)<span><a href="#label-2.29.0+-282017-08-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.29.0+-282017-08-16-29"><a href="doc/release_notes/2_29_0_txt.html">2.29.0</a> (2017-08-16)<span><a href="#label-2.29.0+-282017-08-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Deprecate accessing multi_route namespace when there are no routes (jeremyevans)</p>
 </li><li>
@@ -508,7 +521,7 @@ Last Update:
 <p>Deprecate use of placeholders in string matchers by default, add placeholder_string_matchers plugin for it (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.28.0+-282017-07-14-29">2.28.0 (2017-07-14)<span><a href="#label-2.28.0+-282017-07-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.28.0+-282017-07-14-29"><a href="doc/release_notes/2_28_0_txt.html">2.28.0</a> (2017-07-14)<span><a href="#label-2.28.0+-282017-07-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Deprecate unneeded internal constants (jeremyevans)</p>
 </li><li>
@@ -517,7 +530,7 @@ Last Update:
 <p>Move 303 default redirect status from sinatra_helpers to status_303 plugin, so it can be loaded separately (plujon) (#122)</p>
 </li></ul>
 
-<h1 id="label-2.27.0+-282017-06-14-29">2.27.0 (2017-06-14)<span><a href="#label-2.27.0+-282017-06-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.27.0+-282017-06-14-29"><a href="doc/release_notes/2_27_0_txt.html">2.27.0</a> (2017-06-14)<span><a href="#label-2.27.0+-282017-06-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add class_matchers plugin for matching other classes (in addition to String/Integer), with user specified regexps and type conversion (jeremyevans)</p>
 </li><li>
@@ -526,19 +539,19 @@ Last Update:
 <p>Support Integer class matcher for d+ segments, yielding matched values as integers (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.26.0+-282017-05-16-29">2.26.0 (2017-05-16)<span><a href="#label-2.26.0+-282017-05-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.26.0+-282017-05-16-29"><a href="doc/release_notes/2_26_0_txt.html">2.26.0</a> (2017-05-16)<span><a href="#label-2.26.0+-282017-05-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Support :skip_middleware option to csrf plugin to add only the methods and not add the middleware (luciusgone) (#118)</p>
 </li><li>
 <p>Handle multiple types with matching suffixes in the type_routing plugin (e.g. tar.gz and gz) (tomdalling) (#117)</p>
 </li></ul>
 
-<h1 id="label-2.25.0+-282017-04-18-29">2.25.0 (2017-04-18)<span><a href="#label-2.25.0+-282017-04-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.25.0+-282017-04-18-29"><a href="doc/release_notes/2_25_0_txt.html">2.25.0</a> (2017-04-18)<span><a href="#label-2.25.0+-282017-04-18-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add error_mail plugin, similar to error_email but using mail instead of net/smtp directly (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.24.0+-282017-03-15-29">2.24.0 (2017-03-15)<span><a href="#label-2.24.0+-282017-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.24.0+-282017-03-15-29"><a href="doc/release_notes/2_24_0_txt.html">2.24.0</a> (2017-03-15)<span><a href="#label-2.24.0+-282017-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Have h plugin use cgi/escape if available for faster escaping (jeremyevans)</p>
 </li><li>
@@ -559,7 +572,7 @@ Last Update:
 <p>Do not modify the render plugin&#39;s cache if loading the plugin multiple times (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.23.0+-282017-02-24-29">2.23.0 (2017-02-24)<span><a href="#label-2.23.0+-282017-02-24-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.23.0+-282017-02-24-29"><a href="doc/release_notes/2_23_0_txt.html">2.23.0</a> (2017-02-24)<span><a href="#label-2.23.0+-282017-02-24-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :inherit_cache render plugin option, to create a copy of the cache for subclasses, instead of using an empty cache (jeremyevans)</p>
 </li><li>
@@ -574,7 +587,7 @@ Last Update:
 <p>Make Roda.freeze in the static_routing plugin return self (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.22.0+-282017-01-20-29">2.22.0 (2017-01-20)<span><a href="#label-2.22.0+-282017-01-20-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.22.0+-282017-01-20-29"><a href="doc/release_notes/2_22_0_txt.html">2.22.0</a> (2017-01-20)<span><a href="#label-2.22.0+-282017-01-20-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add support for :verbatim_string_matcher option, for making all string matchers match verbatim (jeremyevans)</p>
 </li><li>
@@ -583,17 +596,17 @@ Last Update:
 <p>Add support for :unsupported_block_result =&gt; :raise option, for raising on unsupported route/match block return values (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.21.0+-282016-12-16-29">2.21.0 (2016-12-16)<span><a href="#label-2.21.0+-282016-12-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.21.0+-282016-12-16-29"><a href="doc/release_notes/2_21_0_txt.html">2.21.0</a> (2016-12-16)<span><a href="#label-2.21.0+-282016-12-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add handle_stream_error method to streaming plugin, for handling errors when using stream(:loop=&gt;true) (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.20.0+-282016-11-13-29">2.20.0 (2016-11-13)<span><a href="#label-2.20.0+-282016-11-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.20.0+-282016-11-13-29"><a href="doc/release_notes/2_20_0_txt.html">2.20.0</a> (2016-11-13)<span><a href="#label-2.20.0+-282016-11-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Support :escape=&gt;:erubi option in the render plugin to use the erubi template engine (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.19.0+-282016-10-14-29">2.19.0 (2016-10-14)<span><a href="#label-2.19.0+-282016-10-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.19.0+-282016-10-14-29"><a href="doc/release_notes/2_19_0_txt.html">2.19.0</a> (2016-10-14)<span><a href="#label-2.19.0+-282016-10-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Don&#39;t add Content-Type/Content-Length headers for 1xx, 204, 205, 304 statuses (celsworth, jeremyevans) (#101, #102)</p>
 </li><li>
@@ -606,7 +619,7 @@ Last Update:
 <p>Make h plugin not escape / (celsworth, jeremyevans) (#100)</p>
 </li></ul>
 
-<h1 id="label-2.18.0+-282016-09-13-29">2.18.0 (2016-09-13)<span><a href="#label-2.18.0+-282016-09-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.18.0+-282016-09-13-29"><a href="doc/release_notes/2_18_0_txt.html">2.18.0</a> (2016-09-13)<span><a href="#label-2.18.0+-282016-09-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add assets_preloading plugin, for creating link tags or Link header for preloading assets (celsworth, jeremyevans) (#98)</p>
 </li><li>
@@ -619,7 +632,7 @@ Last Update:
 <p>Make head plugin work with not_allowed plugin if loaded after (jeremyevans) (#92)</p>
 </li></ul>
 
-<h1 id="label-2.17.0+-282016-08-13-29">2.17.0 (2016-08-13)<span><a href="#label-2.17.0+-282016-08-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.17.0+-282016-08-13-29"><a href="doc/release_notes/2_17_0_txt.html">2.17.0</a> (2016-08-13)<span><a href="#label-2.17.0+-282016-08-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :postprocessor option to assets plugin, for postprocessing assets (e.g. autoprefixing CSS) (celsworth) (#86)</p>
 </li><li>
@@ -634,7 +647,7 @@ Last Update:
 <p>Add run_append_slash plugin, so r.run uses “/” instead of “” for app&#39;s PATH_INFO (kenaniah) (#77)</p>
 </li></ul>
 
-<h1 id="label-2.16.0+-282016-07-13-29">2.16.0 (2016-07-13)<span><a href="#label-2.16.0+-282016-07-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.16.0+-282016-07-13-29"><a href="doc/release_notes/2_16_0_txt.html">2.16.0</a> (2016-07-13)<span><a href="#label-2.16.0+-282016-07-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add type_routing plugin, for routing based on path extensions and Accept headers (Papierkorb, jeremyevans) (#75)</p>
 </li><li>
@@ -643,7 +656,7 @@ Last Update:
 <p>Add request_headers plugin, for simpler access to request headers (celsworth) (#72)</p>
 </li></ul>
 
-<h1 id="label-2.15.0+-282016-06-13-29">2.15.0 (2016-06-13)<span><a href="#label-2.15.0+-282016-06-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.15.0+-282016-06-13-29"><a href="doc/release_notes/2_15_0_txt.html">2.15.0</a> (2016-06-13)<span><a href="#label-2.15.0+-282016-06-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add public plugin for r.public method for serving all files in the public directory (jeremyevans)</p>
 </li><li>
@@ -654,19 +667,19 @@ Last Update:
 <p>Add content_for plugin :append option to support appending to the existing content (evanleck, jeremyevans) (#66)</p>
 </li></ul>
 
-<h1 id="label-2.14.0+-282016-05-13-29">2.14.0 (2016-05-13)<span><a href="#label-2.14.0+-282016-05-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.14.0+-282016-05-13-29"><a href="doc/release_notes/2_14_0_txt.html">2.14.0</a> (2016-05-13)<span><a href="#label-2.14.0+-282016-05-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add symbol_status plugin for using symbols as status codes (Papierkorb) (#65)</p>
 </li><li>
 <p>Make middleware plugin also run the application&#39;s middleware (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.13.0+-282016-04-14-29">2.13.0 (2016-04-14)<span><a href="#label-2.13.0+-282016-04-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.13.0+-282016-04-14-29"><a href="doc/release_notes/2_13_0_txt.html">2.13.0</a> (2016-04-14)<span><a href="#label-2.13.0+-282016-04-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :check_paths and :allowed_paths to render plugin options to avoid security issues with template rendering (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.12.0+-282016-03-15-29">2.12.0 (2016-03-15)<span><a href="#label-2.12.0+-282016-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.12.0+-282016-03-15-29"><a href="doc/release_notes/2_12_0_txt.html">2.12.0</a> (2016-03-15)<span><a href="#label-2.12.0+-282016-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Allow error handler access to the request&#39;s remaining_path (jeremyevans)</p>
 </li><li>
@@ -677,7 +690,7 @@ Last Update:
 <p>Optimize symbol matching code for up to a 60% performance increase (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.11.0+-282016-02-16-29">2.11.0 (2016-02-16)<span><a href="#label-2.11.0+-282016-02-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.11.0+-282016-02-16-29"><a href="doc/release_notes/2_11_0_txt.html">2.11.0</a> (2016-02-16)<span><a href="#label-2.11.0+-282016-02-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Support :scope option in render plugin, for specifying object in which to evaluate the template (jeremyevans)</p>
 </li><li>
@@ -686,7 +699,7 @@ Last Update:
 <p>Add params_capturing plugin, for storing matcher captures in the request params (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.10.0+-282016-01-15-29">2.10.0 (2016-01-15)<span><a href="#label-2.10.0+-282016-01-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.10.0+-282016-01-15-29"><a href="doc/release_notes/2_10_0_txt.html">2.10.0</a> (2016-01-15)<span><a href="#label-2.10.0+-282016-01-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Do not override existing Content-Type header in json plugin (jeremyevans)</p>
 </li><li>
@@ -697,19 +710,19 @@ Last Update:
 <p>Add Streaming::Stream#write method so that IO.copy_stream will work (janko-m) (#56)</p>
 </li></ul>
 
-<h1 id="label-2.9.0+-282015-12-15-29">2.9.0 (2015-12-15)<span><a href="#label-2.9.0+-282015-12-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.9.0+-282015-12-15-29"><a href="doc/release_notes/2_9_0_txt.html">2.9.0</a> (2015-12-15)<span><a href="#label-2.9.0+-282015-12-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Support passing the content as a string argument instead of a block in the content_for plugin (badosu) (#52)</p>
 </li></ul>
 
-<h1 id="label-2.8.0+-282015-11-16-29">2.8.0 (2015-11-16)<span><a href="#label-2.8.0+-282015-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.8.0+-282015-11-16-29"><a href="doc/release_notes/2_8_0_txt.html">2.8.0</a> (2015-11-16)<span><a href="#label-2.8.0+-282015-11-16-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add multi_view plugin for easily setting up routing for rendering multiple views (jeremyevans)</p>
 </li><li>
 <p>Make content_for plugin work with haml and potentially other non-erb template engines (plukevdh) (#50)</p>
 </li></ul>
 
-<h1 id="label-2.7.0+-282015-10-13-29">2.7.0 (2015-10-13)<span><a href="#label-2.7.0+-282015-10-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.7.0+-282015-10-13-29"><a href="doc/release_notes/2_7_0_txt.html">2.7.0</a> (2015-10-13)<span><a href="#label-2.7.0+-282015-10-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add run_handler plugin for modifying rack response arrays when using r.run, and continuing routing for 404 responses (jeremyevans)</p>
 </li><li>
@@ -724,7 +737,7 @@ Last Update:
 <p>Allow Roda.rewrite_path to take a block in the path_rewriter plugin (Freaky) (#45)</p>
 </li></ul>
 
-<h1 id="label-2.6.0+-282015-09-14-29">2.6.0 (2015-09-14)<span><a href="#label-2.6.0+-282015-09-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.6.0+-282015-09-14-29"><a href="doc/release_notes/2_6_0_txt.html">2.6.0</a> (2015-09-14)<span><a href="#label-2.6.0+-282015-09-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :params and :params! matchers to param_matchers plugin (jeremyevans)</p>
 </li><li>
@@ -733,12 +746,12 @@ Last Update:
 <p>Allow request.halt to work in before hooks in the hooks plugin (celsworth) (#38)</p>
 </li></ul>
 
-<h1 id="label-2.5.1+-282015-08-13-29">2.5.1 (2015-08-13)<span><a href="#label-2.5.1+-282015-08-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.5.1+-282015-08-13-29"><a href="doc/release_notes/2_5_1_txt.html">2.5.1</a> (2015-08-13)<span><a href="#label-2.5.1+-282015-08-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Allow multi_route and middleware plugins to work together (janko-m) (#36)</p>
 </li></ul>
 
-<h1 id="label-2.5.0+-282015-07-14-29">2.5.0 (2015-07-14)<span><a href="#label-2.5.0+-282015-07-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.5.0+-282015-07-14-29"><a href="doc/release_notes/2_5_0_txt.html">2.5.0</a> (2015-07-14)<span><a href="#label-2.5.0+-282015-07-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make :by_name option to path plugin default to true in development (jeremyevans)</p>
 </li><li>
@@ -749,7 +762,7 @@ Last Update:
 <p>Allow r.multi_run to take a block that is called with the prefix before dispatching to the rack app (mikz) (#32)</p>
 </li></ul>
 
-<h1 id="label-2.4.0+-282015-06-15-29">2.4.0 (2015-06-15)<span><a href="#label-2.4.0+-282015-06-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.4.0+-282015-06-15-29"><a href="doc/release_notes/2_4_0_txt.html">2.4.0</a> (2015-06-15)<span><a href="#label-2.4.0+-282015-06-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add websockets plugin, for integration with faye-websocket (jeremyevans)</p>
 </li><li>
@@ -762,7 +775,7 @@ Last Update:
 <p>Add :gzip option to assets plugin (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.3.0+-282015-05-13-29">2.3.0 (2015-05-13)<span><a href="#label-2.3.0+-282015-05-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.3.0+-282015-05-13-29"><a href="doc/release_notes/2_3_0_txt.html">2.3.0</a> (2015-05-13)<span><a href="#label-2.3.0+-282015-05-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make assets plugin work better with json plugin when r.assets is the last method called in a route block (jeremyevans) (#27)</p>
 </li><li>
@@ -797,7 +810,7 @@ Last Update:
 <p>Add json_parser plugin, for parsing request bodies in JSON format (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.2.0+-282015-04-13-29">2.2.0 (2015-04-13)<span><a href="#label-2.2.0+-282015-04-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.2.0+-282015-04-13-29"><a href="doc/release_notes/2_2_0_txt.html">2.2.0</a> (2015-04-13)<span><a href="#label-2.2.0+-282015-04-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add :escaper render plugin option to support custom escaping of &lt;%= %&gt; tags when :escape is used (jeremyevans)</p>
 </li><li>
@@ -818,7 +831,7 @@ Last Update:
 <p>Make Roda#path work correctly in subclasses (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.1.0+-282015-03-13-29">2.1.0 (2015-03-13)<span><a href="#label-2.1.0+-282015-03-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.1.0+-282015-03-13-29"><a href="doc/release_notes/2_1_0_txt.html">2.1.0</a> (2015-03-13)<span><a href="#label-2.1.0+-282015-03-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Have add_file in the mailer plugin support blocks, which are called after the file has been added (jeremyevans)</p>
 </li><li>
@@ -845,7 +858,7 @@ Last Update:
 <p>Make add_file in the mailer plugin add the files after the email body instead of before (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-2.0.0+-282015-02-13-29">2.0.0 (2015-02-13)<span><a href="#label-2.0.0+-282015-02-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-2.0.0+-282015-02-13-29"><a href="doc/release_notes/2_0_0_txt.html">2.0.0</a> (2015-02-13)<span><a href="#label-2.0.0+-282015-02-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Allow <a href="../classes/Roda.html"><code>Roda</code></a> app to be used as a regular rack app even when using the middleware plugin (jeremyevans)</p>
 </li><li>
@@ -867,10 +880,10 @@ Last Update:
 </li><li>
 <p>Don&#39;t modify SCRIPT_NAME/PATH_INFO during routing, merging static_path_info plugin into core (jeremyevans)</p>
 </li><li>
-<p>Remove code deprecated in <a href="../classes/Roda.html"><code>Roda</code></a> 1.3.0 (jeremyevans)</p>
+<p>Remove code deprecated in <a href="../classes/Roda.html"><code>Roda</code></a> <a href="doc/release_notes/1_3_0_txt.html">1.3.0</a> (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-1.3.0+-282015-01-13-29">1.3.0 (2015-01-13)<span><a href="#label-1.3.0+-282015-01-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-1.3.0+-282015-01-13-29"><a href="doc/release_notes/1_3_0_txt.html">1.3.0</a> (2015-01-13)<span><a href="#label-1.3.0+-282015-01-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Make static_path_info plugin restore original SCRIPT_NAME/PATH_INFO before returning from r.run (jeremyevans)</p>
 </li><li>
@@ -913,7 +926,7 @@ Last Update:
 <p>Make RodaResponse a subclass of Object instead of Rack::Response (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-1.2.0+-282014-12-17-29">1.2.0 (2014-12-17)<span><a href="#label-1.2.0+-282014-12-17-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-1.2.0+-282014-12-17-29"><a href="doc/release_notes/1_2_0_txt.html">1.2.0</a> (2014-12-17)<span><a href="#label-1.2.0+-282014-12-17-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Don&#39;t override explicit nil :default_encoding template option in the render plugin (jeremyevans)</p>
 </li><li>
@@ -984,7 +997,7 @@ Last Update:
 <p>Add mailer plugin, allowing use of a routing tree for email instead of web responses (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-1.1.0+-282014-11-11-29">1.1.0 (2014-11-11)<span><a href="#label-1.1.0+-282014-11-11-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-1.1.0+-282014-11-11-29"><a href="doc/release_notes/1_1_0_txt.html">1.1.0</a> (2014-11-11)<span><a href="#label-1.1.0+-282014-11-11-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Add assets plugin, for rendering assets on the fly, or compiling them to a single compressed file (cj, jeremyevans) (#5)</p>
 </li><li>
@@ -1019,7 +1032,7 @@ Last Update:
 <p>Add error_email plugin, for easily emailing an error notification for an exception (jeremyevans)</p>
 </li></ul>
 
-<h1 id="label-1.0.0+-282014-08-19-29">1.0.0 (2014-08-19)<span><a href="#label-1.0.0+-282014-08-19-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<h1 id="label-1.0.0+-282014-08-19-29"><a href="doc/release_notes/1_0_0_txt.html">1.0.0</a> (2014-08-19)<span><a href="#label-1.0.0+-282014-08-19-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Don&#39;t have :extension hash matcher force a terminal match (jeremyevans)</p>
 </li><li>

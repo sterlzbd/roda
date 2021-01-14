@@ -40,7 +40,7 @@ Last Update:
 <ul><li>
 <p>Do not post-process content_for block result with template engine</p>
 
-<p>Since 2.8.0, the content_for block result was post-processed with the template engine.  There is no actual need to do so, as content_for is not designed to render output, it is designed to store already rendered output.  This post-processing was introduced when support for haml templates was added in 2.8.0.</p>
+<p>Since <a href="2_8_0_txt.html">2.8.0</a>, the content_for block result was post-processed with the template engine.  There is no actual need to do so, as content_for is not designed to render output, it is designed to store already rendered output.  This post-processing was introduced when support for haml templates was added in 2.8.0.</p>
 
 <p>Post-processing the output with the template engine is generally a no-op for most usage as most output does not contain template metaprogramming characters, which is why this went undetected for so long.  However, if a content_for block return value contained unescaped user input, it was probably vulnerable to remote code execution if the default ERB template engine is used, the same as if the user input was passed directly to the render or view method.</p>
 

@@ -51,6 +51,7 @@ Superclass:
 <ol>
 <li><a href="#method-i-5B-5D">[]</a></li>
 <li><a href="#method-i-5B-5D-3D">[]=</a></li>
+<li><a href="#method-i-freeze">freeze</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -111,6 +112,24 @@ Superclass:
 [show source]
 </a>
 <pre id='method-i-5B-5D-3D-source'>   <span class="ruby-comment"># File lib/roda/cache.rb</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)&#x000A;<span class="line-num">22</span>   <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span>{<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span>}&#x000A;<span class="line-num">23</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-freeze'>
+<a name='method-i-freeze'></a>
+<div class='synopsis'>
+<span class='name'>freeze</span><span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Return the frozen internal hash.  The internal hash can then be accessed directly since it is frozen and there are no thread safety issues.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-freeze-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-freeze-source'>   <span class="ruby-comment"># File lib/roda/cache.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>&#x000A;<span class="line-num">29</span>   <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

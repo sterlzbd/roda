@@ -1,15 +1,15 @@
-Tue, 15 Dec 2020 09:56:46 -0800
+Thu, 14 Jan 2021 09:55:59 -0800
 README.rdoc	Thu, 23 Apr 2020 11:17:42 -0700
-CHANGELOG	Tue, 15 Dec 2020 09:43:53 -0800
-MIT-LICENSE	Wed, 08 Jan 2020 20:03:32 -0800
+CHANGELOG	Thu, 14 Jan 2021 08:40:25 -0800
+MIT-LICENSE	Wed, 06 Jan 2021 08:28:25 -0800
 lib/roda.rb	Fri, 04 Dec 2020 15:45:14 -0800
-lib/roda/cache.rb	Wed, 27 Nov 2019 12:12:01 -0800
+lib/roda/cache.rb	Tue, 12 Jan 2021 15:49:31 -0800
 lib/roda/plugins.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/plugins/_after_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/_before_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/_symbol_regexp_matchers.rb	Thu, 16 Apr 2020 13:01:43 -0700
 lib/roda/plugins/all_verbs.rb	Mon, 22 Jun 2020 15:56:02 -0700
-lib/roda/plugins/assets.rb	Tue, 05 May 2020 10:19:03 -0700
+lib/roda/plugins/assets.rb	Wed, 13 Jan 2021 08:54:00 -0800
 lib/roda/plugins/assets_preloading.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/backtracking_array.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/plugins/branch_locals.rb	Wed, 06 Mar 2019 07:42:46 -0800
@@ -75,11 +75,11 @@ lib/roda/plugins/path.rb	Fri, 15 May 2020 10:09:39 -0700
 lib/roda/plugins/path_matchers.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/path_rewriter.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/placeholder_string_matchers.rb	Thu, 16 Apr 2020 13:01:43 -0700
-lib/roda/plugins/precompile_templates.rb	Mon, 23 Sep 2019 12:58:36 -0700
+lib/roda/plugins/precompile_templates.rb	Wed, 13 Jan 2021 12:42:16 -0800
 lib/roda/plugins/public.rb	Wed, 09 Sep 2020 12:05:11 -0700
 lib/roda/plugins/r.rb	Thu, 13 Aug 2020 12:32:01 -0700
 lib/roda/plugins/relative_path.rb	Mon, 14 Dec 2020 12:59:45 -0800
-lib/roda/plugins/render.rb	Mon, 30 Nov 2020 10:33:47 -0800
+lib/roda/plugins/render.rb	Wed, 13 Jan 2021 10:38:45 -0800
 lib/roda/plugins/render_each.rb	Fri, 01 May 2020 14:00:10 -0700
 lib/roda/plugins/render_locals.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/plugins/request_aref.rb	Mon, 12 Feb 2018 17:16:16 -0800
@@ -110,9 +110,8 @@ lib/roda/plugins/view_options.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/request.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/response.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/session_middleware.rb	Sun, 04 Aug 2019 14:34:46 -0700
-lib/roda/version.rb	Tue, 15 Dec 2020 09:43:53 -0800
+lib/roda/version.rb	Thu, 14 Jan 2021 08:40:25 -0800
 doc/conventions.rdoc	Mon, 18 May 2020 13:38:21 -0700
-doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
 doc/release_notes/1.2.0.txt	Fri, 18 Aug 2017 07:20:31 -0700
@@ -150,13 +149,6 @@ doc/release_notes/2.8.0.txt	Mon, 16 Nov 2015 08:16:19 -0800
 doc/release_notes/2.9.0.txt	Tue, 15 Dec 2015 07:46:22 -0800
 doc/release_notes/3.0.0.txt	Fri, 15 Sep 2017 08:13:40 -0700
 doc/release_notes/3.1.0.txt	Fri, 13 Oct 2017 08:55:29 -0700
-doc/release_notes/3.2.0.txt	Thu, 16 Nov 2017 15:24:31 -0800
-doc/release_notes/3.3.0.txt	Thu, 26 Nov 2020 10:47:03 -0800
-doc/release_notes/3.4.0.txt	Fri, 12 Jan 2018 08:46:22 -0800
-doc/release_notes/3.5.0.txt	Wed, 14 Feb 2018 09:11:44 -0800
-doc/release_notes/3.6.0.txt	Mon, 26 Mar 2018 10:51:43 -0700
-doc/release_notes/3.8.0.txt	Thu, 17 May 2018 13:49:47 -0700
-doc/release_notes/3.9.0.txt	Mon, 11 Jun 2018 12:33:07 -0700
 doc/release_notes/3.10.0.txt	Wed, 18 Jul 2018 08:00:08 -0700
 doc/release_notes/3.11.0.txt	Wed, 15 Aug 2018 07:42:06 -0700
 doc/release_notes/3.12.0.txt	Fri, 14 Sep 2018 09:44:36 -0700
@@ -168,6 +160,7 @@ doc/release_notes/3.16.0.txt	Fri, 18 Jan 2019 09:03:43 -0800
 doc/release_notes/3.17.0.txt	Fri, 15 Feb 2019 08:10:25 -0800
 doc/release_notes/3.18.0.txt	Fri, 15 Mar 2019 09:27:33 -0700
 doc/release_notes/3.19.0.txt	Fri, 12 Apr 2019 07:25:27 -0700
+doc/release_notes/3.2.0.txt	Thu, 16 Nov 2017 15:24:31 -0800
 doc/release_notes/3.20.0.txt	Thu, 16 May 2019 08:32:54 -0700
 doc/release_notes/3.21.0.txt	Fri, 14 Jun 2019 08:35:57 -0700
 doc/release_notes/3.22.0.txt	Fri, 12 Jul 2019 07:25:10 -0700
@@ -178,6 +171,7 @@ doc/release_notes/3.26.0.txt	Wed, 27 Nov 2019 12:12:01 -0800
 doc/release_notes/3.27.0.txt	Fri, 13 Dec 2019 08:19:02 -0800
 doc/release_notes/3.28.0.txt	Wed, 15 Jan 2020 09:06:41 -0800
 doc/release_notes/3.29.0.txt	Fri, 14 Feb 2020 08:23:28 -0800
+doc/release_notes/3.3.0.txt	Thu, 26 Nov 2020 10:47:03 -0800
 doc/release_notes/3.30.0.txt	Fri, 13 Mar 2020 07:56:28 -0700
 doc/release_notes/3.31.0.txt	Wed, 15 Apr 2020 08:02:48 -0700
 doc/release_notes/3.32.0.txt	Fri, 15 May 2020 08:44:53 -0700
@@ -188,3 +182,10 @@ doc/release_notes/3.36.0.txt	Mon, 14 Sep 2020 07:36:29 -0700
 doc/release_notes/3.37.0.txt	Fri, 16 Oct 2020 08:22:06 -0700
 doc/release_notes/3.38.0.txt	Mon, 16 Nov 2020 08:41:33 -0800
 doc/release_notes/3.39.0.txt	Tue, 15 Dec 2020 09:43:53 -0800
+doc/release_notes/3.4.0.txt	Fri, 12 Jan 2018 08:46:22 -0800
+doc/release_notes/3.40.0.txt	Thu, 14 Jan 2021 08:40:25 -0800
+doc/release_notes/3.5.0.txt	Wed, 14 Feb 2018 09:11:44 -0800
+doc/release_notes/3.6.0.txt	Mon, 26 Mar 2018 10:51:43 -0700
+doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
+doc/release_notes/3.8.0.txt	Thu, 17 May 2018 13:49:47 -0700
+doc/release_notes/3.9.0.txt	Mon, 11 Jun 2018 12:33:07 -0700

@@ -38,7 +38,7 @@ Last Update:
 <div id='description'>
 <h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The render/view methods in the render plugin, when called with a single string/symbol argument (the most common case), are now up to 2x faster in cache: false mode by directly calling compiled template methods.  This takes the performance increase in 3.22.0 and applies it to cache: false mode in addition to cache: true mode.  If the template file has changed, the compiled method is removed, and a new compiled method replaces it.</p>
+<p>The render/view methods in the render plugin, when called with a single string/symbol argument (the most common case), are now up to 2x faster in cache: false mode by directly calling compiled template methods.  This takes the performance increase in <a href="3_22_0_txt.html">3.22.0</a> and applies it to cache: false mode in addition to cache: true mode.  If the template file has changed, the compiled method is removed, and a new compiled method replaces it.</p>
 </li><li>
 <p>Template modification detection in the render plugin now uses a faster check for modification, which also avoids a race condition.</p>
 </li><li>
