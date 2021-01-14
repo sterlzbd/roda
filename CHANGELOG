@@ -1,4 +1,4 @@
-= master
+= 3.40.0 (2021-01-14)
 
 * Add freeze_template_caches! to the precompile_templates plugin, which ensures all templates are precompiled, and speeds up template access (jeremyevans)
 
