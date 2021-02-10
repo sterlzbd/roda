@@ -161,6 +161,20 @@ describe "render plugin" do
     body.gsub(/\n+/, "\n").must_equal "Header\nThis is the actual content.\nFooter\n"
   end
 
+  it "layout changing does not use cached template method" do
+    app(:bare) do
+      plugin :render, :views=>'spec/views', :layout=>'layout-yield'
+      
+      route do |r|
+        view(:content=>'1')
+      end
+    end
+
+    body.gsub(/\n+/, "\n").must_equal "Header\n1\nFooter\n"
+    app.plugin :render, :layout=>'layout-yield2'
+    body.gsub(/\n+/, "\n").must_equal "Header2\n1\nFooter2\n"
+  end
+
   it "should have :layout_opts=>:views plugin option respect :root app option" do
     app(:bare) do
       self.opts[:root] = 'spec'

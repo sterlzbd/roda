@@ -183,6 +183,7 @@ class Roda
           app.const_set(:RodaCompiledTemplates, compiled_templates_module)
         end
         opts[:template_method_cache] = orig_method_cache || (opts[:cache_class] || RodaCache).new
+        opts[:template_method_cache][:_roda_layout] = nil if opts[:template_method_cache][:_roda_layout]
         opts[:cache] = orig_cache || (opts[:cache_class] || RodaCache).new
 
         opts[:layout_opts] = (opts[:layout_opts] || {}).dup
@@ -415,10 +416,8 @@ class Roda
         # Render the given template.  If there is a default layout
         # for the class, take the result of the template rendering
         # and render it inside the layout.  See Render for details.
-        def view(template, opts = (optimized_template = _cached_template_method(template); OPTS))
-          if optimized_template
-            content = send(optimized_template, OPTS)
-
+        def view(template, opts = (content = _optimized_view_content(template); OPTS))
+          if content
             # First, check if the optimized layout method has already been created,
             # and use it if so.  This way avoids the extra conditional and local variable
             # assignments in the next section.
@@ -518,6 +517,16 @@ class Roda
               end
             end
           end
+
+          # Get the content for #view, or return nil to use the unoptimized approach. Only called if
+          # a single argument is passed to view.
+          def _optimized_view_content(template)
+            if optimized_template = _cached_template_method(template)
+              send(optimized_template, OPTS)
+            elsif template.is_a?(Hash) && template.length == 1
+              template[:content]
+            end
+          end
         else
           # :nocov:
           def _cached_template_method(_)
@@ -533,6 +542,10 @@ class Roda
           end
 
           def _optimized_render_method_for_locals(_, _)
+            nil
+          end
+
+          def _optimized_view_content(template)
             nil
           end
           # :nocov:

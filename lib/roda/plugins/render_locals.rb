@@ -51,6 +51,10 @@ class Roda
           def _cached_template_method(template)
             nil
           end
+
+          def _optimized_view_content(template)
+            nil
+          end
         end
 
         def render_locals
