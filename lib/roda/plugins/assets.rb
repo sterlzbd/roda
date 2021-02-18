@@ -376,7 +376,7 @@ class Roda
 
         if opts[:precompiled] && !opts[:compiled] && ::File.exist?(opts[:precompiled])
           require 'json'
-          opts[:compiled] = (app.opts[:json_parser] || ::JSON.method(:parse)).call(::File.read(opts[:precompiled]))
+          opts[:compiled] = app.send(:_precompiled_asset_metadata, opts[:precompiled])
         end
 
         if opts[:early_hints]
@@ -455,7 +455,7 @@ class Roda
           require 'fileutils'
 
           unless assets_opts[:compiled]
-            opts[:assets] = assets_opts.merge(:compiled => {})
+            opts[:assets] = assets_opts.merge(:compiled => _compiled_assets_initial_hash).freeze
           end
 
           if type == nil
@@ -478,6 +478,11 @@ class Roda
 
         private
 
+        # The initial hash to use to store compiled asset metadata.
+        def _compiled_assets_initial_hash
+          {}
+        end
+
         # Internals of compile_assets, handling recursive calls for loading
         # all asset groups under the given type.
         def _compile_assets(type)
@@ -493,6 +498,11 @@ class Roda
             files = Array(files)
             compile_assets_files(files, type, dirs) unless files.empty?
           end
+        end
+
+        # The precompiled asset metadata stored in the given file
+        def _precompiled_asset_metadata(file)
+          (opts[:json_parser] || ::JSON.method(:parse)).call(::File.read(file))
         end
 
         # Compile each array of files for the given type into a single
@@ -796,23 +806,32 @@ class Roda
         # handled.
         def assets_matchers
           @assets_matchers ||= [:css, :js].map do |t|
-            [t, assets_regexp(t)].freeze if roda_class.assets_opts[t]
+            if regexp = assets_regexp(t)
+              [t, regexp].freeze
+            end
           end.compact.freeze
         end
 
         private
+
+        # A string for the asset filename for the asset type, key, and digest.
+        def _asset_regexp(type, key, digest)
+          "#{key.sub(/\A#{type}/, '')}.#{digest}.#{type}"
+        end
 
         # The regexp matcher to use for the given type.  This handles any asset groups
         # for the asset types.
         def assets_regexp(type)
           o = roda_class.assets_opts
           if compiled = o[:compiled]
-            assets = compiled.select{|k,_| k =~ /\A#{type}/}.map do |k, md|
-              "#{k.sub(/\A#{type}/, '')}.#{md}.#{type}"
-            end
+            assets = compiled.
+              select{|k,_| k =~ /\A#{type}/}.
+              map{|k, md| _asset_regexp(type, k, md)}
+            return if assets.empty?
             /#{o[:"compiled_#{type}_prefix"]}(#{Regexp.union(assets)})/
           else
-            assets = unnest_assets_hash(o[type])
+            return unless assets = o[type]
+            assets = unnest_assets_hash(assets)
             ts = o[:timestamp_paths]
             /#{o[:"#{type}_prefix"]}#{"\\d+#{ts}" if ts}(#{Regexp.union(assets.uniq)})#{o[:"#{type}_suffix"]}/
           end
