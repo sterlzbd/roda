@@ -1,3 +1,7 @@
+= master
+
+* Make compile_assets class method in assets plugin use an atomic approach to writing precompiled metadata file (jeremyevans)
+
 = 3.41.0 (2021-02-17)
 
 * Improve view performance with :content option up to 3x by calling compiled template methods directly (jeremyevans)

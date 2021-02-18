@@ -465,10 +465,12 @@ class Roda
             _compile_assets(type)
           end
 
-          if assets_opts[:precompiled]
+          if precompile_file = assets_opts[:precompiled]
             require 'json'
-            ::FileUtils.mkdir_p(File.dirname(assets_opts[:precompiled]))
-            ::File.open(assets_opts[:precompiled], 'wb'){|f| f.write((opts[:json_serializer] || :to_json.to_proc).call(assets_opts[:compiled]))}
+            ::FileUtils.mkdir_p(File.dirname(precompile_file))
+            tmp_file = "#{precompile_file}.tmp"
+            ::File.open(tmp_file, 'wb'){|f| f.write((opts[:json_serializer] || :to_json.to_proc).call(assets_opts[:compiled]))}
+            ::File.rename(tmp_file, precompile_file)
           end
 
           assets_opts[:compiled]
