@@ -1,5 +1,7 @@
 = master
 
+* Add recheck_precompiled_assets plugin for checking for updates to the precompiled asset metadata file (jeremyevans)
+
 * Make compile_assets class method in assets plugin use an atomic approach to writing precompiled metadata file (jeremyevans)
 
 = 3.41.0 (2021-02-17)
