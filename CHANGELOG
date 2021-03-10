@@ -1,5 +1,7 @@
 = master
 
+* Support common_logger plugin :method option for specifying the method to call on the logger (fnordfish, jeremyevans) (#206)
+
 * Add recheck_precompiled_assets plugin for checking for updates to the precompiled asset metadata file (jeremyevans)
 
 * Make compile_assets class method in assets plugin use an atomic approach to writing precompiled metadata file (jeremyevans)

@@ -18,11 +18,11 @@ class Roda
     #   plugin :common_logger
     #   plugin :common_logger, $stdout
     #   plugin :common_logger, Logger.new('filename')
-    #   plugin :common_logger, Logger.new('filename'), :debug
+    #   plugin :common_logger, Logger.new('filename'), method: :debug
     module CommonLogger
-      def self.configure(app, logger=nil, logger_meth=nil)
+      def self.configure(app, logger=nil, opts=OPTS)
         app.opts[:common_logger] = logger || app.opts[:common_logger] || $stderr
-        app.opts[:common_logger_meth] = app.opts[:common_logger].method(logger_meth || (logger.respond_to?(:write) ? :write : :<<))
+        app.opts[:common_logger_meth] = app.opts[:common_logger].method(opts.fetch(:method){logger.respond_to?(:write) ? :write : :<<})
       end
 
       if RUBY_VERSION >= '2.1'

@@ -96,7 +96,7 @@ describe "common_logger plugin" do
         write "DEBUG #{str}"
       end
     end).new(StringIO.new)
-    @app.plugin :common_logger, @logger, :debug
+    @app.plugin :common_logger, @logger, :method=>:debug
   end
 
   it 'logs using the given method' do
