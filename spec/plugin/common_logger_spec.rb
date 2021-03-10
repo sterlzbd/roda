@@ -88,4 +88,24 @@ describe "common_logger plugin" do
     @logger.rewind
     @logger.read.must_match(/\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 500 3 0.\d\d\d\d\n\z/)
   end
+
+  def cl_app_meth(&block)
+    app(:common_logger, &block)
+    @logger = (Class.new(SimpleDelegator) do
+      def debug(str)
+        write "DEBUG #{str}"
+      end
+    end).new(StringIO.new)
+    @app.plugin :common_logger, @logger, :debug
+  end
+
+  it 'logs using the given method' do
+    cl_app_meth do |r|
+      r.halt [500, {}, []]
+    end
+
+    body.must_equal ''
+    @logger.rewind
+    @logger.read.must_match(/\ADEBUG - - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ " 500 - 0.\d\d\d\d\n\z/)
+  end
 end
