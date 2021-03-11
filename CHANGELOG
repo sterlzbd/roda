@@ -1,5 +1,7 @@
 = master
 
+* Make Roda.plugin support plugins using keyword arguments in Ruby 3 (jeremyevans)
+
 * Make Roda.use support middleware using keyword arguments in Ruby 3 (pat) (#207)
 
 * Support common_logger plugin :method option for specifying the method to call on the logger (fnordfish, jeremyevans) (#206)

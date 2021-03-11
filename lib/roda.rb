@@ -292,6 +292,9 @@ class Roda
           plugin.configure(self, *args, &block) if plugin.respond_to?(:configure)
           @app = nil
         end
+        # :nocov:
+        ruby2_keywords(:plugin) if respond_to?(:ruby2_keywords, true)
+        # :nocov:
 
         # Setup routing tree for the current Roda application, and build the
         # underlying rack application using the stored middleware. Requires

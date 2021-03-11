@@ -96,4 +96,25 @@ describe "plugins" do
       end
     end
   end
+
+  it "should work with keyword arguments" do
+    mod = Module.new do
+      eval <<-END
+        def self.load_dependencies(app, bar: 1)
+          app.send(:define_method, :foo){bar.to_s}
+        end
+        def self.configure(app, bar: 1)
+          app.send(:define_method, :bar){bar.to_s}
+        end
+      END
+    end
+    app(:bare) do
+      plugin mod, bar: 2
+      route do
+        foo + bar 
+      end
+    end
+
+    body.must_equal '22'
+  end if RUBY_VERSION >= '2'
 end
