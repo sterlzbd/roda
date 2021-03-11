@@ -327,8 +327,9 @@ class Roda
           @middleware << [args, block].freeze
           @app = nil
         end
-
+        # :nocov:
         ruby2_keywords(:use) if respond_to?(:ruby2_keywords, true)
+        # :nocov:
 
         private
 

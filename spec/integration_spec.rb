@@ -206,4 +206,31 @@ describe "integration" do
   it "should have route_block return the route block" do
     app{|r| 1}.route_block.call(nil).must_equal 1
   end
+
+  it "supports configuring middleware with keyword arguments" do
+    m1 = Class.new do
+      eval <<-END
+        def initialize(app, key: 1)
+          @app = app
+          @key = key
+        end
+      END
+
+      def call(env)
+        status, headers, _body = @app.call(env)
+
+        [status, headers, [@key]]
+      end
+    end
+
+    app(:bare) do
+      use m1, key: 'test'
+
+      route do
+        'a'
+      end
+    end
+
+    body.must_equal 'test'
+  end if RUBY_VERSION >= '2'
 end

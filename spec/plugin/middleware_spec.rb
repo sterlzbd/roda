@@ -102,31 +102,6 @@ describe "middleware plugin" do
     proc{app(:bare){use(a1){}; route{}; build_rack_app}}.must_raise Roda::RodaError
   end
 
-  it "supports configuring middleware with keyword arguments" do
-    m1 = Class.new do
-      def initialize(app, key:)
-        @app = app
-        @key = key
-      end
-
-      def call(env)
-        status, headers, _body = @app.call(env)
-
-        [status, headers, [@key]]
-      end
-    end
-
-    app(:bare) do
-      use m1, key: 'test'
-
-      route do
-        'a'
-      end
-    end
-
-    body.must_equal 'test'
-  end
-
   it "supports configuring middleware via a block" do
     a1 = app(:bare) do
       plugin :middleware do |mid, *args, &block|
