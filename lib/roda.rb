@@ -328,6 +328,8 @@ class Roda
           @app = nil
         end
 
+        ruby2_keywords(:use) if respond_to?(:ruby2_keywords, true)
+
         private
 
         # Return the number of required argument, optional arguments,
