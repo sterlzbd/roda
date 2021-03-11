@@ -68,6 +68,8 @@ class Roda
       end
 
       module RequestMethods
+        private
+
         # Try custom matchers before calling super
         def unsupported_matcher(matcher)
           roda_class.opts[:custom_matchers].each do |match_class, meth|

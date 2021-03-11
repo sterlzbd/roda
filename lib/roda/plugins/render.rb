@@ -388,6 +388,8 @@ class Roda
                 instance.send(:retrieve_template, :template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
                 layout_method = opts[:render][:template_method_cache][:_roda_layout]
                 define_method(:_layout_method){layout_method}
+                private :_layout_method
+                alias_method(:_layout_method, :_layout_method)
                 opts[:render] = opts[:render].merge(:optimized_layout_method_created=>true)
               end
             end
