@@ -63,6 +63,10 @@ spec = proc do |env|
   env.each{|k,v| ENV[k] = v}
   sh "#{FileUtils::RUBY} spec/all.rb"
   env.each{|k,v| ENV.delete(k)}
+  if File.directory?('.sass-cache')
+    require 'fileutils'
+    FileUtils.rm_r('.sass-cache')
+  end
 end
 
 desc "Run specs"
