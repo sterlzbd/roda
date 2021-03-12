@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>version.rb</title>
+<title>3.42.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,10 +23,10 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>version.rb
+<h1 class='name'>3.42.0.txt
 </h1>
 <div class='paths'>
-lib/roda/version.rb
+doc/release_notes/3.42.0.txt
 </div>
 <div class='last-update'>
 Last Update:
@@ -35,7 +35,23 @@ Last Update:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A recheck_precompiled_assets plugin has been added, which allows for checking for updates to the precompiled asset metadata file, and automatically using the updated data.</p>
+</li><li>
+<p>The common_logger plugin now supports a :method plugin option to specify the method to call on the logger.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Plugins and middleware that use keyword arguments are now supported in Ruby 3.</p>
+</li><li>
+<p>The compile_assets class method in the assets plugin now uses an atomic approach to writing the precompiled asset metadata file.</p>
+</li><li>
+<p>Minor method visibility issues have been fixed.  The custom_matchers plugin no longer makes the unsupported_matcher request method public, and the render plugin no longer makes the _layout_method public when the application is frozen.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 

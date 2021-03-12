@@ -1,15 +1,15 @@
-Wed, 17 Feb 2021 08:06:41 -0800
+Fri, 12 Mar 2021 07:51:10 -0800
 README.rdoc	Thu, 23 Apr 2020 11:17:42 -0700
-CHANGELOG	Wed, 17 Feb 2021 08:00:15 -0800
+CHANGELOG	Fri, 12 Mar 2021 07:42:47 -0800
 MIT-LICENSE	Wed, 06 Jan 2021 08:28:25 -0800
-lib/roda.rb	Fri, 04 Dec 2020 15:45:14 -0800
+lib/roda.rb	Thu, 11 Mar 2021 08:59:20 -0800
 lib/roda/cache.rb	Tue, 12 Jan 2021 15:49:31 -0800
 lib/roda/plugins.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/plugins/_after_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/_before_hook.rb	Mon, 04 Mar 2019 16:26:49 -0800
 lib/roda/plugins/_symbol_regexp_matchers.rb	Thu, 16 Apr 2020 13:01:43 -0700
 lib/roda/plugins/all_verbs.rb	Mon, 22 Jun 2020 15:56:02 -0700
-lib/roda/plugins/assets.rb	Wed, 13 Jan 2021 08:54:00 -0800
+lib/roda/plugins/assets.rb	Thu, 18 Feb 2021 14:23:19 -0800
 lib/roda/plugins/assets_preloading.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/backtracking_array.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/plugins/branch_locals.rb	Wed, 06 Mar 2019 07:42:46 -0800
@@ -17,12 +17,12 @@ lib/roda/plugins/caching.rb	Thu, 13 Feb 2020 10:02:09 -0800
 lib/roda/plugins/chunked.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/class_level_routing.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/plugins/class_matchers.rb	Fri, 08 Dec 2017 15:45:27 -0800
-lib/roda/plugins/common_logger.rb	Mon, 27 Jan 2020 08:56:41 -0800
+lib/roda/plugins/common_logger.rb	Wed, 10 Mar 2021 08:04:18 -0800
 lib/roda/plugins/content_for.rb	Thu, 29 Nov 2018 07:47:41 -0800
 lib/roda/plugins/content_security_policy.rb	Wed, 09 Sep 2020 12:05:11 -0700
 lib/roda/plugins/cookies.rb	Wed, 16 Aug 2017 08:44:25 -0700
 lib/roda/plugins/csrf.rb	Wed, 23 May 2018 10:59:22 -0700
-lib/roda/plugins/custom_matchers.rb	Fri, 16 Oct 2020 08:22:06 -0700
+lib/roda/plugins/custom_matchers.rb	Thu, 11 Mar 2021 08:59:20 -0800
 lib/roda/plugins/default_headers.rb	Thu, 03 Dec 2020 15:45:22 -0800
 lib/roda/plugins/default_status.rb	Fri, 10 Jan 2020 15:55:45 -0800
 lib/roda/plugins/delay_build.rb	Thu, 11 Apr 2019 11:55:17 -0700
@@ -78,8 +78,9 @@ lib/roda/plugins/placeholder_string_matchers.rb	Thu, 16 Apr 2020 13:01:43 -0700
 lib/roda/plugins/precompile_templates.rb	Wed, 13 Jan 2021 12:42:16 -0800
 lib/roda/plugins/public.rb	Wed, 09 Sep 2020 12:05:11 -0700
 lib/roda/plugins/r.rb	Thu, 13 Aug 2020 12:32:01 -0700
+lib/roda/plugins/recheck_precompiled_assets.rb	Thu, 18 Feb 2021 14:23:19 -0800
 lib/roda/plugins/relative_path.rb	Mon, 14 Dec 2020 12:59:45 -0800
-lib/roda/plugins/render.rb	Wed, 10 Feb 2021 13:59:51 -0800
+lib/roda/plugins/render.rb	Thu, 11 Mar 2021 08:59:20 -0800
 lib/roda/plugins/render_each.rb	Fri, 01 May 2020 14:00:10 -0700
 lib/roda/plugins/render_locals.rb	Wed, 10 Feb 2021 13:59:51 -0800
 lib/roda/plugins/request_aref.rb	Mon, 12 Feb 2018 17:16:16 -0800
@@ -110,7 +111,7 @@ lib/roda/plugins/view_options.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/request.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/response.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/session_middleware.rb	Sun, 04 Aug 2019 14:34:46 -0700
-lib/roda/version.rb	Wed, 17 Feb 2021 08:00:15 -0800
+lib/roda/version.rb	Fri, 12 Mar 2021 07:42:47 -0800
 doc/conventions.rdoc	Mon, 18 May 2020 13:38:21 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -185,6 +186,7 @@ doc/release_notes/3.39.0.txt	Tue, 15 Dec 2020 09:43:53 -0800
 doc/release_notes/3.4.0.txt	Fri, 12 Jan 2018 08:46:22 -0800
 doc/release_notes/3.40.0.txt	Thu, 14 Jan 2021 08:40:25 -0800
 doc/release_notes/3.41.0.txt	Wed, 17 Feb 2021 08:00:15 -0800
+doc/release_notes/3.42.0.txt	Fri, 12 Mar 2021 07:42:47 -0800
 doc/release_notes/3.5.0.txt	Wed, 14 Feb 2018 09:11:44 -0800
 doc/release_notes/3.6.0.txt	Mon, 26 Mar 2018 10:51:43 -0700
 doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
