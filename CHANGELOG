@@ -1,3 +1,7 @@
+= master
+
+* Add host_authorization plugin, for checking that requests are submitted using an approved host (jeremyevans)
+
 = 3.42.0 (2021-03-12)
 
 * Make Roda.plugin support plugins using keyword arguments in Ruby 3 (jeremyevans)
