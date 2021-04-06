@@ -4,8 +4,11 @@
 class Roda
   module RodaPlugins
     # The host_authorization plugin allows configuring an authorized host or
-    # an array of authorized hosts.  The host of each incoming request is
-    # checked, and if it doesn't match one of the authorized hosts, the
+    # an array of authorized hosts.  Then in the routing tree, you can check
+    # whether the request uses an authorized host via the +check_host_authorized!+
+    # method.
+    # 
+    # If the request doesn't match one of the authorized hosts, the
     # request processing stops at that point. Using this plugin can prevent
     # DNS rebinding attacks if the application can receive requests for
     # arbitrary hosts.
@@ -13,8 +16,26 @@ class Roda
     # By default, an empty response using status 403 will be returned for requests
     # with unauthorized hosts.
     #
-    # Host authorization is checked after any before hooks defined by the hooks
-    # plugin, and after any heartbeat checks defined by the heartbeat plugin.
+    # Because +check_host_authorized!+ is an instance method, you can easily choose
+    # to only check for authorization in certain routes, or to check it after
+    # other processing.  For example, you could check for authorized hosts after
+    # serving static files, since the serving of static files should not be
+    # vulnerable to DNS rebinding attacks.
+    #
+    # = Usage
+    #
+    # In your routing tree, call the +check_host_authorized!+ method at the point you
+    # want to check for authorized hosts:
+    #
+    #   plugin :host_authorization, 'www.example.com'
+    #   plugin :public
+    #
+    #   route do |r|
+    #    r.public
+    #    check_host_authorized!
+    #
+    #    # ...
+    #   end
     #
     # = Specifying authorized hosts
     #
@@ -71,10 +92,9 @@ class Roda
       end
 
       module InstanceMethods
-        private
-
-        # Check whether the host is authorized before handling the 
-        def _roda_before_25__host_authorization
+        # Check whether the host is authorized.  If not authorized, return a response
+        # immediately based on the plugin block.
+        def check_host_authorization!
           r = @_request
           return if host_authorized?(_convert_host_for_authorization(r.env["HTTP_HOST"].to_s.dup))
 
@@ -93,6 +113,8 @@ class Roda
             host_authorization_unauthorized(r)
           end
         end
+
+        private
 
         # Remove the port information from the passed string (mutates the passed argument).
         def _convert_host_for_authorization(host)
