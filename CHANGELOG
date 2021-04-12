@@ -1,4 +1,4 @@
-= master
+= 3.43.0 (2021-04-12)
 
 * Add host_authorization plugin, for checking that requests are submitted using an approved host (jeremyevans)
 
