@@ -47,11 +47,16 @@ class Roda
     #
     #   plugin :host_authorization, %w'www.example.com www.example2.com'
     #
-    # For applications supporting arbitrary subdomains, you can use a regexp:
+    # For applications supporting arbitrary subdomains, you can use a regexp. If using
+    # a regexp, make sure you use <tt>\A<tt> and <tt>\z</tt> in your regexp, and restrict
+    # the allowed characters to the minimum required, otherwise you can potentionally
+    # introduce a security issue:
     #
-    #   plugin :host_authorization, /\A[^.*]\.example\.com\z/
+    #   plugin :host_authorization, /\A[-0-9a-f]+\.example\.com\z/
     #
-    # For applications with more complex requirements, you can use a proc:
+    # For applications with more complex requirements, you can use a proc.  Similarly
+    # to the regexp case, the proc should be aware the host contains user-submitted
+    # values, and not assume it is in any particular format:
     #
     #   plugin :host_authorization, proc{|host| ExternalService.allowed_host?(host)}
     #
@@ -60,12 +65,17 @@ class Roda
     # <tt>===</tt> method, which is why it works for strings, regexps, and procs.
     # It can also work with arbitrary objects that support <tt>===</tt>.
     #
-    # For security reasons, only the +Host+ header is checked.  If you are sure that
-    # your application is being run behind a forwarding proxy that sets the
+    # For security reasons, only the +Host+ header is checked by default.  If you are
+    # sure that your application is being run behind a forwarding proxy that sets the
     # <tt>X-Forwarded-Host</tt> header, you should enable support for checking that
     # header using the +:check_forwarded+ option:
     # 
     #   plugin :host_authorization, 'www.example.com', check_forwarded: true
+    #
+    # In this case, the trailing host in the <tt>X-Forwarded-Host</tt> header is checked,
+    # which should be the host set by the forwarding proxy closest to the application.
+    # In cases where multiple forwarding proxies are used that append to the
+    # <tt>X-Forwarded-Host</tt> header, you should not use this plugin.
     #
     # = Customizing behavior
     #
