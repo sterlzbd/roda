@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::HostAuthorization</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::HostAuthorization
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../files/lib/roda/plugins/host_authorization_rb.html">lib/roda/plugins/host_authorization.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<p>The host_authorization plugin allows configuring an authorized host or an array of authorized hosts.  Then in the routing tree, you can check whether the request uses an authorized host via the <code>check_host_authorized!</code> method.</p>
+
+<p>If the request doesn&#39;t match one of the authorized hosts, the request processing stops at that point. Using this plugin can prevent DNS rebinding attacks if the application can receive requests for arbitrary hosts.</p>
+
+<p>By default, an empty response using status 403 will be returned for requests with unauthorized hosts.</p>
+
+<p>Because <code>check_host_authorized!</code> is an instance method, you can easily choose to only check for authorization in certain routes, or to check it after other processing.  For example, you could check for authorized hosts after serving static files, since the serving of static files should not be vulnerable to DNS rebinding attacks.</p>
+
+<h1 id="module-Roda::RodaPlugins::HostAuthorization-label-Usage">Usage<span><a href="#module-Roda::RodaPlugins::HostAuthorization-label-Usage">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>In your routing tree, call the <code>check_host_authorized!</code> method at the point you want to check for authorized hosts:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-string">&#39;www.example.com&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A; <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>&#x000A; <span class="ruby-identifier">check_host_authorized!</span>&#x000A;&#x000A; <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<h1 id="module-Roda::RodaPlugins::HostAuthorization-label-Specifying+authorized+hosts">Specifying authorized hosts<span><a href="#module-Roda::RodaPlugins::HostAuthorization-label-Specifying+authorized+hosts">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>For applications hosted on a single domain name, you can use a single string:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-string">&#39;www.example.com&#39;</span></pre>
+
+<p>For applications hosted on multiple domain names, you can use an array of strings:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-node">%w&#39;www.example.com www.example2.com&#39;</span></pre>
+
+<p>For applications supporting arbitrary subdomains, you can use a regexp. If using a regexp, make sure you use <code>\A&lt;tt&gt; and &lt;tt&gt;\z</code> in your regexp, and restrict the allowed characters to the minimum required, otherwise you can potentionally introduce a security issue:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-regexp">/\A[-0-9a-f]+\.example\.com\z/</span></pre>
+
+<p>For applications with more complex requirements, you can use a proc.  Similarly to the regexp case, the proc should be aware the host contains user-submitted values, and not assume it is in any particular format:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">host</span><span class="ruby-operator">|</span> <span class="ruby-constant">ExternalService</span>.<span class="ruby-identifier">allowed_host?</span>(<span class="ruby-identifier">host</span>)}</pre>
+
+<p>If an array of values is passed as the host argument, the host is authorized if it matches any value in the array.  All host authorization checks use the <code>===</code> method, which is why it works for strings, regexps, and procs. It can also work with arbitrary objects that support <code>===</code>.</p>
+
+<p>For security reasons, only the <code>Host</code> header is checked by default.  If you are sure that your application is being run behind a forwarding proxy that sets the <code>X-Forwarded-Host</code> header, you should enable support for checking that header using the <code>:check_forwarded</code> option:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-string">&#39;www.example.com&#39;</span>, <span class="ruby-value">check_forwarded:</span> <span class="ruby-keyword">true</span></pre>
+
+<p>In this case, the trailing host in the <code>X-Forwarded-Host</code> header is checked, which should be the host set by the forwarding proxy closest to the application. In cases where multiple forwarding proxies are used that append to the <code>X-Forwarded-Host</code> header, you should not use this plugin.</p>
+
+<h1 id="module-Roda::RodaPlugins::HostAuthorization-label-Customizing+behavior">Customizing behavior<span><a href="#module-Roda::RodaPlugins::HostAuthorization-label-Customizing+behavior">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p>By default, an unauthorized host will receive an empty 403 response.  You can customize this by passing a block when loading the plugin. For example, for sites using the render plugin, you could return a page that uses your default layout:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-string">&#39;www.example.com&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">403</span>&#x000A;  <span class="ruby-identifier">view</span>(<span class="ruby-value">:content</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&quot;&lt;h1&gt;Forbidden&lt;/h1&gt;&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>The block passed to this plugin is treated as a match block.</p>
+</div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Class</h3>
+<ol>
+<li><a href="#method-c-configure">configure</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='class-list'>
+<h2>Classes and Modules</h2>
+<ol>
+<li><a href="HostAuthorization/InstanceMethods.html">Roda::RodaPlugins::HostAuthorization::InstanceMethods</a></li>
+</ol>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Class methods</h2>
+<div class='method public-class' id='method-method-c-configure'>
+<a name='method-c-configure'></a>
+<div class='synopsis'>
+<span class='name'>configure</span><span class='arguments'>(app, host, opts=OPTS, &block)</span>
+
+</div>
+<div class='description'>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/host_authorization.rb</span>&#x000A;<span class="line-num"> 95</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">host</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num"> 96</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:host_authorization_host</span>] = <span class="ruby-identifier">host</span>&#x000A;<span class="line-num"> 97</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:host_authorization_check_forwarded</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:check_forwarded</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-value">:check_forwarded</span>)&#x000A;<span class="line-num"> 98</span> &#x000A;<span class="line-num"> 99</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">100</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">define_roda_method</span>(<span class="ruby-value">:host_authorization_unauthorized</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">101</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">102</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

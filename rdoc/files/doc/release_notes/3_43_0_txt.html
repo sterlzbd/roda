@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.43.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.43.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.43.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2021-04-12 11:10:19 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>A host_authorization plugin has been added to verify the requested Host header is authorized.  Using it can prevent DNS rebinding attacks in cases where the application can receive requests for arbitrary hosts.</p>
+
+<p>To check for authorized hosts in your routing tree, you call the check_host_authorization! method.  For example, if you want to check for authorized hosts after serving requests for public files, you could do:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-string">&#39;my-domain-name.example.com&#39;</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>&#x000A;  <span class="ruby-identifier">check_host_authorized!</span>&#x000A;&#x000A;  <span class="ruby-comment"># ... rest of routing tree</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+
+<p>In addition to handling single domain names via a string, you can provide an array of domain names, a regexp to match again, or a proc.</p>
+
+<p>By default, requests using unauthorized hosts receive an empty 403 response.  If you would like to customize the response, you can pass a block when loading the plugin:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:host_authorization</span>, <span class="ruby-string">&#39;my-domain-name.example.com&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">403</span>&#x000A;  <span class="ruby-string">&quot;Response Body Here&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

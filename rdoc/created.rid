@@ -1,6 +1,6 @@
-Fri, 12 Mar 2021 07:51:10 -0800
+Mon, 12 Apr 2021 11:16:36 -0700
 README.rdoc	Thu, 23 Apr 2020 11:17:42 -0700
-CHANGELOG	Fri, 12 Mar 2021 07:42:47 -0800
+CHANGELOG	Mon, 12 Apr 2021 11:10:19 -0700
 MIT-LICENSE	Wed, 06 Jan 2021 08:28:25 -0800
 lib/roda.rb	Thu, 11 Mar 2021 08:59:20 -0800
 lib/roda/cache.rb	Tue, 12 Jan 2021 15:49:31 -0800
@@ -47,6 +47,7 @@ lib/roda/plugins/head.rb	Fri, 08 Feb 2019 09:07:06 -0800
 lib/roda/plugins/header_matchers.rb	Sat, 15 Feb 2020 09:21:58 -0800
 lib/roda/plugins/heartbeat.rb	Fri, 08 Feb 2019 09:07:06 -0800
 lib/roda/plugins/hooks.rb	Sat, 06 Apr 2019 23:21:10 -0700
+lib/roda/plugins/host_authorization.rb	Mon, 12 Apr 2021 11:05:35 -0700
 lib/roda/plugins/indifferent_params.rb	Thu, 16 Apr 2020 13:01:43 -0700
 lib/roda/plugins/json.rb	Fri, 06 Jul 2018 10:45:07 -0700
 lib/roda/plugins/json_parser.rb	Thu, 19 Dec 2019 18:43:16 -0800
@@ -111,7 +112,7 @@ lib/roda/plugins/view_options.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/request.rb	Mon, 22 Jun 2020 15:56:02 -0700
 lib/roda/response.rb	Wed, 27 Nov 2019 12:12:01 -0800
 lib/roda/session_middleware.rb	Sun, 04 Aug 2019 14:34:46 -0700
-lib/roda/version.rb	Fri, 12 Mar 2021 07:42:47 -0800
+lib/roda/version.rb	Mon, 12 Apr 2021 11:10:19 -0700
 doc/conventions.rdoc	Mon, 18 May 2020 13:38:21 -0700
 doc/release_notes/1.0.0.txt	Tue, 19 Aug 2014 09:04:25 -0700
 doc/release_notes/1.1.0.txt	Tue, 11 Nov 2014 11:35:26 -0800
@@ -187,6 +188,7 @@ doc/release_notes/3.4.0.txt	Fri, 12 Jan 2018 08:46:22 -0800
 doc/release_notes/3.40.0.txt	Thu, 14 Jan 2021 08:40:25 -0800
 doc/release_notes/3.41.0.txt	Wed, 17 Feb 2021 08:00:15 -0800
 doc/release_notes/3.42.0.txt	Fri, 12 Mar 2021 07:42:47 -0800
+doc/release_notes/3.43.0.txt	Mon, 12 Apr 2021 11:10:19 -0700
 doc/release_notes/3.5.0.txt	Wed, 14 Feb 2018 09:11:44 -0800
 doc/release_notes/3.6.0.txt	Mon, 26 Mar 2018 10:51:43 -0700
 doc/release_notes/3.7.0.txt	Fri, 20 Apr 2018 11:49:04 -0700
