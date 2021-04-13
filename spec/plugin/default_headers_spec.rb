@@ -112,12 +112,9 @@ describe "default_headers plugin" do
     req[1].wont_be_same_as h 
   end
 
-  it "should work with content_security_policy plugin" do
-    h = {'Foo'=>'bar'}
-
+  it "should work when freezing" do
     app(:bare) do
-      plugin :content_security_policy
-      plugin :default_headers, h
+      plugin :default_headers, 'Foo'=>'bar'
 
       route do |r|
         r.halt response.finish_with_body([])
@@ -125,5 +122,83 @@ describe "default_headers plugin" do
     end
 
     req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar')
+    app.freeze
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar')
+  end
+
+  it "should work when freezing when not all headers are strings" do
+    app(:bare) do
+      plugin :default_headers, 'Foo'=>:bar
+
+      route do |r|
+        r.halt response.finish_with_body([])
+      end
+    end
+
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>:bar)
+    app.freeze
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>:bar)
+  end
+
+  it "should work when subclassing and redefining" do
+    app(:bare) do
+      plugin :default_headers, 'Foo'=>'bar'
+
+      route do |r|
+        r.halt response.finish_with_body([])
+      end
+    end
+
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar')
+
+    app = self.app
+    app2 = Class.new(app)
+    app2.plugin(:default_headers, 'Foo'=>'bar2')
+
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar')
+    
+    @app = app2
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar2')
+
+    app.plugin(:default_headers, 'Foo'=>'bar3')
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar2')
+
+    @app = app
+    req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar3')
+  end
+
+  [true, false].each do |freeze|
+    [true, false].each do |after|
+      it "should work with content_security_policy plugin if loaded #{after ? 'after' : 'before'}#{' when freezing' if freeze}" do
+        h = {'Foo'=>'bar'}
+
+        app(:bare) do
+          plugin :default_headers, h if after 
+          plugin :content_security_policy do |csp|
+            csp.default_src :none
+          end
+          plugin :default_headers, h unless after 
+
+          route do |r|
+            r.halt response.finish_with_body([])
+          end
+        end
+
+        req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar', "Content-Security-Policy"=>"default-src 'none'; ")
+
+        app = self.app
+        app2 = Class.new(app)
+        app2.plugin(:default_headers, 'Foo'=>'bar2')
+
+        req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar', "Content-Security-Policy"=>"default-src 'none'; ")
+        @app.freeze if freeze
+        req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar', "Content-Security-Policy"=>"default-src 'none'; ")
+        
+        @app = app2
+        req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar2', "Content-Security-Policy"=>"default-src 'none'; ")
+        @app.freeze if freeze
+        req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>'bar2', "Content-Security-Policy"=>"default-src 'none'; ")
+      end
+    end
   end
 end
