@@ -1,4 +1,4 @@
-= master
+= 3.43.1 (2021-04-13)
 
 * [SECURITY] Fix issue where loading content_security_policy plugin after default_headers plugin had no effect (jeremyevans)
 
