@@ -332,6 +332,22 @@ describe "sinatra_helpers plugin" do
       body.must_equal 'b'
     end
 
+    it 'sets the Content-Disposition header with character set if filename contains characters that should be escaped' do
+      filename = "/foo/a\u1023b.xml"
+      sin_app{|r| attachment filename; 'b'}
+
+      header('Content-Disposition').must_equal 'attachment; filename="a-b.xml"; filename*=UTF-8\'\'a%E1%80%A3b.xml'
+      body.must_equal 'b'
+
+      filename = "/foo/a\255\255b.xml".dup.force_encoding('ISO-8859-1')
+      header('Content-Disposition').must_equal 'attachment; filename="a-b.xml"; filename*=ISO-8859-1\'\'a%AD%ADb.xml'
+      body.must_equal 'b'
+
+      filename = "/foo/a\255\255b.xml".dup.force_encoding('BINARY')
+      header('Content-Disposition').must_equal 'attachment; filename="a-b.xml"'
+      body.must_equal 'b'
+    end
+
     it 'sets the Content-Disposition header even when a filename is not given' do
       sin_app{attachment}
       header('Content-Disposition', '/foo/test.xml').must_equal 'attachment'

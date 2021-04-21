@@ -1,3 +1,7 @@
+= master
+
+* Use RFC 5987 UTF-8 and ISO-8859-1 encoded filenames when using send_file and attachment in the sinatra_helpers plugin (jeremyevans)
+
 = 3.43.1 (2021-04-13)
 
 * [SECURITY] Fix issue where loading content_security_policy plugin after default_headers plugin had no effect (jeremyevans)
