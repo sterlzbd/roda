@@ -19,7 +19,8 @@ class Roda
     #     end
     #   end
     #
-    # Note that both of these methods only work with plain strings, not
+    # If you are using the placeholder_string_matchers plugin, note
+    # that both of these methods only work with plain strings, not
     # with strings with embedded colons for capturing.  Matching will work
     # correctly in such cases, but the captures will not be yielded to the
     # match blocks.
