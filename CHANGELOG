@@ -1,5 +1,7 @@
 = master
 
+* Add optimized_segment_matchers plugin for optimized matchers for a single String class argument (jeremyevans)
+
 * Use RFC 5987 UTF-8 and ISO-8859-1 encoded filenames when using send_file and attachment in the sinatra_helpers plugin (jeremyevans)
 
 = 3.43.1 (2021-04-13)
