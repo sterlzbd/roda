@@ -468,8 +468,8 @@ class Roda
             if last = rp.index('/', 1)
               @captures << rp[1, last-1]
               @remaining_path = rp[last, rp.length]
-            elsif rp.length > 1
-              @captures << rp[1,rp.length]
+            elsif (len = rp.length) > 1
+              @captures << rp[1, len]
               @remaining_path = ""
             end
           end
