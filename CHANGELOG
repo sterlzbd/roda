@@ -1,4 +1,4 @@
-= master
+= 3.44.0 (2021-05-12)
 
 * Add optimized_segment_matchers plugin for optimized matchers for a single String class argument (jeremyevans)
 
