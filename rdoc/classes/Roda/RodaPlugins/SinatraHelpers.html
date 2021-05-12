@@ -194,6 +194,34 @@ Roda::RodaPlugins::SinatraHelpers
 </ol>
 </div>
 <div id='section'>
+<div id='constants-list'>
+<h2>Constants</h2>
+<div class='name-list'>
+<table summary='Constants'>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>BINARY_ENCODING</td>
+<td>=</td>
+<td class='context-item-value'>Encoding.find('BINARY')</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>ISO88591_ENCODING</td>
+<td>=</td>
+<td class='context-item-value'>Encoding.find('ISO-8859-1')</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+<tr class='top-aligned-row context-row'>
+<td class='context-item-name'>UTF8_ENCODING</td>
+<td>=</td>
+<td class='context-item-value'>Encoding.find('UTF-8')</td>
+<td>&nbsp;</td>
+<td class='context-item-desc'></td>
+</tr>
+</table>
+</div>
+</div>
 <div id='methods'>
 <h2>Public Class methods</h2>
 <div class='method public-class' id='method-method-c-configure'>
@@ -211,7 +239,7 @@ Roda::RodaPlugins::SinatraHelpers
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">222</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">223</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>&#x000A;<span class="line-num">224</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">226</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">227</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">DelegateMethods</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:delegate</span>] <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>&#x000A;<span class="line-num">228</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -229,7 +257,7 @@ Roda::RodaPlugins::SinatraHelpers
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">215</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">216</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_303</span>&#x000A;<span class="line-num">217</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>    <span class="ruby-comment"># File lib/roda/plugins/sinatra_helpers.rb</span>&#x000A;<span class="line-num">219</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">220</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_303</span>&#x000A;<span class="line-num">221</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

@@ -39,7 +39,7 @@ Roda::RodaPlugins::OptimizedStringMatchers
 
 <pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:optimized_string_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_branch</span> <span class="ruby-string">&quot;x&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches /x and paths starting with /x/</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_exactly</span> <span class="ruby-string">&quot;y&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># matches /x/y</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
 
-<p>Note that both of these methods only work with plain strings, not with strings with embedded colons for capturing.  Matching will work correctly in such cases, but the captures will not be yielded to the match blocks.</p>
+<p>If you are using the placeholder_string_matchers plugin, note that both of these methods only work with plain strings, not with strings with embedded colons for capturing.  Matching will work correctly in such cases, but the captures will not be yielded to the match blocks.</p>
 </div>
 <div id='context'>
 </div>

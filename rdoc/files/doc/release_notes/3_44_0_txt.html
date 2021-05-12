@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.44.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.44.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.44.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2021-05-12 08:38:16 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>An optimized_segment_matchers plugin has been added that offers very fast matchers for arbitrary segments (the same segments that would be matched by the String class matcher).  The on_segment method it offers accepts no arguments and yields the next segment if there is a segment.  The is_segment method is similar, but only yields if the next segment is the final segment.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The send_file and attachment methods in the sinatra_helpers plugin now support RFC 5987 UTF-8 and ISO-8859-1 encoded filenames, allowing modern browsers to save files with encoded chracters. For older browsers that do not support RFC 5987, unsupported characters in filenames are replaced with dashes.  This is considered to be an improvement over the previous behavior of using Ruby&#39;s inspect output for the filename, which could contain backslashes (backslash is not an allowed chracter in Windows filenames).</p>
+</li><li>
+<p>The performance of the String class matcher has been slightly improved.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
