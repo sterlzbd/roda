@@ -152,6 +152,22 @@ class Roda
     # together and not compressed during compilation.  You can use the
     # :css_compressor and :js_compressor options to specify the compressor to use.
     #
+    # It is also possible to use the built-in compression options in the CSS or JS
+    # compiler, assuming the compiler supports such options.  For example, with
+    # sass/sassc, you can use:
+    #
+    #   plugin :assets,
+    #     css_opts: {style: :compressed}
+    #
+    # === Source Maps (CSS)
+    #
+    # The assets plugin does not have direct support for source maps, so it is
+    # recommended you use embedded source maps if supported by the CSS compiler.
+    # For sass/sassc, you can use:
+    #
+    #   plugin :assets,
+    #     css_opts: {:source_map_embed=>true, source_map_contents: true, source_map_file: "."}
+    #
     # === With Asset Groups
     #
     # When using asset groups, a separate compiled file will be produced per
