@@ -965,19 +965,17 @@ option. If you really want to turn path checking off, you can do so via the
 Roda does not ship with integrated support for code reloading, but there are rack-based
 reloaders that will work with Roda apps.
 
-For most applications, {rack-unreloader}[https://github.com/jeremyevans/rack-unreloader]
-is probably the fastest approach to reloading while still being fairly safe, as it
-reloads just files that have been modified, and unloads constants defined in the files
-before reloading them.  However, it requires modifying your application code to use
-rack-unreloader specific APIs.
+{Zeitwerk}[https://github.com/fxn/zeitwerk] (which Rails now uses for reloading) can be used
+with Roda.  It requires minimal setup and handles most cases. It overrides +require+ when
+activated. If it can meet the needs of your application, it's probably the best approach.
 
-A similar solution that reloads files and unloads constants is ActiveSupport::Dependencies.
-ActiveSupport::Dependencies doesn't require modifying your application code, but it modifies
-some core methods, including +require+ and +const_missing+. It requires less configuration,
-but depends that you follow Rails' file and class naming conventions. It also provides
-autoloading (on the fly) of files when a missing constant is accessed. If your application
-does not rely on autoloading then +require_dependency+ must be used to require the dependencies
-or they won't be reloaded.
+{rack-unreloader}[https://github.com/jeremyevans/rack-unreloader] uses a fast
+approach to reloading while still being fairly safe, as it only reloads files that have
+been modified, and unloads constants defined in the files before reloading them. It can handle
+advanced cases that Zeitwerk does not support, such as classes defined in multiple files
+(common when using separate route files for different routing branches in the same application).
+However, rack-unreloader does not modify core classes and using it requires modifying your
+application code to use rack-unreloader specific APIs, which may not be simple.
 
 {AutoReloader}[https://github.com/rosenfeld/auto_reloader] provides transparent reloading for
 all files reached from one of the +reloadable_paths+ option entries, by detecting new top-level
