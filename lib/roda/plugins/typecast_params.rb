@@ -260,6 +260,11 @@ class Roda
     # strip leading and trailing whitespace from parameter string values before processing, which
     # you can do by passing the <tt>strip: :all</tt> option when loading the plugin.
     #
+    # By default, the typecast_params conversion procs check that null bytes are not allowed
+    # in param string values. This check for null bytes occurs prior to any type conversion.
+    # If you would like to skip this check and allow null bytes in param string values,
+    # you can do by passing the <tt>:allow_null_bytes</tt> option when loading the plugin.
+    #
     # By design, typecast_params only deals with string keys, it is not possible to use
     # symbol keys as arguments to the conversion methods and have them converted.
     module TypecastParams
@@ -356,6 +361,14 @@ class Roda
         end
       end
 
+      module AllowNullByte
+        private
+
+        # Allow ASCII NUL bytes ("\0") in parameter string values.
+        def check_null_byte(v)
+        end
+      end
+
       module StringStripper
         private
 
@@ -391,7 +404,10 @@ class Roda
           convert_array_meth = :"_convert_array_#{type}"
           define_method(convert_array_meth) do |v|
             raise Error, "expected array but received #{v.inspect}" unless v.is_a?(Array)
-            v.map!{|val| send(convert_meth, val)}
+            v.map! do |val|
+              check_null_byte(val)
+              send(convert_meth, val)
+            end
           end
 
           private convert_meth, convert_array_meth
@@ -927,12 +943,20 @@ class Roda
           end
         end
 
+        # Raise an Error if the value is a string containing a null byte.
+        def check_null_byte(v)
+          if v.is_a?(String) && v.index("\0")
+            handle_error(nil, :null_byte, "string parameter contains null byte", true)
+          end
+        end
+
         # Get the value of +key+ for the object, and convert it to the expected type using +meth+.
         # If the value either before or after conversion is nil, return the +default+ value.
         def process(meth, key, default)
           v = param_value(key)
 
           unless v.nil?
+            check_null_byte(v)
             v = send(meth, v)
           end
 
@@ -991,6 +1015,9 @@ class Roda
         app::TypecastParams.class_eval(&block) if block
         if opts[:strip] == :all
           app::TypecastParams.send(:include, StringStripper)
+        end
+        if opts[:allow_null_bytes]
+          app::TypecastParams.send(:include, AllowNullByte)
         end
       end
 

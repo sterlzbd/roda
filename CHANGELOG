@@ -1,3 +1,7 @@
+= master
+
+* Make typecast_params plugin check for null bytes in strings by default, with :allow_null_bytes option for previous behavior (jeremyevans)
+
 = 3.44.0 (2021-05-12)
 
 * Add optimized_segment_matchers plugin for optimized matchers for a single String class argument (jeremyevans)

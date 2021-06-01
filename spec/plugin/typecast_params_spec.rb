@@ -66,6 +66,98 @@ describe "typecast_params plugin" do
     lambda{tp.any([['a']])}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
   end
 
+  it "conversion methods should check for null bytes in strins" do
+    lambda{tp('a=1%00&b=1').any('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').str('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').nonempty_str('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').bool('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').pos_int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').Integer('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').float('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').Float('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=2020-10-20%00&b=1').date('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=2020-10-20%00&b=1').time('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=2020-10-20%00&b=1').datetime('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+
+    lambda{tp('a=1%00&b=1').any!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').str!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').nonempty_str!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').bool!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').int!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').pos_int!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').Integer!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').float!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1%00&b=1').Float!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=2020-10-20%00&b=1').date!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=2020-10-20%00&b=1').time!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=2020-10-20%00&b=1').datetime!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+
+    lambda{tp('a[]=1%00&b=1').array(:any, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:str, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:nonempty_str, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:bool, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:int, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:pos_int, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:Integer, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:float, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1%00&b=1').array(:Float, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=2020-10-20%00&b=1').array(:date, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=2020-10-20%00&b=1').array(:time, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=2020-10-20%00&b=1').array(:datetime, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+
+    tp('a=1%00&b=1').any('b').must_equal '1'
+    tp('a=1%00&b=1').any!('b').must_equal '1'
+    tp('a[]=1%00&b[]=1').array(:any, 'b').must_equal ['1']
+  end
+
+  it "conversion methods should allow null bytes in strins when :allow_null_bytes plugin option is used" do
+    app.plugin :typecast_params, :allow_null_bytes=>true
+
+    tp('a=1%00&b=1').any('a').must_equal "1\x00"
+    tp('a=1%00&b=1').str('a').must_equal "1\x00"
+    tp('a=1%00&b=1').nonempty_str('a').must_equal "1\x00"
+    lambda{tp('a=1%00&b=1').bool('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a=1%00&b=1').int('a').must_equal 1
+    tp('a=1%00&b=1').pos_int('a').must_equal 1
+    lambda{tp('a=1%00&b=1').Integer('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a=1.1%00&b=1').float('a').must_equal 1.1
+    lambda{tp('a=1%00&b=1').Float('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a=2020-10-20%00&b=1').date('a').must_equal Date.new(2020, 10, 20)
+    tp('a=2020-10-20%00&b=1').time('a').must_equal Time.local(2020, 10, 20)
+    tp('a=2020-10-20%00&b=1').datetime('a').must_equal DateTime.new(2020, 10, 20)
+
+    tp('a=1%00&b=1').any!('a').must_equal "1\x00"
+    tp('a=1%00&b=1').str!('a').must_equal "1\x00"
+    tp('a=1%00&b=1').nonempty_str!('a').must_equal "1\x00"
+    lambda{tp('a=1%00&b=1').bool!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a=1%00&b=1').int!('a').must_equal 1
+    tp('a=1%00&b=1').pos_int!('a').must_equal 1
+    lambda{tp('a=1%00&b=1').Integer!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a=1.1%00&b=1').float!('a').must_equal 1.1
+    lambda{tp('a=1%00&b=1').Float!('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a=2020-10-20%00&b=1').date!('a').must_equal Date.new(2020, 10, 20)
+    tp('a=2020-10-20%00&b=1').time!('a').must_equal Time.local(2020, 10, 20)
+    tp('a=2020-10-20%00&b=1').datetime!('a').must_equal DateTime.new(2020, 10, 20)
+
+    tp('a[]=1%00&b=1').array(:any, 'a').must_equal ["1\x00"]
+    tp('a[]=1%00&b=1').array(:str, 'a').must_equal ["1\x00"]
+    tp('a[]=1%00&b=1').array(:nonempty_str, 'a').must_equal ["1\x00"]
+    lambda{tp('a[]=1%00&b=1').array(:bool, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a[]=1%00&b=1').array(:int, 'a').must_equal [1]
+    tp('a[]=1%00&b=1').array(:pos_int, 'a').must_equal [1]
+    lambda{tp('a[]=1%00&b=1').array(:Integer, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a[]=1.1%00&b=1').array(:float, 'a').must_equal [1.1]
+    lambda{tp('a[]=1%00&b=1').array(:Float, 'a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    tp('a[]=2020-10-20%00&b=1').array(:date, 'a').must_equal [Date.new(2020, 10, 20)]
+    tp('a[]=2020-10-20%00&b=1').array(:time, 'a').must_equal [Time.local(2020, 10, 20)]
+    tp('a[]=2020-10-20%00&b=1').array(:datetime, 'a').must_equal [DateTime.new(2020, 10, 20)]
+
+    tp('a=1%00&b=1').any('b').must_equal '1'
+    tp('a=1%00&b=1').any!('b').must_equal '1'
+    tp('a[]=1%00&b[]=1').array(:any, 'b').must_equal ['1']
+  end
+
   it "#any should not do any conversion" do
     tp.any('a').must_equal '1'
     tp.any('b').must_equal ["2", "3"]
