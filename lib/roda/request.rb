@@ -24,7 +24,7 @@ class Roda
 
         # Return the cached pattern for the given object.  If the object is
         # not already cached, yield to get the basic pattern, and convert the
-        # basic pattern to a pattern that does not partial segments.
+        # basic pattern to a pattern that does not match partial segments.
         def cached_matcher(obj)
           cache = @match_pattern_cache
 
