@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2020-04-23 11:17:42 -0700</span>
+<span class='datetime'>2021-05-21 12:46:20 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -527,9 +527,9 @@ Last Update:
 
 <p><a href="../classes/Roda.html"><code>Roda</code></a> does not ship with integrated support for code reloading, but there are rack-based reloaders that will work with <a href="../classes/Roda.html"><code>Roda</code></a> apps.</p>
 
-<p>For most applications, <a href="https://github.com/jeremyevans/rack-unreloader">rack-unreloader</a> is probably the fastest approach to reloading while still being fairly safe, as it reloads just files that have been modified, and unloads constants defined in the files before reloading them.  However, it requires modifying your application code to use rack-unreloader specific APIs.</p>
+<p><a href="https://github.com/fxn/zeitwerk">Zeitwerk</a> (which Rails now uses for reloading) can be used with <a href="../classes/Roda.html"><code>Roda</code></a>.  It requires minimal setup and handles most cases. It overrides <code>require</code> when activated. If it can meet the needs of your application, it&#39;s probably the best approach.</p>
 
-<p>A similar solution that reloads files and unloads constants is ActiveSupport::Dependencies. ActiveSupport::Dependencies doesn&#39;t require modifying your application code, but it modifies some core methods, including <code>require</code> and <code>const_missing</code>. It requires less configuration, but depends that you follow Rails&#39; file and class naming conventions. It also provides autoloading (on the fly) of files when a missing constant is accessed. If your application does not rely on autoloading then <code>require_dependency</code> must be used to require the dependencies or they won&#39;t be reloaded.</p>
+<p><a href="https://github.com/jeremyevans/rack-unreloader">rack-unreloader</a> uses a fast approach to reloading while still being fairly safe, as it only reloads files that have been modified, and unloads constants defined in the files before reloading them. It can handle advanced cases that Zeitwerk does not support, such as classes defined in multiple files (common when using separate route files for different routing branches in the same application). However, rack-unreloader does not modify core classes and using it requires modifying your application code to use rack-unreloader specific APIs, which may not be simple.</p>
 
 <p><a href="https://github.com/rosenfeld/auto_reloader">AutoReloader</a> provides transparent reloading for all files reached from one of the <code>reloadable_paths</code> option entries, by detecting new top-level constants and removing them when any of the reloadable loaded files changes. It overrides <code>require</code> and <code>require_relative</code> when activated (usually in the development environment). No configurations other than <code>reloadable_paths</code> are required.</p>
 

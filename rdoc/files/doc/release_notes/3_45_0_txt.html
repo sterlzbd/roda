@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>3.45.0.txt</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='file' id='wrapper'>
+<div class='header'>
+<h1 class='name'>3.45.0.txt
+</h1>
+<div class='paths'>
+doc/release_notes/3.45.0.txt
+</div>
+<div class='last-update'>
+Last Update:
+<span class='datetime'>2021-06-14 08:27:39 -0700</span>
+</div>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The typecast_params plugin checks now checks for null bytes by default before typecasting.  If null bytes are present, it raises an error.  Most applications do not require null bytes in parameters, and in some cases allowing them can lead to security issues, especially when parameters are passed to C extensions. In general, the benefit of forbidding null bytes in parameters is greater than the cost.</p>
+
+<p>If you would like to continue allowing null bytes, use the :allow_null_bytes option when loading the plugin.</p>
+
+<p>Note that this change does not affect uploaded files, since those are expected to contain null bytes.</p>
+</li></ul>
+
+<h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The change to the typecast_params plugin to raise an error for null bytes can break applications that are expecting null bytes to be passed in parameters.  Such applications should use the :allow_null_bytes option when loading the plugin.</p>
+</li></ul>
+</div>
+<div id='context'>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>
