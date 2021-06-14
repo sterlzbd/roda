@@ -1,3 +1,7 @@
+= master
+
+* Automatically optimize r.on/r.is/r.get/r.post methods with a single string, String, Integer, or regexp argument (jeremyevans)
+
 = 3.45.0 (2021-06-14)
 
 * Make typecast_params plugin check for null bytes in strings by default, with :allow_null_bytes option for previous behavior (jeremyevans)

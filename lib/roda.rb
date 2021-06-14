@@ -212,6 +212,10 @@ class Roda
             if @middleware.empty? && use_new_dispatch_api?
               plugin :direct_call
             end
+
+            if ([:on, :is, :_verb, :_match_class_String, :_match_class_Integer, :_match_string, :_match_regexp, :empty_path?]).all?{|m| self::RodaRequest.instance_method(m).owner == RequestMethods}
+              plugin :_optimized_matching
+            end
           end
 
           build_rack_app
