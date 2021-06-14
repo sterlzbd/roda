@@ -235,7 +235,7 @@ class Roda
         # An alias of remaining_path. If a plugin changes remaining_path then
         # it should override this method to return the untouched original.
         def real_remaining_path
-          remaining_path
+          @remaining_path
         end
 
         # Match POST requests.  If no arguments are provided, matches all POST
@@ -336,7 +336,7 @@ class Roda
         # Use <tt>r.get true</tt> to handle +GET+ requests where the current
         # path is empty.
         def root(&block)
-          if remaining_path == "/" && is_get?
+          if @remaining_path == "/" && is_get?
             always(&block)
           end
         end
@@ -519,7 +519,7 @@ class Roda
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
-          if matchdata = remaining_path.match(pattern)
+          if matchdata = @remaining_path.match(pattern)
             @remaining_path = matchdata.post_match
             captures = matchdata.captures
             captures = yield(*captures) if block_given?
@@ -548,7 +548,7 @@ class Roda
 
         # Whether the current path is considered empty.
         def empty_path?
-          remaining_path.empty?
+          @remaining_path.empty?
         end
 
         # If all of the arguments match, yields to the match block and
