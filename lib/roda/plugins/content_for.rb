@@ -62,8 +62,7 @@ class Roda
       end
 
       # Configure whether to append or overwrite if content_for
-      # is called multiple times to set data. Overwrite is default, use
-      # the :append option to append.
+      # is called multiple times with the same key.
       def self.configure(app, opts = OPTS)
         app.opts[:append_content_for] = opts.fetch(:append, true)
       end
