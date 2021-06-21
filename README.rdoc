@@ -13,7 +13,6 @@ Website :: http://roda.jeremyevans.net
 Source :: http://github.com/jeremyevans/roda
 Bugs :: http://github.com/jeremyevans/roda/issues
 Google Group :: http://groups.google.com/group/ruby-roda
-IRC :: irc://chat.freenode.net/#roda
 
 == Goals
 
