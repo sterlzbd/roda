@@ -234,9 +234,7 @@ class Roda
 
         # An alias of remaining_path. If a plugin changes remaining_path then
         # it should override this method to return the untouched original.
-        def real_remaining_path
-          @remaining_path
-        end
+        alias real_remaining_path remaining_path
 
         # Match POST requests.  If no arguments are provided, matches all POST
         # requests, otherwise, matches only POST requests where the arguments
