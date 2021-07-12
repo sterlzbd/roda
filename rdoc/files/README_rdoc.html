@@ -30,7 +30,7 @@ README.rdoc
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2021-05-21 12:46:20 -0700</span>
+<span class='datetime'>2021-07-09 15:29:39 -0700</span>
 </div>
 </div>
 <div id='content'>
@@ -53,8 +53,6 @@ Last Update:
 <p><a target="_top" href="http://github.com/jeremyevans/roda/issues">github.com/jeremyevans/roda/issues</a></p>
 </td></tr><tr><td class='label'>Google Group </td><td>
 <p><a target="_top" href="http://groups.google.com/group/ruby-roda">groups.google.com/group/ruby-roda</a></p>
-</td></tr><tr><td class='label'>IRC </td><td>
-<p><a href="irc://chat.freenode.net/#roda">chat.freenode.net/#roda</a></p>
 </td></tr></tbody></table>
 
 <h2 id="label-Goals">Goals<span><a href="#label-Goals">&para;</a> <a href="#top">&uarr;</a></span></h2>
@@ -535,7 +533,7 @@ Last Update:
 
 <p>Both <a href="https://github.com/alexch/rerun">rerun</a> and <a href="https://github.com/rtomayko/shotgun">shotgun</a> use a fork/exec approach for loading new versions of your app.  rerun is faster as it only reloads the app on changes, whereas shotgun reloads the app on every request.  Both work without any changes to application code, but may be slower as they have to reload the entire application on every change. However, for small apps that load quickly, either may be a good approach.</p>
 
-<p><a href="https://github.com/rack/rack/blob/master/lib/rack/reloader.rb">Rack::Reloader</a> ships with rack and just reloads monitored files when they change, without unloading constants. It&#39;s fast but may cause issues in cases where you remove classes, constants, or methods, or when you are not clearing out cached data manually when files are reloaded.</p>
+<p><a href="https://github_com/rack/rack/blob/master/lib/rack/reloader_rb.html">Rack::Reloader</a> ships with rack and just reloads monitored files when they change, without unloading constants. It&#39;s fast but may cause issues in cases where you remove classes, constants, or methods, or when you are not clearing out cached data manually when files are reloaded.</p>
 
 <p>There is no one reloading solution that is the best for all applications and development approaches.  Consider your needs and the tradeoffs of each of the reloading approaches, and pick the one you think will work best.</p>
 

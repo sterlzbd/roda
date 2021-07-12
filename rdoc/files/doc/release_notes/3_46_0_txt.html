@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>version.rb</title>
+<title>3.46.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,10 +23,10 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>version.rb
+<h1 class='name'>3.46.0.txt
 </h1>
 <div class='paths'>
-lib/roda/version.rb
+doc/release_notes/3.46.0.txt
 </div>
 <div class='last-update'>
 Last Update:
@@ -35,7 +35,18 @@ Last Update:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The r.on, r.is, r.get and r.post methods (and other verb methods if using the all_verbs plugin) have now been optimized when using a single string or regexp matcher, or the String or Integer class matcher.  Since those four matchers are the most common types of matchers passed to the methods, this can significantly improve routing performance (about 50% in the r10k benchmark).</p>
+
+<p>This optimization is automatically applied when freezing applications, if the related methods have not been modified by plugins.</p>
+
+<p>This optimization does come at the expense of a small decrease in routing performance (3-4%) for unoptimized cases, but the majority of applications will see a overall performance benefit from this change.</p>
+</li><li>
+<p>Other minor performance improvements have been made.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 

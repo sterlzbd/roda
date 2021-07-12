@@ -82,7 +82,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">481</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">482</span>   <span class="ruby-identifier">klass</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>&#x000A;<span class="line-num">483</span>   <span class="ruby-ivar">@_request</span> = <span class="ruby-identifier">klass</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">484</span>   <span class="ruby-ivar">@_response</span> = <span class="ruby-identifier">klass</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaResponse</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="line-num">485</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">485</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">486</span>   <span class="ruby-identifier">klass</span> = <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>&#x000A;<span class="line-num">487</span>   <span class="ruby-ivar">@_request</span> = <span class="ruby-identifier">klass</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">488</span>   <span class="ruby-ivar">@_response</span> = <span class="ruby-identifier">klass</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaResponse</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="line-num">489</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -101,7 +101,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_roda_handle_main_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-_roda_handle_main_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">489</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_handle_main_route</span>&#x000A;<span class="line-num">490</span>   <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">491</span>     <span class="ruby-identifier">r</span> = <span class="ruby-ivar">@_request</span>&#x000A;<span class="line-num">492</span>     <span class="ruby-identifier">r</span>.<span class="ruby-identifier">block_result</span>(<span class="ruby-identifier">_roda_run_main_route</span>(<span class="ruby-identifier">r</span>))&#x000A;<span class="line-num">493</span>     <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="line-num">494</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">495</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_roda_handle_main_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">493</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_handle_main_route</span>&#x000A;<span class="line-num">494</span>   <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">495</span>     <span class="ruby-identifier">r</span> = <span class="ruby-ivar">@_request</span>&#x000A;<span class="line-num">496</span>     <span class="ruby-identifier">r</span>.<span class="ruby-identifier">block_result</span>(<span class="ruby-identifier">_roda_run_main_route</span>(<span class="ruby-identifier">r</span>))&#x000A;<span class="line-num">497</span>     <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="line-num">498</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">499</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-_roda_handle_route'>
@@ -119,7 +119,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_roda_handle_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-_roda_handle_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">499</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_handle_route</span>&#x000A;<span class="line-num">500</span>   <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">501</span>     <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">block_result</span>(<span class="ruby-keyword">yield</span>)&#x000A;<span class="line-num">502</span>     <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="line-num">503</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">504</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_roda_handle_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">503</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_handle_route</span>&#x000A;<span class="line-num">504</span>   <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">505</span>     <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">block_result</span>(<span class="ruby-keyword">yield</span>)&#x000A;<span class="line-num">506</span>     <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="line-num">507</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">508</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-_roda_main_route'>
@@ -137,7 +137,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_roda_main_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-_roda_main_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">508</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_main_route</span>(<span class="ruby-identifier">_</span>)&#x000A;<span class="line-num">509</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_roda_main_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">512</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_main_route</span>(<span class="ruby-identifier">_</span>)&#x000A;<span class="line-num">513</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-_roda_run_main_route'>
@@ -155,7 +155,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_roda_run_main_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-_roda_run_main_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">513</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_run_main_route</span>(<span class="ruby-identifier">r</span>)&#x000A;<span class="line-num">514</span>   <span class="ruby-identifier">_roda_main_route</span>(<span class="ruby-identifier">r</span>)&#x000A;<span class="line-num">515</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_roda_run_main_route-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">517</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_run_main_route</span>(<span class="ruby-identifier">r</span>)&#x000A;<span class="line-num">518</span>   <span class="ruby-identifier">_roda_main_route</span>(<span class="ruby-identifier">r</span>)&#x000A;<span class="line-num">519</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-call'>
@@ -173,7 +173,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-call-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">518</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">519</span>   <span class="ruby-comment"># RODA4: Remove</span>&#x000A;<span class="line-num">520</span>   <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">521</span>     <span class="ruby-identifier">r</span> = <span class="ruby-ivar">@_request</span>&#x000A;<span class="line-num">522</span>     <span class="ruby-identifier">r</span>.<span class="ruby-identifier">block_result</span>(<span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">r</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)) <span class="ruby-comment"># Fallback</span>&#x000A;<span class="line-num">523</span>     <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="line-num">524</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">525</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">522</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">523</span>   <span class="ruby-comment"># RODA4: Remove</span>&#x000A;<span class="line-num">524</span>   <span class="ruby-identifier">catch</span>(<span class="ruby-value">:halt</span>) <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">525</span>     <span class="ruby-identifier">r</span> = <span class="ruby-ivar">@_request</span>&#x000A;<span class="line-num">526</span>     <span class="ruby-identifier">r</span>.<span class="ruby-identifier">block_result</span>(<span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">r</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)) <span class="ruby-comment"># Fallback</span>&#x000A;<span class="line-num">527</span>     <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">finish</span>&#x000A;<span class="line-num">528</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">529</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-env'>
@@ -193,7 +193,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-env-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-env-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">535</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">env</span>&#x000A;<span class="line-num">536</span>   <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">env</span>&#x000A;<span class="line-num">537</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-env-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">539</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">env</span>&#x000A;<span class="line-num">540</span>   <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">env</span>&#x000A;<span class="line-num">541</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-opts'>
@@ -213,7 +213,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-opts-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-opts-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">546</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">opts</span>&#x000A;<span class="line-num">547</span>   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">548</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-opts-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">550</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">opts</span>&#x000A;<span class="line-num">551</span>   <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">552</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-session'>
@@ -233,7 +233,7 @@ Roda::RodaPlugins::Base::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-session-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-session-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">562</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">session</span>&#x000A;<span class="line-num">563</span>   <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">session</span>&#x000A;<span class="line-num">564</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-session-source'>    <span class="ruby-comment"># File lib/roda.rb</span>&#x000A;<span class="line-num">566</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">session</span>&#x000A;<span class="line-num">567</span>   <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">session</span>&#x000A;<span class="line-num">568</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
