@@ -1,4 +1,4 @@
-= master
+= 3.46.0 (2021-07-12)
 
 * Automatically optimize r.on/r.is/r.get/r.post methods with a single string, String, Integer, or regexp argument (jeremyevans)
 
