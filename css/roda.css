@@ -169,7 +169,7 @@ div.benchmark-images {
   justify-content: center;
 }
 div.benchmark-images img {
-  max-width: 600px;
+  max-width: min(95%, 600px);
   margin: 10px;
 }
 p.benchmark-data {
