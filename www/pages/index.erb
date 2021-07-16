@@ -24,7 +24,7 @@
 # cat config.ru
 require "roda"
 
-class App < Roda
+class App &lt; Roda
   route do |r|
     # GET / request
     r.root do
@@ -112,53 +112,35 @@ END
 <section id="ecosystem" class="bg-green white center">
   <strong>
     <svg class="like" viewBox="0 0 39.87 37.41"><path d="M12.38,19.53s1.37.25,2.74-3.25,4-7,4-10.52-.2-4.6,1.8-5,4.79,2.75,4.79,5.88a31.57,31.57,0,0,1-1.5,7.7H35.63c3.75,0,4.77,4.11,1.49,5.59,3.28,1.77,2.19,5.43-.87,5.79,3,1.79,1.55,5.63-.83,5.59a2.7,2.7,0,0,1-1.67,5H19.44c-2.13,0-5.32-.29-6.82-2"/><rect x="0.75" y="17.41" width="11.88" height="19.25" rx="1" ry="1"/></svg>
-    Roda compares favorably with other popular Ruby web frameworks.<br>
-    The following benchmarks are taken from <a href="https://github.com/luislavena/bench-micro">GitHub</a>
+    Roda is the fastest Ruby web framework,<br>
+    as measured by the <a href="https://github.com/jeremyevans/r10k">r10k benchmark</a>.
   </strong>
 </section>
 
 <section id="performance" class="bg-aqua">
-  <div class="contain">
-    <%
-    [
-    'Serve More Requests',
-    {
-      rack: 15839,
-      roda: 11776,
-      hanami: 10247,
-      sinatra: 3977,
-      grape: 2937,
-      rails_api: 1211
-    },
-    false,
+  <h2 class="white center">Comparison to Popular Ruby Web Frameworks</h2>
 
-    "Use Less Memory",
-    {
-      rack: 2920,
-      roda: 3608,
-      hanami: 4880,
-      sinatra: 12512,
-      grape: 20800,
-      rails_api: 28017
-    },
-    true
-    ].each_slice(3) do |name, frameworks, is_memory| %>
-      <% top = frameworks[is_memory ? :rails_api : :rack] %>
-      <h2 class='white center'><%= name %></h2>
-      <div class="benchmarks <%= is_memory ? 'memory' : 'requests' %>">
-        <% frameworks.each do |k,v| %>
-          <% percent = ((v.to_f / top.to_f) * 100).to_i %>
-          <div class="score <%= k %>">
-            <div class="name"><%= k.to_s.gsub('_',' ') %></div>
-            <div class="bar bg-aquadark">
-              <div class="fill bg-green" data-percent="<%= percent %>%"></div>
-            </div>
-            <div class="value"><%= v %> <small><%= is_memory ? "KB" : "req/sec"  %></small></div>  
-          </div>
-        <% end %>
-      </div>
-      <% end %>
+  <div class="benchmark-images">
+    <img src="images/popular/rps.png">
+    <img src="images/popular/memory.png">
   </div>
+
+  <p class="benchmark-data white center">Data:
+    <a class="white" href="data/popular/rps.txt">Requests/Second</a> |
+    <a class="white" href="data/popular/memory.txt">Initial Memory Usage</a>
+  </p>
+
+  <h2 class="white center">Comparison to Other Ruby Web Frameworks</h2>
+
+  <div class="benchmark-images">
+    <img src="images/other/rps.png">
+    <img src="images/other/memory.png">
+  </div>
+
+  <p class="benchmark-data white center">Data:
+    <a class="white" href="data/other/rps.txt">Requests/Second</a> |
+    <a class="white" href="data/other/memory.txt">Initial Memory Usage</a>
+  </p>
 </section>
 
 <section id="compare" class="bg-gray white">

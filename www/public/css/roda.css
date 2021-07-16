@@ -162,3 +162,20 @@ body.index :not(pre) > code[class*="language-"], body.index pre[class*="language
 .token.important, .token.bold { font-weight: bold; }
 .token.italic { font-style: italic; }
 .token.entity { cursor: help; }
+
+div.benchmark-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+div.benchmark-images img {
+  max-width: 600px;
+  margin: 10px;
+}
+p.benchmark-data {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+section#performance {
+  padding-bottom: 10px;
+}
