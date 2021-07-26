@@ -326,5 +326,171 @@ require_relative "spec_helper"
       body('/foo/').must_equal ''
       body('/foo/1').must_equal ''
     end
+
+    it "r.on with true argument should always match" do
+      app do |r|
+        r.on true do |*args|
+          args.length.to_s
+        end
+        ''
+      end
+
+      body('').must_equal '0'
+      body.must_equal '0'
+      body('fo').must_equal '0'
+      body('foo').must_equal '0'
+      body('/fo').must_equal '0'
+      body('/foo').must_equal '0'
+      body('/foo/').must_equal '0'
+      body('/foo/1').must_equal '0'
+    end
+
+    it "r.on with false argument should never match" do
+      app do |r|
+        r.on false do |*args|
+          args.length.to_s
+        end
+        ''
+      end
+
+      body('').must_equal ''
+      body.must_equal ''
+      body('fo').must_equal ''
+      body('foo').must_equal ''
+      body('/fo').must_equal ''
+      body('/foo').must_equal ''
+      body('/foo/').must_equal ''
+      body('/foo/1').must_equal ''
+    end
+
+    it "r.on with nil argument should never match" do
+      app do |r|
+        r.on nil do |*args|
+          args.length.to_s
+        end
+        ''
+      end
+
+      body('').must_equal ''
+      body.must_equal ''
+      body('fo').must_equal ''
+      body('foo').must_equal ''
+      body('/fo').must_equal ''
+      body('/foo').must_equal ''
+      body('/foo/').must_equal ''
+      body('/foo/1').must_equal ''
+    end
+
+    it "r.on with array argument should match if one if the elements matches" do
+      app do |r|
+        r.on ['fo', 'foo'] do |arg|
+          "#{arg}-#{r.remaining_path}"
+        end
+        ''
+      end
+
+      body('').must_equal ''
+      body.must_equal ''
+      body('fo').must_equal ''
+      body('foo').must_equal ''
+      body('/fo').must_equal 'fo-'
+      body('/foo').must_equal 'foo-'
+      body('/foo/').must_equal 'foo-/'
+      body('/foo/1').must_equal 'foo-/1'
+    end
+
+    it "r.on with hash argument should match if one if hash matches" do
+      app do |r|
+        r.on :all=>['fo', 'foo'] do |*args|
+          "#{args.length}-#{r.remaining_path}"
+        end
+        ''
+      end
+
+      body('').must_equal ''
+      body.must_equal ''
+      body('fo').must_equal ''
+      body('foo').must_equal ''
+      body('/fo').must_equal ''
+      body('/foo').must_equal ''
+      body('/fo/foo').must_equal '0-'
+      body('/fo/foo/').must_equal '0-/'
+      body('/fo/foo/1').must_equal '0-/1'
+    end
+
+    it "r.on with symbol argument should match next segment if non-empty" do
+      app do |r|
+        r.on(:foo) do |*args|
+          "#{args.inspect}-#{r.remaining_path}"
+        end
+        ''
+      end
+
+      body.must_equal ''
+      body('fo').must_equal ''
+      body('foo').must_equal ''
+      body('/fo').must_equal '["fo"]-'
+      body('/foo').must_equal '["foo"]-'
+      body('/foo/').must_equal '["foo"]-/'
+      body('/foo/1').must_equal '["foo"]-/1'
+    end
+
+    it "r.on with proc argument should match unless it returns nil/false" do
+      x = nil
+      app do |r|
+        r.on(proc{x}) do |*args|
+          args.length.to_s
+        end
+        ''
+      end
+
+      body.must_equal ''
+      x = false
+      body.must_equal ''
+      x = true
+      body.must_equal '0'
+    end
+
+    it "r.on with class argument should match if one if the elements matches" do
+      app(:bare) do
+        plugin :class_matchers
+        class_matcher(Float, /(\d+\.\d+)/) do |str|
+          [str.to_f]
+        end
+        route do |r|
+          r.on Float do |arg|
+            "#{arg.class}-#{arg}-#{r.remaining_path}"
+          end
+          ''
+        end
+      end
+
+      body('').must_equal ''
+      body.must_equal ''
+      body('fo').must_equal ''
+      body('123.3').must_equal ''
+      body('/fo').must_equal ''
+      body('/123.3').must_equal 'Float-123.3-'
+      body('/123.3/').must_equal 'Float-123.3-/'
+      body('/123.3/1').must_equal 'Float-123.3-/1'
+    end
+
+    it "r.on with custom argument should match if one if the elements matches" do
+      x = Object.new
+      app(:bare) do
+        plugin :custom_matchers
+        custom_matcher(Object) do |obj|
+          @captures << obj.object_id.to_s
+        end
+        route do |r|
+          r.on x do |arg|
+            "#{arg}-#{r.remaining_path}"
+          end
+          ''
+        end
+      end
+
+      body.must_equal "#{x.object_id}-/"
+    end
   end
 end

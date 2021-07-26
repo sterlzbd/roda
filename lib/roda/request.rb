@@ -517,7 +517,7 @@ class Roda
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
-          if matchdata = @remaining_path.match(pattern)
+          if matchdata = pattern.match(@remaining_path)
             @remaining_path = matchdata.post_match
             captures = matchdata.captures
             captures = yield(*captures) if block_given?

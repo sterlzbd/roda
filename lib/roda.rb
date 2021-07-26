@@ -213,7 +213,7 @@ class Roda
               plugin :direct_call
             end
 
-            if ([:on, :is, :_verb, :_match_class_String, :_match_class_Integer, :_match_string, :_match_regexp, :empty_path?]).all?{|m| self::RodaRequest.instance_method(m).owner == RequestMethods}
+            if ([:on, :is, :_verb, :_match_class_String, :_match_class_Integer, :_match_string, :_match_regexp, :empty_path?, :if_match, :match, :_match_class]).all?{|m| self::RodaRequest.instance_method(m).owner == RequestMethods}
               plugin :_optimized_matching
             end
           end
