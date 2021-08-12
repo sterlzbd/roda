@@ -52,7 +52,7 @@ class Roda
                   end
                 end
               elsif matcher == Integer
-                if matchdata = @remaining_path.match(/\A\/(\d+)(?=\/|\z)/)
+                if matchdata = /\A\/(\d+)(?=\/|\z)/.match(@remaining_path)
                   @remaining_path = matchdata.post_match
                   always{yield(matchdata[1].to_i)}
                 end
@@ -74,7 +74,7 @@ class Roda
                 end
               end
             when Regexp
-              if matchdata = @remaining_path.match(self.class.cached_matcher(matcher){matcher})
+              if matchdata = self.class.cached_matcher(matcher){matcher}.match(@remaining_path)
                 @remaining_path = matchdata.post_match
                 always{yield(*matchdata.captures)}
               end
@@ -151,7 +151,7 @@ class Roda
                 always{yield rp[1, len]}
               end
             elsif matcher == Integer
-              if matchdata = @remaining_path.match(/\A\/(\d+)\z/)
+              if matchdata = /\A\/(\d+)\z/.match(@remaining_path)
                 @remaining_path = ''
                 always{yield(matchdata[1].to_i)}
               end
@@ -159,7 +159,7 @@ class Roda
               if_match(args << TERM, &block)
             end
           when Regexp
-            if (matchdata = @remaining_path.match(self.class.cached_matcher(matcher){matcher})) && (post_match = matchdata.post_match).empty?
+            if (matchdata = self.class.cached_matcher(matcher){matcher}.match(@remaining_path)) && matchdata.post_match.empty?
               @remaining_path = ''
               always{yield(*matchdata.captures)}
             end

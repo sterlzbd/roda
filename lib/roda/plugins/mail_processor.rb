@@ -566,7 +566,7 @@ class Roda
             end
             false
           when Regexp
-            if md = content.match(val)
+            if md = val.match(content)
               @captures.concat(md.captures)
             end
           else

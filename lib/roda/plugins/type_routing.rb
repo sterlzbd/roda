@@ -184,7 +184,7 @@ class Roda
           path = super
 
           if opts[:use_extension]
-            if m = path.match(opts[:extension_regexp])
+            if m = opts[:extension_regexp].match(path)
               @type_routing_extension =  @requested_type = m[2].to_sym
               path = m[1]
             end
