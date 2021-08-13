@@ -1,4 +1,4 @@
-= master
+= 3.47.0 (2021-08-13)
 
 * Automatically optimize remaining r.on calls with a single argument (jeremyevans)
 
