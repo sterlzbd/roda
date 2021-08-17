@@ -1,3 +1,7 @@
+= master
+
+* Extract named_routes plugin from multi_route plugin (jeremyevans)
+
 = 3.47.0 (2021-08-13)
 
 * Automatically optimize remaining r.on calls with a single argument (jeremyevans)
