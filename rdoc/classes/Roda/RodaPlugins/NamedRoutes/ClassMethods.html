@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::NamedRoutes::ClassMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::NamedRoutes::ClassMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/named_routes_rb.html">lib/roda/plugins/named_routes.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-freeze">freeze</a></li>
+<li><a href="#method-i-inherited">inherited</a></li>
+<li><a href="#method-i-named_route">named_route</a></li>
+<li><a href="#method-i-named_routes">named_routes</a></li>
+<li><a href="#method-i-route">route</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-freeze'>
+<a name='method-i-freeze'></a>
+<div class='synopsis'>
+<span class='name'>freeze</span><span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Freeze the namespaced routes so that there can be no thread safety issues at runtime.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-freeze-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-freeze-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">112</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze</span>&#x000A;<span class="line-num">113</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>].<span class="ruby-identifier">freeze</span>.<span class="ruby-identifier">each_value</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:freeze</span>)&#x000A;<span class="line-num">114</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">115</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-inherited'>
+<a name='method-i-inherited'></a>
+<div class='synopsis'>
+<span class='name'>inherited</span><span class='arguments'>(subclass)</span>
+
+</div>
+<div class='description'>
+
+<p>Copy the named routes into the subclass when inheriting.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-inherited-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-inherited-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">118</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">inherited</span>(<span class="ruby-identifier">subclass</span>)&#x000A;<span class="line-num">119</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">120</span>   <span class="ruby-identifier">nsr</span> = <span class="ruby-identifier">subclass</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>]&#x000A;<span class="line-num">121</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">nsr</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">dup</span>}&#x000A;<span class="line-num">122</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-named_route'>
+<a name='method-i-named_route'></a>
+<div class='synopsis'>
+<span class='name'>named_route</span><span class='arguments'>(name, namespace=nil)</span>
+
+</div>
+<div class='description'>
+
+<p>Return the named route with the given name.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-named_route-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-named_route-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">133</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">named_route</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">134</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>][<span class="ruby-identifier">name</span>]&#x000A;<span class="line-num">135</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-named_routes'>
+<a name='method-i-named_routes'></a>
+<div class='synopsis'>
+<span class='name'>named_routes</span><span class='arguments'>(namespace=nil)</span>
+
+</div>
+<div class='description'>
+
+<p>The names for the currently stored named routes</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-named_routes-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-named_routes-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">125</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">named_routes</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">126</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>]&#x000A;<span class="line-num">127</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;unsupported multi_route namespace used: #{namespace.inspect}&quot;</span>&#x000A;<span class="line-num">128</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">129</span>   <span class="ruby-identifier">routes</span>.<span class="ruby-identifier">keys</span>&#x000A;<span class="line-num">130</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+<div class='method public-instance' id='method-method-i-route'>
+<a name='method-i-route'></a>
+<div class='synopsis'>
+<span class='name'>route</span><span class='arguments'>(name=nil, namespace=nil, &block)</span>
+
+</div>
+<div class='description'>
+
+<p>If the given route has a name, treat it as a named route and store the route block.  Otherwise, this is the main route, so call super.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-route-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-route-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">140</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">route</span>(<span class="ruby-identifier">name</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">141</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">name</span>&#x000A;<span class="line-num">142</span>     <span class="ruby-identifier">routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>][<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">143</span>     <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">define_roda_method</span>(<span class="ruby-identifier">routes</span>[<span class="ruby-identifier">name</span>] <span class="ruby-operator">||</span> <span class="ruby-node">&quot;multi_route_#{namespace}_#{name}&quot;</span>, <span class="ruby-value">1</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">convert_route_block</span>(<span class="ruby-identifier">block</span>))&#x000A;<span class="line-num">144</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">145</span>     <span class="ruby-keyword">super</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">146</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">147</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

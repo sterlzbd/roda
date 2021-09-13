@@ -40,7 +40,6 @@ Roda::RodaPlugins::MultiRoute::RequestMethods
 <h3>Public Instance</h3>
 <ol>
 <li><a href="#method-i-multi_route">multi_route</a></li>
-<li><a href="#method-i-route">route</a></li>
 </ol>
 </div>
 <div id='context'>
@@ -63,25 +62,7 @@ Roda::RodaPlugins::MultiRoute::RequestMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-multi_route-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_route.rb</span>&#x000A;<span class="line-num">207</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_route</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">208</span>   <span class="ruby-identifier">on</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">named_route_regexp</span>(<span class="ruby-identifier">namespace</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">section</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">209</span>     <span class="ruby-identifier">r</span> = <span class="ruby-identifier">route</span>(<span class="ruby-identifier">section</span>, <span class="ruby-identifier">namespace</span>)&#x000A;<span class="line-num">210</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;<span class="line-num">211</span>       <span class="ruby-keyword">yield</span>&#x000A;<span class="line-num">212</span>     <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">213</span>       <span class="ruby-identifier">r</span>&#x000A;<span class="line-num">214</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">215</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">216</span> <span class="ruby-keyword">end</span></pre>
-</div>
-</div>
-<div class='method public-instance' id='method-method-i-route'>
-<a name='method-i-route'></a>
-<div class='synopsis'>
-<span class='name'>route</span><span class='arguments'>(name, namespace=nil)</span>
-
-</div>
-<div class='description'>
-
-<p>Dispatch to the named route with the given name.</p>
-
-</div>
-<div class='source'>
-<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-route-source&#39;); return false'>
-[show source]
-</a>
-<pre id='method-i-route-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_route.rb</span>&#x000A;<span class="line-num">219</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">route</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">220</span>   <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">roda_class</span>.<span class="ruby-identifier">named_route</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">namespace</span>), <span class="ruby-keyword">self</span>)&#x000A;<span class="line-num">221</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-multi_route-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_route.rb</span>&#x000A;<span class="line-num">140</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_route</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">141</span>   <span class="ruby-identifier">on</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">named_route_regexp</span>(<span class="ruby-identifier">namespace</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">section</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">142</span>     <span class="ruby-identifier">res</span> = <span class="ruby-identifier">route</span>(<span class="ruby-identifier">section</span>, <span class="ruby-identifier">namespace</span>)&#x000A;<span class="line-num">143</span>     <span class="ruby-keyword">if</span> <span class="ruby-identifier">block_given?</span>&#x000A;<span class="line-num">144</span>       <span class="ruby-keyword">yield</span>&#x000A;<span class="line-num">145</span>     <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">146</span>       <span class="ruby-identifier">res</span>&#x000A;<span class="line-num">147</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">148</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">149</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
