@@ -1,4 +1,4 @@
-= master
+= 3.48.0 (2021-09-13)
 
 * Extract named_routes plugin from multi_route plugin (jeremyevans)
 
