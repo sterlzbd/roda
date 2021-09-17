@@ -156,7 +156,21 @@ class Roda
                 always{yield(matchdata[1].to_i)}
               end
             else
-              if_match(args << TERM, &block)
+              path = @remaining_path
+              captures = @captures.clear
+              meth = :"_match_class_#{matcher}"
+              if respond_to?(meth, true)
+                # Allow calling private methods, as match methods are generally private
+                if send(meth, &block) && @remaining_path.empty?
+                  block_result(yield(*captures))
+                  throw :halt, response.finish
+                else
+                  @remaining_path = path
+                  false
+                end
+              else
+                unsupported_matcher(matcher)
+              end
             end
           when Regexp
             if (matchdata = self.class.cached_matcher(matcher){matcher}.match(@remaining_path)) && matchdata.post_match.empty?
@@ -165,8 +179,32 @@ class Roda
             end
           when true
             always(&block) if @remaining_path.empty?
+          when false, nil
+            # nothing
           else
-            if_match(args << TERM, &block)
+            path = @remaining_path
+            captures = @captures.clear
+
+            matched = case matcher
+            when Array
+              _match_array(matcher)
+            when Hash
+              _match_hash(matcher)
+            when Symbol
+              _match_symbol(matcher)
+            when Proc
+              matcher.call
+            else
+              unsupported_matcher(matcher)
+            end
+
+            if matched && @remaining_path.empty?
+              block_result(yield(*captures))
+              throw :halt, response.finish
+            else
+              @remaining_path = path
+              false
+            end
           end
         end
       end
