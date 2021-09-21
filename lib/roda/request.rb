@@ -520,7 +520,7 @@ class Roda
           if matchdata = pattern.match(@remaining_path)
             @remaining_path = matchdata.post_match
             captures = matchdata.captures
-            captures = yield(*captures) if block_given?
+            captures = yield(*captures) if defined?(yield)
             @captures.concat(captures)
           end
         end

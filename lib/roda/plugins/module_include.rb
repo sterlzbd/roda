@@ -72,7 +72,7 @@ class Roda
           end
 
           if mod
-            raise RodaError, "can't provide both argument and block to response_module" if block_given?
+            raise RodaError, "can't provide both argument and block to response_module" if defined?(yield)
             klass.send(:include, mod)
           else
             if instance_variable_defined?(iv)

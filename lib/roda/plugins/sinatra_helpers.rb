@@ -384,7 +384,7 @@ class Roda
 
         # Set or retrieve the response body. When a block is given,
         # evaluation is deferred until the body is needed.
-        def body(value = (return @body unless block_given?; nil), &block)
+        def body(value = (return @body unless defined?(yield); nil), &block)
           if block
             @body = DelayedBody.new(&block)
           else

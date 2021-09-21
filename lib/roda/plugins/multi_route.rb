@@ -140,7 +140,7 @@ class Roda
         def multi_route(namespace=nil)
           on self.class.named_route_regexp(namespace) do |section|
             res = route(section, namespace)
-            if block_given?
+            if defined?(yield)
               yield
             else
               res

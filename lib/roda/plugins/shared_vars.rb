@@ -61,7 +61,7 @@ class Roda
         def shared(vars=nil)
           h = env['roda.shared'] ||= {}
 
-          if block_given?
+          if defined?(yield)
             if vars
               begin
                 env['roda.shared'] = h.merge(vars)

@@ -91,7 +91,7 @@ class Roda
         # dispatch the request to the stored rack application.
         def multi_run
           on self.class.multi_run_regexp do |prefix|
-            yield prefix if block_given?
+            yield prefix if defined?(yield)
             run scope.class.multi_run_apps[prefix]
           end
         end

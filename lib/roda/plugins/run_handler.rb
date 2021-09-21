@@ -34,7 +34,7 @@ class Roda
         # routing normally.
         def run(app, opts=OPTS)
           res = catch(:halt){super(app)}
-          yield res if block_given?
+          yield res if defined?(yield)
           throw(:halt, res) unless opts[:not_found] == :pass && res[0] == 404
         end
       end

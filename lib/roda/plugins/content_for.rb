@@ -75,8 +75,8 @@ class Roda
         def content_for(key, value=nil)
           append = opts[:append_content_for]
 
-          if block_given? || value
-            if block_given?
+          if defined?(yield) || value
+            if defined?(yield)
               outvar = render_opts[:template_opts][:outvar]
               buf_was = instance_variable_get(outvar)
 

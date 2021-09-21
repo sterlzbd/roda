@@ -564,7 +564,7 @@ class Roda
           end
 
           v = @obj[key]
-          v = yield if v.nil? && block_given?
+          v = yield if v.nil? && defined?(yield)
 
           begin
             sub = self.class.nest(v, Array(@nesting) + [key])
@@ -580,7 +580,7 @@ class Roda
         # Return the nested value for key. If there is no nested_value for +key+,
         # calls the block to return the value, or returns nil if there is no block given.
         def fetch(key)
-          send(:[], key){return(yield if block_given?)}
+          send(:[], key){return(yield if defined?(yield))}
         end
 
         # Captures conversions inside the given block, and returns a hash of all conversions,

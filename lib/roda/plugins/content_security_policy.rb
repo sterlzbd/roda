@@ -278,7 +278,7 @@ class Roda
           Policy.new
         end
 
-        yield policy if block_given?
+        yield policy if defined?(yield)
         policy.freeze
       end
 
@@ -287,7 +287,7 @@ class Roda
         # current content security policy.
         def content_security_policy
           policy = @_response.content_security_policy
-          yield policy if block_given?
+          yield policy if defined?(yield)
           policy
         end
       end
