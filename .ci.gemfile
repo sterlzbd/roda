@@ -1,20 +1,33 @@
 source 'https://rubygems.org'
 
-gemspec
-
 if RUBY_VERSION < '2.0.0'
   gem 'json', '<1.8.5'
   gem 'rake', '<10.0.0'
   gem 'haml', '<5'
   gem 'mime-types', '< 3'
+else
+  gem 'json'
+  gem 'rake'
+  gem 'haml'
 end
 
 if RUBY_VERSION < '2.2.0'
   gem 'rack', '<2'
   gem 'sass', '< 3.5'
+else
+  gem 'rack'
+  gem 'sass'
 end
 
 if RUBY_VERSION < '2.4.0'
   # Until mintest 5.12.0 is fixed
   gem 'minitest', '5.11.3'
+else
+  gem 'minitest'
 end
+
+gem "minitest-global_expectations"
+gem "tilt"
+gem "erubi"
+gem "rack_csrf"
+gem "mail"
