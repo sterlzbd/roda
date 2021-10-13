@@ -1,4 +1,4 @@
-= master
+= 3.49.0 (2021-10-13)
 
 * Switch block_given? to defined?(yield) (jeremyevans)
 
