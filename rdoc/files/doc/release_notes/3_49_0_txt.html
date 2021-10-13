@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>version.rb</title>
+<title>3.49.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,10 +23,10 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>version.rb
+<h1 class='name'>3.49.0.txt
 </h1>
 <div class='paths'>
-lib/roda/version.rb
+doc/release_notes/3.49.0.txt
 </div>
 <div class='last-update'>
 Last Update:
@@ -35,7 +35,25 @@ Last Update:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-Improvements">Improvements<span><a href="#label-Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The r.is optimization added in <a href="3_46_0_txt.html">3.46.0</a> has been extended to optimize all single argument calls. This results in the following speedups based on argument type:</p>
+<ul><li>
+<p>Hash/Class matching: 20%</p>
+</li><li>
+<p>Symbol matching: 25%</p>
+</li><li>
+<p>Array matching: 35%</p>
+</li><li>
+<p>Proc matching: 50%</p>
+</li><li>
+<p>false/nil matching: 65%</p>
+</li></ul>
+</li><li>
+<p><a href="../../../classes/Roda.html"><code>Roda</code></a> now uses defined?(yield) instead of block_given? internally for better performance on CRuby.  defined?(yield) is faster as it is built into the VM, while block_given? is a regular method and has the overhead of calling a regular method.  Note that defined?(yield) is not implemented correctly on JRuby before 9.0.0.0, so this release of <a href="../../../classes/Roda.html"><code>Roda</code></a> drops support for JRuby versions before 9.0.0.0.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 
