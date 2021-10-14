@@ -312,6 +312,16 @@ describe "hash_routes plugin - hash_branch" do
     proc{app.hash_branch("foo"){}}.must_raise
   end
 
+  it "allows removing a hash branch" do
+    2.times do
+      app.hash_branch('a')
+      body.must_equal 'n'
+      body('/a').must_equal 'n'
+      body('/a/').must_equal 'n'
+      body('/p/x').must_equal 'px'
+    end
+  end
+
   it "works when subclassing the app" do
     old_app = app
     @app = Class.new(app)
@@ -417,6 +427,16 @@ describe "hash_routes plugin - hash_path" do
     body('/a').must_equal 'a'
     body('/a/').must_equal 'n'
     body('/p/x').must_equal 'px'
+  end
+
+  it "allows removing a hash path" do
+    2.times do
+      app.hash_path('/a')
+      body.must_equal 'n'
+      body('/a').must_equal 'n'
+      body('/a/').must_equal 'n'
+      body('/p/x').must_equal 'px'
+    end
   end
 
   it "handles loading the plugin multiple times correctly" do

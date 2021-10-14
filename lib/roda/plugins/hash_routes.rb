@@ -394,20 +394,32 @@ class Roda
           dsl
         end
 
-        # Add branch handler for the given namespace and segment.
+        # Add branch handler for the given namespace and segment. If called without
+        # a block, removes the existing branch handler if it exists.
         def hash_branch(namespace='', segment, &block)
           segment = "/#{segment}"
           routes = opts[:hash_branches][namespace] ||= {}
-          routes[segment] = define_roda_method(routes[segment] || "hash_branch_#{namespace}_#{segment}", 1, &convert_route_block(block))
+          if block
+            routes[segment] = define_roda_method(routes[segment] || "hash_branch_#{namespace}_#{segment}", 1, &convert_route_block(block))
+          elsif meth = routes[segment]
+            routes.delete(segment)
+            remove_method(meth)
+          end
         end
 
         # Add path handler for the given namespace and path. When the
         # r.hash_paths method is called, checks the matching namespace
         # for the full remaining path, and dispatch to that block if
-        # there is one.
+        # there is one.  If called without a block, removes the existing
+        # path handler if it exists.
         def hash_path(namespace='', path, &block)
           routes = opts[:hash_paths][namespace] ||= {}
-          routes[path] = define_roda_method(routes[path] || "hash_path_#{namespace}_#{path}", 1, &convert_route_block(block))
+          if block
+            routes[path] = define_roda_method(routes[path] || "hash_path_#{namespace}_#{path}", 1, &convert_route_block(block))
+          elsif meth = routes[path]
+            routes.delete(path)
+            remove_method(meth)
+          end
         end
       end
 

@@ -1,3 +1,7 @@
+= master
+
+* Allow hash_branch and hash_path in hash_routes plugin to be called without a block to remove existing handler (jeremyevans)
+
 = 3.49.0 (2021-10-13)
 
 * Switch block_given? to defined?(yield) (jeremyevans)
