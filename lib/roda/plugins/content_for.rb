@@ -55,10 +55,10 @@ class Roda
     #
     #   plugin :content_for, append: false
     module ContentFor
-      # Depend on the render plugin, since this plugin only makes
-      # sense when the render plugin is used.
+      # Depend on the capture_erb plugin, since it uses capture_erb
+      # to capture the content.
       def self.load_dependencies(app, _opts = OPTS)
-        app.plugin :render
+        app.plugin :capture_erb
       end
 
       # Configure whether to append or overwrite if content_for
@@ -72,18 +72,12 @@ class Roda
         # under the given key.  If called without a block, retrieve
         # stored content with the given key, or return nil if there
         # is no content stored with that key.
-        def content_for(key, value=nil)
+        def content_for(key, value=nil, &block)
           append = opts[:append_content_for]
 
-          if defined?(yield) || value
-            if defined?(yield)
-              outvar = render_opts[:template_opts][:outvar]
-              buf_was = instance_variable_get(outvar)
-
-              # Use temporary output buffer for ERB-based rendering systems
-              instance_variable_set(outvar, String.new)
-              value = yield.to_s
-              instance_variable_set(outvar, buf_was)
+          if block || value
+            if block
+              value = capture_erb(&block)
             end
 
             @_content_for ||= {}
