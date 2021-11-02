@@ -47,7 +47,7 @@ class Roda
     # The following plugin options are supported:
     #
     # :allowed_paths :: Set the template paths to allow.  Attempts to render paths outside
-    #                   of this directory will raise an error.  Defaults to the +:views+ directory.
+    #                   of these paths will raise an error.  Defaults to the +:views+ directory.
     # :cache :: nil/false to explicitly disable premanent template caching.  By default, permanent
     #           template caching is disabled by default if RACK_ENV is development.  When permanent
     #           template caching is disabled, for templates with paths in the file system, the
@@ -59,9 +59,9 @@ class Roda
     #            templates, defaults to 'erb'.
     # :escape :: Use Erubi as the ERB template engine, and enable escaping by default,
     #            which makes <tt><%= %></tt> escape output and  <tt><%== %></tt> not escape output.
-    #            If given, sets the <tt>:escape=>true</tt> option for all template engines, which
+    #            If given, sets the <tt>escape: true</tt> option for all template engines, which
     #            can break some non-ERB template engines.  You can use a string or array of strings
-    #            as the value for this option to only set the <tt>:escape=>true</tt> option for those
+    #            as the value for this option to only set the <tt>escape: true</tt> option for those
     #            specific template engines.
     # :layout :: The base name of the layout file, defaults to 'layout'.  This can be provided as a hash
     #            with the :template or :inline options.
@@ -130,6 +130,84 @@ class Roda
     # only argument, you can speed things up by specifying a +:cache_key+ option in
     # the hash, making sure the +:cache_key+ is unique to the template you are
     # rendering.
+    #
+    # = Accepting Template Blocks in Methods
+    #
+    # If you are used to Rails, you may be surprised that this type of template code
+    # doesn't work in Roda:
+    #
+    #   <%= some_method do %>
+    #     Some HTML
+    #   <% end %>
+    #
+    # The reason this doesn't work is that this is not valid ERB syntax, it is Rails syntax,
+    # and requires attempting to parse the <tt>some_method do</tt> Ruby code with a regular
+    # expression.  Since Roda uses ERB syntax, it does not support this.
+    #
+    # In general, these methods are used to wrap the content of the block and
+    # inject the content into the output. To get similar behavior with Roda, you have
+    # a few different options you can use.
+    #
+    # == Directly Inject Template Output
+    #
+    # You can switch from a <tt><%=</tt> tag to using a <tt><%</tt> tag:
+    #
+    #   <% some_method do %>
+    #     Some HTML
+    #   <% end %>
+    #
+    # While this would output <tt>Some HTML</tt> into the template, it would not be able
+    # to inject content before or after the block.  However, you can use the inject_erb_plugin
+    # to handle the injection:
+    #
+    #   def some_method
+    #     inject_erb "content before block"
+    #     yield
+    #     inject_erb "content after block"
+    #   end
+    #
+    # If you need to modify the captured block before injecting it, you can use the
+    # capture_erb plugin to capture content from the template block, and modify that content,
+    # then use inject_erb to inject it into the template output:
+    #
+    #   def some_method(&block)
+    #     inject_erb "content before block"
+    #     inject_erb capture_erb(&block).upcase
+    #     inject_erb "content after block"
+    #   end
+    #
+    # This is the recommended approach for handling this type of method, if you want to keep
+    # the template block in the same template.
+    #
+    # == Separate Block Output Into Separate Template
+    #
+    # By moving the <tt>Some HTML</tt> into a separate template, you can render that
+    # template inside the block:
+    #
+    #  <%= some_method{render('template_name')} %>
+    #
+    # It's also possible to use an inline template:
+    #
+    #   <%= some_method do render(:inline=><<-END)
+    #     Some HTML
+    #     END
+    #   end %>
+    #
+    # This approach is useful if it makes sense to separate the template block into its
+    # own template. You lose the ability to use local variable from outside the
+    # template block inside the template block with this approach.
+    #
+    # == Separate Header and Footer
+    #
+    # You can define two separate methods, one that outputs the content before the block,
+    # and one that outputs the content after the block, and use those instead of a single
+    # call:
+    #
+    #   <%= some_method_before %>
+    #     Some HTML
+    #   <%= some_method_after %>
+    #
+    # This is the simplest option to setup, but it is fairly tedious to use.
     module Render
       # Support for using compiled methods directly requires Ruby 2.3 for the
       # method binding to work, and Tilt 1.2 for Tilt::Template#compiled_method.
