@@ -1,5 +1,7 @@
 = master
 
+* Add inject_erb plugin for injecting content directly into ERB template output (jeremyevans)
+
 * Allow hash_branch and hash_path in hash_routes plugin to be called without a block to remove existing handler (jeremyevans)
 
 = 3.49.0 (2021-10-13)
