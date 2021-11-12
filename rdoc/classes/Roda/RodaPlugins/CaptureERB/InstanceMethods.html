@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+<head>
+<title>Roda::RodaPlugins::CaptureERB::InstanceMethods</title>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<link href='../../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+<script type='text/javascript'>
+  function popupCode(url) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+  
+  function toggleCode(id) {
+    var code = document.getElementById(id)
+  
+    code.style.display = code.style.display != 'block' ? 'block' : 'none'
+    return true
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+</script>
+</head>
+<body class='page'>
+<div class='class' id='wrapper'>
+<div class='header'>
+<h1 class='name'><span class='type'>module</span>
+Roda::RodaPlugins::CaptureERB::InstanceMethods
+</h1>
+<ol class='paths'>
+<li>
+<a href="../../../../files/lib/roda/plugins/capture_erb_rb.html">lib/roda/plugins/capture_erb.rb</a>
+</li>
+</ol>
+</div>
+<div id='content'>
+<div id='text'>
+<div id='description'></div>
+<div id='method-list'>
+<h2>Methods</h2>
+<h3>Public Instance</h3>
+<ol>
+<li><a href="#method-i-capture_erb">capture_erb</a></li>
+</ol>
+</div>
+<div id='context'>
+</div>
+<div id='section'>
+<div id='methods'>
+<h2>Public Instance methods</h2>
+<div class='method public-instance' id='method-method-i-capture_erb'>
+<a name='method-i-capture_erb'></a>
+<div class='synopsis'>
+<span class='name'>capture_erb</span><span class='arguments'>()</span>
+
+</div>
+<div class='description'>
+
+<p>Temporarily replace the ERB output buffer with an empty string, and then yield to the block. Return the value of the block, converted to a string. Restore the previous ERB output buffer before returning.</p>
+
+</div>
+<div class='source'>
+<a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-capture_erb-source&#39;); return false'>
+[show source]
+</a>
+<pre id='method-i-capture_erb-source'>   <span class="ruby-comment"># File lib/roda/plugins/capture_erb.rb</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">capture_erb</span>&#x000A;<span class="line-num">29</span>   <span class="ruby-identifier">outvar</span> = <span class="ruby-identifier">render_opts</span>[<span class="ruby-value">:template_opts</span>][<span class="ruby-value">:outvar</span>]&#x000A;<span class="line-num">30</span>   <span class="ruby-identifier">buf_was</span> = <span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">outvar</span>)&#x000A;<span class="line-num">31</span>   <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">outvar</span>, <span class="ruby-constant">String</span>.<span class="ruby-identifier">new</span>)&#x000A;<span class="line-num">32</span>   <span class="ruby-keyword">yield</span>.<span class="ruby-identifier">to_s</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">ensure</span>&#x000A;<span class="line-num">34</span>   <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">outvar</span>, <span class="ruby-identifier">buf_was</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">outvar</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">buf_was</span>&#x000A;<span class="line-num">35</span> <span class="ruby-keyword">end</span></pre>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div id='footer-push'></div>
+</div>
+<div id='footer'>
+<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+</div>
+</body>
+</html>

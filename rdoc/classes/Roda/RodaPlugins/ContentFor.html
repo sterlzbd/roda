@@ -108,14 +108,14 @@ Roda::RodaPlugins::ContentFor
 </div>
 <div class='description'>
 
-<p>Depend on the render plugin, since this plugin only makes sense when the render plugin is used.</p>
+<p>Depend on the capture_erb plugin, since it uses capture_erb to capture the content.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/content_for.rb</span>&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">61</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">62</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/content_for.rb</span>&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">61</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:capture_erb</span>&#x000A;<span class="line-num">62</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
