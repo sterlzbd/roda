@@ -1,4 +1,4 @@
-= master
+= 3.50.0 (2021-11-12)
 
 * Add capture_erb plugin for capturing ERB template blocks, instead of injecting them into the template output (jeremyevans)
 
