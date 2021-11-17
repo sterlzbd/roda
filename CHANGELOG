@@ -1,5 +1,7 @@
 = master
 
+* Allow run in multi_run plugin to be called without an app to remove existing handler (jeremyevans)
+
 * Allow route in named_routes plugin to be called without a block to remove existing handler (jeremyevans)
 
 = 3.50.0 (2021-11-12)

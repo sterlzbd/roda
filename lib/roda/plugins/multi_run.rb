@@ -45,6 +45,9 @@ class Roda
     # subtrees, multi_run is a better approach, but it does not let you set instance
     # variables in the main Roda app and have those instance variables usable in
     # the routing subtrees.
+    #
+    # To handle development environments that reload code, you can call the
+    # +run+ class method without an app to remove dispatching for the prefix.
     module MultiRun
       # Initialize the storage for the dispatched applications
       def self.configure(app)
@@ -67,8 +70,12 @@ class Roda
 
         # Add a rack application to dispatch to for the given prefix when
         # r.multi_run is called.
-        def run(prefix, app)
-          multi_run_apps[prefix.to_s] = app
+        def run(prefix, app=nil)
+          if app
+            multi_run_apps[prefix.to_s] = app
+          else
+            multi_run_apps.delete(prefix.to_s)
+          end
           self::RodaRequest.refresh_multi_run_regexp!
         end
       end

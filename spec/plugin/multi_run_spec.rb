@@ -84,4 +84,16 @@ describe "multi_run plugin" do
     body("/a").must_equal "a1"
     yielded.must_equal "a"
   end
+
+  it "allows removing dispatching to apps" do
+    app(:multi_run) do |r|
+      r.multi_run
+      "c"
+    end
+
+    app.run "a", Class.new(Roda).class_eval{route{"a1"}; app}
+    body("/a").must_equal 'a1'
+    app.run "a"
+    body("/a").must_equal 'c'
+  end
 end
