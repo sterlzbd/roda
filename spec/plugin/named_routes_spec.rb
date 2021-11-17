@@ -60,4 +60,12 @@ describe "named_routes plugin" do
     status('/p/').must_equal 404
     status('/q/a').must_equal 404
   end
+
+  it "allows removing a hash branch" do
+    status('/p').must_equal 200
+    2.times do
+      app.route(:p)
+      proc{status('/p')}.must_raise TypeError
+    end
+  end
 end

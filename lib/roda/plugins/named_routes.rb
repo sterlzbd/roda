@@ -38,6 +38,9 @@ class Roda
     # Note that in multi-threaded code, you should not attempt to add a
     # named route after accepting requests.
     #
+    # To handle development environments that reload code, you can call the
+    # +route+ class method without a block to remove an existing named route.
+    #
     # == Routing Files
     #
     # The convention when using the named_routes plugin is to have a single
@@ -124,7 +127,7 @@ class Roda
         # The names for the currently stored named routes
         def named_routes(namespace=nil)
           unless routes = opts[:namespaced_routes][namespace]
-            raise RodaError, "unsupported multi_route namespace used: #{namespace.inspect}"
+            raise RodaError, "unsupported named_routes namespace used: #{namespace.inspect}"
           end
           routes.keys
         end
@@ -140,7 +143,12 @@ class Roda
         def route(name=nil, namespace=nil, &block)
           if name
             routes = opts[:namespaced_routes][namespace] ||= {}
-            routes[name] = define_roda_method(routes[name] || "multi_route_#{namespace}_#{name}", 1, &convert_route_block(block))
+            if block
+              routes[name] = define_roda_method(routes[name] || "named_routes_#{namespace}_#{name}", 1, &convert_route_block(block))
+            elsif meth = routes[name]
+              routes.delete(name)
+              remove_method(meth)
+            end
           else
             super(&block)
           end
