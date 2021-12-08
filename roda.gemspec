@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
     'bug_tracker_uri'   => 'https://github.com/jeremyevans/roda/issues',
     'changelog_uri'     => 'http://roda.jeremyevans.net/rdoc/files/CHANGELOG.html',
     'documentation_uri' => 'http://roda.jeremyevans.net/documentation.html',
-    'mailing_list_uri'  => 'https://groups.google.com/forum/#!forum/ruby-roda',
+    'mailing_list_uri'  => 'https://github.com/jeremyevans/roda/discussions',
     "source_code_uri"   => "https://github.com/jeremyevans/roda" 
   }
 

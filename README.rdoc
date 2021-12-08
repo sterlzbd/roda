@@ -12,7 +12,8 @@ maintainable web applications in ruby.
 Website :: http://roda.jeremyevans.net
 Source :: http://github.com/jeremyevans/roda
 Bugs :: http://github.com/jeremyevans/roda/issues
-Google Group :: http://groups.google.com/group/ruby-roda
+Discussion Forum (GitHub Discussions) :: https://github.com/jeremyevans/roda/discussions
+Alternate Discussion Forum (Google Group) :: http://groups.google.com/group/ruby-roda
 
 == Goals
 
