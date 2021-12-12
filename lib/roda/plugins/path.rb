@@ -41,12 +41,12 @@ class Roda
     #     end
     #
     #     r.post 'baz' do
-    #       bar = Baz[1]
+    #       baz = Baz[1]
     #       r.redirect path(baz, 'c', 'd') # /baz/1/c/d
     #     end
     #
     #     r.post 'quux' do
-    #       bar = Quux[1]
+    #       quux = Quux[1]
     #       r.redirect url(quux, '/bar') # http://example.com/quux/1/bar
     #     end
     #   end
