@@ -1,5 +1,7 @@
 = master
 
+* Avoid method redefinition warning in error_handler plugin in verbose warning mode (jeremyevans)
+
 * Allow run in multi_run plugin to be called without an app to remove existing handler (jeremyevans)
 
 * Allow route in named_routes plugin to be called without a block to remove existing handler (jeremyevans)

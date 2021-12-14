@@ -62,6 +62,7 @@ class Roda
         # the exception in the scope of the Roda instance.
         def error(&block)
           define_method(:handle_error, &block)
+          alias_method(:handle_error, :handle_error)
           private :handle_error
         end
       end
