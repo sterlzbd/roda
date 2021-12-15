@@ -43,6 +43,8 @@ Roda::RodaPlugins::NamedRoutes
 
 <p>Note that in multi-threaded code, you should not attempt to add a named route after accepting requests.</p>
 
+<p>To handle development environments that reload code, you can call the <code>route</code> class method without a block to remove an existing named route.</p>
+
 <h2 id="module-Roda::RodaPlugins::NamedRoutes-label-Routing+Files">Routing Files<span><a href="#module-Roda::RodaPlugins::NamedRoutes-label-Routing+Files">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>The convention when using the named_routes plugin is to have a single named route per file, and these routing files should be stored in a routes subdirectory in your application.  So for the above example, you would use the following files:</p>
@@ -95,7 +97,7 @@ Roda::RodaPlugins::NamedRoutes
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">106</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">107</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">108</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">109</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">110</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">111</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

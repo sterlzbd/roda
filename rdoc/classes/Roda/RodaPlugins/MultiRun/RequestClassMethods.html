@@ -63,7 +63,7 @@ Roda::RodaPlugins::MultiRun::RequestClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_run_regexp-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-multi_run_regexp-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">84</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_run_regexp</span>&#x000A;<span class="line-num">85</span>   <span class="ruby-ivar">@multi_run_regexp</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">refresh_multi_run_regexp!</span>&#x000A;<span class="line-num">86</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-multi_run_regexp-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">91</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_run_regexp</span>&#x000A;<span class="line-num">92</span>   <span class="ruby-ivar">@multi_run_regexp</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">refresh_multi_run_regexp!</span>&#x000A;<span class="line-num">93</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-refresh_multi_run_regexp-21'>
@@ -81,7 +81,7 @@ Roda::RodaPlugins::MultiRun::RequestClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-refresh_multi_run_regexp-21-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-refresh_multi_run_regexp-21-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">79</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">refresh_multi_run_regexp!</span>&#x000A;<span class="line-num">80</span>   <span class="ruby-ivar">@multi_run_regexp</span> = <span class="ruby-regexp">/(#{Regexp.union(roda_class.multi_run_apps.keys.sort.reverse)})/</span>&#x000A;<span class="line-num">81</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-refresh_multi_run_regexp-21-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">86</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">refresh_multi_run_regexp!</span>&#x000A;<span class="line-num">87</span>   <span class="ruby-ivar">@multi_run_regexp</span> = <span class="ruby-regexp">/(#{Regexp.union(roda_class.multi_run_apps.keys.sort.reverse)})/</span>&#x000A;<span class="line-num">88</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>

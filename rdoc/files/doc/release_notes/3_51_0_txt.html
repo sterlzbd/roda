@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>version.rb</title>
+<title>3.51.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,10 +23,10 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>version.rb
+<h1 class='name'>3.51.0.txt
 </h1>
 <div class='paths'>
-lib/roda/version.rb
+doc/release_notes/3.51.0.txt
 </div>
 <div class='last-update'>
 Last Update:
@@ -35,7 +35,22 @@ Last Update:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The named_routes plugin now allows calling route without a block to remove the existing route handler.  The multi_run plugin now allows calling run without an app to remove an existing handler. These changes are designed to better support code reloading libraries, so that if the related file is deleted, the related handlers are also removed, without having to reload the entire application.</p>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The error_handler plugin now avoids a method redefinition warning in verbose warning mode.</p>
+</li></ul>
+
+<h1 id="label-Other">Other<span><a href="#label-Other">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Roda&#39;s primary discussion forum is now GitHub Discussions. The ruby-roda Google Group is still available for users who would prefer to use that instead.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 

@@ -56,6 +56,8 @@ Roda::RodaPlugins::MultiRun
 <p>This is useful for modifying the environment before passing it to the rack app.</p>
 
 <p>The multi_run plugin is similar to the multi_route plugin, with the difference being the multi_route plugin keeps all routing subtrees in the same <a href="../../Roda.html"><code>Roda</code></a> app/class, while multi_run dispatches to other rack apps.  If you want to isolate your routing subtrees, multi_run is a better approach, but it does not let you set instance variables in the main <a href="../../Roda.html"><code>Roda</code></a> app and have those instance variables usable in the routing subtrees.</p>
+
+<p>To handle development environments that reload code, you can call the <code>run</code> class method without an app to remove dispatching for the prefix.</p>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -92,7 +94,7 @@ Roda::RodaPlugins::MultiRun
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">50</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">51</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">52</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">54</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">55</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
