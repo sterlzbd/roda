@@ -1,3 +1,7 @@
+= master
+
+* Support typecast_params :limit_date_parse plugin option for raising or truncating long input to date parsing methods (jeremyevans)
+
 = 3.51.0 (2021-12-15)
 
 * Avoid method redefinition warning in error_handler plugin in verbose warning mode (jeremyevans)

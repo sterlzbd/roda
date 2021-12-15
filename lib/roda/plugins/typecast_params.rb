@@ -265,6 +265,13 @@ class Roda
     # If you would like to skip this check and allow null bytes in param string values,
     # you can do by passing the <tt>:allow_null_bytes</tt> option when loading the plugin.
     #
+    # By default, typecast_params does not limit strings passed to the date parsing methods.
+    # Modern versions of Ruby and the date gem internally raise if the input to date parsing
+    # methods is too large to prevent denial of service.  If you are using an older version of Ruby,
+    # you can use the <tt>limit_date_parse: :raise</tt> option when loading the plugin to enforce
+    # the same check.  You can alternatively use the <tt>limit_date_parse: :truncate</tt> option to
+    # automatically truncate all input to date parse methods to the first 128 characters.
+    #
     # By design, typecast_params only deals with string keys, it is not possible to use
     # symbol keys as arguments to the conversion methods and have them converted.
     module TypecastParams
@@ -381,6 +388,27 @@ class Roda
           end
 
           v
+        end
+      end
+
+      module DateParseTruncate
+        # Truncate strings passed to parse method to 128 characters to mitigate
+        # denial of service vulnerability, while still allowing potential matching.
+        def _string_parse!(klass, v)
+          v = v[0, 128]
+          super
+        end
+      end
+
+      module DateParseRaise
+        # Raise if passing too large input to the date parsing methods.
+        # This is designed for older versions of Ruby lacking the appropriate
+        # denial of service mitigations.
+        def _string_parse!(klass, v)
+          if v.length > 128
+            raise Error, "string length (#{v.length}) exceeds the limit 128"
+          end
+          super
         end
       end
 
@@ -999,10 +1027,15 @@ class Roda
           when ''
             nil
           when String
-            klass.parse(v)
+            _string_parse!(klass, v)
           else
             raise Error, "unexpected value received: #{v.inspect}"
           end
+        end
+
+        # Handle parsing for string values passed to parse!.
+        def _string_parse!(klass, v)
+          klass.parse(v)
         end
       end
 
@@ -1018,6 +1051,16 @@ class Roda
         end
         if opts[:allow_null_bytes]
           app::TypecastParams.send(:include, AllowNullByte)
+        end
+        case opts[:limit_date_parse]
+        when nil
+          # nothing
+        when :truncate
+          app::TypecastParams.send(:include, DateParseTruncate)
+        when :raise
+          app::TypecastParams.send(:include, DateParseRaise)
+        else
+          raise ProgrammerError, "invalid value for :limit_date_parse: #{opts[:limit_date_parse].inspect}"
         end
       end
 
