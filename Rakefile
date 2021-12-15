@@ -61,7 +61,7 @@ end
 
 spec = proc do |env|
   env.each{|k,v| ENV[k] = v}
-  sh "#{FileUtils::RUBY} spec/all.rb"
+  sh "#{FileUtils::RUBY} #{"-w" if RUBY_VERSION >= '3'} spec/all.rb"
   env.each{|k,v| ENV.delete(k)}
   if File.directory?('.sass-cache')
     require 'fileutils'
@@ -86,14 +86,6 @@ task "spec_cov" do
   spec.call('COVERAGE'=>'1')
 end
   
-desc "Run specs with -w, some warnings filtered"
-task "spec_w" do
-  rubyopt = ENV['RUBYOPT']
-  ENV['RUBYOPT'] = "#{rubyopt} -w"
-  spec.call('WARNING'=>'1')
-  ENV['RUBYOPT'] = rubyopt
-end
-
 ### Other
 
 desc "Print #{NAME} version"

@@ -61,8 +61,6 @@ if run_tests
       File.utime(css_atime, css_mtime, css_file)
       File.delete(metadata_file) if File.file?(metadata_file)
       File.delete(importdep_file) if File.file?(importdep_file)
-    end
-    after(:all) do
       FileUtils.rm_r('spec/assets/tmp') if File.directory?('spec/assets/tmp')
       FileUtils.rm_r('spec/public') if File.directory?('spec/public')
       FileUtils.rm(Dir['spec/assets/app.*.{js,css}*'])

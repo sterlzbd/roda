@@ -1,10 +1,13 @@
 $:.unshift(File.expand_path("../lib", File.dirname(__FILE__)))
 
-if ENV['WARNING']
-  require 'warning'
-  Warning.ignore(:missing_ivar, File.dirname(File.dirname(__FILE__)))
-  Warning.ignore(%r{gems/(mail|hanna-nouveau|minjs)-\d})
-  Warning.dedup if Warning.respond_to?(:dedup)
+if RUBY_VERSION >= '3'
+  begin
+    require 'warning'
+  rescue LoadError
+  else
+    Warning.ignore(%r{gems/(mail|minjs)-\d})
+    Warning.dedup if Warning.respond_to?(:dedup)
+  end
 end
 
 if ENV['COVERAGE']
