@@ -265,12 +265,22 @@ class Roda
     # If you would like to skip this check and allow null bytes in param string values,
     # you can do by passing the <tt>:allow_null_bytes</tt> option when loading the plugin.
     #
-    # By default, typecast_params does not limit strings passed to the date parsing methods.
-    # Modern versions of Ruby and the date gem internally raise if the input to date parsing
-    # methods is too large to prevent denial of service.  If you are using an older version of Ruby,
-    # you can use the <tt>limit_date_parse: :raise</tt> option when loading the plugin to enforce
-    # the same check.  You can alternatively use the <tt>limit_date_parse: :truncate</tt> option to
-    # automatically truncate all input to date parse methods to the first 128 characters.
+    # You can use the :date_parse_input_handler option to specify custom handling of date
+    # parsing input.  Modern versions of Ruby and the date gem internally raise if the input to
+    # date parsing methods is too large to prevent denial of service.  If you are using an
+    # older version of Ruby, you can use this option to enforce the same check:
+    #
+    #   plugin :typecast_params, date_parse_input_handler: proc {|string|
+    #       raise ArgumentError, "too big" if string.bytesize > 128
+    #       string
+    #     }
+    #
+    # You can also use this option to modify the input, such as truncating it to the first
+    # 128 bytes:
+    #
+    #   plugin :typecast_params, date_parse_input_handler: proc {|string|
+    #       string.b[0, 128]
+    #     }
     #
     # By design, typecast_params only deals with string keys, it is not possible to use
     # symbol keys as arguments to the conversion methods and have them converted.
@@ -391,23 +401,10 @@ class Roda
         end
       end
 
-      module DateParseTruncate
-        # Truncate strings passed to parse method to 128 characters to mitigate
-        # denial of service vulnerability, while still allowing potential matching.
+      module DateParseInputHandler
+        # Pass input string to date parsing through handle_date_parse_input.
         def _string_parse!(klass, v)
-          v = v[0, 128]
-          super
-        end
-      end
-
-      module DateParseRaise
-        # Raise if passing too large input to the date parsing methods.
-        # This is designed for older versions of Ruby lacking the appropriate
-        # denial of service mitigations.
-        def _string_parse!(klass, v)
-          if v.length > 128
-            raise Error, "string length (#{v.length}) exceeds the limit 128"
-          end
+          v = handle_date_parse_input(v)
           super
         end
       end
@@ -1052,15 +1049,13 @@ class Roda
         if opts[:allow_null_bytes]
           app::TypecastParams.send(:include, AllowNullByte)
         end
-        case opts[:limit_date_parse]
-        when nil
-          # nothing
-        when :truncate
-          app::TypecastParams.send(:include, DateParseTruncate)
-        when :raise
-          app::TypecastParams.send(:include, DateParseRaise)
-        else
-          raise ProgrammerError, "invalid value for :limit_date_parse: #{opts[:limit_date_parse].inspect}"
+        if opts[:date_parse_input_handler]
+          app::TypecastParams.class_eval do
+            include DateParseInputHandler
+            define_method(:handle_date_parse_input, &opts[:date_parse_input_handler])
+            private :handle_date_parse_input
+            alias handle_date_parse_input handle_date_parse_input
+          end
         end
       end
 

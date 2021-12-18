@@ -111,8 +111,8 @@ describe "typecast_params plugin" do
     tp('a[]=1%00&b[]=1').array(:any, 'b').must_equal ['1']
   end
 
-  it "conversion methods should truncate input strings to 128 bytes when :limit_date_parse=>:truncate plugin option is used" do
-    app.plugin :typecast_params, :limit_date_parse=>:truncate
+  it "conversion methods should respect :date_parse_input_handler" do
+    app.plugin :typecast_params, :date_parse_input_handler=>proc{|string| string[0, 128]}
 
     tp('a=2021-10-22' + ' '*100).date('a').must_equal Date.new(2021, 10, 22)
     tp('a=2021-10-22 10:20:30' + ' '*100).datetime('a').must_equal DateTime.new(2021, 10, 22, 10, 20, 30)
@@ -121,11 +121,8 @@ describe "typecast_params plugin" do
     tp('a=2021-10-22' + ' '*1000).date('a').must_equal Date.new(2021, 10, 22)
     tp('a=2021-10-22 10:20:30' + ' '*1000).datetime('a').must_equal DateTime.new(2021, 10, 22, 10, 20, 30)
     tp('a=2021-10-22 10:20:30' + ' '*1000).time('a').must_equal Time.local(2021, 10, 22, 10, 20, 30)
-  end
 
-  it "conversion methods should raise with too long strings when :limit_date_parse=>:raise plugin option is used" do
-    app.plugin :typecast_params, :limit_date_parse=>:raise
-
+    app.plugin :typecast_params, :date_parse_input_handler=>proc{|string| raise Roda::RodaPlugins::TypecastParams::Error if string.bytesize > 128; string}
     tp('a=2021-10-22' + ' '*100).date('a').must_equal Date.new(2021, 10, 22)
     tp('a=2021-10-22 10:20:30' + ' '*100).datetime('a').must_equal DateTime.new(2021, 10, 22, 10, 20, 30)
     tp('a=2021-10-22 10:20:30' + ' '*100).time('a').must_equal Time.local(2021, 10, 22, 10, 20, 30)
@@ -133,10 +130,6 @@ describe "typecast_params plugin" do
     lambda{tp('a=2021-10-22' + ' '*1000).date('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
     lambda{tp('a=2021-10-22 10:20:30' + ' '*1000).datetime('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
     lambda{tp('a=2021-10-22 10:20:30' + ' '*1000).time('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
-  end
-
-  it "should raise when loading plugin with invalid :limit_date_parse plugin option" do
-    lambda{app.plugin :typecast_params, :limit_date_parse=>:foo}.must_raise Roda::RodaPlugins::TypecastParams::ProgrammerError
   end
 
   it "conversion methods should allow null bytes in strings when :allow_null_bytes plugin option is used" do
