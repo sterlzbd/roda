@@ -85,39 +85,10 @@ describe "content_for plugin with multiple calls to the same key" do
 end
 end
 
-begin
-  require 'tilt/erb'
-  require 'tilt/haml'
-rescue LoadError
-  warn "tilt or haml not installed, skipping content_for plugin haml tests"
-else
-describe "content_for plugin with haml" do
-  before do
-    app(:bare) do
-      plugin :render, :engine => 'haml'
-      plugin :content_for
-
-      route do |r|
-        r.root do
-          view(:inline => "- content_for :foo do\n  - capture_haml do\n    foo\nbar", :layout => { :inline => "= yield\n=content_for :foo" })
-        end
-        r.get 'a' do
-          view(:inline => "- content_for :foo, 'foo'\nbar", :layout => { :inline => "= yield\n=content_for :foo" })
-        end
-      end
-    end
-  end
-
-  it "should work with alternate rendering engines" do
-    body.strip.sub(/\n+/, "\n").must_equal "bar\nfoo"
-    body('/a').strip.sub(/\n+/, "\n").must_equal "bar\nfoo"
-  end
-end
-
 describe "content_for plugin with mixed template engines" do
   before do
     app(:bare) do
-      plugin :render, :layout_opts=>{:engine => 'haml', :inline => "= yield\n=content_for :foo" }
+      plugin :render, :layout_opts=>{:engine => 'str', :inline => '#{yield}\n#{content_for :foo}' }
       plugin :content_for
 
       route do |r|
@@ -140,7 +111,7 @@ end
 describe "content_for plugin when overriding :engine" do
   before do
     app(:bare) do
-      plugin :render, :engine => 'haml', :layout_opts=>{:inline => "= yield\n=content_for :foo" }
+      plugin :render, :engine => 'str', :layout_opts=>{:inline => '#{yield}\n#{content_for :foo}' }
       plugin :content_for
 
       route do |r|
@@ -158,5 +129,4 @@ describe "content_for plugin when overriding :engine" do
     body.strip.must_equal "bar\nfoo"
     body('/a').strip.must_equal "bar\nfoo"
   end
-end
 end

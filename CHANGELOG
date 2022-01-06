@@ -1,5 +1,7 @@
 = master
 
+* Drop development dependency on haml (jeremyevans)
+
 * Make the path method in the path plugin handle blocks that accept keyword arguments in Ruby 3+ (adam12) (#227)
 
 * Support typecast_params :date_parse_input_handler plugin option for handling input to date parsing methods (jeremyevans)

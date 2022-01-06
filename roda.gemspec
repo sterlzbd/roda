@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "minitest-global_expectations"
   s.add_development_dependency "tilt"
   s.add_development_dependency "erubi"
-  s.add_development_dependency "haml"
   s.add_development_dependency "rack_csrf"
   s.add_development_dependency "sass"
   s.add_development_dependency "json"
