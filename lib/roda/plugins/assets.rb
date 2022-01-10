@@ -641,9 +641,17 @@ class Roda
         # a different digest type or to return a static string if you don't
         # want to use a unique value.
         def asset_digest(content)
-          require 'digest/sha2'
           algo = assets_opts[:sri] || :sha256
-          ::Digest.const_get(algo.to_s.upcase).hexdigest(content)
+          digest = begin
+            require 'openssl'
+            ::OpenSSL::Digest
+          # :nocov:
+          rescue LoadError
+            require 'digest/sha2'
+            ::Digest
+          # :nocov:
+          end
+          digest.const_get(algo.to_s.upcase).hexdigest(content)
         end
       end
 

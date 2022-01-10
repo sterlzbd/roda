@@ -1,5 +1,7 @@
 = master
 
+* Use faster OpenSSL::Digest instead of Digest for assets plugin SRI support (jeremyevans)
+
 * Drop development dependency on haml (jeremyevans)
 
 * Make the path method in the path plugin handle blocks that accept keyword arguments in Ruby 3+ (adam12) (#227)
