@@ -148,13 +148,17 @@ class Roda
                 # Allow calling private _method to get path
                 relative_path(request.script_name.to_s + send(_meth, *a, &blk))
               end
+              # :nocov:
               ruby2_keywords(meth) if respond_to?(:ruby2_keywords, true)
+              # :nocov:
             elsif add_script_name
               define_method(meth) do |*a, &blk|
                 # Allow calling private _method to get path
                 request.script_name.to_s + send(_meth, *a, &blk)
               end
+              # :nocov:
               ruby2_keywords(meth) if respond_to?(:ruby2_keywords, true)
+              # :nocov:
             else
               define_method(meth, &block)
             end
@@ -173,7 +177,9 @@ class Roda
             end
 
             define_method(url_meth, &url_block)
+            # :nocov:
             ruby2_keywords(url_meth) if respond_to?(:ruby2_keywords, true)
+            # :nocov:
           end
 
           nil
