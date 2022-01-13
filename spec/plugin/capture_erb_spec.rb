@@ -22,6 +22,9 @@ describe "capture_erb plugin" do
         r.get 'inject' do
           render(:inline => "<% some_method do %>foo<% end %>")
         end
+        r.get 'outside' do
+          capture_erb{1}
+        end
       end
 
       def some_method(&block)
@@ -42,6 +45,10 @@ describe "capture_erb plugin" do
 
   it "should work with the inject_erb plugin" do
     body('/inject').strip.must_equal "barFOObaz"
+  end
+
+  it "should return result of block converted to string when used outside template" do
+    body('/outside').must_equal "1"
   end
 end
 end
