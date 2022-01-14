@@ -35,11 +35,34 @@ Roda::RodaPlugins::NamedRoutes
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The named_routes plugin allows for multiple named routes, which the main route block can dispatch to by name at any point by calling <code>r.route</code>. If the named route doesn&#39;t handle the request, execution will continue, and if the named route does handle the request, the response returned by the named route will be returned.</p>
+<p>The named_routes plugin allows for multiple named routes, which the main route block can dispatch to by name at any point by calling <code>r.route</code>. If the named route doesn’t handle the request, execution will continue, and if the named route does handle the request, the response returned by the named route will be returned.</p>
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_route</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;/foo/bar&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;/bar/foo&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&#39;foo&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&#39;bar&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_route</span>
+
+<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&#39;/foo/bar&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&#39;/bar/foo&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&#39;foo&#39;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&#39;bar&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Note that in multi-threaded code, you should not attempt to add a named route after accepting requests.</p>
 
@@ -49,19 +72,62 @@ Roda::RodaPlugins::NamedRoutes
 
 <p>The convention when using the named_routes plugin is to have a single named route per file, and these routing files should be stored in a routes subdirectory in your application.  So for the above example, you would use the following files:</p>
 
-<pre class="ruby"><span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span>.<span class="ruby-identifier">rb</span>&#x000A;<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span>.<span class="ruby-identifier">rb</span></pre>
+<pre class="ruby"><span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span>.<span class="ruby-identifier">rb</span>
+<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span>.<span class="ruby-identifier">rb</span>
+</pre>
 
 <h2 id="module-Roda::RodaPlugins::NamedRoutes-label-Namespace+Support">Namespace Support<span><a href="#module-Roda::RodaPlugins::NamedRoutes-label-Namespace+Support">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>The named_routes plugin also has support for namespaces, allowing you to use <code>r.route</code> at multiple levels in your routing tree.  Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;baz&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;baz&quot;</span>, <span class="ruby-string">&quot;foo&quot;</span>)}&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;quux&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;quux&quot;</span>, <span class="ruby-string">&quot;foo&quot;</span>)}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;baz&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;baz&quot;</span>, <span class="ruby-string">&quot;bar&quot;</span>)}&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;quux&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;quux&quot;</span>, <span class="ruby-string">&quot;bar&quot;</span>)}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;baz&#39;</span>, <span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># handles /foo/baz prefix</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;quux&#39;</span>, <span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># handles /foo/quux prefix</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;baz&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># handles /bar/baz prefix</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;quux&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># handles /bar/quux prefix</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;foo&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;bar&quot;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;baz&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;baz&quot;</span>, <span class="ruby-string">&quot;foo&quot;</span>)}
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;quux&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;quux&quot;</span>, <span class="ruby-string">&quot;foo&quot;</span>)}
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;baz&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;baz&quot;</span>, <span class="ruby-string">&quot;bar&quot;</span>)}
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&quot;quux&quot;</span>){<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;quux&quot;</span>, <span class="ruby-string">&quot;bar&quot;</span>)}
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;baz&#39;</span>, <span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># handles /foo/baz prefix</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;quux&#39;</span>, <span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># handles /foo/quux prefix</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;baz&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># handles /bar/baz prefix</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span>(<span class="ruby-string">&#39;quux&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># handles /bar/quux prefix</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;foo&quot;</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span>(<span class="ruby-string">&quot;bar&quot;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <h3 id="module-Roda::RodaPlugins::NamedRoutes-label-Routing+Files">Routing Files<span><a href="#module-Roda::RodaPlugins::NamedRoutes-label-Routing+Files">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The convention when using namespaces with the multi_route plugin is to store the routing files in subdirectories per namespace. So for the above example, you would have the following routing files:</p>
 
-<pre class="ruby"><span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span>.<span class="ruby-identifier">rb</span>&#x000A;<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span><span class="ruby-operator">/</span><span class="ruby-identifier">baz</span>.<span class="ruby-identifier">rb</span>&#x000A;<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span><span class="ruby-operator">/</span><span class="ruby-identifier">quux</span>.<span class="ruby-identifier">rb</span>&#x000A;<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span>.<span class="ruby-identifier">rb</span>&#x000A;<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span><span class="ruby-operator">/</span><span class="ruby-identifier">baz</span>.<span class="ruby-identifier">rb</span>&#x000A;<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span><span class="ruby-operator">/</span><span class="ruby-identifier">quux</span>.<span class="ruby-identifier">rb</span></pre>
+<pre class="ruby"><span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span>.<span class="ruby-identifier">rb</span>
+<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span><span class="ruby-operator">/</span><span class="ruby-identifier">baz</span>.<span class="ruby-identifier">rb</span>
+<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">bar</span><span class="ruby-operator">/</span><span class="ruby-identifier">quux</span>.<span class="ruby-identifier">rb</span>
+<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span>.<span class="ruby-identifier">rb</span>
+<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span><span class="ruby-operator">/</span><span class="ruby-identifier">baz</span>.<span class="ruby-identifier">rb</span>
+<span class="ruby-identifier">routes</span><span class="ruby-operator">/</span><span class="ruby-identifier">foo</span><span class="ruby-operator">/</span><span class="ruby-identifier">quux</span>.<span class="ruby-identifier">rb</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -97,7 +163,10 @@ Roda::RodaPlugins::NamedRoutes
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>&#x000A;<span class="line-num">109</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">110</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">111</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/named_routes.rb</span>
+<span class="line-num">109</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">110</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:namespaced_routes</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">111</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -109,7 +178,7 @@ Roda::RodaPlugins::NamedRoutes
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -63,7 +63,11 @@ Roda::RodaPlugins::BeforeHook::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-_roda_run_main_route-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-_roda_run_main_route-source'>   <span class="ruby-comment"># File lib/roda/plugins/_before_hook.rb</span>&#x000A;<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_run_main_route</span>(<span class="ruby-identifier">r</span>)&#x000A;<span class="line-num">26</span>   <span class="ruby-identifier">_roda_before</span>&#x000A;<span class="line-num">27</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-_roda_run_main_route-source'>   <span class="ruby-comment"># File lib/roda/plugins/_before_hook.rb</span>
+<span class="line-num">25</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">_roda_run_main_route</span>(<span class="ruby-identifier">r</span>)
+<span class="line-num">26</span>   <span class="ruby-identifier">_roda_before</span>
+<span class="line-num">27</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-call'>
@@ -81,7 +85,14 @@ Roda::RodaPlugins::BeforeHook::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-call-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/roda/plugins/_before_hook.rb</span>&#x000A;<span class="line-num">15</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">16</span>   <span class="ruby-comment"># RODA4: Remove</span>&#x000A;<span class="line-num">17</span>   <span class="ruby-keyword">super</span> <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">18</span>     <span class="ruby-identifier">_roda_before</span>&#x000A;<span class="line-num">19</span>     <span class="ruby-identifier">instance_exec</span>(<span class="ruby-ivar">@_request</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-comment"># call Fallback</span>&#x000A;<span class="line-num">20</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-call-source'>   <span class="ruby-comment"># File lib/roda/plugins/_before_hook.rb</span>
+<span class="line-num">15</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">call</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">16</span>   <span class="ruby-comment"># RODA4: Remove</span>
+<span class="line-num">17</span>   <span class="ruby-keyword">super</span> <span class="ruby-keyword">do</span>
+<span class="line-num">18</span>     <span class="ruby-identifier">_roda_before</span>
+<span class="line-num">19</span>     <span class="ruby-identifier">instance_exec</span>(<span class="ruby-ivar">@_request</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-comment"># call Fallback</span>
+<span class="line-num">20</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -93,7 +104,7 @@ Roda::RodaPlugins::BeforeHook::InstanceMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

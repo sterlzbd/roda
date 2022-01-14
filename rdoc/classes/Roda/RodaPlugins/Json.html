@@ -37,27 +37,45 @@ Roda::RodaPlugins::Json
 <div id='description'>
 <p>The json plugin allows match blocks to return arrays or hashes, and have those arrays or hashes be converted to json which is used as the response body. It also sets the response content type to application/json. So you can take code like:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&#39;application/json&#39;</span>&#x000A;  [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>].<span class="ruby-identifier">to_json</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&#39;application/json&#39;</span>&#x000A;  {<span class="ruby-string">&#39;a&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;b&#39;</span>}.<span class="ruby-identifier">to_json</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&#39;application/json&#39;</span>
+  [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>].<span class="ruby-identifier">to_json</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&#39;application/json&#39;</span>
+  {<span class="ruby-string">&#39;a&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;b&#39;</span>}.<span class="ruby-identifier">to_json</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>and DRY it up:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;  [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>]&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  {<span class="ruby-string">&#39;a&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;b&#39;</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>
+  [<span class="ruby-value">1</span>, <span class="ruby-value">2</span>, <span class="ruby-value">3</span>]
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+  {<span class="ruby-string">&#39;a&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;b&#39;</span>}
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>By default, only arrays and hashes are handled, but you can specifically set the allowed classes to json by adding using the :classes option when loading the plugin:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>, <span class="ruby-value">classes:</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>, <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>]</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>, <span class="ruby-value">classes:</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>, <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>]
+</pre>
 
 <p>By default objects are serialized with <code>to_json</code>, but you can pass in a custom serializer, which can be any object that responds to +call(object)+.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>, <span class="ruby-value">serializer:</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">to_json</span>(<span class="ruby-value">root:</span> <span class="ruby-keyword">true</span>)}</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>, <span class="ruby-value">serializer:</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">o</span><span class="ruby-operator">|</span> <span class="ruby-identifier">o</span>.<span class="ruby-identifier">to_json</span>(<span class="ruby-value">root:</span> <span class="ruby-keyword">true</span>)}
+</pre>
 
 <p>If you need the request information during serialization, such as HTTP headers or query parameters, you can pass in the <code>:include_request</code> option, which will pass in the request object as the second argument when calling the serializer.</p>
 
 <pre>plugin :json, include_request: true, serializer: proc{|o, request| ...}</pre>
 
-<p>The default content-type is &#39;application/json&#39;, but you can change that using the <code>:content_type</code> option:</p>
+<p>The default content-type is ‘application/json’, but you can change that using the <code>:content_type</code> option:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>, <span class="ruby-value">content_type:</span> <span class="ruby-string">&#39;application/xml&#39;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>, <span class="ruby-value">content_type:</span> <span class="ruby-string">&#39;application/xml&#39;</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -93,7 +111,20 @@ Roda::RodaPlugins::Json
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/json.rb</span>&#x000A;<span class="line-num">57</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">58</span>   <span class="ruby-identifier">classes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]&#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">60</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">classes</span>&#x000A;<span class="line-num">61</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">uniq!</span>&#x000A;<span class="line-num">62</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">63</span> &#x000A;<span class="line-num">64</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-value">:to_json</span>.<span class="ruby-identifier">to_proc</span>&#x000A;<span class="line-num">65</span> &#x000A;<span class="line-num">66</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_include_request</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:include_request</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:include_request</span>)&#x000A;<span class="line-num">67</span> &#x000A;<span class="line-num">68</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_content_type</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_type</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;application/json&#39;</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">69</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/json.rb</span>
+<span class="line-num">57</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">58</span>   <span class="ruby-identifier">classes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> [<span class="ruby-constant">Array</span>, <span class="ruby-constant">Hash</span>]
+<span class="line-num">59</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">||=</span> []
+<span class="line-num">60</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>] <span class="ruby-operator">+=</span> <span class="ruby-identifier">classes</span>
+<span class="line-num">61</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">uniq!</span>
+<span class="line-num">62</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_classes</span>].<span class="ruby-identifier">freeze</span>
+<span class="line-num">63</span> 
+<span class="line-num">64</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_serializer</span>] <span class="ruby-operator">||</span> <span class="ruby-value">:to_json</span>.<span class="ruby-identifier">to_proc</span>
+<span class="line-num">65</span> 
+<span class="line-num">66</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_include_request</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:include_request</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:include_request</span>)
+<span class="line-num">67</span> 
+<span class="line-num">68</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:json_result_content_type</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_type</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;application/json&#39;</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">69</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -105,7 +136,7 @@ Roda::RodaPlugins::Json
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

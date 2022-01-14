@@ -37,7 +37,8 @@ Roda::RodaPlugins::DisallowFileUploads
 <div id='description'>
 <p>The disallow_file_uploads plugin raises a <a href="DisallowFileUploads/Error.html"><code>Roda::RodaPlugins::DisallowFileUploads::Error</code></a> if there is an attempt to upload a file.  This plugin is useful for applications where multipart file uploads are not expected and you want to remove the ability for rack to create temporary files.  Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:disallow_file_uploads</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:disallow_file_uploads</span>
+</pre>
 
 <p>This plugin is only supported on Rack 1.6+.  This plugin does not technically block users from uploading files, it only blocks the parsing of request bodies containing multipart file uploads.  So if you do not call <code>r.POST</code> (or something that calls it such as <code>r.params</code>), then <a href="../../Roda.html"><code>Roda</code></a> will not attempt to parse the request body, and an exception will not be raised.</p>
 </div>
@@ -73,7 +74,7 @@ Roda::RodaPlugins::DisallowFileUploads
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

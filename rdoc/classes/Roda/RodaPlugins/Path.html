@@ -41,11 +41,46 @@ Roda::RodaPlugins::Path
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:path</span>&#x000A;<span class="ruby-identifier">path</span> <span class="ruby-value">:foo</span>, <span class="ruby-string">&#39;/foo&#39;</span>&#x000A;<span class="ruby-identifier">path</span> <span class="ruby-value">:bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-node">&quot;/bar/#{bar.id}&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">path</span> <span class="ruby-constant">Baz</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">baz</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">paths</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-node">&quot;/baz/#{baz.id}/#{paths.join(&#39;/&#39;)}&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">path</span> <span class="ruby-constant">Quux</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">quux</span>, <span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-node">&quot;/quux/#{quux.id}/#{path}&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">foo_path</span> <span class="ruby-comment"># /foo</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">bar_params</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;bar&#39;</span>]&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">bar_params</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;      <span class="ruby-identifier">bar</span> = <span class="ruby-constant">Bar</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">bar_params</span>)&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">bar_path</span>(<span class="ruby-identifier">bar</span>) <span class="ruby-comment"># /bar/1</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;baz&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">baz</span> = <span class="ruby-constant">Baz</span>[<span class="ruby-value">1</span>]&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">path</span>(<span class="ruby-identifier">baz</span>, <span class="ruby-string">&#39;c&#39;</span>, <span class="ruby-string">&#39;d&#39;</span>) <span class="ruby-comment"># /baz/1/c/d</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;quux&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">quux</span> = <span class="ruby-constant">Quux</span>[<span class="ruby-value">1</span>]&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">url</span>(<span class="ruby-identifier">quux</span>, <span class="ruby-string">&#39;/bar&#39;</span>) <span class="ruby-comment"># http://example.com/quux/1/bar</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:path</span>
+<span class="ruby-identifier">path</span> <span class="ruby-value">:foo</span>, <span class="ruby-string">&#39;/foo&#39;</span>
+<span class="ruby-identifier">path</span> <span class="ruby-value">:bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>
+  <span class="ruby-node">&quot;/bar/#{bar.id}&quot;</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">path</span> <span class="ruby-constant">Baz</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">baz</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">paths</span><span class="ruby-operator">|</span>
+  <span class="ruby-node">&quot;/baz/#{baz.id}/#{paths.join(&#39;/&#39;)}&quot;</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">path</span> <span class="ruby-constant">Quux</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">quux</span>, <span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+  <span class="ruby-node">&quot;/quux/#{quux.id}/#{path}&quot;</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">foo_path</span> <span class="ruby-comment"># /foo</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">bar_params</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;bar&#39;</span>]
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">bar_params</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+      <span class="ruby-identifier">bar</span> = <span class="ruby-constant">Bar</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">bar_params</span>)
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">bar_path</span>(<span class="ruby-identifier">bar</span>) <span class="ruby-comment"># /bar/1</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;baz&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">baz</span> = <span class="ruby-constant">Baz</span>[<span class="ruby-value">1</span>]
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">path</span>(<span class="ruby-identifier">baz</span>, <span class="ruby-string">&#39;c&#39;</span>, <span class="ruby-string">&#39;d&#39;</span>) <span class="ruby-comment"># /baz/1/c/d</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-string">&#39;quux&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">quux</span> = <span class="ruby-constant">Quux</span>[<span class="ruby-value">1</span>]
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-identifier">url</span>(<span class="ruby-identifier">quux</span>, <span class="ruby-string">&#39;/bar&#39;</span>) <span class="ruby-comment"># http://example.com/quux/1/bar</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The path class method accepts the following options when not called with a class:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>:add_script_name </td><td>
-<p>Prefix the path generated with SCRIPT_NAME. This defaults to the app&#39;s :add_script_name option.</p>
+<p>Prefix the path generated with SCRIPT_NAME. This defaults to the app’s :add_script_name option.</p>
 </td></tr><tr><td class='label'>:name </td><td>
 <p>Provide a different name for the method, instead of using <code>*_path</code>.</p>
 </td></tr><tr><td class='label'>:relative </td><td>
@@ -109,7 +144,17 @@ Roda::RodaPlugins::Path
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/path.rb</span>&#x000A;<span class="line-num">74</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">75</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">76</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_by_name</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:by_name</span>, <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;development&#39;</span>)&#x000A;<span class="line-num">77</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_classes</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">78</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_methods</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">79</span>     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">path_block</span>(<span class="ruby-constant">String</span>)&#x000A;<span class="line-num">80</span>       <span class="ruby-identifier">path</span>(<span class="ruby-constant">String</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>}&#x000A;<span class="line-num">81</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">82</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">83</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/path.rb</span>
+<span class="line-num">74</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">75</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">instance_eval</span> <span class="ruby-keyword">do</span>
+<span class="line-num">76</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_by_name</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:by_name</span>, <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;development&#39;</span>)
+<span class="line-num">77</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_classes</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">78</span>     <span class="ruby-keyword">self</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path_class_methods</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">79</span>     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">path_block</span>(<span class="ruby-constant">String</span>)
+<span class="line-num">80</span>       <span class="ruby-identifier">path</span>(<span class="ruby-constant">String</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">str</span><span class="ruby-operator">|</span> <span class="ruby-identifier">str</span>}
+<span class="line-num">81</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">82</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">83</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -121,7 +166,7 @@ Roda::RodaPlugins::Path
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

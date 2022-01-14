@@ -37,11 +37,14 @@ Roda::RodaPlugins::Cookies
 <div id='description'>
 <p>The cookies plugin adds response methods for handling cookies. Currently, you can set cookies with <code>set_cookie</code> and delete cookies with <code>delete_cookie</code>:</p>
 
-<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">set_cookie</span>(<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>)&#x000A;<span class="ruby-identifier">response</span>.<span class="ruby-identifier">delete_cookie</span>(<span class="ruby-string">&#39;foo&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">set_cookie</span>(<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;bar&#39;</span>)
+<span class="ruby-identifier">response</span>.<span class="ruby-identifier">delete_cookie</span>(<span class="ruby-string">&#39;foo&#39;</span>)
+</pre>
 
 <p><a href="Pass.html"><code>Pass</code></a> a hash of cookie options when loading the plugin to set some defaults for all cookies upon setting and deleting. This is particularly useful for configuring the <code>domain</code> and <code>path</code> of all cookies.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:cookies</span>, <span class="ruby-value">domain:</span> <span class="ruby-string">&#39;example.com&#39;</span>, <span class="ruby-value">path:</span> <span class="ruby-string">&#39;/api&#39;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:cookies</span>, <span class="ruby-value">domain:</span> <span class="ruby-string">&#39;example.com&#39;</span>, <span class="ruby-value">path:</span> <span class="ruby-string">&#39;/api&#39;</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -76,7 +79,10 @@ Roda::RodaPlugins::Cookies
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/cookies.rb</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">21</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookies_opts</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookies_opts</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/cookies.rb</span>
+<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})
+<span class="line-num">21</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookies_opts</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:cookies_opts</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -88,7 +94,7 @@ Roda::RodaPlugins::Cookies
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

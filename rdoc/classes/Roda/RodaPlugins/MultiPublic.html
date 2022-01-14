@@ -37,17 +37,55 @@ Roda::RodaPlugins::MultiPublic
 <div id='description'>
 <p>The multi_public plugin adds an <code>r.multi_public</code> method that accepts an argument specifying a directory from which to serve static files.  It is similar to the public plugin, but allows for multiple separate directories.</p>
 
-<p>Here&#39;s an example of using the multi_public plugin to serve 3 different types of files from 3 different directories:</p>
+<p>Here’s an example of using the multi_public plugin to serve 3 different types of files from 3 different directories:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_public</span>,&#x000A;  <span class="ruby-value">img:</span>  <span class="ruby-string">&#39;static/images&#39;</span>,&#x000A;  <span class="ruby-value">font:</span> <span class="ruby-string">&#39;assets/fonts&#39;</span>,&#x000A;  <span class="ruby-value">form:</span> <span class="ruby-string">&#39;static/forms/pdfs&#39;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;images&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-value">:img</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;fonts&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-value">:font</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;forms&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-value">:form</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_public</span>,
+  <span class="ruby-value">img:</span>  <span class="ruby-string">&#39;static/images&#39;</span>,
+  <span class="ruby-value">font:</span> <span class="ruby-string">&#39;assets/fonts&#39;</span>,
+  <span class="ruby-value">form:</span> <span class="ruby-string">&#39;static/forms/pdfs&#39;</span>
+
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;images&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-value">:img</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;fonts&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-value">:font</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;forms&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-value">:form</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>It is possible to simplify the routing tree for this using string keys and an array matcher:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_public</span>,&#x000A;  <span class="ruby-string">&#39;images&#39;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;static/images&#39;</span>,&#x000A;  <span class="ruby-string">&#39;fonts&#39;</span>  <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;assets/fonts&#39;</span>,&#x000A;  <span class="ruby-string">&#39;forms&#39;</span>  <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;static/forms/pdfs&#39;</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-node">%w&quot;images fonts forms&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-identifier">dir</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_public</span>,
+  <span class="ruby-string">&#39;images&#39;</span> <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;static/images&#39;</span>,
+  <span class="ruby-string">&#39;fonts&#39;</span>  <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;assets/fonts&#39;</span>,
+  <span class="ruby-string">&#39;forms&#39;</span>  <span class="ruby-operator">=&gt;</span> <span class="ruby-string">&#39;static/forms/pdfs&#39;</span>
+
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-node">%w&quot;images fonts forms&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-identifier">dir</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>You can provide custom headers and default mime type for each directory using an array of three elements as the value, with the first element being the path, the second being the custom headers, and the third being the default mime type:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_public</span>,&#x000A;  <span class="ruby-string">&#39;images&#39;</span> <span class="ruby-operator">=&gt;</span> [<span class="ruby-string">&#39;static/images&#39;</span>, {<span class="ruby-string">&#39;Cache-Control&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;max-age=86400&#39;</span>}, <span class="ruby-keyword">nil</span>],&#x000A;  <span class="ruby-string">&#39;fonts&#39;</span>  <span class="ruby-operator">=&gt;</span> [<span class="ruby-string">&#39;assets/fonts&#39;</span>, {<span class="ruby-string">&#39;Cache-Control&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;max-age=31536000&#39;</span>}, <span class="ruby-string">&#39;font/ttf&#39;</span>],&#x000A;  <span class="ruby-string">&#39;forms&#39;</span>  <span class="ruby-operator">=&gt;</span> [<span class="ruby-string">&#39;static/forms/pdfs&#39;</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-string">&#39;application/pdf&#39;</span>]&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-node">%w&quot;images fonts forms&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-identifier">dir</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_public</span>,
+  <span class="ruby-string">&#39;images&#39;</span> <span class="ruby-operator">=&gt;</span> [<span class="ruby-string">&#39;static/images&#39;</span>, {<span class="ruby-string">&#39;Cache-Control&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;max-age=86400&#39;</span>}, <span class="ruby-keyword">nil</span>],
+  <span class="ruby-string">&#39;fonts&#39;</span>  <span class="ruby-operator">=&gt;</span> [<span class="ruby-string">&#39;assets/fonts&#39;</span>, {<span class="ruby-string">&#39;Cache-Control&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;max-age=31536000&#39;</span>}, <span class="ruby-string">&#39;font/ttf&#39;</span>],
+  <span class="ruby-string">&#39;forms&#39;</span>  <span class="ruby-operator">=&gt;</span> [<span class="ruby-string">&#39;static/forms/pdfs&#39;</span>, <span class="ruby-keyword">nil</span>, <span class="ruby-string">&#39;application/pdf&#39;</span>]
+
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-node">%w&quot;images fonts forms&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_public</span>(<span class="ruby-identifier">dir</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -83,7 +121,15 @@ Roda::RodaPlugins::MultiPublic
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_public.rb</span>&#x000A;<span class="line-num">66</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">directories</span>, <span class="ruby-identifier">_</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">67</span>   <span class="ruby-identifier">roots</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_public_servers</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_public_servers</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">68</span>   <span class="ruby-identifier">directories</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">69</span>     <span class="ruby-identifier">path</span>, <span class="ruby-identifier">headers</span>, <span class="ruby-identifier">mime</span> = <span class="ruby-identifier">path</span>&#x000A;<span class="line-num">70</span>     <span class="ruby-identifier">roots</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>), <span class="ruby-identifier">headers</span><span class="ruby-operator">||</span>{}, <span class="ruby-identifier">mime</span><span class="ruby-operator">||</span><span class="ruby-string">&#39;text/plain&#39;</span>)&#x000A;<span class="line-num">71</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">72</span>   <span class="ruby-identifier">roots</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">73</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_public.rb</span>
+<span class="line-num">66</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">directories</span>, <span class="ruby-identifier">_</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">67</span>   <span class="ruby-identifier">roots</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_public_servers</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_public_servers</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">dup</span>
+<span class="line-num">68</span>   <span class="ruby-identifier">directories</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+<span class="line-num">69</span>     <span class="ruby-identifier">path</span>, <span class="ruby-identifier">headers</span>, <span class="ruby-identifier">mime</span> = <span class="ruby-identifier">path</span>
+<span class="line-num">70</span>     <span class="ruby-identifier">roots</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">path</span>), <span class="ruby-identifier">headers</span><span class="ruby-operator">||</span>{}, <span class="ruby-identifier">mime</span><span class="ruby-operator">||</span><span class="ruby-string">&#39;text/plain&#39;</span>)
+<span class="line-num">71</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">72</span>   <span class="ruby-identifier">roots</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">73</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -99,7 +145,10 @@ Roda::RodaPlugins::MultiPublic
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_public.rb</span>&#x000A;<span class="line-num">61</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">62</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span>(<span class="ruby-value">:public</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">63</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_public.rb</span>
+<span class="line-num">61</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">62</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span>(<span class="ruby-value">:public</span>, <span class="ruby-identifier">opts</span>)
+<span class="line-num">63</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -111,7 +160,7 @@ Roda::RodaPlugins::MultiPublic
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -62,7 +62,14 @@ Roda::RodaPlugins::Middleware::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/middleware.rb</span>&#x000A;<span class="line-num">123</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">new</span>(<span class="ruby-identifier">app</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">124</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;<span class="line-num">125</span>     <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">126</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">127</span>     <span class="ruby-constant">Forwarder</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">app</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">128</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">129</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/middleware.rb</span>
+<span class="line-num">123</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">new</span>(<span class="ruby-identifier">app</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">124</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+<span class="line-num">125</span>     <span class="ruby-keyword">super</span>
+<span class="line-num">126</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">127</span>     <span class="ruby-constant">Forwarder</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">app</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">128</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">129</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -74,7 +81,7 @@ Roda::RodaPlugins::Middleware::ClassMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

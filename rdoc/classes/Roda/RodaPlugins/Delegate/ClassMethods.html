@@ -64,7 +64,12 @@ Roda::RodaPlugins::Delegate::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-class_delegate-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-class_delegate-source'>   <span class="ruby-comment"># File lib/roda/plugins/delegate.rb</span>&#x000A;<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">class_delegate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">meths</span>)&#x000A;<span class="line-num">54</span>   <span class="ruby-identifier">meths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">55</span>     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">meth</span>){<span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">public_send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}&#x000A;<span class="line-num">56</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">57</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-class_delegate-source'>   <span class="ruby-comment"># File lib/roda/plugins/delegate.rb</span>
+<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">class_delegate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">meths</span>)
+<span class="line-num">54</span>   <span class="ruby-identifier">meths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>
+<span class="line-num">55</span>     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">meth</span>){<span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">public_send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}
+<span class="line-num">56</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">57</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-request_delegate'>
@@ -82,7 +87,12 @@ Roda::RodaPlugins::Delegate::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-request_delegate-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-request_delegate-source'>   <span class="ruby-comment"># File lib/roda/plugins/delegate.rb</span>&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">request_delegate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">meths</span>)&#x000A;<span class="line-num">61</span>   <span class="ruby-identifier">meths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">62</span>     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">meth</span>){<span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">public_send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}&#x000A;<span class="line-num">63</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">64</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-request_delegate-source'>   <span class="ruby-comment"># File lib/roda/plugins/delegate.rb</span>
+<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">request_delegate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">meths</span>)
+<span class="line-num">61</span>   <span class="ruby-identifier">meths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>
+<span class="line-num">62</span>     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">meth</span>){<span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@_request</span>.<span class="ruby-identifier">public_send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}
+<span class="line-num">63</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">64</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-response_delegate'>
@@ -100,7 +110,12 @@ Roda::RodaPlugins::Delegate::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-response_delegate-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-response_delegate-source'>   <span class="ruby-comment"># File lib/roda/plugins/delegate.rb</span>&#x000A;<span class="line-num">67</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">response_delegate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">meths</span>)&#x000A;<span class="line-num">68</span>   <span class="ruby-identifier">meths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">69</span>     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">meth</span>){<span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">public_send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}&#x000A;<span class="line-num">70</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">71</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-response_delegate-source'>   <span class="ruby-comment"># File lib/roda/plugins/delegate.rb</span>
+<span class="line-num">67</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">response_delegate</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">meths</span>)
+<span class="line-num">68</span>   <span class="ruby-identifier">meths</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>
+<span class="line-num">69</span>     <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">meth</span>){<span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span><span class="ruby-operator">|</span> <span class="ruby-ivar">@_response</span>.<span class="ruby-identifier">public_send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)}
+<span class="line-num">70</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">71</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -112,7 +127,7 @@ Roda::RodaPlugins::Delegate::ClassMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

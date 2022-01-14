@@ -50,11 +50,14 @@ Roda::RodaPlugins::Assets
 
 <p>When loading the plugin, use the :css and :js options to set the source file(s) to use for CSS and javascript assets:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, <span class="ruby-value">css:</span> <span class="ruby-string">&#39;some_file.scss&#39;</span>, <span class="ruby-value">js:</span> <span class="ruby-string">&#39;some_file.coffee&#39;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, <span class="ruby-value">css:</span> <span class="ruby-string">&#39;some_file.scss&#39;</span>, <span class="ruby-value">js:</span> <span class="ruby-string">&#39;some_file.coffee&#39;</span>
+</pre>
 
 <p>This will look for the following files:</p>
 
-<pre class="ruby"><span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_file</span>.<span class="ruby-identifier">scss</span>&#x000A;<span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">js</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_file</span>.<span class="ruby-identifier">coffee</span></pre>
+<pre class="ruby"><span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_file</span>.<span class="ruby-identifier">scss</span>
+<span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">js</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_file</span>.<span class="ruby-identifier">coffee</span>
+</pre>
 
 <p>The values for the :css and :js options can be arrays to load multiple files. If you want to change the paths where asset files are stored, see the Options section below.</p>
 
@@ -62,7 +65,10 @@ Roda::RodaPlugins::Assets
 
 <p>In your routes, call the <code>r.assets</code> method to add a route to your assets, which will make your app serve the rendered assets:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">assets</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">assets</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>You should generally call <code>r.assets</code> inside the route block itself, and not under any branches of the routing tree.</p>
 
@@ -70,33 +76,42 @@ Roda::RodaPlugins::Assets
 
 <p>In your layout view, use the assets method to add links to your CSS and javascript assets:</p>
 
-<pre>&lt;%= assets(:css) %&gt;&#x000A;&lt;%= assets(:js) %&gt;</pre>
+<pre>&lt;%= assets(:css) %&gt;
+&lt;%= assets(:js) %&gt;</pre>
 
 <p>You can add attributes to the tags by using an options hash:</p>
 
 <pre>&lt;%= assets(:css, media: &#39;print&#39;) %&gt;</pre>
 
-<p>The assets method will respect the application&#39;s <code>:add_script_name</code> option, if it set it will automatically prefix the path with the <code>SCRIPT_NAME</code> for the request.</p>
+<p>The assets method will respect the application’s <code>:add_script_name</code> option, if it set it will automatically prefix the path with the <code>SCRIPT_NAME</code> for the request.</p>
 
 <h2 id="module-Roda::RodaPlugins::Assets-label-Asset+Paths">Asset Paths<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Paths">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>If you just want the paths rather than the full tags, you can use assets_paths instead. This will return an array of the sources that the assets function would have put into tags:</p>
 
-<pre class="ruby"><span class="ruby-identifier">assets_paths</span>(<span class="ruby-value">:css</span>)&#x000A;<span class="ruby-comment"># =&gt; [&quot;/assets/css/foo.css&quot;, &quot;/assets/css/app.css&quot;]</span></pre>
+<pre class="ruby"><span class="ruby-identifier">assets_paths</span>(<span class="ruby-value">:css</span>)
+<span class="ruby-comment"># =&gt; [&quot;/assets/css/foo.css&quot;, &quot;/assets/css/app.css&quot;]</span>
+</pre>
 
 <p>If compilation is turned on, it will return the path to the compiled asset:</p>
 
-<pre class="ruby"><span class="ruby-identifier">assets_paths</span>(<span class="ruby-value">:css</span>)&#x000A;<span class="ruby-comment"># =&gt; [&quot;/assets/app.5e7b06baa1a514d8473b0eca514b806c201073b9.css&quot;]</span></pre>
+<pre class="ruby"><span class="ruby-identifier">assets_paths</span>(<span class="ruby-value">:css</span>)
+<span class="ruby-comment"># =&gt; [&quot;/assets/app.5e7b06baa1a514d8473b0eca514b806c201073b9.css&quot;]</span>
+</pre>
 
 <h2 id="module-Roda::RodaPlugins::Assets-label-Asset+Groups">Asset Groups<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Groups">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>The asset plugin supports groups for the cases where you have different css/js files for your front end and back end.  To use asset groups, you pass a hash for the :css and/or :js options:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, <span class="ruby-value">css:</span> {<span class="ruby-value">frontend:</span> <span class="ruby-string">&#39;some_frontend_file.scss&#39;</span>,&#x000A;                      <span class="ruby-value">backend:</span> <span class="ruby-string">&#39;some_backend_file.scss&#39;</span>}</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, <span class="ruby-value">css:</span> {<span class="ruby-value">frontend:</span> <span class="ruby-string">&#39;some_frontend_file.scss&#39;</span>,
+                      <span class="ruby-value">backend:</span> <span class="ruby-string">&#39;some_backend_file.scss&#39;</span>}
+</pre>
 
 <p>This expects the following directory structure for your assets:</p>
 
-<pre class="ruby"><span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">frontend</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_frontend_file</span>.<span class="ruby-identifier">scss</span>&#x000A;<span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">backend</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_backend_file</span>.<span class="ruby-identifier">scss</span></pre>
+<pre class="ruby"><span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">frontend</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_frontend_file</span>.<span class="ruby-identifier">scss</span>
+<span class="ruby-identifier">assets</span><span class="ruby-operator">/</span><span class="ruby-identifier">css</span><span class="ruby-operator">/</span><span class="ruby-identifier">backend</span><span class="ruby-operator">/</span><span class="ruby-identifier">some_backend_file</span>.<span class="ruby-identifier">scss</span>
+</pre>
 
 <p>If you do not want to force that directory structure when using asset groups, you can use the <code>group_subdirs: false</code> option.</p>
 
@@ -108,7 +123,9 @@ Roda::RodaPlugins::Assets
 
 <p>Asset groups also support nesting, though that should only be needed in fairly large applications.  You can use a nested hash when loading the plugin:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,&#x000A;  <span class="ruby-value">css:</span> {<span class="ruby-value">frontend:</span> {<span class="ruby-value">dashboard:</span> <span class="ruby-string">&#39;some_frontend_file.scss&#39;</span>}}</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,
+  <span class="ruby-value">css:</span> {<span class="ruby-value">frontend:</span> {<span class="ruby-value">dashboard:</span> <span class="ruby-string">&#39;some_frontend_file.scss&#39;</span>}}
+</pre>
 
 <p>and an extra entry per nesting level when creating the tags.</p>
 
@@ -120,13 +137,17 @@ Roda::RodaPlugins::Assets
 
 <p>If you have assets that include other asset files, such as using @import in a sass file, you need to specify the dependencies for your assets so that the assets plugin will correctly pick up changes.  You can do this using the :dependencies option to the plugin, which takes a hash where the keys are paths to asset files, and values are arrays of paths to dependencies of those asset files:</p>
 
-<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,&#x000A;  <span class="ruby-value">dependencies:</span> {<span class="ruby-string">&#39;assets/css/bootstrap.scss&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;assets/css/bootstrap/&#39;</span> <span class="ruby-string">&#39;**/*.scss&#39;</span>]}</pre>
+<pre class="ruby"><span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,
+  <span class="ruby-value">dependencies:</span> {<span class="ruby-string">&#39;assets/css/bootstrap.scss&#39;</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;assets/css/bootstrap/&#39;</span> <span class="ruby-string">&#39;**/*.scss&#39;</span>]}
+</pre>
 
 <h2 id="module-Roda::RodaPlugins::Assets-label-Asset+Compilation">Asset Compilation<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Compilation">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
 <p>In production, you are generally going to want to compile your assets into a single file, with you can do by calling compile_assets after loading the plugin:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, <span class="ruby-value">css:</span> <span class="ruby-string">&#39;some_file.scss&#39;</span>, <span class="ruby-value">js:</span> <span class="ruby-string">&#39;some_file.coffee&#39;</span>&#x000A;<span class="ruby-identifier">compile_assets</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, <span class="ruby-value">css:</span> <span class="ruby-string">&#39;some_file.scss&#39;</span>, <span class="ruby-value">js:</span> <span class="ruby-string">&#39;some_file.coffee&#39;</span>
+<span class="ruby-identifier">compile_assets</span>
+</pre>
 
 <p>After calling compile_assets, calls to assets in your views will default to a using a single link each to your CSS and javascript compiled asset files.  By default the compiled files are written to the public directory, so that they can be served by the webserver.</p>
 
@@ -136,13 +157,17 @@ Roda::RodaPlugins::Assets
 
 <p>It is also possible to use the built-in compression options in the CSS or JS compiler, assuming the compiler supports such options.  For example, with sass/sassc, you can use:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,&#x000A;  <span class="ruby-value">css_opts:</span> {<span class="ruby-value">style:</span> <span class="ruby-value">:compressed</span>}</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,
+  <span class="ruby-value">css_opts:</span> {<span class="ruby-value">style:</span> <span class="ruby-value">:compressed</span>}
+</pre>
 
 <h3 id="module-Roda::RodaPlugins::Assets-label-Source+Maps+-28CSS-29">Source Maps (CSS)<span><a href="#module-Roda::RodaPlugins::Assets-label-Source+Maps+-28CSS-29">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>The assets plugin does not have direct support for source maps, so it is recommended you use embedded source maps if supported by the CSS compiler. For sass/sassc, you can use:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,&#x000A;  <span class="ruby-value">css_opts:</span> {<span class="ruby-value">:source_map_embed</span><span class="ruby-operator">=&gt;</span><span class="ruby-keyword">true</span>, <span class="ruby-value">source_map_contents:</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">source_map_file:</span> <span class="ruby-string">&quot;.&quot;</span>}</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>,
+  <span class="ruby-value">css_opts:</span> {<span class="ruby-value">:source_map_embed</span><span class="ruby-operator">=&gt;</span><span class="ruby-keyword">true</span>, <span class="ruby-value">source_map_contents:</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">source_map_file:</span> <span class="ruby-string">&quot;.&quot;</span>}
+</pre>
 
 <h3 id="module-Roda::RodaPlugins::Assets-label-With+Asset+Groups">With Asset Groups<span><a href="#module-Roda::RodaPlugins::Assets-label-With+Asset+Groups">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
@@ -158,9 +183,12 @@ Roda::RodaPlugins::Assets
 
 <p>Assuming you are using compiled assets in production mode that are served by the webserver, you can remove the serving of them by the application:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">assets</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;production&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">assets</span> <span class="ruby-keyword">unless</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;RACK_ENV&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-string">&#39;production&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
-<p>If you do have the application serve the compiled assets, it will use the Last-Modified header to make sure that clients do not redownload compiled assets that haven&#39;t changed.</p>
+<p>If you do have the application serve the compiled assets, it will use the Last-Modified header to make sure that clients do not redownload compiled assets that haven’t changed.</p>
 
 <h3 id="module-Roda::RodaPlugins::Assets-label-Asset+Precompilation">Asset Precompilation<span><a href="#module-Roda::RodaPlugins::Assets-label-Asset+Precompilation">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
@@ -174,7 +202,14 @@ Roda::RodaPlugins::Assets
 
 <p>Heroku supports precompiling the assets when using <a href="../../Roda.html"><code>Roda</code></a>.  You just need to add an assets:precompile task, similar to this:</p>
 
-<pre class="ruby"><span class="ruby-identifier">namespace</span> <span class="ruby-value">:assets</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">desc</span> <span class="ruby-string">&quot;Precompile the assets&quot;</span>&#x000A;  <span class="ruby-identifier">task</span> <span class="ruby-value">:precompile</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;./app&#39;</span>&#x000A;    <span class="ruby-constant">App</span>.<span class="ruby-identifier">compile_assets</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">namespace</span> <span class="ruby-value">:assets</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">desc</span> <span class="ruby-string">&quot;Precompile the assets&quot;</span>
+  <span class="ruby-identifier">task</span> <span class="ruby-value">:precompile</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;./app&#39;</span>
+    <span class="ruby-constant">App</span>.<span class="ruby-identifier">compile_assets</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <h2 id="module-Roda::RodaPlugins::Assets-label-Postprocessing">Postprocessing<span><a href="#module-Roda::RodaPlugins::Assets-label-Postprocessing">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
@@ -186,7 +221,13 @@ Roda::RodaPlugins::Assets
 
 <p>You can use this to call Autoprefixer on your CSS:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, {&#x000A;  <span class="ruby-value">css:</span> [ <span class="ruby-string">&#39;style.scss&#39;</span> ],&#x000A;  <span class="ruby-value">postprocessor:</span> <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">content</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:css</span> <span class="ruby-operator">?</span> <span class="ruby-constant">AutoprefixerRails</span>.<span class="ruby-identifier">process</span>(<span class="ruby-identifier">content</span>).<span class="ruby-identifier">css</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">content</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;}</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>, {
+  <span class="ruby-value">css:</span> [ <span class="ruby-string">&#39;style.scss&#39;</span> ],
+  <span class="ruby-value">postprocessor:</span> <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">content</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">type</span> <span class="ruby-operator">==</span> <span class="ruby-value">:css</span> <span class="ruby-operator">?</span> <span class="ruby-constant">AutoprefixerRails</span>.<span class="ruby-identifier">process</span>(<span class="ruby-identifier">content</span>).<span class="ruby-identifier">css</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">content</span>
+  <span class="ruby-keyword">end</span>
+}
+</pre>
 
 <h2 id="module-Roda::RodaPlugins::Assets-label-External+Assets-2FAssets+from+Gems">External Assets/Assets from Gems<span><a href="#module-Roda::RodaPlugins::Assets-label-External+Assets-2FAssets+from+Gems">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
@@ -211,7 +252,7 @@ Roda::RodaPlugins::Assets
 </td></tr><tr><td class='label'>:compiled_js_route </td><td>
 <p>Route under :prefix for compiled javscript assets (default: :compiled_js_dir)</p>
 </td></tr><tr><td class='label'>:compiled_name </td><td>
-<p>Compiled file name prefix (default: &#39;app&#39;)</p>
+<p>Compiled file name prefix (default: ‘app’)</p>
 </td></tr><tr><td class='label'>:compiled_path</td><td>
 <p><a href="Path.html"><code>Path</code></a> inside public folder in which compiled files are stored (default: :prefix)</p>
 </td></tr><tr><td class='label'>:concat_only </td><td>
@@ -219,7 +260,7 @@ Roda::RodaPlugins::Assets
 </td></tr><tr><td class='label'>:css_compressor </td><td>
 <p>Compressor to use for compressing CSS, either :yui, :none, or nil (the default, which will try :yui if available, but not fail if it is not available)</p>
 </td></tr><tr><td class='label'>:css_dir </td><td>
-<p>Directory name containing your css source, inside :path (default: &#39;css&#39;)</p>
+<p>Directory name containing your css source, inside :path (default: ‘css’)</p>
 </td></tr><tr><td class='label'>:css_headers </td><td>
 <p>A hash of additional headers for your rendered css files</p>
 </td></tr><tr><td class='label'>:css_opts </td><td>
@@ -239,7 +280,7 @@ Roda::RodaPlugins::Assets
 </td></tr><tr><td class='label'>:js_compressor </td><td>
 <p>Compressor to use for compressing javascript, either :yui, :closure, :uglifier, :minjs, :none, or nil (the default, which will try :yui, :closure, :uglifier, then :minjs, but not fail if any of them is not available)</p>
 </td></tr><tr><td class='label'>:js_dir </td><td>
-<p>Directory name containing your javascript source, inside :path (default: &#39;js&#39;)</p>
+<p>Directory name containing your javascript source, inside :path (default: ‘js’)</p>
 </td></tr><tr><td class='label'>:js_headers </td><td>
 <p>A hash of additional headers for your rendered javascript files</p>
 </td></tr><tr><td class='label'>:js_opts </td><td>
@@ -247,15 +288,15 @@ Roda::RodaPlugins::Assets
 </td></tr><tr><td class='label'>:js_route </td><td>
 <p>Route under :prefix for javascript assets (default: :js_dir)</p>
 </td></tr><tr><td class='label'>:path </td><td>
-<p><a href="Path.html"><code>Path</code></a> to your asset source directory (default: &#39;assets&#39;).   Relative paths will be considered relative to the application&#39;s :root option.</p>
+<p><a href="Path.html"><code>Path</code></a> to your asset source directory (default: ‘assets’).   Relative paths will be considered relative to the application’s :root option.</p>
 </td></tr><tr><td class='label'>:postprocessor </td><td>
 <p>A block which should accept three arguments (asset name, asset type, content). This block can be used to hook into the asset system and make your own modifications before the asset is served. If the asset is to be compiled, the block is called at compile time.</p>
 </td></tr><tr><td class='label'>:prefix </td><td>
-<p>Prefix for assets path in your URL/routes (default: &#39;assets&#39;)</p>
+<p>Prefix for assets path in your URL/routes (default: ‘assets’)</p>
 </td></tr><tr><td class='label'>:precompiled </td><td>
 <p><a href="Path.html"><code>Path</code></a> to the compiled asset metadata file.  If the file exists, will use compiled mode using the metadata in the file.  If the file does not exist, will use non-compiled mode, but will write the metadata to the file if compile_assets is called.</p>
 </td></tr><tr><td class='label'>:public </td><td>
-<p><a href="Path.html"><code>Path</code></a> to your public folder, in which compiled files are placed (default: &#39;public&#39;).  Relative paths will be considered relative to the application&#39;s :root option.</p>
+<p><a href="Path.html"><code>Path</code></a> to your public folder, in which compiled files are placed (default: ‘public’).  Relative paths will be considered relative to the application’s :root option.</p>
 </td></tr><tr><td class='label'>:relative_paths </td><td>
 <p>Use relative paths instead of absolute paths when setting up link and script tags for assets.</p>
 </td></tr><tr><td class='label'>:sri </td><td>
@@ -338,7 +379,110 @@ Roda::RodaPlugins::Assets
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/assets.rb</span>&#x000A;<span class="line-num">356</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = {})&#x000A;<span class="line-num">357</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">assets_opts</span>&#x000A;<span class="line-num">358</span>     <span class="ruby-identifier">prev_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">assets_opts</span>[<span class="ruby-value">:orig_opts</span>]&#x000A;<span class="line-num">359</span>     <span class="ruby-identifier">orig_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">assets_opts</span>[<span class="ruby-value">:orig_opts</span>].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">360</span>     [<span class="ruby-value">:headers</span>, <span class="ruby-value">:css_headers</span>, <span class="ruby-value">:js_headers</span>, <span class="ruby-value">:css_opts</span>, <span class="ruby-value">:js_opts</span>, <span class="ruby-value">:dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">361</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">prev_opts</span>[<span class="ruby-identifier">s</span>]&#x000A;<span class="line-num">362</span>         <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>]&#x000A;<span class="line-num">363</span>           <span class="ruby-identifier">orig_opts</span>[<span class="ruby-identifier">s</span>] = <span class="ruby-identifier">prev_opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>])&#x000A;<span class="line-num">364</span>         <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">365</span>           <span class="ruby-identifier">orig_opts</span>[<span class="ruby-identifier">s</span>] = <span class="ruby-identifier">prev_opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">366</span>         <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">367</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">368</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">369</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>] = <span class="ruby-identifier">orig_opts</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">370</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>][<span class="ruby-value">:orig_opts</span>] = <span class="ruby-identifier">orig_opts</span>&#x000A;<span class="line-num">371</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">372</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">373</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>][<span class="ruby-value">:orig_opts</span>] = <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">374</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">375</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>]&#x000A;<span class="line-num">376</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;assets&quot;</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">377</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:public</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;public&quot;</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">378</span> &#x000A;<span class="line-num">379</span>   <span class="ruby-comment"># Combine multiple values into a path, ignoring trailing slashes</span>&#x000A;<span class="line-num">380</span>   <span class="ruby-identifier">j</span> = <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">381</span>     <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">v</span>).&#x000A;<span class="line-num">382</span>       <span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>}.&#x000A;<span class="line-num">383</span>       <span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-string">&#39;/&#39;</span>)}.&#x000A;<span class="line-num">384</span>       <span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">385</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">386</span> &#x000A;<span class="line-num">387</span>   <span class="ruby-comment"># Same as j, but add a trailing slash if not empty</span>&#x000A;<span class="line-num">388</span>   <span class="ruby-identifier">sj</span> = <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">389</span>     <span class="ruby-identifier">s</span> = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">v</span>)&#x000A;<span class="line-num">390</span>     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">391</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">392</span> &#x000A;<span class="line-num">393</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:precompiled</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:precompiled</span>])&#x000A;<span class="line-num">394</span>     <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;json&#39;</span>&#x000A;<span class="line-num">395</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:_precompiled_asset_metadata</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:precompiled</span>])&#x000A;<span class="line-num">396</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">397</span> &#x000A;<span class="line-num">398</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:early_hints</span>]&#x000A;<span class="line-num">399</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:early_hints</span>&#x000A;<span class="line-num">400</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">401</span> &#x000A;<span class="line-num">402</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_paths</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_paths</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)&#x000A;<span class="line-num">403</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_paths</span>] = <span class="ruby-string">&#39;/&#39;</span>&#x000A;<span class="line-num">404</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">405</span> &#x000A;<span class="line-num">406</span>   <span class="ruby-constant">DEFAULTS</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">407</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)&#x000A;<span class="line-num">408</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">409</span> &#x000A;<span class="line-num">410</span>   [&#x000A;<span class="line-num">411</span>    [<span class="ruby-value">:compiled_path</span>, <span class="ruby-value">:prefix</span>],&#x000A;<span class="line-num">412</span>    [<span class="ruby-value">:js_route</span>, <span class="ruby-value">:js_dir</span>],&#x000A;<span class="line-num">413</span>    [<span class="ruby-value">:css_route</span>, <span class="ruby-value">:css_dir</span>],&#x000A;<span class="line-num">414</span>    [<span class="ruby-value">:compiled_js_route</span>, <span class="ruby-value">:compiled_js_dir</span>],&#x000A;<span class="line-num">415</span>    [<span class="ruby-value">:compiled_css_route</span>, <span class="ruby-value">:compiled_css_dir</span>]&#x000A;<span class="line-num">416</span>   ].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">417</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>]  = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">v</span>] <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)&#x000A;<span class="line-num">418</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">419</span> &#x000A;<span class="line-num">420</span>   [<span class="ruby-value">:css_headers</span>, <span class="ruby-value">:js_headers</span>, <span class="ruby-value">:css_opts</span>, <span class="ruby-value">:js_opts</span>, <span class="ruby-value">:dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">421</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>] <span class="ruby-operator">||=</span> {} &#x000A;<span class="line-num">422</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">423</span> &#x000A;<span class="line-num">424</span>   <span class="ruby-identifier">expanded_deps</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:expanded_dependencies</span>] = {}&#x000A;<span class="line-num">425</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span>, <span class="ruby-identifier">deps</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">426</span>     <span class="ruby-identifier">expanded_deps</span>[<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">file</span>)] = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">deps</span>)&#x000A;<span class="line-num">427</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">428</span> &#x000A;<span class="line-num">429</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]&#x000A;<span class="line-num">430</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_headers</span>] = <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_headers</span>])&#x000A;<span class="line-num">431</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_headers</span>]  = <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_headers</span>])&#x000A;<span class="line-num">432</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">433</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_headers</span>][<span class="ruby-string">&#39;Content-Type&#39;</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;text/css; charset=UTF-8&quot;</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">434</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_headers</span>][<span class="ruby-string">&#39;Content-Type&#39;</span>]  <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;application/javascript; charset=UTF-8&quot;</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">435</span> &#x000A;<span class="line-num">436</span>   [<span class="ruby-value">:css_headers</span>, <span class="ruby-value">:js_headers</span>, <span class="ruby-value">:css_opts</span>, <span class="ruby-value">:js_opts</span>, <span class="ruby-value">:dependencies</span>, <span class="ruby-value">:expanded_dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">437</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">438</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">439</span>   [<span class="ruby-value">:headers</span>, <span class="ruby-value">:css</span>, <span class="ruby-value">:js</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">440</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">freeze</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>]&#x000A;<span class="line-num">441</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">442</span> &#x000A;<span class="line-num">443</span>   <span class="ruby-comment"># Used for reading/writing files</span>&#x000A;<span class="line-num">444</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_path</span>]           = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:path</span>, <span class="ruby-value">:js_dir</span>)&#x000A;<span class="line-num">445</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_path</span>]          = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:path</span>, <span class="ruby-value">:css_dir</span>)&#x000A;<span class="line-num">446</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_js_path</span>]  = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:public</span>, <span class="ruby-value">:compiled_path</span>, <span class="ruby-value">:compiled_js_dir</span>, <span class="ruby-value">:compiled_name</span>)&#x000A;<span class="line-num">447</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_css_path</span>] = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:public</span>, <span class="ruby-value">:compiled_path</span>, <span class="ruby-value">:compiled_css_dir</span>, <span class="ruby-value">:compiled_name</span>)&#x000A;<span class="line-num">448</span> &#x000A;<span class="line-num">449</span>   <span class="ruby-comment"># Used for URLs/routes</span>&#x000A;<span class="line-num">450</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_prefix</span>]           = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:js_route</span>)&#x000A;<span class="line-num">451</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_prefix</span>]          = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:css_route</span>)&#x000A;<span class="line-num">452</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_js_prefix</span>]  = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:compiled_js_route</span>, <span class="ruby-value">:compiled_name</span>)&#x000A;<span class="line-num">453</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_css_prefix</span>] = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:compiled_css_route</span>, <span class="ruby-value">:compiled_name</span>)&#x000A;<span class="line-num">454</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_suffix</span>]           = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:add_suffix</span>] <span class="ruby-operator">?</span> <span class="ruby-string">&#39;.js&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">455</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_suffix</span>]          = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:add_suffix</span>] <span class="ruby-operator">?</span> <span class="ruby-string">&#39;.css&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">456</span> &#x000A;<span class="line-num">457</span>   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">458</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/assets.rb</span>
+<span class="line-num">356</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = {})
+<span class="line-num">357</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">assets_opts</span>
+<span class="line-num">358</span>     <span class="ruby-identifier">prev_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">assets_opts</span>[<span class="ruby-value">:orig_opts</span>]
+<span class="line-num">359</span>     <span class="ruby-identifier">orig_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">assets_opts</span>[<span class="ruby-value">:orig_opts</span>].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">360</span>     [<span class="ruby-value">:headers</span>, <span class="ruby-value">:css_headers</span>, <span class="ruby-value">:js_headers</span>, <span class="ruby-value">:css_opts</span>, <span class="ruby-value">:js_opts</span>, <span class="ruby-value">:dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+<span class="line-num">361</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">prev_opts</span>[<span class="ruby-identifier">s</span>]
+<span class="line-num">362</span>         <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>]
+<span class="line-num">363</span>           <span class="ruby-identifier">orig_opts</span>[<span class="ruby-identifier">s</span>] = <span class="ruby-identifier">prev_opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>])
+<span class="line-num">364</span>         <span class="ruby-keyword">else</span>
+<span class="line-num">365</span>           <span class="ruby-identifier">orig_opts</span>[<span class="ruby-identifier">s</span>] = <span class="ruby-identifier">prev_opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">dup</span>
+<span class="line-num">366</span>         <span class="ruby-keyword">end</span>
+<span class="line-num">367</span>       <span class="ruby-keyword">end</span>
+<span class="line-num">368</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">369</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>] = <span class="ruby-identifier">orig_opts</span>.<span class="ruby-identifier">dup</span>
+<span class="line-num">370</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>][<span class="ruby-value">:orig_opts</span>] = <span class="ruby-identifier">orig_opts</span>
+<span class="line-num">371</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">372</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>
+<span class="line-num">373</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>][<span class="ruby-value">:orig_opts</span>] = <span class="ruby-identifier">opts</span>
+<span class="line-num">374</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">375</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:assets</span>]
+<span class="line-num">376</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;assets&quot;</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">377</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:public</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;public&quot;</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">378</span> 
+<span class="line-num">379</span>   <span class="ruby-comment"># Combine multiple values into a path, ignoring trailing slashes</span>
+<span class="line-num">380</span>   <span class="ruby-identifier">j</span> = <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+<span class="line-num">381</span>     <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">v</span>).
+<span class="line-num">382</span>       <span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">empty?</span>}.
+<span class="line-num">383</span>       <span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-string">&#39;/&#39;</span>)}.
+<span class="line-num">384</span>       <span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">385</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">386</span> 
+<span class="line-num">387</span>   <span class="ruby-comment"># Same as j, but add a trailing slash if not empty</span>
+<span class="line-num">388</span>   <span class="ruby-identifier">sj</span> = <span class="ruby-identifier">lambda</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+<span class="line-num">389</span>     <span class="ruby-identifier">s</span> = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">v</span>)
+<span class="line-num">390</span>     <span class="ruby-identifier">s</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">:</span> (<span class="ruby-identifier">s</span> <span class="ruby-operator">+</span> <span class="ruby-string">&#39;/&#39;</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">391</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">392</span> 
+<span class="line-num">393</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:precompiled</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:precompiled</span>])
+<span class="line-num">394</span>     <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;json&#39;</span>
+<span class="line-num">395</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:_precompiled_asset_metadata</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:precompiled</span>])
+<span class="line-num">396</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">397</span> 
+<span class="line-num">398</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:early_hints</span>]
+<span class="line-num">399</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:early_hints</span>
+<span class="line-num">400</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">401</span> 
+<span class="line-num">402</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_paths</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_paths</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">String</span>)
+<span class="line-num">403</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:timestamp_paths</span>] = <span class="ruby-string">&#39;/&#39;</span>
+<span class="line-num">404</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">405</span> 
+<span class="line-num">406</span>   <span class="ruby-constant">DEFAULTS</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+<span class="line-num">407</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)
+<span class="line-num">408</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">409</span> 
+<span class="line-num">410</span>   [
+<span class="line-num">411</span>    [<span class="ruby-value">:compiled_path</span>, <span class="ruby-value">:prefix</span>],
+<span class="line-num">412</span>    [<span class="ruby-value">:js_route</span>, <span class="ruby-value">:js_dir</span>],
+<span class="line-num">413</span>    [<span class="ruby-value">:css_route</span>, <span class="ruby-value">:css_dir</span>],
+<span class="line-num">414</span>    [<span class="ruby-value">:compiled_js_route</span>, <span class="ruby-value">:compiled_js_dir</span>],
+<span class="line-num">415</span>    [<span class="ruby-value">:compiled_css_route</span>, <span class="ruby-value">:compiled_css_dir</span>]
+<span class="line-num">416</span>   ].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+<span class="line-num">417</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>]  = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">v</span>] <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">k</span>)
+<span class="line-num">418</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">419</span> 
+<span class="line-num">420</span>   [<span class="ruby-value">:css_headers</span>, <span class="ruby-value">:js_headers</span>, <span class="ruby-value">:css_opts</span>, <span class="ruby-value">:js_opts</span>, <span class="ruby-value">:dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+<span class="line-num">421</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>] <span class="ruby-operator">||=</span> {} 
+<span class="line-num">422</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">423</span> 
+<span class="line-num">424</span>   <span class="ruby-identifier">expanded_deps</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:expanded_dependencies</span>] = {}
+<span class="line-num">425</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span>, <span class="ruby-identifier">deps</span><span class="ruby-operator">|</span>
+<span class="line-num">426</span>     <span class="ruby-identifier">expanded_deps</span>[<span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">file</span>)] = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">deps</span>)
+<span class="line-num">427</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">428</span> 
+<span class="line-num">429</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">headers</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]
+<span class="line-num">430</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_headers</span>] = <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_headers</span>])
+<span class="line-num">431</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_headers</span>]  = <span class="ruby-identifier">headers</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_headers</span>])
+<span class="line-num">432</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">433</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_headers</span>][<span class="ruby-string">&#39;Content-Type&#39;</span>] <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;text/css; charset=UTF-8&quot;</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">434</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_headers</span>][<span class="ruby-string">&#39;Content-Type&#39;</span>]  <span class="ruby-operator">||=</span> <span class="ruby-string">&quot;application/javascript; charset=UTF-8&quot;</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">435</span> 
+<span class="line-num">436</span>   [<span class="ruby-value">:css_headers</span>, <span class="ruby-value">:js_headers</span>, <span class="ruby-value">:css_opts</span>, <span class="ruby-value">:js_opts</span>, <span class="ruby-value">:dependencies</span>, <span class="ruby-value">:expanded_dependencies</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+<span class="line-num">437</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">freeze</span>
+<span class="line-num">438</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">439</span>   [<span class="ruby-value">:headers</span>, <span class="ruby-value">:css</span>, <span class="ruby-value">:js</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+<span class="line-num">440</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>].<span class="ruby-identifier">freeze</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">s</span>]
+<span class="line-num">441</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">442</span> 
+<span class="line-num">443</span>   <span class="ruby-comment"># Used for reading/writing files</span>
+<span class="line-num">444</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_path</span>]           = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:path</span>, <span class="ruby-value">:js_dir</span>)
+<span class="line-num">445</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_path</span>]          = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:path</span>, <span class="ruby-value">:css_dir</span>)
+<span class="line-num">446</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_js_path</span>]  = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:public</span>, <span class="ruby-value">:compiled_path</span>, <span class="ruby-value">:compiled_js_dir</span>, <span class="ruby-value">:compiled_name</span>)
+<span class="line-num">447</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_css_path</span>] = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:public</span>, <span class="ruby-value">:compiled_path</span>, <span class="ruby-value">:compiled_css_dir</span>, <span class="ruby-value">:compiled_name</span>)
+<span class="line-num">448</span> 
+<span class="line-num">449</span>   <span class="ruby-comment"># Used for URLs/routes</span>
+<span class="line-num">450</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_prefix</span>]           = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:js_route</span>)
+<span class="line-num">451</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_prefix</span>]          = <span class="ruby-identifier">sj</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:css_route</span>)
+<span class="line-num">452</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_js_prefix</span>]  = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:compiled_js_route</span>, <span class="ruby-value">:compiled_name</span>)
+<span class="line-num">453</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:compiled_css_prefix</span>] = <span class="ruby-identifier">j</span>.<span class="ruby-identifier">call</span>(<span class="ruby-value">:prefix</span>, <span class="ruby-value">:compiled_css_route</span>, <span class="ruby-value">:compiled_name</span>)
+<span class="line-num">454</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:js_suffix</span>]           = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:add_suffix</span>] <span class="ruby-operator">?</span> <span class="ruby-string">&#39;.js&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">455</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:css_suffix</span>]          = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:add_suffix</span>] <span class="ruby-operator">?</span> <span class="ruby-string">&#39;.css&#39;</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">freeze</span>
+<span class="line-num">456</span> 
+<span class="line-num">457</span>   <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">458</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -356,7 +500,16 @@ Roda::RodaPlugins::Assets
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>    <span class="ruby-comment"># File lib/roda/plugins/assets.rb</span>&#x000A;<span class="line-num">344</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">345</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">346</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:caching</span>&#x000A;<span class="line-num">347</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:h</span>&#x000A;<span class="line-num">348</span> &#x000A;<span class="line-num">349</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:relative_paths</span>]&#x000A;<span class="line-num">350</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:relative_path</span>&#x000A;<span class="line-num">351</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">352</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>    <span class="ruby-comment"># File lib/roda/plugins/assets.rb</span>
+<span class="line-num">344</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>)
+<span class="line-num">345</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
+<span class="line-num">346</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:caching</span>
+<span class="line-num">347</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:h</span>
+<span class="line-num">348</span> 
+<span class="line-num">349</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:relative_paths</span>]
+<span class="line-num">350</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:relative_path</span>
+<span class="line-num">351</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">352</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -368,7 +521,7 @@ Roda::RodaPlugins::Assets
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

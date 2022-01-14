@@ -37,7 +37,7 @@ Roda::RodaPlugins::Static
 <div id='description'>
 <p>The static plugin loads the Rack::Static middleware into the application. It mainly exists to make serving static files simpler, by supplying defaults to Rack::Static that are appropriate for <a href="../../Roda.html"><code>Roda</code></a>.</p>
 
-<p>The static plugin recognizes the application&#39;s :root option, and by default sets the Rack::Static <code>:root</code> option to the <code>public</code> subfolder of the application&#39;s <code>:root</code> option.  Additionally, if a relative path is provided as the :root option to the plugin, it will be considered relative to the application&#39;s <code>:root</code> option.</p>
+<p>The static plugin recognizes the application’s :root option, and by default sets the Rack::Static <code>:root</code> option to the <code>public</code> subfolder of the application’s <code>:root</code> option.  Additionally, if a relative path is provided as the :root option to the plugin, it will be considered relative to the application’s <code>:root</code> option.</p>
 
 <p>Since the :urls option for Rack::Static is always required, the static plugin uses a separate option for it.</p>
 
@@ -45,7 +45,11 @@ Roda::RodaPlugins::Static
 
 <p>Examples:</p>
 
-<pre class="ruby"><span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:static</span>, [<span class="ruby-string">&#39;/js&#39;</span>, <span class="ruby-string">&#39;/css&#39;</span>] <span class="ruby-comment"># path: /path/to/app/public</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:static</span>, [<span class="ruby-string">&#39;/images&#39;</span>], <span class="ruby-value">root:</span> <span class="ruby-string">&#39;pub&#39;</span>  <span class="ruby-comment"># path: /path/to/app/pub</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:static</span>, [<span class="ruby-string">&#39;/media&#39;</span>], <span class="ruby-value">root:</span> <span class="ruby-string">&#39;/path/to/public&#39;</span> <span class="ruby-comment"># path: /path/to/public</span></pre>
+<pre class="ruby"><span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:static</span>, [<span class="ruby-string">&#39;/js&#39;</span>, <span class="ruby-string">&#39;/css&#39;</span>] <span class="ruby-comment"># path: /path/to/app/public</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:static</span>, [<span class="ruby-string">&#39;/images&#39;</span>], <span class="ruby-value">root:</span> <span class="ruby-string">&#39;pub&#39;</span>  <span class="ruby-comment"># path: /path/to/app/pub</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:static</span>, [<span class="ruby-string">&#39;/media&#39;</span>], <span class="ruby-value">root:</span> <span class="ruby-string">&#39;/path/to/public&#39;</span> <span class="ruby-comment"># path: /path/to/public</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -67,14 +71,20 @@ Roda::RodaPlugins::Static
 </div>
 <div class='description'>
 
-<p>Load the Rack::Static middleware.  Use the paths given as the :urls option, and set the :root option to be relative to the application&#39;s :root option.</p>
+<p>Load the Rack::Static middleware.  Use the paths given as the :urls option, and set the :root option to be relative to the application’s :root option.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/static.rb</span>&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">paths</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">31</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">32</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:urls</span>] = <span class="ruby-identifier">paths</span>&#x000A;<span class="line-num">33</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>] =  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;public&quot;</span>)&#x000A;<span class="line-num">34</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">use</span> <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Static</span>, <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">35</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/static.rb</span>
+<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">paths</span>, <span class="ruby-identifier">opts</span>={})
+<span class="line-num">31</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">dup</span>
+<span class="line-num">32</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:urls</span>] = <span class="ruby-identifier">paths</span>
+<span class="line-num">33</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>] =  <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]<span class="ruby-operator">||</span><span class="ruby-string">&quot;public&quot;</span>)
+<span class="line-num">34</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">use</span> <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Static</span>, <span class="ruby-identifier">opts</span>
+<span class="line-num">35</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -86,7 +96,7 @@ Roda::RodaPlugins::Static
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

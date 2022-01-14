@@ -40,7 +40,16 @@ Last Update:
 <ul><li>
 <p>A request_aref plugin has been added for configuring the behavior of the [] and []= request methods.  These methods are deprecated in the current version of Rack, but Rack will only print a deprecation warning in verbose mode.  With this plugin, you can choose to never warn, always warn, or raise an exception:</p>
 
-<pre class="ruby"><span class="ruby-comment"># Don&#39;t emit a warning, allowing for the historical Rack</span>&#x000A;<span class="ruby-comment"># behavior</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:allow</span>&#x000A;&#x000A;<span class="ruby-comment"># Always emit a warning when the method is called</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:warn</span>&#x000A;&#x000A;<span class="ruby-comment"># Raise an exception if the method is called</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:raise</span></pre>
+<pre class="ruby"><span class="ruby-comment"># Don&#39;t emit a warning, allowing for the historical Rack</span>
+<span class="ruby-comment"># behavior</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:allow</span>
+
+<span class="ruby-comment"># Always emit a warning when the method is called</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:warn</span>
+
+<span class="ruby-comment"># Raise an exception if the method is called</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_aref</span>, <span class="ruby-value">:raise</span>
+</pre>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -61,7 +70,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -39,7 +39,20 @@ Roda::RodaPlugins::Head
 
 <p>So for the following routes,</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;root&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;a&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-value">method:</span> [<span class="ruby-value">:get</span>, <span class="ruby-value">:post</span>] <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;b&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">root</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&#39;root&#39;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;a&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&#39;a&#39;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-value">method:</span> [<span class="ruby-value">:get</span>, <span class="ruby-value">:post</span>] <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&#39;b&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>HEAD requests for <code>/</code>, <code>/a</code>, and <code>/b</code> will all return 200 status with an empty body.</p>
 
@@ -66,7 +79,7 @@ Roda::RodaPlugins::Head
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -63,7 +63,14 @@ Roda::RodaPlugins::BranchLocals::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-set_layout_locals-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-set_layout_locals-source'>   <span class="ruby-comment"># File lib/roda/plugins/branch_locals.rb</span>&#x000A;<span class="line-num">32</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_layout_locals</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">33</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-ivar">@_layout_locals</span>&#x000A;<span class="line-num">34</span>     <span class="ruby-ivar">@_layout_locals</span> = <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">35</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">36</span>     <span class="ruby-ivar">@_layout_locals</span> = <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">37</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">38</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-set_layout_locals-source'>   <span class="ruby-comment"># File lib/roda/plugins/branch_locals.rb</span>
+<span class="line-num">32</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_layout_locals</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">33</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-ivar">@_layout_locals</span>
+<span class="line-num">34</span>     <span class="ruby-ivar">@_layout_locals</span> = <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">35</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">36</span>     <span class="ruby-ivar">@_layout_locals</span> = <span class="ruby-identifier">opts</span>
+<span class="line-num">37</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">38</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-set_view_locals'>
@@ -81,7 +88,14 @@ Roda::RodaPlugins::BranchLocals::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-set_view_locals-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-set_view_locals-source'>   <span class="ruby-comment"># File lib/roda/plugins/branch_locals.rb</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_view_locals</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">42</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-ivar">@_view_locals</span>&#x000A;<span class="line-num">43</span>     <span class="ruby-ivar">@_view_locals</span> = <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">44</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">45</span>     <span class="ruby-ivar">@_view_locals</span> = <span class="ruby-identifier">opts</span>&#x000A;<span class="line-num">46</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">47</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-set_view_locals-source'>   <span class="ruby-comment"># File lib/roda/plugins/branch_locals.rb</span>
+<span class="line-num">41</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">set_view_locals</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">42</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-ivar">@_view_locals</span>
+<span class="line-num">43</span>     <span class="ruby-ivar">@_view_locals</span> = <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">44</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">45</span>     <span class="ruby-ivar">@_view_locals</span> = <span class="ruby-identifier">opts</span>
+<span class="line-num">46</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">47</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -93,7 +107,7 @@ Roda::RodaPlugins::BranchLocals::InstanceMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

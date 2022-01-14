@@ -58,14 +58,28 @@ Roda::RodaPlugins::ModuleInclude::ClassMethods
 
 <p>Include the given module in the request class. If a block is provided instead of a module, create a module using the the block. Example:</p>
 
-<pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">request_module</span> <span class="ruby-constant">SomeModule</span>&#x000A;&#x000A;<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">request_module</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">description</span>&#x000A;    <span class="ruby-node">&quot;#{request_method} #{path_info}&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">description</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">request_module</span> <span class="ruby-constant">SomeModule</span>
+
+<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">request_module</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">description</span>
+    <span class="ruby-node">&quot;#{request_method} #{path_info}&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">description</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-request_module-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-request_module-source'>   <span class="ruby-comment"># File lib/roda/plugins/module_include.rb</span>&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">request_module</span>(<span class="ruby-identifier">mod</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">40</span>   <span class="ruby-identifier">module_include</span>(<span class="ruby-value">:request</span>, <span class="ruby-identifier">mod</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-request_module-source'>   <span class="ruby-comment"># File lib/roda/plugins/module_include.rb</span>
+<span class="line-num">39</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">request_module</span>(<span class="ruby-identifier">mod</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">40</span>   <span class="ruby-identifier">module_include</span>(<span class="ruby-value">:request</span>, <span class="ruby-identifier">mod</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">41</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-response_module'>
@@ -78,14 +92,28 @@ Roda::RodaPlugins::ModuleInclude::ClassMethods
 
 <p>Include the given module in the response class. If a block is provided instead of a module, create a module using the the block. Example:</p>
 
-<pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">response_module</span> <span class="ruby-constant">SomeModule</span>&#x000A;&#x000A;<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">response_module</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error!</span>&#x000A;    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">500</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">error!</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">response_module</span> <span class="ruby-constant">SomeModule</span>
+
+<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">response_module</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">error!</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">500</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-constant">Roda</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">response</span>.<span class="ruby-identifier">error!</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-response_module-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-response_module-source'>   <span class="ruby-comment"># File lib/roda/plugins/module_include.rb</span>&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">response_module</span>(<span class="ruby-identifier">mod</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">59</span>   <span class="ruby-identifier">module_include</span>(<span class="ruby-value">:response</span>, <span class="ruby-identifier">mod</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-response_module-source'>   <span class="ruby-comment"># File lib/roda/plugins/module_include.rb</span>
+<span class="line-num">58</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">response_module</span>(<span class="ruby-identifier">mod</span> = <span class="ruby-keyword">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">59</span>   <span class="ruby-identifier">module_include</span>(<span class="ruby-value">:response</span>, <span class="ruby-identifier">mod</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">60</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -97,7 +125,7 @@ Roda::RodaPlugins::ModuleInclude::ClassMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

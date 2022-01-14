@@ -39,7 +39,15 @@ Roda::RodaPlugins::StatusHandler
 
 <p>This plugin does not support providing the blocks with the plugin call; you must provide them to status_handler calls afterwards:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_handler</span>&#x000A;&#x000A;<span class="ruby-identifier">status_handler</span>(<span class="ruby-value">403</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;You are forbidden from seeing that!&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">status_handler</span>(<span class="ruby-value">404</span>) <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-string">&quot;Where did it go?&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:status_handler</span>
+
+<span class="ruby-identifier">status_handler</span>(<span class="ruby-value">403</span>) <span class="ruby-keyword">do</span>
+  <span class="ruby-string">&quot;You are forbidden from seeing that!&quot;</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">status_handler</span>(<span class="ruby-value">404</span>) <span class="ruby-keyword">do</span>
+  <span class="ruby-string">&quot;Where did it go?&quot;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Before a block is called, any existing headers on the response will be cleared.  So if you want to be sure the headers are set even in your block, you need to reset them in the block.</p>
 </div>
@@ -75,7 +83,10 @@ Roda::RodaPlugins::StatusHandler
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/status_handler.rb</span>&#x000A;<span class="line-num">26</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">27</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:status_handler</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/status_handler.rb</span>
+<span class="line-num">26</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">27</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:status_handler</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -87,7 +98,7 @@ Roda::RodaPlugins::StatusHandler
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

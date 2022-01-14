@@ -35,23 +35,43 @@ Roda::RodaPlugins::ParamMatchers
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The param_matchers plugin adds hash matchers that operate on the request&#39;s params.</p>
+<p>The param_matchers plugin adds hash matchers that operate on the request’s params.</p>
 
 <p>It adds a :param matcher for matching on any param with the same name, yielding the value of the param:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">param:</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&#39;, &#39;?foo=&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?bar=foo&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">param:</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># Matches &#39;?foo=bar&#39;, &#39;?foo=&#39;</span>
+  <span class="ruby-comment"># Doesn&#39;t match &#39;?bar=foo&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>It adds a :param! matcher for matching on any non-empty param with the same name, yielding the value of the param:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">param!:</span> <span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=&#39;, &#39;?bar=foo&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">param!:</span> <span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># Matches &#39;?foo=bar&#39;</span>
+  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=&#39;, &#39;?bar=foo&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>It also adds :params and :params! matchers, for matching multiple params at the same time:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">params:</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span>, <span class="ruby-identifier">baz</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&amp;baz=quuz&#39;, &#39;?foo=&amp;baz=&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=bar&#39;, &#39;?baz=&#39;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">params!:</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span>, <span class="ruby-identifier">baz</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Matches &#39;?foo=bar&amp;baz=quuz&#39;</span>&#x000A;  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=bar&#39;, &#39;?baz=&#39;, &#39;?foo=&amp;baz=&#39;, &#39;?foo=bar&amp;baz=&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">params:</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span>, <span class="ruby-identifier">baz</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># Matches &#39;?foo=bar&amp;baz=quuz&#39;, &#39;?foo=&amp;baz=&#39;</span>
+  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=bar&#39;, &#39;?baz=&#39;</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">params!:</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;baz&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span>, <span class="ruby-identifier">baz</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># Matches &#39;?foo=bar&amp;baz=quuz&#39;</span>
+  <span class="ruby-comment"># Doesn&#39;t match &#39;?foo=bar&#39;, &#39;?baz=&#39;, &#39;?foo=&amp;baz=&#39;, &#39;?foo=bar&amp;baz=&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Because users have some control over the types of submitted parameters, it is recommended that you explicitly force the correct type for values yielded by the block:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span>(<span class="ruby-value">:param</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">foo</span> = <span class="ruby-identifier">foo</span>.<span class="ruby-identifier">to_s</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span>(<span class="ruby-value">:param</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;foo&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">foo</span> = <span class="ruby-identifier">foo</span>.<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='context'>
 </div>
@@ -70,7 +90,7 @@ Roda::RodaPlugins::ParamMatchers
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

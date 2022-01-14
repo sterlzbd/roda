@@ -40,15 +40,37 @@ Last Update:
 <ul><li>
 <p>A static_routing plugin has been added, which can give a 3-4x increase in performance for large number of static routes, and makes routing O(1) for static routes.  Static routes are routes that match full paths, with no placeholders, and are checked before using the normal routing tree.</p>
 
-<p>Static routes are defined via class-level static_* routing methods. There is a static_* routing method for each HTTP verb (e.g. static_get), as well as a static_route method, which will work for any HTTP verb, with the verb-specific method taking priority. By using static_route, you can get significantly faster performance while retaining some of the benefits of Roda&#39;s routing tree design (simple shared logic with verb specific behavior). Example:</p>
+<p>Static routes are defined via class-level static_* routing methods. There is a static_* routing method for each HTTP verb (e.g. static_get), as well as a static_route method, which will work for any HTTP verb, with the verb-specific method taking priority. By using static_route, you can get significantly faster performance while retaining some of the benefits of Roda’s routing tree design (simple shared logic with verb specific behavior). Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:static_routing</span>&#x000A;&#x000A;<span class="ruby-identifier">static_route</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@var</span> = <span class="ruby-value">:foo</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&#39;Not actually reached&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span>{<span class="ruby-string">&#39;static POST /#{@var}&#39;</span>}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">static_get</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&#39;static GET /foo&#39;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&#39;Not a static route&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:static_routing</span>
+
+<span class="ruby-identifier">static_route</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-ivar">@var</span> = <span class="ruby-value">:foo</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&#39;Not actually reached&#39;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span>{<span class="ruby-string">&#39;static POST /#{@var}&#39;</span>}
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">static_get</span> <span class="ruby-string">&#39;/foo&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-string">&#39;static GET /foo&#39;</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-string">&#39;Not a static route&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Because static routing routes on the full path instead of by path segment, the methods takes the full path as a string, including the leading slash.</p>
 </li><li>
 <p>An assets_preloading plugin has been added, which makes it simple to generate HTML link tags or a Link header value to tell the browser to preload assets for performance reasons.</p>
 
-<pre># In routes, using the Link header:&#x000A;response.headers[&#39;Link&#39;] = preload_assets_link_header(:css)&#x000A;# In templates, using a link tag:&#x000A;&lt;%= preload_assets_link_tags(:css) %&gt;</pre>
+<pre># In routes, using the Link header:
+response.headers[&#39;Link&#39;] = preload_assets_link_header(:css)
+# In templates, using a link tag:
+&lt;%= preload_assets_link_tags(:css) %&gt;</pre>
 </li></ul>
 
 <h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -74,7 +96,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

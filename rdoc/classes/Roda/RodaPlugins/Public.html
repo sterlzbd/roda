@@ -37,11 +37,28 @@ Roda::RodaPlugins::Public
 <div id='description'>
 <p>The public plugin adds a <code>r.public</code> routing method to serve static files from a directory.</p>
 
-<p>The public plugin recognizes the application&#39;s :root option, and defaults to using the <code>public</code> subfolder of the application&#39;s <code>:root</code> option.  If the application&#39;s :root option is not set, it defaults to the <code>public</code> folder in the working directory.  Additionally, if a relative path is provided as the <code>:root</code> option to the plugin, it will be considered relative to the application&#39;s <code>:root</code> option.</p>
+<p>The public plugin recognizes the application’s :root option, and defaults to using the <code>public</code> subfolder of the application’s <code>:root</code> option.  If the application’s :root option is not set, it defaults to the <code>public</code> folder in the working directory.  Additionally, if a relative path is provided as the <code>:root</code> option to the plugin, it will be considered relative to the application’s <code>:root</code> option.</p>
 
 <p>Examples:</p>
 
-<pre class="ruby"><span class="ruby-comment"># Use public folder as location of files</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>&#x000A;&#x000A;<span class="ruby-comment"># Use /path/to/app/static as location of files</span>&#x000A;<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>, <span class="ruby-value">root:</span> <span class="ruby-string">&#39;static&#39;</span>&#x000A;&#x000A;<span class="ruby-comment"># Assuming public is the location of files</span>&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-comment"># Make GET /images/foo.png look for public/images/foo.png</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>&#x000A;&#x000A;  <span class="ruby-comment"># Make GET /static/images/foo.png look for public/images/foo.png</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:static</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-comment"># Use public folder as location of files</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>
+
+<span class="ruby-comment"># Use /path/to/app/static as location of files</span>
+<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>] = <span class="ruby-string">&#39;/path/to/app&#39;</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:public</span>, <span class="ruby-value">root:</span> <span class="ruby-string">&#39;static&#39;</span>
+
+<span class="ruby-comment"># Assuming public is the location of files</span>
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-comment"># Make GET /images/foo.png look for public/images/foo.png</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>
+
+  <span class="ruby-comment"># Make GET /static/images/foo.png look for public/images/foo.png</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-value">:static</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -108,7 +125,17 @@ Roda::RodaPlugins::Public
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/public.rb</span>&#x000A;<span class="line-num">49</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})&#x000A;<span class="line-num">50</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]&#x000A;<span class="line-num">51</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])&#x000A;<span class="line-num">52</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>]&#x000A;<span class="line-num">53</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-string">&quot;public&quot;</span>)&#x000A;<span class="line-num">54</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">55</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)&#x000A;<span class="line-num">56</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]&#x000A;<span class="line-num">57</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_brotli</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:brotli</span>]&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/public.rb</span>
+<span class="line-num">49</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={})
+<span class="line-num">50</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>]
+<span class="line-num">51</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:root</span>])
+<span class="line-num">52</span>   <span class="ruby-keyword">elsif</span> <span class="ruby-operator">!</span><span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>]
+<span class="line-num">53</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-string">&quot;public&quot;</span>)
+<span class="line-num">54</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">55</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_server</span>] = <span class="ruby-operator">::</span><span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_root</span>], <span class="ruby-identifier">opts</span>[<span class="ruby-value">:headers</span>]<span class="ruby-operator">||</span>{}, <span class="ruby-identifier">opts</span>[<span class="ruby-value">:default_mime</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;text/plain&#39;</span>)
+<span class="line-num">56</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_gzip</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:gzip</span>]
+<span class="line-num">57</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:public_brotli</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:brotli</span>]
+<span class="line-num">58</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -120,7 +147,7 @@ Roda::RodaPlugins::Public
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

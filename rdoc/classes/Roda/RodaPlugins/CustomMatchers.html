@@ -43,7 +43,39 @@ Roda::RodaPlugins::CustomMatchers
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:custom_matchers</span>&#x000A;<span class="ruby-identifier">method_segment</span> = <span class="ruby-constant">Struct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:request_method</span>, <span class="ruby-value">:next_segment</span>)&#x000A;<span class="ruby-identifier">custom_matcher</span>(<span class="ruby-identifier">method_segment</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">matcher</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># self is the request instance (&quot;r&quot; yielded in the route block below)</span>&#x000A;  <span class="ruby-keyword">if</span> <span class="ruby-identifier">matcher</span>.<span class="ruby-identifier">request_method</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">request_method</span>&#x000A;    <span class="ruby-identifier">match</span>(<span class="ruby-identifier">matcher</span>.<span class="ruby-identifier">next_segment</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">get_foo</span> = <span class="ruby-identifier">method_segment</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;GET&#39;</span>, <span class="ruby-string">&#39;foo&#39;</span>) &#x000A;<span class="ruby-identifier">post_any</span> = <span class="ruby-identifier">method_segment</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;POST&#39;</span>, <span class="ruby-constant">String</span>) &#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&#39;baz&#39;</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-identifier">get_foo</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># GET method, /baz/foo prefix</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span>(<span class="ruby-identifier">post_any</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">seg</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># for POST /baz/bar, seg is &quot;bar&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&#39;quux&#39;</span>) <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span>(<span class="ruby-identifier">get_foo</span>) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># GET method, /quux/foo route</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-identifier">post_any</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">seg</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># for POST /quux/xyz, seg is &quot;xyz&quot;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:custom_matchers</span>
+<span class="ruby-identifier">method_segment</span> = <span class="ruby-constant">Struct</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">:request_method</span>, <span class="ruby-value">:next_segment</span>)
+<span class="ruby-identifier">custom_matcher</span>(<span class="ruby-identifier">method_segment</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">matcher</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># self is the request instance (&quot;r&quot; yielded in the route block below)</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">matcher</span>.<span class="ruby-identifier">request_method</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">request_method</span>
+    <span class="ruby-identifier">match</span>(<span class="ruby-identifier">matcher</span>.<span class="ruby-identifier">next_segment</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">get_foo</span> = <span class="ruby-identifier">method_segment</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;GET&#39;</span>, <span class="ruby-string">&#39;foo&#39;</span>) 
+<span class="ruby-identifier">post_any</span> = <span class="ruby-identifier">method_segment</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;POST&#39;</span>, <span class="ruby-constant">String</span>) 
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&#39;baz&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-identifier">get_foo</span>) <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># GET method, /baz/foo prefix</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span>(<span class="ruby-identifier">post_any</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">seg</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># for POST /baz/bar, seg is &quot;bar&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-string">&#39;quux&#39;</span>) <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span>(<span class="ruby-identifier">get_foo</span>) <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># GET method, /quux/foo route</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span>(<span class="ruby-identifier">post_any</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">seg</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># for POST /quux/xyz, seg is &quot;xyz&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -77,7 +109,10 @@ Roda::RodaPlugins::CustomMatchers
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/custom_matchers.rb</span>&#x000A;<span class="line-num">56</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">57</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:custom_matchers</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">OPTS</span>&#x000A;<span class="line-num">58</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/custom_matchers.rb</span>
+<span class="line-num">56</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">57</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:custom_matchers</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">OPTS</span>
+<span class="line-num">58</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -89,7 +124,7 @@ Roda::RodaPlugins::CustomMatchers
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

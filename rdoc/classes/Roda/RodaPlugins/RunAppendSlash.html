@@ -37,7 +37,20 @@ Roda::RodaPlugins::RunAppendSlash
 <div id='description'>
 <p>The run_append_slash plugin makes <code>r.run</code> use <code>/</code> as the <code>PATH_INFO</code> when calling the rack application if <code>PATH_INFO</code> would be empty. Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># without run_append_slash:</span>&#x000A;<span class="ruby-comment"># GET /a =&gt; App gets &quot;&quot; as PATH_INFO</span>&#x000A;<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span>&#x000A;&#x000A;<span class="ruby-comment"># with run_append_slash:</span>&#x000A;<span class="ruby-comment"># GET /a =&gt; App gets &quot;/&quot; as PATH_INFO</span>&#x000A;<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># without run_append_slash:</span>
+<span class="ruby-comment"># GET /a =&gt; App gets &quot;&quot; as PATH_INFO</span>
+<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span>
+
+<span class="ruby-comment"># with run_append_slash:</span>
+<span class="ruby-comment"># GET /a =&gt; App gets &quot;/&quot; as PATH_INFO</span>
+<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -75,7 +88,10 @@ Roda::RodaPlugins::RunAppendSlash
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/run_append_slash.rb</span>&#x000A;<span class="line-num">27</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">28</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:run_append_slash_redirect</span>] = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:use_redirects</span>]&#x000A;<span class="line-num">29</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/run_append_slash.rb</span>
+<span class="line-num">27</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">28</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:run_append_slash_redirect</span>] = <span class="ruby-operator">!</span><span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:use_redirects</span>]
+<span class="line-num">29</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -87,7 +103,7 @@ Roda::RodaPlugins::RunAppendSlash
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

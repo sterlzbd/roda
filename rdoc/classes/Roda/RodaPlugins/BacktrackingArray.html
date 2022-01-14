@@ -37,7 +37,10 @@ Roda::RodaPlugins::BacktrackingArray
 <div id='description'>
 <p>The backtracking_array plugin changes the handling of array matchers such that if one of the array entries matches, but a later match argument fails, it will backtrack and try the next entry in the array.  For example, the following match block does not match <code>/a/b</code> by default:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> [<span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;a/b&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> [<span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;a/b&#39;</span>] <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">path</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>This is because the <code>&#39;a&#39;</code> entry in the array matches, which makes the array match.  However, the next matcher is the terminal matcher (since <code>r.is</code> was used), and since the path is not terminal as it still contains <code>/b</code> after matching <code>&#39;a&#39;</code>.</p>
 
@@ -60,7 +63,7 @@ Roda::RodaPlugins::BacktrackingArray
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

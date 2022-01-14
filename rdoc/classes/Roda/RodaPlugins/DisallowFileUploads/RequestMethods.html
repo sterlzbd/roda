@@ -62,7 +62,11 @@ Roda::RodaPlugins::DisallowFileUploads::RequestMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/plugins/disallow_file_uploads.rb</span>&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_</span>, <span class="ruby-identifier">env</span>)&#x000A;<span class="line-num">31</span>   <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.multipart.tempfile_factory&#39;</span>] = <span class="ruby-constant">NO_TEMPFILE</span>&#x000A;<span class="line-num">32</span>   <span class="ruby-keyword">super</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>   <span class="ruby-comment"># File lib/roda/plugins/disallow_file_uploads.rb</span>
+<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">_</span>, <span class="ruby-identifier">env</span>)
+<span class="line-num">31</span>   <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;rack.multipart.tempfile_factory&#39;</span>] = <span class="ruby-constant">NO_TEMPFILE</span>
+<span class="line-num">32</span>   <span class="ruby-keyword">super</span>
+<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -74,7 +78,7 @@ Roda::RodaPlugins::DisallowFileUploads::RequestMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

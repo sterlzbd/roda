@@ -37,7 +37,20 @@ Roda::RodaPlugins::RenderLocals
 <div id='description'>
 <p>The render_locals plugin allows setting default locals for rendering templates.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:render_locals</span>, <span class="ruby-value">render:</span> {<span class="ruby-value">heading:</span> <span class="ruby-string">&#39;Hello&#39;</span>}&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">locals:</span> {<span class="ruby-value">name:</span> <span class="ruby-string">&#39;Foo&#39;</span>} <span class="ruby-comment"># locals: {:heading=&gt;&#39;Hello&#39;, :name=&gt;&#39;Foo&#39;}</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">locals:</span> {<span class="ruby-value">heading:</span> <span class="ruby-string">&#39;Bar&#39;</span>} <span class="ruby-comment"># locals: {:heading=&gt;&#39;Bar&#39;}</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;default&quot;</span> <span class="ruby-comment"># locals: {:heading=&gt;&#39;Hello&#39;}</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:render_locals</span>, <span class="ruby-value">render:</span> {<span class="ruby-value">heading:</span> <span class="ruby-string">&#39;Hello&#39;</span>}
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">locals:</span> {<span class="ruby-value">name:</span> <span class="ruby-string">&#39;Foo&#39;</span>} <span class="ruby-comment"># locals: {:heading=&gt;&#39;Hello&#39;, :name=&gt;&#39;Foo&#39;}</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">view</span> <span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-value">locals:</span> {<span class="ruby-value">heading:</span> <span class="ruby-string">&#39;Bar&#39;</span>} <span class="ruby-comment"># locals: {:heading=&gt;&#39;Bar&#39;}</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;default&quot;</span> <span class="ruby-comment"># locals: {:heading=&gt;&#39;Hello&#39;}</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The render_locals plugin accepts the following options:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>render </td><td>
@@ -80,7 +93,15 @@ Roda::RodaPlugins::RenderLocals
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/render_locals.rb</span>&#x000A;<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">35</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">36</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">37</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:merge</span>)&#x000A;<span class="line-num">38</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:merge_locals</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:merge</span>]&#x000A;<span class="line-num">39</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>]).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">40</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/render_locals.rb</span>
+<span class="line-num">34</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">35</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">freeze</span>
+<span class="line-num">36</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] = (<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] <span class="ruby-operator">||</span> {}).<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout</span>]<span class="ruby-operator">||</span>{}).<span class="ruby-identifier">freeze</span>
+<span class="line-num">37</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:merge</span>)
+<span class="line-num">38</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:merge_locals</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:merge</span>]
+<span class="line-num">39</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:render_locals</span>].<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:layout_locals</span>]).<span class="ruby-identifier">freeze</span>
+<span class="line-num">40</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">41</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -96,7 +117,10 @@ Roda::RodaPlugins::RenderLocals
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/render_locals.rb</span>&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">31</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">32</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/render_locals.rb</span>
+<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">31</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
+<span class="line-num">32</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -108,7 +132,7 @@ Roda::RodaPlugins::RenderLocals
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -37,7 +37,17 @@ Roda::RodaPlugins::BranchLocals
 <div id='description'>
 <p>The branch_locals plugin allows you to override view and layout locals for specific branches and routes.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render_locals</span>, <span class="ruby-value">render:</span> {<span class="ruby-value">footer:</span> <span class="ruby-string">&#39;Default&#39;</span>}, <span class="ruby-value">layout:</span> {<span class="ruby-value">title:</span> <span class="ruby-string">&#39;Main&#39;</span>}&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:branch_locals</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">set_layout_locals</span> <span class="ruby-value">title:</span> <span class="ruby-string">&#39;Users&#39;</span>&#x000A;    <span class="ruby-identifier">set_view_locals</span> <span class="ruby-value">footer:</span> <span class="ruby-string">&#39;(c) Roda&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render_locals</span>, <span class="ruby-value">render:</span> {<span class="ruby-value">footer:</span> <span class="ruby-string">&#39;Default&#39;</span>}, <span class="ruby-value">layout:</span> {<span class="ruby-value">title:</span> <span class="ruby-string">&#39;Main&#39;</span>}
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:branch_locals</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;users&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">set_layout_locals</span> <span class="ruby-value">title:</span> <span class="ruby-string">&#39;Users&#39;</span>
+    <span class="ruby-identifier">set_view_locals</span> <span class="ruby-value">footer:</span> <span class="ruby-string">&#39;(c) Roda&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The locals you specify in the set_layout_locals and set_view_locals methods have higher precedence than the render_locals plugin options, but lower precedence than options you directly pass to the view/render methods.</p>
 </div>
@@ -74,7 +84,10 @@ Roda::RodaPlugins::BranchLocals
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/branch_locals.rb</span>&#x000A;<span class="line-num">26</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">27</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render_locals</span>&#x000A;<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/branch_locals.rb</span>
+<span class="line-num">26</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">27</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render_locals</span>
+<span class="line-num">28</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -86,7 +99,7 @@ Roda::RodaPlugins::BranchLocals
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

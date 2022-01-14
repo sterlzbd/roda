@@ -37,7 +37,12 @@ Roda::RodaPlugins::MatchHook
 <div id='description'>
 <p>The match_hook plugin adds hooks that are called upon a successful match by any of the matchers.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:match_hook</span>&#x000A;&#x000A;<span class="ruby-identifier">match_hook</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;#{request.matched_path} matched. #{request.remaining_path} remaining.&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:match_hook</span>
+
+<span class="ruby-identifier">match_hook</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">debug</span>(<span class="ruby-node">&quot;#{request.matched_path} matched. #{request.remaining_path} remaining.&quot;</span>)
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -72,7 +77,10 @@ Roda::RodaPlugins::MatchHook
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/match_hook.rb</span>&#x000A;<span class="line-num">15</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">16</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_hooks</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">17</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/match_hook.rb</span>
+<span class="line-num">15</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">16</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:match_hooks</span>] <span class="ruby-operator">||=</span> []
+<span class="line-num">17</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -84,7 +92,7 @@ Roda::RodaPlugins::MatchHook
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

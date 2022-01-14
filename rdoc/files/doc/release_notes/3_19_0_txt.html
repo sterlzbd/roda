@@ -42,35 +42,129 @@ Last Update:
 
 <p>Assume you have the following routing tree:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>With this routing tree, a request for /c will first check /a and /b.  This is not normally a performance issue, but if you have a large number of routes at a particular level, it can be.</p>
 
 <p>The hash_routes plugin allows you to convert this routing tree to:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;<span class="ruby-identifier">hash_routes</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
 
-<p>This routing tree looks similar to Roda&#39;s standard routing tree, and will have the same behavior as the previous example, but dispatching to the routes inside the hash_routes block by the r.hash_routes method will be an O(1) operation, instead of a linear search.  This can significantly improve performance in cases where you have a large number of branches at any point in the routing tree.</p>
+<span class="ruby-identifier">hash_routes</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>This routing tree looks similar to Roda’s standard routing tree, and will have the same behavior as the previous example, but dispatching to the routes inside the hash_routes block by the r.hash_routes method will be an O(1) operation, instead of a linear search.  This can significantly improve performance in cases where you have a large number of branches at any point in the routing tree.</p>
 
 <p>In order to support O(1) route dispatching at any level of the tree, the hash_routes plugin supports namespaces.  You can use this namespace support to keep the primary advantage of <a href="../../../classes/Roda.html"><code>Roda</code></a> when using the hash_routes plugin, which is the ability to operate on a request at any point during routing.  Assume you have this routing tree:</p>
 
-<pre class="ruby"><span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:root</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo_id</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@foo</span> = <span class="ruby-constant">Foo</span>[<span class="ruby-identifier">foo_id</span>]&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:foo</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar_id</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@bar</span> = <span class="ruby-constant">Bar</span>[<span class="ruby-identifier">bar_id</span>]&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:bar</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:foo</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;show&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-ivar">@page_title</span> = <span class="ruby-ivar">@foo</span>.<span class="ruby-identifier">name</span>&#x000A;    <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;foo/show&#39;</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:bar</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">post</span> <span class="ruby-string">&quot;edit&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-ivar">@bar</span>.<span class="ruby-identifier">update</span>(<span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;name&#39;</span>])&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:root</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:root</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">foo_id</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@foo</span> = <span class="ruby-constant">Foo</span>[<span class="ruby-identifier">foo_id</span>]
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:foo</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar_id</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">next</span> <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@bar</span> = <span class="ruby-constant">Bar</span>[<span class="ruby-identifier">bar_id</span>]
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:bar</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:foo</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;show&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-ivar">@page_title</span> = <span class="ruby-ivar">@foo</span>.<span class="ruby-identifier">name</span>
+    <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;foo/show&#39;</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:bar</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">post</span> <span class="ruby-string">&quot;edit&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-ivar">@bar</span>.<span class="ruby-identifier">update</span>(<span class="ruby-value">:name</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;name&#39;</span>])
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/&quot;</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:root</span>)
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>With this routing tree, a GET /foo/123/show request will first get dispatched to the on “foo” block in the :root namespace.  That will extract the 123 segment from the path, and use it to find the Foo object with id 123 and set that to the instance variable @foo. If there is no matching foo, the rest of the block will be skipped, which will result in a 404 response.  If there is a matching foo, after setting the instance variable, it will dispatch to routes in the :foo namespace, one of which is show, which will be able to use the @foo variable, both in the route and in the view.</p>
 
 <p>Similarly, a POST /bar/321/edit request would dispatch to the on “bar” block in the :root namespace, will look up the matching bar, then will dispatch to the edit route in the :bar namespace.</p>
 
-<p>The hash_routes plugin can be used as a faster version of the multi_route plugin&#39;s r.multi_route method.  It can also be used as a faster replacement for the multi_view plugin.</p>
+<p>The hash_routes plugin can be used as a faster version of the multi_route plugin’s r.multi_route method.  It can also be used as a faster replacement for the multi_view plugin.</p>
 
 <p>Please see the hash_routes plugin documentation for additional methods and configuration styles supported by the plugin.</p>
 </li><li>
 <p>A match_hook plugin has been added, which is called for each successful match, before yielding to the match block.  For example, with the following routing tree:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:match_hook</span>&#x000A;&#x000A;<span class="ruby-identifier">match_hook</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{r.matched_path}|#{r.remaining_path}&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:match_hook</span>
+
+<span class="ruby-identifier">match_hook</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;#{r.matched_path}|#{r.remaining_path}&quot;</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-keyword">end</span>
+
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>A GET request for /a/b would call the match hook three times, and output the following:</p>
 
-<pre>/a|/b # When the r.on block matches&#x000A;/a/b| # When the r.is block matches&#x000A;/a/b| # When the r.get block matches</pre>
+<pre>/a|/b # When the r.on block matches
+/a/b| # When the r.is block matches
+/a/b| # When the r.get block matches</pre>
 
 <p>A GET request for /a/c would call the match hook once, and output the following:</p>
 
@@ -120,7 +214,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

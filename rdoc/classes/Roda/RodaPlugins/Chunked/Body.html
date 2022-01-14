@@ -72,7 +72,10 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/chunked.rb</span>&#x000A;<span class="line-num">166</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">scope</span>)&#x000A;<span class="line-num">167</span>   <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>&#x000A;<span class="line-num">168</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/chunked.rb</span>
+<span class="line-num">166</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">scope</span>)
+<span class="line-num">167</span>   <span class="ruby-ivar">@scope</span> = <span class="ruby-identifier">scope</span>
+<span class="line-num">168</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -91,7 +94,17 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-each-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-each-source'>    <span class="ruby-comment"># File lib/roda/plugins/chunked.rb</span>&#x000A;<span class="line-num">175</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each</span>&#x000A;<span class="line-num">176</span>   <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">each_chunk</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chunk</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">177</span>     <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">chunk</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="line-num">178</span>     <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;%x\r\n&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">bytesize</span>)&#x000A;<span class="line-num">179</span>     <span class="ruby-keyword">yield</span>(<span class="ruby-identifier">chunk</span>)&#x000A;<span class="line-num">180</span>     <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;\r\n&quot;</span>)&#x000A;<span class="line-num">181</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">182</span> <span class="ruby-keyword">ensure</span>&#x000A;<span class="line-num">183</span>   <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;0\r\n\r\n&quot;</span>)&#x000A;<span class="line-num">184</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-each-source'>    <span class="ruby-comment"># File lib/roda/plugins/chunked.rb</span>
+<span class="line-num">175</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each</span>
+<span class="line-num">176</span>   <span class="ruby-ivar">@scope</span>.<span class="ruby-identifier">each_chunk</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">chunk</span><span class="ruby-operator">|</span>
+<span class="line-num">177</span>     <span class="ruby-keyword">next</span> <span class="ruby-keyword">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">chunk</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">empty?</span>
+<span class="line-num">178</span>     <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;%x\r\n&quot;</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">chunk</span>.<span class="ruby-identifier">bytesize</span>)
+<span class="line-num">179</span>     <span class="ruby-keyword">yield</span>(<span class="ruby-identifier">chunk</span>)
+<span class="line-num">180</span>     <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;\r\n&quot;</span>)
+<span class="line-num">181</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">182</span> <span class="ruby-keyword">ensure</span>
+<span class="line-num">183</span>   <span class="ruby-keyword">yield</span>(<span class="ruby-string">&quot;0\r\n\r\n&quot;</span>)
+<span class="line-num">184</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -103,7 +116,7 @@ Superclass:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

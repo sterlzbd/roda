@@ -35,11 +35,22 @@ Roda::RodaPlugins::MultibyteStringMatcher
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The multibyte_string_matcher plugin allows multibyte strings to be used in matchers.  Roda&#39;s default string matcher does not handle multibyte strings for performance reasons.</p>
+<p>The multibyte_string_matcher plugin allows multibyte strings to be used in matchers.  Roda’s default string matcher does not handle multibyte strings for performance reasons.</p>
 
 <p>As browsers send multibyte characters in request paths URL escaped, so this also loads the unescape_path plugin to unescape the paths.</p>
 
-<pre>plugin :multibyte_string_matcher&#x000A;path = &quot;\xD0\xB8&quot;.force_encoding(&#39;UTF-8&#39;)&#x000A;route do |r|&#x000A;  r.get path do&#x000A;    # GET /\xD0\xB8 (request.path in UTF-8 format)&#x000A;  end&#x000A;&#x000A;  r.get /y-(#{path})/u do |x|&#x000A;    # GET /y-\xD0\xB8 (request.path in UTF-8 format)&#x000A;    x =&gt; &quot;\xD0\xB8&quot;.force_encoding(&#39;BINARY&#39;)&#x000A;  end&#x000A;end</pre>
+<pre>plugin :multibyte_string_matcher
+path = &quot;\xD0\xB8&quot;.force_encoding(&#39;UTF-8&#39;)
+route do |r|
+  r.get path do
+    # GET /\xD0\xB8 (request.path in UTF-8 format)
+  end
+
+  r.get /y-(#{path})/u do |x|
+    # GET /y-\xD0\xB8 (request.path in UTF-8 format)
+    x =&gt; &quot;\xD0\xB8&quot;.force_encoding(&#39;BINARY&#39;)
+  end
+end</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -74,7 +85,10 @@ Roda::RodaPlugins::MultibyteStringMatcher
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/multibyte_string_matcher.rb</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">32</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:unescape_path</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/multibyte_string_matcher.rb</span>
+<span class="line-num">31</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">32</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:unescape_path</span>
+<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -86,7 +100,7 @@ Roda::RodaPlugins::MultibyteStringMatcher
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -41,15 +41,20 @@ Roda::RodaPlugins::PrecompileTemplates
 
 <p>After loading the plugin, you should call precompile_views with an array of views to compile, using the same argument you are passing to view or render:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:precompile_templates</span>&#x000A;<span class="ruby-identifier">precompile_views</span> <span class="ruby-node">%w&#39;view1 view2&#39;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:precompile_templates</span>
+<span class="ruby-identifier">precompile_views</span> <span class="ruby-node">%w&#39;view1 view2&#39;</span>
+</pre>
 
 <p>If the view requires local variables, you should call precompile_views with a second argument for the local variables:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:precompile_templates</span>&#x000A;<span class="ruby-identifier">precompile_views</span> <span class="ruby-value">:view3</span>, [<span class="ruby-value">:local_var1</span>, <span class="ruby-value">:local_var2</span>]</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:precompile_templates</span>
+<span class="ruby-identifier">precompile_views</span> <span class="ruby-value">:view3</span>, [<span class="ruby-value">:local_var1</span>, <span class="ruby-value">:local_var2</span>]
+</pre>
 
 <p>After all templates are precompiled, you can optionally use freeze_template_caches!, which will freeze the template caches so that any template compilation at runtime will result in an error.  This also speeds up template cache access, since the template caches no longer need a mutex.</p>
 
-<pre class="ruby"><span class="ruby-identifier">freeze_template_caches!</span></pre>
+<pre class="ruby"><span class="ruby-identifier">freeze_template_caches!</span>
+</pre>
 
 <p>Note that you should use Tilt 2.0.1+ if you are using this plugin, so that locals are handled in the same order.</p>
 </div>
@@ -86,7 +91,10 @@ Roda::RodaPlugins::PrecompileTemplates
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>&#x000A;<span class="line-num">45</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">46</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">47</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>
+<span class="line-num">45</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">46</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
+<span class="line-num">47</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -98,7 +106,7 @@ Roda::RodaPlugins::PrecompileTemplates
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

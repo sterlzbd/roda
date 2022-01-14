@@ -69,7 +69,10 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-after_mail_hook-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-after_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">412</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">after_mail_hook</span>&#x000A;<span class="line-num">413</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">414</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-after_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">412</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">after_mail_hook</span>
+<span class="line-num">413</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">414</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-handled_mail_hook'>
@@ -87,7 +90,10 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-handled_mail_hook-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-handled_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">418</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handled_mail_hook</span>&#x000A;<span class="line-num">419</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">420</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-handled_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">418</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handled_mail_hook</span>
+<span class="line-num">419</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">420</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-mail'>
@@ -105,7 +111,10 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-mail-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">430</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail</span>&#x000A;<span class="line-num">431</span>   <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;roda.mail&#39;</span>]&#x000A;<span class="line-num">432</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">430</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail</span>
+<span class="line-num">431</span>   <span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;roda.mail&#39;</span>]
+<span class="line-num">432</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-mail_recipients'>
@@ -123,7 +132,10 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-mail_recipients-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-mail_recipients-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">442</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail_recipients</span>&#x000A;<span class="line-num">443</span>   <span class="ruby-constant">Array</span>(<span class="ruby-identifier">to</span>) <span class="ruby-operator">+</span> <span class="ruby-constant">Array</span>(<span class="ruby-identifier">cc</span>)&#x000A;<span class="line-num">444</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-mail_recipients-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">442</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail_recipients</span>
+<span class="line-num">443</span>   <span class="ruby-constant">Array</span>(<span class="ruby-identifier">to</span>) <span class="ruby-operator">+</span> <span class="ruby-constant">Array</span>(<span class="ruby-identifier">cc</span>)
+<span class="line-num">444</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-mail_text'>
@@ -141,7 +153,10 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-mail_text-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-mail_text-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">436</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail_text</span>&#x000A;<span class="line-num">437</span>   <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">decoded</span>&#x000A;<span class="line-num">438</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-mail_text-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">436</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">mail_text</span>
+<span class="line-num">437</span>   <span class="ruby-identifier">mail</span>.<span class="ruby-identifier">body</span>.<span class="ruby-identifier">decoded</span>
+<span class="line-num">438</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-process_mail'>
@@ -159,7 +174,32 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-process_mail-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-process_mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">384</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">process_mail</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">385</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">string_routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:mail_processor_string_routes</span>]&#x000A;<span class="line-num">386</span>     <span class="ruby-identifier">addresses</span> = <span class="ruby-identifier">mail_recipients</span>&#x000A;<span class="line-num">387</span> &#x000A;<span class="line-num">388</span>     <span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">address</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">389</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">string_routes</span>[<span class="ruby-identifier">address</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>]&#x000A;<span class="line-num">390</span>         <span class="ruby-identifier">_roda_handle_route</span>{<span class="ruby-identifier">send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-ivar">@_request</span>)}&#x000A;<span class="line-num">391</span>         <span class="ruby-keyword">return</span>&#x000A;<span class="line-num">392</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">393</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">394</span> &#x000A;<span class="line-num">395</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:mail_processor_regexp_routes</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">regexp</span>, <span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">396</span>       <span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">address</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">397</span>         <span class="ruby-keyword">if</span> <span class="ruby-identifier">md</span> = <span class="ruby-identifier">regexp</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">address</span>)&#x000A;<span class="line-num">398</span>           <span class="ruby-identifier">_roda_handle_route</span>{<span class="ruby-identifier">send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-ivar">@_request</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">md</span>.<span class="ruby-identifier">captures</span>)}&#x000A;<span class="line-num">399</span>           <span class="ruby-keyword">return</span> &#x000A;<span class="line-num">400</span>         <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">401</span>       <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">402</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">403</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">404</span> &#x000A;<span class="line-num">405</span>   <span class="ruby-identifier">_roda_handle_main_route</span>&#x000A;<span class="line-num">406</span> &#x000A;<span class="line-num">407</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">408</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-process_mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">384</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">process_mail</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">385</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">string_routes</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:mail_processor_string_routes</span>]
+<span class="line-num">386</span>     <span class="ruby-identifier">addresses</span> = <span class="ruby-identifier">mail_recipients</span>
+<span class="line-num">387</span> 
+<span class="line-num">388</span>     <span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">address</span><span class="ruby-operator">|</span>
+<span class="line-num">389</span>       <span class="ruby-keyword">if</span> <span class="ruby-identifier">meth</span> = <span class="ruby-identifier">string_routes</span>[<span class="ruby-identifier">address</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>]
+<span class="line-num">390</span>         <span class="ruby-identifier">_roda_handle_route</span>{<span class="ruby-identifier">send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-ivar">@_request</span>)}
+<span class="line-num">391</span>         <span class="ruby-keyword">return</span>
+<span class="line-num">392</span>       <span class="ruby-keyword">end</span>
+<span class="line-num">393</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">394</span> 
+<span class="line-num">395</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:mail_processor_regexp_routes</span>].<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">regexp</span>, <span class="ruby-identifier">meth</span><span class="ruby-operator">|</span>
+<span class="line-num">396</span>       <span class="ruby-identifier">addresses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">address</span><span class="ruby-operator">|</span>
+<span class="line-num">397</span>         <span class="ruby-keyword">if</span> <span class="ruby-identifier">md</span> = <span class="ruby-identifier">regexp</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">address</span>)
+<span class="line-num">398</span>           <span class="ruby-identifier">_roda_handle_route</span>{<span class="ruby-identifier">send</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-ivar">@_request</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">md</span>.<span class="ruby-identifier">captures</span>)}
+<span class="line-num">399</span>           <span class="ruby-keyword">return</span> 
+<span class="line-num">400</span>         <span class="ruby-keyword">end</span>
+<span class="line-num">401</span>       <span class="ruby-keyword">end</span>
+<span class="line-num">402</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">403</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">404</span> 
+<span class="line-num">405</span>   <span class="ruby-identifier">_roda_handle_main_route</span>
+<span class="line-num">406</span> 
+<span class="line-num">407</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">408</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-unhandled_mail'>
@@ -177,7 +217,10 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-unhandled_mail-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-unhandled_mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">449</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unhandled_mail</span>(<span class="ruby-identifier">reason</span>)&#x000A;<span class="line-num">450</span>   <span class="ruby-identifier">raise</span> <span class="ruby-constant">UnhandledMail</span>, <span class="ruby-identifier">reason</span>&#x000A;<span class="line-num">451</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-unhandled_mail-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">449</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unhandled_mail</span>(<span class="ruby-identifier">reason</span>)
+<span class="line-num">450</span>   <span class="ruby-identifier">raise</span> <span class="ruby-constant">UnhandledMail</span>, <span class="ruby-identifier">reason</span>
+<span class="line-num">451</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-unhandled_mail_hook'>
@@ -195,7 +238,10 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-unhandled_mail_hook-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-unhandled_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>&#x000A;<span class="line-num">425</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unhandled_mail_hook</span>&#x000A;<span class="line-num">426</span>   <span class="ruby-identifier">raise</span>&#x000A;<span class="line-num">427</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-unhandled_mail_hook-source'>    <span class="ruby-comment"># File lib/roda/plugins/mail_processor.rb</span>
+<span class="line-num">425</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unhandled_mail_hook</span>
+<span class="line-num">426</span>   <span class="ruby-identifier">raise</span>
+<span class="line-num">427</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -207,7 +253,7 @@ Roda::RodaPlugins::MailProcessor::InstanceMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

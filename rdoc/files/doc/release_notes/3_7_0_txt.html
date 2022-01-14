@@ -40,17 +40,39 @@ Last Update:
 <ul><li>
 <p>A content_security_policy plugin has been added for setting up an appropriate Content-Security-Policy header.  To configure the default policy, load the plugin with a block:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">default_src</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">img_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">style_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;fonts.googleapis.com&#39;</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">font_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;fonts.gstatic.com&#39;</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">form_action</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">frame_ancestors</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">block_all_mixed_content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">default_src</span> <span class="ruby-value">:none</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">img_src</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">style_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;fonts.googleapis.com&#39;</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">font_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;fonts.gstatic.com&#39;</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">form_action</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-value">:none</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">frame_ancestors</span> <span class="ruby-value">:none</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">block_all_mixed_content</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
-<p>It&#39;s recommended that use use a default_src of :none at the top of the policy, then explicitly change other settings (e.g. img_src) when you want to allow content.</p>
+<p>It’s recommended that use use a default_src of :none at the top of the policy, then explicitly change other settings (e.g. img_src) when you want to allow content.</p>
 
 <p>Anywhere in the routing tree, you can use the content_security_policy method to override the default policy.  You can pass this method a block:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">object_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">add_style_src</span> <span class="ruby-string">&#39;bar.com&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">object_src</span> <span class="ruby-value">:self</span>
+    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">add_style_src</span> <span class="ruby-string">&#39;bar.com&#39;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Or just call a method on it:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The following methods exist for configuring the content security policy, they set the appropriate directive, with the underscores replaced by a dash.</p>
 <ul><li>
@@ -104,13 +126,23 @@ Last Update:
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>,&#x000A;  <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>,
+  <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>
+</pre>
 
 <p>When calling a method with no arguments, the setting is removed from the policy instead of being left empty, since all of these setting require at least one value.  Likewise, if the policy does not have any settings, the header will not be added.</p>
 
 <p>Calling the method overrides any previous setting.  Each of the methods has a add_* method (e.g. add_script_src) for appending to the current setting, and a get_* method (e.g. get_script_src) for retrieving the current value of the setting, or nil if it is not defined.</p>
 
-<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39;;</span>&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">add_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>&#x000A;&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">get_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># =&gt; [:self, :unsafe_eval, &#39;example.com&#39;, [:nonce, &#39;foobarbaz&#39;]]</span></pre>
+<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>
+<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39;;</span>
+<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">add_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>
+
+<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">get_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+<span class="ruby-comment"># =&gt; [:self, :unsafe_eval, &#39;example.com&#39;, [:nonce, &#39;foobarbaz&#39;]]</span>
+</pre>
 
 <p>The clear method can be used to remove all settings from the policy.</p>
 
@@ -140,7 +172,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

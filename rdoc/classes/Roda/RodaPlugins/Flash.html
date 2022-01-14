@@ -37,13 +37,31 @@ Roda::RodaPlugins::Flash
 <div id='description'>
 <p>The flash plugin adds a <code>flash</code> instance method to <a href="../../Roda.html"><code>Roda</code></a>, for typical web application flash handling, where values set in the current flash hash are available in the next request.</p>
 
-<p>With the example below, if a POST request is submitted, it will redirect and the resulting GET request will return &#39;b&#39;.</p>
+<p>With the example below, if a POST request is submitted, it will redirect and the resulting GET request will return ‘b’.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:flash</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;&#39;</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:flash</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&#39;&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>]
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;&#39;</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>You can modify the flash for the current request (instead of the next request) by using the <code>flash.now</code> method:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>&#x000A;  <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] <span class="ruby-comment"># = &gt;&#39;b&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">now</span>[<span class="ruby-string">&#39;a&#39;</span>] = <span class="ruby-string">&#39;b&#39;</span>
+  <span class="ruby-identifier">flash</span>[<span class="ruby-string">&#39;a&#39;</span>] <span class="ruby-comment"># = &gt;&#39;b&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='context'>
 </div>
@@ -63,7 +81,7 @@ Roda::RodaPlugins::Flash
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -37,15 +37,46 @@ Roda::RodaPlugins::SharedVars
 <div id='description'>
 <p>The shared_vars plugin adds a <code>shared</code> method for storing shared variables across nested <a href="../../Roda.html"><code>Roda</code></a> apps.</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">API</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:shared_vars</span>&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">user</span> = <span class="ruby-identifier">shared</span>[<span class="ruby-value">:user</span>]&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:shared_vars</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">shared</span>[<span class="ruby-value">:user</span>] = <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>]&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">API</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">API</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:shared_vars</span>
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">user</span> = <span class="ruby-identifier">shared</span>[<span class="ruby-value">:user</span>]
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:shared_vars</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">shared</span>[<span class="ruby-value">:user</span>] = <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>]
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">API</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>If you pass a hash to shared, it will update the shared vars with the content of the hash:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">shared</span>(<span class="ruby-value">user:</span> <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>])&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">API</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">shared</span>(<span class="ruby-value">user:</span> <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>])
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">API</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>You can also pass a block to shared, which will set the shared variables only for the given block, restoring the previous shared variables afterward:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">shared</span>(<span class="ruby-value">user:</span> <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>]) <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">API</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user_id</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">shared</span>(<span class="ruby-value">user:</span> <span class="ruby-constant">User</span>[<span class="ruby-identifier">user_id</span>]) <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">API</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='context'>
 </div>
@@ -64,7 +95,7 @@ Roda::RodaPlugins::SharedVars
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

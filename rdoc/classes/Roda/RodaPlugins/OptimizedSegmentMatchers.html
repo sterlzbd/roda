@@ -37,7 +37,17 @@ Roda::RodaPlugins::OptimizedSegmentMatchers
 <div id='description'>
 <p>The optimized_segment_matchers plugin adds two optimized matcher methods, <code>r.on_segment</code> and <code>r.is_segment</code>.  <code>r.on_segment</code> is an optimized version of +r.on String+ that accepts no arguments and yields the next segment if there is a segment. <code>r.is_segment</code> is an optimized version of +r.is String+ that accepts no arguments and yields the next segment only if it is the last segment.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:optimized_segment_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_segment</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># matches any segment (e.g. /a, /b, but not /)</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_segment</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># matches only if final segment (e.g. /a/b, /b/c, but not /c, /c/d/, /c/d/e)</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:optimized_segment_matchers</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_segment</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># matches any segment (e.g. /a, /b, but not /)</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_segment</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># matches only if final segment (e.g. /a/b, /b/c, but not /c, /c/d/, /c/d/e)</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='context'>
 </div>
@@ -56,7 +66,7 @@ Roda::RodaPlugins::OptimizedSegmentMatchers
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

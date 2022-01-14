@@ -40,7 +40,11 @@ Last Update:
 <ul><li>
 <p>A json_parser plugin has been added, for parsing request bodies in JSON format.  This is faster than using a middleware to perform the same task.  This plugin supports a :parser option to use a custom JSON parser, an :include_request option to include the request when calling the parser, and a :error_handler option for a proc to call with the request if there is an error when parsing. Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json_parser</span>,&#x000A;  <span class="ruby-value">:parser</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">JSON</span>.<span class="ruby-identifier">method</span>(<span class="ruby-value">:parse</span>),&#x000A;  <span class="ruby-value">:include_request</span><span class="ruby-operator">=&gt;</span><span class="ruby-keyword">false</span>,&#x000A;  <span class="ruby-value">:error_handler</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span> [<span class="ruby-value">400</span>, {}, []]}</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json_parser</span>,
+  <span class="ruby-value">:parser</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">JSON</span>.<span class="ruby-identifier">method</span>(<span class="ruby-value">:parse</span>),
+  <span class="ruby-value">:include_request</span><span class="ruby-operator">=&gt;</span><span class="ruby-keyword">false</span>,
+  <span class="ruby-value">:error_handler</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">halt</span> [<span class="ruby-value">400</span>, {}, []]}
+</pre>
 </li><li>
 <p>A path_rewriter plugin has been added, allowing for the rewriting of paths before routing.  This allows you to rewrite just the routing path (the default), or PATH_INFO as well as the routing path (if the :path_info option is used).  This is useful if you want to internally treat one path exactly the same as another path.</p>
 
@@ -48,15 +52,27 @@ Last Update:
 
 <p>Examples:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:path_rewriter</span>&#x000A;<span class="ruby-identifier">rewrite_path</span> <span class="ruby-string">&#39;/a&#39;</span>, <span class="ruby-string">&#39;/b&#39;</span>&#x000A;<span class="ruby-comment"># GET /a treated as GET /b</span>&#x000A;<span class="ruby-comment"># GET /a/c treated as GET /b/c</span>&#x000A;&#x000A;<span class="ruby-identifier">rewrite_path</span> <span class="ruby-regexp">/\A\/c\z/</span>, <span class="ruby-string">&#39;/d&#39;</span>&#x000A;<span class="ruby-comment"># GET /c treated as GET /d</span>&#x000A;<span class="ruby-comment"># GET /c/e no change</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:path_rewriter</span>
+<span class="ruby-identifier">rewrite_path</span> <span class="ruby-string">&#39;/a&#39;</span>, <span class="ruby-string">&#39;/b&#39;</span>
+<span class="ruby-comment"># GET /a treated as GET /b</span>
+<span class="ruby-comment"># GET /a/c treated as GET /b/c</span>
+
+<span class="ruby-identifier">rewrite_path</span> <span class="ruby-regexp">/\A\/c\z/</span>, <span class="ruby-string">&#39;/d&#39;</span>
+<span class="ruby-comment"># GET /c treated as GET /d</span>
+<span class="ruby-comment"># GET /c/e no change</span>
+</pre>
 </li><li>
 <p>A precompiled_templates plugin has been added, for precompiling templates before starting the application.  This can save a substantial amount of memory if you are using large templates or a large number of small templates in conjunction when using application preloading with a forking webserver.  Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:precompile_templates</span>&#x000A;<span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/\*\*/*.erb&quot;</span>&#x000A;<span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/users/_*.erb&quot;</span>, <span class="ruby-value">:locals</span><span class="ruby-operator">=&gt;</span>[<span class="ruby-value">:user</span>]</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:precompile_templates</span>
+<span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/\*\*/*.erb&quot;</span>
+<span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/users/_*.erb&quot;</span>, <span class="ruby-value">:locals</span><span class="ruby-operator">=&gt;</span>[<span class="ruby-value">:user</span>]
+</pre>
 </li><li>
 <p>A heartbeat plugin has been added, for easily handling heartbeat/status requests.  If a heartbeat/status request comes in, it will get a 200 response with a body of “OK”.  This is designed for automated systems that check if the application is functioning. The default heartbeat path is /heartbeat, but you can choose a different one using the :path option.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:heartbeat</span>, <span class="ruby-value">:path</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/heartbeat&#39;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:heartbeat</span>, <span class="ruby-value">:path</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;/heartbeat&#39;</span>
+</pre>
 </li></ul>
 
 <h1 id="label-Other+New+Features">Other New Features<span><a href="#label-Other+New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -97,7 +113,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

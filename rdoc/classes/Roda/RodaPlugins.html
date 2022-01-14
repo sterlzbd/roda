@@ -540,7 +540,14 @@ Roda::RodaPlugins
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-deprecate_constant-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-deprecate_constant-source'>   <span class="ruby-comment"># File lib/roda/plugins.rb</span>&#x000A;<span class="line-num">45</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">deprecate_constant</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">name</span>)&#x000A;<span class="line-num">46</span>   <span class="ruby-comment"># :nocov:</span>&#x000A;<span class="line-num">47</span>   <span class="ruby-keyword">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-string">&#39;2.3&#39;</span>&#x000A;<span class="line-num">48</span>     <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">name</span>)&#x000A;<span class="line-num">49</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">50</span>   <span class="ruby-comment"># :nocov:</span>&#x000A;<span class="line-num">51</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-deprecate_constant-source'>   <span class="ruby-comment"># File lib/roda/plugins.rb</span>
+<span class="line-num">45</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">deprecate_constant</span>(<span class="ruby-identifier">mod</span>, <span class="ruby-identifier">name</span>)
+<span class="line-num">46</span>   <span class="ruby-comment"># :nocov:</span>
+<span class="line-num">47</span>   <span class="ruby-keyword">if</span> <span class="ruby-constant">RUBY_VERSION</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-string">&#39;2.3&#39;</span>
+<span class="line-num">48</span>     <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">deprecate_constant</span>(<span class="ruby-identifier">name</span>)
+<span class="line-num">49</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">50</span>   <span class="ruby-comment"># :nocov:</span>
+<span class="line-num">51</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_plugin'>
@@ -551,14 +558,22 @@ Roda::RodaPlugins
 </div>
 <div class='description'>
 
-<p>If the registered plugin already exists, use it.  Otherwise, require it and return it.  This raises a LoadError if such a plugin doesn&#39;t exist, or a <a href="RodaError.html"><code>RodaError</code></a> if it exists but it does not register itself correctly.</p>
+<p>If the registered plugin already exists, use it.  Otherwise, require it and return it.  This raises a LoadError if such a plugin doesn’t exist, or a <a href="RodaError.html"><code>RodaError</code></a> if it exists but it does not register itself correctly.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_plugin-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_plugin-source'>   <span class="ruby-comment"># File lib/roda/plugins.rb</span>&#x000A;<span class="line-num">26</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_plugin</span>(<span class="ruby-identifier">name</span>)&#x000A;<span class="line-num">27</span>   <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>&#x000A;<span class="line-num">28</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;<span class="line-num">29</span>     <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>&#x000A;<span class="line-num">30</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]&#x000A;<span class="line-num">31</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">32</span>   <span class="ruby-identifier">plugin</span>&#x000A;<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_plugin-source'>   <span class="ruby-comment"># File lib/roda/plugins.rb</span>
+<span class="line-num">26</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_plugin</span>(<span class="ruby-identifier">name</span>)
+<span class="line-num">27</span>   <span class="ruby-identifier">h</span> = <span class="ruby-ivar">@plugins</span>
+<span class="line-num">28</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]
+<span class="line-num">29</span>     <span class="ruby-identifier">require</span> <span class="ruby-node">&quot;roda/plugins/#{name}&quot;</span>
+<span class="line-num">30</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Plugin #{name} did not register itself correctly in Roda::RodaPlugins&quot;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">plugin</span> = <span class="ruby-identifier">h</span>[<span class="ruby-identifier">name</span>]
+<span class="line-num">31</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">32</span>   <span class="ruby-identifier">plugin</span>
+<span class="line-num">33</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-register_plugin'>
@@ -571,14 +586,18 @@ Roda::RodaPlugins
 
 <p>Register the given plugin with <a href="../Roda.html"><code>Roda</code></a>, so that it can be loaded using plugin with a symbol.  Should be used by plugin files. Example:</p>
 
-<pre class="ruby"><span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-value">:plugin_name</span>, <span class="ruby-constant">PluginModule</span>)</pre>
+<pre class="ruby"><span class="ruby-constant">Roda</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaPlugins</span>.<span class="ruby-identifier">register_plugin</span>(<span class="ruby-value">:plugin_name</span>, <span class="ruby-constant">PluginModule</span>)
+</pre>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-register_plugin-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-register_plugin-source'>   <span class="ruby-comment"># File lib/roda/plugins.rb</span>&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)&#x000A;<span class="line-num">40</span>   <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>&#x000A;<span class="line-num">41</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-register_plugin-source'>   <span class="ruby-comment"># File lib/roda/plugins.rb</span>
+<span class="line-num">39</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">register_plugin</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">mod</span>)
+<span class="line-num">40</span>   <span class="ruby-ivar">@plugins</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-identifier">mod</span>
+<span class="line-num">41</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -590,7 +609,7 @@ Roda::RodaPlugins
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

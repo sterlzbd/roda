@@ -40,7 +40,20 @@ Last Update:
 <ul><li>
 <p>A run_append_slash plugin has been added, which automatically uses “/” as the path instead of an empty path when calling rack applications with r.run:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># without run_append_slash:</span>&#x000A;<span class="ruby-comment"># GET /a =&gt; App gets &quot;&quot; as PATH_INFO</span>&#x000A;<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span>&#x000A;&#x000A;<span class="ruby-comment"># with run_append_slash:</span>&#x000A;<span class="ruby-comment"># GET /a =&gt; App gets &quot;/&quot; as PATH_INFO</span>&#x000A;<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">run</span> <span class="ruby-constant">App</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># without run_append_slash:</span>
+<span class="ruby-comment"># GET /a =&gt; App gets &quot;&quot; as PATH_INFO</span>
+<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span>
+
+<span class="ruby-comment"># with run_append_slash:</span>
+<span class="ruby-comment"># GET /a =&gt; App gets &quot;/&quot; as PATH_INFO</span>
+<span class="ruby-comment"># GET /a/ =&gt; App gets &quot;/&quot; as PATH_INFO</span>
+</pre>
 
 <p>By default, the path is modified directly, but if you want to redirect instead, you can pass a :use_redirects option when loading the plugin.</p>
 </li></ul>
@@ -75,7 +88,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

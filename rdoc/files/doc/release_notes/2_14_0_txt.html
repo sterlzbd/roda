@@ -40,18 +40,33 @@ Last Update:
 <ul><li>
 <p>A symbol_status plugin has been added for using symbolic status names in response.status=:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_status</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;needs_authorization&quot;</span>&#x000A;      <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">:unauthorized</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_status</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;needs_authorization&quot;</span>
+      <span class="ruby-identifier">response</span>.<span class="ruby-identifier">status</span> = <span class="ruby-value">:unauthorized</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+</pre>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The middleware plugin will now also run the application&#39;s middleware when the application is used as middleware.  For example, if you have the following code in your config.ru file:</p>
+<p>The middleware plugin will now also run the application’s middleware when the application is used as middleware.  For example, if you have the following code in your config.ru file:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:csrf</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:middleware</span>&#x000A;  <span class="ruby-identifier">route</span>{}&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">use</span> <span class="ruby-constant">App</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:csrf</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:middleware</span>
+  <span class="ruby-identifier">route</span>{}
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">use</span> <span class="ruby-constant">App</span>
+</pre>
 
 <p>previously, the csrf protection would not be enforced, as it uses a middleware instead of being part of the application. Now, csrf protection will be enforced.  This change makes it so the <a href="../../../classes/Roda.html"><code>Roda</code></a> application operates the same way regardless of whether it is run as the rack application or used as rack middleware.</p>
 
-<p>Because of this change, if you are nesting roda applications using the middleware plugin, you may need to use the middleware plugin&#39;s :env_var option to specify the environment variable used to indicate to the <a href="../../../classes/Roda.html"><code>Roda</code></a> application that it is being run as middleware.</p>
+<p>Because of this change, if you are nesting roda applications using the middleware plugin, you may need to use the middleware plugin’s :env_var option to specify the environment variable used to indicate to the <a href="../../../classes/Roda.html"><code>Roda</code></a> application that it is being run as middleware.</p>
 </li></ul>
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -68,7 +83,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -37,21 +37,24 @@ Roda::RodaPlugins::RequestHeaders
 <div id='description'>
 <p>The request_headers plugin provides access to headers sent in the request in a more natural way than directly accessing the env hash.</p>
 
-<p>In practise this means you don&#39;t need to uppercase, convert dashes to underscores, or add a HTTP_ prefix.</p>
+<p>In practise this means you don’t need to uppercase, convert dashes to underscores, or add a HTTP_ prefix.</p>
 
 <p>For example, to access a header called X-My-Header you would previously need to do:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;HTTP_X_MY_HEADER&#39;</span>]</pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">env</span>[<span class="ruby-string">&#39;HTTP_X_MY_HEADER&#39;</span>]
+</pre>
 
 <p>But with this plugin you can now say:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">headers</span>[<span class="ruby-string">&#39;X-My-Header&#39;</span>]</pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">headers</span>[<span class="ruby-string">&#39;X-My-Header&#39;</span>]
+</pre>
 
 <p>The name is actually case-insensitive so <code>x-my-header</code> will work as well.</p>
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_headers</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:request_headers</span>
+</pre>
 </div>
 <div id='context'>
 </div>
@@ -71,7 +74,7 @@ Roda::RodaPlugins::RequestHeaders
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

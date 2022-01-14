@@ -39,15 +39,37 @@ Roda::RodaPlugins::ContentSecurityPolicy
 
 <p>You would generally call the plugin with a block to set the default policy:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">default_src</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">img_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">style_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">font_src</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">form_action</span> <span class="ruby-value">:self</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">frame_ancestors</span> <span class="ruby-value">:none</span>&#x000A;  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">block_all_mixed_content</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">default_src</span> <span class="ruby-value">:none</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">img_src</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">style_src</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">font_src</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">form_action</span> <span class="ruby-value">:self</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">base_uri</span> <span class="ruby-value">:none</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">frame_ancestors</span> <span class="ruby-value">:none</span>
+  <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">block_all_mixed_content</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Then, anywhere in the routing tree, you can customize the policy for just that branch or action using the same block syntax:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">object_src</span> <span class="ruby-value">:self</span>&#x000A;    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">add_style_src</span> <span class="ruby-string">&#39;bar.com&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">content_security_policy</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">csp</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">object_src</span> <span class="ruby-value">:self</span>
+    <span class="ruby-identifier">csp</span>.<span class="ruby-identifier">add_style_src</span> <span class="ruby-string">&#39;bar.com&#39;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>In addition to using a block, you can also call methods on the object returned by the method:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;foo&#39;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The following methods are available for configuring the content security policy, which specify the setting (substituting _ with -): </p>
 <ul><li>
@@ -103,13 +125,21 @@ Roda::RodaPlugins::ContentSecurityPolicy
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>, <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>
+</pre>
 
 <p>When calling a method with no arguments, the setting is removed from the policy instead of being left empty, since all of these setting require at least one value.  Likewise, if the policy does not have any settings, the header will not be added.</p>
 
 <p>Calling the method overrides any previous setting.  Each of the methods has <code>add_*</code> and <code>get_*</code> methods defined. The <code>add_*</code> method appends to any existing setting, and the <code>get_*</code> method returns the current value for the setting.</p>
 
-<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">add_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>&#x000A;&#x000A;<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">get_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]&#x000A;<span class="ruby-comment"># =&gt; [:self, :unsafe_eval, &#39;example.com&#39;, [:nonce, &#39;foobarbaz&#39;]]</span></pre>
+<pre class="ruby"><span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">script_src</span> <span class="ruby-value">:self</span>, <span class="ruby-value">:unsafe_eval</span>
+<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">add_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+<span class="ruby-comment"># script-src &#39;self&#39; &#39;unsafe-eval&#39; example.com &#39;nonce-foobarbaz&#39;;</span>
+
+<span class="ruby-identifier">content_security_policy</span>.<span class="ruby-identifier">get_script_src</span> <span class="ruby-string">&#39;example.com&#39;</span>, [<span class="ruby-value">:nonce</span>, <span class="ruby-string">&#39;foobarbaz&#39;</span>]
+<span class="ruby-comment"># =&gt; [:self, :unsafe_eval, &#39;example.com&#39;, [:nonce, &#39;foobarbaz&#39;]]</span>
+</pre>
 
 <p>The clear method can be used to remove all settings from the policy.</p>
 
@@ -159,7 +189,17 @@ Roda::RodaPlugins::ContentSecurityPolicy
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb</span>&#x000A;<span class="line-num">274</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">275</span>   <span class="ruby-identifier">policy</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>] = <span class="ruby-keyword">if</span> <span class="ruby-identifier">policy</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>]&#x000A;<span class="line-num">276</span>     <span class="ruby-identifier">policy</span>.<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">277</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">278</span>     <span class="ruby-constant">Policy</span>.<span class="ruby-identifier">new</span>&#x000A;<span class="line-num">279</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">280</span> &#x000A;<span class="line-num">281</span>   <span class="ruby-keyword">yield</span> <span class="ruby-identifier">policy</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-keyword">yield</span>)&#x000A;<span class="line-num">282</span>   <span class="ruby-identifier">policy</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">283</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/content_security_policy.rb</span>
+<span class="line-num">274</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">275</span>   <span class="ruby-identifier">policy</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>] = <span class="ruby-keyword">if</span> <span class="ruby-identifier">policy</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:content_security_policy</span>]
+<span class="line-num">276</span>     <span class="ruby-identifier">policy</span>.<span class="ruby-identifier">dup</span>
+<span class="line-num">277</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">278</span>     <span class="ruby-constant">Policy</span>.<span class="ruby-identifier">new</span>
+<span class="line-num">279</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">280</span> 
+<span class="line-num">281</span>   <span class="ruby-keyword">yield</span> <span class="ruby-identifier">policy</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-keyword">yield</span>)
+<span class="line-num">282</span>   <span class="ruby-identifier">policy</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">283</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -171,7 +211,7 @@ Roda::RodaPlugins::ContentSecurityPolicy
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

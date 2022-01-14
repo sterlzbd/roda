@@ -71,7 +71,10 @@ Last Update:
 </li><li>
 <p>The middleware plugin now supports a :handle_result option, which can be any callable object.  If set, this object is called with the environment of the request and the rack response after either the <a href="../../../classes/Roda.html"><code>Roda</code></a> app or next middleware returns the rack response.  The rack response can be modified by the callable object, and the response (after possible modification) will be returned to the previous middleware.  Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:middleware</span>, <span class="ruby-value">:handle_result</span><span class="ruby-operator">=&gt;</span>(<span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">env</span>, <span class="ruby-identifier">res</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">res</span>[<span class="ruby-value">1</span>][<span class="ruby-string">&#39;MyHeader&#39;</span>] = <span class="ruby-string">&#39;HeaderValue&#39;</span>&#x000A;<span class="ruby-keyword">end</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:middleware</span>, <span class="ruby-value">:handle_result</span><span class="ruby-operator">=&gt;</span>(<span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">env</span>, <span class="ruby-identifier">res</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">res</span>[<span class="ruby-value">1</span>][<span class="ruby-string">&#39;MyHeader&#39;</span>] = <span class="ruby-string">&#39;HeaderValue&#39;</span>
+<span class="ruby-keyword">end</span>)
+</pre>
 </li><li>
 <p>The :json_parser and :json_serializer application options are now supported.  If set, these options are used for parsing and serializing JSON instead of the default of JSON.parse and .to_json.</p>
 </li></ul>
@@ -87,7 +90,7 @@ Last Update:
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The flash plugin now uses &#39;_flash&#39; instead of :_flash as the session key.  When using session middleware that uses Rack::Session::Abstract::SessionHash to store the session (e.g. Rack::Session::Cookie), session keys are converted internally to strings, so this change will not affect you unless you are using alternative session support.  Even if your session does treat :_flash different than &#39;_flash&#39; in keys, the plugin will still work because it will try :_flash if there is no value for &#39;_flash&#39;.  This change was made to support the sessions plugin, which doesn&#39;t convert keys to strings.</p>
+<p>The flash plugin now uses ‘_flash’ instead of :_flash as the session key.  When using session middleware that uses Rack::Session::Abstract::SessionHash to store the session (e.g. Rack::Session::Cookie), session keys are converted internally to strings, so this change will not affect you unless you are using alternative session support.  Even if your session does treat :_flash different than ‘_flash’ in keys, the plugin will still work because it will try :_flash if there is no value for ‘_flash’.  This change was made to support the sessions plugin, which doesn’t convert keys to strings.</p>
 </li><li>
 <p>This DEFAULT_PARSER and DEFAULT_SERIALIZER constants from the the json_parser and json plugins have been removed.</p>
 </li></ul>
@@ -101,7 +104,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

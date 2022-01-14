@@ -39,11 +39,19 @@ Roda::RodaPlugins::ErrorHandler
 
 <p>You can provide the error handler as a block to the plugin:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&quot;Oh No!&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+  <span class="ruby-string">&quot;Oh No!&quot;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Or later via the <code>error</code> class method:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span>&#x000A;&#x000A;<span class="ruby-identifier">error</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-string">&quot;Oh No!&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span>
+
+<span class="ruby-identifier">error</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+  <span class="ruby-string">&quot;Oh No!&quot;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>In both cases, the exception instance is passed into the block, and the block can return the request body via a string.</p>
 
@@ -51,7 +59,8 @@ Roda::RodaPlugins::ErrorHandler
 
 <p>By default, this plugin handles StandardError and ScriptError. To override the exception classes it will handle, pass a :classes option to the plugin:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span>, <span class="ruby-value">classes:</span> [<span class="ruby-constant">StandardError</span>, <span class="ruby-constant">ScriptError</span>, <span class="ruby-constant">NoMemoryError</span>]</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span>, <span class="ruby-value">classes:</span> [<span class="ruby-constant">StandardError</span>, <span class="ruby-constant">ScriptError</span>, <span class="ruby-constant">NoMemoryError</span>]
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -101,7 +110,14 @@ Roda::RodaPlugins::ErrorHandler
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/error_handler.rb</span>&#x000A;<span class="line-num">51</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">52</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_ERROR_HANDLER_CLASSES</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">53</span> &#x000A;<span class="line-num">54</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">55</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">error</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">56</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">57</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/error_handler.rb</span>
+<span class="line-num">51</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">52</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:classes</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_handler_classes</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">DEFAULT_ERROR_HANDLER_CLASSES</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">53</span> 
+<span class="line-num">54</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
+<span class="line-num">55</span>     <span class="ruby-identifier">app</span>.<span class="ruby-identifier">error</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">56</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">57</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -113,7 +129,7 @@ Roda::RodaPlugins::ErrorHandler
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -62,7 +62,17 @@ Roda::RodaPlugins::ExceptionPage::RequestMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-exception_page_assets-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-exception_page_assets-source'>    <span class="ruby-comment"># File lib/roda/plugins/exception_page.rb</span>&#x000A;<span class="line-num">404</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exception_page_assets</span>&#x000A;<span class="line-num">405</span>   <span class="ruby-identifier">get</span> <span class="ruby-string">&#39;exception_page.css&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">406</span>     <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&quot;text/css&quot;</span>&#x000A;<span class="line-num">407</span>     <span class="ruby-constant">ExceptionPage</span>.<span class="ruby-identifier">css</span>&#x000A;<span class="line-num">408</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">409</span>   <span class="ruby-identifier">get</span> <span class="ruby-string">&#39;exception_page.js&#39;</span> <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">410</span>     <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&quot;application/javascript&quot;</span>&#x000A;<span class="line-num">411</span>     <span class="ruby-constant">ExceptionPage</span>.<span class="ruby-identifier">js</span>&#x000A;<span class="line-num">412</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">413</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-exception_page_assets-source'>    <span class="ruby-comment"># File lib/roda/plugins/exception_page.rb</span>
+<span class="line-num">404</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">exception_page_assets</span>
+<span class="line-num">405</span>   <span class="ruby-identifier">get</span> <span class="ruby-string">&#39;exception_page.css&#39;</span> <span class="ruby-keyword">do</span>
+<span class="line-num">406</span>     <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&quot;text/css&quot;</span>
+<span class="line-num">407</span>     <span class="ruby-constant">ExceptionPage</span>.<span class="ruby-identifier">css</span>
+<span class="line-num">408</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">409</span>   <span class="ruby-identifier">get</span> <span class="ruby-string">&#39;exception_page.js&#39;</span> <span class="ruby-keyword">do</span>
+<span class="line-num">410</span>     <span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;Content-Type&#39;</span>] = <span class="ruby-string">&quot;application/javascript&quot;</span>
+<span class="line-num">411</span>     <span class="ruby-constant">ExceptionPage</span>.<span class="ruby-identifier">js</span>
+<span class="line-num">412</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">413</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -74,7 +84,7 @@ Roda::RodaPlugins::ExceptionPage::RequestMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

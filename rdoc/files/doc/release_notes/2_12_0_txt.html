@@ -40,11 +40,21 @@ Last Update:
 <ul><li>
 <p>An optimized_string_matchers plugin has been added, which contains optimized matchers for single strings.  r.on_branch is an optimized version of r.on and r.is_exactly is optimized version of r.is:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:optimized_string_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_branch</span> <span class="ruby-string">&quot;x&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches /x and paths starting with /x/</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_exactly</span> <span class="ruby-string">&quot;y&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># matches /x/y</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:optimized_string_matchers</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on_branch</span> <span class="ruby-string">&quot;x&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># matches /x and paths starting with /x/</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is_exactly</span> <span class="ruby-string">&quot;y&quot;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># matches /x/y</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Both of these methods will work even if the strings have placeholders, but no captures will be yielded to the blocks.</p>
 </li><li>
-<p>The error_handler plugin now has access to the request&#39;s remaining_path when handling an error.  You can then compare the remaining_path to path_info to see how much of request was already routed, which can be useful when reporting errors.</p>
+<p>The error_handler plugin now has access to the request’s remaining_path when handling an error.  You can then compare the remaining_path to path_info to see how much of request was already routed, which can be useful when reporting errors.</p>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -68,7 +78,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

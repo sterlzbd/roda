@@ -57,7 +57,13 @@ Last Update:
 
 <p>This allows you to write code such as:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_matchers</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;track/:d&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_matchers</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;track/:d&quot;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>And have it only match routes such as /track/123, not /track/abc.</p>
 
@@ -65,25 +71,53 @@ Last Update:
 
 <p>You can add your own symbol matchers using the symbol_matcher class method:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_matchers</span>&#x000A;<span class="ruby-identifier">symbol_matcher</span> <span class="ruby-value">:slug</span>, <span class="ruby-regexp">/([\w-]+)/</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:slug</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_matchers</span>
+<span class="ruby-identifier">symbol_matcher</span> <span class="ruby-value">:slug</span>, <span class="ruby-regexp">/([\w-]+)/</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:slug</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </li><li>
 <p>A symbol_views plugin has been added, which allows match blocks to return symbols, which are interpreted as template names:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_views</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-value">:template_name</span> <span class="ruby-comment"># same as view :template_name</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:symbol_views</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-value">:template_name</span> <span class="ruby-comment"># same as view :template_name</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </li><li>
 <p>A json plugin has been added, which allows match blocks to return arrays or hashes, and uses a JSON version of them as the response body:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  {<span class="ruby-string">&#39;a&#39;</span><span class="ruby-operator">=&gt;</span>[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>]} <span class="ruby-comment"># response: {&quot;a&quot;:[1,2,3]}</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  {<span class="ruby-string">&#39;a&#39;</span><span class="ruby-operator">=&gt;</span>[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>,<span class="ruby-value">3</span>]} <span class="ruby-comment"># response: {&quot;a&quot;:[1,2,3]}</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>This also sets the Content-Type of the response to application/json.</p>
 
 <p>To convert additional object types to JSON, you can modify json_response_classes:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>&#x000A;<span class="ruby-identifier">json_response_classes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:json</span>
+<span class="ruby-identifier">json_response_classes</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Sequel</span><span class="ruby-operator">::</span><span class="ruby-constant">Model</span>
+</pre>
 </li><li>
 <p>A view_subdirs plugin has been added for setting a default subdirectory to use for views:</p>
 
-<pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;admin&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">set_view_subdir</span> <span class="ruby-string">&quot;admin&quot;</span>&#x000A;&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;index&quot;</span> <span class="ruby-comment"># uses admin/index view</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-constant">Roda</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-string">&quot;admin&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">set_view_subdir</span> <span class="ruby-string">&quot;admin&quot;</span>
+
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-identifier">view</span> <span class="ruby-string">&quot;index&quot;</span> <span class="ruby-comment"># uses admin/index view</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </li><li>
 <p>A render_each plugin has been added, for rendering the same template for multiple objects, and returning the concatenation of all of the output:</p>
 
@@ -95,7 +129,9 @@ Last Update:
 </li><li>
 <p>A content_for plugin has been added, for storing content in one template and retrieving that content in a different template (such as the layout).  To set content, you call content_for with a block:</p>
 
-<pre>&lt;% content_for :foo do %&gt;&#x000A;  content for foo&#x000A;&lt;% end %&gt;</pre>
+<pre>&lt;% content_for :foo do %&gt;
+  content for foo
+&lt;% end %&gt;</pre>
 
 <p>To retrieve content, you call content_for without a block:</p>
 
@@ -105,27 +141,49 @@ Last Update:
 </li><li>
 <p>A not_allowed plugin has been added, for automatically returning 405 Method Not Allowed responses when a route is handled for a different request method than the one used.  For this routing tree:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:not_allowed</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:not_allowed</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>If you submit a POST /foo request, it will return a 405 error instead of a 404 error.</p>
 
 <p>This also handles cases when multiple methods are supported for a single path, so for this routing tree:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">post</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>If you submit a DELETE /foo request, it will return a 405 error instead of a 404 error.</p>
 </li><li>
 <p>A head plugin has been added, automatically handling HEAD requests the same as GET requests, except returning an empty body. So for this routing tree:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:head</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:head</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>A request for HEAD /foo will return a 200 result instead of a 404 error.</p>
 </li><li>
 <p>A backtracking_array plugin has been added, which makes matching backtrack to the next entry in an array if a later matcher fails. For example, the following code does not match /foo/bar by default in Roda:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;foo/bar&#39;</span>] <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> [<span class="ruby-string">&#39;foo&#39;</span>, <span class="ruby-string">&#39;foo/bar&#39;</span>] <span class="ruby-keyword">do</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
-<p>This is because the &#39;foo&#39; entry in the array matches, so the array matches.  However, after the array is matched, the terminal matcher added by r.is fails to match.  That causes the routing method not to match the request, so the match block is not called.</p>
+<p>This is because the ‘foo’ entry in the array matches, so the array matches.  However, after the array is matched, the terminal matcher added by r.is fails to match.  That causes the routing method not to match the request, so the match block is not called.</p>
 
 <p>With the backtracking_array plugin, failures of later matchers after an array matcher backtrack so the next entry in the array is tried.</p>
 </li><li>
@@ -136,7 +194,16 @@ Last Update:
 <ul><li>
 <p>The hash_matcher class method has been added to make it easier to define custom hash matchers:</p>
 
-<pre class="ruby"><span class="ruby-identifier">hash_matcher</span>(<span class="ruby-value">:foo</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-keyword">self</span>[<span class="ruby-string">&#39;foo&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">v</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:foo</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># matches when param foo has value bar</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">hash_matcher</span>(<span class="ruby-value">:foo</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+  <span class="ruby-keyword">self</span>[<span class="ruby-string">&#39;foo&#39;</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">v</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:foo</span><span class="ruby-operator">=&gt;</span><span class="ruby-string">&#39;bar&#39;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># matches when param foo has value bar</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </li><li>
 <p>An r.root routing method has been added for handling GET requests where the current path is /.  This is basically a faster and simpler version of r.get “”, except it does not consume the / from the path.</p>
 </li><li>
@@ -146,23 +213,42 @@ Last Update:
 </li><li>
 <p>An :all hash matcher has been added, which takes an array and matches only if all of the elements match.  This is mainly designed for usage inside an array matcher, so:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> [<span class="ruby-string">&quot;foo&quot;</span>, {<span class="ruby-value">:all</span><span class="ruby-operator">=&gt;</span>[<span class="ruby-string">&quot;bar&quot;</span>, <span class="ruby-value">:id</span>]}] <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> [<span class="ruby-string">&quot;foo&quot;</span>, {<span class="ruby-value">:all</span><span class="ruby-operator">=&gt;</span>[<span class="ruby-string">&quot;bar&quot;</span>, <span class="ruby-value">:id</span>]}] <span class="ruby-keyword">do</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>will match either /foo or /bar/123, but not /bar.</p>
 </li><li>
-<p>The render plugin&#39;s view method now accepts a :content option, in which case it uses the content directly without running it through the template engine.  This is useful if you have arbitrary content you want rendered inside the layout.</p>
+<p>The render plugin’s view method now accepts a :content option, in which case it uses the content directly without running it through the template engine.  This is useful if you have arbitrary content you want rendered inside the layout.</p>
 </li><li>
 <p>The render plugin now accepts an :escape option, in which case it will automatically set the default :engine_class for erb templates to an Erubis::EscapedEruby subclass.  This changes the behavior of erb templates such that:</p>
 
-<pre>&lt;%= &#39;&lt;escaped&gt;&#39; %&gt; # &amp;lt;escaped&amp;gt;&#x000A;&lt;%== &#39;&lt;not escaped&gt;&#39; %&gt; # &lt;not escaped&gt;</pre>
+<pre>&lt;%= &#39;&lt;escaped&gt;&#39; %&gt; # &amp;lt;escaped&amp;gt;
+&lt;%== &#39;&lt;not escaped&gt;&#39; %&gt; # &lt;not escaped&gt;</pre>
 
 <p>This makes it easier to protect against XSS attacks in your templates, as long as you only use &lt;%== %&gt; for content that has already been escaped.</p>
 
-<p>Note that similar behavior is available in Erubis by default, using the :opts=&gt;{:escape_html=&gt;true} render option, but that doesn&#39;t handle postfix conditionals in &lt;%= %&gt; tags.</p>
+<p>Note that similar behavior is available in Erubis by default, using the :opts=&gt;{:escape_html=&gt;true} render option, but that doesn’t handle postfix conditionals in &lt;%= %&gt; tags.</p>
 </li><li>
 <p>The multi_route plugin now has an r.multi_route method, which will attempt to dispatch to one of the named routes based on first segment in the path.  So this routing tree:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_route</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;e&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;d&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;f&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_route</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_route</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&quot;e&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;d&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&quot;f&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_route</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>will return “e” for /a/c and “f” for /b/d.</p>
 </li><li>
@@ -192,14 +278,22 @@ Last Update:
 <ul><li>
 <p>The flash plugin now implements its own flash hash instead of using sinatra-flash.  It is now slightly faster and handles nil keys in keep and discard.</p>
 </li><li>
-<p>Roda&#39;s version is now stored in roda/version.rb so that it can be required without requiring <a href="../../../classes/Roda.html"><code>Roda</code></a> itself.</p>
+<p>Roda’s version is now stored in roda/version.rb so that it can be required without requiring <a href="../../../classes/Roda.html"><code>Roda</code></a> itself.</p>
 </li></ul>
 
 <h1 id="label-Backwards+Compatibility">Backwards Compatibility<span><a href="#label-Backwards+Compatibility">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>The multi_route plugin&#39;s route instance method has been changed to a request method.  So the new usage is:</p>
+<p>The multi_route plugin’s route instance method has been changed to a request method.  So the new usage is:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_route</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-comment"># instead of: route &quot;a&quot;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_route</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">route</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-comment"># instead of: route &quot;a&quot;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </li><li>
 <p>The session key used for the flash hash in the flash plugin is now :_flash, not :flash.</p>
 </li><li>
@@ -209,11 +303,13 @@ Last Update:
 </li><li>
 <p>The r.consume private method now takes the exact regexp to use to search the current path, it no longer enforces a preceeding slash and that the match end on a segment boundary.</p>
 </li><li>
-<p>Dynamically constructing match patterns is now a potential memory leak due to them being cached.  So you shouldn&#39;t do things like:</p>
+<p>Dynamically constructing match patterns is now a potential memory leak due to them being cached.  So you shouldn’t do things like:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;param&#39;</span>] <span class="ruby-keyword">do</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-identifier">r</span>[<span class="ruby-string">&#39;param&#39;</span>] <span class="ruby-keyword">do</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </li><li>
-<p>Many private routing methods were changed or removed, if you were using them, you&#39;ll probably need to update your code.</p>
+<p>Many private routing methods were changed or removed, if you were using them, you’ll probably need to update your code.</p>
 </li></ul>
 </div>
 <div id='context'>
@@ -225,7 +321,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -37,21 +37,35 @@ Roda::RodaPlugins::MultiRun
 <div id='description'>
 <p>The multi_run plugin provides the ability to easily dispatch to other rack applications based on the request path prefix. First, load the plugin:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:multi_run</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Then, other rack applications can register with the multi_run plugin:</p>
 
-<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ra&quot;</span>, <span class="ruby-constant">PlainRackApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ro&quot;</span>, <span class="ruby-constant">OtherRodaApp</span>&#x000A;<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;si&quot;</span>, <span class="ruby-constant">SinatraApp</span></pre>
+<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ra&quot;</span>, <span class="ruby-constant">PlainRackApp</span>
+<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;ro&quot;</span>, <span class="ruby-constant">OtherRodaApp</span>
+<span class="ruby-constant">App</span>.<span class="ruby-identifier">run</span> <span class="ruby-string">&quot;si&quot;</span>, <span class="ruby-constant">SinatraApp</span>
+</pre>
 
 <p>Inside your route block, you can call r.multi_run to dispatch to all three rack applications based on the prefix:</p>
 
-<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>This will dispatch routes starting with <code>/ra</code> to <code>PlainRackApp</code>, routes starting with <code>/ro</code> to <code>OtherRodaApp</code>, and routes starting with <code>/si</code> to SinatraApp.</p>
 
 <p>You can pass a block to <code>multi_run</code> that will be called with the prefix, before dispatching to the rack app:</p>
 
-<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># do something based on prefix before the request is passed further</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-constant">App</span>.<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">multi_run</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># do something based on prefix before the request is passed further</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>This is useful for modifying the environment before passing it to the rack app.</p>
 
@@ -94,7 +108,10 @@ Roda::RodaPlugins::MultiRun
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">54</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">55</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>
+<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">54</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:multi_run_apps</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">55</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -106,7 +123,7 @@ Roda::RodaPlugins::MultiRun
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

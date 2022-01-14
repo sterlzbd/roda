@@ -39,7 +39,9 @@ Roda::RodaPlugins::ContentFor
 
 <p>In the template in which you want to store content, call content_for with a block:</p>
 
-<pre>&lt;% content_for :foo do %&gt;&#x000A;  Some content here.&#x000A;&lt;% end %&gt;</pre>
+<pre>&lt;% content_for :foo do %&gt;
+  Some content here.
+&lt;% end %&gt;</pre>
 
 <p>or:</p>
 
@@ -55,13 +57,18 @@ Roda::RodaPlugins::ContentFor
 
 <p>Note that when storing content by calling content_for with a block and embedding template code, the return value of the block is used as the content (after being converted to a string).  This can cause issues in some cases, such as:</p>
 
-<pre>&lt;% content_for :foo do %&gt;&#x000A;  &lt;% [1,2,3].each do |i| %&gt;&#x000A;    Content &lt;%= i %&gt;&#x000A;  &lt;% end %&gt;&#x000A;&lt;% end %&gt;</pre>
+<pre>&lt;% content_for :foo do %&gt;
+  &lt;% [1,2,3].each do |i| %&gt;
+    Content &lt;%= i %&gt;
+  &lt;% end %&gt;
+&lt;% end %&gt;</pre>
 
 <p>In the above example, the return value of the block is <code>[1,2,3]</code>, as Array#each returns the receiver. If whitespace is not important, you can work around this by adding an empty line before the end of the content_for block.</p>
 
 <p>If content_for is used multiple times with the same key, by default, the last call will append previous calls. If you want to overwrite the previous content, pass the <code>append: false</code> option when loading the plugin:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_for</span>, <span class="ruby-value">append:</span> <span class="ruby-keyword">false</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:content_for</span>, <span class="ruby-value">append:</span> <span class="ruby-keyword">false</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -97,7 +104,10 @@ Roda::RodaPlugins::ContentFor
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/content_for.rb</span>&#x000A;<span class="line-num">66</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">67</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:append_content_for</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:append</span>, <span class="ruby-keyword">true</span>)&#x000A;<span class="line-num">68</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/content_for.rb</span>
+<span class="line-num">66</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>)
+<span class="line-num">67</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:append_content_for</span>] = <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:append</span>, <span class="ruby-keyword">true</span>)
+<span class="line-num">68</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-load_dependencies'>
@@ -115,7 +125,10 @@ Roda::RodaPlugins::ContentFor
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/content_for.rb</span>&#x000A;<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">61</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:capture_erb</span>&#x000A;<span class="line-num">62</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/content_for.rb</span>
+<span class="line-num">60</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">_opts</span> = <span class="ruby-constant">OPTS</span>)
+<span class="line-num">61</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:capture_erb</span>
+<span class="line-num">62</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -127,7 +140,7 @@ Roda::RodaPlugins::ContentFor
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

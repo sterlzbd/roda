@@ -41,7 +41,31 @@ Roda::RodaPlugins::Environments
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:environments</span>&#x000A;&#x000A;  <span class="ruby-identifier">environment</span>  <span class="ruby-comment"># =&gt; :development</span>&#x000A;  <span class="ruby-identifier">development?</span> <span class="ruby-comment"># =&gt; true</span>&#x000A;  <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; false</span>&#x000A;  <span class="ruby-identifier">production?</span>  <span class="ruby-comment"># =&gt; false</span>&#x000A;&#x000A;  <span class="ruby-comment"># Set the environment for the application</span>&#x000A;  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">environment</span> = <span class="ruby-value">:test</span> &#x000A;  <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; true</span>&#x000A;&#x000A;  <span class="ruby-identifier">configure</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># called, as no environments given</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">configure</span> <span class="ruby-value">:development</span>, <span class="ruby-value">:production</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># not called, as no environments match</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">configure</span> <span class="ruby-value">:test</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># called, as environment given matches current environment</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:environments</span>
+
+  <span class="ruby-identifier">environment</span>  <span class="ruby-comment"># =&gt; :development</span>
+  <span class="ruby-identifier">development?</span> <span class="ruby-comment"># =&gt; true</span>
+  <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; false</span>
+  <span class="ruby-identifier">production?</span>  <span class="ruby-comment"># =&gt; false</span>
+
+  <span class="ruby-comment"># Set the environment for the application</span>
+  <span class="ruby-keyword">self</span>.<span class="ruby-identifier">environment</span> = <span class="ruby-value">:test</span> 
+  <span class="ruby-identifier">test?</span>        <span class="ruby-comment"># =&gt; true</span>
+
+  <span class="ruby-identifier">configure</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># called, as no environments given</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">configure</span> <span class="ruby-value">:development</span>, <span class="ruby-value">:production</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># not called, as no environments match</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">configure</span> <span class="ruby-value">:test</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># called, as environment given matches current environment</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -76,7 +100,10 @@ Roda::RodaPlugins::Environments
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/environments.rb</span>&#x000A;<span class="line-num">46</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">env</span>=<span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;RACK_ENV&quot;</span>])&#x000A;<span class="line-num">47</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">environment</span> = (<span class="ruby-identifier">env</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;development&#39;</span>).<span class="ruby-identifier">to_sym</span>&#x000A;<span class="line-num">48</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/environments.rb</span>
+<span class="line-num">46</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">env</span>=<span class="ruby-constant">ENV</span>[<span class="ruby-string">&quot;RACK_ENV&quot;</span>])
+<span class="line-num">47</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">environment</span> = (<span class="ruby-identifier">env</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;development&#39;</span>).<span class="ruby-identifier">to_sym</span>
+<span class="line-num">48</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -88,7 +115,7 @@ Roda::RodaPlugins::Environments
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

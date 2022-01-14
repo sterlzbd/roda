@@ -37,11 +37,14 @@ Roda::RodaPlugins::TypecastParams
 <div id='description'>
 <p>The typecast_params plugin allows for the simple type conversion for submitted parameters.  Submitted parameters should be considered untrusted input, and in standard use with browsers, parameters are submitted as strings (or a hash/array containing strings).  In most cases it makes sense to explicitly convert the parameter to the desired type.  While this can be done via manual conversion:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">to_i</span>&#x000A;<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span></pre>
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">to_i</span>
+<span class="ruby-identifier">key</span> = <span class="ruby-keyword">nil</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">key</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
+</pre>
 
 <p>the typecast_params plugin adds a friendlier interface:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>)
+</pre>
 
 <p>As <code>typecast_params</code> is a fairly long method name, you may want to consider aliasing it to something more terse in your application, such as <code>tp</code>.</p>
 
@@ -49,45 +52,56 @@ Roda::RodaPlugins::TypecastParams
 
 <p>typecast_params offers support for default values:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">1</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">1</span>)
+</pre>
 
 <p>The default value is only used if no value has been submitted for the parameter, or if the conversion of the value results in <code>nil</code>.  Handling defaults for parameter conversion manually is more difficult, since the parameter may not be present at all, or it may be present but an empty string because the user did not enter a value on the related form.  Use of typecast_params for the conversion handles both cases.</p>
 
-<p>In many cases, parameters should be required, and if they aren&#39;t submitted, that should be considered an error.  typecast_params handles this with ! methods:</p>
+<p>In many cases, parameters should be required, and if they aren’t submitted, that should be considered an error.  typecast_params handles this with ! methods:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;key&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">key</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;key&#39;</span>)
+</pre>
 
 <p>These ! methods raise an error instead of returning <code>nil</code>, and do not allow defaults.</p>
 
 <p>To make it easy to handle cases where many parameters need the same conversion done, you can pass an array of keys to a conversion method, and it will return an array of converted values:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])</pre>
+<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])
+</pre>
 
 <p>This is equivalent to:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key1</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key1&#39;</span>)&#x000A;<span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key2&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">key1</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key1&#39;</span>)
+<span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int</span>(<span class="ruby-string">&#39;key2&#39;</span>)
+</pre>
 
 <p>The ! methods also support arrays, ensuring that all parameters have a value:</p>
 
-<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])</pre>
+<pre class="ruby"><span class="ruby-identifier">key1</span>, <span class="ruby-identifier">key2</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;key1&#39;</span>, <span class="ruby-string">&#39;key2&#39;</span>])
+</pre>
 
 <p>For handling of array parameters, where all entries in the array use the same conversion, there is an <code>array</code> method which takes the type as the first argument and the keys to convert as the second argument:</p>
 
-<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)
+</pre>
 
 <p>If you want to ensure that all entries in the array are converted successfully and that there is a value for the array itself, you can use <code>array!</code>:</p>
 
-<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>)
+</pre>
 
 <p>This will raise an exception if any of the values in the array for parameter <code>keys</code> cannot be converted to integer.</p>
 
 <p>Both <code>array</code> and <code>array!</code> support default values which are used if no value is present for the parameter:</p>
 
-<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])&#x000A;<span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])</pre>
+<pre class="ruby"><span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])
+<span class="ruby-identifier">keys</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;keys&#39;</span>, [])
+</pre>
 
 <p>You can also pass an array of keys to <code>array</code> or <code>array!</code>, if you would like to perform the same conversion on multiple arrays:</p>
 
-<pre class="ruby"><span class="ruby-identifier">foo_ids</span>, <span class="ruby-identifier">bar_ids</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, [<span class="ruby-string">&#39;foo_ids&#39;</span>, <span class="ruby-string">&#39;bar_ids&#39;</span>])</pre>
+<pre class="ruby"><span class="ruby-identifier">foo_ids</span>, <span class="ruby-identifier">bar_ids</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, [<span class="ruby-string">&#39;foo_ids&#39;</span>, <span class="ruby-string">&#39;bar_ids&#39;</span>])
+</pre>
 
 <p>The previous examples have shown use of the <code>pos_int</code> method, which uses <code>to_i</code> to convert the value to an integer, but returns nil if the resulting integer is not positive.  Unless you need to handle negative numbers, it is recommended to use <code>pos_int</code> instead of <code>int</code> as <code>int</code> will convert invalid values to 0 (since that is how <code>String#to_i</code> works).</p>
 
@@ -101,11 +115,11 @@ Roda::RodaPlugins::TypecastParams
 </td></tr><tr><td class='label'>bool </td><td>
 <p>Converts entry to boolean if in one of the recognized formats:</p>
 <table class="rdoc-list note-list"><tbody><tr><td class='label'>nil </td><td>
-<p>nil, &#39;&#39;</p>
+<p>nil, ”</p>
 </td></tr><tr><td class='label'>true </td><td>
-<p>true, 1, &#39;1&#39;, &#39;t&#39;, &#39;true&#39;, &#39;yes&#39;, &#39;y&#39;, &#39;on&#39; # case insensitive</p>
+<p>true, 1, ‘1’, ‘t’, ‘true’, ‘yes’, ‘y’, ‘on’ # case insensitive</p>
 </td></tr><tr><td class='label'>false </td><td>
-<p>false, 0, &#39;0&#39;, &#39;f&#39;, &#39;false&#39;, &#39;no&#39;, &#39;n&#39;, &#39;off&#39; # case insensitive</p>
+<p>false, 0, ‘0’, ‘f’, ‘false’, ‘no’, ‘n’, ‘off’ # case insensitive</p>
 </td></tr></tbody></table>
 
 <p>If not in one of those formats, raises an error.</p>
@@ -135,33 +149,102 @@ Roda::RodaPlugins::TypecastParams
 
 <p>Since parameter hashes can be nested, the <code>[]</code> method can be used to access nested hashes:</p>
 
-<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;&#39;1&#39;}}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span></pre>
+<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;&#39;1&#39;}}</span>
+<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span>
+</pre>
 
 <p>This works to an arbitrary depth:</p>
 
-<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span></pre>
+<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}}</span>
+<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span>
+</pre>
 
 <p>And also works with arrays at any depth, if those arrays contain hashes:</p>
 
-<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}]}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span>&#x000A;&#x000A;<span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;[&#39;1&#39;]}]}</span>&#x000A;<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; [1]</span></pre>
+<pre class="ruby"><span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;{&#39;sub_sub_key&#39;=&gt;&#39;1&#39;}}]}</span>
+<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>][<span class="ruby-string">&#39;sub_key&#39;</span>].<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;sub_sub_key&#39;</span>) <span class="ruby-comment"># =&gt; 1</span>
+
+<span class="ruby-comment"># params: {&#39;key&#39;=&gt;[{&#39;sub_key&#39;=&gt;[&#39;1&#39;]}]}</span>
+<span class="ruby-identifier">typecast_params</span>[<span class="ruby-string">&#39;key&#39;</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;sub_key&#39;</span>) <span class="ruby-comment"># =&gt; [1]</span>
+</pre>
 
 <p>To allow easier access to nested data, there is a <code>dig</code> method:</p>
 
-<pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)&#x000A;<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)
+<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)
+</pre>
 
 <p><code>dig</code> will return <code>nil</code> if any access while looking up the nested value returns <code>nil</code>. There is also a <code>dig!</code> method, which will raise an <a href="TypecastParams/Error.html"><code>Error</code></a> if <code>dig</code> would return <code>nil</code>:</p>
 
-<pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)&#x000A;<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-string">&#39;sub_key&#39;</span>)
+<span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">dig!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;key&#39;</span>, <span class="ruby-value">0</span>, <span class="ruby-string">&#39;sub_key&#39;</span>, <span class="ruby-string">&#39;sub_sub_key&#39;</span>)
+</pre>
 
 <p>Note that none of these conversion methods modify <code>request.params</code>.  They purely do the conversion and return the converted value.  However, in some cases it is useful to do all the conversion up front, and then pass a hash of converted parameters to an internal method that expects to receive values in specific types.  The <code>convert!</code> method does this, and there is also a <code>convert_each!</code> method designed for converting multiple values using the same block:</p>
 
-<pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># converted_params:</span>&#x000A;<span class="ruby-comment"># {</span>&#x000A;<span class="ruby-comment">#   &#39;page&#39; =&gt; 1,</span>&#x000A;<span class="ruby-comment">#   &#39;artist_id&#39; =&gt; 2,</span>&#x000A;<span class="ruby-comment">#   &#39;album_ids&#39; =&gt; [3, 4],</span>&#x000A;<span class="ruby-comment">#   &#39;sales&#39; =&gt; {</span>&#x000A;<span class="ruby-comment">#     &#39;num_sold&#39; =&gt; 5,</span>&#x000A;<span class="ruby-comment">#     &#39;num_shipped&#39; =&gt; 6</span>&#x000A;<span class="ruby-comment">#   },</span>&#x000A;<span class="ruby-comment">#   &#39;members&#39; =&gt; [</span>&#x000A;<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Foo&#39;, &#39;last_name&#39; =&gt; &#39;Bar&#39;},</span>&#x000A;<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Baz&#39;, &#39;last_name&#39; =&gt; &#39;Quux&#39;}</span>&#x000A;<span class="ruby-comment">#   ]</span>&#x000A;<span class="ruby-comment"># }</span></pre>
+<pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># converted_params:</span>
+<span class="ruby-comment"># {</span>
+<span class="ruby-comment">#   &#39;page&#39; =&gt; 1,</span>
+<span class="ruby-comment">#   &#39;artist_id&#39; =&gt; 2,</span>
+<span class="ruby-comment">#   &#39;album_ids&#39; =&gt; [3, 4],</span>
+<span class="ruby-comment">#   &#39;sales&#39; =&gt; {</span>
+<span class="ruby-comment">#     &#39;num_sold&#39; =&gt; 5,</span>
+<span class="ruby-comment">#     &#39;num_shipped&#39; =&gt; 6</span>
+<span class="ruby-comment">#   },</span>
+<span class="ruby-comment">#   &#39;members&#39; =&gt; [</span>
+<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Foo&#39;, &#39;last_name&#39; =&gt; &#39;Bar&#39;},</span>
+<span class="ruby-comment">#      {&#39;first_name&#39; =&gt; &#39;Baz&#39;, &#39;last_name&#39; =&gt; &#39;Quux&#39;}</span>
+<span class="ruby-comment">#   ]</span>
+<span class="ruby-comment"># }</span>
+</pre>
 
 <p><code>convert!</code> and <code>convert_each!</code> only return values you explicitly specify for conversion inside the passed block.</p>
 
 <p>You can specify the <code>:symbolize</code> option to <code>convert!</code> or <code>convert_each!</code>, which will symbolize the resulting hash keys:</p>
 
-<pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-value">symbolize:</span> <span class="ruby-keyword">true</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># converted_params:</span>&#x000A;<span class="ruby-comment"># {</span>&#x000A;<span class="ruby-comment">#   :page =&gt; 1,</span>&#x000A;<span class="ruby-comment">#   :artist_id =&gt; 2,</span>&#x000A;<span class="ruby-comment">#   :album_ids =&gt; [3, 4],</span>&#x000A;<span class="ruby-comment">#   :sales =&gt; {</span>&#x000A;<span class="ruby-comment">#     :num_sold =&gt; 5,</span>&#x000A;<span class="ruby-comment">#     :num_shipped =&gt; 6</span>&#x000A;<span class="ruby-comment">#   },</span>&#x000A;<span class="ruby-comment">#   :members =&gt; [</span>&#x000A;<span class="ruby-comment">#      {:first_name =&gt; &#39;Foo&#39;, :last_name =&gt; &#39;Bar&#39;},</span>&#x000A;<span class="ruby-comment">#      {:first_name =&gt; &#39;Baz&#39;, :last_name =&gt; &#39;Quux&#39;}</span>&#x000A;<span class="ruby-comment">#   ]</span>&#x000A;<span class="ruby-comment"># }</span></pre>
+<pre class="ruby"><span class="ruby-identifier">converted_params</span> = <span class="ruby-identifier">typecast_params</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-value">symbolize:</span> <span class="ruby-keyword">true</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">tp</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">int</span>(<span class="ruby-string">&#39;page&#39;</span>)
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">pos_int!</span>(<span class="ruby-string">&#39;artist_id&#39;</span>)
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">array!</span>(<span class="ruby-value">:pos_int</span>, <span class="ruby-string">&#39;album_ids&#39;</span>)
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;sales&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">pos_int!</span>([<span class="ruby-string">&#39;num_sold&#39;</span>, <span class="ruby-string">&#39;num_shipped&#39;</span>])
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">tp</span>.<span class="ruby-identifier">convert!</span>(<span class="ruby-string">&#39;members&#39;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">mtp</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">mtp</span>.<span class="ruby-identifier">convert_each!</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">stp</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">stp</span>.<span class="ruby-identifier">str!</span>([<span class="ruby-string">&#39;first_name&#39;</span>, <span class="ruby-string">&#39;last_name&#39;</span>])
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># converted_params:</span>
+<span class="ruby-comment"># {</span>
+<span class="ruby-comment">#   :page =&gt; 1,</span>
+<span class="ruby-comment">#   :artist_id =&gt; 2,</span>
+<span class="ruby-comment">#   :album_ids =&gt; [3, 4],</span>
+<span class="ruby-comment">#   :sales =&gt; {</span>
+<span class="ruby-comment">#     :num_sold =&gt; 5,</span>
+<span class="ruby-comment">#     :num_shipped =&gt; 6</span>
+<span class="ruby-comment">#   },</span>
+<span class="ruby-comment">#   :members =&gt; [</span>
+<span class="ruby-comment">#      {:first_name =&gt; &#39;Foo&#39;, :last_name =&gt; &#39;Bar&#39;},</span>
+<span class="ruby-comment">#      {:first_name =&gt; &#39;Baz&#39;, :last_name =&gt; &#39;Quux&#39;}</span>
+<span class="ruby-comment">#   ]</span>
+<span class="ruby-comment"># }</span>
+</pre>
 
 <p>Using the <code>:symbolize</code> option makes it simpler to transition from untrusted external data (string keys), to trusted data that can be used internally (trusted in the sense that the expected types are used).</p>
 
@@ -173,11 +256,33 @@ Roda::RodaPlugins::TypecastParams
 
 <p>When loading the typecast_params plugin, a subclass of <code>TypecastParams::Params</code> is created specific to the <a href="../../Roda.html"><code>Roda</code></a> application.  You can add support for custom types by passing a block when loading the typecast_params plugin.  This block is executed in the context of the subclass, and calling <code>handle_type</code> in the block can be used to add conversion methods. <code>handle_type</code> accepts a type name and the block used to convert the type:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:typecast_params</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">handle_type</span>(<span class="ruby-value">:album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span> = <span class="ruby-identifier">convert_pos_int</span>(<span class="ruby-identifier">val</span>)&#x000A;      <span class="ruby-constant">Album</span>[<span class="ruby-identifier">id</span>]&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:typecast_params</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">handle_type</span>(<span class="ruby-value">:album</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">id</span> = <span class="ruby-identifier">convert_pos_int</span>(<span class="ruby-identifier">val</span>)
+      <span class="ruby-constant">Album</span>[<span class="ruby-identifier">id</span>]
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>By default, the typecast_params conversion procs are passed the parameter value directly from <code>request.params</code> without modification.  In some cases, it may be beneficial to strip leading and trailing whitespace from parameter string values before processing, which you can do by passing the <code>strip: :all</code> option when loading the plugin.</p>
 
 <p>By default, the typecast_params conversion procs check that null bytes are not allowed in param string values. This check for null bytes occurs prior to any type conversion. If you would like to skip this check and allow null bytes in param string values, you can do by passing the <code>:allow_null_bytes</code> option when loading the plugin.</p>
+
+<p>You can use the :date_parse_input_handler option to specify custom handling of date parsing input.  Modern versions of Ruby and the date gem internally raise if the input to date parsing methods is too large to prevent denial of service.  If you are using an older version of Ruby, you can use this option to enforce the same check:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:typecast_params</span>, <span class="ruby-value">date_parse_input_handler:</span> <span class="ruby-identifier">proc</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">string</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-string">&quot;too big&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">bytesize</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">128</span>
+    <span class="ruby-identifier">string</span>
+  }
+</pre>
+
+<p>You can also use this option to modify the input, such as truncating it to the first 128 bytes:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:typecast_params</span>, <span class="ruby-value">date_parse_input_handler:</span> <span class="ruby-identifier">proc</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">string</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">string</span>.<span class="ruby-identifier">b</span>[<span class="ruby-value">0</span>, <span class="ruby-value">128</span>]
+  }
+</pre>
 
 <p>By design, typecast_params only deals with string keys, it is not possible to use symbol keys as arguments to the conversion methods and have them converted.</p>
 </div>
@@ -189,12 +294,19 @@ Roda::RodaPlugins::TypecastParams
 </ol>
 </div>
 <div id='context'>
+<div id='includes'>
+<h2>Included modules</h2>
+<ol>
+<li><a href="TypecastParams/DateParseInputHandler.html">DateParseInputHandler</a></li>
+</ol>
+</div>
 </div>
 <div id='class-list'>
 <h2>Classes and Modules</h2>
 <ol>
 <li><a href="TypecastParams/AllowNullByte.html">Roda::RodaPlugins::TypecastParams::AllowNullByte</a></li>
 <li><a href="TypecastParams/ClassMethods.html">Roda::RodaPlugins::TypecastParams::ClassMethods</a></li>
+<li><a href="TypecastParams/DateParseInputHandler.html">Roda::RodaPlugins::TypecastParams::DateParseInputHandler</a></li>
 <li><a href="TypecastParams/InstanceMethods.html">Roda::RodaPlugins::TypecastParams::InstanceMethods</a></li>
 <li><a href="TypecastParams/StringStripper.html">Roda::RodaPlugins::TypecastParams::StringStripper</a></li>
 <li><a href="TypecastParams/Error.html">Roda::RodaPlugins::TypecastParams::Error</a></li>
@@ -236,7 +348,25 @@ Roda::RodaPlugins::TypecastParams
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>     <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>&#x000A;<span class="line-num">1013</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">1014</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span><span class="ruby-operator">::</span><span class="ruby-constant">Params</span>)) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-value">:TypecastParams</span>)&#x000A;<span class="line-num">1015</span>   <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">class_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>&#x000A;<span class="line-num">1016</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:all</span>&#x000A;<span class="line-num">1017</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">StringStripper</span>)&#x000A;<span class="line-num">1018</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">1019</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:allow_null_bytes</span>]&#x000A;<span class="line-num">1020</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">AllowNullByte</span>)&#x000A;<span class="line-num">1021</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">1022</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>     <span class="ruby-comment"># File lib/roda/plugins/typecast_params.rb</span>
+<span class="line-num">1043</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">1044</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-value">:TypecastParams</span>, <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">RodaPlugins</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span><span class="ruby-operator">::</span><span class="ruby-constant">Params</span>)) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">const_defined?</span>(<span class="ruby-value">:TypecastParams</span>)
+<span class="line-num">1045</span>   <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">class_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">block</span>
+<span class="line-num">1046</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip</span>] <span class="ruby-operator">==</span> <span class="ruby-value">:all</span>
+<span class="line-num">1047</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">StringStripper</span>)
+<span class="line-num">1048</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">1049</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:allow_null_bytes</span>]
+<span class="line-num">1050</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:include</span>, <span class="ruby-constant">AllowNullByte</span>)
+<span class="line-num">1051</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">1052</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:date_parse_input_handler</span>]
+<span class="line-num">1053</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">TypecastParams</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword">do</span>
+<span class="line-num">1054</span>       <span class="ruby-identifier">include</span> <span class="ruby-constant">DateParseInputHandler</span>
+<span class="line-num">1055</span>       <span class="ruby-identifier">define_method</span>(<span class="ruby-value">:handle_date_parse_input</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">opts</span>[<span class="ruby-value">:date_parse_input_handler</span>])
+<span class="line-num">1056</span>       <span class="ruby-identifier">private</span> <span class="ruby-value">:handle_date_parse_input</span>
+<span class="line-num">1057</span>       <span class="ruby-keyword">alias</span> <span class="ruby-identifier">handle_date_parse_input</span> <span class="ruby-identifier">handle_date_parse_input</span>
+<span class="line-num">1058</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">1059</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">1060</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -248,7 +378,7 @@ Roda::RodaPlugins::TypecastParams
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -39,37 +39,225 @@ Roda::RodaPlugins::HashRoutes
 
 <p>For a basic replacement of the multi_route plugin, you can replace class level <code>route(&#39;segment&#39;)</code> calls with <code>hash_branch(&#39;segment&#39;)</code>:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a branch</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /b branch</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+
+  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a branch</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b branch</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>With the above routing tree, the <code>r.hash_branches</code> call in the main routing tree, will dispatch requests for the <code>/a</code> and <code>/b</code> branches of the tree to the appropriate routing blocks.</p>
 
 <p>In addition to supporting routing via the next segment, you can also support similar routing for entire remaining path using the <code>hash_path</code> class method:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a/b path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_paths</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a/b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_paths</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>With the above routing tree, the <code>r.hash_paths</code> call will dispatch requests for the <code>/a</code> and <code>/a/b</code> request paths.</p>
 
 <p>You can combine the two approaches, and use <code>r.hash_routes</code> to first try routing the full path, and then try routing the next segment:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a branch</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /b branch</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a/b path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+
+  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a branch</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b branch</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a/b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>With the above routing tree, requests for <code>/a</code> and <code>/a/b</code> will be routed to the appropriate <code>hash_path</code> block.  Other requests for the <code>/a</code> branch, and all requests for the <code>/b</code> branch will be routed to the appropriate <code>hash_branch</code> block.</p>
 
 <p>Both <code>hash_branch</code> and <code>hash_path</code> support namespaces, which allows them to be used at any level of the routing tree.  Here is an example that uses namespaces for sub-branches:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;  <span class="ruby-comment"># Only one argument used, so the namespace defaults to &#39;&#39;, and the argument</span>&#x000A;  <span class="ruby-comment"># specifies the route name</span>&#x000A;  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># uses &#39;/a&#39; as the namespace when looking up routes,</span>&#x000A;    <span class="ruby-comment"># as that part of the path has been routed now</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># Two arguments used, so first specifies the namespace and the second specifies</span>&#x000A;  <span class="ruby-comment"># the route name</span>&#x000A;  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># uses :b as the namespace when looking up routes, as that was explicitly specified</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:b</span>)&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a/b path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /a/c path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /b/b path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /b/c path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># uses &#39;&#39; as the namespace, as no part of the path has been routed yet</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+
+  <span class="ruby-comment"># Only one argument used, so the namespace defaults to &#39;&#39;, and the argument</span>
+  <span class="ruby-comment"># specifies the route name</span>
+  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&quot;a&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># uses &#39;/a&#39; as the namespace when looking up routes,</span>
+    <span class="ruby-comment"># as that part of the path has been routed now</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># Two arguments used, so first specifies the namespace and the second specifies</span>
+  <span class="ruby-comment"># the route name</span>
+  <span class="ruby-identifier">hash_branch</span>(<span class="ruby-string">&#39;&#39;</span>, <span class="ruby-string">&quot;b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># uses :b as the namespace when looking up routes, as that was explicitly specified</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:b</span>)
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a/b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-string">&quot;/a&quot;</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /a/c path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/b&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b/b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_path</span>(<span class="ruby-value">:b</span>, <span class="ruby-string">&quot;/c&quot;</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b/c path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># uses &#39;&#39; as the namespace, as no part of the path has been routed yet</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>With the above routing tree, requests for the <code>/a</code> and <code>/b</code> branches will be dispatched to the appropriate <code>hash_branch</code> block.  Those blocks will the dispatch to the <code>hash_path</code> blocks, with the <code>/a</code> branch using the implicit namespace of <code>/a</code>, and the <code>/b</code> branch using the explicit namespace of <code>:b</code>.  In general, it is best for performance to explicitly specify the namespace when calling <code>r.hash_branches</code>, <code>r.hash_paths</code>, and <code>r.hash_routes</code>.</p>
 
 <p>Because specifying routes explicitly using the <code>hash_branch</code> and <code>hash_path</code> class methods can get repetitive, the hash_routes plugin offers a <a href="HashRoutes/DSL.html"><code>DSL</code></a> for DRYing the code up.  This <a href="HashRoutes/DSL.html"><code>DSL</code></a> is used by calling the <code>hash_routes</code> class method.  Below is a translation of the previous example to using the <code>hash_routes</code> DSL:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;  <span class="ruby-comment"># No block argument is used, DSL evaluates block using instance_exec</span>&#x000A;  <span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># on method is used for routing to next segment,</span>&#x000A;    <span class="ruby-comment"># for similarity to standard Roda</span>&#x000A;    <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&#39;/a&#39;</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:b</span>)&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># Block argument is used, block is yielded DSL instance</span>&#x000A;  <span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&quot;/a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hr</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># is method is used for routing to the remaining path,</span>&#x000A;    <span class="ruby-comment"># for similarity to standard Roda</span>&#x000A;    <span class="ruby-identifier">hr</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># /a/b path</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">hr</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># /a/c path</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:b</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># /b/b path</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;      <span class="ruby-comment"># /b/c path</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># No change here, DSL only makes setup DRYer</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+
+  <span class="ruby-comment"># No block argument is used, DSL evaluates block using instance_exec</span>
+  <span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># on method is used for routing to next segment,</span>
+    <span class="ruby-comment"># for similarity to standard Roda</span>
+    <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&#39;/a&#39;</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">on</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:b</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># Block argument is used, block is yielded DSL instance</span>
+  <span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&quot;/a&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">hr</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># is method is used for routing to the remaining path,</span>
+    <span class="ruby-comment"># for similarity to standard Roda</span>
+    <span class="ruby-identifier">hr</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># /a/b path</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">hr</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># /a/c path</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:b</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># /b/b path</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-identifier">is</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment"># /b/c path</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># No change here, DSL only makes setup DRYer</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The <code>hash_routes</code> <a href="HashRoutes/DSL.html"><code>DSL</code></a> also offers some additional features to handle additional cases.  It supports verb methods, such as <code>get</code> and <code>post</code>, which operate like <code>is</code>, but are only called if the verb matches (and are not yielded the request). It supports a <code>view</code> method for routes that only render views, as well as a <code>views</code> method for setting up routes for multiple views in a single call, which is a good replacement for the <code>multi_view</code> plugin. <code>is</code>, <code>view</code>, and the verb methods can use a value of <code>true</code> for the empty remaining path (as the empty string specifies the <code>&quot;/&quot;</code> remaining path). It also supports a <code>dispatch_from</code> method, allowing you to setup dispatching to current group of routes from a higher-level namespace. The <code>hash_routes</code> class method will return the <a href="HashRoutes/DSL.html"><code>DSL</code></a> instance, so you are not limited to using it with a block.</p>
 
-<p>Here&#39;s the above example modified to use some of these features:</p>
+<p>Here’s the above example modified to use some of these features:</p>
 
-<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;&#x000A;  <span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&quot;/a&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-comment"># Dispatch requests for the /a branch from the empty (default) routing</span>&#x000A;    <span class="ruby-comment"># namespace to this namespace</span>&#x000A;    <span class="ruby-identifier">dispatch_from</span> <span class="ruby-string">&quot;a&quot;</span>&#x000A;&#x000A;    <span class="ruby-comment"># Handle GET /a path, render &quot;a&quot; template, returning 404 for non-GET requests</span>&#x000A;    <span class="ruby-identifier">view</span> <span class="ruby-keyword">true</span>, <span class="ruby-string">&quot;a&quot;</span>&#x000A;&#x000A;    <span class="ruby-comment"># Handle /a/b path, returning 404 for non-GET requests</span>&#x000A;    <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># GET /a/b path</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;&#x000A;    <span class="ruby-comment"># Handle /a/c path, returning 404 for non-POST requests</span>&#x000A;    <span class="ruby-identifier">post</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>&#x000A;      <span class="ruby-comment"># POST /a/c path</span>&#x000A;    <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">bhr</span> = <span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:b</span>)&#x000A;&#x000A;  <span class="ruby-comment"># Dispatch requests for the /b branch from the empty routing to this namespace,</span>&#x000A;  <span class="ruby-comment"># but first check routes in the :b_preauth namespace.  If there is no</span>&#x000A;  <span class="ruby-comment"># matching route in the :b_preauth namespace, call the check_authenticated!</span>&#x000A;  <span class="ruby-comment"># method before dispatching to any of the routes in this namespace</span>&#x000A;  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">dispatch_from</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:b_preauth</span>&#x000A;    <span class="ruby-identifier">check_authenticated!</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /b path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># /b/ path</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-comment"># GET /b/d path, render &#39;d2&#39; template, returning 404 for non-GET requests</span>&#x000A;  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">views</span> <span class="ruby-string">&#39;d&#39;</span>, <span class="ruby-string">&#39;d2&#39;</span>&#x000A;&#x000A;  <span class="ruby-comment"># GET /b/e path, render &#39;e&#39; template, returning 404 for non-GET requests</span>&#x000A;  <span class="ruby-comment"># GET /b/f path, render &#39;f&#39; template, returning 404 for non-GET requests</span>&#x000A;  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">views</span> <span class="ruby-node">%w&#39;e f&#39;</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">App</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+
+  <span class="ruby-identifier">hash_routes</span> <span class="ruby-string">&quot;/a&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-comment"># Dispatch requests for the /a branch from the empty (default) routing</span>
+    <span class="ruby-comment"># namespace to this namespace</span>
+    <span class="ruby-identifier">dispatch_from</span> <span class="ruby-string">&quot;a&quot;</span>
+
+    <span class="ruby-comment"># Handle GET /a path, render &quot;a&quot; template, returning 404 for non-GET requests</span>
+    <span class="ruby-identifier">view</span> <span class="ruby-keyword">true</span>, <span class="ruby-string">&quot;a&quot;</span>
+
+    <span class="ruby-comment"># Handle /a/b path, returning 404 for non-GET requests</span>
+    <span class="ruby-identifier">get</span> <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># GET /a/b path</span>
+    <span class="ruby-keyword">end</span>
+
+    <span class="ruby-comment"># Handle /a/c path, returning 404 for non-POST requests</span>
+    <span class="ruby-identifier">post</span> <span class="ruby-string">&quot;c&quot;</span> <span class="ruby-keyword">do</span>
+      <span class="ruby-comment"># POST /a/c path</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">bhr</span> = <span class="ruby-identifier">hash_routes</span>(<span class="ruby-value">:b</span>)
+
+  <span class="ruby-comment"># Dispatch requests for the /b branch from the empty routing to this namespace,</span>
+  <span class="ruby-comment"># but first check routes in the :b_preauth namespace.  If there is no</span>
+  <span class="ruby-comment"># matching route in the :b_preauth namespace, call the check_authenticated!</span>
+  <span class="ruby-comment"># method before dispatching to any of the routes in this namespace</span>
+  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">dispatch_from</span> <span class="ruby-string">&quot;&quot;</span>, <span class="ruby-string">&quot;b&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span> <span class="ruby-value">:b_preauth</span>
+    <span class="ruby-identifier">check_authenticated!</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">is</span> <span class="ruby-keyword">true</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># /b/ path</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-comment"># GET /b/d path, render &#39;d2&#39; template, returning 404 for non-GET requests</span>
+  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">views</span> <span class="ruby-string">&#39;d&#39;</span>, <span class="ruby-string">&#39;d2&#39;</span>
+
+  <span class="ruby-comment"># GET /b/e path, render &#39;e&#39; template, returning 404 for non-GET requests</span>
+  <span class="ruby-comment"># GET /b/f path, render &#39;f&#39; template, returning 404 for non-GET requests</span>
+  <span class="ruby-identifier">bhr</span>.<span class="ruby-identifier">views</span> <span class="ruby-node">%w&#39;e f&#39;</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_branches</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The <code>view</code> and <code>views</code> method depend on the render plugin being loaded, but this plugin does not load the render plugin.  You must load the render plugin separately if you want to use the <code>view</code> and <code>views</code> methods.</p>
 
@@ -117,7 +305,12 @@ Roda::RodaPlugins::HashRoutes
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>&#x000A;<span class="line-num">267</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">268</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">269</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">270</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_routes_methods</span>] <span class="ruby-operator">||=</span> {}&#x000A;<span class="line-num">271</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/hash_routes.rb</span>
+<span class="line-num">267</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">268</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_branches</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">269</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_paths</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">270</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:hash_routes_methods</span>] <span class="ruby-operator">||=</span> {}
+<span class="line-num">271</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -129,7 +322,7 @@ Roda::RodaPlugins::HashRoutes
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

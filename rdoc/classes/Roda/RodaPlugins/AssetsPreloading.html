@@ -43,11 +43,16 @@ Roda::RodaPlugins::AssetsPreloading
 
 <p>preload_assets_link_header returns a string suitable for populating the response Link header:</p>
 
-<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">headers</span>[<span class="ruby-string">&#39;Link&#39;</span>] = <span class="ruby-identifier">preload_assets_link_header</span>(<span class="ruby-value">:css</span>)&#x000A;<span class="ruby-comment"># Link header will now contain something like:</span>&#x000A;<span class="ruby-comment"># &lt;/assets/app.css&gt;;rel=&quot;preload&quot;;as=&quot;style&quot;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">headers</span>[<span class="ruby-string">&#39;Link&#39;</span>] = <span class="ruby-identifier">preload_assets_link_header</span>(<span class="ruby-value">:css</span>)
+<span class="ruby-comment"># Link header will now contain something like:</span>
+<span class="ruby-comment"># &lt;/assets/app.css&gt;;rel=&quot;preload&quot;;as=&quot;style&quot;</span>
+</pre>
 
 <p>preload_assets_link_tags returns a string to drop into your templates containing link tags:</p>
 
-<pre class="ruby"><span class="ruby-identifier">preload_assets_link_tags</span>(<span class="ruby-value">:css</span>)&#x000A;<span class="ruby-comment"># returns &lt;link href=&quot;/assets/app.css&quot; rel=&quot;preload&quot; as=&quot;style&quot;&gt;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">preload_assets_link_tags</span>(<span class="ruby-value">:css</span>)
+<span class="ruby-comment"># returns &lt;link href=&quot;/assets/app.css&quot; rel=&quot;preload&quot; as=&quot;style&quot;&gt;</span>
+</pre>
 
 <p>Note that these link tags are different to the usual asset declarations in markup; this will only instruct a compatible browser to fetch the file and cache it for later; the browser will not parse the asset until it encounters a traditional link or script tag.</p>
 
@@ -55,7 +60,12 @@ Roda::RodaPlugins::AssetsPreloading
 
 <p>Both functions can be passed any combination of asset types or asset groups, as multiple arguments:</p>
 
-<pre class="ruby"><span class="ruby-comment"># generate tags for css assets and the app js asset group</span>&#x000A;<span class="ruby-identifier">preload_assets_link_tags</span>(<span class="ruby-value">:css</span>, [<span class="ruby-value">:js</span>, <span class="ruby-value">:app</span>], [<span class="ruby-value">:js</span>, <span class="ruby-value">:bar</span>])&#x000A;&#x000A;<span class="ruby-comment"># generate Link header for css assets and js asset groups app and bar</span>&#x000A;<span class="ruby-identifier">preload_assets_link_header</span>(<span class="ruby-value">:css</span>, [<span class="ruby-value">:js</span>, <span class="ruby-value">:app</span>])</pre>
+<pre class="ruby"><span class="ruby-comment"># generate tags for css assets and the app js asset group</span>
+<span class="ruby-identifier">preload_assets_link_tags</span>(<span class="ruby-value">:css</span>, [<span class="ruby-value">:js</span>, <span class="ruby-value">:app</span>], [<span class="ruby-value">:js</span>, <span class="ruby-value">:bar</span>])
+
+<span class="ruby-comment"># generate Link header for css assets and js asset groups app and bar</span>
+<span class="ruby-identifier">preload_assets_link_header</span>(<span class="ruby-value">:css</span>, [<span class="ruby-value">:js</span>, <span class="ruby-value">:app</span>])
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -100,14 +110,17 @@ Roda::RodaPlugins::AssetsPreloading
 </div>
 <div class='description'>
 
-<p>Depend on the assets plugin, as we&#39;ll be calling some functions in it.</p>
+<p>Depend on the assets plugin, as we’ll be calling some functions in it.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/assets_preloading.rb</span>&#x000A;<span class="line-num">54</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">55</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>&#x000A;<span class="line-num">56</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/assets_preloading.rb</span>
+<span class="line-num">54</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">55</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>
+<span class="line-num">56</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -119,7 +132,7 @@ Roda::RodaPlugins::AssetsPreloading
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

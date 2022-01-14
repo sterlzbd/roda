@@ -35,9 +35,23 @@ Roda::RodaPlugins::R
 <div id='content'>
 <div id='text'>
 <div id='description'>
-<p>The r plugin adds an <code>r</code> instance method that will return the request. This allows you to use common <a href="../../Roda.html"><code>Roda</code></a> idioms such as <code>r.halt</code> and <code>r.redirect</code> even when <code>r</code> isn&#39;t a local variable in scope. Example:</p>
+<p>The r plugin adds an <code>r</code> instance method that will return the request. This allows you to use common <a href="../../Roda.html"><code>Roda</code></a> idioms such as <code>r.halt</code> and <code>r.redirect</code> even when <code>r</code> isn’t a local variable in scope. Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:r</span>&#x000A;&#x000A;<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">foo</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/bar&quot;</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-identifier">foo</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>&#x000A;    <span class="ruby-string">&quot;bar&quot;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:r</span>
+
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">foo</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span> <span class="ruby-string">&quot;/bar&quot;</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;foo&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-identifier">foo</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&quot;bar&quot;</span> <span class="ruby-keyword">do</span>
+    <span class="ruby-string">&quot;bar&quot;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='context'>
 </div>
@@ -56,7 +70,7 @@ Roda::RodaPlugins::R
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

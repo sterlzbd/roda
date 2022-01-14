@@ -57,14 +57,25 @@ Roda::RodaPlugins::PrecompileTemplates::ClassMethods
 </div>
 <div class='description'>
 
-<p>Freeze the template caches.  Should be called after precompiling all templates during application startup, if you don&#39;t want to allow templates to be cached at runtime. In addition to ensuring that no templates are compiled at runtime, this also speeds up rendering by freezing the template caches, so that a mutex is not needed to access them.</p>
+<p>Freeze the template caches.  Should be called after precompiling all templates during application startup, if you don’t want to allow templates to be cached at runtime. In addition to ensuring that no templates are compiled at runtime, this also speeds up rendering by freezing the template caches, so that a mutex is not needed to access them.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-freeze_template_caches-21-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-freeze_template_caches-21-source'>   <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>&#x000A;<span class="line-num">55</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze_template_caches!</span>&#x000A;<span class="line-num">56</span>   <span class="ruby-identifier">_freeze_layout_method</span>&#x000A;<span class="line-num">57</span> &#x000A;<span class="line-num">58</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>] = <span class="ruby-identifier">render_opts</span>.<span class="ruby-identifier">merge</span>(&#x000A;<span class="line-num">59</span>     <span class="ruby-value">:cache</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">render_opts</span>[<span class="ruby-value">:cache</span>].<span class="ruby-identifier">freeze</span>,&#x000A;<span class="line-num">60</span>     <span class="ruby-value">:template_method_cache</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">render_opts</span>[<span class="ruby-value">:template_method_cache</span>].<span class="ruby-identifier">freeze</span>,&#x000A;<span class="line-num">61</span>   ).<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">62</span>   <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">63</span> &#x000A;<span class="line-num">64</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">65</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-freeze_template_caches-21-source'>   <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>
+<span class="line-num">55</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">freeze_template_caches!</span>
+<span class="line-num">56</span>   <span class="ruby-identifier">_freeze_layout_method</span>
+<span class="line-num">57</span> 
+<span class="line-num">58</span>   <span class="ruby-identifier">opts</span>[<span class="ruby-value">:render</span>] = <span class="ruby-identifier">render_opts</span>.<span class="ruby-identifier">merge</span>(
+<span class="line-num">59</span>     <span class="ruby-value">:cache</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">render_opts</span>[<span class="ruby-value">:cache</span>].<span class="ruby-identifier">freeze</span>,
+<span class="line-num">60</span>     <span class="ruby-value">:template_method_cache</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">render_opts</span>[<span class="ruby-value">:template_method_cache</span>].<span class="ruby-identifier">freeze</span>,
+<span class="line-num">61</span>   ).<span class="ruby-identifier">freeze</span>
+<span class="line-num">62</span>   <span class="ruby-keyword">self</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaCompiledTemplates</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">63</span> 
+<span class="line-num">64</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">65</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-precompile_templates'>
@@ -75,30 +86,65 @@ Roda::RodaPlugins::PrecompileTemplates::ClassMethods
 </div>
 <div class='description'>
 
-<p>Precompile the templates using the given options.  Note that this doesn&#39;t handle optimized template methods supported in newer versions of <a href="../../../Roda.html"><code>Roda</code></a>, but there are still cases where makes sense to use it.</p>
+<p>Precompile the templates using the given options.  Note that this doesn’t handle optimized template methods supported in newer versions of <a href="../../../Roda.html"><code>Roda</code></a>, but there are still cases where makes sense to use it.</p>
 
 <p>You can call <code>precompile_templates</code> with the pattern of templates you would like to precompile:</p>
 
-<pre class="ruby"><span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/**/*.erb&quot;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&quot;views/**/*.erb&quot;</span>
+</pre>
 
 <p>That will precompile all erb template files in the views directory or any subdirectory.</p>
 
 <p>If the templates use local variables, you need to specify which local variables to precompile, which should be an array of symbols:</p>
 
-<pre class="ruby"><span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&#39;views/users/_*.erb&#39;</span>, <span class="ruby-value">locals:</span> [<span class="ruby-value">:user</span>]</pre>
+<pre class="ruby"><span class="ruby-identifier">precompile_templates</span> <span class="ruby-string">&#39;views/users/_*.erb&#39;</span>, <span class="ruby-value">locals:</span> [<span class="ruby-value">:user</span>]
+</pre>
 
 <p>You can specify other render options when calling <code>precompile_templates</code>, including <code>:cache_key</code>, <code>:template_class</code>, and <code>:template_opts</code>.  If you are passing any of those options to render/view for the template, you should pass the same options when precompiling the template.</p>
 
 <p>To compile inline templates, just pass a single hash containing an :inline to <code>precompile_templates</code>:</p>
 
-<pre class="ruby"><span class="ruby-identifier">precompile_templates</span> <span class="ruby-value">inline:</span> <span class="ruby-identifier">some_template_string</span></pre>
+<pre class="ruby"><span class="ruby-identifier">precompile_templates</span> <span class="ruby-value">inline:</span> <span class="ruby-identifier">some_template_string</span>
+</pre>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-precompile_templates-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-precompile_templates-source'>    <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>&#x000A;<span class="line-num"> 93</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">precompile_templates</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num"> 94</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;<span class="line-num"> 95</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num"> 96</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num"> 97</span> &#x000A;<span class="line-num"> 98</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:locals</span>]&#x000A;<span class="line-num"> 99</span>     <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">sort!</span>&#x000A;<span class="line-num">100</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">101</span>     <span class="ruby-identifier">locals</span> = <span class="ruby-constant">EMPTY_ARRAY</span>&#x000A;<span class="line-num">102</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">103</span> &#x000A;<span class="line-num">104</span>   <span class="ruby-identifier">compile_opts</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)&#x000A;<span class="line-num">105</span>     [<span class="ruby-identifier">opts</span>]&#x000A;<span class="line-num">106</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">107</span>     <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">pattern</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-value">:path</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">file</span>, <span class="ruby-keyword">nil</span>))}&#x000A;<span class="line-num">108</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">109</span> &#x000A;<span class="line-num">110</span>   <span class="ruby-identifier">instance</span> = <span class="ruby-identifier">allocate</span>&#x000A;<span class="line-num">111</span>   <span class="ruby-identifier">compile_opts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">compile_opt</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">112</span>     <span class="ruby-identifier">template</span> = <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:retrieve_template</span>, <span class="ruby-identifier">compile_opt</span>)&#x000A;<span class="line-num">113</span>     <span class="ruby-keyword">begin</span>&#x000A;<span class="line-num">114</span>       <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-keyword">self</span>)&#x000A;<span class="line-num">115</span>     <span class="ruby-keyword">rescue</span> <span class="ruby-constant">NotImplementedError</span>&#x000A;<span class="line-num">116</span>       <span class="ruby-comment"># When freezing template caches, you may want to precompile a template for a</span>&#x000A;<span class="line-num">117</span>       <span class="ruby-comment"># template type that doesn&#39;t support template precompilation, just to populate</span>&#x000A;<span class="line-num">118</span>       <span class="ruby-comment"># the cache.  Tilt rescues NotImplementedError in this case, which we can ignore.</span>&#x000A;<span class="line-num">119</span>       <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">120</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">121</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">122</span> &#x000A;<span class="line-num">123</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">124</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-precompile_templates-source'>    <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>
+<span class="line-num"> 93</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">precompile_templates</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num"> 94</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+<span class="line-num"> 95</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num"> 96</span>   <span class="ruby-keyword">end</span>
+<span class="line-num"> 97</span> 
+<span class="line-num"> 98</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:locals</span>]
+<span class="line-num"> 99</span>     <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">sort!</span>
+<span class="line-num">100</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">101</span>     <span class="ruby-identifier">locals</span> = <span class="ruby-constant">EMPTY_ARRAY</span>
+<span class="line-num">102</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">103</span> 
+<span class="line-num">104</span>   <span class="ruby-identifier">compile_opts</span> = <span class="ruby-keyword">if</span> <span class="ruby-identifier">pattern</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+<span class="line-num">105</span>     [<span class="ruby-identifier">opts</span>]
+<span class="line-num">106</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">107</span>     <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">pattern</span>].<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-value">:path</span><span class="ruby-operator">=&gt;</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">file</span>, <span class="ruby-keyword">nil</span>))}
+<span class="line-num">108</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">109</span> 
+<span class="line-num">110</span>   <span class="ruby-identifier">instance</span> = <span class="ruby-identifier">allocate</span>
+<span class="line-num">111</span>   <span class="ruby-identifier">compile_opts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">compile_opt</span><span class="ruby-operator">|</span>
+<span class="line-num">112</span>     <span class="ruby-identifier">template</span> = <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:retrieve_template</span>, <span class="ruby-identifier">compile_opt</span>)
+<span class="line-num">113</span>     <span class="ruby-keyword">begin</span>
+<span class="line-num">114</span>       <span class="ruby-constant">Render</span>.<span class="ruby-identifier">tilt_template_compiled_method</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">locals</span>, <span class="ruby-keyword">self</span>)
+<span class="line-num">115</span>     <span class="ruby-keyword">rescue</span> <span class="ruby-constant">NotImplementedError</span>
+<span class="line-num">116</span>       <span class="ruby-comment"># When freezing template caches, you may want to precompile a template for a</span>
+<span class="line-num">117</span>       <span class="ruby-comment"># template type that doesn&#39;t support template precompilation, just to populate</span>
+<span class="line-num">118</span>       <span class="ruby-comment"># the cache.  Tilt rescues NotImplementedError in this case, which we can ignore.</span>
+<span class="line-num">119</span>       <span class="ruby-keyword">nil</span>
+<span class="line-num">120</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">121</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">122</span> 
+<span class="line-num">123</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">124</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-precompile_views'>
@@ -116,7 +162,31 @@ Roda::RodaPlugins::PrecompileTemplates::ClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-precompile_views-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-precompile_views-source'>    <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>&#x000A;<span class="line-num">127</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">precompile_views</span>(<span class="ruby-identifier">views</span>, <span class="ruby-identifier">locals</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)&#x000A;<span class="line-num">128</span>   <span class="ruby-identifier">instance</span> = <span class="ruby-identifier">allocate</span>&#x000A;<span class="line-num">129</span>   <span class="ruby-identifier">views</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">views</span>)&#x000A;<span class="line-num">130</span> &#x000A;<span class="line-num">131</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">empty?</span>&#x000A;<span class="line-num">132</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>&#x000A;<span class="line-num">133</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">134</span>     <span class="ruby-identifier">locals_hash</span> = {}&#x000A;<span class="line-num">135</span>     <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">locals_hash</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-keyword">nil</span>}&#x000A;<span class="line-num">136</span>     <span class="ruby-identifier">opts</span> = {<span class="ruby-value">:locals</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">locals_hash</span>}&#x000A;<span class="line-num">137</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">138</span> &#x000A;<span class="line-num">139</span>   <span class="ruby-identifier">views</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">view</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">140</span>     <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:retrieve_template</span>, <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:render_template_opts</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">opts</span>))&#x000A;<span class="line-num">141</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">142</span> &#x000A;<span class="line-num">143</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals_hash</span>&#x000A;<span class="line-num">144</span>     <span class="ruby-identifier">views</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">view</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">145</span>       <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:_optimized_render_method_for_locals</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">locals_hash</span>)&#x000A;<span class="line-num">146</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">147</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">148</span> &#x000A;<span class="line-num">149</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">150</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-precompile_views-source'>    <span class="ruby-comment"># File lib/roda/plugins/precompile_templates.rb</span>
+<span class="line-num">127</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">precompile_views</span>(<span class="ruby-identifier">views</span>, <span class="ruby-identifier">locals</span>=<span class="ruby-constant">EMPTY_ARRAY</span>)
+<span class="line-num">128</span>   <span class="ruby-identifier">instance</span> = <span class="ruby-identifier">allocate</span>
+<span class="line-num">129</span>   <span class="ruby-identifier">views</span> = <span class="ruby-constant">Array</span>(<span class="ruby-identifier">views</span>)
+<span class="line-num">130</span> 
+<span class="line-num">131</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">empty?</span>
+<span class="line-num">132</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-constant">OPTS</span>
+<span class="line-num">133</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">134</span>     <span class="ruby-identifier">locals_hash</span> = {}
+<span class="line-num">135</span>     <span class="ruby-identifier">locals</span>.<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">locals_hash</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-keyword">nil</span>}
+<span class="line-num">136</span>     <span class="ruby-identifier">opts</span> = {<span class="ruby-value">:locals</span><span class="ruby-operator">=&gt;</span><span class="ruby-identifier">locals_hash</span>}
+<span class="line-num">137</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">138</span> 
+<span class="line-num">139</span>   <span class="ruby-identifier">views</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">view</span><span class="ruby-operator">|</span>
+<span class="line-num">140</span>     <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:retrieve_template</span>, <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:render_template_opts</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">opts</span>))
+<span class="line-num">141</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">142</span> 
+<span class="line-num">143</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">locals_hash</span>
+<span class="line-num">144</span>     <span class="ruby-identifier">views</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">view</span><span class="ruby-operator">|</span>
+<span class="line-num">145</span>       <span class="ruby-identifier">instance</span>.<span class="ruby-identifier">send</span>(<span class="ruby-value">:_optimized_render_method_for_locals</span>, <span class="ruby-identifier">view</span>, <span class="ruby-identifier">locals_hash</span>)
+<span class="line-num">146</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">147</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">148</span> 
+<span class="line-num">149</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">150</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -128,7 +198,7 @@ Roda::RodaPlugins::PrecompileTemplates::ClassMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

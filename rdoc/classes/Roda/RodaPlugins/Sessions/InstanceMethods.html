@@ -62,7 +62,13 @@ Roda::RodaPlugins::Sessions::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-clear_session-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-clear_session-source'>    <span class="ruby-comment"># File lib/roda/plugins/sessions.rb</span>&#x000A;<span class="line-num">211</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">clear_session</span>&#x000A;<span class="line-num">212</span>   <span class="ruby-identifier">session</span>.<span class="ruby-identifier">clear</span>&#x000A;<span class="line-num">213</span>   <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_CREATED_AT</span>)&#x000A;<span class="line-num">214</span>   <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_UPDATED_AT</span>)&#x000A;<span class="line-num">215</span>   <span class="ruby-keyword">nil</span>&#x000A;<span class="line-num">216</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-clear_session-source'>    <span class="ruby-comment"># File lib/roda/plugins/sessions.rb</span>
+<span class="line-num">211</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">clear_session</span>
+<span class="line-num">212</span>   <span class="ruby-identifier">session</span>.<span class="ruby-identifier">clear</span>
+<span class="line-num">213</span>   <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_CREATED_AT</span>)
+<span class="line-num">214</span>   <span class="ruby-identifier">env</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-constant">SESSION_UPDATED_AT</span>)
+<span class="line-num">215</span>   <span class="ruby-keyword">nil</span>
+<span class="line-num">216</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -74,7 +80,7 @@ Roda::RodaPlugins::Sessions::InstanceMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

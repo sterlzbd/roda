@@ -62,7 +62,13 @@ Roda::RodaPlugins::MultiRun::RequestMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-multi_run-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-multi_run-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>&#x000A;<span class="line-num"> 99</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_run</span>&#x000A;<span class="line-num">100</span>   <span class="ruby-identifier">on</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">multi_run_regexp</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>&#x000A;<span class="line-num">101</span>     <span class="ruby-keyword">yield</span> <span class="ruby-identifier">prefix</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-keyword">yield</span>)&#x000A;<span class="line-num">102</span>     <span class="ruby-identifier">run</span> <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">multi_run_apps</span>[<span class="ruby-identifier">prefix</span>]&#x000A;<span class="line-num">103</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">104</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-multi_run-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_run.rb</span>
+<span class="line-num"> 99</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">multi_run</span>
+<span class="line-num">100</span>   <span class="ruby-identifier">on</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">multi_run_regexp</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">prefix</span><span class="ruby-operator">|</span>
+<span class="line-num">101</span>     <span class="ruby-keyword">yield</span> <span class="ruby-identifier">prefix</span> <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-keyword">yield</span>)
+<span class="line-num">102</span>     <span class="ruby-identifier">run</span> <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">multi_run_apps</span>[<span class="ruby-identifier">prefix</span>]
+<span class="line-num">103</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">104</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -74,7 +80,7 @@ Roda::RodaPlugins::MultiRun::RequestMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -48,19 +48,29 @@ Last Update:
 
 <p>For a small application, the following directory layout is recommended:</p>
 
-<pre>Rakefile&#x000A;app_name.rb&#x000A;assets/&#x000A;config.ru&#x000A;db.rb&#x000A;migrate/&#x000A;models.rb&#x000A;models/&#x000A;public/&#x000A;spec/&#x000A;views/</pre>
+<pre>Rakefile
+app_name.rb
+assets/
+config.ru
+db.rb
+migrate/
+models.rb
+models/
+public/
+spec/
+views/</pre>
 
 <p><code>app_name.rb</code> should contain the <a href="../../classes/Roda.html"><code>Roda</code></a> application, and should reflect the name of your application. So, if your application is named <code>FooBar</code>, you should use <code>foo_bar.rb</code>.</p>
 
 <p><code>config.ru</code> should contain the code the webserver uses to determine which application to run.</p>
 
-<p><code>views/</code> should contain your template files.  This assumes you are using the <code>render</code> plugin and server-side rendering.  If you are creating a single page application and just serving JSON, then you won&#39;t need a <code>views</code> directory.  For small applications, all view files should be in the <code>views</code> directory.</p>
+<p><code>views/</code> should contain your template files.  This assumes you are using the <code>render</code> plugin and server-side rendering.  If you are creating a single page application and just serving JSON, then you won’t need a <code>views</code> directory.  For small applications, all view files should be in the <code>views</code> directory.</p>
 
-<p><code>public/</code> should contain any static files that should be served directly by the webserver. Again, for pure JSON applications, you won&#39;t need a <code>public</code> directory.</p>
+<p><code>public/</code> should contain any static files that should be served directly by the webserver. Again, for pure JSON applications, you won’t need a <code>public</code> directory.</p>
 
-<p><code>assets/</code> should contain the source files for your CSS and javascript assets.  If you are not using the <code>assets</code> plugin, you won&#39;t need an <code>assets</code> directory.</p>
+<p><code>assets/</code> should contain the source files for your CSS and javascript assets.  If you are not using the <code>assets</code> plugin, you won’t need an <code>assets</code> directory.</p>
 
-<p><code>db.rb</code> should contain the minimum code to setup a database connection, without loading any of the applications models.  This can be required in cases where you don&#39;t want the models loaded, such as when running migrations. This file should be required by <code>models.rb</code>.</p>
+<p><code>db.rb</code> should contain the minimum code to setup a database connection, without loading any of the applications models.  This can be required in cases where you don’t want the models loaded, such as when running migrations. This file should be required by <code>models.rb</code>.</p>
 
 <p><code>models.rb</code> should contain all code related to your ORM.  This file should be required by <code>app_name.rb</code>.  This keeps your model code separate from your web code, making it easier to use outside of your web code. It allows you to get an IRB shell for accessing your models via <code>irb -r ./models</code>, without loading the <a href="../../classes/Roda.html"><code>Roda</code></a> application.</p>
 
@@ -68,7 +78,7 @@ Last Update:
 
 <p><code>migrate/</code> should create your database migration files, if you are using an ORM that uses migrations.</p>
 
-<p><code>spec/</code> (or <code>test/</code> should contain your specifications/tests.  For a small application, it&#39;s recommended to a have a single file for your model tests, and a single file for your web/integration tests.</p>
+<p><code>spec/</code> (or <code>test/</code> should contain your specifications/tests.  For a small application, it’s recommended to a have a single file for your model tests, and a single file for your web/integration tests.</p>
 
 <p><code>Rakefile</code> should contain the rake tasks for the application.  The convention is that the default rake task will run all specs/tests related to the application.  If you are using the <code>assets</code> plugin, you should have an <code>assets:precompile</code> task for precompiling assets.</p>
 
@@ -76,7 +86,23 @@ Last Update:
 
 <p>Large applications generally need more structure:</p>
 
-<pre>Rakefile&#x000A;app_name.rb&#x000A;assets/&#x000A;helpers/&#x000A;migrate/&#x000A;models.rb&#x000A;models/&#x000A;public/&#x000A;routes/&#x000A; prefix1.rb&#x000A; prefix2.rb&#x000A;spec/&#x000A; models/&#x000A; web/&#x000A;views/&#x000A; prefix1/&#x000A; prefix2/</pre>
+<pre>Rakefile
+app_name.rb
+assets/
+helpers/
+migrate/
+models.rb
+models/
+public/
+routes/
+ prefix1.rb
+ prefix2.rb
+spec/
+ models/
+ web/
+views/
+ prefix1/
+ prefix2/</pre>
 
 <p>For larger apps, the <code>Rakefile</code>, <code>assets/</code>, <code>migrate</code>, <code>models.rb</code>, <code>models/</code>, <code>public/</code>, remain the same.</p>
 
@@ -84,13 +110,13 @@ Last Update:
 
 <p>For specs/tests, you should have <code>spec/models/</code> and <code>spec/web/</code>, with one file per model in <code>spec/models/</code> and one file per prefix in <code>spec/web/</code>. Substitute <code>spec</code> with <code>test</code> if that is what you are using as the name of the directory.</p>
 
-<p>You should have a separate view subdirectory per prefix. If you are using <code>hash_routes</code> and <code>view_options</code> plugins, use <code>set_view_subdir</code> in your routing files to specify the subdirectory to use, so it doesn&#39;t need to be specified on every call to view.</p>
+<p>You should have a separate view subdirectory per prefix. If you are using <code>hash_routes</code> and <code>view_options</code> plugins, use <code>set_view_subdir</code> in your routing files to specify the subdirectory to use, so it doesn’t need to be specified on every call to view.</p>
 
 <p><code>helpers/</code> should be used to store helper methods for your application, that you call in your routing files and views.  In a small application, these methods should just be specified in <code>app_name.rb</code></p>
 
 <h3 id="label-Really+Large+Applications">Really Large Applications<span><a href="#label-Really+Large+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
-<p>For very large applications, it&#39;s expected that there will be deviations from these conventions. However, it is recommended to use the <code>hash_routes</code> or <code>multi_run</code> plugins to organize your application, and have subdirectories in the <code>routes/</code> directory, and nested subdirectories in the <code>views/</code> directory.</p>
+<p>For very large applications, it’s expected that there will be deviations from these conventions. However, it is recommended to use the <code>hash_routes</code> or <code>multi_run</code> plugins to organize your application, and have subdirectories in the <code>routes/</code> directory, and nested subdirectories in the <code>views/</code> directory.</p>
 
 <h2 id="label-Roda+Application+File+Layout"><a href="../../classes/Roda.html"><code>Roda</code></a> Application File Layout<span><a href="#label-Roda+Application+File+Layout">&para;</a> <a href="#top">&uarr;</a></span></h2>
 
@@ -98,17 +124,56 @@ Last Update:
 
 <p>For a small application, the convention in <a href="../../classes/Roda.html"><code>Roda</code></a> is to layout your <a href="../../classes/Roda.html"><code>Roda</code></a> application file (<code>app_name.rb</code>) like this:</p>
 
-<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;roda&#39;</span>&#x000A;<span class="ruby-identifier">require_relative</span> <span class="ruby-string">&#39;models&#39;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">AppName</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-constant">SOME_CONSTANT</span> = <span class="ruby-value">1</span>&#x000A;&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">SomeMiddleware</span>&#x000A;&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-value">escape:</span> <span class="ruby-keyword">true</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># ...</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">view_method</span>&#x000A;    <span class="ruby-string">&#39;foo&#39;</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;roda&#39;</span>
+<span class="ruby-identifier">require_relative</span> <span class="ruby-string">&#39;models&#39;</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">AppName</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-constant">SOME_CONSTANT</span> = <span class="ruby-value">1</span>
+
+  <span class="ruby-identifier">use</span> <span class="ruby-constant">SomeMiddleware</span>
+
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-value">escape:</span> <span class="ruby-keyword">true</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># ...</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">view_method</span>
+    <span class="ruby-string">&#39;foo&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>You should first require <code>roda</code> and <code>./models</code>, followed by any other libraries needed by the application.</p>
 
-<p>You should subclass <a href="../../classes/Roda.html"><code>Roda</code></a> and make the application&#39;s name the name of the <a href="../../classes/Roda.html"><code>Roda</code></a> subclass. Inside the subclass, you first define the constants used by the application.  Then you add any middleware used by the application, followed by loading any plugins used by the application. Then you add the route block for the application.  After the route block, define the instance methods used in your route block or views.</p>
+<p>You should subclass <a href="../../classes/Roda.html"><code>Roda</code></a> and make the application’s name the name of the <a href="../../classes/Roda.html"><code>Roda</code></a> subclass. Inside the subclass, you first define the constants used by the application.  Then you add any middleware used by the application, followed by loading any plugins used by the application. Then you add the route block for the application.  After the route block, define the instance methods used in your route block or views.</p>
 
 <h3 id="label-Large+Applications">Large Applications<span><a href="#label-Large+Applications">&para;</a> <a href="#top">&uarr;</a></span></h3>
 
 <p>For larger applications, there are some slight changes to the <a href="../../classes/Roda.html"><code>Roda</code></a> application file layout:</p>
 
-<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;roda&#39;</span>&#x000A;<span class="ruby-identifier">require_relative</span> <span class="ruby-string">&#39;models&#39;</span>&#x000A;&#x000A;<span class="ruby-keyword">class</span> <span class="ruby-constant">AppName</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>&#x000A;  <span class="ruby-constant">SOME_CONSTANT</span> = <span class="ruby-value">1</span>&#x000A;&#x000A;  <span class="ruby-identifier">use</span> <span class="ruby-constant">SomeMiddleware</span>&#x000A;&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-value">escape:</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">layout:</span> <span class="ruby-string">&#39;./layout&#39;</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:view_options</span>&#x000A;  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>&#x000A;  <span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;routes/*.rb&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require_relative</span> <span class="ruby-identifier">f</span>}&#x000A;&#x000A;  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;&#x000A;  <span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;helpers/*.rb&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require_relative</span> <span class="ruby-identifier">f</span>}&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">require</span> <span class="ruby-string">&#39;roda&#39;</span>
+<span class="ruby-identifier">require_relative</span> <span class="ruby-string">&#39;models&#39;</span>
+
+<span class="ruby-keyword">class</span> <span class="ruby-constant">AppName</span> <span class="ruby-operator">&lt;</span> <span class="ruby-constant">Roda</span>
+  <span class="ruby-constant">SOME_CONSTANT</span> = <span class="ruby-value">1</span>
+
+  <span class="ruby-identifier">use</span> <span class="ruby-constant">SomeMiddleware</span>
+
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>, <span class="ruby-value">escape:</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">layout:</span> <span class="ruby-string">&#39;./layout&#39;</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:assets</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:view_options</span>
+  <span class="ruby-identifier">plugin</span> <span class="ruby-value">:hash_routes</span>
+  <span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;routes/*.rb&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require_relative</span> <span class="ruby-identifier">f</span>}
+
+  <span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">hash_routes</span>
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-constant">Dir</span>[<span class="ruby-string">&#39;helpers/*.rb&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span> <span class="ruby-identifier">require_relative</span> <span class="ruby-identifier">f</span>}
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>After loading the <code>view_options</code> and <code>hash_routes</code> plugin, you require all of your routing files.  Inside your route block, instead of defining your routes, you just call <code>r.hash_routes</code>, which will dispatch to all of your routing files.  After your route block, you require all of your helper files containing the instance methods for your route block or views, instead of defining the methods directly.</p>
 </div>
@@ -121,7 +186,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

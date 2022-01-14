@@ -37,7 +37,15 @@ Roda::RodaPlugins::UnescapePath
 <div id='description'>
 <p>The unescape_path plugin decodes a URL-encoded path before routing.  This fixes routing when the slashes are URL-encoded as %2f and returns decoded parameters when matched by symbols or regexps.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:unescape_path</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-comment"># Assume /b/a URL encoded at %2f%62%2f%61</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:x</span>, <span class="ruby-regexp">/(.)/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>&#x000A;    <span class="ruby-comment"># x =&gt; [&#39;b&#39;, &#39;a&#39;]</span>&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:unescape_path</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-comment"># Assume /b/a URL encoded at %2f%62%2f%61</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">on</span> <span class="ruby-value">:x</span>, <span class="ruby-regexp">/(.)/</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+    <span class="ruby-comment"># x =&gt; [&#39;b&#39;, &#39;a&#39;]</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 </div>
 <div id='context'>
 </div>
@@ -56,7 +64,7 @@ Roda::RodaPlugins::UnescapePath
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -78,7 +78,19 @@ Roda::RodaPlugins::RequestAref
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/request_aref.rb</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">setting</span>)&#x000A;<span class="line-num">21</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">setting</span>&#x000A;<span class="line-num">22</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:allow</span>, <span class="ruby-value">:raise</span>, <span class="ruby-value">:warn</span>&#x000A;<span class="line-num">23</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword">do</span>&#x000A;<span class="line-num">24</span>       <span class="ruby-identifier">alias_method</span>(<span class="ruby-value">:[]</span>,  <span class="ruby-value">:&quot;request_aref_#{setting}&quot;</span>)&#x000A;<span class="line-num">25</span>       <span class="ruby-identifier">alias_method</span>(<span class="ruby-value">:[]=</span>, <span class="ruby-value">:&quot;request_aset_#{setting}&quot;</span>)&#x000A;<span class="line-num">26</span>       <span class="ruby-identifier">public</span> <span class="ruby-value">:[]</span>, <span class="ruby-value">:[]=</span>&#x000A;<span class="line-num">27</span>     <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">28</span>   <span class="ruby-keyword">else</span>&#x000A;<span class="line-num">29</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Unsupport request_aref plugin setting: #{setting.inspect}&quot;</span>&#x000A;<span class="line-num">30</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/request_aref.rb</span>
+<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">setting</span>)
+<span class="line-num">21</span>   <span class="ruby-keyword">case</span> <span class="ruby-identifier">setting</span>
+<span class="line-num">22</span>   <span class="ruby-keyword">when</span> <span class="ruby-value">:allow</span>, <span class="ruby-value">:raise</span>, <span class="ruby-value">:warn</span>
+<span class="line-num">23</span>     <span class="ruby-identifier">app</span><span class="ruby-operator">::</span><span class="ruby-constant">RodaRequest</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword">do</span>
+<span class="line-num">24</span>       <span class="ruby-identifier">alias_method</span>(<span class="ruby-value">:[]</span>,  <span class="ruby-value">:&quot;request_aref_#{setting}&quot;</span>)
+<span class="line-num">25</span>       <span class="ruby-identifier">alias_method</span>(<span class="ruby-value">:[]=</span>, <span class="ruby-value">:&quot;request_aset_#{setting}&quot;</span>)
+<span class="line-num">26</span>       <span class="ruby-identifier">public</span> <span class="ruby-value">:[]</span>, <span class="ruby-value">:[]=</span>
+<span class="line-num">27</span>     <span class="ruby-keyword">end</span>
+<span class="line-num">28</span>   <span class="ruby-keyword">else</span>
+<span class="line-num">29</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-node">&quot;Unsupport request_aref plugin setting: #{setting.inspect}&quot;</span>
+<span class="line-num">30</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">31</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -90,7 +102,7 @@ Roda::RodaPlugins::RequestAref
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -37,11 +37,13 @@ Roda::RodaPlugins::Heartbeat
 <div id='description'>
 <p>The heartbeat handles heartbeat/status requests.  If a request for the heartbeat path comes in, a 200 response with a text/plain Content-Type and a body of “OK” will be returned. The default heartbeat path is “/heartbeat”, so to use that:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:heartbeat</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:heartbeat</span>
+</pre>
 
 <p>You can also specify a custom heartbeat path:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:heartbeat</span>, <span class="ruby-value">path:</span> <span class="ruby-string">&#39;/status&#39;</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:heartbeat</span>, <span class="ruby-value">path:</span> <span class="ruby-string">&#39;/status&#39;</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -90,7 +92,10 @@ Roda::RodaPlugins::Heartbeat
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/heartbeat.rb</span>&#x000A;<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">21</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;/heartbeat&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/heartbeat.rb</span>
+<span class="line-num">20</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">21</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] = (<span class="ruby-identifier">opts</span>[<span class="ruby-value">:path</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:heartbeat_path</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&quot;/heartbeat&quot;</span>).<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">freeze</span>
+<span class="line-num">22</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -102,7 +107,7 @@ Roda::RodaPlugins::Heartbeat
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

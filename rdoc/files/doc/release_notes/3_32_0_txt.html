@@ -40,19 +40,23 @@ Last Update:
 <ul><li>
 <p>render_each in the render_each plugin now automatically handles template names with subdirectories and extensions.  Previously, these caused issues unless the :local option was provided.  So now you can use:</p>
 
-<pre class="ruby"><span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/foo&quot;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/foo&quot;</span>)
+</pre>
 
 <p>instead of:</p>
 
-<pre class="ruby"><span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/foo&quot;</span>, <span class="ruby-value">:local</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:foo</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/foo&quot;</span>, <span class="ruby-value">:local</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:foo</span>)
+</pre>
 </li><li>
 <p>each_partial has been added to the partials plugin.  It operates similarly to render_each, but uses the convention for partial template naming.  So this:</p>
 
-<pre class="ruby"><span class="ruby-identifier">each_partial</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/foo&quot;</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">each_partial</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/foo&quot;</span>)
+</pre>
 
 <p>is the same as:</p>
 
-<pre class="ruby"><span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/_foo&quot;</span>, <span class="ruby-value">:local</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:foo</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">foos</span>, <span class="ruby-string">&quot;items/_foo&quot;</span>, <span class="ruby-value">:local</span><span class="ruby-operator">=&gt;</span><span class="ruby-value">:foo</span>)
+</pre>
 </li></ul>
 
 <h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -84,7 +88,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

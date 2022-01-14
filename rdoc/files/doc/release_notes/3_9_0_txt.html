@@ -52,7 +52,14 @@ Last Update:
 </li><li>
 <p>route_csrf does not use a middleware, as it is designed to give more control. In order to enforce the CSRF protection, you need to call check_csrf! in your routing tree at the appropriate place.  If you are not sure where to add it, add it to the top of the routing tree, after the public or assets routes if you are using those plugins:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">assets</span>&#x000A;  <span class="ruby-identifier">check_csrf!</span>&#x000A;&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">public</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">assets</span>
+  <span class="ruby-identifier">check_csrf!</span>
+
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>The check_csrf! method accepts an options hash, which can be used to override the plugin options on a per-call basis.</p>
 </li><li>
@@ -71,7 +78,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

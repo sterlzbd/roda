@@ -62,7 +62,11 @@ Roda::RodaPlugins::SymbolStatus::ResponseMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-status-3D-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-status-3D-source'>   <span class="ruby-comment"># File lib/roda/plugins/symbol_status.rb</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">status=</span>(<span class="ruby-identifier">code</span>)&#x000A;<span class="line-num">22</span>   <span class="ruby-identifier">code</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">status_code</span>(<span class="ruby-identifier">code</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)&#x000A;<span class="line-num">23</span>   <span class="ruby-keyword">super</span>(<span class="ruby-identifier">code</span>)&#x000A;<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-status-3D-source'>   <span class="ruby-comment"># File lib/roda/plugins/symbol_status.rb</span>
+<span class="line-num">21</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">status=</span>(<span class="ruby-identifier">code</span>)
+<span class="line-num">22</span>   <span class="ruby-identifier">code</span> = <span class="ruby-constant">Rack</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">status_code</span>(<span class="ruby-identifier">code</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">code</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)
+<span class="line-num">23</span>   <span class="ruby-keyword">super</span>(<span class="ruby-identifier">code</span>)
+<span class="line-num">24</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -74,7 +78,7 @@ Roda::RodaPlugins::SymbolStatus::ResponseMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

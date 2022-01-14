@@ -58,14 +58,17 @@ Roda::RodaPlugins::MultiRoute::RequestClassMethods
 
 <p>Clear cached regexp for named routes, it will be regenerated the next time it is needed.</p>
 
-<p>This shouldn&#39;t be an issue in production applications, but during development it&#39;s useful to support new named routes being added while the application is running.</p>
+<p>This shouldn’t be an issue in production applications, but during development it’s useful to support new named routes being added while the application is running.</p>
 
 </div>
 <div class='source'>
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-clear_named_route_regexp-21-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-clear_named_route_regexp-21-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_route.rb</span>&#x000A;<span class="line-num">125</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">clear_named_route_regexp!</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">126</span>   <span class="ruby-ivar">@namespaced_route_regexps</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">namespace</span>)&#x000A;<span class="line-num">127</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-clear_named_route_regexp-21-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_route.rb</span>
+<span class="line-num">126</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">clear_named_route_regexp!</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)
+<span class="line-num">127</span>   <span class="ruby-ivar">@namespaced_route_regexps</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">namespace</span>)
+<span class="line-num">128</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-named_route_regexp'>
@@ -83,7 +86,10 @@ Roda::RodaPlugins::MultiRoute::RequestClassMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-named_route_regexp-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-named_route_regexp-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_route.rb</span>&#x000A;<span class="line-num">130</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">named_route_regexp</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)&#x000A;<span class="line-num">131</span>   <span class="ruby-ivar">@namespaced_route_regexps</span>[<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> <span class="ruby-regexp">/(#{Regexp.union(roda_class.named_routes(namespace).select{|s| s.is_a?(String)}.sort.reverse)})/</span>&#x000A;<span class="line-num">132</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-named_route_regexp-source'>    <span class="ruby-comment"># File lib/roda/plugins/multi_route.rb</span>
+<span class="line-num">131</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">named_route_regexp</span>(<span class="ruby-identifier">namespace</span>=<span class="ruby-keyword">nil</span>)
+<span class="line-num">132</span>   <span class="ruby-ivar">@namespaced_route_regexps</span>[<span class="ruby-identifier">namespace</span>] <span class="ruby-operator">||=</span> <span class="ruby-regexp">/(#{Regexp.union(roda_class.named_routes(namespace).select{|s| s.is_a?(String)}.sort.reverse)})/</span>
+<span class="line-num">133</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -95,7 +101,7 @@ Roda::RodaPlugins::MultiRoute::RequestClassMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

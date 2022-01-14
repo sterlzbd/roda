@@ -37,7 +37,14 @@ Roda::RodaPlugins::Streaming
 <div id='description'>
 <p>The streaming plugin adds support for streaming responses from roda using the <code>stream</code> method:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:streaming</span>&#x000A;&#x000A;<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">stream</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">out</span><span class="ruby-operator">|</span>&#x000A;    [<span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-string">&#39;c&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>; <span class="ruby-identifier">sleep</span> <span class="ruby-value">1</span>}&#x000A;  <span class="ruby-keyword">end</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:streaming</span>
+
+<span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">stream</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">out</span><span class="ruby-operator">|</span>
+    [<span class="ruby-string">&#39;a&#39;</span>, <span class="ruby-string">&#39;b&#39;</span>, <span class="ruby-string">&#39;c&#39;</span>].<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>; <span class="ruby-identifier">sleep</span> <span class="ruby-value">1</span>}
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>In order for streaming to work, any webservers used in front of the roda app must not buffer responses.</p>
 
@@ -49,16 +56,22 @@ Roda::RodaPlugins::Streaming
 </td></tr><tr><td class='label'>:async </td><td>
 <p>Whether to call the stream block in a separate thread (default: false). Only supported on Ruby 2.3+.</p>
 </td></tr><tr><td class='label'>:queue </td><td>
-<p>A queue object to use for asynchronous streaming (default: `SizedQueue.new(10)`).</p>
+<p>A queue object to use for asynchronous streaming (default: ‘SizedQueue.new(10)`).</p>
 </td></tr></tbody></table>
 
 <p>If the :loop option is used, you can override the handle_stream_error method to change how exceptions are handled during streaming. This method is passed the exception and the stream.  By default, this method just reraises the exception, but you can choose to output the an error message to the stream, before raising:</p>
 
-<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)&#x000A;  <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&#39;ERROR!&#39;</span>&#x000A;  <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)
+  <span class="ruby-identifier">out</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-string">&#39;ERROR!&#39;</span>
+  <span class="ruby-identifier">raise</span> <span class="ruby-identifier">e</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Ignore errors completely while streaming:</p>
 
-<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">handle_stream_error</span>(<span class="ruby-identifier">e</span>, <span class="ruby-identifier">out</span>)
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>or handle the errors in some other way.</p>
 </div>
@@ -81,7 +94,7 @@ Roda::RodaPlugins::Streaming
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

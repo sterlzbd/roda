@@ -30,12 +30,25 @@ CHANGELOG
 </div>
 <div class='last-update'>
 Last Update:
-<span class='datetime'>2021-12-15 08:06:05 -0800</span>
+<span class='datetime'>2022-01-14 08:35:29 -0800</span>
 </div>
 </div>
 <div id='content'>
 <div id='text'>
 <div id='description'>
+<h1 id="label-3.52.0+-282022-01-14-29"><a href="doc/release_notes/3_52_0_txt.html">3.52.0</a> (2022-01-14)<span><a href="#label-3.52.0+-282022-01-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>Fix return value of Roda.freeze when multi_route plugin is used (jeremyevans) (#240)</p>
+</li><li>
+<p>Use faster OpenSSL::Digest instead of Digest for assets plugin SRI support (jeremyevans)</p>
+</li><li>
+<p>Drop development dependency on haml (jeremyevans)</p>
+</li><li>
+<p>Make the path method in the path plugin handle blocks that accept keyword arguments in Ruby 3+ (adam12) (#227)</p>
+</li><li>
+<p>Support typecast_params :date_parse_input_handler plugin option for handling input to date parsing methods (jeremyevans)</p>
+</li></ul>
+
 <h1 id="label-3.51.0+-282021-12-15-29"><a href="doc/release_notes/3_51_0_txt.html">3.51.0</a> (2021-12-15)<span><a href="#label-3.51.0+-282021-12-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
 <p>Avoid method redefinition warning in error_handler plugin in verbose warning mode (jeremyevans)</p>
@@ -422,7 +435,7 @@ Last Update:
 </li><li>
 <p>Speed up RodaRequest initialization by avoiding 1-2 method calls (jeremyevans)</p>
 </li><li>
-<p>Add roda/session_middleware (<a href="../classes/RodaSessionMiddleware.html"><code>RodaSessionMiddleware</code></a>), usable as a middleware by any Rack app to use Roda&#39;s session support (jeremyevans)</p>
+<p>Add roda/session_middleware (<a href="../classes/RodaSessionMiddleware.html"><code>RodaSessionMiddleware</code></a>), usable as a middleware by any Rack app to use Roda’s session support (jeremyevans)</p>
 </li><li>
 <p>Add sessions plugin for more secure (encrypted+signed) sessions (jeremyevans)</p>
 </li><li>
@@ -444,7 +457,7 @@ Last Update:
 <ul><li>
 <p>Accept convert_each! :keys option that is Proc or Method in typecast_params plugin (jeremyevans)</p>
 </li><li>
-<p>Make convert_each! in typecast_params plugin handle hashes with &#39;0&#39;..&#39;N&#39; keys without :keys option (jeremyevans)</p>
+<p>Make convert_each! in typecast_params plugin handle hashes with ‘0’..‘N’ keys without :keys option (jeremyevans)</p>
 </li></ul>
 
 <h1 id="label-3.7.0+-282018-04-20-29"><a href="doc/release_notes/3_7_0_txt.html">3.7.0</a> (2018-04-20)<span><a href="#label-3.7.0+-282018-04-20-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -650,7 +663,7 @@ Last Update:
 </li><li>
 <p>Make the static_routing plugin work with the hooks plugin if the hooks plugin is loaded first (jeremyevans) (#110)</p>
 </li><li>
-<p>Do not modify the render plugin&#39;s cache if loading the plugin multiple times (jeremyevans)</p>
+<p>Do not modify the render plugin’s cache if loading the plugin multiple times (jeremyevans)</p>
 </li></ul>
 
 <h1 id="label-2.23.0+-282017-02-24-29"><a href="doc/release_notes/2_23_0_txt.html">2.23.0</a> (2017-02-24)<span><a href="#label-2.23.0+-282017-02-24-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -689,7 +702,7 @@ Last Update:
 
 <h1 id="label-2.19.0+-282016-10-14-29"><a href="doc/release_notes/2_19_0_txt.html">2.19.0</a> (2016-10-14)<span><a href="#label-2.19.0+-282016-10-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>Don&#39;t add Content-Type/Content-Length headers for 1xx, 204, 205, 304 statuses (celsworth, jeremyevans) (#101, #102)</p>
+<p>Don’t add Content-Type/Content-Length headers for 1xx, 204, 205, 304 statuses (celsworth, jeremyevans) (#101, #102)</p>
 </li><li>
 <p>Optimize indifferent_params plugin when using Rack 2 (jeremyevans)</p>
 </li><li>
@@ -725,7 +738,7 @@ Last Update:
 </li><li>
 <p>Support :sri option to assets plugin to enable subresource integrity (jeremyevans)</p>
 </li><li>
-<p>Add run_append_slash plugin, so r.run uses “/” instead of “” for app&#39;s PATH_INFO (kenaniah) (#77)</p>
+<p>Add run_append_slash plugin, so r.run uses “/” instead of “” for app’s PATH_INFO (kenaniah) (#77)</p>
 </li></ul>
 
 <h1 id="label-2.16.0+-282016-07-13-29"><a href="doc/release_notes/2_16_0_txt.html">2.16.0</a> (2016-07-13)<span><a href="#label-2.16.0+-282016-07-13-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -752,7 +765,7 @@ Last Update:
 <ul><li>
 <p>Add symbol_status plugin for using symbols as status codes (Papierkorb) (#65)</p>
 </li><li>
-<p>Make middleware plugin also run the application&#39;s middleware (jeremyevans)</p>
+<p>Make middleware plugin also run the application’s middleware (jeremyevans)</p>
 </li></ul>
 
 <h1 id="label-2.13.0+-282016-04-14-29"><a href="doc/release_notes/2_13_0_txt.html">2.13.0</a> (2016-04-14)<span><a href="#label-2.13.0+-282016-04-14-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
@@ -762,7 +775,7 @@ Last Update:
 
 <h1 id="label-2.12.0+-282016-03-15-29"><a href="doc/release_notes/2_12_0_txt.html">2.12.0</a> (2016-03-15)<span><a href="#label-2.12.0+-282016-03-15-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>Allow error handler access to the request&#39;s remaining_path (jeremyevans)</p>
+<p>Allow error handler access to the request’s remaining_path (jeremyevans)</p>
 </li><li>
 <p>Add optimized_string_matchers plugin, containing optimized matchers for single string arguments (jeremyevans)</p>
 </li><li>
@@ -878,7 +891,7 @@ Last Update:
 </li><li>
 <p>Add :cache_key option to render/view to explicitly set the template cache key (jeremyevans)</p>
 </li><li>
-<p>Don&#39;t cache templates if :template_block is given to render/view, unless :cache=&gt;true is used  (jeremyevans)</p>
+<p>Don’t cache templates if :template_block is given to render/view, unless :cache=&gt;true is used  (jeremyevans)</p>
 </li><li>
 <p>Add :cache option to render/view to force caching or not caching the template (jeremyevans)</p>
 </li><li>
@@ -959,7 +972,7 @@ Last Update:
 </li><li>
 <p>Remove keep_remaining_path/update_remaining_path private request methods (jeremyevans)</p>
 </li><li>
-<p>Don&#39;t modify SCRIPT_NAME/PATH_INFO during routing, merging static_path_info plugin into core (jeremyevans)</p>
+<p>Don’t modify SCRIPT_NAME/PATH_INFO during routing, merging static_path_info plugin into core (jeremyevans)</p>
 </li><li>
 <p>Remove code deprecated in <a href="../classes/Roda.html"><code>Roda</code></a> <a href="doc/release_notes/1_3_0_txt.html">1.3.0</a> (jeremyevans)</p>
 </li></ul>
@@ -1009,7 +1022,7 @@ Last Update:
 
 <h1 id="label-1.2.0+-282014-12-17-29"><a href="doc/release_notes/1_2_0_txt.html">1.2.0</a> (2014-12-17)<span><a href="#label-1.2.0+-282014-12-17-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>Don&#39;t override explicit nil :default_encoding template option in the render plugin (jeremyevans)</p>
+<p>Don’t override explicit nil :default_encoding template option in the render plugin (jeremyevans)</p>
 </li><li>
 <p>Add remaining_path and matched_path request methods (jeremyevans)</p>
 </li><li>
@@ -1027,7 +1040,7 @@ Last Update:
 </li><li>
 <p>Add sinatra_helpers plugin, porting Sinatra::Helpers methods not covered by other plugins (jeremyevans)</p>
 </li><li>
-<p>Don&#39;t set the default headers until the response is finished (jeremyevans)</p>
+<p>Don’t set the default headers until the response is finished (jeremyevans)</p>
 </li><li>
 <p>Add RodaRequest#default_redirect_status, so plugins can override the default status used for redirects (jeremyevans)</p>
 </li><li>
@@ -1115,7 +1128,7 @@ Last Update:
 
 <h1 id="label-1.0.0+-282014-08-19-29"><a href="doc/release_notes/1_0_0_txt.html">1.0.0</a> (2014-08-19)<span><a href="#label-1.0.0+-282014-08-19-29">&para;</a> <a href="#top">&uarr;</a></span></h1>
 <ul><li>
-<p>Don&#39;t have :extension hash matcher force a terminal match (jeremyevans)</p>
+<p>Don’t have :extension hash matcher force a terminal match (jeremyevans)</p>
 </li><li>
 <p>Add :content option to view method in render plugin to use given content instead of rendering a template (jeremyevans)</p>
 </li><li>
@@ -1190,7 +1203,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

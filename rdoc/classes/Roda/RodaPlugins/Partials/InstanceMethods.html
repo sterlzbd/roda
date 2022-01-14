@@ -63,7 +63,14 @@ Roda::RodaPlugins::Partials::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-each_partial-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-each_partial-source'>   <span class="ruby-comment"># File lib/roda/plugins/partials.rb</span>&#x000A;<span class="line-num">42</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each_partial</span>(<span class="ruby-identifier">enum</span>, <span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">43</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:local</span>)&#x000A;<span class="line-num">44</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">opts</span>]&#x000A;<span class="line-num">45</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:local</span>] = <span class="ruby-identifier">render_each_default_local</span>(<span class="ruby-identifier">template</span>)&#x000A;<span class="line-num">46</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">47</span>   <span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">enum</span>, <span class="ruby-identifier">partial_template_name</span>(<span class="ruby-identifier">template</span>.<span class="ruby-identifier">to_s</span>), <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">48</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-each_partial-source'>   <span class="ruby-comment"># File lib/roda/plugins/partials.rb</span>
+<span class="line-num">42</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each_partial</span>(<span class="ruby-identifier">enum</span>, <span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">43</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-value">:local</span>)
+<span class="line-num">44</span>     <span class="ruby-identifier">opts</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-identifier">opts</span>]
+<span class="line-num">45</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:local</span>] = <span class="ruby-identifier">render_each_default_local</span>(<span class="ruby-identifier">template</span>)
+<span class="line-num">46</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">47</span>   <span class="ruby-identifier">render_each</span>(<span class="ruby-identifier">enum</span>, <span class="ruby-identifier">partial_template_name</span>(<span class="ruby-identifier">template</span>.<span class="ruby-identifier">to_s</span>), <span class="ruby-identifier">opts</span>)
+<span class="line-num">48</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-partial'>
@@ -81,7 +88,14 @@ Roda::RodaPlugins::Partials::InstanceMethods
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-partial-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-partial-source'>   <span class="ruby-comment"># File lib/roda/plugins/partials.rb</span>&#x000A;<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">partial</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">54</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">parse_template_opts</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">55</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>]&#x000A;<span class="line-num">56</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>] = <span class="ruby-identifier">partial_template_name</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>])&#x000A;<span class="line-num">57</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">58</span>   <span class="ruby-identifier">render_template</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">59</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-partial-source'>   <span class="ruby-comment"># File lib/roda/plugins/partials.rb</span>
+<span class="line-num">53</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">partial</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">54</span>   <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">parse_template_opts</span>(<span class="ruby-identifier">template</span>, <span class="ruby-identifier">opts</span>)
+<span class="line-num">55</span>   <span class="ruby-keyword">if</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>]
+<span class="line-num">56</span>     <span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>] = <span class="ruby-identifier">partial_template_name</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:template</span>])
+<span class="line-num">57</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">58</span>   <span class="ruby-identifier">render_template</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">59</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -93,7 +107,7 @@ Roda::RodaPlugins::Partials::InstanceMethods
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

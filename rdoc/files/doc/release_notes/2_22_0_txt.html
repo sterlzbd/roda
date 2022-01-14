@@ -42,15 +42,19 @@ Last Update:
 </li><li>
 <p>An :unsupported_matcher =&gt; :raise option is now supported for <a href="../../../classes/Roda.html"><code>Roda</code></a> applications.  This will raise a RodaError if you use an unsupported value as a matcher.  This can make it easier to discover potential problems in the routing tree. This option may become the default behavior in <a href="../../../classes/Roda.html"><code>Roda</code></a> 3.</p>
 </li><li>
-<p>A :verbatim_string_matcher option is now supported for <a href="../../../classes/Roda.html"><code>Roda</code></a> applications.  This will make all string matchers only match the path verbatim, disallowing the use of a colon for placeholders in the string.  It&#39;s recommended that users switch to using separate symbol arguments for placeholders.</p>
+<p>A :verbatim_string_matcher option is now supported for <a href="../../../classes/Roda.html"><code>Roda</code></a> applications.  This will make all string matchers only match the path verbatim, disallowing the use of a colon for placeholders in the string.  It’s recommended that users switch to using separate symbol arguments for placeholders.</p>
 
 <p>If you enable this option, you need to change code such as:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo/:bar&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo/:bar&quot;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>to:</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-value">:bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">is</span> <span class="ruby-string">&quot;foo&quot;</span>, <span class="ruby-value">:bar</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">bar</span><span class="ruby-operator">|</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>If you are looking to convert an existing routing tree from using placeholders in strings to separate symbol arguments, you can scan your routing tree for potential usage of placeholders in strings:</p>
 
@@ -68,7 +72,7 @@ Last Update:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

@@ -39,17 +39,35 @@ Roda::RodaPlugins::Caching
 
 <p>For proper caching, you should use either the <code>last_modified</code> or <code>etag</code> request methods.</p>
 
-<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;albums&#39;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-identifier">album_id</span>]&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">last_modified</span> <span class="ruby-ivar">@album</span>.<span class="ruby-identifier">updated_at</span>&#x000A;  <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;album&#39;</span>)&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-comment"># or</span>&#x000A;&#x000A;<span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;albums&#39;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_id</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-ivar">@album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-identifier">album_id</span>]&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">etag</span> <span class="ruby-ivar">@album</span>.<span class="ruby-identifier">sha1</span>&#x000A;  <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;album&#39;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;albums&#39;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_id</span><span class="ruby-operator">|</span>
+  <span class="ruby-ivar">@album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-identifier">album_id</span>]
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">last_modified</span> <span class="ruby-ivar">@album</span>.<span class="ruby-identifier">updated_at</span>
+  <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;album&#39;</span>)
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-comment"># or</span>
+
+<span class="ruby-identifier">r</span>.<span class="ruby-identifier">get</span> <span class="ruby-string">&#39;albums&#39;</span>, <span class="ruby-constant">Integer</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album_id</span><span class="ruby-operator">|</span>
+  <span class="ruby-ivar">@album</span> = <span class="ruby-constant">Album</span>[<span class="ruby-identifier">album_id</span>]
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">etag</span> <span class="ruby-ivar">@album</span>.<span class="ruby-identifier">sha1</span>
+  <span class="ruby-identifier">view</span>(<span class="ruby-string">&#39;album&#39;</span>)
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Both <code>last_modified</code> or <code>etag</code> will immediately halt processing if there have been no modifications since the last time the client requested the resource, assuming the client uses the appropriate HTTP 1.1 request headers.</p>
 
 <p>This plugin also includes the <code>cache_control</code> and <code>expires</code> response methods.  The <code>cache_control</code> method sets the Cache-Control header using the given hash:</p>
 
-<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">cache_control</span> <span class="ruby-value">public:</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">max_age:</span> <span class="ruby-value">60</span>&#x000A;<span class="ruby-comment"># Cache-Control: public, max-age=60</span></pre>
+<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">cache_control</span> <span class="ruby-value">public:</span> <span class="ruby-keyword">true</span>, <span class="ruby-value">max_age:</span> <span class="ruby-value">60</span>
+<span class="ruby-comment"># Cache-Control: public, max-age=60</span>
+</pre>
 
 <p>The <code>expires</code> method is similar, but in addition to setting the HTTP 1.1 Cache-Control header, it also sets the HTTP 1.0 Expires header:</p>
 
-<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">expires</span> <span class="ruby-value">60</span>, <span class="ruby-value">public:</span> <span class="ruby-keyword">true</span>&#x000A;<span class="ruby-comment"># Cache-Control: public, max-age=60</span>&#x000A;<span class="ruby-comment"># Expires: Mon, 29 Sep 2014 21:25:47 GMT</span></pre>
+<pre class="ruby"><span class="ruby-identifier">response</span>.<span class="ruby-identifier">expires</span> <span class="ruby-value">60</span>, <span class="ruby-value">public:</span> <span class="ruby-keyword">true</span>
+<span class="ruby-comment"># Cache-Control: public, max-age=60</span>
+<span class="ruby-comment"># Expires: Mon, 29 Sep 2014 21:25:47 GMT</span>
+</pre>
 
 <p>The implementation was originally taken from Sinatra, which is also released under the MIT License:</p>
 
@@ -79,7 +97,7 @@ Roda::RodaPlugins::Caching
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

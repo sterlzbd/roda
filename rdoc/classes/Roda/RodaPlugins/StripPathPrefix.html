@@ -39,7 +39,9 @@ Roda::RodaPlugins::StripPathPrefix
 
 <p>Examples:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:strip_path_prefix</span> <span class="ruby-comment"># Defaults to Dir.pwd</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:strip_path_prefix</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>)</pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:strip_path_prefix</span> <span class="ruby-comment"># Defaults to Dir.pwd</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:strip_path_prefix</span>, <span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>)
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -74,7 +76,11 @@ Roda::RodaPlugins::StripPathPrefix
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/strip_path_prefix.rb</span>&#x000A;<span class="line-num">18</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>=<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>)&#x000A;<span class="line-num">19</span>   <span class="ruby-identifier">prefix</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;/&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">prefix</span><span class="ruby-operator">=~</span> <span class="ruby-regexp">/\/\z/</span>&#x000A;<span class="line-num">20</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip_path_prefix</span>] = <span class="ruby-regexp">/\A#{Regexp.escape(prefix)}/</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/strip_path_prefix.rb</span>
+<span class="line-num">18</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">prefix</span>=<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>)
+<span class="line-num">19</span>   <span class="ruby-identifier">prefix</span> <span class="ruby-operator">+=</span> <span class="ruby-string">&#39;/&#39;</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">prefix</span><span class="ruby-operator">=~</span> <span class="ruby-regexp">/\/\z/</span>
+<span class="line-num">20</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:strip_path_prefix</span>] = <span class="ruby-regexp">/\A#{Regexp.escape(prefix)}/</span>
+<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -86,7 +92,7 @@ Roda::RodaPlugins::StripPathPrefix
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

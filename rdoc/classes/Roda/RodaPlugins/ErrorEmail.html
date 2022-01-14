@@ -37,7 +37,12 @@ Roda::RodaPlugins::ErrorEmail
 <div id='description'>
 <p>The error_email plugin adds an <code>error_email</code> instance method that send an email related to the exception.  This is most useful if you are also using the error_handler plugin:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_email</span>, <span class="ruby-value">to:</span> <span class="ruby-string">&#39;to@example.com&#39;</span>, <span class="ruby-value">from:</span> <span class="ruby-string">&#39;from@example.com&#39;</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">error_email</span>(<span class="ruby-identifier">e</span>)&#x000A;  <span class="ruby-string">&#39;Internal Server Error&#39;</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_email</span>, <span class="ruby-value">to:</span> <span class="ruby-string">&#39;to@example.com&#39;</span>, <span class="ruby-value">from:</span> <span class="ruby-string">&#39;from@example.com&#39;</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:error_handler</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">error_email</span>(<span class="ruby-identifier">e</span>)
+  <span class="ruby-string">&#39;Internal Server Error&#39;</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>It is similar to the error_mail plugin, except that it uses net/smtp directly instead of using the mail library.  If you are not already using the mail library in your application, it makes sense to use error_email instead of error_mail.</p>
 
@@ -49,7 +54,7 @@ Roda::RodaPlugins::ErrorEmail
 </td></tr><tr><td class='label'>:host </td><td>
 <p>The SMTP server to use to send the email (default: localhost)</p>
 </td></tr><tr><td class='label'>:prefix </td><td>
-<p>A prefix to use in the email&#39;s subject line (default: no prefix)</p>
+<p>A prefix to use in the email’s subject line (default: no prefix)</p>
 </td></tr><tr><td class='label'>:to </td><td>
 <p>The To address to use in the email (required)</p>
 </td></tr></tbody></table>
@@ -168,7 +173,18 @@ end
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/error_email.rb</span>&#x000A;<span class="line-num">106</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">107</span>   <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">DEFAULTS</span>&#x000A;<span class="line-num">108</span>   <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">email_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)&#x000A;<span class="line-num">109</span>   <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>] = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>].<span class="ruby-identifier">dup</span>&#x000A;<span class="line-num">110</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:to</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:from</span>]&#x000A;<span class="line-num">111</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;must provide :to and :from options to error_email plugin&quot;</span>&#x000A;<span class="line-num">112</span>   <span class="ruby-keyword">end</span>&#x000A;<span class="line-num">113</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] = <span class="ruby-identifier">email_opts</span>&#x000A;<span class="line-num">114</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>][<span class="ruby-value">:headers</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">115</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>].<span class="ruby-identifier">freeze</span>&#x000A;<span class="line-num">116</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>    <span class="ruby-comment"># File lib/roda/plugins/error_email.rb</span>
+<span class="line-num">106</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">107</span>   <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">DEFAULTS</span>
+<span class="line-num">108</span>   <span class="ruby-identifier">email_opts</span> = <span class="ruby-identifier">email_opts</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">opts</span>)
+<span class="line-num">109</span>   <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>] = <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:headers</span>].<span class="ruby-identifier">dup</span>
+<span class="line-num">110</span>   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:to</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">email_opts</span>[<span class="ruby-value">:from</span>]
+<span class="line-num">111</span>     <span class="ruby-identifier">raise</span> <span class="ruby-constant">RodaError</span>, <span class="ruby-string">&quot;must provide :to and :from options to error_email plugin&quot;</span>
+<span class="line-num">112</span>   <span class="ruby-keyword">end</span>
+<span class="line-num">113</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>] = <span class="ruby-identifier">email_opts</span>
+<span class="line-num">114</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>][<span class="ruby-value">:headers</span>].<span class="ruby-identifier">freeze</span>
+<span class="line-num">115</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:error_email</span>].<span class="ruby-identifier">freeze</span>
+<span class="line-num">116</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -180,7 +196,7 @@ end
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

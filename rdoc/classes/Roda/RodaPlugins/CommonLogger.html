@@ -39,18 +39,22 @@ Roda::RodaPlugins::CommonLogger
 <ul><li>
 <p>Better performance</p>
 </li><li>
-<p>Doesn&#39;t include middleware timing</p>
+<p>Doesn’t include middleware timing</p>
 </li><li>
-<p>Doesn&#39;t proxy the body</p>
+<p>Doesn’t proxy the body</p>
 </li><li>
-<p>Doesn&#39;t support different capitalization of the Content-Length response header</p>
+<p>Doesn’t support different capitalization of the Content-Length response header</p>
 </li><li>
 <p>Logs to $stderr instead of <a href="'rack.errors'">env</a> if explicit logger not passed</p>
 </li></ul>
 
 <p>Example:</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>, <span class="ruby-identifier">$stdout</span>&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>, <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;filename&#39;</span>)&#x000A;<span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>, <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;filename&#39;</span>), <span class="ruby-value">method:</span> <span class="ruby-value">:debug</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>, <span class="ruby-identifier">$stdout</span>
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>, <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;filename&#39;</span>)
+<span class="ruby-identifier">plugin</span> <span class="ruby-value">:common_logger</span>, <span class="ruby-constant">Logger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;filename&#39;</span>), <span class="ruby-value">method:</span> <span class="ruby-value">:debug</span>
+</pre>
 </div>
 <div id='method-list'>
 <h2>Methods</h2>
@@ -84,7 +88,11 @@ Roda::RodaPlugins::CommonLogger
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/common_logger.rb</span>&#x000A;<span class="line-num">23</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">logger</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)&#x000A;<span class="line-num">24</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] = <span class="ruby-identifier">logger</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">$stderr</span>&#x000A;<span class="line-num">25</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger_meth</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>].<span class="ruby-identifier">method</span>(<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:method</span>){<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:write</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:write</span> <span class="ruby-operator">:</span> <span class="ruby-value">:&lt;&lt;</span>})&#x000A;<span class="line-num">26</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/common_logger.rb</span>
+<span class="line-num">23</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>, <span class="ruby-identifier">logger</span>=<span class="ruby-keyword">nil</span>, <span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>)
+<span class="line-num">24</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] = <span class="ruby-identifier">logger</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">$stderr</span>
+<span class="line-num">25</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger_meth</span>] = <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:common_logger</span>].<span class="ruby-identifier">method</span>(<span class="ruby-identifier">opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:method</span>){<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-value">:write</span>) <span class="ruby-operator">?</span> <span class="ruby-value">:write</span> <span class="ruby-operator">:</span> <span class="ruby-value">:&lt;&lt;</span>})
+<span class="line-num">26</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-class' id='method-method-c-start_timer'>
@@ -102,7 +110,10 @@ Roda::RodaPlugins::CommonLogger
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-start_timer-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-start_timer-source'>   <span class="ruby-comment"># File lib/roda/plugins/common_logger.rb</span>&#x000A;<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">start_timer</span>&#x000A;<span class="line-num">31</span>   <span class="ruby-constant">Process</span>.<span class="ruby-identifier">clock_gettime</span>(<span class="ruby-constant">Process</span><span class="ruby-operator">::</span><span class="ruby-constant">CLOCK_MONOTONIC</span>)&#x000A;<span class="line-num">32</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-start_timer-source'>   <span class="ruby-comment"># File lib/roda/plugins/common_logger.rb</span>
+<span class="line-num">30</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">start_timer</span>
+<span class="line-num">31</span>   <span class="ruby-constant">Process</span>.<span class="ruby-identifier">clock_gettime</span>(<span class="ruby-constant">Process</span><span class="ruby-operator">::</span><span class="ruby-constant">CLOCK_MONOTONIC</span>)
+<span class="line-num">32</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -114,7 +125,7 @@ Roda::RodaPlugins::CommonLogger
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

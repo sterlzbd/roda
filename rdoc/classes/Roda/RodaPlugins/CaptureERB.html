@@ -37,7 +37,9 @@ Roda::RodaPlugins::CaptureERB
 <div id='description'>
 <p>The capture_erb plugin allows you to capture the content of a block in an ERB template, and return it as a value, instead of injecting the template block into the template output.</p>
 
-<pre>&lt;% value = capture_erb do %&gt;&#x000A;  Some content here.&#x000A;&lt;% end %&gt;</pre>
+<pre>&lt;% value = capture_erb do %&gt;
+  Some content here.
+&lt;% end %&gt;</pre>
 
 <p><code>capture_erb</code> can be used inside other methods that are called inside templates.  It can be combined with the inject_erb plugin to wrap template blocks with arbitrary output and then inject the wrapped output into the template.</p>
 </div>
@@ -72,7 +74,10 @@ Roda::RodaPlugins::CaptureERB
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-load_dependencies-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/capture_erb.rb</span>&#x000A;<span class="line-num">19</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">20</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>&#x000A;<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-load_dependencies-source'>   <span class="ruby-comment"># File lib/roda/plugins/capture_erb.rb</span>
+<span class="line-num">19</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">load_dependencies</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">20</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">plugin</span> <span class="ruby-value">:render</span>
+<span class="line-num">21</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -84,7 +89,7 @@ Roda::RodaPlugins::CaptureERB
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

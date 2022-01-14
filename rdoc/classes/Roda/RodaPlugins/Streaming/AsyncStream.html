@@ -79,7 +79,12 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-new-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/streaming.rb</span>&#x000A;<span class="line-num">100</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">101</span>   <span class="ruby-ivar">@stream</span> = <span class="ruby-constant">Stream</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)&#x000A;<span class="line-num">102</span>   <span class="ruby-ivar">@queue</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:queue</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">SizedQueue</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">10</span>) <span class="ruby-comment"># have some default backpressure</span>&#x000A;<span class="line-num">103</span>   <span class="ruby-ivar">@thread</span> = <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span> { <span class="ruby-identifier">enqueue_chunks</span> }&#x000A;<span class="line-num">104</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-new-source'>    <span class="ruby-comment"># File lib/roda/plugins/streaming.rb</span>
+<span class="line-num">100</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">opts</span>=<span class="ruby-constant">OPTS</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">101</span>   <span class="ruby-ivar">@stream</span> = <span class="ruby-constant">Stream</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+<span class="line-num">102</span>   <span class="ruby-ivar">@queue</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-value">:queue</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">SizedQueue</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value">10</span>) <span class="ruby-comment"># have some default backpressure</span>
+<span class="line-num">103</span>   <span class="ruby-ivar">@thread</span> = <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span> { <span class="ruby-identifier">enqueue_chunks</span> }
+<span class="line-num">104</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <h2>Public Instance methods</h2>
@@ -98,7 +103,11 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-close-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-close-source'>    <span class="ruby-comment"># File lib/roda/plugins/streaming.rb</span>&#x000A;<span class="line-num">113</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">close</span>&#x000A;<span class="line-num">114</span>   <span class="ruby-ivar">@queue</span>.<span class="ruby-identifier">close</span> <span class="ruby-comment"># terminate the producer thread</span>&#x000A;<span class="line-num">115</span>   <span class="ruby-ivar">@stream</span>.<span class="ruby-identifier">close</span>&#x000A;<span class="line-num">116</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-close-source'>    <span class="ruby-comment"># File lib/roda/plugins/streaming.rb</span>
+<span class="line-num">113</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">close</span>
+<span class="line-num">114</span>   <span class="ruby-ivar">@queue</span>.<span class="ruby-identifier">close</span> <span class="ruby-comment"># terminate the producer thread</span>
+<span class="line-num">115</span>   <span class="ruby-ivar">@stream</span>.<span class="ruby-identifier">close</span>
+<span class="line-num">116</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 <div class='method public-instance' id='method-method-i-each'>
@@ -116,7 +125,11 @@ Superclass:
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-i-each-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-i-each-source'>    <span class="ruby-comment"># File lib/roda/plugins/streaming.rb</span>&#x000A;<span class="line-num">107</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">out</span>)&#x000A;<span class="line-num">108</span>   <span class="ruby-identifier">dequeue_chunks</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">out</span>)&#x000A;<span class="line-num">109</span>   <span class="ruby-ivar">@thread</span>.<span class="ruby-identifier">join</span>&#x000A;<span class="line-num">110</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-i-each-source'>    <span class="ruby-comment"># File lib/roda/plugins/streaming.rb</span>
+<span class="line-num">107</span> <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">out</span>)
+<span class="line-num">108</span>   <span class="ruby-identifier">dequeue_chunks</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">out</span>)
+<span class="line-num">109</span>   <span class="ruby-ivar">@thread</span>.<span class="ruby-identifier">join</span>
+<span class="line-num">110</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -128,7 +141,7 @@ Superclass:
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>

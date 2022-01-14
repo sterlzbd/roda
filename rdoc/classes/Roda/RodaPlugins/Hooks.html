@@ -37,11 +37,25 @@ Roda::RodaPlugins::Hooks
 <div id='description'>
 <p>The hooks plugin adds before and after hooks to the request cycle.</p>
 
-<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:hooks</span>&#x000A;&#x000A;<span class="ruby-identifier">before</span> <span class="ruby-keyword">do</span>&#x000A;  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;/login&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>&#x000A;  <span class="ruby-ivar">@time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>&#x000A;<span class="ruby-keyword">end</span>&#x000A;&#x000A;<span class="ruby-identifier">after</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">notice</span>(<span class="ruby-node">&quot;Took #{Time.now - @time} seconds&quot;</span>)&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:hooks</span>
+
+<span class="ruby-identifier">before</span> <span class="ruby-keyword">do</span>
+  <span class="ruby-identifier">request</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;/login&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>
+  <span class="ruby-ivar">@time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-identifier">after</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">res</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">notice</span>(<span class="ruby-node">&quot;Took #{Time.now - @time} seconds&quot;</span>)
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>Note that in general, before hooks are not needed, since you can just run code at the top of the route block:</p>
 
-<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>&#x000A;  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;/login&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>&#x000A;  <span class="ruby-comment"># ...</span>&#x000A;<span class="ruby-keyword">end</span></pre>
+<pre class="ruby"><span class="ruby-identifier">route</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">r</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-string">&#39;/login&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">logged_in?</span>
+  <span class="ruby-comment"># ...</span>
+<span class="ruby-keyword">end</span>
+</pre>
 
 <p>However, this code makes it easier to write after hooks, as well as handle cases where before hooks are added after the route block.</p>
 
@@ -79,7 +93,11 @@ Roda::RodaPlugins::Hooks
 <a class='source-toggle' href='#' onclick='toggleCode(&#39;method-c-configure-source&#39;); return false'>
 [show source]
 </a>
-<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/hooks.rb</span>&#x000A;<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)&#x000A;<span class="line-num">37</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hooks</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">38</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hooks</span>] <span class="ruby-operator">||=</span> []&#x000A;<span class="line-num">39</span> <span class="ruby-keyword">end</span></pre>
+<pre id='method-c-configure-source'>   <span class="ruby-comment"># File lib/roda/plugins/hooks.rb</span>
+<span class="line-num">36</span> <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">configure</span>(<span class="ruby-identifier">app</span>)
+<span class="line-num">37</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:after_hooks</span>] <span class="ruby-operator">||=</span> []
+<span class="line-num">38</span>   <span class="ruby-identifier">app</span>.<span class="ruby-identifier">opts</span>[<span class="ruby-value">:before_hooks</span>] <span class="ruby-operator">||=</span> []
+<span class="line-num">39</span> <span class="ruby-keyword">end</span></pre>
 </div>
 </div>
 </div>
@@ -91,7 +109,7 @@ Roda::RodaPlugins::Hooks
 <div id='footer-push'></div>
 </div>
 <div id='footer'>
-<a href="https://github.com/rdoc/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
+<a href="https://github.com/jeremyevans/hanna-nouveau"><strong>Hanna Nouveau</strong> RDoc template</a>
 </div>
 </body>
 </html>
