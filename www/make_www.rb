@@ -10,10 +10,10 @@ descriptions = {
 }
 
 Dir.chdir(File.dirname(__FILE__))
-erb = ERB.new(File.read('layout.erb'), nil)
+erb = ERB.new(File.read('layout.erb'))
 Dir['pages/*.erb'].each do |page|
   public_loc = "#{page.gsub(/\Apages\//, 'public/').sub('.erb', '.html')}"
-  content = content = ERB.new(File.read(page), nil).result(binding)
+  content = content = ERB.new(File.read(page)).result(binding)
   current_page = File.basename(page.sub('.erb', ''))
   description = description = descriptions[current_page.to_sym]
   File.open(public_loc, 'wb'){|f| f.write(erb.result(binding))}
