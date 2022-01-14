@@ -1,5 +1,7 @@
 = master
 
+* Fix return value of Roda.freeze when multi_route plugin is used (jeremyevans) (#240)
+
 * Use faster OpenSSL::Digest instead of Digest for assets plugin SRI support (jeremyevans)
 
 * Drop development dependency on haml (jeremyevans)

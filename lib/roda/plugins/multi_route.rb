@@ -98,6 +98,7 @@ class Roda
             self::RodaRequest.named_route_regexp(k)
           end
           self::RodaRequest.instance_variable_get(:@namespaced_route_regexps).freeze
+          self
         end
 
         # Copy the named routes into the subclass when inheriting.

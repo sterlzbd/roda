@@ -77,7 +77,7 @@ describe "multi_route plugin" do
   end
 
   it "works when freezing the app" do
-    app.freeze
+    app.freeze.must_equal app
     body.must_equal 'get'
     body('REQUEST_METHOD'=>'POST').must_equal 'post'
     body('/a').must_equal 'geta'
