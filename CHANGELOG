@@ -1,4 +1,4 @@
-= master
+= 3.52.0 (2022-01-14)
 
 * Fix return value of Roda.freeze when multi_route plugin is used (jeremyevans) (#240)
 
