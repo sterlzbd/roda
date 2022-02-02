@@ -1,5 +1,7 @@
 = master
 
+* Make indifferent_params plugin support rack main branch (jeremyevans)
+
 * Add additional_view_directories plugin, for checking multiple view directories for templates (jeremyevans) (#229)
 
 = 3.52.0 (2022-01-14)

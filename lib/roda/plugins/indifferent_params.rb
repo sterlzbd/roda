@@ -52,17 +52,29 @@ class Roda
           end
           
           class Params < Rack::QueryParser::Params
-            def initialize(limit = Rack::Utils.key_space_limit)
-              @limit  = limit
-              @size   = 0
-              @params = Hash.new(&INDIFFERENT_PROC)
+            # :nocov:
+            if Rack.release >= '2.3'
+              def initialize
+                @size   = 0
+                @params = Hash.new(&INDIFFERENT_PROC)
+              end
+            else
+            # :nocov:
+              def initialize(limit = Rack::Utils.key_space_limit)
+                @limit  = limit
+                @size   = 0
+                @params = Hash.new(&INDIFFERENT_PROC)
+              end
             end
           end
 
         end
 
         module RequestMethods
-          QUERY_PARSER = Rack::Utils.default_query_parser = QueryParser.new(QueryParser::Params, 65536, 100)
+          # :nocov:
+          query_parser = Rack.release >= '2.3' ? QueryParser.new(QueryParser::Params, 32) : QueryParser.new(QueryParser::Params, 65536, 32)
+          # :nocov:
+          QUERY_PARSER = Rack::Utils.default_query_parser = query_parser
 
           private
 
