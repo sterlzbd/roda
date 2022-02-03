@@ -191,7 +191,9 @@ class Roda
             when :raise
               raise InvalidToken, msg
             when :empty_403
-              throw :halt, [403, {'Content-Type'=>'text/html', 'Content-Length'=>'0'}, []]
+              @_response.status = 403
+              @_response.headers.replace('Content-Type'=>'text/html', 'Content-Length'=>'0')
+              throw :halt, @_response.finish_with_body([])
             when :clear_session
               session.clear
             when :csrf_failure_method

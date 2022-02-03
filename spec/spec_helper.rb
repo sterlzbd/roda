@@ -66,6 +66,34 @@ else
   DEFAULT_SESSION_ARGS = [:use, Rack::Session::Cookie, :secret=>'1']
 end
 
+if defined?(Rack::Headers)
+  class Rack::Headers
+    def must_equal(hash)
+      case hash
+      when Hash
+        must_be(:==, Rack::Headers[hash])
+      else
+        super
+      end
+    end
+  end
+
+  class Array
+    def must_equal(array)
+      case array
+      when Array
+        if array.length == 3 && array[1].is_a?(Hash)
+          must_be(:==, [array[0], Rack::Headers[array[1]], array[2]])
+        else
+          super
+        end
+      else
+        super
+      end
+    end
+  end
+end
+
 module CookieJar
   def req(path='/', env={})
     if path.is_a?(Hash)

@@ -1,6 +1,13 @@
 require_relative "../spec_helper"
 
 describe "multi_public plugin" do 
+  if Rack.release >= '2.3'
+    def req(*a)
+      s, h, b = super(*a)
+      [s, Rack::Headers[h], b]
+    end
+  end
+
   it "adds r.multi_public for serving static files from public folder" do
     app(:bare) do
       plugin :multi_public, :a => 'spec/views', :b => 'spec'

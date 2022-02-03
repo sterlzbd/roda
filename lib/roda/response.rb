@@ -37,11 +37,22 @@ class Roda
         # code for non-empty responses and a 404 code for empty responses.
         attr_accessor :status
 
-        # Set the default headers when creating a response.
-        def initialize
-          @headers = {}
-          @body    = []
-          @length  = 0
+        # :nocov:
+        if defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
+          # Set the default headers when creating a response.
+          def initialize
+            @headers = Rack::Headers.new
+            @body    = []
+            @length  = 0
+          end
+        else
+        # :nocov:
+          # Set the default headers when creating a response.
+          def initialize
+            @headers = {}
+            @body    = []
+            @length  = 0
+          end
         end
 
         # Return the response header with the given key. Example:

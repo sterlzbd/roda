@@ -1,5 +1,7 @@
 = master
 
+* Work with Rack 3 SPEC, using Rack::Headers to handle lowercasing header keys on Rack 3 (jeremyevans)
+
 * Allow overriding script tag type attribute returned by assets method in assets plugin (pusewicz) (#250)
 
 * Make reloading render plugin after additional_view_directories plugin retain :allowed_paths (jeremyevans)
