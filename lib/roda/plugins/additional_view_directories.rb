@@ -42,6 +42,8 @@ class Roda
       end
 
       module InstanceMethods
+        private
+
         # If the template path does not exist, try looking for the template
         # in each of the additional view directories, in order, returning
         # the first path that exists. If no additional directory includes
