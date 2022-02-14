@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang='en'>
 <head>
-<title>version.rb</title>
+<title>3.53.0.txt</title>
 <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
 <link href='../../../css/style.css' media='screen' rel='stylesheet' type='text/css'>
 <script type='text/javascript'>
@@ -23,10 +23,10 @@
 <body class='page'>
 <div class='file' id='wrapper'>
 <div class='header'>
-<h1 class='name'>version.rb
+<h1 class='name'>3.53.0.txt
 </h1>
 <div class='paths'>
-lib/roda/version.rb
+doc/release_notes/3.53.0.txt
 </div>
 <div class='last-update'>
 Last Update:
@@ -35,7 +35,20 @@ Last Update:
 </div>
 <div id='content'>
 <div id='text'>
-<div id='description'></div>
+<div id='description'>
+<h1 id="label-New+Features">New Features<span><a href="#label-New+Features">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>An additional_view_directories plugin has been added, which allows you to specify additional directories to look in for templates. If the template path does not exist when using the default view directory, then each additional view directory will be checked, returning the first path that exists:</p>
+
+<pre class="ruby"><span class="ruby-identifier">plugin</span> <span class="ruby-value">:additional_view_directories</span>, [<span class="ruby-string">&#39;admin_views&#39;</span>, <span class="ruby-string">&#39;public_views&#39;</span>]
+</pre>
+</li></ul>
+
+<h1 id="label-Other+Improvements">Other Improvements<span><a href="#label-Other+Improvements">&para;</a> <a href="#top">&uarr;</a></span></h1>
+<ul><li>
+<p>The indifferent_params plugin now avoids a deprecation warning when using the rack main branch, which will become Rack 3.</p>
+</li></ul>
+</div>
 <div id='context'>
 </div>
 
