@@ -1,3 +1,7 @@
+= master
+
+* Make reloading render plugin after additional_view_directories plugin retain :allowed_paths (jeremyevans)
+
 = 3.53.0 (2022-02-14)
 
 * Make indifferent_params plugin support rack main branch (jeremyevans)

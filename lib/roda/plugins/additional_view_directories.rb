@@ -36,9 +36,7 @@ class Roda
       # is also added as an allowed path.
       def self.configure(app, view_dirs)
         view_dirs = app.opts[:additional_view_directories] = view_dirs.map{|f| app.expand_path(f, nil)}.freeze
-        opts = app.opts[:render]
-        app.opts[:render] = opts.merge(:allowed_paths=>(opts[:allowed_paths] + view_dirs).uniq.freeze)
-        opts.freeze
+        app.plugin :render, :allowed_paths=>(app.opts[:render][:allowed_paths] + view_dirs).uniq.freeze
       end
 
       module InstanceMethods
