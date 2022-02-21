@@ -708,6 +708,9 @@ class Roda
         # To return the tags for a specific asset group, use an array for
         # the type, such as [:css, :frontend].
         #
+        # You can specify custom attributes for the tag by passing a hash
+        # as the attrs argument.
+        #
         # When the assets are not compiled, this will result in a separate
         # tag for each asset file.  When the assets are compiled, this will
         # result in a single tag to the compiled asset file.
@@ -720,13 +723,13 @@ class Roda
             attrs[:integrity] = "#{algo}-#{h([[hash].pack('H*')].pack('m').tr("\n", ''))}"
           end
 
-          attrs = attrs.map{|k,v| "#{k}=\"#{h(v)}\""}.join(' ')
+          attributes = attrs.map{|k,v| "#{k}=\"#{h(v)}\""}.join(' ')
 
           if ltype == :js
-            tag_start = "<script type=\"text/javascript\" #{attrs} src=\""
+            tag_start = "<script#{' type="text/javascript"' unless attrs[:type]} #{attributes} src=\""
             tag_end = "\"></script>"
           else
-            tag_start = "<link rel=\"stylesheet\" #{attrs} href=\""
+            tag_start = "<link rel=\"stylesheet\" #{attributes} href=\""
             tag_end = "\" />"
           end
 

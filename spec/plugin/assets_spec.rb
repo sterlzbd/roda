@@ -725,6 +725,10 @@ END
       app.allocate.assets([:js, :head], 'a'=>'b').must_equal '<script type="text/javascript" a="b" src="/assets/js/head/app.js"></script>'
     end
 
+    it '#assets must_include type given' do
+      app.allocate.assets([:js, :head], type: 'module').must_equal '<script type="module" src="/assets/js/head/app.js"></script>'
+     end
+
     it '#assets should escape attribute values given' do
       app.allocate.assets([:js, :head], 'a'=>'b"e').must_equal '<script type="text/javascript" a="b&quot;e" src="/assets/js/head/app.js"></script>'
     end
