@@ -37,6 +37,9 @@ class Roda
     module Public
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
       PARSER = URI::DEFAULT_PARSER
+      # :nocov:
+      RACK_FILES = defined?(Rack::Files) ? Rack::Files : Rack::File
+      # :nocov:
 
       # Use options given to setup a Rack::File instance for serving files. Options:
       # :default_mime :: The default mime type to use if the mime type is not recognized.
@@ -52,7 +55,7 @@ class Roda
         elsif !app.opts[:public_root]
           app.opts[:public_root] = app.expand_path("public")
         end
-        app.opts[:public_server] = ::Rack::File.new(app.opts[:public_root], opts[:headers]||{}, opts[:default_mime] || 'text/plain')
+        app.opts[:public_server] = RACK_FILES.new(app.opts[:public_root], opts[:headers]||{}, opts[:default_mime] || 'text/plain')
         app.opts[:public_gzip] = opts[:gzip]
         app.opts[:public_brotli] = opts[:brotli]
       end
@@ -122,7 +125,7 @@ class Roda
         end
 
         if ::Rack.release > '2'
-          # Serve the given path using the given Rack::File server.
+          # Serve the given path using the given Rack::Files server.
           def public_serve(server, path)
             server.serving(self, path)
           end

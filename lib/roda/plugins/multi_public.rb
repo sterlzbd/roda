@@ -58,6 +58,10 @@ class Roda
     #     end
     #   end
     module MultiPublic
+      # :nocov:
+      RACK_FILES = defined?(Rack::Files) ? Rack::Files : Rack::File
+      # :nocov:
+
       def self.load_dependencies(app, _, opts=OPTS)
         app.plugin(:public, opts)
       end
@@ -67,7 +71,7 @@ class Roda
         roots = app.opts[:multi_public_servers] = (app.opts[:multi_public_servers] || {}).dup
         directories.each do |key, path|
           path, headers, mime = path
-          roots[key] = ::Rack::File.new(app.expand_path(path), headers||{}, mime||'text/plain')
+          roots[key] = RACK_FILES.new(app.expand_path(path), headers||{}, mime||'text/plain')
         end
         roots.freeze
       end

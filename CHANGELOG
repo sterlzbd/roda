@@ -1,5 +1,7 @@
 = master
 
+* Use Rack::Files instead of Rack::File if available, to avoid deprecation warnings (jeremyevans)
+
 * Work with Rack 3 SPEC, using Rack::Headers to handle lowercasing header keys on Rack 3 (jeremyevans)
 
 * Allow overriding script tag type attribute returned by assets method in assets plugin (pusewicz) (#250)

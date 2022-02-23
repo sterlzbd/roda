@@ -215,6 +215,10 @@ class Roda
       ISO88591_ENCODING = Encoding.find('ISO-8859-1')
       BINARY_ENCODING = Encoding.find('BINARY')
 
+      # :nocov:
+      RACK_FILES = defined?(Rack::Files) ? Rack::Files : Rack::File
+      # :nocov:
+
       # Depend on the status_303 plugin.
       def self.load_dependencies(app, _opts = nil)
         app.plugin :status_303
@@ -333,7 +337,7 @@ class Roda
             last_modified(lm)
           end
 
-          file = ::Rack::File.new nil
+          file = RACK_FILES.new nil
           s, h, b = if Rack.release > '2'
             file.serving(self, path)
           else
