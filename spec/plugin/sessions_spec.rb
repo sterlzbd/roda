@@ -447,6 +447,6 @@ if RUBY_VERSION >= '2'
       h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nquux\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/m)
       b.must_equal ['{"a"=>"bar"}']
     end
-  end
+  end if Rack.release < '2.3'
 end
 end
