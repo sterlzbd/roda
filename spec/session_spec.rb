@@ -15,9 +15,15 @@ describe "session handling" do
     body.must_match("You're missing a session handler, try using the sessions plugin.")
   end
 
-  it "should return session if rack session middleware is used" do
+  it "should return session if session middleware is used" do
+    require 'roda/session_middleware'
     app(:bare) do
-      use Rack::Session::Cookie, :secret=>'1'
+      if RUBY_VERSION >= '2.0'
+        require 'roda/session_middleware'
+        use RodaSessionMiddleware, :secret=>'1'*64
+      else
+        use Rack::Session::Cookie, :secret=>'1'*64
+      end
 
       route do |r|
         r.on do
