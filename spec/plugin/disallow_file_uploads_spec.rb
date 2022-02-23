@@ -19,6 +19,7 @@ describe "disallow_file_uploads plugin" do
     }
     body(h.dup).must_equal "foo\n"
     app.plugin :disallow_file_uploads
+    request_body.rewind
     proc{body(h.dup)}.must_raise Roda::RodaPlugins::DisallowFileUploads::Error
   end
 end
