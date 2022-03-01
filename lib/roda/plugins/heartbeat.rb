@@ -14,6 +14,7 @@ class Roda
     #
     #   plugin :heartbeat, path: '/status'
     module Heartbeat
+      HEADER_CLASS = (defined?(Rack::Headers) && Rack::Headers.is_a?(Class)) ? Rack::Headers : Hash
       HEARTBEAT_RESPONSE = [200, {'Content-Type'=>'text/plain'}.freeze, ['OK'.freeze].freeze].freeze
 
       # Set the heartbeat path to the given path.
@@ -28,7 +29,7 @@ class Roda
         def _roda_before_20__heartbeat
           if env['PATH_INFO'] == opts[:heartbeat_path]
             response = HEARTBEAT_RESPONSE.dup
-            response[1] = Hash[response[1]]
+            response[1] = HEADER_CLASS[response[1]]
             throw :halt, response
           end
         end
