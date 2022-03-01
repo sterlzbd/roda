@@ -10,18 +10,28 @@ else
 end
 
 if RUBY_VERSION < '2.2.0'
-  gem 'rack', '<2'
   gem 'sass', '< 3.5'
 else
-  case RUBY_VERSION[0, 3]
-  when '2.4', '3.1'
-    # Test main branch of Rack for lowest and highest supported
-    # Ruby version
-    gem 'rack', :git => 'https://github.com/rack/rack'
-  else
-    gem 'rack'
-  end
   gem 'sass'
+end
+
+case RUBY_VERSION[0, 3]
+when '1.9', '2.0'
+  gem 'rack', '<1.6'
+when '2.1', '2.2'
+  gem 'rack', '<2'
+when '2.3'
+  gem 'rack', '<2.1'
+when '2.5'
+  gem 'rack', '<2.2'
+when '2.6'
+  gem 'rack', '<3'
+when '2.4', '3.1'
+  # Test main branch of Rack for lowest and highest supported
+  # Ruby version
+  gem 'rack', :git => 'https://github.com/rack/rack'
+else
+  gem 'rack'
 end
 
 if RUBY_VERSION < '2.4.0'
