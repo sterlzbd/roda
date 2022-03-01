@@ -35,7 +35,13 @@ class Roda
         def run(app, opts=OPTS)
           res = catch(:halt){super(app)}
           yield res if defined?(yield)
-          throw(:halt, res) unless opts[:not_found] == :pass && res[0] == 404
+          if opts[:not_found] == :pass && res[0] == 404
+            body = res[2]
+            body.close if body.respond_to?(:close)
+            nil
+          else
+            throw(:halt, res)
+          end
         end
       end
     end

@@ -1,5 +1,7 @@
 = master
 
+* Make run_handler plugin close bodies for upstream 404 responses when using not_found: :pass (jeremyevans)
+
 * Drop all 1xx bodies in the drop body plugin (jeremyevans)
 
 * Do not set a Content-Length header for 205 responses on Rack <2.0.2 (jeremyevans)
