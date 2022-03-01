@@ -111,15 +111,16 @@ class Roda
             compressed_path = path + suffix
 
             if public_file_readable?(compressed_path)
-              res = public_serve(server, compressed_path)
-              headers = res[1]
+              s, h, b = public_serve(server, compressed_path)
+              headers = response.headers
+              headers.replace(h)
 
-              unless res[0] == 304
+              unless s == 304
                 headers['Content-Type'] = ::Rack::Mime.mime_type(::File.extname(path), 'text/plain')
                 headers['Content-Encoding'] = encoding
               end
 
-              halt res
+              halt [s, headers, b]
             end
           end
         end
