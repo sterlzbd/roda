@@ -86,6 +86,11 @@ task "spec_cov" do
   spec.call('COVERAGE'=>'1')
 end
   
+desc "Run specs with Rack::Lint"
+task "spec_lint" do
+  spec.call('LINT'=>'1')
+end
+  
 desc "Run specs in CI mode"
 task "spec_ci" do
   # Use LINT on about have of the tested Ruby versions,
