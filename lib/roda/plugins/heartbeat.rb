@@ -14,7 +14,11 @@ class Roda
     #
     #   plugin :heartbeat, path: '/status'
     module Heartbeat
+      # :nocov:
       HEADER_CLASS = (defined?(Rack::Headers) && Rack::Headers.is_a?(Class)) ? Rack::Headers : Hash
+      # :nocov:
+      private_constant :HEADER_CLASS
+
       HEARTBEAT_RESPONSE = [200, {'Content-Type'=>'text/plain'}.freeze, ['OK'.freeze].freeze].freeze
 
       # Set the heartbeat path to the given path.
