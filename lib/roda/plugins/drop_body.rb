@@ -15,13 +15,16 @@ class Roda
         DROP_BODY_STATUSES = [100, 101, 102, 204, 205, 304].freeze
         RodaPlugins.deprecate_constant(self, :DROP_BODY_STATUSES)
 
+        DROP_BODY_RANGE = 100..199
+        private_constant :DROP_BODY_RANGE
+
         # If the response status indicates a body should not be
         # returned, use an empty body and remove the Content-Length
         # and Content-Type headers.
         def finish
           r = super
           case r[0]
-          when 100, 101, 102, 204, 304
+          when DROP_BODY_RANGE, 204, 304
             r[2] = EMPTY_ARRAY
             h = r[1]
             h.delete("Content-Length")

@@ -1,5 +1,7 @@
 = master
 
+* Drop all 1xx bodies in the drop body plugin (jeremyevans)
+
 * Do not set a Content-Length header for 205 responses on Rack <2.0.2 (jeremyevans)
 
 * Use Rack::Files instead of Rack::File if available, to avoid deprecation warnings (jeremyevans)

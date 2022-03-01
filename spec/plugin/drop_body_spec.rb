@@ -7,7 +7,7 @@ describe "drop_body plugin" do
       response.write('a')
     end
 
-    [101, 102, 204, 304].each do  |i|
+    [100 + rand(100), 204, 304].each do  |i|
       path = "/#{i.to_s}"
       body(path).must_equal ''
       header('Content-Type', path).must_be_nil
