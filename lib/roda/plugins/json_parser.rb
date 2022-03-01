@@ -52,9 +52,7 @@ class Roda
           if post_params = (env["roda.json_params"] || env["rack.request.form_hash"])
             post_params
           elsif (input = env["rack.input"]) && content_type =~ /json/
-            input.rewind
-            str = input.read
-            input.rewind
+            str = _read_json_input(input)
             return super if str.empty?
             begin
               json_params = parse_json(str)
@@ -80,6 +78,23 @@ class Roda
           args = [str]
           args << self if roda_class.opts[:json_parser_include_request]
           roda_class.opts[:json_parser_parser].call(*args)
+        end
+
+        
+        # Rack 3 dropped requirement that input be rewindable
+        if Rack.release >= '2.3'
+          # :nocov:
+          def _read_json_input(input)
+            input.read
+          end
+          # :nocov:
+        else
+          def _read_json_input(input)
+            input.rewind
+            str = input.read
+            input.rewind
+            str
+          end
         end
       end
     end
