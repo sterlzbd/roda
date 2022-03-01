@@ -9,9 +9,9 @@ describe "exception_page plugin" do
 
   def req(path = '/', headers={})
     if path.is_a?(Hash)
-      super({'rack.input'=>StringIO.new}.merge(path))
+      super({'rack.input'=>rack_input}.merge(path))
     else
-      super(path, {'rack.input'=>StringIO.new}.merge(headers))
+      super(path, {'rack.input'=>rack_input}.merge(headers))
     end
   end
 
@@ -37,7 +37,7 @@ describe "exception_page plugin" do
     body.wont_include "\"/exception_page.css\""
     body.wont_include "\"/exception_page.js\""
 
-    s, h, body = req('HTTP_ACCEPT'=>'text/html', 'REQUEST_METHOD'=>'POST', 'rack.input'=>StringIO.new('(%bad-params%)'))
+    s, h, body = req('HTTP_ACCEPT'=>'text/html', 'REQUEST_METHOD'=>'POST', 'rack.input'=>rack_input('(%bad-params%)'))
     s.must_equal 200
     h['Content-Type'].must_equal 'text/html'
     body.join.must_include "Invalid POST data"

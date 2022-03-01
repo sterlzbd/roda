@@ -8,13 +8,15 @@ describe "slash_path_empty" do
       r.get("b"){"3"}
     end
 
-    body("").must_equal '1'
+    unless_lint do
+      body("").must_equal '1'
+      body("a").must_equal ''
+      body("b").must_equal ''
+    end
     body.must_equal '1'
-    body("a").must_equal ''
     body("/a").must_equal '2'
     body("/a/").must_equal '2'
     body("/a/b").must_equal ''
-    body("b").must_equal ''
     body("/b").must_equal '3'
     body("/b/").must_equal '3'
     body("/b/c").must_equal ''

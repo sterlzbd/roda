@@ -23,66 +23,66 @@ describe "route_csrf plugin" do
     route_csrf_app
     token = body("/token/foo")
     token.length.must_equal 84
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     token = body("/token/bar")
     token.length.must_equal 84
-    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'b'
-    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/bar", "REQUEST_METHOD"=>'DELETE', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'b'
+    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'DELETE', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     # Additional failure cases
 
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new)}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input)}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}a"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}a"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     t2 = token.dup
     t2.setbyte(1, t2.getbyte(1) ^ 1)
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(t2)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(t2)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     t2 = token.dup
     t2.setbyte(61, t2.getbyte(61) ^ 1)
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(t2)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(t2)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     t2 = token.dup
     t2[1] = '|'
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(t2)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(t2)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
   end
 
   it "supports :require_request_specific_tokens => false option to allow non-request-specific tokens" do
     route_csrf_app(:require_request_specific_tokens=>false){csrf_token}
     token = body("/token/foo")
     token.length.must_equal 84
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     token = body
     token.length.must_equal 84
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
-    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'b'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'b'
   end
 
   it "allows tokens submitted in both parameter and HTTP header if :check_header option is true" do
     route_csrf_app(:check_header=>true)
     token = body("/token/foo")
     token.length.must_equal 84
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new, 'HTTP_X_CSRF_TOKEN'=>token).must_equal 'f'
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'HTTP_X_CSRF_TOKEN'=>token)}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input, 'HTTP_X_CSRF_TOKEN'=>token).must_equal 'f'
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'HTTP_X_CSRF_TOKEN'=>token)}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
   end
 
   it "allows tokens submitted in only HTTP header if :check_header option is :only" do
     route_csrf_app(:check_header=>:only)
     token = body("/token/foo")
     token.length.must_equal 84
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new, 'HTTP_X_CSRF_TOKEN'=>token).must_equal 'f'
-    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'HTTP_X_CSRF_TOKEN'=>token)}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input, 'HTTP_X_CSRF_TOKEN'=>token).must_equal 'f'
+    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'HTTP_X_CSRF_TOKEN'=>token)}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
   end
 
   it "allows tokens specified via :token option to check_csrf" do
@@ -105,26 +105,26 @@ describe "route_csrf plugin" do
 
   it "allows configuring CSRF failure action with :csrf_failure => :empty_403 option" do
     route_csrf_app(:csrf_failure=>:empty_403)
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
-    req("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new).must_equal [403, {'Content-Type'=>'text/html', 'Content-Length'=>'0'}, []]
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
+    req("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input).must_equal [403, {'Content-Type'=>'text/html', 'Content-Length'=>'0'}, []]
   end
 
   it "allows configuring CSRF failure action with :csrf_failure => :empty_403 option" do
     route_csrf_app(:csrf_failure=>:clear_session){session.inspect}
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
-    body("/b", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/token/a'))}")).must_equal '{}'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
+    body("/b", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/token/a'))}")).must_equal '{}'
   end
 
   it "allows configuring CSRF failure action with :csrf_failure => proc option" do
     route_csrf_app(:csrf_failure=>proc{|r| r.path + '2'})
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new).must_equal '/foo2'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input).must_equal '/foo2'
   end
 
   it "allows configuring CSRF failure action via a plugin block" do
     route_csrf_app(:block=>proc{|r| r.path + '2'})
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new).must_equal '/foo2'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input).must_equal '/foo2'
   end
 
   it "allows plugin block to integrate with route_block_args plugin" do
@@ -142,13 +142,13 @@ describe "route_csrf plugin" do
         end
       end
     end
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new).must_equal '/foo2'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input).must_equal '/foo2'
   end
 
   it "raises Error if configuring plugin with invalid :csrf_failure option" do
     route_csrf_app(:csrf_failure=>:foo)
-    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new)}.must_raise Roda::RodaError
+    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input)}.must_raise Roda::RodaError
   end
 
   it "raises Error if configuring plugin with block and :csrf_failure option" do
@@ -159,14 +159,14 @@ describe "route_csrf plugin" do
     pr = proc{env['BAD'] == '1' ? 't' : 'f'}
     route_csrf_app{check_csrf!(:csrf_failure=>pr); ''}
     token = body("/token/foo")
-    body("SKIP"=>"1", "BAD"=>'1', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 't'
-    body("SKIP"=>"1", "BAD"=>'0', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    body("SKIP"=>"1", "BAD"=>'1', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 't'
+    body("SKIP"=>"1", "BAD"=>'0', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
   end
 
   it "supports valid_csrf? method" do
     route_csrf_app{valid_csrf?.to_s}
-    body("/a", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/a"))}")).must_equal 'true'
-    body("/a", "REQUEST_METHOD"=>'POST', 'SKIP'=>true, 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/b"))}")).must_equal 'false'
+    body("/a", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/a"))}")).must_equal 'true'
+    body("/a", "REQUEST_METHOD"=>'POST', 'SKIP'=>'1', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/b"))}")).must_equal 'false'
   end
 
   it "supports valid_csrf? method" do
@@ -174,8 +174,8 @@ describe "route_csrf plugin" do
       check_csrf!{'nope'}
       'yep'
     end
-    body("/a", "REQUEST_METHOD"=>'POST', 'SKIP'=>true, 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/a"))}")).must_equal 'yep'
-    body("/a", "REQUEST_METHOD"=>'POST', 'SKIP'=>true, 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body("/token/b"))}")).must_equal 'nope'
+    body("/a", "REQUEST_METHOD"=>'POST', 'SKIP'=>'1', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/a"))}")).must_equal 'yep'
+    body("/a", "REQUEST_METHOD"=>'POST', 'SKIP'=>'1', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/b"))}")).must_equal 'nope'
   end
 
   it "supports use_request_specific_csrf_tokens? method" do
@@ -202,28 +202,28 @@ describe "route_csrf plugin" do
   it "supports csrf_metatag method" do
     route_csrf_app(:require_request_specific_tokens=>false){csrf_metatag}
     body =~ /\A<meta name="_csrf" content="([+\/0-9A-Za-z]{84})" \/>\z/
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape($1)}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape($1)}")).must_equal 'f'
 
     route_csrf_app(:require_request_specific_tokens=>false, :field=>'foo'){csrf_metatag}
     body =~ /\A<meta name="foo" content="([+\/0-9A-Za-z]{84})" \/>\z/
-    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("foo=#{Rack::Utils.escape($1)}")).must_equal 'b'
+    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("foo=#{Rack::Utils.escape($1)}")).must_equal 'b'
   end
 
   it "supports csrf_tag method" do
     route_csrf_app(:require_request_specific_tokens=>false){csrf_tag}
     body =~ /\A<input type="hidden" name="_csrf" value="([+\/0-9A-Za-z]{84})" \/>\z/
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape($1)}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape($1)}")).must_equal 'f'
 
     route_csrf_app(:require_request_specific_tokens=>false, :field=>'foo'){csrf_tag}
     body =~ /\A<input type="hidden" name="foo" value="([+\/0-9A-Za-z]{84})" \/>\z/
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("foo=#{Rack::Utils.escape($1)}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("foo=#{Rack::Utils.escape($1)}")).must_equal 'f'
 
     route_csrf_app{csrf_tag('/foo')}
     body =~ /\A<input type="hidden" name="_csrf" value="([+\/0-9A-Za-z]{84})" \/>\z/
     token = $1
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     route_csrf_app do |r|
       r.is 'foo', :method=>'PUT' do
@@ -233,23 +233,23 @@ describe "route_csrf plugin" do
     end
     body =~ /\A<input type="hidden" name="_csrf" value="([+\/0-9A-Za-z]{84})" \/>\z/
     token = $1
-    body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}").must_equal 'f2'
-    proc{body("/bar", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}").must_equal 'f2'
+    proc{body("/bar", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
   end
 
   it "supports csrf_tag method" do
     route_csrf_app(:require_request_specific_tokens=>false){csrf_token}
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body)}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body)}")).must_equal 'f'
 
     route_csrf_app(:require_request_specific_tokens=>false, :field=>'foo'){csrf_token}
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("foo=#{Rack::Utils.escape(body)}")).must_equal 'f'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("foo=#{Rack::Utils.escape(body)}")).must_equal 'f'
 
     route_csrf_app{csrf_token('/foo')}
     token = body
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
 
     route_csrf_app do |r|
       r.is 'foo', :method=>'PUT' do
@@ -258,9 +258,9 @@ describe "route_csrf plugin" do
       csrf_token('/foo', 'PUT')
     end
     token = body
-    body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}").must_equal 'f2'
-    proc{body("/bar", "REQUEST_METHOD"=>'PUT', 'rack.input'=>StringIO.new, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    body("/foo", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}").must_equal 'f2'
+    proc{body("/bar", "REQUEST_METHOD"=>'PUT', 'rack.input'=>rack_input, 'QUERY_STRING'=>"_csrf=#{Rack::Utils.escape(token)}")}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
   end
 
   it "supports csrf_path method" do
@@ -269,31 +269,31 @@ describe "route_csrf plugin" do
       csrf_token(csrf_path(env['CP']))
     end
 
-    body("REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>nil))}")).must_equal '/2'
-    body("REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>''))}")).must_equal '/2'
-    body("REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'#foo'))}")).must_equal '/2'
-    body("REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'?foo'))}")).must_equal '/2'
+    body("REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body)}")).must_equal '/2'
+    body("REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>''))}")).must_equal '/2'
+    body("REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'#foo'))}")).must_equal '/2'
+    body("REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'?foo'))}")).must_equal '/2'
 
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/a', 'CP'=>nil))}")).must_equal '/a2'
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/a', 'CP'=>''))}")).must_equal '/a2'
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/a', 'CP'=>'?foo'))}")).must_equal '/a2'
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/a', 'CP'=>'#foo'))}")).must_equal '/a2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/a'))}")).must_equal '/a2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/a', 'CP'=>''))}")).must_equal '/a2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/a', 'CP'=>'?foo'))}")).must_equal '/a2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/a', 'CP'=>'#foo'))}")).must_equal '/a2'
 
-    body("REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'http://foo/'))}")).must_equal '/2'
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'https://foo/a'))}")).must_equal '/a2'
-    body('/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'http://foo/a/b'))}")).must_equal '/a/b2'
+    body("REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'http://foo/'))}")).must_equal '/2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'https://foo/a'))}")).must_equal '/a2'
+    body('/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'http://foo/a/b'))}")).must_equal '/a/b2'
 
-    body("REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'/'))}")).must_equal '/2'
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'/a'))}")).must_equal '/a2'
-    body('/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('CP'=>'/a/b'))}")).must_equal '/a/b2'
+    body("REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'/'))}")).must_equal '/2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'/a'))}")).must_equal '/a2'
+    body('/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('CP'=>'/a/b'))}")).must_equal '/a/b2'
 
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/a2'
-    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/b', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/a2'
-    body('/b/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/b/', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/b/a2'
-    body('/b/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/b/b', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/b/a2'
-    body('/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/b', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a/b'))}")).must_equal '/a/b2'
-    body('/b/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/b/', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a/b'))}")).must_equal '/b/a/b2'
-    body('/b/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(body('/b/a', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a/b'))}")).must_equal '/b/a/b2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/a2'
+    body('/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/b', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/a2'
+    body('/b/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/b/', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/b/a2'
+    body('/b/a', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/b/b', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a'))}")).must_equal '/b/a2'
+    body('/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/b', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a/b'))}")).must_equal '/a/b2'
+    body('/b/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/b/', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a/b'))}")).must_equal '/b/a/b2'
+    body('/b/a/b', "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body('/b/a', 'HTTPS'=>'on', 'HTTP_HOST'=>'foo.com', 'CP'=>'a/b'))}")).must_equal '/b/a/b2'
   end
 
 begin
@@ -313,11 +313,11 @@ else
     app.use Rack::Csrf, :skip=>['POST:/foo', 'POST:/bar'], :raise=>true
     token = body
     token.length.wont_equal 84
-    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
-    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'b'
+    body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'f'
+    body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}")).must_equal 'b'
     body('/clear').must_equal ''
-    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
-    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>StringIO.new("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
+    proc{body("/bar", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(token)}"))}.must_raise Roda::RodaPlugins::RouteCsrf::InvalidToken
   end
 end
 end

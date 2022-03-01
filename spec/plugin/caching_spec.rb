@@ -136,27 +136,28 @@ describe 'request.etag' do
   before(:all) do
     app(:caching) do |r|
       r.is "" do
-        response.status = r.env['status'] if r.env['status']
+        response.status = r.env['status'].to_i if r.env['status']
         etag_opts = {}
-        etag_opts[:new_resource] = r.env['new_resource'] if r.env.has_key?('new_resource')
-        etag_opts[:weak] = r.env['weak'] if r.env.has_key?('weak')
+        etag_opts[:new_resource] = r.env['new_resource'] == 'true' if r.env.has_key?('new_resource')
+        etag_opts[:weak] = r.env['weak'] == 'true' if r.env.has_key?('weak')
         r.etag 'foo', etag_opts
         'ok'
       end
     end
   end
 
+  def res(a={})
+    a['status'] = a['status'].to_s if a['status']
+    s, h, b = req(a)
+    h['ETag'].must_equal '"foo"'
+    [s, b.join]
+  end
+
   it 'uses a weak etag with the :weak option' do
-    header('ETag', 'weak'=>true).must_equal 'W/"foo"'
+    header('ETag', 'weak'=>'true').must_equal 'W/"foo"'
   end
 
   describe 'for GET requests' do
-    def res(a={})
-      s, h, b = req(a)
-      h['ETag'].must_equal '"foo"'
-      [s, b.join]
-    end
-
     it "sets etag if no If-None-Match" do
       res.must_equal [200, 'ok']
     end
@@ -166,7 +167,7 @@ describe 'request.etag' do
     end
 
     it "sets etag and if If-None-Match is * and it is a new resource" do
-      res('HTTP_IF_NONE_MATCH' => '*', 'new_resource'=>true).must_equal [200, 'ok']
+      res('HTTP_IF_NONE_MATCH' => '*', 'new_resource'=>'true').must_equal [200, 'ok']
     end
 
     it "sets etag and returns 304 if If-None-Match is etag" do
@@ -206,19 +207,17 @@ describe 'request.etag' do
     end
 
     it "sets etag and returns 412 if If-Match is * for new resources" do
-      res('HTTP_IF_MATCH' => '*', 'new_resource'=>true).must_equal [412, '']
+      res('HTTP_IF_MATCH' => '*', 'new_resource'=>'true').must_equal [412, '']
     end
 
     it "sets etag if If-Match does not include etag" do
-      res('HTTP_IF_MATCH' => '"bar", "baz"', 'new_resource'=>true).must_equal [412, '']
+      res('HTTP_IF_MATCH' => '"bar", "baz"', 'new_resource'=>'true').must_equal [412, '']
     end
   end
 
   describe 'for PUT requests' do
     def res(a={})
-      s, h, b = req(a.merge('REQUEST_METHOD'=>'PUT'))
-      h['ETag'].must_equal '"foo"'
-      [s, b.join]
+      super(a.merge('REQUEST_METHOD'=>'PUT'))
     end
 
     it "sets etag if no If-None-Match" do
@@ -230,7 +229,7 @@ describe 'request.etag' do
     end
 
     it "sets etag and if If-None-Match is * and it is a new resource" do
-      res('HTTP_IF_NONE_MATCH' => '*', 'new_resource'=>true).must_equal [200, 'ok']
+      res('HTTP_IF_NONE_MATCH' => '*', 'new_resource'=>'true').must_equal [200, 'ok']
     end
 
     it "sets etag and returns 412 if If-None-Match is etag" do
@@ -270,19 +269,17 @@ describe 'request.etag' do
     end
 
     it "sets etag and returns 412 if If-Match is * for new resources" do
-      res('HTTP_IF_MATCH' => '*', 'new_resource'=>true).must_equal [412, '']
+      res('HTTP_IF_MATCH' => '*', 'new_resource'=>'true').must_equal [412, '']
     end
 
     it "sets etag if If-Match does not include etag" do
-      res('HTTP_IF_MATCH' => '"bar", "baz"', 'new_resource'=>true).must_equal [412, '']
+      res('HTTP_IF_MATCH' => '"bar", "baz"', 'new_resource'=>'true').must_equal [412, '']
     end
   end
 
   describe 'for POST requests' do
     def res(a={})
-      s, h, b = req(a.merge('REQUEST_METHOD'=>'POST'))
-      h['ETag'].must_equal '"foo"'
-      [s, b.join]
+      super(a.merge('REQUEST_METHOD'=>'POST'))
     end
 
     it "sets etag if no If-None-Match" do
@@ -290,7 +287,7 @@ describe 'request.etag' do
     end
 
     it "sets etag and returns 412 if If-None-Match is * and it is not a new resource" do
-      res('HTTP_IF_NONE_MATCH' => '*', 'new_resource'=>false).must_equal [412, '']
+      res('HTTP_IF_NONE_MATCH' => '*', 'new_resource'=>'false').must_equal [412, '']
     end
 
     it "sets etag and if If-None-Match is *" do
@@ -322,7 +319,7 @@ describe 'request.etag' do
     end
 
     it "sets etag if If-Match is * and this is not a new resource" do
-      res('HTTP_IF_MATCH' => '*', 'new_resource'=>false).must_equal [200, 'ok']
+      res('HTTP_IF_MATCH' => '*', 'new_resource'=>'false').must_equal [200, 'ok']
     end
 
     it "sets etag if If-Match is etag" do
@@ -338,7 +335,7 @@ describe 'request.etag' do
     end
 
     it "sets etag if If-Match does not include etag" do
-      res('HTTP_IF_MATCH' => '"bar", "baz"', 'new_resource'=>true).must_equal [412, '']
+      res('HTTP_IF_MATCH' => '"bar", "baz"', 'new_resource'=>'true').must_equal [412, '']
     end
   end
 end

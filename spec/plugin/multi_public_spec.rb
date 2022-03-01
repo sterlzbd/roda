@@ -68,7 +68,7 @@ describe "multi_public plugin" do
   it "support headers and default mime types per directory" do
     app(:bare) do
       plugin :multi_public,
-        :a => ['spec/views', {'X-Foo' => 'bar'}, nil],
+        :a => ['spec/views', {'x-foo' => 'bar'}, nil],
         :b => ['spec', nil, 'foo/bar']
 
       route do |r|
@@ -82,17 +82,17 @@ describe "multi_public plugin" do
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
     header('Content-Type', '/about/_test.erb').must_equal 'text/plain'
-    header('X-Foo', '/about/_test.erb').must_equal 'bar'
+    header('x-foo', '/about/_test.erb').must_equal 'bar'
 
     body('/static/views/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
     header('Content-Type', '/static/views/about/_test.erb').must_equal 'foo/bar'
-    header('X-Foo', '/static/views/about/_test.erb').must_be_nil
+    header('x-foo', '/static/views/about/_test.erb').must_be_nil
   end
 
 
   it "loads the public plugin with the given options" do
     app(:bare) do
-      plugin :multi_public, {}, :root=>'spec/views', :headers=>{'X-Foo' => 'bar'}, :default_mime=>'foo/bar'
+      plugin :multi_public, {}, :root=>'spec/views', :headers=>{'x-foo' => 'bar'}, :default_mime=>'foo/bar'
 
       route do |r|
         r.public
@@ -101,7 +101,7 @@ describe "multi_public plugin" do
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
     header('Content-Type', '/about/_test.erb').must_equal 'foo/bar'
-    header('X-Foo', '/about/_test.erb').must_equal 'bar'
+    header('x-foo', '/about/_test.erb').must_equal 'bar'
   end
 
   it "handles serving gzip files in gzip mode if client supports gzip" do

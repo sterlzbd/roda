@@ -4,11 +4,17 @@ require 'uri'
 
 describe "sinatra_helpers plugin" do 
   def sin_app(&block)
-    app(:sinatra_helpers, &block)
+    app = app(:sinatra_helpers, &block)
+    app.plugin :drop_body
+    app
   end
 
   def status_app(code, &block)
     block ||= proc{}
+    case code
+    when 204, 205, 304
+      code += 2
+    end
     sin_app do |r|
       status code
       instance_eval(&block).inspect
@@ -35,8 +41,8 @@ describe "sinatra_helpers plugin" do
   end
 
   it 'informational? is true only for 1xx status' do
-    status_app(100 + rand(100)){informational?}
-    body.must_equal 'true'
+    status_app(100 + rand(100)){response['X'] = informational?.inspect}
+    header('X').must_equal 'true'
     status_app(200 + rand(400)){informational?}
     body.must_equal 'false'
   end
@@ -44,8 +50,8 @@ describe "sinatra_helpers plugin" do
   it 'success? is true only for 2xx status' do
     status_app(200 + rand(100)){success?}
     body.must_equal 'true'
-    status_app(100 + rand(100)){success?}
-    body.must_equal 'false'
+    status_app(100 + rand(100)){response['X'] = success?.inspect}
+    header('X').must_equal 'false'
     status_app(300 + rand(300)){success?}
     body.must_equal 'false'
   end
@@ -250,30 +256,31 @@ describe "sinatra_helpers plugin" do
 
   describe 'mime_type' do
     before do
-      sin_app{|r| mime_type((r.path unless r.path.empty?)).to_s}
+      sin_app{|r| mime_type((r.path[1,1000] unless r.path.empty?)).to_s}
     end
 
     it "looks up mime types in Rack's MIME registry" do
       Rack::Mime::MIME_TYPES['.foo'] = 'application/foo'
-      body('foo').must_equal 'application/foo'
-      body('.foo').must_equal 'application/foo'
+      body('/foo').must_equal 'application/foo'
+      body('/.foo').must_equal 'application/foo'
     end
 
     it 'returns nil when given nil' do
-      body('PATH_INFO'=>'').must_equal ''
+      sin_app{|r| mime_type((r.path[2,1000] unless r.path.empty?)).to_s}
+      body.must_equal ''
     end
 
     it 'returns nil when media type not registered' do
-      body('bizzle').must_equal ''
+      body('/bizzle').must_equal ''
     end
 
     it 'returns the argument when given a media type string' do
-      body('text/plain').must_equal 'text/plain'
+      body('/text/plain').must_equal 'text/plain'
     end
 
     it 'supports mime types registered at the class level' do
       app.mime_type :foo, 'application/foo2'
-      body('foo').must_equal 'application/foo2'
+      body('/foo').must_equal 'application/foo2'
     end
   end
 
@@ -315,16 +322,16 @@ describe "sinatra_helpers plugin" do
     end
 
     it 'properly encodes parameters with delimiter characters' do
-      sin_app{|r| content_type 'image/png', :comment => r.path }
-      header('Content-Type', 'Hello, world!').must_equal 'image/png;comment="Hello, world!"'
-      header('Content-Type', 'semi;colon').must_equal 'image/png;comment="semi;colon"'
-      header('Content-Type', '"Whatever."').must_equal 'image/png;comment="\"Whatever.\""'
+      sin_app{|r| content_type 'image/png', :comment => r.path[1, 1000] }
+      header('Content-Type', '/Hello, world!').must_equal 'image/png;comment="Hello, world!"'
+      header('Content-Type', '/semi;colon').must_equal 'image/png;comment="semi;colon"'
+      header('Content-Type', '/"Whatever."').must_equal 'image/png;comment="\"Whatever.\""'
     end
   end
 
   describe 'attachment' do
     before do
-      sin_app{|r| attachment r.path; 'b'}
+      sin_app{|r| attachment r.path[1, 1000]; 'b'}
     end
 
     it 'sets the Content-Disposition header' do
@@ -354,11 +361,11 @@ describe "sinatra_helpers plugin" do
     end
 
     it 'sets the Content-Type header' do
-      header('Content-Type', 'test.xml').must_equal 'application/xml'
+      header('Content-Type', '/test.xml').must_equal 'application/xml'
     end
 
     it 'does not modify the default Content-Type without a file extension' do
-      header('Content-Type', 'README').must_equal 'text/html'
+      header('Content-Type', '/README').must_equal 'text/html'
     end
 
     it 'should not modify the Content-Type if it is already set' do
@@ -367,7 +374,7 @@ describe "sinatra_helpers plugin" do
         attachment 'test.xml'
       end
 
-      header('Content-Type', 'README').must_equal 'application/atom+xml'
+      header('Content-Type', '/README').must_equal 'application/atom+xml'
     end
   end
 
@@ -375,7 +382,7 @@ describe "sinatra_helpers plugin" do
     before(:all) do
       file = @file = 'spec/assets/css/raw.css'
       @content = File.read(@file)
-      sin_app{send_file file, env['OPTS'] || {}}
+      sin_app{send_file file, env['rack.OPTS'] || {}}
     end
 
     it "sends the contents of the file" do
@@ -388,11 +395,11 @@ describe "sinatra_helpers plugin" do
     end
 
     it 'sets the Content-Type response header if type option is set to a file extension' do
-      header('Content-Type', 'OPTS'=>{:type => 'html'}).must_equal 'text/html'
+      header('Content-Type', 'rack.OPTS'=>{:type => 'html'}).must_equal 'text/html'
     end
 
     it 'sets the Content-Type response header if type option is set to a mime type' do
-      header('Content-Type', 'OPTS'=>{:type => 'application/octet-stream'}).must_equal 'application/octet-stream'
+      header('Content-Type', 'rack.OPTS'=>{:type => 'application/octet-stream'}).must_equal 'application/octet-stream'
     end
 
     it 'sets the Content-Length response header' do
@@ -406,7 +413,7 @@ describe "sinatra_helpers plugin" do
     it 'allows passing in a different Last-Modified response header with :last_modified' do
       time = Time.now
       @app.plugin :caching
-      header('Last-Modified', 'OPTS'=>{:last_modified => time}).must_equal time.httpdate
+      header('Last-Modified', 'rack.OPTS'=>{:last_modified => time}).must_equal time.httpdate
     end
 
     it "returns a 404 when not found" do
@@ -419,27 +426,27 @@ describe "sinatra_helpers plugin" do
     end
 
     it "sets the Content-Disposition header when :disposition set to 'attachment'" do
-      header('Content-Disposition', 'OPTS'=>{:disposition => 'attachment'}).must_equal 'attachment; filename="raw.css"'
+      header('Content-Disposition', 'rack.OPTS'=>{:disposition => 'attachment'}).must_equal 'attachment; filename="raw.css"'
     end
 
     it "does not set add a file name if filename is false" do
-      header('Content-Disposition', 'OPTS'=>{:disposition => 'inline', :filename=>false}).must_equal 'inline'
+      header('Content-Disposition', 'rack.OPTS'=>{:disposition => 'inline', :filename=>false}).must_equal 'inline'
     end
 
     it "sets the Content-Disposition header when :disposition set to 'inline'" do
-      header('Content-Disposition', 'OPTS'=>{:disposition => 'inline'}).must_equal 'inline; filename="raw.css"'
+      header('Content-Disposition', 'rack.OPTS'=>{:disposition => 'inline'}).must_equal 'inline; filename="raw.css"'
     end
 
     it "sets the Content-Disposition header when :filename provided" do
-      header('Content-Disposition', 'OPTS'=>{:filename => 'foo.txt'}).must_equal 'attachment; filename="foo.txt"'
+      header('Content-Disposition', 'rack.OPTS'=>{:filename => 'foo.txt'}).must_equal 'attachment; filename="foo.txt"'
     end
 
     it 'allows setting a custom status code' do
-      status('OPTS'=>{:status=>201}).must_equal 201
+      status('rack.OPTS'=>{:status=>201}).must_equal 201
     end
 
     it "is able to send files with unknown mime type" do
-      header('Content-Type', 'OPTS'=>{:type => '.foobar'}).must_equal 'application/octet-stream'
+      header('Content-Type', 'rack.OPTS'=>{:type => '.foobar'}).must_equal 'application/octet-stream'
     end
 
     it "does not override Content-Type if already set and no explicit type is given" do
@@ -548,6 +555,9 @@ describe "sinatra_helpers plugin" do
     o = Object.new
     def o.method_missing(*a)
       (@a ||= []) << a
+    end
+    %w'info debug warn error fatal'.each do |meth|
+      o.define_singleton_method(meth){|*a| super(*a)}
     end
     def o.logs
       @a

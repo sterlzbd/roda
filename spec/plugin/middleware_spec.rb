@@ -175,6 +175,7 @@ describe "middleware plugin" do
   it "calls :handle_result option with env and response" do
     app(:bare) do
       plugin :middleware, :handle_result=>(proc do |env, res|
+        res[1].delete('Content-Length')
         res[2] << env['foo']
       end)
       route{}

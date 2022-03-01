@@ -14,8 +14,10 @@ describe "relative_plath plugin" do
     body('/a/b/c', 'SCRIPT_NAME'=>'/d').must_equal '../../../a'
     body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
     body('', 'SCRIPT_NAME'=>'').must_equal '/a'
-    body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
-    body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
+    unless_lint do
+      body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
+      body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
+    end
   end
 
   it "supports relative_prefix method for prefix to turn absolute paths into relative paths" do
@@ -31,8 +33,10 @@ describe "relative_plath plugin" do
     body('/a/b/c', 'SCRIPT_NAME'=>'/d').must_equal '../../../a'
     body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
     body('', 'SCRIPT_NAME'=>'').must_equal '/a'
-    body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
-    body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
+    unless_lint do
+      body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
+      body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
+    end
   end
 
   it "supports multiple calls to relative_prefix while routing same request" do
@@ -48,7 +52,9 @@ describe "relative_plath plugin" do
     body('/a/b/c', 'SCRIPT_NAME'=>'/d').must_equal '../../../a'
     body('', 'SCRIPT_NAME'=>'/d').must_equal './a'
     body('', 'SCRIPT_NAME'=>'').must_equal '/a'
-    body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
-    body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
+    unless_lint do
+      body('a', 'SCRIPT_NAME'=>'').must_equal '/a'
+      body('/', 'SCRIPT_NAME'=>'d').must_equal '/a'
+    end
   end
 end

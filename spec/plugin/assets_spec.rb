@@ -67,7 +67,7 @@ if run_tests
     end
 
     def gunzip(body)
-      Zlib::GzipReader.wrap(StringIO.new(body), &:read)
+      Zlib::GzipReader.wrap(rack_input(body), &:read)
     end
 
     it 'assets_opts should use correct paths given options' do

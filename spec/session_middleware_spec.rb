@@ -14,7 +14,7 @@ describe "RodaSessionMiddleware" do
       use RodaSessionMiddleware, :secret=>'1'*64
 
       route do |r|
-        r.get('s', String, String){|k, v| session[k.to_sym] = v}
+        r.get('s', String, String){|k, v| v.force_encoding('UTF-8'); session[k.to_sym] = v}
         r.get('g',  String){|k| session[k.to_sym].to_s}
         r.get('c'){|k| session.clear; ''}
         r.get('sh'){|k| env = r.env; sess = session; ''}
@@ -35,7 +35,7 @@ describe "RodaSessionMiddleware" do
     body('/s/foo/baz').must_equal 'baz'
     body('/g/foo').must_equal 'baz'
 
-    body("/s/foo/\u1234").must_equal "\u1234"
+    body("/s/foo/\u1234".b).must_equal "\u1234"
     body("/g/foo").must_equal "\u1234"
 
     body("/c").must_equal ""

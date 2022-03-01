@@ -201,7 +201,7 @@ describe "integration" do
     c = Class.new{def initialize(app) @app = app end; def call(env) @app.call(env) end} 
     app.use c
     app.app.must_be_kind_of(c)
-  end
+  end unless ENV['LINT']
 
   it "should have route_block return the route block" do
     app{|r| 1}.route_block.call(nil).must_equal 1
@@ -219,7 +219,7 @@ describe "integration" do
       def call(env)
         status, headers, _body = @app.call(env)
 
-        [status, headers, [@key]]
+        [status, headers.merge('Content-Length'=>@key.length.to_s), [@key]]
       end
     end
 

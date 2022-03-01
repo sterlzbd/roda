@@ -5,7 +5,7 @@ require 'logger'
 describe "common_logger plugin" do
   def cl_app(&block)
     app(:common_logger, &block)
-    @logger = StringIO.new
+    @logger = rack_input
     @app.plugin :common_logger, @logger
   end
 
@@ -95,7 +95,7 @@ describe "common_logger plugin" do
       def debug(str)
         write "DEBUG #{str}"
       end
-    end).new(StringIO.new)
+    end).new(rack_input)
     @app.plugin :common_logger, @logger, :method=>:debug
   end
 

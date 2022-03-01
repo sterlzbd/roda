@@ -32,7 +32,12 @@ describe "class_level_routing plugin" do
       meths.concat(%w'link unlink') if ::Rack::Request.method_defined?("link?")
       meths.each do |meth|
         send(meth, :d) do |m|
-          "x-#{meth}-#{m}"
+          if meth == 'head'
+            response['x'] = "x-#{meth}-#{m}"
+            ''
+          else
+            "x-#{meth}-#{m}"
+          end
         end
       end
     end
@@ -47,7 +52,7 @@ describe "class_level_routing plugin" do
     body('/bar').must_equal "x-get-bar"
     body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
     body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    header('x', '/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
     body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
     body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
     body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
@@ -69,7 +74,7 @@ describe "class_level_routing plugin" do
     body('/bar').must_equal "x-get-bar"
     body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
     body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    header('x', '/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
     body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
     body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
     body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
@@ -105,7 +110,7 @@ describe "class_level_routing plugin" do
     body('/bar').must_equal ""
     body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "ibar"
     body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    header('x', '/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
     body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
     body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
     body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
@@ -125,7 +130,7 @@ describe "class_level_routing plugin" do
     body('/bar').must_equal "x-get-bar"
     body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
     body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    header('x', '/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
     body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
     body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
     body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
@@ -146,7 +151,7 @@ describe "class_level_routing plugin" do
     body('/bar').must_equal "x-get-bar"
     body('/bar', 'REQUEST_METHOD'=>'POST').must_equal "x-post-bar"
     body('/bar', 'REQUEST_METHOD'=>'DELETE').must_equal "x-delete-bar"
-    body('/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
+    header('x', '/bar', 'REQUEST_METHOD'=>'HEAD').must_equal "x-head-bar"
     body('/bar', 'REQUEST_METHOD'=>'OPTIONS').must_equal "x-options-bar"
     body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
     body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"

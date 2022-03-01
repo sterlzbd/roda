@@ -66,8 +66,8 @@ describe "placeholder_string_matchers plugin" do
       end
     end
 
-    body('/bar/banana', 'rack.input'=>StringIO.new).must_equal 'b-banana-banana-1'
-    body('/baz/ban/ana', 'rack.input'=>StringIO.new).must_equal 'b-ban-ana-ban-ana-2'
+    body('/bar/banana', 'rack.input'=>rack_input).must_equal 'b-banana-banana-1'
+    body('/baz/ban/ana', 'rack.input'=>rack_input).must_equal 'b-ban-ana-ban-ana-2'
   end
 
   it "works with symbol_matchers plugin" do

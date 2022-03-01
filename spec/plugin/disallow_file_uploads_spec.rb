@@ -9,7 +9,7 @@ describe "disallow_file_uploads plugin" do
       r.params['foo'][:tempfile].read
     end
 
-    request_body = StringIO.new("------WebKitFormBoundarymwHIM9XjTTVHn3YP\r\nContent-Disposition: form-data; name=\"foo\"; filename=\"bar.txt\"\r\nContent-Type: text/plain\r\n\r\nfoo\n\r\n------WebKitFormBoundarymwHIM9XjTTVHn3YP--\r\n")
+    request_body = rack_input("------WebKitFormBoundarymwHIM9XjTTVHn3YP\r\nContent-Disposition: form-data; name=\"foo\"; filename=\"bar.txt\"\r\nContent-Type: text/plain\r\n\r\nfoo\n\r\n------WebKitFormBoundarymwHIM9XjTTVHn3YP--\r\n")
 
     h = {
       'rack.input'=>request_body,

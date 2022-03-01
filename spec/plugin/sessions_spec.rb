@@ -6,13 +6,15 @@ if RUBY_VERSION >= '2'
     include CookieJar
 
     def req(path, opts={})
-      @errors ||= (errors = []; def errors.puts(s) self << s; end; errors)
+      @errors ||= StringIO.new
       super(path, opts.merge('rack.errors'=>@errors))
     end
 
     def errors
-      e = @errors.dup
-      @errors.clear
+      @errors.rewind
+      e = @errors.read.split("\n")
+      @errors.rewind
+      @errors.truncate(0)
       e
     end
 
@@ -24,7 +26,7 @@ if RUBY_VERSION >= '2'
             session
             env['roda.session.updated_at'] -= r.GET['sut'].to_i if r.GET['sut']
           end
-          r.get('s', String, String){|k, v| session[k] = v}
+          r.get('s', String, String){|k, v| v.force_encoding('UTF-8'); session[k] = v}
           r.get('g',  String){|k| session[k].to_s}
           r.get('sct'){|i| session; env['roda.session.created_at'].to_s}
           r.get('ssct', Integer){|i| session; (env['roda.session.created_at'] -= i).to_s}
@@ -52,7 +54,7 @@ if RUBY_VERSION >= '2'
       body('/s/foo/baz').must_equal 'baz'
       body('/g/foo').must_equal 'baz'
 
-      body("/s/foo/\u1234").must_equal "\u1234"
+      body("/s/foo/\u1234".b).must_equal "\u1234"
       body("/g/foo").must_equal "\u1234"
 
       errors.must_equal []
@@ -372,13 +374,15 @@ if RUBY_VERSION >= '2'
     include CookieJar
 
     def req(path, opts={})
-      @errors ||= (errors = []; def errors.puts(s) self << s; end; errors)
+      @errors ||= StringIO.new
       super(path, opts.merge('rack.errors'=>@errors))
     end
 
     def errors
-      e = @errors.dup
-      @errors.clear
+      @errors.rewind
+      e = @errors.read.split("\n")
+      @errors.rewind
+      @errors.truncate(0)
       e
     end
 

@@ -18,9 +18,10 @@ describe "streaming plugin" do
   end
 
   it "works with IO.copy_stream" do
+    ri = proc{|v| rack_input(v)}
     app(:streaming) do |r|
       stream do |out|
-        %w'a b c'.each{|v| IO.copy_stream(StringIO.new(v), out) }
+        %w'a b c'.each{|v| IO.copy_stream(ri[v], out) }
       end
     end
 
@@ -243,4 +244,4 @@ describe "streaming plugin" do
       a.must_equal %w'a b c d e'
     end
   end if RUBY_VERSION >= '2.3'
-end
+end unless ENV['LINT']

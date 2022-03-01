@@ -187,7 +187,7 @@ describe "error_handler plugin" do
       end
     end
 
-    errors = StringIO.new
+    errors = rack_input
     body('rack.errors'=>errors).must_equal 'foofoo'
     errors.rewind
     errors.read.split("\n").first.must_equal "Error in after hook processing of error handler: RuntimeError: foo"

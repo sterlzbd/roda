@@ -26,7 +26,7 @@ describe "typecast_params plugin" do
       if params.is_a?(Hash)
         req('rack.params'=>params)
       else
-        req('QUERY_STRING'=>params, 'rack.input'=>StringIO.new)
+        req('QUERY_STRING'=>params, 'rack.input'=>rack_input)
       end
       res
     end
@@ -1385,7 +1385,7 @@ describe "typecast_params plugin with customized params" do
     end
 
     @tp = lambda do |params|
-      req('QUERY_STRING'=>params, 'rack.input'=>StringIO.new)
+      req('QUERY_STRING'=>params, 'rack.input'=>rack_input)
       res
     end
 
@@ -1528,7 +1528,7 @@ describe "typecast_params plugin with strip: :all option" do
     end
 
     @tp = lambda do |params|
-      req('QUERY_STRING'=>params, 'rack.input'=>StringIO.new)
+      req('QUERY_STRING'=>params, 'rack.input'=>rack_input)
       res
     end
 

@@ -94,6 +94,8 @@ if defined?(Rack::Headers)
   end
 end
 
+require 'uri' if ENV['LINT']
+
 module CookieJar
   def req(path='/', env={})
     if path.is_a?(Hash)
@@ -121,6 +123,10 @@ class Minitest::Spec
         $RODA_WARN = true
       end
     end
+  end
+
+  def rack_input(str='')
+    StringIO.new(str.dup.force_encoding('BINARY'))
   end
 
   def app(type=nil, &block)
@@ -157,10 +163,39 @@ class Minitest::Spec
       env['PATH_INFO'] = path.dup
     end
 
-    env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge(env)
-    @app.call(env)
+    _req(@app, env)
   end
-  
+
+  def _req(app, env)
+    env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge(env)
+    if ENV['LINT']
+      env['SERVER_NAME'] ||= 'example.com'
+      env['QUERY_STRING'] ||= ''
+      env['rack.input'] ||= rack_input
+      env['rack.errors'] ||= StringIO.new
+      env['rack.url_scheme'] ||= 'http'
+
+      env['rack.version'] = [1, 5]
+      if Rack.release < '2.3'
+        env['SERVER_PORT'] ||= '80'
+        env['rack.multiprocess'] = env['rack.multithread'] = env['rack.run_once'] = false
+      end
+    end
+    a = @app.call(env)
+
+    if ENV['LINT']
+      orig = a[2]
+      a[2] = a[2].to_enum(:each).to_a
+      orig.close if orig.respond_to?(:close)
+    end
+
+    a
+  end
+
+  def unless_lint
+    yield unless ENV['LINT']
+  end
+
   def status(path='/', env={})
     req(path, env)[0]
   end
@@ -179,6 +214,7 @@ class Minitest::Spec
 
   def _app(&block)
     c = Class.new(Roda)
+    c.use Rack::Lint if ENV['LINT']
     c.class_eval(&block)
     c
   end

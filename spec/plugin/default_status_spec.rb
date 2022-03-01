@@ -25,7 +25,7 @@ describe "default_status plugin" do
     end
 
     status.must_equal 201
-    status('/foo').must_equal 204
+    status('/foo/bar').must_equal 208
   end
 
   it "should not override existing response" do

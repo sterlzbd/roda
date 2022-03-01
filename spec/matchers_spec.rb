@@ -473,7 +473,7 @@ describe "r.on" do
 
     pi, sn = '/login', ''
     env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => pi, "SCRIPT_NAME" => sn}
-    app.call(env)[2].join.must_equal ":/login"
+    _req(app, env)[2].join.must_equal ":/login"
     env["PATH_INFO"].must_equal pi 
     env["SCRIPT_NAME"].must_equal sn
   end

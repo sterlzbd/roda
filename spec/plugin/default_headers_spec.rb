@@ -110,7 +110,7 @@ describe "default_headers plugin" do
 
     req[1].must_equal h
     req[1].wont_be_same_as h 
-  end
+  end unless ENV['LINT']
 
   it "should work when freezing" do
     app(:bare) do
@@ -138,7 +138,7 @@ describe "default_headers plugin" do
     req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>:bar)
     app.freeze
     req[1].must_equal('Content-Type'=>'text/html', 'Foo'=>:bar)
-  end
+  end unless ENV['LINT']
 
   it "should work when subclassing and redefining" do
     app(:bare) do

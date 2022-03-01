@@ -8,7 +8,9 @@ describe "empty_root plugin" do
     end
 
     body.must_equal 'root'
-    body("").must_equal 'root'
-    body("a").must_equal 'notroot'
+    unless_lint do
+      body("").must_equal 'root'
+    end
+    body("/a").must_equal 'notroot'
   end
 end

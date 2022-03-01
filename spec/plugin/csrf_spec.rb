@@ -5,6 +5,11 @@ begin
 rescue LoadError
   warn "rack_csrf not installed, skipping csrf plugin test"  
 else
+  begin
+    require 'rack/csrf/version'
+  rescue LoadError
+  end
+
 describe "csrf plugin" do 
   include CookieJar
 
@@ -31,7 +36,7 @@ describe "csrf plugin" do
       end
     end
 
-    io = StringIO.new
+    io = rack_input
     status('REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 403
     body('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 'bar'
 
@@ -84,7 +89,7 @@ describe "csrf plugin" do
       end
     end
 
-    io = StringIO.new
+    io = rack_input
     status('/foo', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 403
     body('/foo/bar', 'REQUEST_METHOD'=>'POST', 'rack.input'=>io).must_equal 'foobar'
 
@@ -107,5 +112,5 @@ describe "csrf plugin" do
     s.must_equal 200
     b.must_equal ['foobar']
   end
-end
+end unless Rack.release >= '2.3' && defined?(Rack::Csrf::VERSION) && Rack::Csrf::VERSION < '2.7'
 end

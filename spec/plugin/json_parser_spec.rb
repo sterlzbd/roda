@@ -8,11 +8,11 @@ describe "json_parser plugin" do
   end
 
   it "parses incoming json if content type specifies json" do
-    body('rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>rack_input('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
   end
 
   it "doesn't affect parsing of non-json content type" do
-    body('rack.input'=>StringIO.new('a[b]=1'), 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>rack_input('a[b]=1'), 'REQUEST_METHOD'=>'POST').must_equal '1'
   end
 
   it "parses incoming json if content type specifies json and body is already read" do
@@ -20,21 +20,21 @@ describe "json_parser plugin" do
       r.body.read
       r.params['a']['b'].to_s
     end
-    body('rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
-  end
+    body('rack.input'=>rack_input('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+  end unless Rack.release >= '2.3'
 
   it "returns 400 for invalid json" do
-    req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
+    req('rack.input'=>rack_input('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
   end
 
   it "returns 400 for invalid json when using params_capturing plugin" do
     @app.plugin :params_capturing
-    req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
+    req('rack.input'=>rack_input('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [400, {}, []]
   end
 
   it "raises by default if r.params is called and a non-hash is submitted" do
     proc do
-      req('rack.input'=>StringIO.new('[1]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST')
+      req('rack.input'=>rack_input('[1]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST')
     end.must_raise
   end
 end
@@ -44,14 +44,14 @@ describe "json_parser plugin" do
     app(:json_parser) do |r|
       r.params.length.to_s
     end
-    body('rack.input'=>StringIO.new(''), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '0'
+    body('rack.input'=>rack_input(''), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '0'
   end
 
   it "handles arrays and other non-hash values using r.POST" do
     app(:json_parser) do |r|
       r.POST.inspect
     end
-    body('rack.input'=>StringIO.new('[ 1 ]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '[1]'
+    body('rack.input'=>rack_input('[ 1 ]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '[1]'
   end
 
   it "supports :wrap=>:always option" do
@@ -62,8 +62,8 @@ describe "json_parser plugin" do
         r.params['_json'][1].to_s
       end
     end
-    body('/a', 'rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
-    body('rack.input'=>StringIO.new('[true, 2]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '2'
+    body('/a', 'rack.input'=>rack_input('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>rack_input('[true, 2]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '2'
   end
 
   it "supports :wrap=>:unless_hash option" do
@@ -74,8 +74,8 @@ describe "json_parser plugin" do
         r.params['_json'][1].to_s
       end
     end
-    body('/a', 'rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
-    body('rack.input'=>StringIO.new('[true, 2]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '2'
+    body('/a', 'rack.input'=>rack_input('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>rack_input('[true, 2]'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '2'
   end
 
   it "raises for unsupported :wrap option" do
@@ -93,7 +93,7 @@ describe "json_parser plugin" do
         r.params['a']['b'].to_s
       end
     end
-    req('rack.input'=>StringIO.new('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [401, {}, ['bad']]
+    req('rack.input'=>rack_input('{"a":{"b":1}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal [401, {}, ['bad']]
   end
 
   it "works with bare POST" do
@@ -103,7 +103,7 @@ describe "json_parser plugin" do
         (r.POST['a']['b'] + r.POST['a']['c']).to_s
       end
     end
-    body('rack.input'=>StringIO.new('{"a":{"b":1,"c":2}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '3'
+    body('rack.input'=>rack_input('{"a":{"b":1,"c":2}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '3'
   end
 
   it "supports :parser option" do
@@ -113,7 +113,7 @@ describe "json_parser plugin" do
         r.params['a']['b'].to_s
       end
     end
-    body('rack.input'=>StringIO.new("{'a'=>{'b'=>1}}"), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>rack_input("{'a'=>{'b'=>1}}"), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
   end
 
   it "supports :include_request option" do
@@ -125,7 +125,7 @@ describe "json_parser plugin" do
         "#{r.params['a']}:#{r.params['b']}"
       end
     end
-    body('rack.input'=>StringIO.new('{}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '{}:/'
+    body('rack.input'=>rack_input('{}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '{}:/'
   end
 
   it "supports resetting :include_request option to false" do
@@ -136,6 +136,6 @@ describe "json_parser plugin" do
         r.params['a']['b'].to_s
       end
     end
-    body('rack.input'=>StringIO.new('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
+    body('rack.input'=>rack_input('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
   end
 end

@@ -34,7 +34,7 @@ describe "head plugin" do
   end
 
   it "releases resources via body.close" do
-    body = StringIO.new('hi')
+    body = rack_input('')
     app(:head) do |r|
       r.root do
         r.halt [ 200, {}, body ]
@@ -43,9 +43,13 @@ describe "head plugin" do
     s, _, b = req('REQUEST_METHOD' => 'HEAD')
     s.must_equal 200
     res = String.new
-    body.closed?.must_equal false
+    unless_lint do
+      body.closed?.must_equal false
+    end
     b.each { |buf| res << buf }
-    b.close
+    unless_lint do
+      b.close 
+    end
     body.closed?.must_equal true
     res.must_equal ''
   end

@@ -17,11 +17,11 @@ describe "request_aref plugin" do
   end
 
   def aref_body
-    body("QUERY_STRING" => 'a=d', 'rack.input'=>StringIO.new)
+    body("QUERY_STRING" => 'a=d', 'rack.input'=>rack_input)
   end
 
   def aset_body
-    body('/set', "QUERY_STRING" => 'a=d', 'rack.input'=>StringIO.new)
+    body('/set', "QUERY_STRING" => 'a=d', 'rack.input'=>rack_input)
   end
 
   it "allows if given the :allow option" do

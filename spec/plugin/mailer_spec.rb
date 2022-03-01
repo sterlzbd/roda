@@ -177,7 +177,7 @@ describe "mailer plugin" do
       end
     end
 
-    body("/foo/baz", 'rack.input'=>StringIO.new).must_equal 'foobaz'
+    body("/foo/baz", 'rack.input'=>rack_input).must_equal 'foobaz'
     app.mail('/bar').body.must_be :==, 'b'
   end
 

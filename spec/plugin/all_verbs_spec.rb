@@ -4,7 +4,7 @@ describe "all_verbs plugin" do
   it "adds method for each http verb" do
     app(:all_verbs) do |r|
       r.delete{'d'}
-      r.head{'h'}
+      r.head{''}
       r.options{'o'}
       r.patch{'pa'}
       r.put{'pu'}
@@ -16,7 +16,7 @@ describe "all_verbs plugin" do
     end
 
     body('REQUEST_METHOD'=>'DELETE').must_equal 'd'
-    body('REQUEST_METHOD'=>'HEAD').must_equal 'h'
+    body('REQUEST_METHOD'=>'HEAD').must_equal ''
     body('REQUEST_METHOD'=>'OPTIONS').must_equal 'o'
     body('REQUEST_METHOD'=>'PATCH').must_equal 'pa'
     body('REQUEST_METHOD'=>'PUT').must_equal 'pu'

@@ -33,7 +33,7 @@ describe "error_mail plugin" do
 
   it "adds error_mail method for emailing exceptions" do
     app
-    body('rack.input'=>StringIO.new, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'}).must_equal 'e'
+    body('rack.input'=>rack_input, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'}).must_equal 'e'
     email.to.must_equal ['t']
     email.from.must_equal ['f']
     email.header.to_s.must_match(/^Subject: ArgumentError: bad foo/)
@@ -42,7 +42,7 @@ describe "error_mail plugin" do
 
   it "have error_mail method support string arguments" do
     app
-    body('/noerror', 'rack.input'=>StringIO.new, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'}).must_equal 'g'
+    body('/noerror', 'rack.input'=>rack_input, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'}).must_equal 'g'
     email.to.must_equal ['t']
     email.from.must_equal ['f']
     email.header.to_s.must_match(/^Subject: Problem/)
@@ -54,7 +54,7 @@ describe "error_mail plugin" do
     app.route do |r|
       raise ArgumentError, 'bad foo' rescue error_mail_content($!)
     end
-    b = body('rack.input'=>StringIO.new, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'})
+    b = body('rack.input'=>rack_input, 'QUERY_STRING'=>'b=c', 'rack.session'=>{'d'=>'e'})
     b.must_match(/^Subject: ArgumentError: bad foo/)
     b.must_match(/^Backtrace:.+^ENV:.+^"rack\.input" => .+^Params:\s+^"b" => "c"\s+^Session:\s+^"d" => "e"/m)
   end
@@ -63,20 +63,20 @@ describe "error_mail plugin" do
     app.route do |r|
       raise ArgumentError, 'bad foo' rescue error_mail_content($!)
     end
-    b = body('rack.input'=>StringIO.new, 'QUERY_STRING'=>'b=%c', 'rack.session'=>{'d'=>'e'})
+    b = body('rack.input'=>rack_input, 'QUERY_STRING'=>'b=%c', 'rack.session'=>{'d'=>'e'})
     b.must_match(/^Subject: ArgumentError: bad foo/)
     b.must_match(/^Backtrace:.+^ENV:.+^"rack\.input" => .+^Params:\s+^Invalid Parameters!\s+^Session:\s+^"d" => "e"/m)
   end
 
   it "adds :prefix option to subject line" do
     app(:prefix=>'TEST ')
-    body('rack.input'=>StringIO.new).must_equal 'e'
+    body('rack.input'=>rack_input).must_equal 'e'
     email.header.to_s.must_match(/^Subject: TEST ArgumentError/)
   end
 
   it "uses :headers option for additional headers" do
     app(:headers=>{'Foo'=>'Bar', 'Baz'=>'Quux'})
-    body('rack.input'=>StringIO.new).must_equal 'e'
+    body('rack.input'=>rack_input).must_equal 'e'
     email.header.to_s.must_match(/^Foo: Bar/)
     email.header.to_s.must_match(/^Baz: Quux/)
   end
@@ -92,7 +92,7 @@ describe "error_mail plugin" do
       raise ArgumentError rescue error_mail($!)
       'e'
     end
-    body('rack.input'=>StringIO.new).must_equal 'e'
+    body('rack.input'=>rack_input).must_equal 'e'
     email.to.must_equal ['t']
     email.from.must_equal ['f']
     email.header.to_s.must_match(/^Subject: ArgumentError: ArgumentError/)

@@ -210,7 +210,7 @@ describe "Roda.define_roda_method" do
         suppress = proc do |&b|
           begin
             stderr = $stderr
-            $stderr = StringIO.new
+            $stderr = rack_input
             b.call
           ensure
             $stderr = stderr

@@ -53,34 +53,30 @@ describe "route_block_args plugin" do
   it "supports many route block arguments" do
     app(:bare) do
       plugin :route_block_args do
-        [request.params, request.env, response.headers, response.body]
+        [request.params, request.env, response.headers]
       end
-      route do |p, e, h, b|
-        h['Foo'] = 'Bar'
-        b << "#{p['a']}-#{e['B']}"
-        "x"
+      route do |p, e, h|
+        h['Foo'] = "#{p['a']}-#{e['B']}"
       end
     end
 
-    header('Foo', 'rack.input'=>StringIO.new).must_equal('Bar')
-    body('rack.input'=>StringIO.new).must_equal('-')
-    body('QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>StringIO.new).must_equal('c-D')
+    header('Foo', 'rack.input'=>rack_input).must_equal('-')
+    body('rack.input'=>rack_input).must_equal('-')
+    header('Foo', 'QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>rack_input).must_equal('c-D')
   end
 
   it "works if given after the route block" do
     app(:bare) do
-      route do |p, e, h, b|
-        h['Foo'] = 'Bar'
-        b << "#{p['a']}-#{e['B']}"
-        "x"
+      route do |p, e, h|
+        h['Foo'] = "#{p['a']}-#{e['B']}"
       end
       plugin :route_block_args do
-        [request.params, request.env, response.headers, response.body]
+        [request.params, request.env, response.headers]
       end
     end
 
-    header('Foo', 'rack.input'=>StringIO.new).must_equal('Bar')
-    body('rack.input'=>StringIO.new).must_equal('-')
-    body('QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>StringIO.new).must_equal('c-D')
+    header('Foo', 'rack.input'=>rack_input).must_equal('-')
+    body('rack.input'=>rack_input).must_equal('-')
+    header('Foo', 'QUERY_STRING'=>'a=c', 'B'=>'D', 'rack.input'=>rack_input).must_equal('c-D')
   end
 end

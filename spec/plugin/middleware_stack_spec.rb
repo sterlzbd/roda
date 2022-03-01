@@ -16,7 +16,7 @@ describe "middleware_stack plugin" do
         end
 
         def call(env)
-          (env[:record] ||= []) << [self.class.name, args, block]
+          (env['rack.record'] ||= []) << [self.class.name, args, block]
           app.call(env)
         end
       end
@@ -25,7 +25,7 @@ describe "middleware_stack plugin" do
     recorded = nil
 
     app(:middleware_stack) do |r|
-      recorded = env[:record]
+      recorded = env['rack.record']
       nil 
     end
 
@@ -34,7 +34,9 @@ describe "middleware_stack plugin" do
 
     called = false
     app.middleware_stack.before{called = true}.use(make_middleware[:m1], :a1).must_be_nil
-    called.must_equal false
+    unless_lint do
+      called.must_equal false
+    end
 
     status.must_equal 404
     recorded.must_equal [[:m1, [:a1], nil]]

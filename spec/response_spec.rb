@@ -37,22 +37,30 @@ end
 
 describe "response #finish" do
   it "should set status to 404 if body has not been written to" do
+    s, h, b = nil
     app do |r|
       s, h, b = response.finish
-      "#{s}#{h['Content-Type']}#{b.length}"
+      ''
     end
 
-    body.must_equal '404text/html0'
+    body.must_equal ''
+    s.must_equal 404
+    h['Content-Type'].must_equal 'text/html'
+    b.join.length.must_equal 0
   end
 
   it "should set status to 200 if body has been written to" do
+    s, h, b = nil
     app do |r|
       response.write 'a'
       s, h, b = response.finish
-      response.write "#{s}#{h['Content-Type']}#{b.length}"
+      ''
     end
 
-    body.must_equal 'a200text/html1'
+    body.must_equal 'a'
+    s.must_equal 200
+    h['Content-Type'].must_equal 'text/html'
+    b.join.length.must_equal 1
   end
 
   it "should set Content-Length header" do
@@ -84,17 +92,25 @@ describe "response #finish" do
     end
 
     header('Content-Type').must_be_nil
-    header('Content-Length').must_equal '0'
+    if Rack.release < '2.0.2'
+      header('Content-Length').must_be_nil
+    else
+      header('Content-Length').must_equal '0'
+    end
   end
 
   it "should not overwrite existing status" do
+    s, h, b = nil
     app do |r|
       response.status = 500
       s, h, b = response.finish
-      "#{s}#{h['Content-Type']}#{b.length}"
+      ''
     end
 
-    body.must_equal '500text/html0'
+    body.must_equal ''
+    s.must_equal 500
+    h['Content-Type'].must_equal 'text/html'
+    b.join.length.must_equal 0
   end
 end
 

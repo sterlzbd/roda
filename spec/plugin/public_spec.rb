@@ -57,7 +57,7 @@ describe "public plugin" do
 
   it "support :headers options for custom headers" do
     app(:bare) do
-      plugin :public, :root=>'spec/views', :headers=>{'X-Foo' => 'bar'}
+      plugin :public, :root=>'spec/views', :headers=>{'x-foo' => 'bar'}
 
       route do |r|
         r.public
@@ -66,7 +66,7 @@ describe "public plugin" do
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
     header('Content-Type', '/about/_test.erb').must_equal 'text/plain'
-    header('X-Foo', '/about/_test.erb').must_equal 'bar'
+    header('x-foo', '/about/_test.erb').must_equal 'bar'
   end
 
   it "support :default_mime options for default mime type" do

@@ -14,8 +14,10 @@ describe "optimized_segment_matchers plugin" do
       "r"
     end
 
+    unless_lint do
+      body('a').must_equal 'r'
+    end
     body.must_equal 'r'
-    body('a').must_equal 'r'
     body('/a').must_equal 'y-a'
     body('/a/').must_equal 'y-a'
     body('/b').must_equal 'y-b'

@@ -5,7 +5,7 @@ describe "path plugin" do
     app(:bare) do
       plugin :path
       path(*args, &block)
-      route{|r| send(r.path_info)}
+      route{|r| send(r.path_info[1, 1000])}
     end
   end
 
@@ -14,13 +14,13 @@ describe "path plugin" do
       opts[:add_script_name] = true
       plugin :path
       path(*args, &block)
-      route{|r| send(r.path_info)}
+      route{|r| send(r.path_info[1, 1000])}
     end
   end
 
   def path_block_app(b, *args, &block)
     path_app(*args, &block)
-    app.route{|r| send(r.path_info, &b)}
+    app.route{|r| send(r.path_info[1, 1000], &b)}
   end
 
   it "adds path method for defining named paths" do
@@ -59,37 +59,37 @@ describe "path plugin" do
 
   it "supports :name option for naming the method" do
     path_app(:foo, :name=>'foobar_route'){"/bar/foo"}
-    body("foobar_route").must_equal "/bar/foo"
+    body("/foobar_route").must_equal "/bar/foo"
   end
 
   it "supports :add_script_name option for automatically adding the script name" do
     path_app(:foo, :add_script_name=>true){"/bar/foo"}
-    body("foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo"
+    body("/foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo"
   end
 
   it "respects :add_script_name app option for automatically adding the script name" do
     path_script_name_app(:foo){"/bar/foo"}
-    body("foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo"
+    body("/foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo"
   end
 
   it "supports :add_script_name=>false option for not automatically adding the script name" do
     path_script_name_app(:foo, :add_script_name=>false){"/bar/foo"}
-    body("foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/bar/foo"
+    body("/foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/bar/foo"
   end
 
   it "respects :add_script_name app option for automatically adding the script name for url methods" do
     path_script_name_app(:foo, :url=>true){"/bar/foo"}
-    body("foo_url", 'SCRIPT_NAME'=>'/baz', 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/baz/bar/foo"
+    body("/foo_url", 'SCRIPT_NAME'=>'/baz', 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "http://example.org/baz/bar/foo"
   end
 
   it "supports :add_script_name=>false option for not automatically adding the script name for url methods" do
     path_script_name_app(:foo, :add_script_name=>false, :url=>true){"/bar/foo"}
-    body("foo_url", 'SCRIPT_NAME'=>'/baz', 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/bar/foo"
+    body("/foo_url", 'SCRIPT_NAME'=>'/baz', 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "http://example.org/bar/foo"
   end
 
   it "supports path method accepting a block when using :add_script_name" do
     path_block_app(lambda{"c"}, :foo, :add_script_name=>true){|&block| "/bar/foo/#{block.call}"}
-    body("foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo/c"
+    body("/foo_path", 'SCRIPT_NAME'=>'/baz').must_equal "/baz/bar/foo/c"
   end
 
   it "supports :relative option for returning paths relative to the current request" do
@@ -113,30 +113,30 @@ describe "path plugin" do
 
   it "supports :url option for also creating a *_url method" do
     path_app(:foo, :url=>true){"/bar/foo"}
-    body("foo_path", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "/bar/foo"
-    body("foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/bar/foo"
+    body("/foo_path", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "/bar/foo"
+    body("/foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "http://example.org/bar/foo"
   end
 
   it "supports url method accepting a block when using :url" do
     path_block_app(lambda{"c"}, :foo, :url=>true){|&block| "/bar/foo/#{block.call}"}
-    body("foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/bar/foo/c"
+    body("/foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "http://example.org/bar/foo/c"
   end
 
   it "supports url method name specified in :url option" do
     path_app(:foo, :url=>:foobar_uri){"/bar/foo"}
-    body("foo_path", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "/bar/foo"
-    body("foobar_uri", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/bar/foo"
+    body("/foo_path", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "/bar/foo"
+    body("/foobar_uri", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "http://example.org/bar/foo"
   end
 
   it "supports :url_only option for not creating a path method" do
     path_app(:foo, :url_only=>true){"/bar/foo"}
-    proc{body("foo_path")}.must_raise(NoMethodError)
-    body("foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal "http://example.org/bar/foo"
+    proc{body("/foo_path")}.must_raise(NoMethodError)
+    body("/foo_url", 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal "http://example.org/bar/foo"
   end
 
   it "handles non-default ports in url methods" do
     path_app(:foo, :url=>true){"/bar/foo"}
-    body("foo_url", 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>81).must_equal "http://example.org:81/bar/foo"
+    body("/foo_url", 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'81').must_equal "http://example.org:81/bar/foo"
   end
 
   if RUBY_VERSION >= "2.1"
@@ -174,7 +174,7 @@ describe "path plugin" do
         end
       RUBY
 
-      body("/", 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>81).must_equal "http://example.org:81/foo/bar"
+      body("/", 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'81').must_equal "http://example.org:81/foo/bar"
     end
   end
 end
@@ -184,8 +184,8 @@ describe "path plugin" do
     app(:bare) do
       plugin :path
       route do |r|
-        r.get("url"){url(*env['path'])}
-        path(*env['path'])
+        r.get("url"){url(*env['rack.path'])}
+        path(*env['rack.path'])
       end
     end
 
@@ -197,29 +197,29 @@ describe "path plugin" do
 
   it "Roda#path respects classes and symbols registered via Roda.path" do
     # Strings
-    body('path'=>'/foo/bar').must_equal '/foo/bar'
+    body('rack.path'=>'/foo/bar').must_equal '/foo/bar'
 
     # Classes
-    body('path'=>@obj).must_equal '/d/1/'
-    body('path'=>[@obj, 'foo']).must_equal '/d/1/foo'
-    body('path'=>[@obj, 'foo', 'bar']).must_equal '/d/1/foo/bar'
+    body('rack.path'=>@obj).must_equal '/d/1/'
+    body('rack.path'=>[@obj, 'foo']).must_equal '/d/1/foo'
+    body('rack.path'=>[@obj, 'foo', 'bar']).must_equal '/d/1/foo/bar'
   end
 
   it "Roda#path raises an error for an unrecognized class" do
     # Strings
-    proc{body('path'=>:foo)}.must_raise(Roda::RodaError)
+    proc{body('rack.path'=>:foo)}.must_raise(Roda::RodaError)
   end
 
   it "Roda#path respects :add_script_name app option" do
     app.opts[:add_script_name] = true
 
     # Strings
-    body('path'=>'/foo/bar', 'SCRIPT_NAME'=>'/baz').must_equal '/baz/foo/bar'
+    body('rack.path'=>'/foo/bar', 'SCRIPT_NAME'=>'/baz').must_equal '/baz/foo/bar'
 
     # Classes
-    body('path'=>@obj, 'SCRIPT_NAME'=>'/baz').must_equal '/baz/d/1/'
-    body('path'=>[@obj, 'foo'], 'SCRIPT_NAME'=>'/baz').must_equal '/baz/d/1/foo'
-    body('path'=>[@obj, 'foo', 'bar'], 'SCRIPT_NAME'=>'/baz').must_equal '/baz/d/1/foo/bar'
+    body('rack.path'=>@obj, 'SCRIPT_NAME'=>'/baz').must_equal '/baz/d/1/'
+    body('rack.path'=>[@obj, 'foo'], 'SCRIPT_NAME'=>'/baz').must_equal '/baz/d/1/foo'
+    body('rack.path'=>[@obj, 'foo', 'bar'], 'SCRIPT_NAME'=>'/baz').must_equal '/baz/d/1/foo/bar'
   end
 
   it "Roda#path works in subclasses" do
@@ -232,13 +232,13 @@ describe "path plugin" do
     body.must_equal '/foo/a'
 
     @app = old_app
-    body('path'=>'/a').must_equal '/a'
+    body('rack.path'=>'/a').must_equal '/a'
   end
 
   it "Roda#url works similar to Roda#path but turns it into a full URL" do
-    body("/url", 'path'=>@obj, 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>80).must_equal 'http://example.org/d/1/'
-    body("/url", 'path'=>[@obj, 'foo'], 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'https', 'SERVER_PORT'=>443).must_equal 'https://example.org/d/1/foo'
-    body("/url", 'path'=>[@obj, 'foo', 'bar'], 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>81).must_equal 'http://example.org:81/d/1/foo/bar'
+    body("/url", 'rack.path'=>@obj, 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'80').must_equal 'http://example.org/d/1/'
+    body("/url", 'rack.path'=>[@obj, 'foo'], 'HTTP_HOST'=>'example.org', "rack.url_scheme"=>'https', 'SERVER_PORT'=>'443').must_equal 'https://example.org/d/1/foo'
+    body("/url", 'rack.path'=>[@obj, 'foo', 'bar'], 'HTTP_HOST'=>'example.org:81', "rack.url_scheme"=>'http', 'SERVER_PORT'=>'81').must_equal 'http://example.org:81/d/1/foo/bar'
   end
 
   it "registers classes by reference by default" do
@@ -247,9 +247,9 @@ describe "path plugin" do
     c2 = Class.new
     def c2.name; 'C'; end
     @app.path(c1){'/c'}
-    @app.route{|r| path(r.env['c'])}
-    body('c'=>c1.new).must_equal '/c'
-    proc{body('c'=>c2.new)}.must_raise(Roda::RodaError)
+    @app.route{|r| path(r.env['rack.c'])}
+    body('rack.c'=>c1.new).must_equal '/c'
+    proc{body('rack.c'=>c2.new)}.must_raise(Roda::RodaError)
   end
 
   it ":by_name => option registers classes by name" do
@@ -259,9 +259,9 @@ describe "path plugin" do
     def c2.name; 'C'; end
     @app.plugin :path, :by_name=>true
     @app.path(c1){'/c'}
-    @app.route{|r| path(r.env['c'])}
-    body('c'=>c1.new).must_equal '/c'
-    body('c'=>c2.new).must_equal '/c'
+    @app.route{|r| path(r.env['rack.c'])}
+    body('rack.c'=>c1.new).must_equal '/c'
+    body('rack.c'=>c2.new).must_equal '/c'
   end
 
   it ":by_name defaults to true in development" do

@@ -16,10 +16,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal '0'
+      unless_lint do
+        body('').must_equal '0'
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal ''
       body('/foo/').must_equal ''
@@ -37,9 +39,11 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal 'get-0'
-      body('', 'REQUEST_METHOD'=>'POST').must_equal 'post-0'
-      body('', 'REQUEST_METHOD'=>'PUT').must_equal ''
+      unless_lint do
+        body('').must_equal 'get-0'
+        body('', 'REQUEST_METHOD'=>'POST').must_equal 'post-0'
+        body('', 'REQUEST_METHOD'=>'PUT').must_equal ''
+      end
     end
 
     [:is, :get].each do |meth|
@@ -51,10 +55,12 @@ require_relative "spec_helper"
           ''
         end
 
-        body('').must_equal '0'
+        unless_lint do
+          body('').must_equal '0'
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal ''
         body('/foo').must_equal ''
         body('/foo/').must_equal ''
@@ -69,9 +75,11 @@ require_relative "spec_helper"
           ''
         end
 
+        unless_lint do
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal ''
         body('/foo').must_equal 'foo-0'
         body('/foo/').must_equal ''
@@ -86,9 +94,11 @@ require_relative "spec_helper"
           ''
         end
 
+        unless_lint do
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal '["fo"]'
         body('/foo').must_equal '["foo"]'
         body('/foo/').must_equal ''
@@ -103,15 +113,17 @@ require_relative "spec_helper"
           ''
         end
 
+        unless_lint do
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+          body('1').must_equal ''
+          body('2').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal ''
         body('/foo').must_equal ''
         body('/foo/').must_equal ''
         body('/foo/1').must_equal ''
-        body('1').must_equal ''
-        body('2').must_equal ''
         body('/1').must_equal '[1]'
         body('/2').must_equal '[2]'
         body('/1/').must_equal ''
@@ -132,10 +144,12 @@ require_relative "spec_helper"
           end
         end
 
-        body('').must_equal ''
+        unless_lint do
+          body('').must_equal ''
+          body('fo').must_equal ''
+          body('123.3').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('123.3').must_equal ''
         body('/fo').must_equal ''
         body('/123.3').must_equal 'Float-123.3-'
         body('/123.3/').must_equal ''
@@ -161,9 +175,11 @@ require_relative "spec_helper"
           ''
         end
 
+        unless_lint do
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/f').must_equal ''
         body('/fo').must_equal '["fo"]'
         body('/foo').must_equal '["foo"]'
@@ -180,9 +196,11 @@ require_relative "spec_helper"
           ''
         end
 
+        unless_lint do
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal ''
         body('/foo').must_equal ''
         body('/foo/').must_equal ''
@@ -198,10 +216,12 @@ require_relative "spec_helper"
           ''
         end
 
-        body('').must_equal ''
+        unless_lint do
+          body('').must_equal ''
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal ''
         body('/foo').must_equal ''
         body('/foo/').must_equal ''
@@ -216,10 +236,12 @@ require_relative "spec_helper"
           ''
         end
 
-        body('').must_equal ''
+        unless_lint do
+          body('').must_equal ''
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal ''
         body('/foo').must_equal ''
         body('/foo/').must_equal ''
@@ -234,10 +256,12 @@ require_relative "spec_helper"
           ''
         end
 
-        body('').must_equal ''
+        unless_lint do
+          body('').must_equal ''
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal 'fo-'
         body('/foo').must_equal 'foo-'
         body('/foo/').must_equal ''
@@ -252,10 +276,12 @@ require_relative "spec_helper"
           ''
         end
 
-        body('').must_equal ''
+        unless_lint do
+          body('').must_equal ''
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal ''
         body('/foo').must_equal ''
         body('/fo/foo').must_equal '0-'
@@ -271,9 +297,11 @@ require_relative "spec_helper"
           ''
         end
 
+        unless_lint do
+          body('fo').must_equal ''
+          body('foo').must_equal ''
+        end
         body.must_equal ''
-        body('fo').must_equal ''
-        body('foo').must_equal ''
         body('/fo').must_equal '["fo"]-'
         body('/foo').must_equal '["foo"]-'
         body('/foo/').must_equal ''
@@ -326,10 +354,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal '0'
+      unless_lint do
+        body('').must_equal '0'
+        body('fo').must_equal '0'
+        body('foo').must_equal '0'
+      end
       body.must_equal '0'
-      body('fo').must_equal '0'
-      body('foo').must_equal '0'
       body('/fo').must_equal '0'
       body('/foo').must_equal '0'
       body('/foo/').must_equal '0'
@@ -344,10 +374,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal '0'
+      unless_lint do
+        body('').must_equal '0'
+        body('fo').must_equal '0'
+        body('foo').must_equal '0'
+      end
       body.must_equal '0'
-      body('fo').must_equal '0'
-      body('foo').must_equal '0'
       body('/fo').must_equal '0'
       body('/foo').must_equal '0'
       body('/foo/').must_equal '0'
@@ -362,9 +394,11 @@ require_relative "spec_helper"
         ''
       end
 
+      unless_lint do
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal 'foo-0-'
       body('/foo/').must_equal 'foo-0-/'
@@ -379,9 +413,11 @@ require_relative "spec_helper"
         ''
       end
 
+      unless_lint do
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal '["fo"]-'
       body('/foo').must_equal '["foo"]-'
       body('/foo/').must_equal '["foo"]-/'
@@ -396,15 +432,17 @@ require_relative "spec_helper"
         ''
       end
 
+      unless_lint do
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+        body('1').must_equal ''
+        body('2').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal ''
       body('/foo/').must_equal ''
       body('/foo/1').must_equal ''
-      body('1').must_equal ''
-      body('2').must_equal ''
       body('/1').must_equal '[1]-'
       body('/2').must_equal '[2]-'
       body('/1/').must_equal '[1]-/'
@@ -430,9 +468,11 @@ require_relative "spec_helper"
         ''
       end
 
+      unless_lint do
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/f').must_equal ''
       body('/fo').must_equal '["fo"]-'
       body('/foo').must_equal '["foo"]-'
@@ -449,9 +489,11 @@ require_relative "spec_helper"
         ''
       end
 
+      unless_lint do
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal ''
       body('/foo/').must_equal ''
@@ -468,10 +510,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal '0'
+      unless_lint do
+        body('').must_equal '0'
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal '0'
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal ''
       body('/foo/').must_equal ''
@@ -486,10 +530,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal '0'
+      unless_lint do
+        body('').must_equal '0'
+        body('fo').must_equal '0'
+        body('foo').must_equal '0'
+      end
       body.must_equal '0'
-      body('fo').must_equal '0'
-      body('foo').must_equal '0'
       body('/fo').must_equal '0'
       body('/foo').must_equal '0'
       body('/foo/').must_equal '0'
@@ -504,10 +550,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal ''
+      unless_lint do
+        body('').must_equal ''
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal ''
       body('/foo/').must_equal ''
@@ -522,10 +570,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal ''
+      unless_lint do
+        body('').must_equal ''
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal ''
       body('/foo/').must_equal ''
@@ -540,10 +590,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal ''
+      unless_lint do
+        body('').must_equal ''
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal 'fo-'
       body('/foo').must_equal 'foo-'
       body('/foo/').must_equal 'foo-/'
@@ -558,10 +610,12 @@ require_relative "spec_helper"
         ''
       end
 
-      body('').must_equal ''
+      unless_lint do
+        body('').must_equal ''
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal ''
       body('/foo').must_equal ''
       body('/fo/foo').must_equal '0-'
@@ -577,9 +631,11 @@ require_relative "spec_helper"
         ''
       end
 
+      unless_lint do
+        body('fo').must_equal ''
+        body('foo').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('foo').must_equal ''
       body('/fo').must_equal '["fo"]-'
       body('/foo').must_equal '["foo"]-'
       body('/foo/').must_equal '["foo"]-/'
@@ -616,10 +672,12 @@ require_relative "spec_helper"
         end
       end
 
-      body('').must_equal ''
+      unless_lint do
+        body('').must_equal ''
+        body('fo').must_equal ''
+        body('123.3').must_equal ''
+      end
       body.must_equal ''
-      body('fo').must_equal ''
-      body('123.3').must_equal ''
       body('/fo').must_equal ''
       body('/123.3').must_equal 'Float-123.3-'
       body('/123.3/').must_equal 'Float-123.3-/'

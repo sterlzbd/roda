@@ -16,7 +16,9 @@ describe "unescape_path_path plugin" do
 
     body('/a').must_equal 'a'
     body('/%61').must_equal 'a'
-    body('%2f%61').must_equal 'a'
-    body('%2f%62%2f%61').must_equal 'a-b'
+    unless_lint do
+      body('%2f%61').must_equal 'a'
+      body('%2f%62%2f%61').must_equal 'a-b'
+    end
   end
 end

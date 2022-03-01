@@ -10,7 +10,7 @@ describe "param_matchers plugin" do
       "No email"
     end
 
-    io = StringIO.new
+    io = rack_input
     body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").must_equal 'john@doe.com'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "").must_equal 'No email'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").must_equal 'No email'
@@ -25,7 +25,7 @@ describe "param_matchers plugin" do
       "No email"
     end
 
-    io = StringIO.new
+    io = rack_input
     body("/signup", "rack.input" => io, "QUERY_STRING" => "email=john@doe.com").must_equal 'john@doe.com'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "").must_equal 'No email'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "email=").must_equal ''
@@ -40,7 +40,7 @@ describe "param_matchers plugin" do
       "No email"
     end
 
-    io = StringIO.new
+    io = rack_input
     body("/signup", "rack.input" => io, "QUERY_STRING" => "em=foo&ail=john@doe.com").must_equal 'foojohn@doe.com'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "em=&ail=john@doe.com").must_equal 'No email'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "em=foo&ail=").must_equal 'No email'
@@ -58,7 +58,7 @@ describe "param_matchers plugin" do
       "No email"
     end
 
-    io = StringIO.new
+    io = rack_input
     body("/signup", "rack.input" => io, "QUERY_STRING" => "em=foo&ail=john@doe.com").must_equal 'foojohn@doe.com'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "em=&ail=john@doe.com").must_equal 'john@doe.com'
     body("/signup", "rack.input" => io, "QUERY_STRING" => "em=foo&ail=").must_equal 'foo'
