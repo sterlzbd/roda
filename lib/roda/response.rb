@@ -107,8 +107,7 @@ class Roda
             if (s == 304 || s == 204 || (s >= 100 && s <= 199))
               h.delete("Content-Type")
             elsif s == 205
-              h.delete("Content-Type")
-              h["Content-Length"] = '0'
+              empty_205_headers(h)
             else
               h["Content-Length"] ||= '0'
             end
@@ -168,6 +167,23 @@ class Roda
         end
 
         private
+
+        # :nocov:
+        if Rack.release < '2.0.2'
+          # Don't use a content length for empty 205 responses on
+          # rack 1, as it violates Rack::Lint in that version.
+          def empty_205_headers(headers)
+            headers.delete("Content-Type")
+            headers.delete("Content-Length")
+          end
+        # :nocov:
+        else
+          # Set the content length for empty 205 responses to 0
+          def empty_205_headers(headers)
+            headers.delete("Content-Type")
+            headers["Content-Length"] = '0'
+          end
+        end
 
         # For each default header, if a header has not already been set for the
         # response, set the header in the response.

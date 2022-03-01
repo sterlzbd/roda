@@ -1,5 +1,7 @@
 = master
 
+* Do not set a Content-Length header for 205 responses on Rack <2.0.2 (jeremyevans)
+
 * Use Rack::Files instead of Rack::File if available, to avoid deprecation warnings (jeremyevans)
 
 * Work with Rack 3 SPEC, using Rack::Headers to handle lowercasing header keys on Rack 3 (jeremyevans)

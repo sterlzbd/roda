@@ -28,9 +28,7 @@ class Roda
             h.delete("Content-Type")
           when 205
             r[2] = EMPTY_ARRAY
-            h = r[1]
-            h["Content-Length"] = '0'
-            h.delete("Content-Type")
+            empty_205_headers(r[1])
           end
           r
         end
