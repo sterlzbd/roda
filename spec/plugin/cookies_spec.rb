@@ -8,7 +8,7 @@ describe "cookies plugin" do
       "Hello"
     end
 
-    header('Set-Cookie').must_equal "foo=bar\nbar=baz"
+    ["foo=bar\nbar=baz", %w"foo=bar bar=baz"].must_include header('Set-Cookie')
     body.must_equal 'Hello'
   end
 
@@ -19,7 +19,12 @@ describe "cookies plugin" do
       "Hello"
     end
 
-    header('Set-Cookie').must_match(/foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/)
+    cookie = header('Set-Cookie')
+    if cookie.is_a?(Array)
+      cookie.length.must_equal 1
+      cookie = cookie[0]
+    end
+    cookie.must_match(/foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/)
     body.must_equal 'Hello'
   end
 
