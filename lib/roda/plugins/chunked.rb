@@ -3,11 +3,11 @@
 #
 class Roda
   module RodaPlugins
-    # The chunked plugin allows you to stream responses to clients using
-    # Transfer-Encoding: chunked.  This can significantly improve performance
-    # of page rendering on the client, as it flushes the headers and top part
-    # of the layout template (generally containing references to the stylesheet
-    # and javascript assets) before rendering the content template.
+    # The chunked plugin allows you to stream rendered views to clients.
+    # This can significantly improve performance of page rendering on the
+    # client, as it flushes the headers and top part of the layout template
+    # (generally containing references to the stylesheet and javascript assets)
+    # before rendering the content template.
     #
     # This allows the client to fetch the assets while the template is still
     # being rendered.  Additionally, this plugin makes it easy to defer
@@ -17,11 +17,11 @@ class Roda
     # order to render the content template, such as retrieving values from a
     # database.
     #
-    # There are a couple disadvantages of streaming using chunked encoding.
-    # First is that the layout must be rendered before the content, so any state 
-    # changes made in your content template will not affect the layout template.
-    # Second, error handling is reduced, since if an error occurs while
-    # rendering a template, a successful response code has already been sent.
+    # There are a couple disadvantages of streaming.  First is that the layout
+    # must be rendered before the content, so any state changes made in your
+    # content template will not affect the layout template.  Second, error
+    # handling is reduced, since if an error occurs while rendering a template,
+    # a successful response code has already been sent.
     #
     # To use chunked encoding for a response, just call the chunked method
     # instead of view:
@@ -55,7 +55,6 @@ class Roda
     #       chunked(:tracks)
     #     end
     #   end
-    #
     #
     # If you want to chunk all responses, pass the :chunk_by_default option
     # when loading the plugin:
@@ -121,12 +120,7 @@ class Roda
     # flush to output the message to the client inside handle_chunk_error.
     #
     # In order for chunking to work, you must make sure that no proxies between
-    # the application and the client buffer responses.  Also, this
-    # plugin only works for HTTP/1.1 requests since Transfer-Encoding: chunked
-    # is not supported in HTTP/1.0.  If an HTTP/1.0 request is submitted, this
-    # plugin will automatically fallback to the normal template rendering.
-    # Note that some proxies including nginx default to HTTP/1.0 even if the
-    # client supports HTTP/1.1.  For nginx, set the proxy_http_version to 1.1.
+    # the application and the client buffer responses.
     #
     # If you are using nginx and have it set to buffer proxy responses by
     # default, you can turn this off on a per response basis using the
@@ -134,6 +128,15 @@ class Roda
     # all chunked responses, pass a :headers option when loading the plugin:
     #
     #   plugin :chunked, headers: {'X-Accel-Buffering'=>'no'}
+    #
+    # By default, this plugin does not use Transfer-Encoding: chunked, it only
+    # returns a body that will stream the response in chunks.  If you would like
+    # to force the use of Transfer-Encoding: chunked, you can use the
+    # :force_chunked_encoding plugin option.  If using the
+    # :force_chunked_encoding plugin option, chunking will only be used for 
+    # HTTP/1.1 requests since Transfer-Encoding: chunked is only supported
+    # in HTTP/1.1 (non-HTTP/1.1 requests will have behavior similar to
+    # calling no_chunk!).
     #
     # The chunked plugin requires the render plugin, and only works for
     # template engines that store their template output variable in
@@ -155,12 +158,14 @@ class Roda
       # :headers :: Set default additional headers to use when calling view
       def self.configure(app, opts=OPTS)
         app.opts[:chunk_by_default] = opts[:chunk_by_default]
+        app.opts[:force_chunked_encoding] = opts[:force_chunked_encoding]
         if opts[:headers]
           app.opts[:chunk_headers] = (app.opts[:chunk_headers] || {}).merge(opts[:headers]).freeze
         end
       end
 
-      # Rack response body instance for chunked responses
+      # Rack response body instance for chunked responses using
+      # Transfer-Encoding: chunked.
       class Body
         # Save the scope of the current request handling.
         def initialize(scope)
@@ -181,6 +186,22 @@ class Roda
           end
         ensure
           yield("0\r\n\r\n")
+        end
+      end
+
+      # Rack response body instance for chunked responses not
+      # using Transfer-Encoding: chunked.
+      class StreamBody
+        # Save the scope of the current request handling.
+        def initialize(scope)
+          @scope = scope
+        end
+
+        # Yield each non-empty chunk as the body.
+        def each(&block)
+          @scope.each_chunk do |chunk|
+            yield chunk if chunk && !chunk.empty?
+          end
         end
       end
 
@@ -205,7 +226,7 @@ class Roda
         # an overview.  If a block is given, it is passed to #delay.
         def chunked(template, opts=OPTS, &block)
           unless defined?(@_chunked)
-            @_chunked = env['HTTP_VERSION'] == "HTTP/1.1"
+            @_chunked = !self.opts[:force_chunked_encoding] || env['HTTP_VERSION'] == "HTTP/1.1" 
           end
 
           if block
@@ -235,9 +256,14 @@ class Roda
           if chunk_headers = self.opts[:chunk_headers]
             headers.merge!(chunk_headers)
           end
-          headers['Transfer-Encoding'] = 'chunked'
+          if self.opts[:force_chunked_encoding]
+            headers['Transfer-Encoding'] = 'chunked'
+            body = Body.new(self)
+          else
+            body = StreamBody.new(self)
+          end
 
-          throw :halt, res.finish_with_body(Body.new(self))
+          throw :halt, res.finish_with_body(body)
         end
 
         # Delay the execution of the block until right before the

@@ -1,5 +1,7 @@
 = master
 
+* Make chunked plugin not use Transfer-Encoding: chunked by default (jeremyevans)
+
 * Make run_handler plugin close bodies for upstream 404 responses when using not_found: :pass (jeremyevans)
 
 * Drop all 1xx bodies in the drop body plugin (jeremyevans)
