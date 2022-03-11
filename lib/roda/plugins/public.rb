@@ -102,7 +102,10 @@ class Roda
           public_serve_compressed(server, path, '.gz', 'gzip') if roda_opts[:public_gzip]
 
           if public_file_readable?(path)
-            halt public_serve(server, path)
+            s, h, b = public_serve(server, path)
+            headers = response.headers
+            headers.replace(h)
+            halt [s, headers, b]
           end
         end
 
