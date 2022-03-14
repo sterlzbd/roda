@@ -1,4 +1,4 @@
-= master
+= 3.54.0 (2022-03-14)
 
 * Make chunked plugin not use Transfer-Encoding: chunked by default (jeremyevans)
 
