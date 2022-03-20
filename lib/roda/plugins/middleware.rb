@@ -78,6 +78,7 @@ class Roda
         app.opts[:middleware_env_var] ||= 'roda.forward_next'
         app.opts[:middleware_configure] = block if block
         app.opts[:middleware_handle_result] = opts[:handle_result]
+        app.opts[:middleware_forward_response_headers] = opts[:forward_response_headers]
       end
 
       # Forwarder instances are what is actually used as middleware.
@@ -108,6 +109,10 @@ class Roda
 
           if call_next
             res = @app.call(env)
+
+            if modified_headers = env.delete('roda.response_headers')
+              res[1] = modified_headers.merge(res[1])
+            end
           end
 
           if handle_result = @mid.opts[:middleware_handle_result]
@@ -135,7 +140,10 @@ class Roda
         def call(&block)
           super do |r|
             res = instance_exec(r, &block) # call Fallback
-            throw :next, true if r.forward_next
+            if r.forward_next
+              r.env['roda.response_headers'] = response.headers if opts[:middleware_forward_response_headers]
+              throw :next, true
+            end
             res
           end
         end
@@ -144,7 +152,10 @@ class Roda
         # that the next middleware is called.
         def _roda_run_main_route(r)
           res = super
-          throw :next, true if r.forward_next
+          if r.forward_next
+            r.env['roda.response_headers'] = response.headers if opts[:middleware_forward_response_headers]
+            throw :next, true
+          end
           res
         end
       end
