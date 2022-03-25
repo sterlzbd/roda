@@ -73,6 +73,10 @@ class Roda
       #                   and rack response for all requests passing through the middleware,
       #                   after either the middleware or next app handles the request
       #                   and returns a response.
+      # :forward_response_headers :: Whether changes to the response headers made inside
+      #                              the middleware's route block should be applied to the
+      #                              final response when the request is forwarded to the app.
+      #                              Defaults to false.
       def self.configure(app, opts={}, &block)
         app.opts[:middleware_env_var] = opts[:env_var] if opts.has_key?(:env_var)
         app.opts[:middleware_env_var] ||= 'roda.forward_next'
