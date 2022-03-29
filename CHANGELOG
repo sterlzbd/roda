@@ -1,5 +1,7 @@
 = master
 
+* Allow passing blocks to the view method in the render plugin (jeremyevans) (#262)
+
 * Add :forward_response_headers middleware plugin option to use app headers as default for response (janko) (#259)
 
 = 3.54.0 (2022-03-14)

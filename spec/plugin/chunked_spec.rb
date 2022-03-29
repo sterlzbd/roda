@@ -353,6 +353,17 @@ describe "chunked plugin without :force_chunked_encoding" do
     body.must_equal %w'h m t'
   end
 
+  it "does not stream template responses for view with a block if :chunk_by_default is used" do
+    app(:bare) do
+      plugin :chunked, :chunk_by_default=>true
+      route do |r|
+        view(:inline=>'<%= yield %>', :layout=>{:inline=>'h<%= yield %>t'}){'m'}
+      end
+    end
+
+    body.must_equal %w'hmt'
+  end
+
   it "does not uses Transfer-Encoding header when streaming chunks" do
     app(:chunked) do |r|
       chunked(:inline=>'m', :layout=>{:inline=>'h<%= yield %>t'})

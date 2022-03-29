@@ -215,7 +215,7 @@ class Roda
         # If chunking by default, call chunked if it hasn't yet been
         # called and chunking is not specifically disabled.
         def view(*a)
-          if opts[:chunk_by_default] && !defined?(@_chunked)
+          if opts[:chunk_by_default] && !defined?(@_chunked) && !defined?(yield)
             chunked(*a)
           else
             super

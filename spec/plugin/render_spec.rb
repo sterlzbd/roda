@@ -33,6 +33,14 @@ describe "render plugin" do
         r.on "content" do
           view(:content=>'bar', :layout_opts=>{:locals=>{:title=>"Home"}})
         end
+
+        r.on "render-block" do
+          render('layout', :locals=>{:title=>"Home"}){render("about", :locals=>{:title => "About Roda"})}
+        end
+
+        r.on "view-block" do
+          view(:layout, :locals=>{:title=>"A"}, :layout_opts=>{:locals=>{:title=>"B"}}){render("about", :locals=>{:title => "About Roda"})}
+        end
       end
     end
   end
@@ -43,6 +51,8 @@ describe "render plugin" do
     body("/inline").strip.must_equal "Hello Agent Smith"
     body("/path").strip.must_equal "<h1>Path</h1>"
     body("/content").strip.must_equal "<title>Roda: Home</title>\nbar"
+    body("/render-block").strip.must_equal "<title>Roda: Home</title>\n<h1>About Roda</h1>"
+    body("/view-block").strip.must_equal "<title>Roda: B</title>\n<title>Roda: A</title>\n<h1>About Roda</h1>"
   end
 
   it "with str as engine" do

@@ -495,8 +495,10 @@ class Roda
 
         # Render the given template.  If there is a default layout
         # for the class, take the result of the template rendering
-        # and render it inside the layout.  See Render for details.
-        def view(template, opts = (content = _optimized_view_content(template); OPTS))
+        # and render it inside the layout.  Blocks passed to view
+        # are passed to render when rendering the template.
+        # See Render for details.
+        def view(template, opts = (content = _optimized_view_content(template) unless defined?(yield); OPTS), &block)
           if content
             # First, check if the optimized layout method has already been created,
             # and use it if so.  This way avoids the extra conditional and local variable
@@ -516,7 +518,7 @@ class Roda
             end
           else
             opts = parse_template_opts(template, opts)
-            content = opts[:content] || render_template(opts)
+            content = opts[:content] || render_template(opts, &block)
           end
 
           if layout_opts  = view_layout_opts(opts)
