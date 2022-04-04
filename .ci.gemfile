@@ -12,7 +12,7 @@ end
 if RUBY_VERSION < '2.2.0'
   gem 'sass', '< 3.5'
 else
-  gem 'sass'
+  gem 'sassc'
 end
 
 case RUBY_VERSION[0, 3]
