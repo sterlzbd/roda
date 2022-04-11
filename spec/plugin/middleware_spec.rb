@@ -57,6 +57,48 @@ describe "middleware plugin" do
       body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
       body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
     end
+
+    send meth, "supports :forward_response_headers middleware option" do
+      mid1 = app(:bare) do
+        plugin :middleware, :forward_response_headers=>true
+        def call; super end if def_call
+
+        route do |r|
+          response.headers['A'] = 'A1'
+          response.headers['B'] = 'B1'
+        end
+      end
+
+      mid2 = app(:bare) do
+        plugin :middleware
+        def call; super end if def_call
+
+        route do |r|
+          response.headers['C'] = 'C1'
+          response.headers['D'] = 'D1'
+        end
+      end
+
+      app(:bare) do
+        use mid1
+        use mid2
+        def call; super end if def_call
+
+        route do |r|
+          response.headers['A'] = 'A2'
+          response.headers['C'] = 'C2'
+
+          r.root do
+            'body'
+          end
+        end
+      end
+
+      header('A').must_equal 'A2'
+      header('B').must_equal 'B1'
+      header('C').must_equal 'C2'
+      header('D').must_be_nil
+    end
   end
 
   it "makes it still possible to use the Roda app normally" do
@@ -284,44 +326,4 @@ describe "middleware plugin" do
     body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
     body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
   end
-
-  it "supports :forward_response_headers middleware option" do
-    mid1 = app(:bare) do
-      plugin :middleware, :forward_response_headers=>true
-
-      route do |r|
-        response.headers['A'] = 'A1'
-        response.headers['B'] = 'B1'
-      end
-    end
-
-    mid2 = app(:bare) do
-      plugin :middleware
-
-      route do |r|
-        response.headers['C'] = 'C1'
-        response.headers['D'] = 'D1'
-      end
-    end
-
-    app(:bare) do
-      use mid1
-      use mid2
-
-      route do |r|
-        response.headers['A'] = 'A2'
-        response.headers['C'] = 'C2'
-
-        r.root do
-          'body'
-        end
-      end
-    end
-
-    header('A').must_equal 'A2'
-    header('B').must_equal 'B1'
-    header('C').must_equal 'C2'
-    header('D').must_be_nil
-  end
 end
-
