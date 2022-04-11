@@ -20,11 +20,16 @@ describe "cookies plugin" do
     end
 
     cookie = header('Set-Cookie')
-    if cookie.is_a?(Array)
-      cookie.length.must_equal 1
-      cookie = cookie[0]
+    if Rack.release >= '2.3'
+      cookie[0].must_match(/foo=bar/)
+      cookie[1].must_match(/foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/)
+    else
+      if cookie.is_a?(Array)
+        cookie.length.must_equal 1
+        cookie = cookie[0]
+      end
+      cookie.must_match(/foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/)
     end
-    cookie.must_match(/foo=; (max-age=0; )?expires=Thu, 01[ -]Jan[ -]1970 00:00:00 (-0000|GMT)/)
     body.must_equal 'Hello'
   end
 

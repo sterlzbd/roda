@@ -162,23 +162,23 @@ if RUBY_VERSION >= '2'
 
     it "should include HttpOnly and secure cookie options appropriately" do
       h = header('Set-Cookie', '/s/foo/bar')
-      h.must_include('; HttpOnly')
+      h.must_match(/; HttpOnly/i)
       h.wont_include('; secure')
 
       h = header('Set-Cookie', '/s/foo/baz', 'HTTPS'=>'on')
-      h.must_include('; HttpOnly')
+      h.must_match(/; HttpOnly/i)
       h.must_include('; secure')
 
       @app.plugin(:sessions, :cookie_options=>{})
       h = header('Set-Cookie', '/s/foo/bar')
-      h.must_include('; HttpOnly')
+      h.must_match(/; HttpOnly/i)
       h.wont_include('; secure')
     end
 
     it "should merge :cookie_options options into the default cookie options" do
       @app.plugin(:sessions, :cookie_options=>{:secure=>true})
       h = header('Set-Cookie', '/s/foo/bar')
-      h.must_include('; HttpOnly')
+      h.must_match(/; HttpOnly/i)
       h.must_include('; path=/')
       h.must_include('; secure')
     end
@@ -398,7 +398,7 @@ if RUBY_VERSION >= '2'
       end
 
       _, h, b = req('/s/foo/bar')
-      (h['Set-Cookie'] =~ /\A(rack\.session=.*); path=\/; HttpOnly\z/).must_equal 0
+      (h['Set-Cookie'] =~ /\A(rack\.session=.*); path=\/; HttpOnly\z/i).must_equal 0
       c = $1
       b.must_equal ['bar']
       _, h, b = req('/g/foo')
@@ -430,25 +430,25 @@ if RUBY_VERSION >= '2'
 
       @cookie = c
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/m)
+      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
 
       @app.plugin :sessions, :cookie_options=>{:path=>'/foo'}, :upgrade_from_rack_session_cookie_options=>{}
       @cookie = c
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/foo; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/m)
+      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/foo; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
 
       @app.plugin :sessions, :upgrade_from_rack_session_cookie_options=>{:path=>'/baz'}
       @cookie = c
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/m)
+      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
 
       @app.plugin :sessions, :upgrade_from_rack_session_cookie_key=>'quux.session'
       @cookie = c.sub(/\Arack/, 'quux')
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nquux\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/m)
+      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nquux\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
     end
   end if Rack.release < '2.3'

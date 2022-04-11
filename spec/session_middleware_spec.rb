@@ -27,7 +27,7 @@ describe "RodaSessionMiddleware" do
     b.must_equal ['']
 
     _, h, b = req('/s/foo/bar')
-    h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\z/m)
+    h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\z/mi)
     b.must_equal ['bar']
     body('/s/foo/bar').must_equal 'bar'
     body('/g/foo').must_equal 'bar'
@@ -121,9 +121,6 @@ describe "RodaSessionMiddleware" do
     sess.empty?.must_equal false
     sess.keys.must_equal ["foo"]
     sess.values.must_equal ["bar"]
-
-    
-    
   end
 end
 end
