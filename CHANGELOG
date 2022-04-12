@@ -1,4 +1,4 @@
-= master
+= 3.55.0 (2022-04-12)
 
 * Allow passing blocks to the view method in the render plugin (jeremyevans) (#262)
 
