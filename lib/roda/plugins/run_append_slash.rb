@@ -34,7 +34,7 @@ class Roda
         # path internally, or a redirect is issued when configured with
         # <tt>use_redirects: true</tt>.
         def run(*)
-          if remaining_path.empty?
+          if @remaining_path.empty?
             if scope.opts[:run_append_slash_redirect]
               redirect("#{path}/")
             else
