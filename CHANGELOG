@@ -1,3 +1,7 @@
+= master
+
+* Add run_require_slash plugin, for skipping application dispatch for remaining paths that would violate Rack SPEC (jeremyevans)
+
 = 3.55.0 (2022-04-12)
 
 * Allow passing blocks to the view method in the render plugin (jeremyevans) (#262)
