@@ -1,5 +1,13 @@
 # frozen-string-literal: true
 
+require 'rack/mime'
+begin
+  require 'rack/files'
+rescue LoadError
+  require 'rack/file'
+end
+
+
 #
 class Roda
   module RodaPlugins

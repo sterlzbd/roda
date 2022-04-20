@@ -1,5 +1,7 @@
 = master
 
+* In Rack 3, only require the parts of rack used by Roda, instead of requiring rack itself and relying on autoload (jeremyevans)
+ 
 * Add run_require_slash plugin, for skipping application dispatch for remaining paths that would violate Rack SPEC (jeremyevans)
 
 = 3.55.0 (2022-04-12)

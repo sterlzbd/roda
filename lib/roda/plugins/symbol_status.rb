@@ -1,5 +1,7 @@
 # frozen-string-literal: true
 
+require 'rack/utils'
+
 class Roda
   module RodaPlugins
     # The symbol_status plugin patches the +status=+ response method to

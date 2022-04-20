@@ -14,6 +14,7 @@ require 'base64'
 require 'json'
 require 'securerandom'
 require 'zlib'
+require 'rack/utils'
 
 class Roda
   module RodaPlugins

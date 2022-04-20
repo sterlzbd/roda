@@ -4,6 +4,7 @@ require 'base64'
 require 'openssl'
 require 'securerandom'
 require 'uri'
+require 'rack/utils'
 
 class Roda
   module RodaPlugins

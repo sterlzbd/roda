@@ -1,5 +1,10 @@
 # frozen-string-literal: true
 
+begin
+  require 'rack/headers'
+rescue LoadError
+end
+
 class Roda
   # Base class used for Roda responses.  The instance methods for this
   # class are added by Roda::RodaPlugins::Base::ResponseMethods, the class

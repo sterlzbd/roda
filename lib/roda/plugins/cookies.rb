@@ -1,5 +1,7 @@
 # frozen-string-literal: true
 
+require 'rack/utils'
+
 #
 class Roda
   module RodaPlugins

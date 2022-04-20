@@ -1,6 +1,17 @@
 # frozen-string-literal: true
 
-require "rack"
+begin
+  require "rack/version"
+rescue LoadError
+  require "rack"
+else
+  if Rack.release >= '2.3'
+    require "rack/request"
+  else
+    require "rack"
+  end
+end
+
 require_relative "cache"
 
 class Roda
