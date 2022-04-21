@@ -74,10 +74,11 @@ describe "render plugin" do
 end
 
 describe "render plugin" do
-  file = 'spec/iv.erb'
-  dependent_file = 'spec/tmp.txt'
+  iv = "iv-#{$$}"
+  file = "spec/#{iv}.erb"
+  dependent_file = "spec/tmp-#{$$}.txt"
   before do
-    File.binwrite(file, File.binread('spec/views/iv.erb'))
+    File.binwrite(file, File.binread("spec/views/iv.erb"))
   end
   after do
     [file, dependent_file].each do |f|
@@ -93,7 +94,7 @@ describe "render plugin" do
 
       route do |r|
         @a = 'a'
-        render('iv', :dependencies=>[dependent_file])
+        render(iv, :dependencies=>[dependent_file])
       end
     end
 
@@ -112,7 +113,7 @@ describe "render plugin" do
 
         route do |r|
           @a = 'a'
-          render('iv')
+          render(iv)
         end
       end
 
@@ -143,7 +144,7 @@ describe "render plugin" do
 
       route do |r|
         @a = 'a'
-        render('iv', :cache=>true)
+        render(iv, :cache=>true)
       end
     end
 

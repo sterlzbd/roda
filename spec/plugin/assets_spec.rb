@@ -18,22 +18,28 @@ begin
 end
 
 if run_tests
-  metadata_file = File.expand_path('spec/assets/tmp/precompiled.json')
-  importdep_file = File.expand_path('spec/assets/css/importdep.scss')
-  js_file = File.expand_path('spec/assets/js/head/app.js')
-  css_file = File.expand_path('spec/assets/css/no_access.css')
-  js_mtime = File.mtime(js_file)
-  js_atime = File.atime(js_file)
-  css_mtime = File.mtime(css_file)
-  css_atime = File.atime(css_file)
+  pid_dir = "spec/pid-#{$$}"
+  assets_dir = File.join(pid_dir, "assets")
+  metadata_file = File.expand_path(File.join(assets_dir, 'precompiled.json'))
+  importdep_file = File.expand_path(File.join(assets_dir, 'css/importdep.scss'))
+  js_file = File.expand_path(File.join(assets_dir, 'js/head/app.js'))
+  css_file = File.expand_path(File.join(assets_dir, 'css/no_access.css'))
   describe 'assets plugin' do
+    before(:all) do
+      Dir.mkdir(pid_dir)
+      FileUtils.cp_r('spec/assets', assets_dir)
+      @js_mtime = File.mtime(js_file)
+      @js_atime = File.atime(js_file)
+      @css_mtime = File.mtime(css_file)
+      @css_atime = File.atime(css_file)
+    end
     before do
       app(:bare) do
         plugin :assets,
           :css => ['app.scss', 'raw.css'],
           :js => { :head => ['app.js'] },
-          :path => 'spec/assets',
-          :public => 'spec',
+          :path => assets_dir,
+          :public => pid_dir,
           :css_opts => {:cache=>false},
           :css_compressor => :none,
           :js_compressor => :none
@@ -57,13 +63,16 @@ if run_tests
       end
     end
     after do
-      File.utime(js_atime, js_mtime, js_file)
-      File.utime(css_atime, css_mtime, css_file)
+      File.utime(@js_atime, @js_mtime, js_file)
+      File.utime(@css_atime, @css_mtime, css_file)
       File.delete(metadata_file) if File.file?(metadata_file)
       File.delete(importdep_file) if File.file?(importdep_file)
-      FileUtils.rm_r('spec/assets/tmp') if File.directory?('spec/assets/tmp')
-      FileUtils.rm_r('spec/public') if File.directory?('spec/public')
-      FileUtils.rm(Dir['spec/assets/app.*.{js,css}*'])
+      FileUtils.rm_r(File.join(assets_dir, 'tmp')) if File.directory?(File.join(assets_dir, 'tmp'))
+      FileUtils.rm_r(File.join(pid_dir, 'public')) if File.directory?(File.join(pid_dir, 'public'))
+      FileUtils.rm(Dir["#{pid_dir}/app.*.{js,css}*"])
+    end
+    after(:all) do
+      FileUtils.rm_r(pid_dir) if File.directory?(pid_dir)
     end
 
     def gunzip(body)
@@ -73,7 +82,7 @@ if run_tests
     it 'assets_opts should use correct paths given options' do
       fpaths = [:js_path, :css_path, :compiled_js_path, :compiled_css_path]
       rpaths = [:js_prefix, :css_prefix, :compiled_js_prefix, :compiled_css_prefix]
-      app.assets_opts.values_at(*fpaths).must_equal %w"spec/assets/js/ spec/assets/css/ spec/assets/app spec/assets/app".map{|s| File.join(Dir.pwd, s)}
+      app.assets_opts.values_at(*fpaths).must_equal %w"js/ css/ app app".map{|s| File.join(Dir.pwd, assets_dir, s)}
       app.assets_opts.values_at(*rpaths).must_equal %w"assets/js/ assets/css/ assets/app assets/app"
 
       app.plugin :assets, :path=>'bar/', :public=>'foo/', :prefix=>'as/', :js_dir=>'j/', :css_dir=>'c/', :compiled_name=>'a'
@@ -313,7 +322,7 @@ if run_tests
     end
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling, with different options' do
-      app.plugin :assets, :path=>'spec/', :js_dir=>'assets/js', :css_dir=>'assets/css', :prefix=>'a',
+      app.plugin :assets, :path=>pid_dir, :js_dir=>'assets/js', :css_dir=>'assets/css', :prefix=>'a',
         :js_route=>'foo', :css_route=>'bar', :add_suffix=>true, :css_opts=>{:style=>:compressed}
       html = body('/test')
       html.scan(/<link/).length.must_equal 2
@@ -330,7 +339,7 @@ if run_tests
     end
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash' do
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :prefix=>nil,
+      app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :prefix=>nil,
         :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.route do |r|
         r.assets
@@ -353,7 +362,7 @@ if run_tests
     end
 
     it 'should handle :group_subdirs => false' do
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :prefix=>nil, :group_subdirs=>false,
+      app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :prefix=>nil, :group_subdirs=>false,
         :css=>{:assets=>{:css=>%w'assets/css/app.scss assets/css/raw.css'}}, :js=>{:assets=>{:js=>{:head=>'assets/js/head/app.js'}}}
       app.route do |r|
         r.assets
@@ -383,8 +392,8 @@ if run_tests
         rescue LoadError, Roda::RodaPlugins::Assets::CompressorNotFound
           next
         end
-        File.read("spec/assets/app.#{app.assets_opts[:compiled]['css']}.css").must_match(/color: ?blue/)
-        File.read("spec/assets/app.head.#{app.assets_opts[:compiled]['js.head']}.js").must_include('console.log')
+        File.read(File.join(assets_dir, "app.#{app.assets_opts[:compiled]['css']}.css")).must_match(/color: ?blue/)
+        File.read(File.join(assets_dir, "app.head.#{app.assets_opts[:compiled]['js.head']}.js")).must_include('console.log')
       end
 
       try_compressor.call(nil, nil)
@@ -398,8 +407,8 @@ if run_tests
       try_compressor = proc do |css, js|
         app.plugin :assets, :css_compressor=>css, :js_compressor=>js, :concat_only=>true
         app.compile_assets
-        File.read("spec/assets/app.#{app.assets_opts[:compiled]['css']}.css").must_include('color: blue')
-        File.read("spec/assets/app.head.#{app.assets_opts[:compiled]['js.head']}.js").must_include('console.log')
+        File.read(File.join(assets_dir, "app.#{app.assets_opts[:compiled]['css']}.css")).must_include('color: blue')
+        File.read(File.join(assets_dir, "app.head.#{app.assets_opts[:compiled]['js.head']}.js")).must_include('console.log')
       end
 
       try_compressor.call(nil, nil)
@@ -414,8 +423,8 @@ if run_tests
       app.define_singleton_method(:compress_js_yui){|*|}
       app.define_singleton_method(:compress_css_yui){|*|}
       app.compile_assets
-      File.read("spec/assets/app.#{app.assets_opts[:compiled]['css']}.css").must_include('color: blue')
-      File.read("spec/assets/app.head.#{app.assets_opts[:compiled]['js.head']}.js").must_include('console.log')
+      File.read(File.join(assets_dir, "app.#{app.assets_opts[:compiled]['css']}.css")).must_include('color: blue')
+      File.read(File.join(assets_dir, "app.head.#{app.assets_opts[:compiled]['js.head']}.js")).must_include('console.log')
     end
 
     it 'should handle compiling assets, linking to them, and accepting requests for them' do
@@ -575,7 +584,7 @@ END
 
     it 'should handle compiling assets, linking to them, and accepting requests for them, with different options' do
       app.plugin :assets, :compiled_path=>nil, :js_dir=>'assets/js', :css_dir=>'assets/css', :prefix=>'a',
-        :public=>'spec/assets', :path=>'spec', :compiled_js_route=>'foo', :compiled_css_route=>'bar'
+        :public=>assets_dir, :path=>pid_dir, :compiled_js_route=>'foo', :compiled_css_route=>'bar'
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
@@ -590,7 +599,7 @@ END
     end
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash' do
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
+      app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
         :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.compile_assets
       app.route do |r|
@@ -613,7 +622,7 @@ END
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash when :add_script_name app option is used' do
       app.opts[:add_script_name] = true
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
+      app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
         :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.compile_assets
       app.route do |r|
@@ -635,7 +644,7 @@ END
     end
 
     it 'should handle :group_subdirs => false when compiling' do
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil, :group_subdirs=>false,
+      app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil, :group_subdirs=>false,
         :css=>{:assets=>{:css=>%w'assets/css/app.scss assets/css/raw.css'}}, :js=>{:assets=>{:js=>{:head=>'assets/js/head/app.js'}}}
       app.compile_assets
       app.route do |r|
@@ -657,7 +666,7 @@ END
     end
 
     it 'should handle automatically creating directories when compiling assets' do
-      app.plugin :assets, :public=>'spec/public'
+      app.plugin :assets, :public=>File.join(pid_dir, 'public')
       app.compile_assets
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
@@ -746,7 +755,7 @@ END
     it 'requests for assets should not return 304 if the asset has been modified' do
       loc = '/assets/js/head/app.js'
       lm = header('Last-Modified', loc)
-      File.utime(js_atime, js_mtime+1, js_file)
+      File.utime(@js_atime, @js_mtime+1, js_file)
       status(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal 200
       body(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_include('console.log')
     end
@@ -763,21 +772,21 @@ END
       app.plugin :assets, :dependencies=>{js_file=>css_file}
       loc = '/assets/js/head/app.js'
       lm = header('Last-Modified', loc)
-      File.utime(css_atime, [css_mtime+2, js_mtime+2].max, css_file)
+      File.utime(@css_atime, [@css_mtime+2, @js_mtime+2].max, css_file)
       status(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal 200
       body(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_include('console.log')
     end
 
     it 'requests for assets should include modifications to content of dependencies' do
-      File.open('spec/assets/css/importdep.scss', 'wb'){|f| f.write('body{color:blue}')}
+      File.open(File.join(assets_dir, 'css/importdep.scss'), 'wb'){|f| f.write('body{color:blue}')}
       app.plugin :assets, :css=>['import.scss'],
-        :dependencies=>{'spec/assets/css/import.scss'=>'spec/assets/css/importdep.scss'}
+        :dependencies=>{File.join(assets_dir, 'css/import.scss')=>File.join(assets_dir, 'css/importdep.scss')}
       app.plugin :render, :cache=>false
       3.times do
         body('/assets/css/import.scss').must_include('color: blue;')
       end
-      File.open('spec/assets/css/importdep.scss', 'wb'){|f| f.write('body{color:red}')}
-      File.utime(Time.now+2, Time.now+4, 'spec/assets/css/importdep.scss')
+      File.open(File.join(assets_dir, 'css/importdep.scss'), 'wb'){|f| f.write('body{color:red}')}
+      File.utime(Time.now+2, Time.now+4, File.join(assets_dir, 'css/importdep.scss'))
       3.times do
         body('/assets/css/import.scss').must_include('color: red;')
       end
@@ -811,7 +820,7 @@ END
         "file=#{file} type=#{type} tc=#{type.class} #{content.sub('color', 'font')}"
       end
 
-      app.plugin :assets, :path=>'spec', :js_dir=>nil, :css_dir=>nil, :prefix=>nil,
+      app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :prefix=>nil,
         :postprocessor=>postprocessor,
         :css=>{:assets=>{:css=>%w'app.scss'}}
       app.route do |r|
