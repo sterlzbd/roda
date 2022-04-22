@@ -6,13 +6,13 @@ Gem::Specification.new do |s|
   s.summary           = "Routing tree web toolkit"
   s.authors           = ["Jeremy Evans"]
   s.email             = ["code@jeremyevans.net"]
-  s.homepage          = "http://roda.jeremyevans.net"
+  s.homepage          = "https://roda.jeremyevans.net"
   s.license           = "MIT"
   s.required_ruby_version = ">= 1.9.2"
   s.metadata          = { 
     'bug_tracker_uri'   => 'https://github.com/jeremyevans/roda/issues',
-    'changelog_uri'     => 'http://roda.jeremyevans.net/rdoc/files/CHANGELOG.html',
-    'documentation_uri' => 'http://roda.jeremyevans.net/documentation.html',
+    'changelog_uri'     => 'https://roda.jeremyevans.net/rdoc/files/CHANGELOG.html',
+    'documentation_uri' => 'https://roda.jeremyevans.net/documentation.html',
     'mailing_list_uri'  => 'https://github.com/jeremyevans/roda/discussions',
     "source_code_uri"   => "https://github.com/jeremyevans/roda" 
   }
