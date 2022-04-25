@@ -17,6 +17,9 @@ class Roda
     # will return a 200 response for <tt>GET /</tt> and a 405
     # response for <tt>POST /</tt>.
     #
+    # This plugin changes the +r.root+ method to return a 405 status
+    # for non-GET requests to +/+.
+    #
     # This plugin also changes the +r.is+ method so that if you use
     # a verb method inside +r.is+, it returns a 405 status if none
     # of the verb methods match.  So this code:
