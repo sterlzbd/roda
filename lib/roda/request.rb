@@ -1,5 +1,6 @@
 # frozen-string-literal: true
 
+# :nocov:
 begin
   require "rack/version"
 rescue LoadError
@@ -11,6 +12,7 @@ else
     require "rack"
   end
 end
+# :nocov:
 
 require_relative "cache"
 

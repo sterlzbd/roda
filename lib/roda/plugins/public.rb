@@ -5,7 +5,9 @@ require 'uri'
 begin
   require 'rack/files'
 rescue LoadError
+  # :nocov:
   require 'rack/file'
+  # :nocov:
 end
 
 #
