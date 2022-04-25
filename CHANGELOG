@@ -1,5 +1,7 @@
 = master
 
+* Make not_allowed plugin have r.root return 405 responses for non-GET requests (jeremyevans) (#266)
+
 * In Rack 3, only require the parts of rack used by Roda, instead of requiring rack itself and relying on autoload (jeremyevans)
  
 * Add run_require_slash plugin, for skipping application dispatch for remaining paths that would violate Rack SPEC (jeremyevans)

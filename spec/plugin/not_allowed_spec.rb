@@ -3,7 +3,7 @@ require_relative "../spec_helper"
 describe "not_allowed plugin" do 
   it "skips the current block if pass is called" do
     app(:not_allowed) do |r|
-      r.get '' do
+      r.root do
         'a'
       end
 
@@ -64,6 +64,7 @@ describe "not_allowed plugin" do
     header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'GET, POST'
 
     @app.plugin :head
+    header('Allow', 'REQUEST_METHOD'=>'POST').must_equal 'HEAD, GET'
     header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'HEAD, GET, POST'
   end
 end

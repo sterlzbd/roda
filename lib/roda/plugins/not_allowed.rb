@@ -100,6 +100,15 @@ class Roda
           end
         end
 
+        # Treat +r.root+ similar to <tt>r.get ''</tt>, using a 405
+        # response for non-GET requests.
+        def root
+          super
+          if @remaining_path == "/"  && !is_get?
+            method_not_allowed("GET")
+          end
+        end
+
         # Setup methods for all verbs.  If inside an is block and not given
         # arguments, record the verb used.  If given an argument, add an is
         # check with the arguments.
