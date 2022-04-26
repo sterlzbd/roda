@@ -15,13 +15,19 @@ class Roda
     #   status_handler(403) do
     #     "You are forbidden from seeing that!"
     #   end
+    #
     #   status_handler(404) do
     #     "Where did it go?"
     #   end
     #
+    #   status_handler(405, keep_headers: true) do
+    #     "Use a different method!"
+    #   end
+    #
     # Before a block is called, any existing headers on the response will be
-    # cleared.  So if you want to be sure the headers are set even in your block,
-    # you need to reset them in the block.
+    # cleared, unless the +:keep_headers+ option is used.  If the +:keep_headers+
+    # option is used, only the Content-Length header will be removed (to prevent
+    # invalid content lengths in the returned response).
     module StatusHandler
       def self.configure(app)
         app.opts[:status_handler] ||= {}
@@ -29,10 +35,20 @@ class Roda
 
       module ClassMethods
         # Install the given block as a status handler for the given HTTP response code.
-        def status_handler(code, &block)
+        def status_handler(code, opts=OPTS, &block)
           # For backwards compatibility, pass request argument if block accepts argument
           arity = block.arity == 0 ? 0 : 1
-          opts[:status_handler][code] = [define_roda_method(:"_roda_status_handler_#{code}", arity, &block), arity]
+          meth = define_roda_method(:"_roda_status_handler__#{code}", arity, &block)
+          self.opts[:status_handler][code] = define_roda_method(:"_roda_status_handler_#{code}", 1) do |result|
+            res = @_response
+            res.status = result[0]
+            if opts[:keep_headers]
+              res.headers.delete('Content-Length')
+            else
+              res.headers.clear
+            end
+            result.replace(_roda_handle_route{arity == 1 ? send(meth, @_request) : send(meth)})
+          end
         end
 
         # Freeze the hash of status handlers so that there can be no thread safety issues at runtime.
@@ -47,11 +63,8 @@ class Roda
 
         # If routing returns a response we have a handler for, call that handler.
         def _roda_after_20__status_handler(result)
-          if result && (meth, arity = opts[:status_handler][result[0]]; meth) && (v = result[2]).is_a?(Array) && v.empty?
-            res = @_response
-            res.headers.clear
-            res.status = result[0]
-            result.replace(_roda_handle_route{arity == 1 ? send(meth, @_request) : send(meth)})
+          if result && (meth = opts[:status_handler][result[0]]) && (v = result[2]).is_a?(Array) && v.empty?
+            send(meth, result)
           end
         end
       end

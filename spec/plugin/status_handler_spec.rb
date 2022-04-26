@@ -88,6 +88,26 @@ describe "status_handler plugin" do
     header('Foo').must_be_nil
   end
 
+  it "keeps existing headers if :keep_headers option is used" do
+    app(:bare) do
+      plugin :status_handler
+
+      status_handler(404, :keep_headers=>true) do
+        "a"
+      end
+
+      route do |r|
+        response['Content-Type'] = 'text/pdf'
+        response['Foo'] = 'bar'
+        nil
+      end
+    end
+
+    header('Content-Length').must_equal '1'
+    header('Content-Type').must_equal 'text/pdf'
+    header('Foo').must_equal 'bar'
+  end
+
   it "does not modify behavior if status_handler is not called" do
     app(:status_handler) do |r|
       r.on "a" do

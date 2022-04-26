@@ -1,5 +1,7 @@
 = master
 
+* Support status_handler method :keep_headers option in status_handler plugin (jeremyevans) (#267)
+
 * Make not_allowed plugin have r.root return 405 responses for non-GET requests (jeremyevans) (#266)
 
 * In Rack 3, only require the parts of rack used by Roda, instead of requiring rack itself and relying on autoload (jeremyevans)
