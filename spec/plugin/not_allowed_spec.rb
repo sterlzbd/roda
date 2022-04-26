@@ -15,8 +15,6 @@ describe "not_allowed plugin" do
         r.post do
           "cp"
         end
-
-        "c"
       end
 
       r.on "q" do
@@ -41,8 +39,10 @@ describe "not_allowed plugin" do
     end
 
     body.must_equal 'a'
-    status('REQUEST_METHOD'=>'POST').must_equal 405
-    header('Allow', 'REQUEST_METHOD'=>'POST').must_equal 'GET'
+    s, h, b = req('REQUEST_METHOD'=>'POST')
+    s.must_equal 405
+    h['Allow'].must_equal 'GET'
+    b.must_be_empty
 
     body('/b').must_equal 'b'
     status('/b', 'REQUEST_METHOD'=>'POST').must_equal 404
@@ -54,17 +54,32 @@ describe "not_allowed plugin" do
     status('/e', 'REQUEST_METHOD'=>'POST').must_equal 404
 
     body('/q').must_equal 'q'
-    status('/q', 'REQUEST_METHOD'=>'POST').must_equal 405
+    s, _, b = req('/q', 'REQUEST_METHOD'=>'POST')
+    s.must_equal 405
+    b.must_be_empty
 
     body('/c').must_equal 'cg'
-    body('/c').must_equal 'cg'
     body('/c', 'REQUEST_METHOD'=>'POST').must_equal 'cp'
-    body('/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'c'
-    status('/c', 'REQUEST_METHOD'=>'PATCH').must_equal 405
-    header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'GET, POST'
+    s, h, b = req('/c', 'REQUEST_METHOD'=>'PATCH')
+    s.must_equal 405
+    h['Allow'].must_equal 'GET, POST'
+    b.must_be_empty
 
     @app.plugin :head
     header('Allow', 'REQUEST_METHOD'=>'POST').must_equal 'HEAD, GET'
     header('Allow', '/c', 'REQUEST_METHOD'=>'PATCH').must_equal 'HEAD, GET, POST'
+    
+    @app.plugin :status_handler
+    @app.status_handler(405, :keep_headers=>true){'a'}
+
+    s, h, b = req('REQUEST_METHOD'=>'POST')
+    s.must_equal 405
+    h['Allow'].must_equal 'HEAD, GET'
+    b.must_equal ['a']
+
+    s, h, b = req('/c', 'REQUEST_METHOD'=>'PATCH')
+    s.must_equal 405
+    h['Allow'].must_equal 'HEAD, GET, POST'
+    b.must_equal ['a']
   end
 end

@@ -108,7 +108,7 @@ class Roda
         def root
           super
           if @remaining_path == "/"  && !is_get?
-            method_not_allowed("GET")
+            always{method_not_allowed("GET")}
           end
         end
 
@@ -141,6 +141,7 @@ class Roda
           res = response
           res.status = 405
           res['Allow'] = verbs
+          nil
         end
       end
     end
