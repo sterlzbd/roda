@@ -20,15 +20,18 @@ class Roda
     #     "Where did it go?"
     #   end
     #
-    #   status_handler(405, keep_headers: true) do
+    #   status_handler(405, keep_headers: ['Accept']) do
     #     "Use a different method!"
     #   end
     #
     # Before a block is called, any existing headers on the response will be
     # cleared, unless the +:keep_headers+ option is used.  If the +:keep_headers+
-    # option is used, only the Content-Length header will be removed (to prevent
-    # invalid content lengths in the returned response).
+    # option is used, the value should be an array, and only the headers listed
+    # in the array will be kept.
     module StatusHandler
+      CLEAR_HEADERS = :clear.to_proc
+      private_constant :CLEAR_HEADERS
+
       def self.configure(app)
         app.opts[:status_handler] ||= {}
       end
@@ -38,15 +41,20 @@ class Roda
         def status_handler(code, opts=OPTS, &block)
           # For backwards compatibility, pass request argument if block accepts argument
           arity = block.arity == 0 ? 0 : 1
+          handle_headers = case keep_headers = opts[:keep_headers]
+          when nil, false
+            CLEAR_HEADERS
+          when Array
+            lambda{|headers| headers.delete_if{|k,_| !keep_headers.include?(k)}}
+          else
+            raise RodaError, "Invalid :keep_headers option"
+          end
+
           meth = define_roda_method(:"_roda_status_handler__#{code}", arity, &block)
           self.opts[:status_handler][code] = define_roda_method(:"_roda_status_handler_#{code}", 1) do |result|
             res = @_response
             res.status = result[0]
-            if opts[:keep_headers]
-              res.headers.delete('Content-Length')
-            else
-              res.headers.clear
-            end
+            handle_headers.call(res.headers)
             result.replace(_roda_handle_route{arity == 1 ? send(meth, @_request) : send(meth)})
           end
         end
