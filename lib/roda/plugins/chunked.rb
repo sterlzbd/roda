@@ -226,7 +226,7 @@ class Roda
         # an overview.  If a block is given, it is passed to #delay.
         def chunked(template, opts=OPTS, &block)
           unless defined?(@_chunked)
-            @_chunked = !self.opts[:force_chunked_encoding] || env['HTTP_VERSION'] == "HTTP/1.1" 
+            @_chunked = !self.opts[:force_chunked_encoding] || @_request.http_version == "HTTP/1.1" 
           end
 
           if block

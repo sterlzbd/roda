@@ -17,10 +17,13 @@ class Roda
         private
 
         def default_redirect_status
-          if env['HTTP_VERSION'] == 'HTTP/1.1' && !is_get?
-            303
-          else
+          return super if is_get?
+
+          case http_version
+          when 'HTTP/1.0', 'HTTP/0.9', nil
             super
+          else
+            303
           end
         end
       end

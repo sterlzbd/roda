@@ -1,5 +1,9 @@
 = master
 
+* Make status_303 plugin use 303 responses for HTTP/2 and higher versions (jeremyevans)
+
+* Add RodaRequest#http_version for determining the HTTP version in use (jeremyevans)
+
 * Do not set a body for 405 responses when using the verb methods in the not_allowed plugin (jeremyevans) (#267)
 
 * Support status_handler method :keep_headers option in status_handler plugin (jeremyevans) (#267)

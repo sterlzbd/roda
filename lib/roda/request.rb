@@ -129,6 +129,27 @@ class Roda
           "#<#{self.class.inspect} #{@env["REQUEST_METHOD"]} #{path}>"
         end
 
+        # :nocov:
+        if Rack.release >= '2.3'
+          def http_version
+            # Prefer SERVER_PROTOCOL as it is required in Rack 3.
+            # Still fall back to HTTP_VERSION if SERVER_PROTOCOL
+            # is not set, in case the server in use is not Rack 3
+            # compliant.
+            @env['SERVER_PROTOCOL'] || @env['HTTP_VERSION']
+          end
+        else
+        # :nocov:
+          # What HTTP version the request was submitted with.
+          def http_version
+            # Prefer HTTP_VERSION as it is backwards compatible
+            # with previous Roda versions. Fallback to
+            # SERVER_PROTOCOL for servers that do not set
+            # HTTP_VERSION.
+            @env['HTTP_VERSION'] || @env['SERVER_PROTOCOL']
+          end
+        end
+
         # Does a terminal match on the current path, matching only if the arguments
         # have fully matched the path.  If it matches, the match block is
         # executed, and when the match block returns, the rack response is

@@ -171,6 +171,8 @@ class Minitest::Spec
     env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge(env)
     if ENV['LINT']
       env['SERVER_NAME'] ||= 'example.com'
+      env['SERVER_PROTOCOL'] ||= env['HTTP_VERSION'] || 'HTTP/1.0'
+      env['HTTP_VERSION'] ||= env['SERVER_PROTOCOL']
       env['QUERY_STRING'] ||= ''
       env['rack.input'] ||= rack_input
       env['rack.errors'] ||= StringIO.new
