@@ -10,6 +10,8 @@ class Roda
     #
     # This only parses the request body as JSON if the Content-Type
     # header for the request includes "json".
+    #
+    # Sent JSON body will be available calling +r.params+.
     module JsonParser
       DEFAULT_ERROR_HANDLER = proc{|r| r.halt [400, {}, []]}
 
