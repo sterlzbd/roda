@@ -4,14 +4,16 @@ require 'json'
 
 class Roda
   module RodaPlugins
-    # The json_parser plugin parses request bodies in json format
+    # The json_parser plugin parses request bodies in JSON format
     # if the request's content type specifies json. This is mostly
     # designed for use with JSON API sites.
     #
     # This only parses the request body as JSON if the Content-Type
     # header for the request includes "json".
     #
-    # Sent JSON body will be available calling +r.params+.
+    # The parsed JSON body will be available in +r.POST+, just as a
+    # parsed HTML form body would be. It will also be available in
+    # +r.params+ (which merges +r.GET+ with +r.POST+).
     module JsonParser
       DEFAULT_ERROR_HANDLER = proc{|r| r.halt [400, {}, []]}
 
@@ -27,7 +29,7 @@ class Roda
       #                     object as the second argument, so the parser needs
       #                     to respond to +call(str, request)+.
       # :wrap :: Whether to wrap uploaded JSON data in a hash with a "_json"
-      #          key.  Without this, calls to r.params will fail if a non-Hash
+      #          key.  Without this, calls to +r.params+ will fail if a non-Hash
       #          (such as an array) is uploaded in JSON format.  A value of
       #          :always will wrap all values, and a value of :unless_hash will
       #          only wrap values that are not already hashes.
