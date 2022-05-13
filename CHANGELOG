@@ -1,4 +1,4 @@
-= master
+= 3.56.0 (2022-05-13)
 
 * Make status_303 plugin use 303 responses for HTTP/2 and higher versions (jeremyevans)
 
