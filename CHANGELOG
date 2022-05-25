@@ -1,3 +1,7 @@
+= master
+
+* Add hash_branch_view_subdir plugin for automatically appending a view subdirectory on a successful hash branch (jeremyevans)
+
 = 3.56.0 (2022-05-13)
 
 * Make status_303 plugin use 303 responses for HTTP/2 and higher versions (jeremyevans)
