@@ -401,8 +401,7 @@ class Roda
           routes = opts[:hash_branches][namespace] ||= {}
           if block
             routes[segment] = define_roda_method(routes[segment] || "hash_branch_#{namespace}_#{segment}", 1, &convert_route_block(block))
-          elsif meth = routes[segment]
-            routes.delete(segment)
+          elsif meth = routes.delete(segment)
             remove_method(meth)
           end
         end
@@ -416,8 +415,7 @@ class Roda
           routes = opts[:hash_paths][namespace] ||= {}
           if block
             routes[path] = define_roda_method(routes[path] || "hash_path_#{namespace}_#{path}", 1, &convert_route_block(block))
-          elsif meth = routes[path]
-            routes.delete(path)
+          elsif meth = routes.delete(path)
             remove_method(meth)
           end
         end
