@@ -1,5 +1,7 @@
 = master
 
+* Hex escape unprintable characters in common_logger plugin output (jeremyevans)
+
 * Add hash_branch_view_subdir plugin for automatically appending a view subdirectory on a successful hash branch (jeremyevans)
 
 = 3.56.0 (2022-05-13)

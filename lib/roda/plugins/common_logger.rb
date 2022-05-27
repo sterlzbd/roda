@@ -20,6 +20,9 @@ class Roda
     #   plugin :common_logger, Logger.new('filename')
     #   plugin :common_logger, Logger.new('filename'), method: :debug
     module CommonLogger
+      MUTATE_LINE = RUBY_VERSION < '2.3' && RUBY_VERSION >= '3'
+      private_constant :MUTATE_LINE
+
       def self.configure(app, logger=nil, opts=OPTS)
         app.opts[:common_logger] = logger || app.opts[:common_logger] || $stderr
         app.opts[:common_logger_meth] = app.opts[:common_logger].method(opts.fetch(:method){logger.respond_to?(:write) ? :write : :<<})
@@ -53,7 +56,15 @@ class Roda
 
           env = @_request.env
 
-          opts[:common_logger_meth].call("#{env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"] || "-"} - #{env["REMOTE_USER"] || "-"} [#{Time.now.strftime("%d/%b/%Y:%H:%M:%S %z")}] \"#{env["REQUEST_METHOD"]} #{env["SCRIPT_NAME"]}#{env["PATH_INFO"]}#{"?#{env["QUERY_STRING"]}" if ((qs = env["QUERY_STRING"]) && !qs.empty?)} #{@_request.http_version}\" #{result[0]} #{((length = result[1]['Content-Length']) && (length unless length == '0')) || '-'} #{elapsed_time}\n")
+          line = "#{env['HTTP_X_FORWARDED_FOR'] || env["REMOTE_ADDR"] || "-"} - #{env["REMOTE_USER"] || "-"} [#{Time.now.strftime("%d/%b/%Y:%H:%M:%S %z")}] \"#{env["REQUEST_METHOD"]} #{env["SCRIPT_NAME"]}#{env["PATH_INFO"]}#{"?#{env["QUERY_STRING"]}" if ((qs = env["QUERY_STRING"]) && !qs.empty?)} #{@_request.http_version}\" #{result[0]} #{((length = result[1]['Content-Length']) && (length unless length == '0')) || '-'} #{elapsed_time}\n"
+          if MUTATE_LINE
+            line.gsub!(/[^[:print:]\n]/){|c| sprintf("\\x%x", c.ord)}
+          # :nocov:
+          else
+            line = line.gsub(/[^[:print:]\n]/){|c| sprintf("\\x%x", c.ord)}
+          # :nocov:
+          end
+          opts[:common_logger_meth].call(line)
         end
 
         # Create timer instance used for timing

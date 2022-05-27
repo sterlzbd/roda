@@ -89,6 +89,14 @@ describe "common_logger plugin" do
     @logger.read.must_match(/\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ HTTP\/1.0" 500 3 0.\d\d\d\d\n\z/)
   end
 
+  it 'escapes' do
+    cl_app(&:path_info)
+
+    body("HTTP_VERSION"=>"HTTP/\x801.0".dup.force_encoding('BINARY')).must_equal '/'
+    @logger.rewind
+    @logger.read.must_match(/\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ HTTP\/\\x801.0" 200 1 0.\d\d\d\d\n\z/)
+  end
+
   def cl_app_meth(&block)
     app(:common_logger, &block)
     @logger = (Class.new(SimpleDelegator) do
