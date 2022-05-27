@@ -95,7 +95,7 @@ describe "common_logger plugin" do
     body("HTTP_VERSION"=>"HTTP/\x801.0".dup.force_encoding('BINARY')).must_equal '/'
     @logger.rewind
     @logger.read.must_match(/\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ HTTP\/\\x801.0" 200 1 0.\d\d\d\d\n\z/)
-  end
+  end unless ENV['LINT']
 
   def cl_app_meth(&block)
     app(:common_logger, &block)
