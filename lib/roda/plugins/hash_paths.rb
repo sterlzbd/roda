@@ -12,7 +12,7 @@ class Roda
     # to the configured paths using +r.hash_paths+:
     #
     #   class App < Roda
-    #     plugin :hash_routes
+    #     plugin :hash_paths
     #
     #     hash_path("/a") do |r|
     #       # /a path
@@ -34,7 +34,7 @@ class Roda
     # any level of the routing tree.  Here is an example that uses namespaces for sub-branches:
     #
     #   class App < Roda
-    #     plugin :hash_routes
+    #     plugin :hash_paths
     #
     #     # Two arguments provided, so first argument is the namespace
     #     hash_path("/a", "/b") do |r|
@@ -80,13 +80,13 @@ class Roda
       end
 
       module ClassMethods
-        # Freeze the hash_routes metadata when freezing the app.
+        # Freeze the hash_paths metadata when freezing the app.
         def freeze
           opts[:hash_paths].freeze.each_value(&:freeze)
           super
         end
 
-        # Duplicate hash_routes metadata in subclass.
+        # Duplicate hash_paths metadata in subclass.
         def inherited(subclass)
           super
 

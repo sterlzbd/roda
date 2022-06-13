@@ -42,12 +42,12 @@ class Roda
     #     hash_branch("a") do |r|
     #       # No argument given, so uses the already matched path as the namespace,
     #       # which is '/a' in this case.
-    #       r.hash_routes
+    #       r.hash_branches
     #     end
     #
     #     hash_branch("b") do |r|
     #       # uses :b as the namespace when looking up routes, as that was explicitly specified
-    #       r.hash_routes(:b)
+    #       r.hash_branches(:b)
     #     end
     #
     #     # Two arguments used, so first specifies the namespace and the second specifies
