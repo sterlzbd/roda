@@ -50,7 +50,7 @@ class Roda
     # while still handling the request methods differently.
     module StaticRouting
       def self.load_dependencies(app)
-        app.plugin :hash_routes
+        app.plugin :hash_paths
       end
 
       module ClassMethods

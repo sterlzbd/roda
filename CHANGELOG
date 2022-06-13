@@ -1,5 +1,7 @@
 = master
 
+* Make static_routing plugin depend on the hash_paths instead of the hash_routes plugin (jeremyevans)
+
 * Split hash_branches and hash_paths plugins from hash_routes plugin (jeremyevans)
 
 * Hex escape unprintable characters in common_logger plugin output (jeremyevans)
