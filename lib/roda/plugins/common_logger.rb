@@ -20,7 +20,7 @@ class Roda
     #   plugin :common_logger, Logger.new('filename')
     #   plugin :common_logger, Logger.new('filename'), method: :debug
     module CommonLogger
-      MUTATE_LINE = RUBY_VERSION < '2.3' && RUBY_VERSION >= '3'
+      MUTATE_LINE = RUBY_VERSION < '2.3' || RUBY_VERSION >= '3'
       private_constant :MUTATE_LINE
 
       def self.configure(app, logger=nil, opts=OPTS)
