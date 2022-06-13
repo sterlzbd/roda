@@ -86,17 +86,17 @@ Large applications generally need more structure:
 
 For larger apps, the +Rakefile+, +assets/+, +migrate+, +models.rb+, +models/+, +public/+, remain the same.
 
-+app_name.rb+ should use the +hash_routes+ and +view_options+ plugin, or the +multi_run+ plugin.
-The routes used by the +hash_routes+ or +multi_run+ should be stored in routing files in the +routes/+
++app_name.rb+ should use the +hash_branch_view_subdir+ plugin (which builds on the +hash_branches+ and
++view_options+ plugin), or the +multi_run+ plugin.
+The routes used by the +hash_branches+ or +multi_run+ should be stored in routing files in the +routes/+
 directory, with one file per prefix.
 
 For specs/tests, you should have +spec/models/+ and +spec/web/+, with one file per model in +spec/models/+
 and one file per prefix in +spec/web/+. Substitute +spec+ with +test+ if that is what you are using as the
 name of the directory.
 
-You should have a separate view subdirectory per prefix. If you are using +hash_routes+ and +view_options+ plugins,
-use +set_view_subdir+ in your routing files to specify the subdirectory to use, so it doesn't need to be
-specified on every call to view.
+You should have a separate view subdirectory per prefix. With the +hash_branch_view_subdir+, the application
+will automatically set a separate view subdirectory per routing tree branch.
 
 +helpers/+ should be used to store helper methods for your application, that you call in your routing files
 and views.  In a small application, these methods should just be specified in +app_name.rb+
@@ -104,7 +104,7 @@ and views.  In a small application, these methods should just be specified in +a
 === Really Large Applications
 
 For very large applications, it's expected that there will be deviations from these conventions. However,
-it is recommended to use the +hash_routes+ or +multi_run+ plugins to organize your application, and have
+it is recommended to use the +hash_branch_view_subdir+ or +multi_run+ plugins to organize your application, and have
 subdirectories in the +routes/+ directory, and nested subdirectories in the +views/+ directory.
 
 == Roda Application File Layout
@@ -156,19 +156,22 @@ For larger applications, there are some slight changes to the Roda application f
 
     plugin :render, escape: true, layout: './layout'
     plugin :assets
-    plugin :view_options
-    plugin :hash_routes
+    plugin :hash_branch_view_subdir
     Dir['routes/*.rb'].each{|f| require_relative f}
 
     route do |r|
-      r.hash_routes
+      r.hash_branches('')
+
+      r.root do
+        # ...
+      end
     end
 
     Dir['helpers/*.rb'].each{|f| require_relative f}
   end
 
-After loading the +view_options+ and +hash_routes+ plugin, you require all of your
+After loading the +hash_branch_view_subdir+ plugin, you require all of your
 routing files.  Inside your route block, instead of defining your routes, you just call
-+r.hash_routes+, which will dispatch to all of your routing files.  After your route
++r.hash_branches+, which will dispatch to all of your routing files.  After your route
 block, you require all of your helper files containing the instance methods for your
 route block or views, instead of defining the methods directly.
