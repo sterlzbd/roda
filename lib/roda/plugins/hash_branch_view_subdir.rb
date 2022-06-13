@@ -3,7 +3,7 @@
 #
 class Roda
   module RodaPlugins
-    # The hash_branch_view_subdir plugin builds on the hash_routes and view_options
+    # The hash_branch_view_subdir plugin builds on the hash_branches and view_options
     # plugins, automatically appending a view subdirectory for any matching hash branch
     # taken. In cases where you are using a separate view subdirectory per hash branch,
     # this can result in DRYer code. Example:
@@ -24,7 +24,7 @@ class Roda
     #   end
     module HashBranchViewSubdir
       def self.load_dependencies(app)
-        app.plugin :hash_routes
+        app.plugin :hash_branches
         app.plugin :view_options
       end
 

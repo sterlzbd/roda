@@ -3,58 +3,9 @@
 #
 class Roda
   module RodaPlugins
-    # The hash_routes plugin combines the O(1) dispatching speed of the static_routing plugin with
-    # the flexibility of the multi_route plugin.  For any point in the routing tree,
-    # it allows you dispatch to multiple routes where the next segment or the remaining path
-    # is a static string.
-    #
-    # For a basic replacement of the multi_route plugin, you can replace class level
-    # <tt>route('segment')</tt> calls with <tt>hash_branch('segment')</tt>:
-    #
-    #   class App < Roda
-    #     plugin :hash_routes
-    #
-    #     hash_branch("a") do |r|
-    #       # /a branch
-    #     end
-    #
-    #     hash_branch("b") do |r|
-    #       # /b branch
-    #     end
-    #
-    #     route do |r|
-    #       r.hash_branches
-    #     end
-    #   end
-    #
-    # With the above routing tree, the +r.hash_branches+ call in the main routing tree,
-    # will dispatch requests for the +/a+ and +/b+ branches of the tree to the appropriate
-    # routing blocks.
-    #
-    # In addition to supporting routing via the next segment, you can also support similar
-    # routing for entire remaining path using the +hash_path+ class method:
-    #
-    #   class App < Roda
-    #     plugin :hash_routes
-    #
-    #     hash_path("/a") do |r|
-    #       # /a path
-    #     end
-    #
-    #     hash_path("/a/b") do |r|
-    #       # /a/b path 
-    #     end
-    #
-    #     route do |r|
-    #       r.hash_paths
-    #     end
-    #   end
-    #
-    # With the above routing tree, the +r.hash_paths+ call will dispatch requests for the +/a+ and
-    # +/a/b+ request paths.
-    #
-    # You can combine the two approaches, and use +r.hash_routes+ to first try routing the
-    # full path, and then try routing the next segment:
+    # The hash_routes plugin builds on top of the hash_branches and hash_paths plugins, and adds
+    # a DSL for configuring hash branches and paths. It also adds an +r.hash_routes+ method for
+    # first attempting dispatch to the configured hash_paths, then to the configured hash_branches:
     #
     #   class App < Roda
     #     plugin :hash_routes
@@ -84,60 +35,14 @@ class Roda
     # +hash_path+ block.  Other requests for the +/a+ branch, and all requests for the +/b+
     # branch will be routed to the appropriate +hash_branch+ block.
     #
-    # Both +hash_branch+ and +hash_path+ support namespaces, which allows them to be used at
-    # any level of the routing tree.  Here is an example that uses namespaces for sub-branches:
-    #
-    #   class App < Roda
-    #     plugin :hash_routes
-    #
-    #     # Only one argument used, so the namespace defaults to '', and the argument
-    #     # specifies the route name
-    #     hash_branch("a") do |r|
-    #       # uses '/a' as the namespace when looking up routes,
-    #       # as that part of the path has been routed now
-    #       r.hash_routes
-    #     end
-    #
-    #     # Two arguments used, so first specifies the namespace and the second specifies
-    #     # the route name
-    #     hash_branch('', "b") do |r|
-    #       # uses :b as the namespace when looking up routes, as that was explicitly specified
-    #       r.hash_routes(:b)
-    #     end
-    #
-    #     hash_path("/a", "/b") do |r|
-    #       # /a/b path
-    #     end
-    #
-    #     hash_path("/a", "/c") do |r|
-    #       # /a/c path 
-    #     end
-    #
-    #     hash_path(:b, "/b") do |r|
-    #       # /b/b path
-    #     end
-    #
-    #     hash_path(:b, "/c") do |r|
-    #       # /b/c path 
-    #     end
-    #
-    #     route do |r|
-    #       # uses '' as the namespace, as no part of the path has been routed yet
-    #       r.hash_branches
-    #     end
-    #   end
-    #
-    # With the above routing tree, requests for the +/a+ and +/b+ branches will be
-    # dispatched to the appropriate +hash_branch+ block.  Those blocks will the dispatch
-    # to the +hash_path+ blocks, with the +/a+ branch using the implicit namespace of
-    # +/a+, and the +/b+ branch using the explicit namespace of +:b+.  In general, it
-    # is best for performance to explicitly specify the namespace when calling
-    # +r.hash_branches+, +r.hash_paths+, and +r.hash_routes+.
+    # It is best for performance to explicitly specify the namespace when calling
+    # +r.hash_routes+.
     #
     # Because specifying routes explicitly using the +hash_branch+ and +hash_path+
     # class methods can get repetitive, the hash_routes plugin offers a DSL for DRYing
-    # the code up.  This DSL is used by calling the +hash_routes+ class method.  Below
-    # is a translation of the previous example to using the +hash_routes+ DSL:
+    # the code up.  This DSL is used by calling the +hash_routes+ class method.  The
+    # DSL used tries to mirror the standard Roda DSL, but it is not a normal routing
+    # tree (it's not possible to execute arbitrary code between branches during routing).
     #
     #   class App < Roda
     #     plugin :hash_routes
@@ -264,9 +169,12 @@ class Roda
     # * views
     # * all verb methods (get, post, etc.)
     module HashRoutes
+      def self.load_dependencies(app)
+        app.plugin :hash_branches
+        app.plugin :hash_paths
+      end
+
       def self.configure(app)
-        app.opts[:hash_branches] ||= {}
-        app.opts[:hash_paths] ||= {}
         app.opts[:hash_routes_methods] ||= {}
       end
 
@@ -359,22 +267,8 @@ class Roda
       module ClassMethods
         # Freeze the hash_routes metadata when freezing the app.
         def freeze
-          opts[:hash_branches].freeze.each_value(&:freeze)
-          opts[:hash_paths].freeze.each_value(&:freeze)
           opts[:hash_routes_methods].freeze
           super
-        end
-
-        # Duplicate hash_routes metadata in subclass.
-        def inherited(subclass)
-          super
-
-          [:hash_branches, :hash_paths].each do |k|
-            h = subclass.opts[k]
-            opts[k].each do |namespace, routes|
-              h[namespace] = routes.dup
-            end
-          end
         end
 
         # Invoke the DSL for configuring hash routes, see DSL for methods inside the
@@ -393,64 +287,9 @@ class Roda
 
           dsl
         end
-
-        # Add branch handler for the given namespace and segment. If called without
-        # a block, removes the existing branch handler if it exists.
-        def hash_branch(namespace='', segment, &block)
-          segment = "/#{segment}"
-          routes = opts[:hash_branches][namespace] ||= {}
-          if block
-            routes[segment] = define_roda_method(routes[segment] || "hash_branch_#{namespace}_#{segment}", 1, &convert_route_block(block))
-          elsif meth = routes.delete(segment)
-            remove_method(meth)
-          end
-        end
-
-        # Add path handler for the given namespace and path. When the
-        # r.hash_paths method is called, checks the matching namespace
-        # for the full remaining path, and dispatch to that block if
-        # there is one.  If called without a block, removes the existing
-        # path handler if it exists.
-        def hash_path(namespace='', path, &block)
-          routes = opts[:hash_paths][namespace] ||= {}
-          if block
-            routes[path] = define_roda_method(routes[path] || "hash_path_#{namespace}_#{path}", 1, &convert_route_block(block))
-          elsif meth = routes.delete(path)
-            remove_method(meth)
-          end
-        end
       end
 
       module RequestMethods
-        # Checks the matching hash_branch namespace for a branch matching the next
-        # segment in the remaining path, and dispatch to that block if there is one.
-        def hash_branches(namespace=matched_path)
-          rp = @remaining_path
-
-          return unless rp.getbyte(0) == 47 # "/"
-
-          if routes = roda_class.opts[:hash_branches][namespace]
-            if segment_end = rp.index('/', 1)
-              if meth = routes[rp[0, segment_end]]
-                @remaining_path = rp[segment_end, 100000000]
-                always{scope.send(meth, self)}
-              end
-            elsif meth = routes[rp]
-              @remaining_path = ''
-              always{scope.send(meth, self)}
-            end
-          end
-        end
-
-        # Checks the matching hash_path namespace for a branch matching the 
-        # remaining path, and dispatch to that block if there is one.
-        def hash_paths(namespace=matched_path)
-          if (routes = roda_class.opts[:hash_paths][namespace]) && (meth = routes[@remaining_path])
-            @remaining_path = ''
-            always{scope.send(meth, self)}
-          end
-        end
-
         # Check for matches in both the hash_path and hash_branch namespaces for
         # a matching remaining path or next segment in the remaining path, respectively.
         def hash_routes(namespace=matched_path)

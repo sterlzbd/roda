@@ -1,5 +1,7 @@
 = master
 
+* Split hash_branches and hash_paths plugins from hash_routes plugin (jeremyevans)
+
 * Hex escape unprintable characters in common_logger plugin output (jeremyevans)
 
 * Add hash_branch_view_subdir plugin for automatically appending a view subdirectory on a successful hash branch (jeremyevans)
