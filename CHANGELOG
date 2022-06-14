@@ -1,4 +1,4 @@
-= master
+= 3.57.0 (2022-06-14)
 
 * Make static_routing plugin depend on the hash_paths instead of the hash_routes plugin (jeremyevans)
 
