@@ -127,7 +127,7 @@ div.context ol.context-line li span { float: right; }
 div.commands { margin-left: 40px; }
 div.commands a { color:black; text-decoration:none; }
 #summary { background: #ffc; }
-#summary h2 { font-weight: normal; color: #666; }
+#summary h2 { font-weight: normal; color: #666; font-family: monospace; white-space: pre-wrap;}
 #summary ul#quicklinks { list-style-type: none; margin-bottom: 2em; }
 #summary ul#quicklinks li { float: left; padding: 0 1em; }
 #summary ul#quicklinks>li+li { border-left: 1px #666 solid; }
@@ -196,12 +196,13 @@ END
         #          Designed to be used with the +json+ exception, which will
         #          automatically convert the hash to JSON format.
         def exception_page(exception, opts=OPTS)
+          message = exception_page_exception_message(exception)
           if opts[:json]
             @_response['Content-Type'] = "application/json"
             {
               "exception"=>{
                 "class"=>exception.class.to_s,
-                "message"=>exception.message.to_s,
+                "message"=>message,
                 "backtrace"=>exception.backtrace.map(&:to_s)
               }
             }
@@ -319,7 +320,7 @@ END
 
 <div id="summary">
   <h1>#{h exception.class} at #{h r.path}</h1>
-  <h2>#{h exception.message}</h2>
+  <h2>#{h message}</h2>
   <table><tr>
     <th>Ruby</th>
     <td>
@@ -394,7 +395,22 @@ END1
 END
           else
             @_response['Content-Type'] = "text/plain"
-            "#{exception.class}: #{exception.message}\n#{exception.backtrace.map{|l| "\t#{l}"}.join("\n")}"
+            "#{exception.class}: #{message}\n#{exception.backtrace.map{|l| "\t#{l}"}.join("\n")}"
+          end
+        end
+
+        private
+
+        # :nocov:
+        if RUBY_VERSION >= '3.2'
+          def exception_page_exception_message(exception)
+            exception.detailed_message(highlight: false).to_s
+          end
+        # :nocov:
+        else
+          # Return message to use for exception.
+          def exception_page_exception_message(exception)
+            exception.message.to_s
           end
         end
       end

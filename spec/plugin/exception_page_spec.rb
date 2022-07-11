@@ -15,6 +15,8 @@ describe "exception_page plugin" do
     end
   end
 
+  message = RUBY_VERSION >= '3.2' ? "foo (RuntimeError)" : "foo"
+
   it "returns HTML page with exception information if text/html is accepted" do
     ep_app
     s, h, body = req('HTTP_ACCEPT'=>'text/html')
@@ -24,7 +26,7 @@ describe "exception_page plugin" do
     body = body.join
     body.must_include "<title>RuntimeError at /"
     body.must_include "<h1>RuntimeError at /</h1>"
-    body.must_include "<h2>foo</h2>"
+    body.must_include "<h2>#{message}</h2>"
     body.must_include __FILE__
     body.must_include "No GET data"
     body.must_include "No POST data"
@@ -116,13 +118,13 @@ describe "exception_page plugin" do
     h['Content-Type'].must_equal 'text/plain'
     body = body.join
     first, *bt = body.split("\n")
-    first.must_equal "RuntimeError: foo"
+    first.must_equal "RuntimeError: #{message}"
     bt.first.must_include __FILE__
   end
 
   it "handles exceptions without a backtrace" do
     app(:exception_page) do |r|
-      e = ArgumentError.new("foo")
+      e = RuntimeError.new("foo")
       e.set_backtrace([])
       raise e rescue exception_page($!)
     end
@@ -131,9 +133,9 @@ describe "exception_page plugin" do
     s.must_equal 200
     h['Content-Type'].must_equal 'text/html'
     body = body.join
-    body.must_include "<title>ArgumentError at /"
-    body.must_include "<h1>ArgumentError at /</h1>"
-    body.must_include "<h2>foo</h2>"
+    body.must_include "<title>RuntimeError at /"
+    body.must_include "<h1>RuntimeError at /</h1>"
+    body.must_include "<h2>#{message}</h2>"
     body.must_include "unknown location"
     body.must_include "No GET data"
     body.must_include "No POST data"
@@ -149,7 +151,7 @@ describe "exception_page plugin" do
 
   it "handles exceptions with invalid line numbers in a backtrace" do
     app(:exception_page) do |r|
-      e = ArgumentError.new("foo")
+      e = RuntimeError.new("foo")
       e.set_backtrace(["#{__FILE__}:10000:in `foo'"])
       raise e rescue exception_page($!)
     end
@@ -158,9 +160,9 @@ describe "exception_page plugin" do
     s.must_equal 200
     h['Content-Type'].must_equal 'text/html'
     body = body.join
-    body.must_include "<title>ArgumentError at /"
-    body.must_include "<h1>ArgumentError at /</h1>"
-    body.must_include "<h2>foo</h2>"
+    body.must_include "<title>RuntimeError at /"
+    body.must_include "<h1>RuntimeError at /</h1>"
+    body.must_include "<h2>#{message}</h2>"
     body.must_include "No GET data"
     body.must_include "No POST data"
     body.must_include "No cookie data"
@@ -183,7 +185,7 @@ describe "exception_page plugin" do
     h['Content-Type'].must_equal 'application/json'
     hash = JSON.parse(body.join)
     bt = hash["exception"].delete("backtrace")
-    hash.must_equal("exception"=>{"class"=>"RuntimeError", "message"=>"foo"})
+    hash.must_equal("exception"=>{"class"=>"RuntimeError", "message"=>message})
     bt.must_be_kind_of Array
     bt.each{|line| line.must_be_kind_of String}
   end
@@ -195,7 +197,8 @@ describe "exception_page plugin" do
       exception_page(e)
     end
     body = body('HTTP_ACCEPT'=>'text/html')
-    body.must_include "RuntimeError: foo"
+    body.must_include "<h1>RuntimeError at /</h1>"
+    body.must_include "<h2>#{message}</h2>"
     body.must_include __FILE__
     body.wont_include 'id="c0"'
     body.must_include 'id="c1"'

@@ -1,5 +1,7 @@
 = master
 
+* Make exception_page plugin use Exception#detailed_message on Ruby 3.2+ (jeremyevans)
+
 * Make heartbeat plugin compatible with recent changes in the rack master branch (jeremyevans)
 
 = 3.57.0 (2022-06-14)
