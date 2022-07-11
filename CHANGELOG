@@ -1,5 +1,7 @@
 = master
 
+* Add filter_common_logger plugin for skipping the logging of certain requests when using the common_logger plugin (jeremyevans)
+
 * Make exception_page plugin use Exception#detailed_message on Ruby 3.2+ (jeremyevans)
 
 * Make heartbeat plugin compatible with recent changes in the rack master branch (jeremyevans)
