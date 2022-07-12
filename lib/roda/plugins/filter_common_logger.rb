@@ -6,8 +6,7 @@ class Roda
     # The skip_common_logger plugin allows for skipping common_logger logging
     # of some requests. You pass a block when loading the plugin, and the
     # block will be called before logging each request.  The block should return
-    # whether the 
-    # a false/nil value, the request is not logged.
+    # whether the request should be logged.
     #
     # Example:
     #
