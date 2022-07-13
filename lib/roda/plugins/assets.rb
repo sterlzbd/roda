@@ -147,7 +147,7 @@ class Roda
     # If you have the yuicompressor gem installed and working, it will be used
     # automatically to compress your javascript and css assets.  For javascript
     # assets, if yuicompressor is not available, the plugin will check for
-    # closure_compiler, uglifier, and minjs and use the first one that works.
+    # closure-compiler, uglifier, and minjs and use the first one that works.
     # If no compressors are available, the assets will just be concatenated
     # together and not compressed during compilation.  You can use the
     # :css_compressor and :js_compressor options to specify the compressor to use.
