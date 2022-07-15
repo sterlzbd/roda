@@ -13,18 +13,18 @@ class Roda
       module ResponseMethods
         # Delete any empty headers when calling finish
         def finish
-          delelete_empty_headers(super)
+          delete_empty_headers(super)
         end
 
         # Delete any empty headers when calling finish_with_body
         def finish_with_body(_)
-          delelete_empty_headers(super)
+          delete_empty_headers(super)
         end
 
         private
 
         # Delete any empty headers from response
-        def delelete_empty_headers(res)
+        def delete_empty_headers(res)
           res[1].delete_if{|_, v| v.is_a?(String) && v.empty?}
           res
         end
