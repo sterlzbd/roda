@@ -1,3 +1,7 @@
+= master
+
+* Add render_coverage plugin, using tilt 2.1 features to allow for compiled templates in Ruby <3.2 (jeremyevans)
+
 = 3.65.0 (2023-02-13)
 
 * Make indifferent_params plugin work with changes in rack main branch (jeremyevans)

@@ -320,14 +320,16 @@ class Roda
       # template file has been modified.  This is an internal class and
       # the API is subject to change at any time.
       class TemplateMtimeWrapper
-        def initialize(template_class, path, dependencies, *template_args)
-          @template_class = template_class
-          @path = path
-          @template_args = template_args
-          @dependencies = ([path] + Array(dependencies)) if dependencies
+        def initialize(roda_class, opts, template_opts)
+          @roda_class = roda_class
+          @opts = opts
+          @template_opts = template_opts
+          reset_template
 
-          @mtime = template_last_modified if File.file?(path)
-          @template = template_class.new(path, *template_args)
+          @path = opts[:path]
+          deps = opts[:dependencies]
+          @dependencies = ([@path] + Array(deps)) if deps
+          @mtime = template_last_modified if File.file?(@path)
         end
 
         # If the template file exists and the modification time has
@@ -358,7 +360,7 @@ class Roda
           else
             if mtime != @mtime
               @mtime = mtime
-              @template = @template_class.new(@path, *@template_args)
+              reset_template
               return true
             end
           end
@@ -407,6 +409,14 @@ class Roda
             end
           end
         end
+
+        private
+
+        # Reset the template, done every time the template or one of its
+        # dependencies is modified.
+        def reset_template
+          @template = @roda_class.create_template(@opts, @template_opts)
+        end
       end
 
       module ClassMethods
@@ -425,6 +435,11 @@ class Roda
 
             super
           end
+        end
+
+        # Return an Tilt::Template object based on the given opts and template_opts.
+        def create_template(opts, template_opts)
+          opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
         end
 
         # Copy the rendering options into the subclass, duping
@@ -730,14 +745,14 @@ class Roda
                !opts[:inline]
 
             if render_opts[:check_template_mtime] && !opts[:template_block] && !cache
-              template = TemplateMtimeWrapper.new(opts[:template_class], opts[:path], opts[:dependencies], 1, template_opts)
+              template = TemplateMtimeWrapper.new(self.class, opts, template_opts)
 
               if define_compiled_method
                 method_name = :"_roda_template_#{self.class.object_id}_#{method_cache_key}"
                 method_cache[method_cache_key] = template.define_compiled_method(self.class, method_name)
               end
             else
-              template = opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
+              template = self.class.create_template(opts, template_opts)
 
               if define_compiled_method && cache != false
                 begin
