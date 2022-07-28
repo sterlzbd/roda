@@ -1,5 +1,7 @@
 = master
 
+* Add additional_render_engines plugin, for considering multiple render engines for templates (jeremyevans)
+
 * Fix typo in private method name in delete_empty_headers plugin (mculpt) (#279)
 
 = 3.58.0 (2022-07-13)
