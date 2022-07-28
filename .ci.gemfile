@@ -4,7 +4,9 @@ if RUBY_VERSION < '2.0.0'
   gem 'json', '<1.8.5'
   gem 'rake', '<10.0.0'
   gem 'mime-types', '< 3'
+  gem "tilt", '<2.0.11'
 else
+  gem "tilt"
   gem 'json'
   gem 'rake'
 end
@@ -47,7 +49,6 @@ end
 
 gem "minitest-global_expectations"
 gem "minitest-hooks"
-gem "tilt"
 gem "erubi"
 gem "rack_csrf"
 gem "mail"
