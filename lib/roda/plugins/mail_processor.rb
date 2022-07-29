@@ -465,7 +465,11 @@ class Roda
             def #{field}(address, &block)
               on(:#{field}=>address, &block)
             end
+          END
 
+          next if [:rcpt, :text, :body, :subject].include?(field)
+
+          class_eval(<<-END, __FILE__, __LINE__+1)
             private
 
             def match_#{field}(address)
@@ -473,11 +477,6 @@ class Roda
             end
           END
         end
-
-        undef_method :match_rcpt
-        undef_method :match_text
-        undef_method :match_body
-        undef_method :match_subject
 
         # Same as +header+, but also mark the message as being handled.
         def handle_header(key, value=nil)
