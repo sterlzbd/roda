@@ -1,3 +1,7 @@
+= master
+
+* Add link_to plugin with link_to method for creating HTML links (jeremyevans)
+
 = 3.59.0 (2022-08-12)
 
 * Add additional_render_engines plugin, for considering multiple render engines for templates (jeremyevans)
