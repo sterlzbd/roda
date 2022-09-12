@@ -52,14 +52,12 @@ class Roda
           end
           
           class Params < Rack::QueryParser::Params
-            # :nocov:
-            if Rack.release >= '2.3'
+            if Rack.release >= '3'
               def initialize
                 @size   = 0
                 @params = Hash.new(&INDIFFERENT_PROC)
               end
             else
-            # :nocov:
               def initialize(limit = Rack::Utils.key_space_limit)
                 @limit  = limit
                 @size   = 0
@@ -71,9 +69,7 @@ class Roda
         end
 
         module RequestMethods
-          # :nocov:
-          query_parser = Rack.release >= '2.3' ? QueryParser.new(QueryParser::Params, 32) : QueryParser.new(QueryParser::Params, 65536, 32)
-          # :nocov:
+          query_parser = Rack.release >= '3' ? QueryParser.new(QueryParser::Params, 32) : QueryParser.new(QueryParser::Params, 65536, 32)
           QUERY_PARSER = Rack::Utils.default_query_parser = query_parser
 
           private
@@ -89,7 +85,6 @@ class Roda
           end
         end
       else
-        # :nocov:
         module InstanceMethods
           # A copy of the request params that will automatically
           # convert symbols to strings.
@@ -115,7 +110,6 @@ class Roda
             end
           end
         end
-        # :nocov:
       end  
     end
 

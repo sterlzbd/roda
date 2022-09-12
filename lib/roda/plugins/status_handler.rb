@@ -45,11 +45,9 @@ class Roda
           when nil, false
             CLEAR_HEADERS
           when Array
-            # :nocov:
-            if Rack.release >= '2.3'
+            if Rack.release >= '3'
               keep_headers = keep_headers.map(&:downcase)
             end
-            # :nocov:
             lambda{|headers| headers.delete_if{|k,_| !keep_headers.include?(k)}}
           else
             raise RodaError, "Invalid :keep_headers option"

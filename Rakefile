@@ -83,7 +83,9 @@ end
   
 desc "Run specs with coverage"
 task "spec_cov" do
-  spec.call('COVERAGE'=>'1')
+  spec.call('COVERAGE'=>'< 4')
+  spec.call('COVERAGE'=>'< 3')
+  spec.call('COVERAGE'=>'< 1.6', 'RODA_RENDER_COMPILED_METHOD_SUPPORT'=>'no')
 end
   
 desc "Run specs with Rack::Lint"
@@ -93,7 +95,7 @@ end
   
 desc "Run specs in CI mode"
 task "spec_ci" do
-  # Use LINT on about have of the tested Ruby versions,
+  # Use LINT on about half of the tested Ruby versions,
   # rotating each day.
   spec.call(RUBY_VERSION[2].to_i.odd? ^ Time.now.wday.odd? ? {} : {'LINT'=>'1'})
 end

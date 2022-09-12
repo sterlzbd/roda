@@ -10,21 +10,17 @@ if RUBY_VERSION >= '3'
   end
 end
 
-if ENV['COVERAGE']
-  require 'coverage'
+if rack_gem_version = ENV.delete('COVERAGE')
+  gem 'rack', rack_gem_version
   require 'simplecov'
 
-  def SimpleCov.roda_coverage(opts = {})
-    start do
-      enable_coverage :branch
-      add_filter "/spec/"
-      add_group('Missing'){|src| src.covered_percent < 100}
-      add_group('Covered'){|src| src.covered_percent == 100}
-    end
+  SimpleCov.start do
+    enable_coverage :branch
+    command_name "rack #{rack_gem_version}"
+    add_filter "/spec/"
+    add_group('Missing'){|src| src.covered_percent < 100}
+    add_group('Covered'){|src| src.covered_percent == 100}
   end
-
-  ENV.delete('COVERAGE')
-  SimpleCov.roda_coverage
 end
 
 require_relative "../lib/roda"

@@ -42,7 +42,6 @@ class Roda
         # code for non-empty responses and a 404 code for empty responses.
         attr_accessor :status
 
-        # :nocov:
         if defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
           # Set the default headers when creating a response.
           def initialize
@@ -51,7 +50,6 @@ class Roda
             @length  = 0
           end
         else
-        # :nocov:
           # Set the default headers when creating a response.
           def initialize
             @headers = {}
@@ -173,7 +171,6 @@ class Roda
 
         private
 
-        # :nocov:
         if Rack.release < '2.0.2'
           # Don't use a content length for empty 205 responses on
           # rack 1, as it violates Rack::Lint in that version.
@@ -181,7 +178,6 @@ class Roda
             headers.delete("Content-Type")
             headers.delete("Content-Length")
           end
-        # :nocov:
         else
           # Set the content length for empty 205 responses to 0
           def empty_205_headers(headers)

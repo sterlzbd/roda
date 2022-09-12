@@ -5,9 +5,7 @@ require 'uri'
 begin
   require 'rack/files'
 rescue LoadError
-  # :nocov:
   require 'rack/file'
-  # :nocov:
 end
 
 #
@@ -45,9 +43,7 @@ class Roda
     module Public
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
       PARSER = URI::DEFAULT_PARSER
-      # :nocov:
       RACK_FILES = defined?(Rack::Files) ? Rack::Files : Rack::File
-      # :nocov:
 
       # Use options given to setup a Rack::File instance for serving files. Options:
       # :default_mime :: The default mime type to use if the mime type is not recognized.
@@ -142,13 +138,11 @@ class Roda
             server.serving(self, path)
           end
         else
-          # :nocov:
           def public_serve(server, path)
             server = server.dup
             server.path = path
             server.serving(env)
           end
-          # :nocov:
         end
       end
     end

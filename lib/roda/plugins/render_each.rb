@@ -109,11 +109,9 @@ class Roda
             end.join
           end
         else
-          # :nocov:
           def _cached_render_each_template_method(template)
             nil
           end
-          # :nocov:
         end
       end
     end

@@ -214,18 +214,18 @@ class Roda
       tilt_compiled_method_support = defined?(Tilt::VERSION) && Tilt::VERSION >= '1.2' &&
         ([1, -2].include?(((compiled_method_arity = Tilt::Template.instance_method(:compiled_method).arity) rescue false)))
       NO_CACHE = {:cache=>false}.freeze
-      COMPILED_METHOD_SUPPORT = RUBY_VERSION >= '2.3' && tilt_compiled_method_support
+      COMPILED_METHOD_SUPPORT = RUBY_VERSION >= '2.3' && tilt_compiled_method_support && ENV['RODA_RENDER_COMPILED_METHOD_SUPPORT'] != 'no'
 
       if compiled_method_arity == -2
         def self.tilt_template_compiled_method(template, locals_keys, scope_class)
           template.send(:compiled_method, locals_keys, scope_class)
         end
+      # :nocov:
       else
-        # :nocov:
         def self.tilt_template_compiled_method(template, locals_keys, scope_class)
           template.send(:compiled_method, locals_keys)
         end
-        # :nocov:
+      # :nocov:
       end
 
       # Setup default rendering options.  See Render for details.
@@ -366,9 +366,7 @@ class Roda
           false
         end
 
-        # :nocov:
         if COMPILED_METHOD_SUPPORT
-        # :nocov:
           # Compile a method in the given module with the given name that will
           # call the compiled template method, updating the compiled template method
           def define_compiled_method(roda_class, method_name, locals_keys=EMPTY_ARRAY)
@@ -412,9 +410,7 @@ class Roda
       end
 
       module ClassMethods
-        # :nocov:
         if COMPILED_METHOD_SUPPORT
-        # :nocov:
           # If using compiled methods and there is an optimized layout, speed up
           # access to the layout method to improve the performance of view.
           def freeze
@@ -437,9 +433,7 @@ class Roda
         def inherited(subclass)
           super
           opts = subclass.opts[:render] = subclass.opts[:render].dup
-          # :nocov:
           if COMPILED_METHOD_SUPPORT
-          # :nocov:
             opts[:template_method_cache] = (opts[:cache_class] || RodaCache).new
           end
           opts[:cache] = opts[:cache].dup
@@ -459,9 +453,7 @@ class Roda
             instance = allocate
             instance.send(:retrieve_template, instance.send(:view_layout_opts, OPTS))
 
-            # :nocov:
             if COMPILED_METHOD_SUPPORT
-            # :nocov:
               if (layout_template = render_opts[:optimize_layout]) && !opts[:render][:optimized_layout_method_created]
                 instance.send(:retrieve_template, :template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
                 layout_method = opts[:render][:template_method_cache][:_roda_layout]
@@ -610,7 +602,6 @@ class Roda
             end
           end
         else
-          # :nocov:
           def _cached_template_method(_)
             nil
           end
@@ -630,7 +621,6 @@ class Roda
           def _optimized_view_content(template)
             nil
           end
-          # :nocov:
         end
 
 

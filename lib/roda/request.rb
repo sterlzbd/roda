@@ -1,18 +1,16 @@
 # frozen-string-literal: true
 
-# :nocov:
 begin
   require "rack/version"
 rescue LoadError
   require "rack"
 else
-  if Rack.release >= '2.3'
+  if Rack.release >= '3'
     require "rack/request"
   else
     require "rack"
   end
 end
-# :nocov:
 
 require_relative "cache"
 
@@ -129,8 +127,7 @@ class Roda
           "#<#{self.class.inspect} #{@env["REQUEST_METHOD"]} #{path}>"
         end
 
-        # :nocov:
-        if Rack.release >= '2.3'
+        if Rack.release >= '3'
           def http_version
             # Prefer SERVER_PROTOCOL as it is required in Rack 3.
             # Still fall back to HTTP_VERSION if SERVER_PROTOCOL
@@ -139,7 +136,6 @@ class Roda
             @env['SERVER_PROTOCOL'] || @env['HTTP_VERSION']
           end
         else
-        # :nocov:
           # What HTTP version the request was submitted with.
           def http_version
             # Prefer HTTP_VERSION as it is backwards compatible

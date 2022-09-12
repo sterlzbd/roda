@@ -1,6 +1,8 @@
 require_relative "../spec_helper"
 
-if Rack.release < '1.6'
+begin
+  require_relative '../../lib/roda/plugins/disallow_file_uploads'
+rescue LoadError
   warn "Rack #{Rack.release} used, skipping disallow_file_uploads plugin test"  
 else
 describe "disallow_file_uploads plugin" do 

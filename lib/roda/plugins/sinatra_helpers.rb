@@ -4,9 +4,7 @@ require 'rack/mime'
 begin
   require 'rack/files'
 rescue LoadError
-  # :nocov:
   require 'rack/file'
-  # :nocov:
 end
 
 
@@ -225,9 +223,7 @@ class Roda
       ISO88591_ENCODING = Encoding.find('ISO-8859-1')
       BINARY_ENCODING = Encoding.find('BINARY')
 
-      # :nocov:
       RACK_FILES = defined?(Rack::Files) ? Rack::Files : Rack::File
-      # :nocov:
 
       # Depend on the status_303 plugin.
       def self.load_dependencies(app, _opts = nil)
@@ -351,10 +347,8 @@ class Roda
           s, h, b = if Rack.release > '2'
             file.serving(self, path)
           else
-            # :nocov:
             file.path = path
             file.serving(@env)
-            # :nocov:
           end
 
           res.status = opts[:status] || s

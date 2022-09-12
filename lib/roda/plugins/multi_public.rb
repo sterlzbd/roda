@@ -3,9 +3,7 @@
 begin
   require 'rack/files'
 rescue LoadError
-  # :nocov:
   require 'rack/file'
-  # :nocov:
 end
 
 #
@@ -66,9 +64,7 @@ class Roda
     #     end
     #   end
     module MultiPublic
-      # :nocov:
       RACK_FILES = defined?(Rack::Files) ? Rack::Files : Rack::File
-      # :nocov:
 
       def self.load_dependencies(app, _, opts=OPTS)
         app.plugin(:public, opts)

@@ -86,12 +86,10 @@ class Roda
 
         
         # Rack 3 dropped requirement that input be rewindable
-        if Rack.release >= '2.3'
-          # :nocov:
+        if Rack.release >= '3'
           def _read_json_input(input)
             input.read
           end
-          # :nocov:
         else
           def _read_json_input(input)
             input.rewind
