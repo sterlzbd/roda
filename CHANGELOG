@@ -1,4 +1,4 @@
-= master
+= 3.60.0 (2022-09-13)
 
 * Add link_to plugin with link_to method for creating HTML links (jeremyevans)
 
