@@ -23,6 +23,7 @@ if rack_gem_version = ENV.delete('COVERAGE')
   end
 end
 
+require 'rack/lint' if ENV['LINT']
 require_relative "../lib/roda"
 require "stringio"
 
