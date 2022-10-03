@@ -440,10 +440,10 @@ class Roda
           hash.all?{|k,v| send("match_#{k}", v)}
         end
 
-        # Match integer segment, and yield resulting value as an
+        # Match integer segment of up to 100 decimal characters, and yield resulting value as an
         # integer.
         def _match_class_Integer
-          consume(/\A\/(\d+)(?=\/|\z)/){|i| [i.to_i]}
+          consume(/\A\/(\d{1,100})(?=\/|\z)/){|i| [i.to_i]}
         end
 
         # Match only if all of the arguments in the given array match.

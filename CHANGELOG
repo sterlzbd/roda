@@ -1,5 +1,7 @@
 = master
 
+* Make Integer matcher limit integer segments to 100 characters by default (jeremyevans)
+
 * Limit input bytesize by default for integer, float, and date/time typecasts in typecast_params (jeremyevans)
 
 = 3.60.0 (2022-09-13)

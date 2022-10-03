@@ -75,7 +75,7 @@ describe "capturing" do
     body("/posts/123-postal-service").must_equal "123postal-service"
   end
 
-  it "yields an integer segment as an integer when using Integer matcher " do
+  it "yields an integer segment as an integer segment over 100 bytes when using Integer matcher" do
     app do |r|
       r.get "user", Integer do |id|
         "#{id}-#{id.is_a?(Integer)}"
@@ -85,6 +85,9 @@ describe "capturing" do
 
     body("/user/101").must_equal '101-true'
     body("/user/a").must_equal 'b'
+
+    body("/user/"+"1"*100).must_equal '1'*100+'-true'
+    body("/user/"+"1"*101).must_equal 'b'
   end
 
   it "yields the segment for String class matcher" do
