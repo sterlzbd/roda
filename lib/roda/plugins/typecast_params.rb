@@ -5,34 +5,26 @@ require 'time'
 
 class Roda
   module RodaPlugins
-    # The typecast_params plugin allows for the simple type conversion for
-    # submitted parameters.  Submitted parameters should be considered
-    # untrusted input, and in standard use with browsers, parameters are
-    # submitted as strings (or a hash/array containing strings).  In most
-    # cases it makes sense to explicitly convert the parameter to the
+    # The typecast_params plugin allows for type conversion of submitted parameters.
+    # Submitted parameters should be considered untrusted input, and in standard use
+    # with browsers, parameters are # submitted as strings (or a hash/array containing
+    # strings).  In most # cases it makes sense to explicitly convert the parameter to the
     # desired type.  While this can be done via manual conversion:
     #
-    #   key = request.params['key'].to_i
-    #   key = nil unless key > 0
+    #   val = request.params['key'].to_i
+    #   val = nil unless val > 0
     #
     # the typecast_params plugin adds a friendlier interface:
     #
-    #   key = typecast_params.pos_int('key')
+    #   val = typecast_params.pos_int('key')
     #
-    # As +typecast_params+ is a fairly long method name, you may want to
-    # consider aliasing it to something more terse in your application,
-    # such as +tp+.
-    #
-    # One advantage of using typecast_params is that access or conversion
-    # errors are raised as a specific exception class
-    # (+Roda::RodaPlugins::TypecastParams::Error+).  This allows you to handle
-    # this specific exception class globally and return an appropriate 4xx
-    # response to the client.  You can use the Error#param_name and Error#reason 
-    # methods to get more information about the error.
+    # As +typecast_params+ is a fairly long method name, and may be a method you call
+    # frequently, you may want to consider aliasing it to something more terse in your
+    # application, such as +tp+.
     #
     # typecast_params offers support for default values:
     #
-    #   key = typecast_params.pos_int('key', 1)
+    #   val = typecast_params.pos_int('key', 1)
     #
     # The default value is only used if no value has been submitted for the parameter,
     # or if the conversion of the value results in +nil+.  Handling defaults for parameter
@@ -43,35 +35,41 @@ class Roda
     # In many cases, parameters should be required, and if they aren't submitted, that
     # should be considered an error.  typecast_params handles this with ! methods:
     #
-    #   key = typecast_params.pos_int!('key')
+    #   val = typecast_params.pos_int!('key')
     #
     # These ! methods raise an error instead of returning +nil+, and do not allow defaults.
+    #
+    # The errors raised by this plugin use a specific exception class,
+    # +Roda::RodaPlugins::TypecastParams::Error+.  This allows you to handle
+    # this specific exception class globally and return an appropriate 4xx
+    # response to the client.  You can use the Error#param_name and Error#reason 
+    # methods to get more information about the error.
     #
     # To make it easy to handle cases where many parameters need the same conversion
     # done, you can pass an array of keys to a conversion method, and it will return an array
     # of converted values:
     #
-    #   key1, key2 = typecast_params.pos_int(['key1', 'key2'])
+    #   val1, val2 = typecast_params.pos_int(['key1', 'key2'])
     #
     # This is equivalent to:
     #
-    #   key1 = typecast_params.pos_int('key1')
-    #   key2 = typecast_params.pos_int('key2')
+    #   val1 = typecast_params.pos_int('key1')
+    #   val2 = typecast_params.pos_int('key2')
     #
     # The ! methods also support arrays, ensuring that all parameters have a value:
     #
-    #   key1, key2 = typecast_params.pos_int!(['key1', 'key2'])
+    #   val1, val2 = typecast_params.pos_int!(['key1', 'key2'])
     #
     # For handling of array parameters, where all entries in the array use the
     # same conversion, there is an +array+ method which takes the type as the first argument
     # and the keys to convert as the second argument:
     #
-    #   keys = typecast_params.array(:pos_int, 'keys')
+    #   vals = typecast_params.array(:pos_int, 'keys')
     #
     # If you want to ensure that all entries in the array are converted successfully and that
     # there is a value for the array itself, you can use +array!+:
     #
-    #   keys = typecast_params.array!(:pos_int, 'keys')
+    #   vals = typecast_params.array!(:pos_int, 'keys')
     #
     # This will raise an exception if any of the values in the array for parameter +keys+ cannot
     # be converted to integer.
@@ -79,8 +77,8 @@ class Roda
     # Both +array+ and +array!+ support default values which are used if no value is present
     # for the parameter:
     #
-    #   keys = typecast_params.array(:pos_int, 'keys', [])
-    #   keys = typecast_params.array!(:pos_int, 'keys', [])
+    #   vals1 = typecast_params.array(:pos_int, 'keys1', [])
+    #   vals2 = typecast_params.array!(:pos_int, 'keys2', [])
     #
     # You can also pass an array of keys to +array+ or +array!+, if you would like to perform
     # the same conversion on multiple arrays:
@@ -88,7 +86,7 @@ class Roda
     #   foo_ids, bar_ids = typecast_params.array!(:pos_int, ['foo_ids', 'bar_ids'])
     #
     # The previous examples have shown use of the +pos_int+ method, which uses +to_i+ to convert the
-    # value to an integer, but returns nil if the resulting integer is not positive.  Unless you need
+    # value to an integer, but returns +nil+ if the resulting integer is not positive.  Unless you need
     # to handle negative numbers, it is recommended to use +pos_int+ instead of +int+ as +int+ will
     # convert invalid values to 0 (since that is how <tt>String#to_i</tt> works).
     #
@@ -224,10 +222,10 @@ class Roda
     #   # }
     #
     # Using the +:symbolize+ option makes it simpler to transition from untrusted external
-    # data (string keys), to trusted data that can be used internally (trusted in the sense that
-    # the expected types are used).
+    # data (string keys), to semitrusted data that can be used internally (trusted in the sense that
+    # the expected types are used, not that you trust the values).
     #
-    # Note that if there are multiple conversion Error raised inside a +convert!+ or +convert_each!+ 
+    # Note that if there are multiple conversion errors raised inside a +convert!+ or +convert_each!+ 
     # block, they are recorded and a single TypecastParams::Error instance is raised after
     # processing the block.  TypecastParams::Error#param_names can be called on the exception to
     # get an array of all parameter names with conversion issues, and TypecastParams::Error#all_errors
@@ -245,14 +243,18 @@ class Roda
     # specific to the Roda application.  You can add support for custom types by passing a block
     # when loading the typecast_params plugin.  This block is executed in the context of the
     # subclass, and calling +handle_type+ in the block can be used to add conversion methods.
-    # +handle_type+ accepts a type name and the block used to convert the type:
+    # +handle_type+ accepts a type name, an options hash, and the block used to convert the type.
+    # The only currently supported option is +:max_input_bytesize+, specifying the maximum bytesize of
+    # string input.  You can also override the max input bytesize of an existing type using the
+    # +max_input_bytesize+ method.
     #
     #   plugin :typecast_params do
-    #     handle_type(:album) do |value|
+    #     handle_type(:album, max_input_bytesize: 100) do |value|
     #       if id = convert_pos_int(val)
     #         Album[id]
     #       end
     #     end
+    #     max_input_bytesize(:date, 256)
     #   end
     #
     # By default, the typecast_params conversion procs are passed the parameter value directly
@@ -260,10 +262,18 @@ class Roda
     # strip leading and trailing whitespace from parameter string values before processing, which
     # you can do by passing the <tt>strip: :all</tt> option when loading the plugin.
     #
-    # By default, the typecast_params conversion procs check that null bytes are not allowed
-    # in param string values. This check for null bytes occurs prior to any type conversion.
+    # By default, the typecasting methods for some types check whether the bytesize of input
+    # strings is over the maximum expected values, and raise an error in such cases. The input
+    # bytesize is checked prior to any type conversion.  If you would like to skip this check
+    # and allow any bytesize when doing type conversion for param string values, you can do so by
+    # passing the # <tt>:skip_bytesize_checking</tt> option when loading the plugin. By default,
+    # there is an 100 byte limit on integer input, an 1000 byte input on float input, and a 128
+    # byte limit on date/time input.
+    #
+    # By default, the typecasting methods check whether input strings have null bytes, and raise
+    # an error in such cases.  This check for null bytes occurs prior to any type conversion.
     # If you would like to skip this check and allow null bytes in param string values,
-    # you can do by passing the <tt>:allow_null_bytes</tt> option when loading the plugin.
+    # you can do so by passing the <tt>:allow_null_bytes</tt> option when loading the plugin.
     #
     # You can use the :date_parse_input_handler option to specify custom handling of date
     # parsing input.  Modern versions of Ruby and the date gem internally raise if the input to
@@ -281,6 +291,11 @@ class Roda
     #   plugin :typecast_params, date_parse_input_handler: proc {|string|
     #       string.b[0, 128]
     #     }
+    #
+    # The +date_parse_input_handler+ is only called if the value is under the max input
+    # bytesize, so you may need to call +max_input_bytesize+ for the +:date+, +:time+, and
+    # +:datetime+ methods to override the max input bytesize if you want to use this option
+    # for input strings over 128 bytes.
     #
     # By design, typecast_params only deals with string keys, it is not possible to use
     # symbol keys as arguments to the conversion methods and have them converted.
@@ -409,6 +424,14 @@ class Roda
         end
       end
 
+      module SkipBytesizeChecking
+        private
+
+        # Do not check max input bytesize
+        def check_allowed_bytesize(v, max)
+        end
+      end
+
       # Class handling conversion of submitted parameters to desired types.
       class Params
         # Handle conversions for the given type using the given block.
@@ -422,28 +445,43 @@ class Roda
         # This method is used to define all type conversions, even the built
         # in ones.  It can be called in subclasses to setup subclass-specific
         # types.
-        def self.handle_type(type, &block)
+        def self.handle_type(type, opts=OPTS, &block)
           convert_meth = :"convert_#{type}"
           define_method(convert_meth, &block)
+
+          max_input_bytesize = opts[:max_input_bytesize]
+          max_input_bytesize_meth = :"_max_input_bytesize_for_#{type}"
+          define_method(max_input_bytesize_meth){max_input_bytesize}
 
           convert_array_meth = :"_convert_array_#{type}"
           define_method(convert_array_meth) do |v|
             raise Error, "expected array but received #{v.inspect}" unless v.is_a?(Array)
             v.map! do |val|
+              check_allowed_bytesize(val, send(max_input_bytesize_meth))
               check_null_byte(val)
               send(convert_meth, val)
             end
           end
 
-          private convert_meth, convert_array_meth
+          private convert_meth, convert_array_meth, max_input_bytesize_meth
+          alias_method max_input_bytesize_meth, max_input_bytesize_meth
 
           define_method(type) do |key, default=nil|
-            process_arg(convert_meth, key, default) if require_hash!
+            process_arg(convert_meth, key, default, send(max_input_bytesize_meth)) if require_hash!
           end
 
           define_method(:"#{type}!") do |key|
             send(type, key, CHECK_NIL)
           end
+        end
+
+        # Override the maximum input bytesize for the given type. This is mostly useful
+        # for overriding the sizes for the default input types.
+        def self.max_input_bytesize(type, bytesize)
+          max_input_bytesize_meth = :"_max_input_bytesize_for_#{type}"
+          define_method(max_input_bytesize_meth){bytesize}
+          private max_input_bytesize_meth
+          alias_method max_input_bytesize_meth, max_input_bytesize_meth
         end
 
         # Create a new instance with the given object and nesting level.
@@ -485,17 +523,17 @@ class Roda
           end
         end
 
-        handle_type(:int) do |v|
+        handle_type(:int, :max_input_bytesize=>100) do |v|
           string_or_numeric!(v) && v.to_i
         end
 
-        handle_type(:pos_int) do |v|
+        handle_type(:pos_int, :max_input_bytesize=>100) do |v|
           if (v = convert_int(v)) && v > 0
             v
           end
         end
 
-        handle_type(:Integer) do |v|
+        handle_type(:Integer, :max_input_bytesize=>100) do |v|
           if string_or_numeric!(v)
             case v
             when String
@@ -510,11 +548,11 @@ class Roda
           end
         end
 
-        handle_type(:float) do |v|
+        handle_type(:float, :max_input_bytesize=>1000) do |v|
           string_or_numeric!(v) && v.to_f
         end
 
-        handle_type(:Float) do |v|
+        handle_type(:Float, :max_input_bytesize=>1000) do |v|
           string_or_numeric!(v) && ::Kernel::Float(v)
         end
 
@@ -523,15 +561,15 @@ class Roda
           v
         end
 
-        handle_type(:date) do |v|
+        handle_type(:date, :max_input_bytesize=>128) do |v|
           parse!(::Date, v)
         end
 
-        handle_type(:time) do |v|
+        handle_type(:time, :max_input_bytesize=>128) do |v|
           parse!(::Time, v)
         end
 
-        handle_type(:datetime) do |v|
+        handle_type(:datetime, :max_input_bytesize=>128) do |v|
           parse!(::DateTime, v)
         end
 
@@ -712,7 +750,7 @@ class Roda
         def array(type, key, default=nil)
           meth = :"_convert_array_#{type}"
           raise ProgrammerError, "no typecast_params type registered for #{type.inspect}" unless respond_to?(meth, true)
-          process_arg(meth, key, default) if require_hash!
+          process_arg(meth, key, default, send(:"_max_input_bytesize_for_#{type}")) if require_hash!
         end
 
         # Call +array+ with the +type+, +key+, and +default+, but if the return value is nil or any value in
@@ -945,10 +983,10 @@ class Roda
 
         # If +key+ is not an array, convert the value at the given +key+ using the +meth+ method and +default+
         # value.  If +key+ is an array, return an array with the conversion done for each respective member of +key+.
-        def process_arg(meth, key, default)
+        def process_arg(meth, key, default, max_input_bytesize=nil)
           case key
           when String
-            v = process(meth, key, default)
+            v = process(meth, key, default, max_input_bytesize)
 
             if @capture
               key = key.to_sym if symbolize?
@@ -961,10 +999,17 @@ class Roda
           when Array
             key.map do |k|
               raise ProgrammerError, "non-String element in array argument passed to typecast_params: #{k.inspect}" unless k.is_a?(String)
-              process_arg(meth, k, default)
+              process_arg(meth, k, default, max_input_bytesize)
             end
           else
             raise ProgrammerError, "Unsupported argument for typecast_params conversion method: #{key.inspect}"
+          end
+        end
+
+        # Raise an Error if the value is a string with bytesize over max (if max is given)
+        def check_allowed_bytesize(v, max)
+          if max && v.is_a?(String) && v.bytesize > max
+            handle_error(nil, :too_long, "string parameter is too long for type", true)
           end
         end
 
@@ -977,10 +1022,11 @@ class Roda
 
         # Get the value of +key+ for the object, and convert it to the expected type using +meth+.
         # If the value either before or after conversion is nil, return the +default+ value.
-        def process(meth, key, default)
+        def process(meth, key, default, max_input_bytesize=nil)
           v = param_value(key)
 
           unless v.nil?
+            check_allowed_bytesize(v, max_input_bytesize)
             check_null_byte(v)
             v = send(meth, v)
           end
@@ -1048,6 +1094,9 @@ class Roda
         end
         if opts[:allow_null_bytes]
           app::TypecastParams.send(:include, AllowNullByte)
+        end
+        if opts[:skip_bytesize_checking]
+          app::TypecastParams.send(:include, SkipBytesizeChecking)
         end
         if opts[:date_parse_input_handler]
           app::TypecastParams.class_eval do

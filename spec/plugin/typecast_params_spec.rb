@@ -112,7 +112,11 @@ describe "typecast_params plugin" do
   end
 
   it "conversion methods should respect :date_parse_input_handler" do
-    app.plugin :typecast_params, :date_parse_input_handler=>proc{|string| string[0, 128]}
+    app.plugin :typecast_params, :date_parse_input_handler=>proc{|string| string[0, 128]} do
+      max_input_bytesize(:date, 10000)
+      max_input_bytesize(:time, 10000)
+      max_input_bytesize(:datetime, 10000)
+    end
 
     tp('a=2021-10-22' + ' '*100).date('a').must_equal Date.new(2021, 10, 22)
     tp('a=2021-10-22 10:20:30' + ' '*100).datetime('a').must_equal DateTime.new(2021, 10, 22, 10, 20, 30)
@@ -177,6 +181,75 @@ describe "typecast_params plugin" do
     tp('a=1%00&b=1').any('b').must_equal '1'
     tp('a=1%00&b=1').any!('b').must_equal '1'
     tp('a[]=1%00&b[]=1').array(:any, 'b').must_equal ['1']
+  end
+
+  it "conversion methods should allow to typecast input at max input bytesize by default" do
+    int = '1'*100
+    tp('a='+int).int('a').must_equal int.to_i
+    tp('a='+int).pos_int('a').must_equal int.to_i
+    tp('a='+int).Integer('a').must_equal int.to_i
+
+    float = '1.'+'1'*998
+    tp('a='+float).float('a').must_equal float.to_f
+    tp('a='+float).Float('a').must_equal float.to_f
+
+    date = '2021-10-22' + ' '*118
+    tp('a='+date).date('a').must_equal Date.new(2021, 10, 22)
+    tp('a='+date).time('a').must_equal Time.local(2021, 10, 22)
+    tp('a='+date).datetime('a').must_equal DateTime.new(2021, 10, 22)
+  end
+
+  it "conversion methods should not attempt to typecast input over max input bytesize by default" do
+    lambda{tp('a='+'1'*101).int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a='+'1'*101).pos_int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a='+'1'*101).Integer('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1.'+'1'*999).float('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a=1.'+'1'*999).Float('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+
+    date = '2021-10-22' + ' '*119
+    lambda{tp('a='+date).date('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a='+date).time('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a='+date).datetime('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+  end
+
+  it "conversion methods should attempt to typecast input over max input bytesize if :skip_bytesize_checking plugin option is used" do
+    app.plugin :typecast_params, :skip_bytesize_checking=>true, :date_parse_input_handler=>proc{|string| string[0, 128]}
+
+    int = '1'*101
+    tp('a='+int).int('a').must_equal int.to_i
+    tp('a='+int).pos_int('a').must_equal int.to_i
+    tp('a='+int).Integer('a').must_equal int.to_i
+
+    float = '1.'+'1'*999
+    tp('a='+float).float('a').must_equal float.to_f
+    tp('a='+float).Float('a').must_equal float.to_f
+
+    date = '2021-10-22' + ' '*119
+    tp('a='+date).date('a').must_equal Date.new(2021, 10, 22)
+    tp('a='+date).time('a').must_equal Time.local(2021, 10, 22)
+    tp('a='+date).datetime('a').must_equal DateTime.new(2021, 10, 22)
+  end
+
+  it "should allow overriding max input bytesize using max_input_bytesize" do
+    app.plugin :typecast_params do
+      max_input_bytesize :int, 1
+    end
+
+    tp('a=1').int('a').must_equal 1
+    tp('a[]=1').array(:int, 'a').must_equal [1]
+    tp('a[]=1&a[]=2').array(:int, 'a').must_equal [1, 2]
+    lambda{tp('a=11').int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=11').int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+    lambda{tp('a[]=1&a[]=22').int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
+  end
+
+  it "should allow disabling max input bytesize for specific type by passing nil to max_input_bytesize" do
+    app.plugin :typecast_params do
+      max_input_bytesize :int, nil
+    end
+
+    int = '1'*1000
+    tp('a='+int).int('a').must_equal int.to_i
   end
 
   it "#any should not do any conversion" do
