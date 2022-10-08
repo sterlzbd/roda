@@ -1,31 +1,31 @@
 rdoc-image:https://roda.jeremyevans.net/images/roda-logo.svg
 
-<b> A routing tree web toolkit, designed for building fast and maintainable web applications in ruby. </b>
+A routing tree web toolkit, designed for building fast and maintainable web applications in Ruby.
 
-== Summary
+== Table of contents
 
-- {Instalation}[#label-Installation]
+- {Installation}[#label-Installation]
 - {Resources}[#label-Resources]
 - {Goals}[#label-Goals]
 - {Usage}[#label-Usage]
-  - {Running the application}[#label-Running+the+Application]
-  - {The routing tree}[#label-The+Routing+Tree]
-  - {Matchers}[#label-Matchers]
-  - {Optional segments}[#label-Optional+segments]
-  - {Match/Route Block Return Values}[#label-Match-2FRoute+Block+Return+Values]
-  - {Status codes}[#label-Status+Codes]
-  - {Verb methods}[#label-Verb+Methods]
-  - {Root method}[#label-Root+Method]
-  - {Request and Response}[#label-Request+and+Response]
-  - {Pollution}[#label-Pollution]
-  - {Composition}[#label-Composition]
-  - {Testing}[#label-Testing]
-  - {Settings}[#label-Settings]
-  - {Rendering}[#label-Rendering]
-  - {Security}[#label-Security]
-  - {Code Reloading}[#label-Code+Reloading]
-  - {Plugins}[#label-Plugins]
-  - {No introspection}[#label-No+Introspection]
+- {Running the application}[#label-Running+the+Application]
+- {The routing tree}[#label-The+Routing+Tree]
+- {Matchers}[#label-Matchers]
+- {Optional segments}[#label-Optional+segments]
+- {Match/Route Block Return Values}[#label-Match-2FRoute+Block+Return+Values]
+- {Status codes}[#label-Status+Codes]
+- {Verb methods}[#label-Verb+Methods]
+- {Root method}[#label-Root+Method]
+- {Request and Response}[#label-Request+and+Response]
+- {Pollution}[#label-Pollution]
+- {Composition}[#label-Composition]
+- {Testing}[#label-Testing]
+- {Settings}[#label-Settings]
+- {Rendering}[#label-Rendering]
+- {Security}[#label-Security]
+- {Code Reloading}[#label-Code+Reloading]
+- {Plugins}[#label-Plugins]
+- {No introspection}[#label-No+Introspection]
 - {Inspiration}[#label-Inspiration]
 - {Ruby Support Policy}[#label-Ruby+Support+Policy]
 
@@ -166,12 +166,10 @@ for every request.
 == Running the Application
 
 Running a Roda application is similar to running any other rack-based application
-that uses a +config.ru+ file.  You can start a basic server using +rackup+:
+that uses a +config.ru+ file.  You can start a basic server using +rackup+, +puma+,
++unicorn+, +passenger+, or any other webserver that can handle +config.ru+ files:
 
   $ rackup
-
-Ruby web servers such as Unicorn and Puma also ship with their own programs
-that you can use to run a Roda application.
 
 == The Routing Tree
 
@@ -480,7 +478,7 @@ shared branch:
 
 This works well for many cases, but there are also cases where you really want to
 treat it as one route with an optional segment.  One simple way to do that is to
-use a parameter instead of an optional segment (e.g. +/items/123?opt=456+).
+use a parameter instead of an optional segment (e.g. <tt>/items/123?opt=456</tt>).
 
   r.is "items", Integer do |item_id|
     optional_data = r.params['opt'].to_s
@@ -673,14 +671,14 @@ If you have a lot of rack applications that you want to dispatch to, and
 which one to dispatch to is based on the request path prefix, look into the
 +multi_run+ plugin.
 
-=== hash_routes plugin
+=== hash_branches plugin
 
 If you are just looking to split up the main route block up by branches,
-you should use the +hash_routes+ plugin,
+you should use the +hash_branches+ plugin,
 which keeps the current scope of the +route+ block:
 
   class App < Roda
-    plugin :hash_routes
+    plugin :hash_branches
 
     hash_branch "api" do |r|
       r.is do
@@ -689,7 +687,7 @@ which keeps the current scope of the +route+ block:
     end
 
     route do |r|
-      r.hash_routes
+      r.hash_branches
     end
   end
 
