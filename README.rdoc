@@ -1,9 +1,35 @@
-= Roda
+rdoc-image:https://roda.jeremyevans.net/images/roda-logo.svg
 
-Roda is a routing tree web toolkit, designed for building fast and
-maintainable web applications in ruby.
+<b> A routing tree web toolkit, designed for building fast and maintainable web applications in ruby. </b>
 
-= Installation
+== Summary
+
+- {Instalation}[#label-Installation]
+- {Resources}[#label-Resources]
+- {Goals}[#label-Goals]
+- {Usage}[#label-Usage]
+  - {Running the application}[#label-Running+the+Application]
+  - {The routing tree}[#label-The+Routing+Tree]
+  - {Matchers}[#label-Matchers]
+  - {Optional segments}[#label-Optional+segments]
+  - {Match/Route Block Return Values}[#label-Match-2FRoute+Block+Return+Values]
+  - {Status codes}[#label-Status+Codes]
+  - {Verb methods}[#label-Verb+Methods]
+  - {Root method}[#label-Root+Method]
+  - {Request and Response}[#label-Request+and+Response]
+  - {Pollution}[#label-Pollution]
+  - {Composition}[#label-Composition]
+  - {Testing}[#label-Testing]
+  - {Settings}[#label-Settings]
+  - {Rendering}[#label-Rendering]
+  - {Security}[#label-Security]
+  - {Code Reloading}[#label-Code+Reloading]
+  - {Plugins}[#label-Plugins]
+  - {No introspection}[#label-No+Introspection]
+- {Inspiration}[#label-Inspiration]
+- {Ruby Support Policy}[#label-Ruby+Support+Policy]
+
+== Installation
 
   $ gem install roda
 
@@ -1120,3 +1146,4 @@ MIT
 == Maintainer
 
 Jeremy Evans <code@jeremyevans.net>
+
