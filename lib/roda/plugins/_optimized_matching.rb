@@ -52,7 +52,7 @@ class Roda
                   end
                 end
               elsif matcher == Integer
-                if matchdata = /\A\/(\d+)(?=\/|\z)/.match(@remaining_path)
+                if matchdata = /\A\/(\d{1,100})(?=\/|\z)/.match(@remaining_path)
                   @remaining_path = matchdata.post_match
                   always{yield(matchdata[1].to_i)}
                 end
@@ -151,7 +151,7 @@ class Roda
                 always{yield rp[1, len]}
               end
             elsif matcher == Integer
-              if matchdata = /\A\/(\d+)\z/.match(@remaining_path)
+              if matchdata = /\A\/(\d{1,100})\z/.match(@remaining_path)
                 @remaining_path = ''
                 always{yield(matchdata[1].to_i)}
               end

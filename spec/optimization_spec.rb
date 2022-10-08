@@ -105,7 +105,7 @@ require_relative "spec_helper"
         body('/foo/1').must_equal ''
       end
 
-      it "r.#{meth} Integer should match only final segment" do
+      it "r.#{meth} Integer should match only final segment of 1-100 decimal characters" do
         app do |r|
           r.send(meth, Integer) do |*args|
             args.inspect
@@ -128,6 +128,9 @@ require_relative "spec_helper"
         body('/2').must_equal '[2]'
         body('/1/').must_equal ''
         body('/2/1').must_equal ''
+
+        body('/'+'2'*100).must_equal '['+'2'*100+']'
+        body('/'+'2'*101).must_equal ''
       end
 
       it "r.#{meth} with other supported class argument should match if one if the elements matches" do
@@ -206,6 +209,9 @@ require_relative "spec_helper"
         body('/foo/').must_equal ''
         body('/foo/1').must_equal '["foo", 1]'
         body('/foo/1/').must_equal ''
+
+        body('/foo/'+'2'*100).must_equal '["foo", '+'2'*100+']'
+        body('/foo/'+'2'*101).must_equal ''
       end
 
       it "r.#{meth} with false argument should never match" do
@@ -447,6 +453,9 @@ require_relative "spec_helper"
       body('/2').must_equal '[2]-'
       body('/1/').must_equal '[1]-/'
       body('/2/1').must_equal '[2]-/1'
+
+      body('/'+'2'*100).must_equal '['+'2'*100+']-'
+      body('/'+'2'*101).must_equal ''
     end
 
     it "r.on with unsupported class should raise" do
