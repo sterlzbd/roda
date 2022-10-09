@@ -11,7 +11,7 @@ class Roda
     # * Doesn't include middleware timing
     # * Doesn't proxy the body
     # * Doesn't support different capitalization of the Content-Length response header
-    # * Logs to $stderr instead of env['rack.errors'] if explicit logger not passed
+    # * Logs to +$stderr+ instead of <tt>env['rack.errors']</tt> if explicit logger not passed
     #
     # Example:
     #
