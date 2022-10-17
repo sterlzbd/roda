@@ -1,12 +1,18 @@
 source 'https://rubygems.org'
 
+if RUBY_VERSION < '2'
+  gem 'rake', '<10'
+elsif RUBY_VERSION < '2.3'
+  gem 'rake', '<13'
+else
+  gem 'rake'
+end
+
 if RUBY_VERSION < '2.0.0'
-  gem 'rake', '<10.0.0'
   gem 'mime-types', '< 3'
   gem "tilt", '<2.0.11'
 else
   gem "tilt"
-  gem 'rake'
 end
 
 if RUBY_VERSION < '3.1.0' && RUBY_VERSION >= '3.0.0'
