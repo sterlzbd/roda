@@ -12,8 +12,11 @@ describe "unescape_path_path plugin" do
       r.get :name do |name|
         name
       end
+
+      "#{r.matched_path}|#{r.remaining_path}"
     end
 
+    body('/foo/%61').must_equal '|/foo/a'
     body('/a').must_equal 'a'
     body('/%61').must_equal 'a'
     unless_lint do

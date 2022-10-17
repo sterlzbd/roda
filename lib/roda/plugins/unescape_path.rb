@@ -20,6 +20,13 @@ class Roda
     #   end
     module UnescapePath
       module RequestMethods
+        # Make sure the matched path calculation handles the unescaping
+        # of the remaining path.
+        def matched_path
+          e = @env
+          Rack::Utils.unescape(e["SCRIPT_NAME"] + e["PATH_INFO"]).chomp(@remaining_path)
+        end
+
         private
 
         # Unescape the path.

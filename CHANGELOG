@@ -1,3 +1,7 @@
+= master
+
+* Fix RodaRequest#matched_path when using unescape_path plugin (jeremyevans) (#286)
+
 = 3.61.0 (2022-10-12)
 
 * Make Integer matcher limit integer segments to 100 characters by default (jeremyevans)
