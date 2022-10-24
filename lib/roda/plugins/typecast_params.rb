@@ -526,9 +526,10 @@ class Roda
         handle_type(:int, :max_input_bytesize=>100) do |v|
           string_or_numeric!(v) && v.to_i
         end
+        alias base_convert_int convert_int
 
         handle_type(:pos_int, :max_input_bytesize=>100) do |v|
-          if (v = convert_int(v)) && v > 0
+          if (v = base_convert_int(v)) && v > 0
             v
           end
         end
@@ -547,6 +548,7 @@ class Roda
             end
           end
         end
+        alias base_convert_Integer convert_Integer
 
         handle_type(:float, :max_input_bytesize=>1000) do |v|
           string_or_numeric!(v) && v.to_f

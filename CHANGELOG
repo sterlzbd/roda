@@ -1,5 +1,7 @@
 = master
 
+* Add typecast_params_sized_integers plugin for converting parameters to sized integers (jeremyevans)
+
 * Add Integer_matcher_max plugin for setting maximum integer value matched by the Integer matcher (jeremyevans)
 
 * Allow class matchers in the class_matchers plugin to skip matching based on regexp match values (jeremyevans)
