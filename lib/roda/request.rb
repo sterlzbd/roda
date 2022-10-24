@@ -443,7 +443,16 @@ class Roda
         # Match integer segment of up to 100 decimal characters, and yield resulting value as an
         # integer.
         def _match_class_Integer
-          consume(/\A\/(\d{1,100})(?=\/|\z)/){|i| [i.to_i]}
+          consume(/\A\/(\d{1,100})(?=\/|\z)/) do |i|
+            if i = _match_class_convert_Integer(i)
+              [i]
+            end
+          end
+        end
+
+        # Convert the segment matched by the Integer matcher to an integer.
+        def _match_class_convert_Integer(value)
+          value.to_i
         end
 
         # Match only if all of the arguments in the given array match.
