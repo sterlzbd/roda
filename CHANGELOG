@@ -1,5 +1,7 @@
 = master
 
+* Allow class matchers in the class_matchers plugin to skip matching based on regexp match values (jeremyevans)
+
 * Fix RodaRequest#matched_path when using unescape_path plugin (jeremyevans) (#286)
 
 = 3.61.0 (2022-10-12)

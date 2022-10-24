@@ -548,9 +548,11 @@ class Roda
         # path from PATH_INFO, and updates captures with any regex captures.
         def consume(pattern)
           if matchdata = pattern.match(@remaining_path)
-            @remaining_path = matchdata.post_match
             captures = matchdata.captures
-            captures = yield(*captures) if defined?(yield)
+            if defined?(yield)
+              return unless captures = yield(*captures)
+            end
+            @remaining_path = matchdata.post_match
             @captures.concat(captures)
           end
         end

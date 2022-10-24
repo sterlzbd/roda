@@ -28,6 +28,18 @@ class Roda
     # This is useful to DRY up code if you are using the same type of pattern and
     # type conversion in multiple places in your application.
     #
+    # If you have a segment match the passed regexp, but decide during block
+    # processing that you do not want to treat it as a match, you can have the
+    # block return nil or false.  This is useful if you want to make sure you
+    # are using valid data:
+    #
+    #   class_matcher(Date, /(\dd\d)-(\d\d)-(\d\d)/) do |y, m, d|
+    #     y = y.to_i
+    #     m = m.to_i
+    #     d = d.to_i
+    #     [Date.new(y, m, d)] if Date.valid_date?(y, m, d)
+    #   end
+    #
     # This plugin does not work with the params_capturing plugin, as it does not
     # offer the ability to associate block arguments with named keys.
     module ClassMatchers
