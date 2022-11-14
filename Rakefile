@@ -115,4 +115,13 @@ task :irb do
   sh %{#{irb} -I lib -r #{NAME}}
 end
 
+# Other
 
+desc "Check documentation for plugin files"
+task :check_plugin_doc do
+  text = File.binread('www/pages/documentation.erb')
+  skip = %w'delay_build'
+  Dir['lib/roda/plugins/*.rb'].map{|f| File.basename(f).sub('.rb', '') if File.size(f)}.sort.each do |f|
+    puts f if !f.start_with?('_') && !skip.include?(f) && !text.include?(">#{f}<")
+  end
+end
