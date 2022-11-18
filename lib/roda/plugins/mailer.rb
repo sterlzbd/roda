@@ -115,6 +115,11 @@ class Roda
     #
     #   plugin :mailer, content_type: 'text/html'
     #
+    # For backwards compatibility reasons, the +r.mail+ method does not do
+    # a terminal match by default if provided arguments (unlike +r.get+ and
+    # +r.post+).  You can pass the :terminal option to make +r.mail+ enforce
+    # a terminal match if provided arguments.
+    #
     # The mailer plugin does support being used inside a Roda application
     # that is handling web requests, where the routing block for mails and
     # web requests is shared.  However, it's recommended that you create a
@@ -163,7 +168,8 @@ class Roda
         # any arguments passed to the +mail+ or +sendmail+ Roda class methods.
         def mail(*args)
           if @env["REQUEST_METHOD"] == "MAIL"
-            if_match(args) do |*vs|
+            # RODA4: Make terminal match the default
+            send(roda_class.opts[:mailer][:terminal] ? :_verb : :if_match, args) do |*vs|
               yield(*(vs + @env['roda.mail_args']))
             end
           end

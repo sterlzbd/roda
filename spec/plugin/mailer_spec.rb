@@ -89,6 +89,34 @@ describe "mailer plugin" do
     deliveries.must_equal []
   end
 
+  it "does not enforce terminal match by default" do
+    app(:mailer) do |r|
+      instance_exec(&setup_email)
+      r.mail "foo" do |*args|
+        "a"
+      end
+    end
+
+    app.mail('/foo').body.must_be :==, 'a'
+    app.mail('/foo/').body.must_be :==, 'a'
+  end
+
+  it "supports :terminal option for enforcing terminal match" do
+    app(:bare) do
+      plugin :mailer, :terminal=>true
+      route do |r|
+        instance_exec(&setup_email)
+        r.mail "foo" do |*args|
+          "a"
+        end
+        no_mail!
+      end
+    end
+
+    app.mail('/foo').body.must_be :==, 'a'
+    app.mail('/foo/').must_be_nil
+  end
+
   it "supports attachments" do
     app(:mailer) do |r|
       r.mail do

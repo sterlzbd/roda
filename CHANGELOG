@@ -1,3 +1,7 @@
+= master
+
+* Add mailer plugin :terminal option to make r.mail use a terminal match when provided arguments (jeremyevans)
+
 = 3.62.0 (2022-11-14)
 
 * Add typecast_params_sized_integers plugin for converting parameters to sized integers (jeremyevans)
