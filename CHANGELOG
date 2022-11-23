@@ -1,5 +1,7 @@
 = master
 
+* Add autoload_hash_branches plugin for autoloading file for a hash branch when there is a request for that branch (jeremyevans)
+
 * Add mailer plugin :terminal option to make r.mail use a terminal match when provided arguments (jeremyevans)
 
 = 3.62.0 (2022-11-14)
