@@ -213,9 +213,8 @@ describe "exception_page plugin" do
     body.must_include "foo-bar.rb:#{4200+42}"
     body.must_include __FILE__
     body.wont_include 'id="c0"'
-    # On JRuby, instance_eval uses two frames, and the second one is an internal
-    # JRuby one with no context line.
-    body.must_include "id=\"c#{RUBY_ENGINE == 'jruby' ? 2 : 1}\""
+    # On JRuby, instance_eval uses 2-3 frames depending on version
+    body.must_match /id="c[123]"/
   end
 
   it "should serve exception page assets" do
