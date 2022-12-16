@@ -162,6 +162,7 @@ describe "mailer plugin" do
 
     m = app.mail('foo')
     m.parts.length.must_equal 2
+    m.encoded # necessary in mail 2.8.0+ to get content_type to return expected value
     m.parts.first.content_type.must_match(/text\/plain/)
     m.parts.first.body.must_be :==, 'c'
     m.parts.last.content_type.must_match(/text\/plain/)

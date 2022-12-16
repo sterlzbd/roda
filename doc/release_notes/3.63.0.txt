@@ -29,3 +29,8 @@
   the r.mail method force a terminal match, similar to how r.get
   and other HTTP verb methods work in standard Roda.  This behavior
   will become the default in Roda 4.
+
+= Other Improvements
+
+* The mailer plugin now correctly sets the content_type of the body
+  for emails with attachments when using mail 2.8.0+.

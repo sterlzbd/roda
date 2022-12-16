@@ -1,5 +1,7 @@
 = 3.63.0 (2022-12-16)
 
+* Make mailer plugin set configured content type for body part for emails with attachments when using mail 2.8+ (jeremyevans)
+
 * Add autoload_hash_branches plugin for autoloading file for a hash branch when there is a request for that branch (jeremyevans)
 
 * Add mailer plugin :terminal option to make r.mail use a terminal match when provided arguments (jeremyevans)

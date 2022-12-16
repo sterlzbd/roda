@@ -196,9 +196,9 @@ class Roda
 
             if content_type = header_content_type || roda_class.opts[:mailer][:content_type]
               if mail.multipart?
-                if mail.content_type =~ /multipart\/mixed/ &&
+                if /multipart\/mixed/ =~ mail.content_type &&
                    mail.parts.length >= 2 &&
-                   (part = mail.parts.find{|p| !p.attachment && p.content_type == "text/plain"})
+                   (part = mail.parts.find{|p| !p.attachment && (p.encoded; /text\/plain/ =~ p.content_type)})
                   part.content_type = content_type
                 end
               else
