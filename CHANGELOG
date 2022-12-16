@@ -1,4 +1,4 @@
-= master
+= 3.63.0 (2022-12-16)
 
 * Add autoload_hash_branches plugin for autoloading file for a hash branch when there is a request for that branch (jeremyevans)
 
