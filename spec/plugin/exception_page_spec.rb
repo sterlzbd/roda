@@ -214,7 +214,7 @@ describe "exception_page plugin" do
     body.must_include __FILE__
     body.wont_include 'id="c0"'
     # On JRuby, instance_eval uses 2-3 frames depending on version
-    body.must_match /id="c[123]"/
+    body.must_match(/id="c[123]"/)
   end
 
   it "should serve exception page assets" do
