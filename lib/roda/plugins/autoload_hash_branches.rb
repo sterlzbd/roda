@@ -12,7 +12,7 @@ class Roda
     #
     # You can specify a single hash branch for autoloading:
     #
-    #   plugin :hash_branches
+    #   plugin :autoload_hash_branches
     #   autoload_hash_branch('branch_name', '/path/to/file')
     #   autoload_hash_branch('namespace', 'branch_name', '/path/to/file')
     #
