@@ -1,3 +1,7 @@
+= master
+
+* Add erb_h plugin for faster (if slightly less safe) html escaping using erb/escape (jeremyevans)
+
 = 3.63.0 (2022-12-16)
 
 * Make mailer plugin set configured content type for body part for emails with attachments when using mail 2.8+ (jeremyevans)
