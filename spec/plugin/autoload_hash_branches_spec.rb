@@ -70,4 +70,33 @@ describe "hash_branches plugin" do
 
     check_autoload_hash_branches
   end
+
+  it "should eager load autoload hash branches when freezing the application" do
+    app(:bare) do
+      plugin :autoload_hash_branches
+
+      autoload_hash_branch('a', './spec/autoload_hash_branches/a')
+      autoload_hash_branch('b', './spec/autoload_hash_branches/b')
+      autoload_hash_branch('/a', 'c', './spec/autoload_hash_branches/a/c')
+      autoload_hash_branch('/a', 'd', './spec/autoload_hash_branches/a/d')
+      autoload_hash_branch('/a', 'e', './spec/autoload_hash_branches/a/e')
+
+      route do |r|
+        r.hash_branches
+        '-'
+      end
+    end
+
+    $roda_app = @app
+    @app.opts[:loaded] = []
+    @app.freeze
+    @app.opts[:loaded].must_equal [:a, :b, :a_c, :a_d, :a_e]
+    body('/c').must_equal '-'
+    body('/b').must_equal 'b'
+    body('/a').must_equal 'a'
+    status('/a/e').must_equal 404
+    body('/a/d').must_equal 'a-d'
+    body('/a/c').must_equal 'a-c'
+  end
+
 end

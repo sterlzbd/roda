@@ -26,11 +26,16 @@ class Roda
     # In both cases, when the autoloaded file is required, it should redefine the same
     # hash branch.  If it does not, requests to the hash branch will result in a 404 error.
     #
-    # This plugin will not work correctly when freezing applications, because it requires
+    # When freezing an application, all hash branches are automatically loaded, because
+    # autoloading hash branches does not work for frozen applications.
     # modifying the class at runtime as hash branches are autoloaded.
     module AutoloadHashBranches
       def self.load_dependencies(app)
         app.plugin :hash_branches
+      end
+
+      def self.configure(app)
+        app.opts[:autoload_hash_branch_files] ||= []
       end
 
       module ClassMethods
@@ -38,6 +43,7 @@ class Roda
         # The given file should configure the hash branch specified.
         def autoload_hash_branch(namespace='', segment, file)
           segment = "/#{segment}"
+          opts[:autoload_hash_branch_files] << file
           routes = opts[:hash_branches][namespace] ||= {}
           meth = routes[segment] = define_roda_method(routes[segment] || "hash_branch_#{namespace}_#{segment}", 1) do |r|
             loc = method(routes[segment]).source_location
@@ -58,6 +64,12 @@ class Roda
               autoload_hash_branch(namespace, file.sub(/\.rb\z/i, ''), File.join(dir, file))
             end
           end
+        end
+
+        # Eagerly load all hash branches when freezing the application.
+        def freeze
+          opts.delete(:autoload_hash_branch_files).each{|file| require file}
+          super
         end
       end
     end
