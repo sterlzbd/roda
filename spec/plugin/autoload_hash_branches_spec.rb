@@ -50,11 +50,11 @@ describe "hash_branches plugin" do
     app(:bare) do
       plugin :autoload_hash_branches
 
-      autoload_hash_branch('a', './spec/autoload_hash_branches/a')
-      autoload_hash_branch('b', './spec/autoload_hash_branches/b')
-      autoload_hash_branch('/a', 'c', './spec/autoload_hash_branches/a/c')
-      autoload_hash_branch('/a', 'd', './spec/autoload_hash_branches/a/d')
-      autoload_hash_branch('/a', 'e', './spec/autoload_hash_branches/a/e')
+      autoload_hash_branch('a', 'spec/autoload_hash_branches/a')
+      autoload_hash_branch('b', 'spec/autoload_hash_branches/b')
+      autoload_hash_branch('/a', 'c', 'spec/autoload_hash_branches/a/c')
+      autoload_hash_branch('/a', 'd', 'spec/autoload_hash_branches/a/d')
+      autoload_hash_branch('/a', 'e', 'spec/autoload_hash_branches/a/e')
     end
 
     check_autoload_hash_branches
@@ -98,5 +98,4 @@ describe "hash_branches plugin" do
     body('/a/d').must_equal 'a-d'
     body('/a/c').must_equal 'a-c'
   end
-
 end

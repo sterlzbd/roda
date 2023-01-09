@@ -13,8 +13,8 @@ class Roda
     # You can specify a single hash branch for autoloading:
     #
     #   plugin :autoload_hash_branches
-    #   autoload_hash_branch('branch_name', '/path/to/file')
-    #   autoload_hash_branch('namespace', 'branch_name', '/path/to/file')
+    #   autoload_hash_branch('branch_name', '/absolute/path/to/file')
+    #   autoload_hash_branch('namespace', 'branch_name', 'relative/path/to/file')
     #
     # You can also set the plugin to autoload load all hash branch files in a given directory.
     # This will look at each .rb file in the directory, and add an autoload for it, using the
@@ -42,6 +42,7 @@ class Roda
         # The given file should configure the hash branch specified.
         def autoload_hash_branch(namespace='', segment, file)
           segment = "/#{segment}"
+          file = File.expand_path(file)
           opts[:autoload_hash_branch_files] << file
           routes = opts[:hash_branches][namespace] ||= {}
           meth = routes[segment] = define_roda_method(routes[segment] || "hash_branch_#{namespace}_#{segment}", 1) do |r|
