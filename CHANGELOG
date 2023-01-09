@@ -1,5 +1,7 @@
 = master
 
+* Add autoload_named_routes plugin for autoloading file for a named route when there is a request for that route (jeremyevans)
+
 * Make path method in path plugin accept class name string/symbol with :class_name option to register classes without forcing autoloads (jeremyevans)
 
 = 3.64.0 (2023-01-12)
