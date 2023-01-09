@@ -26,6 +26,9 @@ class Roda
     #   path Quux do |quux, path|
     #     "/quux/#{quux.id}/#{path}"
     #   end
+    #   path 'FooBar', class_name: true do |foobar|
+    #     "/foobar/#{foobar.id}"
+    #   end
     #
     #   route do |r|
     #     r.post 'foo' do
@@ -65,8 +68,17 @@ class Roda
     #
     # Note that if :add_script_name, :relative, :url, or :url_only is used, the path method will also create a
     # <tt>_*_path</tt> private method.
+    #
+    # If the path class method is passed a string or symbol as the first argument, and the second argument
+    # is a hash with the :class_name option passed, the symbol/string is treated as a class name.
+    # This enables the use of class-based paths without forcing autoloads for the related
+    # classes.  If the plugin is not registering classes by name, this will use the symbol or
+    # string to find the related class.
     module Path
       DEFAULT_PORTS = {'http' => 80, 'https' => 443}.freeze
+
+      # Regexp for valid constant names, to prevent code execution.
+      VALID_CONSTANT_NAME_REGEXP = /\A(?:::)?([A-Z]\w*(?:::[A-Z]\w*)*)\z/.freeze
 
       # Initialize the path classes when loading the plugin. Options:
       # :by_name :: Register classes by name, which is friendlier when reloading code (defaults to
@@ -97,11 +109,20 @@ class Roda
 
         # Create a new instance method for the named path.  See plugin module documentation for options.
         def path(name, path=nil, opts=OPTS, &block)
-          if name.is_a?(Class)
-            raise RodaError, "can't provide path or options when calling path with a class" unless path.nil? && opts.empty?
+          if name.is_a?(Class) || (path.is_a?(Hash) && (class_name = path[:class_name]))
+            raise RodaError, "can't provide path when calling path with a class" if path && !class_name
+            raise RodaError, "can't provide options when calling path with a class" unless opts.empty?
             raise RodaError, "must provide a block when calling path with a class" unless block
             if self.opts[:path_class_by_name]
-              name = name.name
+              if class_name
+                name = name.to_s
+              else
+                name = name.name
+              end
+            elsif class_name
+              name = name.to_s
+              raise RodaError, "invalid class name passed when using class_name option" unless VALID_CONSTANT_NAME_REGEXP =~ name
+              name = Object.class_eval(name, __FILE__, __LINE__)
             end
             path_classes[name] = block
             self.opts[:path_class_methods][name] = define_roda_method("path_#{name}", :any, &block)

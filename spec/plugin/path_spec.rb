@@ -252,7 +252,7 @@ describe "path plugin" do
     proc{body('rack.c'=>c2.new)}.must_raise(Roda::RodaError)
   end
 
-  it ":by_name => option registers classes by name" do
+  it ":by_name plugin option registers classes by name" do
     c1 = Class.new
     def c1.name; 'C'; end
     c2 = Class.new
@@ -264,7 +264,58 @@ describe "path plugin" do
     body('rack.c'=>c2.new).must_equal '/c'
   end
 
-  it ":by_name defaults to true in development" do
+  it ":by_name plugin option works with string argument and the :class_name path method option" do
+    c = Class.new
+    def c.name; 'Roda::TestRodaPathPlugin'; end
+    @app.plugin :path, :by_name=>true
+    @app.path('Roda::TestRodaPathPlugin', :class_name=>true){'/c'}
+    @app.route{|r| path(r.env['rack.c'])}
+    body('rack.c'=>c.new).must_equal '/c'
+  end
+
+  it ":by_name plugin option works with symbol argument and the :class_name path method option" do
+    c = Class.new
+    def c.name; 'TestRodaPathPlugin'; end
+    @app.plugin :path, :by_name=>true
+    @app.path(:TestRodaPathPlugin, :class_name=>true){'/c'}
+    @app.route{|r| path(r.env['rack.c'])}
+    body('rack.c'=>c.new).must_equal '/c'
+  end
+
+  it "string argument and the :class_name path method option works without :by_name plugin option" do
+    begin
+      c = Class.new
+      def c.name; 'Roda::TestRodaPathPlugin'; end
+      Roda.const_set(:TestRodaPathPlugin, c)
+      @app.plugin :path
+      @app.path('Roda::TestRodaPathPlugin', :class_name=>true){'/c'}
+      @app.route{|r| path(r.env['rack.c'])}
+      body('rack.c'=>c.new).must_equal '/c'
+    ensure
+      Roda.send(:remove_const, :TestRodaPathPlugin)
+    end
+  end
+
+  it "symbol argument and the :class_name path method option works without :by_name plugin option" do
+    begin
+      c = Class.new
+      def c.name; 'TestRodaPathPlugin'; end
+      Object.const_set(:TestRodaPathPlugin, c)
+      @app.plugin :path
+      @app.path(:TestRodaPathPlugin, :class_name=>true){'/c'}
+      @app.route{|r| path(r.env['rack.c'])}
+      body('rack.c'=>c.new).must_equal '/c'
+    ensure
+      Object.send(:remove_const, :TestRodaPathPlugin)
+    end
+  end
+
+  it ":class_name path method option raises for invalid class names" do
+    @app.plugin :path
+    proc{@app.path(:testRodaPathPlugin, :class_name=>true){'/c'}}.must_raise Roda::RodaError
+  end
+
+  it ":by_name plugin option defaults to true in development" do
     with_rack_env('development') do
       app(:path){}
     end

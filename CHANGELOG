@@ -1,3 +1,7 @@
+= master
+
+* Make path method in path plugin accept class name string/symbol with :class_name option to register classes without forcing autoloads (jeremyevans)
+
 = 3.64.0 (2023-01-12)
 
 * Automatically expand paths for autoload_hash_branches files, so that relative paths work (jeremyevans)
