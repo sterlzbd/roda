@@ -28,7 +28,6 @@ class Roda
     #
     # When freezing an application, all hash branches are automatically loaded, because
     # autoloading hash branches does not work for frozen applications.
-    # modifying the class at runtime as hash branches are autoloaded.
     module AutoloadHashBranches
       def self.load_dependencies(app)
         app.plugin :hash_branches
