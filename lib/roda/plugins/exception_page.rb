@@ -401,7 +401,6 @@ END
 
         private
 
-        # :nocov:
         if RUBY_VERSION >= '3.2'
           def exception_page_exception_message(exception)
             exception.detailed_message(highlight: false).to_s
@@ -413,6 +412,7 @@ END
             exception.message.to_s
           end
         end
+        # :nocov:
       end
 
       module RequestMethods
