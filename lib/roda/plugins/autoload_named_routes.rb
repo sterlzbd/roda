@@ -13,8 +13,8 @@ class Roda
     # You can specify a single hash branch for autoloading:
     #
     #   plugin :autoload_named_route
-    #   autoload_hash_branch(:route_name, '/absolute/path/to/file')
-    #   autoload_hash_branch(:namespace, :route_name, 'relative/path/to/file')
+    #   autoload_named_route(:route_name, '/absolute/path/to/file')
+    #   autoload_named_route(:namespace, :route_name, 'relative/path/to/file')
     #
     # Note that unlike the +route+ method defined by the named_routes plugin, when providing
     # a namespace, the namespace comes before the route name and not after.
