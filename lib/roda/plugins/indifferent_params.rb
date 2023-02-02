@@ -53,9 +53,18 @@ class Roda
           
           class Params < Rack::QueryParser::Params
             if Rack.release >= '3'
-              def initialize
-                @size   = 0
-                @params = Hash.new(&INDIFFERENT_PROC)
+              # rack main branch compatibility
+              # :nocov:
+              if Params < Hash
+                def initialize
+                  super(&INDIFFERENT_PROC)
+                end
+              # :nocov:
+              else
+                def initialize
+                  @size   = 0
+                  @params = Hash.new(&INDIFFERENT_PROC)
+                end
               end
             else
               def initialize(limit = Rack::Utils.key_space_limit)
