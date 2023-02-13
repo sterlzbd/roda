@@ -1,4 +1,4 @@
-= master
+= 3.65.0 (2023-02-13)
 
 * Make indifferent_params plugin work with changes in rack main branch (jeremyevans)
 
