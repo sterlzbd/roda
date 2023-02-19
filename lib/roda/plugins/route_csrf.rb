@@ -90,7 +90,7 @@ class Roda
     #                      action attribute, and returns a path you can pass to csrf_token
     #                      that should be valid for the form submission.  The argument should
     #                      either be nil or a string representing a relative path, absolute
-    #                      path, or full URL.
+    #                      path, or full URL (using appropriate URL encoding).
     # csrf_tag(path=nil, method='POST') :: An HTML hidden input tag string containing the CSRF token, suitable
     #                                      for placing in an HTML form.  Takes the same arguments as csrf_token.
     # csrf_token(path=nil, method='POST') :: The value of the csrf token, in case it needs to be accessed
