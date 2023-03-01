@@ -1,5 +1,7 @@
 = master
 
+* Support overriding exception page assets via exception_page_{css,js} instance methods (jeremyevans) (#306)
+
 * Avoid keeping reference to Roda instance that caches an inline template (jeremyevans)
 
 * Add render_coverage plugin, using tilt 2.1 features to allow for compiled templates in Ruby <3.2 (jeremyevans)

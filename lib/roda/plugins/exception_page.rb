@@ -227,7 +227,7 @@ END
 
             css = case css_file
             when nil
-              "<style type=\"text/css\">#{ExceptionPage.css}</style>"
+              "<style type=\"text/css\">#{exception_page_css}</style>"
             when false
               # :nothing
             else
@@ -236,7 +236,7 @@ END
 
             js = case js_file
             when nil
-              "<script type=\"text/javascript\">\n//<!--\n#{ExceptionPage.js}\n//-->\n</script>"
+              "<script type=\"text/javascript\">\n//<!--\n#{exception_page_js}\n//-->\n</script>"
             when false
               # :nothing
             else
@@ -399,6 +399,16 @@ END
           end
         end
 
+        # The CSS to use on the exception page
+        def exception_page_css
+          ExceptionPage.css
+        end
+
+        # The JavaScript to use on the exception page
+        def exception_page_js
+          ExceptionPage.js
+        end
+
         private
 
         if RUBY_VERSION >= '3.2'
@@ -420,11 +430,11 @@ END
         def exception_page_assets
           get 'exception_page.css' do
             response['Content-Type'] = "text/css"
-            ExceptionPage.css
+            scope.exception_page_css
           end
           get 'exception_page.js' do
             response['Content-Type'] = "application/javascript"
-            ExceptionPage.js
+            scope.exception_page_js
           end
         end
       end
