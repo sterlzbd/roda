@@ -442,6 +442,12 @@ class Roda
           opts[:template_class].new(opts[:path], 1, template_opts, &opts[:template_block])
         end
 
+        # A proc that returns content, used for inline templates, so that the template
+        # doesn't hold a reference to the instance of the class
+        def inline_template_block(content)
+          Proc.new{content}
+        end
+
         # Copy the rendering options into the subclass, duping
         # them as necessary to prevent changes in the subclass
         # affecting the parent class.
@@ -671,7 +677,7 @@ class Roda
           if content = opts[:inline]
             path = opts[:path] = content
             template_class = opts[:template_class] ||= ::Tilt[engine]
-            opts[:template_block] = Proc.new{content}
+            opts[:template_block] = self.class.inline_template_block(content)
           else
             opts[:views] ||= render_opts[:views]
             path = opts[:path] ||= template_path(opts)
