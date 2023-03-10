@@ -329,7 +329,7 @@ class Roda
           @path = opts[:path]
           deps = opts[:dependencies]
           @dependencies = ([@path] + Array(deps)) if deps
-          @mtime = template_last_modified if File.file?(@path)
+          @mtime = template_last_modified
         end
 
         # If the template file exists and the modification time has
