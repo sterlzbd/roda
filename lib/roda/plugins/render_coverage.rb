@@ -66,6 +66,8 @@ class Roda
       end
 
       module InstanceMethods
+        private
+
         # Convert template paths to real paths to try to ensure the same template is cached.
         def template_path(opts)
           path = super
