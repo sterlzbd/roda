@@ -28,7 +28,7 @@ class Roda
 
         # If the block result is a symbol, consider the symbol a
         # template name and use the template view as the body.
-        def block_result_body(result)
+        def unsupported_block_result(result)
           if result.is_a?(Symbol)
             scope.view(result)
           else

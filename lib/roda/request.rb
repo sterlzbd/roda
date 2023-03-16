@@ -547,7 +547,7 @@ class Roda
           when nil, false
             # nothing
           else
-            raise RodaError, "unsupported block result: #{result.inspect}"
+            unsupported_block_result(result)
           end
         end
 
@@ -650,6 +650,12 @@ class Roda
           else
             type.to_s.upcase == @env["REQUEST_METHOD"]
           end
+        end
+
+        # How to handle block results that are not nil, false, or a String.
+        # By default raises an exception.
+        def unsupported_block_result(result)
+          raise RodaError, "unsupported block result: #{result.inspect}"
         end
 
         # Handle an unsupported matcher.

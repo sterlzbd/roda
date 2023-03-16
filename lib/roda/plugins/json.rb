@@ -81,7 +81,7 @@ class Roda
         # If the result is an instance of one of the json_result_classes,
         # convert the result to json and return it as the body, using the
         # application/json content-type.
-        def block_result_body(result)
+        def unsupported_block_result(result)
           case result
           when *roda_class.json_result_classes
             response['Content-Type'] ||= roda_class.opts[:json_result_content_type]
