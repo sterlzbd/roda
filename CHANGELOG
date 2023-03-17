@@ -1,3 +1,7 @@
+= master
+
+* Add custom_block_results plugin for registering custom block result handlers (jeremyevans)
+
 = 3.66.0 (2023-03-13)
 
 * Support overriding exception page assets via exception_page_{css,js} instance methods (jeremyevans) (#306)

@@ -1,13 +1,13 @@
 require_relative "../spec_helper"
 
 describe "json plugin" do
-  before do
-    c = Class.new do
-      def to_json
-        '[1]'
-      end
+  c = Class.new do
+    def to_json
+      '[1]'
     end
+  end
 
+  before do
     app(:bare) do
       plugin :json, :classes=>[Array, Hash, c]
 
@@ -54,6 +54,10 @@ describe "json plugin" do
     @app = Class.new(app)
     app.route{[1]}
     body.must_equal '[1]'
+  end
+
+  it "should return classes that will be converted to JSON" do
+    @app.json_result_classes.must_equal [Array, Hash, c]
   end
 
   it "should accept custom serializers" do

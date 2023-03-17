@@ -55,11 +55,17 @@ class Roda
     module Json
       # Set the classes to automatically convert to JSON, and the serializer to use.
       def self.configure(app, opts=OPTS)
+        app.plugin :custom_block_results
+
         classes = opts[:classes] || [Array, Hash]
         app.opts[:json_result_classes] ||= []
         app.opts[:json_result_classes] += classes
-        app.opts[:json_result_classes].uniq!
-        app.opts[:json_result_classes].freeze
+        classes = app.opts[:json_result_classes]
+        classes.uniq!
+        classes.freeze
+        classes.each do |klass|
+          app.opts[:custom_block_results][klass] = :handle_json_block_result
+        end
 
         app.opts[:json_result_serializer] = opts[:serializer] || app.opts[:json_result_serializer] || app.opts[:json_serializer] || :to_json.to_proc
 
@@ -71,32 +77,34 @@ class Roda
       module ClassMethods
         # The classes that should be automatically converted to json
         def json_result_classes
+          # RODA4: remove, only used by previous implementation.
           opts[:json_result_classes]
+        end
+      end
+
+      module InstanceMethods
+        # Handle a result for one of the registered JSON result classes
+        # by converting the result to JSON.
+        def handle_json_block_result(result)
+          @_response['Content-Type'] ||= opts[:json_result_content_type]
+          @_request.send(:convert_to_json, result)
         end
       end
 
       module RequestMethods
         private
 
-        # If the result is an instance of one of the json_result_classes,
-        # convert the result to json and return it as the body, using the
-        # application/json content-type.
-        def unsupported_block_result(result)
-          case result
-          when *roda_class.json_result_classes
-            response['Content-Type'] ||= roda_class.opts[:json_result_content_type]
-            convert_to_json(result)
-          else
-            super
-          end
-        end
-
         # Convert the given object to JSON.  Uses to_json by default,
         # but can use a custom serializer passed to the plugin.
-        def convert_to_json(obj)
-          args = [obj]
-          args << self if roda_class.opts[:json_result_include_request]
-          roda_class.opts[:json_result_serializer].call(*args)
+        def convert_to_json(result)
+          opts = roda_class.opts
+          serializer = opts[:json_result_serializer]
+
+          if opts[:json_result_include_request]
+            serializer.call(result, self)
+          else
+            serializer.call(result)
+          end
         end
       end
     end
