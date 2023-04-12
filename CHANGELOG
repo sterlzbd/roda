@@ -1,4 +1,4 @@
-= master
+= 3.67.0 (2023-04-12)
 
 * Add custom_block_results plugin for registering custom block result handlers (jeremyevans)
 
