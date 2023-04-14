@@ -1,3 +1,7 @@
+= master
+
+* Make Roda.run in multi_run plugin accept blocks to allow autoloading the apps to dispatch to (jeremyevans)
+
 = 3.67.0 (2023-04-12)
 
 * Add custom_block_results plugin for registering custom block result handlers (jeremyevans)
