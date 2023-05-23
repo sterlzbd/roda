@@ -33,7 +33,7 @@ class Roda
     # block return nil or false.  This is useful if you want to make sure you
     # are using valid data:
     #
-    #   class_matcher(Date, /(\dd\d)-(\d\d)-(\d\d)/) do |y, m, d|
+    #   class_matcher(Date, /(\d\d\d\d)-(\d\d)-(\d\d)/) do |y, m, d|
     #     y = y.to_i
     #     m = m.to_i
     #     d = d.to_i
