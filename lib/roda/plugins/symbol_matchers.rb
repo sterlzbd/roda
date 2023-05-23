@@ -37,6 +37,35 @@ class Roda
     #
     # If using this plugin with the params_capturing plugin, this plugin should
     # be loaded first.
+    #
+    # You can provide a block when calling +symbol_matcher+, and it will be called
+    # for all matches to allow for type conversion.  The block must return an
+    # array:
+    #
+    #   symbol_matcher(:date, /(\d\d\d\d)-(\d\d)-(\d\d)/) do |y, m, d|
+    #     [Date.new(y.to_i, m.to_i, d.to_i)]
+    #   end
+    #
+    #   route do |r|
+    #     r.on :date do |date|
+    #       # date is an instance of Date
+    #     end
+    #   end
+    #
+    # If you have a segment match the passed regexp, but decide during block
+    # processing that you do not want to treat it as a match, you can have the
+    # block return nil or false.  This is useful if you want to make sure you
+    # are using valid data:
+    #
+    #   symbol_matcher(:date, /(\d\d\d\d)-(\d\d)-(\d\d)/) do |y, m, d|
+    #     y = y.to_i
+    #     m = m.to_i
+    #     d = d.to_i
+    #     [Date.new(y, m, d)] if Date.valid_date?(y, m, d)
+    #   end
+    #
+    # However, if providing a block to the symbol_matchers plugin, the symbol may 
+    # not work with the params_capturing plugin.
     module SymbolMatchers
       def self.load_dependencies(app)
         app.plugin :_symbol_regexp_matchers
@@ -50,9 +79,10 @@ class Roda
 
       module ClassMethods
         # Set the regexp to use for the given symbol, instead of the default.
-        def symbol_matcher(s, re)
+        def symbol_matcher(s, re, &block)
           meth = :"match_symbol_#{s}"
-          self::RodaRequest.send(:define_method, meth){re}
+          array = [re, block].freeze
+          self::RodaRequest.send(:define_method, meth){array}
           self::RodaRequest.send(:private, meth)
         end
       end
@@ -67,8 +97,8 @@ class Roda
           meth = :"match_symbol_#{s}"
           if respond_to?(meth, true)
             # Allow calling private match methods
-            re = send(meth)
-            consume(self.class.cached_matcher(re){re})
+            re, block = send(meth)
+            consume(self.class.cached_matcher(re){re}, &block)
           else
             super
           end
@@ -80,7 +110,8 @@ class Roda
           meth = :"match_symbol_#{s}"
           if respond_to?(meth, true)
             # Allow calling private match methods
-            send(meth)
+            re, = send(meth)
+            re
           else
             super
           end

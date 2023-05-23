@@ -1,3 +1,7 @@
+= master
+
+* Allow symbol_matcher in symbol_matchers plugin to take a block to allow type conversion (jeremyevans)
+
 = 3.68.0 (2023-05-11)
 
 * Make Roda.run in multi_run plugin accept blocks to allow autoloading the apps to dispatch to (jeremyevans)

@@ -5,6 +5,9 @@ describe "symbol_matchers plugin" do
     app(:bare) do
       plugin :symbol_matchers
       symbol_matcher(:f, /(f+)/)
+      symbol_matcher(:c, /(c+)/) do |cs|
+        [cs, cs.length] unless cs.length == 5
+      end
 
       route do |r|
         r.is :d do |d|
@@ -19,6 +22,10 @@ describe "symbol_matchers plugin" do
           "f#{f}"
         end
 
+        r.is :c do |cs, nc|
+          "#{cs}#{nc}"
+        end
+
         r.is 'q', :rest do |rest|
           "rest#{rest}"
         end
@@ -27,8 +34,8 @@ describe "symbol_matchers plugin" do
           "w#{w}"
         end
 
-        r.is :d, :w, :f do |d, w, f|
-          "dwf#{d}#{w}#{f}"
+        r.is :d, :w, :f, :c do |d, w, f, cs, nc|
+          "dwfc#{d}#{w}#{f}#{cs}#{nc}"
         end
       end
     end
@@ -40,9 +47,12 @@ describe "symbol_matchers plugin" do
     body("/1az0").must_equal 'w1az0'
     body("/f").must_equal 'ff'
     body("/ffffffffffffffff").must_equal 'fffffffffffffffff'
+    body("/c").must_equal 'c1'
+    body("/cccc").must_equal 'cccc4'
+    body("/ccccc").must_equal 'wccccc'
     status("/-").must_equal 404
-    body("/1/1a/f").must_equal 'dwf11af'
-    body("/12/1azy/fffff").must_equal 'dwf121azyfffff'
+    body("/1/1a/f/cc").must_equal 'dwfc11afcc2'
+    body("/12/1azy/fffff/ccc").must_equal 'dwfc121azyfffffccc3'
     status("/1/f/a").must_equal 404
     body("/q/a/b/c/d//f/g").must_equal 'resta/b/c/d//f/g'
     body('/q/').must_equal 'rest'
