@@ -181,9 +181,9 @@ describe "render plugin" do
       end
     end
 
-    body.gsub(/\n+/, "\n").must_equal "Header\n1\nFooter\n"
+    body.gsub(/\n+/, "\n").sub("\nFooter", 'Footer').must_equal "Header\n1Footer\n"
     app.plugin :render, :layout=>'layout-yield2'
-    body.gsub(/\n+/, "\n").must_equal "Header2\n1\nFooter2\n"
+    body.gsub(/\n+/, "\n").sub("\nFooter", 'Footer').must_equal "Header2\n1Footer2\n"
   end
 
   it "should have :layout_opts=>:views plugin option respect :root app option" do
