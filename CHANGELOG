@@ -1,4 +1,4 @@
-= master
+= 3.69.0 (2023-06-13)
 
 * Allow symbol_matcher in symbol_matchers plugin to take a block to allow type conversion (jeremyevans)
 
