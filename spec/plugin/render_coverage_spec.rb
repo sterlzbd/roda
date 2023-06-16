@@ -11,12 +11,12 @@ else
 require 'fileutils'
 
 describe "render_coverage plugin" do
-  coverage_dir = "./spec/render_coverage"
+  coverage_dir = "./spec/render_coverage-#{$$}"
 
-  def setup_app(render_opts={}, render_coverage_opts={}, prefix='')
+  define_method(:setup_app) do |render_opts={}, render_coverage_opts={}, prefix=''|
     app(:bare) do
       plugin :render, {:views=>"./spec/views/about", :check_paths=>true, :layout=>false}.merge!(render_opts)
-      plugin :render_coverage, {:dir=>"./spec/render_coverage"}.merge!(render_coverage_opts)
+      plugin :render_coverage, {:dir=>coverage_dir}.merge!(render_coverage_opts)
       plugin :render_coverage
 
       route do |r|
