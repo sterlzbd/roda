@@ -48,6 +48,10 @@ if ENV['CHECK_METHOD_VISIBILITY']
   end
 end
 
+if ENV['PLAIN_HASH_RESPONSE_HEADERS']
+  Roda.plugin :plain_hash_response_headers
+end
+
 RodaResponseHeaders = Roda::RodaResponseHeaders
 
 $RODA_WARN = true

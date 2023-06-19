@@ -22,6 +22,32 @@ describe "response #headers and #body" do
     header('foo').must_equal "bar"
     body.must_equal 'true'
   end
+
+  it "uses plain hash for response headers" do
+    app do |r|
+      response.headers['UP'] = 'U'
+      response.headers['down'] = 'd'
+    end
+
+    req[1].must_be_instance_of Hash
+    header('up').must_be_nil
+    header('UP').must_equal 'U'
+    header('down').must_equal 'd'
+    header('DOWN').must_be_nil
+  end if Rack.release < '3'
+
+  it "uses Rack::Headers for response headers" do
+    app do |r|
+      response.headers['UP'] = 'U'
+      response.headers['down'] = 'd'
+    end
+
+    req[1].must_be_instance_of Rack::Headers
+    header('up').must_equal 'U'
+    header('UP').must_equal 'U'
+    header('down').must_equal 'd'
+    header('DOWN').must_equal 'd'
+  end if Rack.release >= '3'
 end
 
 describe "response #write" do

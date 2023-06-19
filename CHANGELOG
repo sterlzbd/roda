@@ -1,5 +1,7 @@
 = master
 
+* Add plain_hash_response_headers plugin, using a plain hash for response headers on Rack 3 for much better performance (jeremyevans)
+
 * Use lower case response header keys by default on Rack 3, instead of relying on Rack::Headers conversion (jeremyevans)
 
 = 3.69.0 (2023-06-13)
