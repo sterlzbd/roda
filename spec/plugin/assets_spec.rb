@@ -139,25 +139,25 @@ if run_tests
       asset_opts_must_equal = lambda do |array|
         app.assets_opts.values_at(*keys).must_be(:==, array)
       end
-      asset_opts_must_equal.call [{'Content-Type'=>"text/css; charset=UTF-8"}, {'Content-Type'=>"application/javascript; charset=UTF-8"}, {}]
+      asset_opts_must_equal.call [{RodaResponseHeaders::CONTENT_TYPE=>"text/css; charset=UTF-8"}, {RodaResponseHeaders::CONTENT_TYPE=>"application/javascript; charset=UTF-8"}, {}]
 
-      app.plugin :assets, :headers=>{'A'=>'B'}, :dependencies=>{'a'=>'b'}
-      asset_opts_must_equal.call [{'Content-Type'=>"text/css; charset=UTF-8", 'A'=>'B'}, {'Content-Type'=>"application/javascript; charset=UTF-8", 'A'=>'B'}, {'a'=>'b'}]
+      app.plugin :assets, :headers=>{'a'=>'b'}, :dependencies=>{'a'=>'b'}
+      asset_opts_must_equal.call [{RodaResponseHeaders::CONTENT_TYPE=>"text/css; charset=UTF-8", 'a'=>'b'}, {RodaResponseHeaders::CONTENT_TYPE=>"application/javascript; charset=UTF-8", 'a'=>'b'}, {'a'=>'b'}]
 
-      app.plugin :assets, :css_headers=>{'C'=>'D'}, :js_headers=>{'E'=>'F'}, :dependencies=>{'c'=>'d'}
-      asset_opts_must_equal.call [{'Content-Type'=>"text/css; charset=UTF-8", 'A'=>'B', 'C'=>'D'}, {'Content-Type'=>"application/javascript; charset=UTF-8", 'A'=>'B', 'E'=>'F'}, {'a'=>'b', 'c'=>'d'}]
-
-      app.plugin :assets
-      asset_opts_must_equal.call [{'Content-Type'=>"text/css; charset=UTF-8", 'A'=>'B', 'C'=>'D'}, {'Content-Type'=>"application/javascript; charset=UTF-8", 'A'=>'B', 'E'=>'F'}, {'a'=>'b', 'c'=>'d'}]
+      app.plugin :assets, :css_headers=>{'c'=>'d'}, :js_headers=>{'e'=>'f'}, :dependencies=>{'c'=>'d'}
+      asset_opts_must_equal.call [{RodaResponseHeaders::CONTENT_TYPE=>"text/css; charset=UTF-8", 'a'=>'b', 'c'=>'d'}, {RodaResponseHeaders::CONTENT_TYPE=>"application/javascript; charset=UTF-8", 'a'=>'b', 'e'=>'f'}, {'a'=>'b', 'c'=>'d'}]
 
       app.plugin :assets
-      asset_opts_must_equal.call [{'Content-Type'=>"text/css; charset=UTF-8", 'A'=>'B', 'C'=>'D'}, {'Content-Type'=>"application/javascript; charset=UTF-8", 'A'=>'B', 'E'=>'F'}, {'a'=>'b', 'c'=>'d'}]
+      asset_opts_must_equal.call [{RodaResponseHeaders::CONTENT_TYPE=>"text/css; charset=UTF-8", 'a'=>'b', 'c'=>'d'}, {RodaResponseHeaders::CONTENT_TYPE=>"application/javascript; charset=UTF-8", 'a'=>'b', 'e'=>'f'}, {'a'=>'b', 'c'=>'d'}]
 
-      app.plugin :assets, :headers=>{'Content-Type'=>'C', 'E'=>'G'}
-      asset_opts_must_equal.call [{'Content-Type'=>"C", 'A'=>'B', 'C'=>'D', 'E'=>'G'}, {'Content-Type'=>"C", 'A'=>'B', 'E'=>'F'}, {'a'=>'b', 'c'=>'d'}]
+      app.plugin :assets
+      asset_opts_must_equal.call [{RodaResponseHeaders::CONTENT_TYPE=>"text/css; charset=UTF-8", 'a'=>'b', 'c'=>'d'}, {RodaResponseHeaders::CONTENT_TYPE=>"application/javascript; charset=UTF-8", 'a'=>'b', 'e'=>'f'}, {'a'=>'b', 'c'=>'d'}]
 
-      app.plugin :assets, :css_headers=>{'A'=>'B1'}, :js_headers=>{'E'=>'F1'}, :dependencies=>{'c'=>'d1'}
-      asset_opts_must_equal.call [{'Content-Type'=>"C", 'A'=>'B1', 'C'=>'D', 'E'=>'G'}, {'Content-Type'=>"C", 'A'=>'B', 'E'=>'F1'}, {'a'=>'b', 'c'=>'d1'}]
+      app.plugin :assets, :headers=>{RodaResponseHeaders::CONTENT_TYPE=>'C', 'e'=>'g'}
+      asset_opts_must_equal.call [{RodaResponseHeaders::CONTENT_TYPE=>"C", 'a'=>'b', 'c'=>'d', 'e'=>'g'}, {RodaResponseHeaders::CONTENT_TYPE=>"C", 'a'=>'b', 'e'=>'f'}, {'a'=>'b', 'c'=>'d'}]
+
+      app.plugin :assets, :css_headers=>{'a'=>'b1'}, :js_headers=>{'e'=>'f1'}, :dependencies=>{'c'=>'d1'}
+      asset_opts_must_equal.call [{RodaResponseHeaders::CONTENT_TYPE=>"C", 'a'=>'b1', 'c'=>'d', 'e'=>'g'}, {RodaResponseHeaders::CONTENT_TYPE=>"C", 'a'=>'b', 'e'=>'f1'}, {'a'=>'b', 'c'=>'d1'}]
     end
 
     it 'assets_paths should return arrays of source paths' do
@@ -747,14 +747,14 @@ END
 
     it 'requests for assets should return 304 if the asset has not been modified' do
       loc = '/assets/js/head/app.js'
-      lm = header('Last-Modified', loc)
+      lm = header(RodaResponseHeaders::LAST_MODIFIED, loc)
       status(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal 304
       body(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal ''
     end
 
     it 'requests for assets should not return 304 if the asset has been modified' do
       loc = '/assets/js/head/app.js'
-      lm = header('Last-Modified', loc)
+      lm = header(RodaResponseHeaders::LAST_MODIFIED, loc)
       File.utime(@js_atime, @js_mtime+1, js_file)
       status(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal 200
       body(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_include('console.log')
@@ -763,7 +763,7 @@ END
     it 'requests for assets should return 304 if the dependency of an asset has not been modified' do
       app.plugin :assets, :dependencies=>{js_file=>css_file}
       loc = '/assets/js/head/app.js'
-      lm = header('Last-Modified', loc)
+      lm = header(RodaResponseHeaders::LAST_MODIFIED, loc)
       status(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal 304
       body(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal ''
     end
@@ -771,7 +771,7 @@ END
     it 'requests for assets should return 200 if the dependency of an asset has been modified' do
       app.plugin :assets, :dependencies=>{js_file=>css_file}
       loc = '/assets/js/head/app.js'
-      lm = header('Last-Modified', loc)
+      lm = header(RodaResponseHeaders::LAST_MODIFIED, loc)
       File.utime(@css_atime, [@css_mtime+2, @js_mtime+2].max, css_file)
       status(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_equal 200
       body(loc, 'HTTP_IF_MODIFIED_SINCE'=>lm).must_include('console.log')

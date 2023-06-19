@@ -193,7 +193,10 @@ class Roda
               raise InvalidToken, msg
             when :empty_403
               @_response.status = 403
-              @_response.headers.replace('Content-Type'=>'text/html', 'Content-Length'=>'0')
+              headers = @_response.headers
+              headers.clear
+              headers[RodaResponseHeaders::CONTENT_TYPE] = 'text/html'
+              headers[RodaResponseHeaders::CONTENT_LENGTH] ='0'
               throw :halt, @_response.finish_with_body([])
             when :clear_session
               session.clear

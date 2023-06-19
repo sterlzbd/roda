@@ -86,7 +86,7 @@ class Roda
         # Handle a result for one of the registered JSON result classes
         # by converting the result to JSON.
         def handle_json_block_result(result)
-          @_response['Content-Type'] ||= opts[:json_result_content_type]
+          @_response[RodaResponseHeaders::CONTENT_TYPE] ||= opts[:json_result_content_type]
           @_request.send(:convert_to_json, result)
         end
       end

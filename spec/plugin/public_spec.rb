@@ -44,8 +44,8 @@ describe "public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Type', '/about/_test.erb').must_equal 'text/plain'
-    header('X-Foo', '/about/_test.erb').must_be_nil
+    header(RodaResponseHeaders::CONTENT_TYPE, '/about/_test.erb').must_equal 'text/plain'
+    header('x-foo', '/about/_test.erb').must_be_nil
   end
 
   it "support :headers options for custom headers" do
@@ -58,7 +58,7 @@ describe "public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Type', '/about/_test.erb').must_equal 'text/plain'
+    header(RodaResponseHeaders::CONTENT_TYPE, '/about/_test.erb').must_equal 'text/plain'
     header('x-foo', '/about/_test.erb').must_equal 'bar'
   end
 
@@ -72,8 +72,8 @@ describe "public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Type', '/about/_test.erb').must_equal 'foo/bar'
-    header('X-Foo', '/about/_test.erb').must_be_nil
+    header(RodaResponseHeaders::CONTENT_TYPE, '/about/_test.erb').must_equal 'foo/bar'
+    header('x-foo', '/about/_test.erb').must_be_nil
   end
 
   it "assumes public directory as default :root option" do
@@ -91,25 +91,25 @@ describe "public plugin" do
     end
 
     body('/about/_test.erb').must_equal File.read('spec/views/about/_test.erb')
-    header('Content-Encoding', '/about/_test.erb').must_be_nil
+    header(RodaResponseHeaders::CONTENT_ENCODING, '/about/_test.erb').must_be_nil
 
     body('/about.erb').must_equal File.read('spec/views/about.erb')
-    header('Content-Encoding', '/about.erb').must_be_nil
+    header(RodaResponseHeaders::CONTENT_ENCODING, '/about.erb').must_be_nil
 
     body('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.erb.gz')
     h = req('/about/_test.erb', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/plain'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'gzip'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/plain'
 
     body('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test.css.gz')
     h = req('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/css'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'gzip'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
 
-    s, h, b = req('/about/_test.css', 'HTTP_IF_MODIFIED_SINCE'=>h["Last-Modified"], 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')
+    s, h, b = req('/about/_test.css', 'HTTP_IF_MODIFIED_SINCE'=>h[RodaResponseHeaders::LAST_MODIFIED], 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')
     s.must_equal 304
-    h['Content-Encoding'].must_be_nil
-    h['Content-Type'].must_be_nil
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_be_nil
+    h[RodaResponseHeaders::CONTENT_TYPE].must_be_nil
     b.must_equal []
   end
 
@@ -124,23 +124,23 @@ describe "public plugin" do
     
     body('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br').must_equal File.binread('spec/views/about/_test2.css.br')
     h = req('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br')[1]
-    h['Content-Encoding'].must_equal 'br'
-    h['Content-Type'].must_equal 'text/css'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'br'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
 
     body('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip').must_equal File.binread('spec/views/about/_test2.css.gz')
     h = req('/about/_test2.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/css'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'gzip'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
 
     body('/about/_test2.css').must_equal File.binread('spec/views/about/_test2.css')
     h = req('/about/_test2.css')[1]
-    h['Content-Encoding'].must_be_nil
-    h['Content-Type'].must_equal 'text/css'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_be_nil
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
 
     body('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br').must_equal File.binread('spec/views/about/_test.css.gz')
     h = req('/about/_test.css', 'HTTP_ACCEPT_ENCODING'=>'deflate, gzip, br')[1]
-    h['Content-Encoding'].must_equal 'gzip'
-    h['Content-Type'].must_equal 'text/css'
+    h[RodaResponseHeaders::CONTENT_ENCODING].must_equal 'gzip'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
   end
 
   it "does not handle non-GET requests" do

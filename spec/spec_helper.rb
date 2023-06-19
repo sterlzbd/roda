@@ -48,6 +48,8 @@ if ENV['CHECK_METHOD_VISIBILITY']
   end
 end
 
+RodaResponseHeaders = Roda::RodaResponseHeaders
+
 $RODA_WARN = true
 def (Roda::RodaPlugins).warn(s)
   return unless $RODA_WARN
@@ -104,7 +106,7 @@ module CookieJar
     env['HTTP_COOKIE'] = @cookie if @cookie
 
     a = super(env)
-    if set = a[1]['Set-Cookie']
+    if set = a[1][RodaResponseHeaders::SET_COOKIE]
       @cookie = set.sub(/(; path=\/)?(; secure)?; HttpOnly/, '')
     end
     a

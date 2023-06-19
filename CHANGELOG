@@ -1,3 +1,7 @@
+= master
+
+* Use lower case response header keys by default on Rack 3, instead of relying on Rack::Headers conversion (jeremyevans)
+
 = 3.69.0 (2023-06-13)
 
 * Allow symbol_matcher in symbol_matchers plugin to take a block to allow type conversion (jeremyevans)

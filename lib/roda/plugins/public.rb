@@ -123,8 +123,8 @@ class Roda
               headers.replace(h)
 
               unless s == 304
-                headers['Content-Type'] = ::Rack::Mime.mime_type(::File.extname(path), 'text/plain')
-                headers['Content-Encoding'] = encoding
+                headers[RodaResponseHeaders::CONTENT_TYPE] = ::Rack::Mime.mime_type(::File.extname(path), 'text/plain')
+                headers[RodaResponseHeaders::CONTENT_ENCODING] = encoding
               end
 
               halt [s, headers, b]

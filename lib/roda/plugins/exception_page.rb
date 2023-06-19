@@ -198,7 +198,7 @@ END
         def exception_page(exception, opts=OPTS)
           message = exception_page_exception_message(exception)
           if opts[:json]
-            @_response['Content-Type'] = "application/json"
+            @_response[RodaResponseHeaders::CONTENT_TYPE] = "application/json"
             {
               "exception"=>{
                 "class"=>exception.class.to_s,
@@ -207,7 +207,7 @@ END
               }
             }
           elsif env['HTTP_ACCEPT'] =~ /text\/html/
-            @_response['Content-Type'] = "text/html"
+            @_response[RodaResponseHeaders::CONTENT_TYPE] = "text/html"
 
             context = opts[:context] || 7
             css_file = opts[:css_file]
@@ -394,7 +394,7 @@ END1
 </html>
 END
           else
-            @_response['Content-Type'] = "text/plain"
+            @_response[RodaResponseHeaders::CONTENT_TYPE] = "text/plain"
             "#{exception.class}: #{message}\n#{exception.backtrace.map{|l| "\t#{l}"}.join("\n")}"
           end
         end
@@ -429,11 +429,11 @@ END
         # Serve exception page assets
         def exception_page_assets
           get 'exception_page.css' do
-            response['Content-Type'] = "text/css"
+            response[RodaResponseHeaders::CONTENT_TYPE] = "text/css"
             scope.exception_page_css
           end
           get 'exception_page.js' do
-            response['Content-Type'] = "application/javascript"
+            response[RodaResponseHeaders::CONTENT_TYPE] = "application/javascript"
             scope.exception_page_js
           end
         end

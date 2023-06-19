@@ -22,7 +22,7 @@ describe "exception_page plugin" do
     s, h, body = req('HTTP_ACCEPT'=>'text/html')
 
     s.must_equal 200
-    h['Content-Type'].must_equal 'text/html'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/html'
     body = body.join
     body.must_include "<title>RuntimeError at /"
     body.must_include "<h1>RuntimeError at /</h1>"
@@ -41,7 +41,7 @@ describe "exception_page plugin" do
 
     s, h, body = req('HTTP_ACCEPT'=>'text/html', 'REQUEST_METHOD'=>'POST', 'rack.input'=>rack_input('(%bad-params%)'))
     s.must_equal 200
-    h['Content-Type'].must_equal 'text/html'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/html'
     body.join.must_include "Invalid POST data"
 
     size = body.size
@@ -115,7 +115,7 @@ describe "exception_page plugin" do
     s, h, body = req
 
     s.must_equal 200
-    h['Content-Type'].must_equal 'text/plain'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/plain'
     body = body.join
     first, *bt = body.split("\n")
     first.must_equal "RuntimeError: #{message}"
@@ -131,7 +131,7 @@ describe "exception_page plugin" do
     s, h, body = req('HTTP_ACCEPT'=>'text/html')
 
     s.must_equal 200
-    h['Content-Type'].must_equal 'text/html'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/html'
     body = body.join
     body.must_include "<title>RuntimeError at /"
     body.must_include "<h1>RuntimeError at /</h1>"
@@ -158,7 +158,7 @@ describe "exception_page plugin" do
     s, h, body = req('HTTP_ACCEPT'=>'text/html')
 
     s.must_equal 200
-    h['Content-Type'].must_equal 'text/html'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/html'
     body = body.join
     body.must_include "<title>RuntimeError at /"
     body.must_include "<h1>RuntimeError at /</h1>"
@@ -182,7 +182,7 @@ describe "exception_page plugin" do
     s, h, body = req
 
     s.must_equal 200
-    h['Content-Type'].must_equal 'application/json'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'application/json'
     hash = JSON.parse(body.join)
     bt = hash["exception"].delete("backtrace")
     hash.must_equal("exception"=>{"class"=>"RuntimeError", "message"=>message})
@@ -224,12 +224,12 @@ describe "exception_page plugin" do
 
     s, h, b = req('/exception_page.css')
     s.must_equal 200
-    h['Content-Type'].must_equal 'text/css'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'text/css'
     b.join.must_equal Roda::RodaPlugins::ExceptionPage.css
 
     s, h, b = req('/exception_page.js')
     s.must_equal 200
-    h['Content-Type'].must_equal 'application/javascript'
+    h[RodaResponseHeaders::CONTENT_TYPE].must_equal 'application/javascript'
     b.join.must_equal Roda::RodaPlugins::ExceptionPage.js
   end
 end

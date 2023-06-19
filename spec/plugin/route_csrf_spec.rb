@@ -106,7 +106,7 @@ describe "route_csrf plugin" do
   it "allows configuring CSRF failure action with :csrf_failure => :empty_403 option" do
     route_csrf_app(:csrf_failure=>:empty_403)
     body("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input("_csrf=#{Rack::Utils.escape(body("/token/foo"))}")).must_equal 'f'
-    req("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input).must_equal [403, {'Content-Type'=>'text/html', 'Content-Length'=>'0'}, []]
+    req("/foo", "REQUEST_METHOD"=>'POST', 'rack.input'=>rack_input).must_equal [403, {RodaResponseHeaders::CONTENT_TYPE=>'text/html', RodaResponseHeaders::CONTENT_LENGTH=>'0'}, []]
   end
 
   it "allows configuring CSRF failure action with :csrf_failure => :empty_403 option" do

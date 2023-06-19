@@ -65,7 +65,7 @@ describe "run_append_slash plugin" do
   it "redirects #run sub apps when trailing slash is missing" do
     app.plugin :run_append_slash, :use_redirects => true
     status('/sub').must_equal 302
-    header('Location', '/sub').must_equal '/sub/'
+    header(RodaResponseHeaders::LOCATION, '/sub').must_equal '/sub/'
     body('/sub/').must_equal 'sub-root'
     body('/sub/foo').must_equal 'sub-foo'
     status('/sub/foo/').must_equal 404

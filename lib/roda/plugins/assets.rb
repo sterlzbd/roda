@@ -430,8 +430,8 @@ class Roda
           opts[:css_headers] = headers.merge(opts[:css_headers])
           opts[:js_headers]  = headers.merge(opts[:js_headers])
         end
-        opts[:css_headers]['Content-Type'] ||= "text/css; charset=UTF-8".freeze
-        opts[:js_headers]['Content-Type']  ||= "application/javascript; charset=UTF-8".freeze
+        opts[:css_headers][RodaResponseHeaders::CONTENT_TYPE] ||= "text/css; charset=UTF-8".freeze
+        opts[:js_headers][RodaResponseHeaders::CONTENT_TYPE]  ||= "application/javascript; charset=UTF-8".freeze
 
         [:css_headers, :js_headers, :css_opts, :js_opts, :dependencies, :expanded_dependencies].each do |s|
           opts[s].freeze
@@ -754,7 +754,7 @@ class Roda
             file = "#{o[:"compiled_#{type}_path"]}#{file}"
 
             if o[:gzip] && env['HTTP_ACCEPT_ENCODING'] =~ /\bgzip\b/
-              @_response['Content-Encoding'] = 'gzip'
+              @_response[RodaResponseHeaders::CONTENT_ENCODING] = 'gzip'
               file += '.gz'
             end
 

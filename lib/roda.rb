@@ -204,7 +204,7 @@ class Roda
 
                 alias set_default_headers set_default_headers
                 def set_default_headers
-                  @headers['Content-Type'] ||= 'text/html'
+                  @headers[RodaResponseHeaders::CONTENT_TYPE] ||= 'text/html'
                 end
               end
             end

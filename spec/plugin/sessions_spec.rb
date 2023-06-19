@@ -47,7 +47,7 @@ if RUBY_VERSION >= '2'
     end
 
     it "has session store data between requests" do
-      req('/').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"0"}, [""]]
+      req('/').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"0"}, [""]]
       body('/s/foo/bar').must_equal 'bar'
       body('/g/foo').must_equal 'bar'
 
@@ -61,7 +61,7 @@ if RUBY_VERSION >= '2'
     end
 
     it "supports loading sessions created when per_cookie_cipher_secret: #{!per_cookie_cipher_secret} " do
-      req('/').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"0"}, [""]]
+      req('/').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"0"}, [""]]
       body('/s/foo/bar').must_equal 'bar'
       body('/g/foo').must_equal 'bar'
 
@@ -84,27 +84,27 @@ if RUBY_VERSION >= '2'
     end
 
     it "does not add Set-Cookie header if session does not change, unless outside :skip_within seconds" do
-      req('/').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"0"}, [""]]
+      req('/').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"0"}, [""]]
       _, h, b = req('/s/foo/bar')
-      h['Set-Cookie'].must_match(/\Aroda.session/)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda.session/)
       b.must_equal ["bar"]
-      req('/g/foo').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"3"}, ["bar"]]
-      req('/s/foo/bar').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"3"}, ["bar"]]
+      req('/g/foo').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"3"}, ["bar"]]
+      req('/s/foo/bar').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"3"}, ["bar"]]
 
       _, h, b = req('/s/foo/baz')
-      h['Set-Cookie'].must_match(/\Aroda.session/)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda.session/)
       b.must_equal ["baz"]
-      req('/g/foo').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"3"}, ["baz"]]
+      req('/g/foo').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"3"}, ["baz"]]
 
-      req('/g/foo', 'QUERY_STRING'=>'sut=3500').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"3"}, ["baz"]]
+      req('/g/foo', 'QUERY_STRING'=>'sut=3500').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"3"}, ["baz"]]
       _, h, b = req('/g/foo', 'QUERY_STRING'=>'sut=3700')
-      h['Set-Cookie'].must_match(/\Aroda.session/)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda.session/)
       b.must_equal ["baz"]
 
       @app.plugin(:sessions, :skip_within=>3800)
-      req('/g/foo', 'QUERY_STRING'=>'sut=3700').must_equal [200, {"Content-Type"=>"text/html", "Content-Length"=>"3"}, ["baz"]]
+      req('/g/foo', 'QUERY_STRING'=>'sut=3700').must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>"text/html", RodaResponseHeaders::CONTENT_LENGTH=>"3"}, ["baz"]]
       _, h, b = req('/g/foo', 'QUERY_STRING'=>'sut=3900')
-      h['Set-Cookie'].must_match(/\Aroda.session/)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda.session/)
       b.must_equal ["baz"]
 
       errors.must_equal []
@@ -119,9 +119,9 @@ if RUBY_VERSION >= '2'
 
       # Parameters can come in any order, and only the final parameter may omit the ;
       ['roda.session=', 'max-age=0', 'path=/'].each do |param|
-        h['Set-Cookie'].must_match(/#{Regexp.escape(param)}(;|\z)/)
+        h[RodaResponseHeaders::SET_COOKIE].must_match(/#{Regexp.escape(param)}(;|\z)/)
       end
-      h['Set-Cookie'].must_match(/expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/)
 
       b.must_equal ['c']
 
@@ -138,9 +138,9 @@ if RUBY_VERSION >= '2'
 
       # Parameters can come in any order, and only the final parameter may omit the ;
       ['roda.session=', 'max-age=0', 'path=/'].each do |param|
-        h['Set-Cookie'].must_match(/#{Regexp.escape(param)}(;|\z)/)
+        h[RodaResponseHeaders::SET_COOKIE].must_match(/#{Regexp.escape(param)}(;|\z)/)
       end
-      h['Set-Cookie'].must_match(/expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/expires=Thu, 01 Jan 1970 00:00:00 (-0000|GMT)(;|\z)/)
 
       b.must_equal ['c']
 
@@ -161,23 +161,23 @@ if RUBY_VERSION >= '2'
     end
 
     it "should include HttpOnly and secure cookie options appropriately" do
-      h = header('Set-Cookie', '/s/foo/bar')
+      h = header(RodaResponseHeaders::SET_COOKIE, '/s/foo/bar')
       h.must_match(/; HttpOnly/i)
       h.wont_include('; secure')
 
-      h = header('Set-Cookie', '/s/foo/baz', 'HTTPS'=>'on')
+      h = header(RodaResponseHeaders::SET_COOKIE, '/s/foo/baz', 'HTTPS'=>'on')
       h.must_match(/; HttpOnly/i)
       h.must_include('; secure')
 
       @app.plugin(:sessions, :cookie_options=>{})
-      h = header('Set-Cookie', '/s/foo/bar')
+      h = header(RodaResponseHeaders::SET_COOKIE, '/s/foo/bar')
       h.must_match(/; HttpOnly/i)
       h.wont_include('; secure')
     end
 
     it "should merge :cookie_options options into the default cookie options" do
       @app.plugin(:sessions, :cookie_options=>{:secure=>true})
-      h = header('Set-Cookie', '/s/foo/bar')
+      h = header(RodaResponseHeaders::SET_COOKIE, '/s/foo/bar')
       h.must_match(/; HttpOnly/i)
       h.must_include('; path=/')
       h.must_include('; secure')
@@ -233,11 +233,11 @@ if RUBY_VERSION >= '2'
       b.must_equal ['bar2']
       _, h4, b = req("/s/foo/#{long}")
       b.must_equal [long]
-      h1['Set-Cookie'].length.must_equal h2['Set-Cookie'].length
-      h1['Set-Cookie'].wont_equal h2['Set-Cookie']
-      h1['Set-Cookie'].length.must_equal h3['Set-Cookie'].length
-      h1['Set-Cookie'].wont_equal h3['Set-Cookie']
-      h1['Set-Cookie'].length.wont_equal h4['Set-Cookie'].length
+      h1[RodaResponseHeaders::SET_COOKIE].length.must_equal h2[RodaResponseHeaders::SET_COOKIE].length
+      h1[RodaResponseHeaders::SET_COOKIE].wont_equal h2[RodaResponseHeaders::SET_COOKIE]
+      h1[RodaResponseHeaders::SET_COOKIE].length.must_equal h3[RodaResponseHeaders::SET_COOKIE].length
+      h1[RodaResponseHeaders::SET_COOKIE].wont_equal h3[RodaResponseHeaders::SET_COOKIE]
+      h1[RodaResponseHeaders::SET_COOKIE].length.wont_equal h4[RodaResponseHeaders::SET_COOKIE].length
 
       @app.plugin(:sessions, :pad_size=>256)
 
@@ -249,12 +249,12 @@ if RUBY_VERSION >= '2'
       b.must_equal ['bar2']
       _, h4, b = req("/s/foo/#{long}")
       b.must_equal [long]
-      h1['Set-Cookie'].length.must_equal h2['Set-Cookie'].length
-      h1['Set-Cookie'].wont_equal h2['Set-Cookie']
-      h1['Set-Cookie'].length.must_equal h3['Set-Cookie'].length
-      h1['Set-Cookie'].wont_equal h3['Set-Cookie']
-      h1['Set-Cookie'].length.must_equal h4['Set-Cookie'].length
-      h1['Set-Cookie'].wont_equal h3['Set-Cookie']
+      h1[RodaResponseHeaders::SET_COOKIE].length.must_equal h2[RodaResponseHeaders::SET_COOKIE].length
+      h1[RodaResponseHeaders::SET_COOKIE].wont_equal h2[RodaResponseHeaders::SET_COOKIE]
+      h1[RodaResponseHeaders::SET_COOKIE].length.must_equal h3[RodaResponseHeaders::SET_COOKIE].length
+      h1[RodaResponseHeaders::SET_COOKIE].wont_equal h3[RodaResponseHeaders::SET_COOKIE]
+      h1[RodaResponseHeaders::SET_COOKIE].length.must_equal h4[RodaResponseHeaders::SET_COOKIE].length
+      h1[RodaResponseHeaders::SET_COOKIE].wont_equal h4[RodaResponseHeaders::SET_COOKIE]
 
       @app.plugin(:sessions, :pad_size=>nil)
 
@@ -264,10 +264,10 @@ if RUBY_VERSION >= '2'
       b.must_equal ['bar']
       _, h3, b = req('/s/foo/bar2')
       b.must_equal ['bar2']
-      h1['Set-Cookie'].length.must_equal h2['Set-Cookie'].length
-      h1['Set-Cookie'].wont_equal h2['Set-Cookie']
+      h1[RodaResponseHeaders::SET_COOKIE].length.must_equal h2[RodaResponseHeaders::SET_COOKIE].length
+      h1[RodaResponseHeaders::SET_COOKIE].wont_equal h2[RodaResponseHeaders::SET_COOKIE]
       if !defined?(JRUBY_VERSION) || JRUBY_VERSION >= '9.2'
-        h1['Set-Cookie'].length.wont_equal h3['Set-Cookie'].length
+      h1[RodaResponseHeaders::SET_COOKIE].length.wont_equal h3[RodaResponseHeaders::SET_COOKIE].length
       end
 
       proc{@app.plugin(:sessions, :pad_size=>0)}.must_raise Roda::RodaError
@@ -398,11 +398,11 @@ if RUBY_VERSION >= '2'
       end
 
       _, h, b = req('/s/foo/bar')
-      (h['Set-Cookie'] =~ /\A(rack\.session=.*); path=\/; HttpOnly\z/i).must_equal 0
+      (h[RodaResponseHeaders::SET_COOKIE] =~ /\A(rack\.session=.*); path=\/; HttpOnly\z/i).must_equal 0
       c = $1
       b.must_equal ['bar']
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_be_nil
+      h[RodaResponseHeaders::SET_COOKIE].must_be_nil
       b.must_equal ['{:a=>"bar"}']
 
       @app.plugin :sessions, :secret=>'1'*64,
@@ -430,25 +430,25 @@ if RUBY_VERSION >= '2'
 
       @cookie = c
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
 
       @app.plugin :sessions, :cookie_options=>{:path=>'/foo'}, :upgrade_from_rack_session_cookie_options=>{}
       @cookie = c
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/foo; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/foo; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
 
       @app.plugin :sessions, :upgrade_from_rack_session_cookie_options=>{:path=>'/baz'}
       @cookie = c
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
 
       @app.plugin :sessions, :upgrade_from_rack_session_cookie_key=>'quux.session'
       @cookie = c.sub(/\Arack/, 'quux')
       _, h, b = req('/g/foo')
-      h['Set-Cookie'].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nquux\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
+      h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nquux\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
       b.must_equal ['{"a"=>"bar"}']
     end
   end if Rack.release < '2.3'
