@@ -47,7 +47,7 @@ describe "response #headers and #body" do
     header('UP').must_equal 'U'
     header('down').must_equal 'd'
     header('DOWN').must_equal 'd'
-  end if Rack.release >= '3'
+  end if Rack.release >= '3' && !ENV['PLAIN_HASH_RESPONSE_HEADERS']
 end
 
 describe "response #write" do
