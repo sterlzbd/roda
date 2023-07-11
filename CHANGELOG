@@ -1,4 +1,4 @@
-= master
+= 3.70.0 (2023-07-12)
 
 * Add plain_hash_response_headers plugin, using a plain hash for response headers on Rack 3 for much better performance (jeremyevans)
 
