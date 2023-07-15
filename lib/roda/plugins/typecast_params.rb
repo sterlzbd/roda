@@ -346,7 +346,7 @@ class Roda
         end
 
         # The reason behind this error.  If this error was caused by a conversion method,
-        # this will be the the conversion method symbol.  If this error was caused
+        # this will be the conversion method symbol.  If this error was caused
         # because a value was missing, then it will be +:missing+.  If this error was
         # caused because a value was not the correct type, then it will be +:invalid_type+.
         attr_accessor :reason
