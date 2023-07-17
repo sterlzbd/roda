@@ -6,4 +6,3 @@
 /spec/iv-*.erb
 /spec/pid-*
 /spec/render_coverage-*
-Gemfile.lock
