@@ -4,7 +4,9 @@
 class Roda
   module RodaPlugins
     # The match_hook plugin adds hooks that are called upon a successful match
-    # by any of the matchers.
+    # by any of the matchers.  The hooks do not take any arguments.  If you would
+    # like hooks that pass the arguments/matchers and values yielded to the route block,
+    # use the match_hook_args plugin.
     #
     #   plugin :match_hook
     #
