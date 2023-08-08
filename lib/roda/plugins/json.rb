@@ -52,6 +52,9 @@ class Roda
     # using the +:content_type+ option:
     #
     #   plugin :json, content_type: 'application/xml'
+    #
+    # This plugin depends on the custom_block_results plugin, and therefore does
+    # not support treating String, FalseClass, or NilClass values as JSON.
     module Json
       # Set the classes to automatically convert to JSON, and the serializer to use.
       def self.configure(app, opts=OPTS)
