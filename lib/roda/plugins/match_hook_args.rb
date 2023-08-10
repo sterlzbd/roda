@@ -14,23 +14,24 @@ class Roda
     #   end
     #
     #   # Term is an implicit matcher used for terminating matches, and
-    #   # will be included in the array of matchers yielded to match block
+    #   # will be included in the array of matchers yielded to the match hook 
     #   # if a terminating match is used.
     #   term = self.class::RodaRequest::TERM
     #
     #   route do |r|
     #     r.root do
+    #       # for a request for /
     #       # matchers: nil, block_args: nil
     #     end
     #
     #     r.on 'a', ['b', 'c'], Integer |segment, id|
-    #       # for a request for /a/b/1:
-    #       # matchers: ['a', ['b', 'c'], Integer], block_args: ['b', 1]
+    #       # for a request for /a/b/1
+    #       # matchers: ["a", ["b", "c"], Integer], block_args: ["b", 1]
     #     end
     #
     #     r.get 'd' |segment, id|
     #       # for a request for /d
-    #       # matchers: ['d', term], block_args: []
+    #       # matchers: ["d", term], block_args: []
     #     end
     #   end
     module MatchHookArgs
