@@ -21,7 +21,7 @@ end
 RDOC_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web toolkit']
 
 begin
-  gem 'hanna-nouveau'
+  gem 'hanna'
   RDOC_OPTS.concat(['-f', 'hanna'])
 rescue Gem::LoadError
 end
