@@ -24,12 +24,12 @@ class Roda
     #       # matchers: nil, block_args: nil
     #     end
     #
-    #     r.on 'a', ['b', 'c'], Integer |segment, id|
+    #     r.on 'a', ['b', 'c'], Integer do |segment, id|
     #       # for a request for /a/b/1
     #       # matchers: ["a", ["b", "c"], Integer], block_args: ["b", 1]
     #     end
     #
-    #     r.get 'd' |segment, id|
+    #     r.get 'd' do
     #       # for a request for /d
     #       # matchers: ["d", term], block_args: []
     #     end
