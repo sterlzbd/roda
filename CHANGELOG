@@ -1,4 +1,4 @@
-= master
+= 3.71.0 (2023-08-14)
 
 * Add match_hook_args plugin, similar to match_hooks but support matchers and block args as hook arguments (jeremyevans)
 
