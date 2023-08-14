@@ -1,5 +1,7 @@
 = master
 
+* Warn when defining method that expects 1 argument when block requires multiple arguments when :check_arity option is set to :warn (jeremyevans)
+
 * Implement the match_hooks plugin using the match_hook_args plugin (jeremyevans)
 
 = 3.71.0 (2023-08-14)
