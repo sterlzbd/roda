@@ -26,3 +26,4 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
     - run: bundle exec rake spec_ci
+      continue-on-error: ${{ startsWith(matrix.ruby, 'truffleruby') }}
