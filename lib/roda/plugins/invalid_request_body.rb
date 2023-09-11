@@ -35,7 +35,7 @@ class Roda
     #
     #   plugin :invalid_request_body do |exception|
     #     # To treat the exception raised as a submitted parameter
-    #     {body_error: e}
+    #     {body_error: exception}
     #   end
     module InvalidRequestBody
       # Exception class raised for invalid request bodies.
