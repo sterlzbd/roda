@@ -1,4 +1,4 @@
-= master
+= 3.72.0 (2023-09-12)
 
 * Add invalid_request_body plugin for custom handling of invalid request bodies (jeremyevans)
 
