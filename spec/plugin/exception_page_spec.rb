@@ -15,7 +15,7 @@ describe "exception_page plugin" do
     end
   end
 
-  message = RUBY_VERSION >= '3.2' ? "foo (RuntimeError)" : "foo"
+  message = Exception.method_defined?(:detailed_message) ? "foo (RuntimeError)" : "foo"
 
   it "returns HTML page with exception information if text/html is accepted" do
     ep_app
