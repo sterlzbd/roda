@@ -10,7 +10,6 @@ rescue OpenSSL::Cipher::CipherError
   # :nocov:
 end
 
-require 'base64'
 require 'json'
 require 'securerandom'
 require 'zlib'
@@ -169,6 +168,10 @@ class Roda
         hmac_secret = secret = secret.dup.force_encoding('BINARY')
         cipher_secret = secret.slice!(0, 32)
         [cipher_secret.freeze, hmac_secret.freeze]
+      end
+
+      def self.load_dependencies(app, opts=OPTS)
+        app.plugin :_base64
       end
 
       # Configure the plugin, see Sessions for details on options.
@@ -344,7 +347,7 @@ class Roda
           opts = roda_class.opts[:sessions]
 
           begin
-            data = Base64.urlsafe_decode64(data)
+            data = Base64_.urlsafe_decode64(data)
           rescue ArgumentError
             return _session_serialization_error("Unable to decode session: invalid base64")
           end
@@ -493,7 +496,7 @@ class Roda
           data << encrypted_data
           data << OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, opts[:hmac_secret], data+opts[:key])
 
-          data = Base64.urlsafe_encode64(data)
+          data = Base64_.urlsafe_encode64(data)
 
           if data.bytesize >= 4096
             raise CookieTooLarge, "attempted to create cookie larger than 4096 bytes"

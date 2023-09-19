@@ -1,4 +1,7 @@
 require_relative "../spec_helper"
+require_relative "../../lib/roda/plugins/_base64"
+
+base64 = Roda::RodaPlugins::Base64_
 
 if RUBY_VERSION >= '2'
 [true, false].each do |per_cookie_cipher_secret|
@@ -292,7 +295,7 @@ if RUBY_VERSION >= '2'
     end
 
     it "raises CookieTooLarge if cookie is too large" do
-      proc{req('/s/foo/'+Base64.urlsafe_encode64(SecureRandom.random_bytes(8192)))}.must_raise Roda::RodaPlugins::Sessions::CookieTooLarge
+      proc{req('/s/foo/'+base64.urlsafe_encode64(SecureRandom.random_bytes(8192)))}.must_raise Roda::RodaPlugins::Sessions::CookieTooLarge
     end
 
     it "ignores session cookies if session exceeds max time since create" do
@@ -348,23 +351,23 @@ if RUBY_VERSION >= '2'
       body('/g/foo').must_equal ''
       errors.must_equal ["Unable to decode session: invalid base64"]
 
-      @cookie = k+Base64.urlsafe_encode64('')
+      @cookie = k+base64.urlsafe_encode64('')
       body('/g/foo').must_equal ''
       errors.must_equal ["Unable to decode session: no data"]
 
-      @cookie = k+Base64.urlsafe_encode64("\0" * 60)
+      @cookie = k+base64.urlsafe_encode64("\0" * 60)
       body('/g/foo').must_equal ''
       errors.must_equal ["Unable to decode session: data too short"]
 
-      @cookie = k+Base64.urlsafe_encode64("\1" * 92)
+      @cookie = k+base64.urlsafe_encode64("\1" * 92)
       body('/g/foo').must_equal ''
       errors.must_equal ["Unable to decode session: data too short"]
 
-      @cookie = k+Base64.urlsafe_encode64('1'*75)
+      @cookie = k+base64.urlsafe_encode64('1'*75)
       body('/g/foo').must_equal ''
       errors.must_equal ["Unable to decode session: version marker unsupported"]
 
-      @cookie = k+Base64.urlsafe_encode64("\0"*75)
+      @cookie = k+base64.urlsafe_encode64("\0"*75)
       body('/g/foo').must_equal ''
       errors.must_equal ["Not decoding session: HMAC invalid"]
     end

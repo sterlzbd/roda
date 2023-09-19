@@ -1,3 +1,7 @@
+= master
+
+* Remove dependency on base64 library from sessions and route_csrf plugin, as it will not be part of the standard library in Ruby 3.4+ (jeremyevans)
+
 = 3.72.0 (2023-09-12)
 
 * Add invalid_request_body plugin for custom handling of invalid request bodies (jeremyevans)

@@ -1,6 +1,5 @@
 # frozen-string-literal: true
 
-require 'base64'
 require 'openssl'
 require 'securerandom'
 require 'uri'
@@ -163,6 +162,10 @@ class Roda
       # a valid CSRF token was not provided.
       class InvalidToken < RodaError; end
 
+      def self.load_dependencies(app, opts=OPTS)
+        app.plugin :_base64
+      end
+
       def self.configure(app, opts=OPTS, &block)
         options = app.opts[:route_csrf] = (app.opts[:route_csrf] || DEFAULTS).merge(opts)
         if block || opts[:csrf_failure].is_a?(Proc)
@@ -260,7 +263,7 @@ class Roda
         def csrf_token(path=nil, method=('POST' if path))
           token = SecureRandom.random_bytes(31)
           token << csrf_hmac(token, method, path)
-          Base64.strict_encode64(token)
+          [token].pack("m0")
         end
 
         # Whether request-specific CSRF tokens should be used by default.
@@ -314,7 +317,7 @@ class Roda
           end
 
           begin
-            submitted_hmac = Base64.strict_decode64(encoded_token)
+            submitted_hmac = Base64_.decode64(encoded_token)
           rescue ArgumentError
             return "encoded token is not valid base64"
           end
@@ -354,7 +357,7 @@ class Roda
         # JSON is used for session serialization).
         def csrf_secret
           key = session[csrf_options[:key]] ||= SecureRandom.base64(32)
-          Base64.strict_decode64(key)
+          Base64_.decode64(key)
         end
       end
     end
