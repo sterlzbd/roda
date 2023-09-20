@@ -24,13 +24,7 @@ class Roda
         end
 
         def urlsafe_decode64(str)
-          if str.length % 4 == 0
-            str = str.tr("-_", "+/")
-          else
-            str = str.ljust((str.length + 3) & ~3, "=")
-            str.tr!("-_", "+/")
-          end
-          decode64(str)
+          decode64(str.tr("-_", "+/"))
         end
       end
     end
