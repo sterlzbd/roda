@@ -1,5 +1,7 @@
 = master
 
+* Support :next_if_not_found option for middleware plugin (jeremyevans) (#334)
+
 * Remove dependency on base64 library from sessions and route_csrf plugin, as it will not be part of the standard library in Ruby 3.4+ (jeremyevans)
 
 = 3.72.0 (2023-09-12)

@@ -326,4 +326,33 @@ describe "middleware plugin" do
     body('/a', 'REQUEST_METHOD'=>'PATCH').must_equal 'a2'
     body('/b', 'REQUEST_METHOD'=>'PATCH').must_equal 'b1'
   end
+
+  it "supports :next_if_not_found plugin option" do
+    a2 = app(:bare) do
+      plugin :middleware, :next_if_not_found=>true
+
+      route do |r|
+        r.on "a" do
+          r.is "b" do
+            'a-b'
+          end
+        end
+      end
+    end
+
+    app(:bare) do
+      use a2
+
+      route do |r|
+        r.on 'a' do
+          'a'
+        end
+        'c'
+      end
+    end
+
+    body('/a').must_equal 'a'
+    body('/a/b').must_equal 'a-b'
+    body('/d').must_equal 'c'
+  end
 end
