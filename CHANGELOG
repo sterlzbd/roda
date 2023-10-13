@@ -1,4 +1,4 @@
-= master
+= 3.73.0 (2023-10-13)
 
 * Support :next_if_not_found option for middleware plugin (jeremyevans) (#334)
 
