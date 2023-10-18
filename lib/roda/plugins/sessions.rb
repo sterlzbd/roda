@@ -40,7 +40,8 @@ class Roda
     #
     # Session secrets can be rotated.  See options below.
     #
-    # The sessions plugin can transparently upgrade sessions from Rack::Session::Cookie
+    # The sessions plugin can transparently upgrade sessions from versions of Rack::Session::Cookie
+    # shipped with Rack before Rack 3,
     # if the default Rack::Session::Cookie coder and HMAC are used, see options below.
     # It is recommended to only enable transparent upgrades for a brief transition period,
     # and remove support for them once old sessions have converted or timed out.

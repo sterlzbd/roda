@@ -851,9 +851,8 @@ should use an appropriate external middleware.
 It is possible to use other session cookie middleware such as
 <tt>Rack::Session::Cookie</tt>, but other middleware may not have the same security
 features that Roda's session support does.  For example, the session cookies used by
-the <tt>Rack::Session::Cookie</tt> middleware are not encrypted, just signed to
-prevent tampering.  This means you should not store any secret data in the session
-when using <tt>Rack::Session::Cookie</tt>.
+the <tt>Rack::Session::Cookie</tt> middleware are not encrypted in older versions of
+Rack, just signed to prevent tampering.
 
 For any cookie-based sessions, make sure that the necessary secrets (+:secret+ option)
 are not disclosed to an attacker.  Knowledge of the

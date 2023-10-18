@@ -22,9 +22,11 @@ class Roda
     # and request path even if they have access to a token that is not
     # specific to request method and request path.  To get this security
     # benefit, you must ensure an attacker does not have access to the
-    # session.  Rack::Session::Cookie uses signed sessions, not encrypted
+    # session.  Rack::Session::Cookie versions shipped with Rack before
+    # Rack 3 use signed sessions, not encrypted
     # sessions, so if the attacker has the ability to read cookie data
-    # and you are using Rack::Session::Cookie, it will still be possible
+    # and you are using one of those Rack::Session::Cookie versions,
+    # it will still be possible
     # for an attacker to generate valid CSRF tokens specific to arbitrary
     # request method and request path.  Roda's session plugin uses
     # encrypted sessions and therefore is safe even if the attacker can
