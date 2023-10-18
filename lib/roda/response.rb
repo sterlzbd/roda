@@ -10,19 +10,15 @@ class Roda
   # headers used internally by Roda can be lower case on Rack 3, so that it is
   # possible to use a plain hash of response headers instead of using Rack::Headers.
   module RodaResponseHeaders
-    headers = %w'Allow Cache-Control Content-Disposition Content-Encoding Content-Length
-       Content-Security-Policy Content-Security-Policy-Report-Only Content-Type
-       ETag Expires Last-Modified Link Location Set-Cookie Transfer-Encoding Vary'.freeze.each(&:freeze)
+    downcase = defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
 
-    if defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
-      headers.each do |mixed_case|
-        const_set(mixed_case.gsub('-', '_').upcase!.to_sym, mixed_case.downcase.freeze)
+    %w'Allow Cache-Control Content-Disposition Content-Encoding Content-Length
+       Content-Security-Policy Content-Security-Policy-Report-Only Content-Type
+       ETag Expires Last-Modified Link Location Set-Cookie Transfer-Encoding Vary'.
+      each do |value|
+        value = value.downcase if downcase
+        const_set(value.gsub('-', '_').upcase!.to_sym, value.freeze)
       end
-    else
-      headers.each do |mixed_case|
-        const_set(mixed_case.gsub('-', '_').upcase!.to_sym, mixed_case.freeze)
-      end
-    end
   end
 
   # Base class used for Roda responses.  The instance methods for this
