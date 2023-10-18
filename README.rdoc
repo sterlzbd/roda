@@ -959,7 +959,8 @@ application level using using the +default_headers+ plugin:
 Strict-Transport-Security :: Enforces SSL/TLS Connections to the application.
 X-Content-Type-Options :: Forces some browsers to respect a declared Content-Type header.
 X-Frame-Options :: Provides click-jacking protection by not allowing usage inside a frame.
-X-XSS-Protection :: Enables an XSS mitigation filter in some browsers.
+                   Only include this if you want to support and protect old browsers that
+                   do not support Content-Security-Policy.
 
 Example:
 
@@ -968,8 +969,7 @@ Example:
       'Content-Type'=>'text/html',
       'Strict-Transport-Security'=>'max-age=63072000; includeSubDomains',
       'X-Content-Type-Options'=>'nosniff',
-      'X-Frame-Options'=>'deny',
-      'X-XSS-Protection'=>'1; mode=block'
+      'X-Frame-Options'=>'deny'
   end
 
 === Rendering Templates Derived From User Input
