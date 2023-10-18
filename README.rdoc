@@ -851,8 +851,8 @@ should use an appropriate external middleware.
 It is possible to use other session cookie middleware such as
 <tt>Rack::Session::Cookie</tt>, but other middleware may not have the same security
 features that Roda's session support does.  For example, the session cookies used by
-the <tt>Rack::Session::Cookie</tt> middleware are not encrypted in older versions of
-Rack, just signed to prevent tampering.
+the <tt>Rack::Session::Cookie</tt> middleware provided by Rack before Rack 3 are not
+encrypted, just signed to prevent tampering.
 
 For any cookie-based sessions, make sure that the necessary secrets (+:secret+ option)
 are not disclosed to an attacker.  Knowledge of the
@@ -966,7 +966,7 @@ Example:
   class App < Roda
     plugin :default_headers,
       'Content-Type'=>'text/html',
-      'Strict-Transport-Security'=>'max-age=16070400;',
+      'Strict-Transport-Security'=>'max-age=63072000; includeSubDomains',
       'X-Content-Type-Options'=>'nosniff',
       'X-Frame-Options'=>'deny',
       'X-XSS-Protection'=>'1; mode=block'
