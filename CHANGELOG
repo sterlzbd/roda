@@ -1,3 +1,7 @@
+= master
+
+* Add cookie_flags plugin, for overriding, warning, or raising for incorrect cookie flags (jeremyevans)
+
 = 3.74.0 (2023-11-13)
 
 * Add redirect_http_to_https plugin, helping to ensure future requests from the browser are submitted via HTTPS (jeremyevans)
