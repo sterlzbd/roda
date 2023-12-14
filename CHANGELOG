@@ -1,4 +1,4 @@
-= master
+= 3.75.0 (2023-12-14)
 
 * Add cookie_flags plugin, for overriding, warning, or raising for incorrect cookie flags (jeremyevans)
 
