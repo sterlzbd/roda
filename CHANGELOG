@@ -1,3 +1,7 @@
+= master
+
+* Add break plugin, for using break inside a routing block to return from the block and keep routing (jeremyevans)
+
 = 3.75.0 (2023-12-14)
 
 * Add cookie_flags plugin, for overriding, warning, or raising for incorrect cookie flags (jeremyevans)
