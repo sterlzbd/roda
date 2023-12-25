@@ -138,6 +138,26 @@ describe "middleware plugin" do
     body.must_equal 'a'
   end
 
+  it "sets temporary name of the subclass" do
+    app(:middleware) do |r|
+      r.get{self.class.name || "anonymous"}
+    end
+    a = app
+    app(:bare) do
+      use a
+      route {}
+    end
+    body.must_equal 'anonymous'
+
+    Object.const_set(:MyApp, a)
+    app(:bare) do
+      use a
+      route {}
+    end
+    body.must_equal 'MyApp(middleware)'
+    Object.send(:remove_const, :MyApp)
+  end if RUBY_VERSION >= "3.3"
+
   it "should raise error if attempting to use options for Roda application that does not support configurable middleware" do
     a1 = app(:bare){plugin :middleware}
     proc{app(:bare){use a1, :foo; route{}; build_rack_app}}.must_raise Roda::RodaError
