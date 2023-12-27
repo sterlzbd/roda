@@ -149,13 +149,16 @@ describe "middleware plugin" do
     end
     body.must_equal 'anonymous'
 
-    Object.const_set(:MyApp, a)
-    app(:bare) do
-      use a
-      route {}
+    begin
+      Object.const_set(:MyApp, a)
+      app(:bare) do
+        use a
+        route {}
+      end
+      body.must_equal 'MyApp(middleware)'
+    ensure
+      Object.send(:remove_const, :MyApp)
     end
-    body.must_equal 'MyApp(middleware)'
-    Object.send(:remove_const, :MyApp)
   end if RUBY_VERSION >= "3.3"
 
   it "should raise error if attempting to use options for Roda application that does not support configurable middleware" do
