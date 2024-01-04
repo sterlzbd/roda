@@ -1,5 +1,7 @@
 = master
 
+* Support :filter plugin option in error_mail and error_email for filtering parameters, environment variables, and session values (jeremyevans) (#346)
+
 * Set temporary name on Ruby 3.3 in middleware plugin for middleware class created (janko) (#344)
 
 * Add break plugin, for using break inside a routing block to return from the block and keep routing (jeremyevans)
