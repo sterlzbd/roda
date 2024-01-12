@@ -1,4 +1,4 @@
-= master
+= 3.76.0 (2024-01-12)
 
 * Support :filter plugin option in error_mail and error_email for filtering parameters, environment variables, and session values (jeremyevans) (#346)
 
