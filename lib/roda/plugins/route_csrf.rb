@@ -86,6 +86,10 @@ class Roda
     #                         override any of the plugin options for this specific call.
     #                         The :token option can be used to specify the provided CSRF token
     #                         (instead of looking for the token in the submitted parameters).
+    # csrf_formaction_tag(path, method='POST') :: An HTML hidden input tag string containing the CSRF token, suitable
+    #                                             for placing in an HTML form that has inputs that use formaction
+    #                                             attributes to change the endpoint to which the form is submitted.
+    #                                             Takes the same arguments as csrf_token.
     # csrf_field :: The field name to use for the hidden tag containing the CSRF token.
     # csrf_path(action) :: This takes an argument that would be the value of the HTML form's
     #                      action attribute, and returns a path you can pass to csrf_token
@@ -152,6 +156,7 @@ class Roda
       # Default CSRF option values
       DEFAULTS = {
         :field => '_csrf'.freeze,
+        :formaction_field => '_csrfs'.freeze,
         :header => 'X-CSRF-Token'.freeze,
         :key => '_roda_csrf_secret'.freeze,
         :require_request_specific_tokens => true,
@@ -252,6 +257,14 @@ class Roda
           end
         end
 
+        # An HTML hidden input tag string containing the CSRF token, used for inputs
+        # with formaction, so the same form can be used to submit to multiple endpoints
+        # depending on which button was clicked.  See csrf_token for arguments, but the
+        # path argument is required.
+        def csrf_formaction_tag(path, *args)
+          "<input type=\"hidden\" name=\"#{csrf_options[:formaction_field]}[#{Rack::Utils.escape_html(path)}]\" value=\"#{csrf_token(path, *args)}\" \/>"
+        end
+
         # An HTML hidden input tag string containing the CSRF token.  See csrf_token for
         # arguments.
         def csrf_tag(*args)
@@ -291,6 +304,8 @@ class Roda
             return
           end
 
+          path = @_request.path
+
           unless encoded_token = opts[:token]
             encoded_token = case opts[:check_header]
             when :only
@@ -298,7 +313,8 @@ class Roda
             when true
               return (csrf_invalid_message(opts.merge(:check_header=>false)) && csrf_invalid_message(opts.merge(:check_header=>:only)))
             else
-              @_request.params[opts[:field]]
+              params = @_request.params
+              ((formactions = params[opts[:formaction_field]]).is_a?(Hash) && (formactions[path])) || params[opts[:field]]
             end
           end
 
@@ -326,7 +342,7 @@ class Roda
 
           random_data = submitted_hmac.slice!(0...31)
 
-          if csrf_compare(csrf_hmac(random_data, method, @_request.path), submitted_hmac)
+          if csrf_compare(csrf_hmac(random_data, method, path), submitted_hmac)
             return
           end
 
