@@ -42,6 +42,9 @@ class Roda
     # This plugin supports the following options:
     #
     # :field :: Form input parameter name for CSRF token (default: '_csrf')
+    # :formaction_field :: Form input parameter name for path-specific CSRF tokens (used by the
+    #                      +csrf_formaction_tag+ method).  If present, this parameter should be
+    #                      submitted as a hash, keyed by path, with CSRF token values.
     # :header :: HTTP header name for CSRF token (default: 'X-CSRF-Token')
     # :key :: Session key for CSRF secret (default: '_roda_csrf_secret')
     # :require_request_specific_tokens :: Whether request-specific tokens are required (default: true).
