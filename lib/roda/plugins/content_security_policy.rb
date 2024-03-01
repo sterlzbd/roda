@@ -89,7 +89,7 @@ class Roda
     #   content_security_policy.add_script_src 'example.com', [:nonce, 'foobarbaz']
     #   # script-src 'self' 'unsafe-eval' example.com 'nonce-foobarbaz'; 
     #
-    #   content_security_policy.get_script_src 'example.com', [:nonce, 'foobarbaz']
+    #   content_security_policy.get_script_src
     #   # => [:self, :unsafe_eval, 'example.com', [:nonce, 'foobarbaz']]
     #
     # The clear method can be used to remove all settings from the policy.
