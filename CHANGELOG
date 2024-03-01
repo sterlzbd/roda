@@ -1,3 +1,7 @@
+= master
+
+* Add permissions_policy plugin for setting Permissions-Policy header (jeremyevans)
+
 = 3.77.0 (2024-02-12)
 
 * Support formaction/formmethod attributes in forms in route_csrf plugin (jeremyevans)

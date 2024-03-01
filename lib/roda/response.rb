@@ -14,7 +14,8 @@ class Roda
 
     %w'Allow Cache-Control Content-Disposition Content-Encoding Content-Length
        Content-Security-Policy Content-Security-Policy-Report-Only Content-Type
-       ETag Expires Last-Modified Link Location Set-Cookie Transfer-Encoding Vary'.
+       ETag Expires Last-Modified Link Location Set-Cookie Transfer-Encoding Vary
+       Permissions-Policy Permissions-Policy-Report-Only'.
       each do |value|
         value = value.downcase if downcase
         const_set(value.gsub('-', '_').upcase!.to_sym, value.freeze)
