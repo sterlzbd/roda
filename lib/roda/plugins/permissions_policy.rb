@@ -3,17 +3,17 @@
 #
 class Roda
   module RodaPlugins
-    # The permissions_policy plugin allows you to easily set a Permissions-Policy
-    # header for the application, which Chrome-based browsers will use to determine
-    # whether to allow access for specific type of requests (mainly related to which
-    # JavaScript APIs the page is allowed to use).
+    # A permissions_policy plugin has been added that allows you to easily set a
+    # Permissions-Policy header for the application, which browsers can use to
+    # determine whether to allow specific functionality on the returned page
+    # (mainly related to which JavaScript APIs the page is allowed to use).
     #
     # You would generally call the plugin with a block to set the default policy:
     #
     #   plugin :permissions_policy do |pp|
     #     pp.camera :none
     #     pp.fullscreen :self
-    #     pp.clipboard-read :self, 'https://example.com'
+    #     pp.clipboard_read :self, 'https://example.com'
     #   end
     #
     # Then, anywhere in the routing tree, you can customize the policy for just that
@@ -91,6 +91,8 @@ class Roda
     # any array of strings/:self/:src).
     #
     #   permissions_policy.fullscreen :self, 'https://example.com'
+    #   # fullscreen (self "https://example.com")
+    #
     #   permissions_policy.add_fullscreen 'https://*.example.com'
     #   # fullscreen (self "https://example.com" "https://*.example.com")
     #
