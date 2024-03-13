@@ -1,4 +1,4 @@
-= master
+= 3.78.0 (2024-03-13)
 
 * Add permissions_policy plugin for setting Permissions-Policy header (jeremyevans)
 
