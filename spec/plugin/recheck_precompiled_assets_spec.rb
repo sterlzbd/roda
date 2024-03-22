@@ -18,7 +18,7 @@ begin
 end
 
 if run_tests
-  pid_dir = "spec/assets/#{$$}"
+  pid_dir = "spec/pid-#{$$}"
   assets_dir = File.join(pid_dir, "tmp")
   metadata_file = File.expand_path(File.join(assets_dir, 'precompiled.json'))
   describe 'recheck_precompiled_assets plugin' do
