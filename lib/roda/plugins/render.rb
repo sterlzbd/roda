@@ -335,8 +335,13 @@ class Roda
         # If the template file exists and the modification time has
         # changed, rebuild the template file, then call render on it.
         def render(*args, &block)
-          modified?
-          @template.render(*args, &block)
+          res = nil
+          modified = false
+          if_modified do
+            res = @template.render(*args, &block)
+            modified = true
+          end
+          modified ? res : @template.render(*args, &block)
         end
 
         # Return when the template was last modified.  If the template depends on any
@@ -352,20 +357,18 @@ class Roda
 
         # If the template file has been updated, return true and update
         # the template object and the modification time. Other return false.
-        def modified?
+        def if_modified
           begin
             mtime = template_last_modified
           rescue
             # ignore errors
           else
             if mtime != @mtime
-              @mtime = mtime
               reset_template
-              return true
+              yield
+              @mtime = mtime
             end
           end
-
-          false
         end
 
         if COMPILED_METHOD_SUPPORT
@@ -375,13 +378,13 @@ class Roda
             mod = roda_class::RodaCompiledTemplates
             internal_method_name = :"_#{method_name}"
             begin
-              mod.send(:define_method, internal_method_name, send(:compiled_method, locals_keys, roda_class))
+              mod.send(:define_method, internal_method_name, compiled_method(locals_keys, roda_class))
             rescue ::NotImplementedError
               return false
             end
 
             mod.send(:private, internal_method_name)
-            mod.send(:define_method, method_name, &compiled_method_lambda(self, roda_class, internal_method_name, locals_keys))
+            mod.send(:define_method, method_name, &compiled_method_lambda(roda_class, internal_method_name, locals_keys))
             mod.send(:private, method_name)
 
             method_name
@@ -397,10 +400,11 @@ class Roda
           # Return the lambda used to define the compiled template method.  This
           # is separated into its own method so the lambda does not capture any
           # unnecessary local variables
-          def compiled_method_lambda(template, roda_class, method_name, locals_keys=EMPTY_ARRAY)
+          def compiled_method_lambda(roda_class, method_name, locals_keys=EMPTY_ARRAY)
             mod = roda_class::RodaCompiledTemplates
+            template = self
             lambda do |locals, &block|
-              if template.modified?
+              template.if_modified do
                 mod.send(:define_method, method_name, Render.tilt_template_compiled_method(template, locals_keys, roda_class))
                 mod.send(:private, method_name)
               end

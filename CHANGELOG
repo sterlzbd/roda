@@ -1,5 +1,7 @@
 = master
 
+* Do not update template mtime when there is an error reloading templates in the render plugin (jeremyevans)
+
 * Add hmac_paths plugin for preventing path enumeration and supporting access control (jeremyevans)
 
 = 3.78.0 (2024-03-13)
