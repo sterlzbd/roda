@@ -1,3 +1,7 @@
+= master
+
+* Support :namespace option in hmac_paths plugin, allowing for easy per-user/per-group HMAC paths (jeremyevans)
+
 = 3.79.0 (2024-04-12)
 
 * Do not update template mtime when there is an error reloading templates in the render plugin (jeremyevans)
