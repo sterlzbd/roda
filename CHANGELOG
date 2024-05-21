@@ -1,3 +1,7 @@
+= master
+
+* Support :until and :seconds option in hmac_paths plugin, for paths valid only until a specific time (jeremyevans)
+
 = 3.80.0 (2024-05-10)
 
 * Support :namespace option in hmac_paths plugin, allowing for easy per-user/per-group HMAC paths (jeremyevans)

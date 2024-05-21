@@ -112,6 +112,16 @@ class Roda
     # this for POST requests (or other HTTP verbs that can have request bodies), use +r.GET+
     # instead of +r.params+ to specifically check query string parameters.
     #
+    # The generated paths can be timestamped, so that they are only valid until a given time
+    # or for a given number of seconds after they are generated, using the :until or :seconds
+    # options:
+    #
+    #   hmac_path('/widget/1', until: Time.utc(2100))
+    #   # =>  "/dc8b6e56e4cbe7815df7880d42f0e02956b2e4c49881b6060ceb0e49745a540d/t/4102444800/widget/1"
+    #
+    #   hmac_path('/widget/1', seconds: Time.utc(2100).to_i - Time.now.to_i)
+    #   # =>  "/dc8b6e56e4cbe7815df7880d42f0e02956b2e4c49881b6060ceb0e49745a540d/t/4102444800/widget/1"
+    #
     # The :namespace option, if provided, should be a string, and it modifies the generated HMACs
     # to only match those in the same namespace.  This can be used to provide different paths to
     # different users or groups of users.
@@ -190,6 +200,11 @@ class Roda
     #  r.hmac_path('/1', params: {k: 2})
     #  HMAC_hex(HMAC_hex(secret, ''), '/p/1?k=2')
     #
+    # The +:until+ and +:seconds+ option include the timestamp in the HMAC:
+    #
+    #  r.hmac_path('/1', until: Time.utc(2100))
+    #  HMAC_hex(HMAC_hex(secret, ''), '/t/4102444800/1')
+    #
     # If a +:namespace+ option is provided, the original secret used before the +:root+ option is
     # an HMAC of the +:secret+ plugin option and the given namespace.
     # 
@@ -232,6 +247,8 @@ class Roda
         #          the already matched path of the routing tree using r.hmac_path. Defaults
         #          to the empty string, which will returns paths valid for r.hmac_path at
         #          the top level of the routing tree.
+        # :seconds :: Make the given path valid for the given integer number of seconds.
+        # :until :: Make the given path valid until the given Time.
         def hmac_path(path, opts=OPTS)
           unless path.is_a?(String) && path.getbyte(0) == 47
             raise RodaError, "path must be a string starting with /"
@@ -240,6 +257,12 @@ class Roda
           root = opts[:root] || ''
           unless root.is_a?(String) && ((root_byte = root.getbyte(0)) == 47 || root_byte == nil)
             raise RodaError, "root must be empty string or string starting with /"
+          end
+
+          if valid_until = opts[:until]
+            valid_until = valid_until.to_i
+          elsif seconds = opts[:seconds]
+            valid_until = Time.now.to_i + seconds
           end
 
           flags = String.new
@@ -256,6 +279,11 @@ class Roda
 
           if hmac_path_namespace(opts)
             flags << 'n'
+          end
+
+          if valid_until
+            flags << 't'
+            path = "/#{valid_until}#{path}"
           end
 
           flags << '0' if flags.empty?
@@ -335,7 +363,19 @@ class Roda
                   end
 
                   if hmac_path_valid?(mpath, rpath, submitted_hmac, opts)
-                    always(&block)
+                    if flags.include?('t')
+                      on Integer do |int|
+                        if int >= Time.now.to_i
+                          always(&block)
+                        else
+                          # Return from method without matching
+                          @remaining_path = orig_path
+                          return
+                        end
+                      end
+                    else
+                      always(&block)
+                    end
                   end
                 end
 

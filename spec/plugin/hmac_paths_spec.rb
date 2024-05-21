@@ -94,13 +94,46 @@ describe "hmac_paths plugin" do
     body.must_equal "/503907ffeb039fa93b0e6d0728d30c2fef4b10d655aef6e1ac23347b2159443c/p/1?foo=bar"
   end
 
-  it "hmac_path HMAC depends on :query option" do
+  it "hmac_path HMAC depends on :params option" do
     hmac_paths_app do |r|
       r.get('a'){hmac_path('/1', params: {bar: :foo})}
       hmac_path('/1', params: {foo: :bar})
     end
     body.must_equal "/503907ffeb039fa93b0e6d0728d30c2fef4b10d655aef6e1ac23347b2159443c/p/1?foo=bar"
     body('/a').must_equal "/1785c857e23dfd04c127162d292f557cd2db4b0a6ac9c39515c85ce9ff404165/p/1?bar=foo"
+  end
+
+  it "hmac_path sets t flag for :seconds and :until options" do
+    t = Time.utc(2100).to_i
+    seconds = t - Time.now.to_i
+    hmac_paths_app do |r|
+      r.get('s'){hmac_path('/1', seconds: seconds)}
+      hmac_path('/1', until: 3)
+    end
+    body.must_equal "/78a56ddf0e081ca127ab1bc704c8a4d5e7e62ccf327dec5c3189a5c72057334c/t/3/1"
+    body('/s').must_equal "/64e31560c6df065b6116599c370aca918cfcbde092724b94f2770192ae513a28/t/#{t}/1"
+  end
+
+  it "hmac_path HMAC depends on :seconds and :until options" do
+    t = Time.utc(2100).to_i
+    seconds = t - Time.now.to_i
+    hmac_paths_app do |r|
+      r.on(Integer) do |v|
+        r.get('s'){hmac_path('/1', seconds: seconds - v)}
+        hmac_path('/1', until: v)
+      end
+    end
+    body('/3').must_equal "/78a56ddf0e081ca127ab1bc704c8a4d5e7e62ccf327dec5c3189a5c72057334c/t/3/1"
+    body('/3/s').must_equal "/9ffb7ce6b6ae76664aeebc53955c7c1d8d09e6908a512a6b5f22e7a24fffdc15/t/#{t-3}/1"
+    body('/4').must_equal "/f04e6d0571e2f3322bfa03b4b251070b7cdbde1004726fd69ded8cb40d1fb4ae/t/4/1"
+    body('/4/s').must_equal "/ecc641d021a3cccd6f3931e41f75f3bbdc9b05791b0ac939278b306e40571c86/t/#{t-4}/1"
+  end
+
+  it "hmac_path gives priority to :until option over seconds option" do
+    hmac_paths_app do |r|
+      hmac_path('/1', until: 3, seconds: 2)
+    end
+    body.must_equal "/78a56ddf0e081ca127ab1bc704c8a4d5e7e62ccf327dec5c3189a5c72057334c/t/3/1"
   end
 
   it "hmac_path HMAC depends on :namespace option" do
@@ -349,6 +382,21 @@ describe "hmac_paths plugin" do
     status(p2, 'QUERY_STRING'=>qs1).must_equal 404
   end
 
+  it "r.hmac_path yields if the path is timestamped, hmac matches, and before the timestamp" do
+    hmac_paths_app{|r| r.hmac_path{r.remaining_path}}
+    body('/ecc641d021a3cccd6f3931e41f75f3bbdc9b05791b0ac939278b306e40571c86/t/4102444796/1').must_equal '/1'
+  end
+
+  it "r.hmac_path does not yield if the path is timestamped, hmac matches, and not before the timestamp" do
+    hmac_paths_app{|r| r.hmac_path{r.remaining_path}}
+    status("/78a56ddf0e081ca127ab1bc704c8a4d5e7e62ccf327dec5c3189a5c72057334c/t/3/1").must_equal 404
+  end
+
+  it "r.hmac_path does not yield if the path is timestamped and hmac does not match" do
+    hmac_paths_app{|r| r.hmac_path{r.remaining_path}}
+    status('/ecc641d021a3cccd6f3931e41f75f3bbdc9b05791b0ac939278b306e40571c85/t/4102444796/1').must_equal 404
+  end
+
   it "r.hmac_path yields if there is a namespace provided and required and it matches" do
     hmac_paths_app{|r| r.hmac_path(namespace: r.GET['ns']){r.remaining_path}}
     body('/4ac78addcebf8b8e00c901e127934c6e4dd4ac0b76dcc9d837099bea01afd777/n/1', 'QUERY_STRING'=>'ns=1').must_equal '/1'
@@ -591,6 +639,14 @@ describe "hmac_paths plugin" do
           hmac_path(r.remaining_path, params: {k=>v})
         end
 
+        r.on 'until' do
+          hmac_path(r.remaining_path, until: Time.utc(2100))
+        end
+
+        r.on 'seconds' do
+          hmac_path(r.remaining_path, seconds: Time.utc(2100).to_i - Time.now.to_i)
+        end
+
         r.on 'namespace', String do |ns|
           hmac_path(r.remaining_path, namespace: ns)
         end
@@ -608,6 +664,8 @@ describe "hmac_paths plugin" do
     body('/root/foobar/1').must_equal "/foobar/c5fdaf482771d4f9f38cc13a1b2832929026a4ceb05e98ed6a0cd5a00bf180b7/0/1"
     body('/method/get/widget/1').must_equal "/d38c1e634ecf9a3c0ab9d0832555b035d91b35069efcbf2670b0dfefd4b62fdd/m/widget/1"
     body('/params/foo/bar/widget/1').must_equal "/fe8d03f9572d5af6c2866295bd3c12c2ea11d290b1cbd016c3b68ee36a678139/p/widget/1?foo=bar"
+    body('/until/widget/1').must_equal "/dc8b6e56e4cbe7815df7880d42f0e02956b2e4c49881b6060ceb0e49745a540d/t/4102444800/widget/1"
+    body('/seconds/widget/1').must_equal "/dc8b6e56e4cbe7815df7880d42f0e02956b2e4c49881b6060ceb0e49745a540d/t/4102444800/widget/1"
     body('/namespace/1/widget/1').must_equal "/3793ac2a72ea399c40cbd63f154d19f0fe34cdf8d347772134c506a0b756d590/n/widget/1"
     body('/namespace/2/widget/1').must_equal "/0e1e748860d4fd17fe9b7c8259b1e26996502c38e465f802c2c9a0a13000087c/n/widget/1"
     body('/all/widget/get/foo/bar/1/1').must_equal "/widget/c14c78a81d34d766cf334a3ddbb7a6b231bc2092ef50a77ded0028586027b14e/mpn/1?foo=bar"
