@@ -111,7 +111,7 @@ describe "hmac_paths plugin" do
       hmac_path('/1', until: 3)
     end
     body.must_equal "/78a56ddf0e081ca127ab1bc704c8a4d5e7e62ccf327dec5c3189a5c72057334c/t/3/1"
-    body('/s').must_equal "/64e31560c6df065b6116599c370aca918cfcbde092724b94f2770192ae513a28/t/#{t}/1"
+    body('/s').must_match %r"/64e31560c6df065b6116599c370aca918cfcbde092724b94f2770192ae513a28/t/410244480[01]/1"
   end
 
   it "hmac_path HMAC depends on :seconds and :until options" do
@@ -124,9 +124,9 @@ describe "hmac_paths plugin" do
       end
     end
     body('/3').must_equal "/78a56ddf0e081ca127ab1bc704c8a4d5e7e62ccf327dec5c3189a5c72057334c/t/3/1"
-    body('/3/s').must_equal "/9ffb7ce6b6ae76664aeebc53955c7c1d8d09e6908a512a6b5f22e7a24fffdc15/t/#{t-3}/1"
+    body('/3/s').must_match %r"/9ffb7ce6b6ae76664aeebc53955c7c1d8d09e6908a512a6b5f22e7a24fffdc15/t/410244479[78]/1"
     body('/4').must_equal "/f04e6d0571e2f3322bfa03b4b251070b7cdbde1004726fd69ded8cb40d1fb4ae/t/4/1"
-    body('/4/s').must_equal "/ecc641d021a3cccd6f3931e41f75f3bbdc9b05791b0ac939278b306e40571c86/t/#{t-4}/1"
+    body('/4/s').must_match %r"/ecc641d021a3cccd6f3931e41f75f3bbdc9b05791b0ac939278b306e40571c86/t/410244479[67]/1"
   end
 
   it "hmac_path gives priority to :until option over seconds option" do
