@@ -1,5 +1,7 @@
 = master
 
+* Correctly parse Ruby 3.4 backtraces in exception_page plugin (jeremyevans)
+
 * Support :until and :seconds option in hmac_paths plugin, for paths valid only until a specific time (jeremyevans)
 
 = 3.80.0 (2024-05-10)

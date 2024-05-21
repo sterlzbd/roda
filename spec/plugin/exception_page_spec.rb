@@ -209,7 +209,7 @@ describe "exception_page plugin" do
       instance_eval('raise "foo"', 'foo-bar.rb', 4200+42) rescue exception_page($!)
     end
     body = body('HTTP_ACCEPT'=>'text/html')
-    body.must_include "RuntimeError: foo"
+    body.must_include(RUBY_VERSION >= '3.4' ? "foo (RuntimeError)" : "RuntimeError: foo")
     body.must_include "foo-bar.rb:#{4200+42}"
     body.must_include __FILE__
     body.wont_include 'id="c0"'
