@@ -172,7 +172,7 @@ class Roda
       # a valid CSRF token was not provided.
       class InvalidToken < RodaError; end
 
-      def self.load_dependencies(app, opts=OPTS)
+      def self.load_dependencies(app, opts=OPTS, &_)
         app.plugin :_base64
       end
 
