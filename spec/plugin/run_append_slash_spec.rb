@@ -39,8 +39,7 @@ describe "run_append_slash plugin" do
     end
   end
 
-  it "internally appends a missing trailing slash to #run sub apps" do
-    # Without append slash
+  it "without plugin does not append a missing trailing slash to #run sub apps" do
     body.must_equal 'root'
     status('/sub').must_equal 404
     body('/sub/').must_equal 'sub-root'
@@ -49,8 +48,9 @@ describe "run_append_slash plugin" do
     body('/sub/bar/').must_equal 'sub-bar-root'
     body('/sub/bar/baz').must_equal 'sub-bar-baz'
     status('/sub/bar/baz/').must_equal 404
+  end unless ENV['LINT']
 
-    # With append slash
+  it "internally appends a missing trailing slash to #run sub apps" do
     app.plugin :run_append_slash
     body('/sub').must_equal 'sub-root'
     body('/sub/').must_equal 'sub-root'

@@ -103,8 +103,8 @@ describe "type_routing plugin" do
       end
     end
 
-    body('/subpath').must_equal 'a'
     unless_lint do
+      body('/subpath').must_equal 'a'
       body('/subpath.html').must_equal 'a'
       body('/subpath.json').must_equal '{b:1}'
     end

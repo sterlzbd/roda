@@ -40,13 +40,18 @@ describe "placeholder_string_matchers plugin" do
   end
 
   it "should handle colons by themselves" do
-    app(:placeholder_string_matchers) do |r|
-      r.on "u/:/:uid/posts/::id" do |uid, id|
-        uid + id
+    app(:bare) do 
+      plugin :placeholder_string_matchers
+      plugin :unescape_path
+
+      route do |r|
+        r.on "u/:/:uid/posts/::id" do |uid, id|
+          uid + id
+        end
       end
     end
 
-    body("/u/:/jdoe/posts/:123").must_equal 'jdoe123'
+    body("/u/%3A/jdoe/posts/%3A123").must_equal 'jdoe123'
     status("/u/a/jdoe/post/b123").must_equal 404
   end
 
