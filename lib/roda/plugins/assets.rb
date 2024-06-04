@@ -736,7 +736,9 @@ class Roda
           paths = assets_paths(type)
           if o[:early_hints]
             early_hint_as = ltype == :js ? 'script' : 'style'
-            send_early_hints('Link'=>paths.map{|p| "<#{p}>; rel=preload; as=#{early_hint_as}"}.join("\n"))
+            early_hints = paths.map{|p| "<#{p}>; rel=preload; as=#{early_hint_as}"}
+            early_hints = early_hints.join("\n") if Rack.release < '3'
+            send_early_hints(RodaResponseHeaders::LINK=>early_hints)
           end
           paths.map{|p| "#{tag_start}#{h(p)}#{tag_end}"}.join("\n")
         end

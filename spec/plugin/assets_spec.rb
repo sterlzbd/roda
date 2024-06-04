@@ -287,9 +287,15 @@ if run_tests
       app.plugin :assets, :early_hints=>true
       eh = []
       html = body('/test', 'rack.early_hints'=>proc{|h| eh << h})
+      css_eh = ["</assets/css/app.scss>; rel=preload; as=style", "</assets/css/raw.css>; rel=preload; as=style"]
+      js_eh = ["</assets/js/head/app.js>; rel=preload; as=script"]
+      if Rack.release < '3'
+        css_eh = css_eh.join("\n")
+        js_eh = js_eh.join("\n")
+      end
       eh.must_equal [
-        {"Link"=>"</assets/css/app.scss>; rel=preload; as=style\n</assets/css/raw.css>; rel=preload; as=style"},
-        {"Link"=>"</assets/js/head/app.js>; rel=preload; as=script"}
+        {Roda::RodaResponseHeaders::LINK=>css_eh},
+        {Roda::RodaResponseHeaders::LINK=>js_eh}
       ]
       html.scan(/<link/).length.must_equal 2
       html =~ %r{href="(/assets/css/app\.scss)"}
