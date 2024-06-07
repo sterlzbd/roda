@@ -476,7 +476,7 @@ class Roda
           serialized_data << json_data
 
           cipher_secret = opts[:cipher_secret]
-          if per_cookie_secret = opts[:per_cookie_cipher_secret]
+          if opts[:per_cookie_cipher_secret]
             version = "\1"
             per_cookie_secret_base = SecureRandom.random_bytes(32)
             cipher_secret = OpenSSL::HMAC.digest(OpenSSL::Digest::SHA256.new, cipher_secret, per_cookie_secret_base)
