@@ -111,7 +111,7 @@ describe "hmac_paths plugin" do
       hmac_path('/1', until: 3)
     end
     body.must_equal "/78a56ddf0e081ca127ab1bc704c8a4d5e7e62ccf327dec5c3189a5c72057334c/t/3/1"
-    body('/s').must_match %r"/64e31560c6df065b6116599c370aca918cfcbde092724b94f2770192ae513a28/t/410244480[01]/1"
+    body('/s').must_match %r"/64e31560c6df065b6116599c370aca918cfcbde092724b94f2770192ae513a28/t/4102444800/1|/f0206d644636000f733df59dcff98c763ca56d209ee4737c72e1b0fe35013913/t/4102444801/1"
   end
 
   it "hmac_path HMAC depends on :seconds and :until options" do
