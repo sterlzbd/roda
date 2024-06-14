@@ -148,6 +148,19 @@ class Roda
     # inject the content into the output. To get similar behavior with Roda, you have
     # a few different options you can use.
     #
+    # == Use Erubi::CaptureBlockEngine
+    #
+    # Roda defaults to using Erubi for erb template rendering.  Erubi 1.13.0+ includes
+    # support for an erb variant that supports blocks in <tt><%=</tt> and <tt><%==</tt>
+    # tags.  To use it:
+    #
+    #   require 'erubi/capture_block'
+    #   plugin :render, template_opts: {engine_class: Erubi::CaptureBlockEngine}
+    #
+    # See the Erubi documentation for how to capture data inside the block.  Make sure
+    # the method call (+some_method+ in the example) returns the output you want added
+    # to the rendered body.
+    #
     # == Directly Inject Template Output
     #
     # You can switch from a <tt><%=</tt> tag to using a <tt><%</tt> tag:
