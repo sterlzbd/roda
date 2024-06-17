@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "tilt"
   s.add_development_dependency "erubi"
   s.add_development_dependency "rack_csrf"
-  s.add_development_dependency "sassc"
   s.add_development_dependency "json"
   s.add_development_dependency "mail"
 end

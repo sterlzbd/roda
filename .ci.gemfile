@@ -25,12 +25,6 @@ else
   gem 'json'
 end
 
-if RUBY_VERSION < '2.2.0'
-  gem 'sass', '< 3.5'
-else
-  gem 'sassc'
-end
-
 case RUBY_VERSION[0, 3]
 when '1.9', '2.0'
   gem 'rack', '<1.6'

@@ -4,16 +4,10 @@ require 'fileutils'
 run_tests = true
 begin
   begin
-    require 'tilt/sass'
+    require 'tilt'
   rescue LoadError
-    begin
-      for lib in %w'tilt sass'
-        require lib
-      end
-    rescue LoadError
-      warn "#{lib} not installed, skipping assets plugin test"
-      run_tests = false
-    end
+    warn "tilt not installed, skipping assets plugin test"
+    run_tests = false
   end
 end
 
@@ -21,7 +15,7 @@ if run_tests
   pid_dir = "spec/pid-#{$$}"
   assets_dir = File.join(pid_dir, "assets")
   metadata_file = File.expand_path(File.join(assets_dir, 'precompiled.json'))
-  importdep_file = File.expand_path(File.join(assets_dir, 'css/importdep.scss'))
+  importdep_file = File.expand_path(File.join(assets_dir, 'css/importdep.str'))
   js_file = File.expand_path(File.join(assets_dir, 'js/head/app.js'))
   css_file = File.expand_path(File.join(assets_dir, 'css/no_access.css'))
   describe 'assets plugin' do
@@ -36,7 +30,7 @@ if run_tests
     before do
       app(:bare) do
         plugin :assets,
-          :css => ['app.scss', 'raw.css'],
+          :css => ['app.str', 'raw.css'],
           :js => { :head => ['app.js'] },
           :path => assets_dir,
           :public => pid_dir,
@@ -162,7 +156,7 @@ if run_tests
 
     it 'assets_paths should return arrays of source paths' do
       html = body('/paths_test')
-      html.scan('css:Array:2:/assets/css/app.scss,/assets/css/raw.css').length.must_equal 1
+      html.scan('css:Array:2:/assets/css/app.str,/assets/css/raw.css').length.must_equal 1
       html.scan('js:Array:1:/assets/js/head/app.js').length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
     end
@@ -181,22 +175,22 @@ if run_tests
       app.plugin :assets, :relative_paths=>true
 
       html = body('/paths_test')
-      html.scan('css:Array:2:./assets/css/app.scss,./assets/css/raw.css').length.must_equal 1
+      html.scan('css:Array:2:./assets/css/app.str,./assets/css/raw.css').length.must_equal 1
       html.scan('js:Array:1:./assets/js/head/app.js').length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
 
       html = body('/paths_test/foo')
-      html.scan('css:Array:2:../assets/css/app.scss,../assets/css/raw.css').length.must_equal 1
+      html.scan('css:Array:2:../assets/css/app.str,../assets/css/raw.css').length.must_equal 1
       html.scan('js:Array:1:../assets/js/head/app.js').length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
 
       html = body('/paths_test/foo/')
-      html.scan('css:Array:2:../../assets/css/app.scss,../../assets/css/raw.css').length.must_equal 1
+      html.scan('css:Array:2:../../assets/css/app.str,../../assets/css/raw.css').length.must_equal 1
       html.scan('js:Array:1:../../assets/js/head/app.js').length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
 
       html = body('/paths_test/foo/bar')
-      html.scan('css:Array:2:../../assets/css/app.scss,../../assets/css/raw.css').length.must_equal 1
+      html.scan('css:Array:2:../../assets/css/app.str,../../assets/css/raw.css').length.must_equal 1
       html.scan('js:Array:1:../../assets/js/head/app.js').length.must_equal 1
       html.scan('empty:Array:0').length.must_equal 1
     end
@@ -226,7 +220,7 @@ if run_tests
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling' do
       html = body('/test')
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/assets/css/app\.scss)"}
+      html =~ %r{href="(/assets/css/app\.str)"}
       css = body($1)
       html =~ %r{href="(/assets/css/raw\.css)"}
       css2 = body($1)
@@ -242,7 +236,7 @@ if run_tests
       app.plugin :assets, :timestamp_paths=>true
       html = body('/test')
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/assets/css/\d+/app\.scss)"}
+      html =~ %r{href="(/assets/css/\d+/app\.str)"}
       css = body($1)
       html =~ %r{href="(/assets/css/\d+/raw\.css)"}
       css2 = body($1)
@@ -258,7 +252,7 @@ if run_tests
       app.plugin :assets, :timestamp_paths=>'-'
       html = body('/test')
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/assets/css/\d+-app\.scss)"}
+      html =~ %r{href="(/assets/css/\d+-app\.str)"}
       css = body($1)
       html =~ %r{href="(/assets/css/\d+-raw\.css)"}
       css2 = body($1)
@@ -272,9 +266,9 @@ if run_tests
 
     it 'should not handle non-GET requests for asset rouets' do
       html = body('/test')
-      html =~ %r{href="(/assets/css/app\.scss)"}
+      html =~ %r{href="(/assets/css/app\.str)"}
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/assets/css/app\.scss)"}
+      html =~ %r{href="(/assets/css/app\.str)"}
       status($1, 'REQUEST_METHOD'=>'POST').must_equal 404
       html =~ %r{href="(/assets/css/raw\.css)"}
       status($1, 'REQUEST_METHOD'=>'POST').must_equal 404
@@ -287,7 +281,7 @@ if run_tests
       app.plugin :assets, :early_hints=>true
       eh = []
       html = body('/test', 'rack.early_hints'=>proc{|h| eh << h})
-      css_eh = ["</assets/css/app.scss>; rel=preload; as=style", "</assets/css/raw.css>; rel=preload; as=style"]
+      css_eh = ["</assets/css/app.str>; rel=preload; as=style", "</assets/css/raw.css>; rel=preload; as=style"]
       js_eh = ["</assets/js/head/app.js>; rel=preload; as=script"]
       if Rack.release < '3'
         css_eh = css_eh.join("\n")
@@ -298,7 +292,7 @@ if run_tests
         {Roda::RodaResponseHeaders::LINK=>js_eh}
       ]
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/assets/css/app\.scss)"}
+      html =~ %r{href="(/assets/css/app\.str)"}
       css = body($1)
       html =~ %r{href="(/assets/css/raw\.css)"}
       css2 = body($1)
@@ -315,7 +309,7 @@ if run_tests
       app.plugin :assets
       html = body('/test', 'SCRIPT_NAME'=>'/foo')
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="/foo(/assets/css/app\.scss)"}
+      html =~ %r{href="/foo(/assets/css/app\.str)"}
       css = body($1)
       html =~ %r{href="/foo(/assets/css/raw\.css)"}
       css2 = body($1)
@@ -332,21 +326,21 @@ if run_tests
         :js_route=>'foo', :css_route=>'bar', :add_suffix=>true, :css_opts=>{:style=>:compressed}
       html = body('/test')
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/a/bar/app\.scss.css)"}
+      html =~ %r{href="(/a/bar/app\.str.css)"}
       css = body($1)
       html =~ %r{href="(/a/bar/raw\.css.css)"}
       css2 = body($1)
       html.scan(/<script/).length.must_equal 1
       html =~ %r{src="(/a/foo/head/app\.js.js)"}
       js = body($1)
-      css.must_match(/color:red\}/)
+      css.must_match(/color: red;/)
       css2.must_match(/color: blue;/)
       js.must_include('console.log')
     end
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash' do
       app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :prefix=>nil,
-        :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
+        :css=>{:assets=>{:css=>%w'app.str raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.route do |r|
         r.assets
         r.is 'test' do
@@ -355,7 +349,7 @@ if run_tests
       end
       html = body('/test')
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/assets/css/app\.scss)"}
+      html =~ %r{href="(/assets/css/app\.str)"}
       css = body($1)
       html =~ %r{href="(/assets/css/raw\.css)"}
       css2 = body($1)
@@ -369,7 +363,7 @@ if run_tests
 
     it 'should handle :group_subdirs => false' do
       app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :prefix=>nil, :group_subdirs=>false,
-        :css=>{:assets=>{:css=>%w'assets/css/app.scss assets/css/raw.css'}}, :js=>{:assets=>{:js=>{:head=>'assets/js/head/app.js'}}}
+        :css=>{:assets=>{:css=>%w'assets/css/app.str assets/css/raw.css'}}, :js=>{:assets=>{:js=>{:head=>'assets/js/head/app.js'}}}
       app.route do |r|
         r.assets
         r.is 'test' do
@@ -378,7 +372,7 @@ if run_tests
       end
       html = body('/test')
       html.scan(/<link/).length.must_equal 2
-      html =~ %r{href="(/assets/css/app\.scss)"}
+      html =~ %r{href="(/assets/css/app\.str)"}
       css = body($1)
       html =~ %r{href="(/assets/css/raw\.css)"}
       css2 = body($1)
@@ -606,7 +600,7 @@ END
 
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash' do
       app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
-        :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
+        :css=>{:assets=>{:css=>%w'app.str raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.compile_assets
       app.route do |r|
         r.assets
@@ -629,7 +623,7 @@ END
     it 'should handle rendering assets, linking to them, and accepting requests for them when not compiling with a multi-level hash when :add_script_name app option is used' do
       app.opts[:add_script_name] = true
       app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil,
-        :css=>{:assets=>{:css=>%w'app.scss raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
+        :css=>{:assets=>{:css=>%w'app.str raw.css'}}, :js=>{:assets=>{:js=>{:head=>'app.js'}}}
       app.compile_assets
       app.route do |r|
         r.assets
@@ -651,7 +645,7 @@ END
 
     it 'should handle :group_subdirs => false when compiling' do
       app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :compiled_js_dir=>nil, :compiled_css_dir=>nil, :group_subdirs=>false,
-        :css=>{:assets=>{:css=>%w'assets/css/app.scss assets/css/raw.css'}}, :js=>{:assets=>{:js=>{:head=>'assets/js/head/app.js'}}}
+        :css=>{:assets=>{:css=>%w'assets/css/app.str assets/css/raw.css'}}, :js=>{:assets=>{:js=>{:head=>'assets/js/head/app.js'}}}
       app.compile_assets
       app.route do |r|
         r.assets
@@ -784,22 +778,22 @@ END
     end
 
     it 'requests for assets should include modifications to content of dependencies' do
-      File.open(File.join(assets_dir, 'css/importdep.scss'), 'wb'){|f| f.write('body{color:blue}')}
-      app.plugin :assets, :css=>['import.scss'],
-        :dependencies=>{File.join(assets_dir, 'css/import.scss')=>File.join(assets_dir, 'css/importdep.scss')}
+      File.open(File.join(assets_dir, 'css/importdep.str'), 'wb'){|f| f.write('body{color: blue;}')}
+      app.plugin :assets, :css=>['import.str'],
+        :dependencies=>{File.join(assets_dir, 'css/import.str')=>File.join(assets_dir, 'css/importdep.str')}
       app.plugin :render, :cache=>false
       3.times do
-        body('/assets/css/import.scss').must_include('color: blue;')
+        body('/assets/css/import.str').must_include('color: blue;')
       end
-      File.open(File.join(assets_dir, 'css/importdep.scss'), 'wb'){|f| f.write('body{color:red}')}
-      File.utime(Time.now+2, Time.now+4, File.join(assets_dir, 'css/importdep.scss'))
+      File.open(File.join(assets_dir, 'css/importdep.str'), 'wb'){|f| f.write('body{color: red;}')}
+      File.utime(Time.now+2, Time.now+4, File.join(assets_dir, 'css/importdep.str'))
       3.times do
-        body('/assets/css/import.scss').must_include('color: red;')
+        body('/assets/css/import.str').must_include('color: red;')
       end
     end
 
     it 'should do a terminal match for assets' do
-      status('/assets/css/app.scss/foo').must_equal 404
+      status('/assets/css/app.str/foo').must_equal 404
     end
 
     it 'should only allow files that you specify' do
@@ -828,7 +822,7 @@ END
 
       app.plugin :assets, :path=>pid_dir, :js_dir=>nil, :css_dir=>nil, :prefix=>nil,
         :postprocessor=>postprocessor,
-        :css=>{:assets=>{:css=>%w'app.scss'}}
+        :css=>{:assets=>{:css=>%w'app.str'}}
       app.route do |r|
         r.assets
         r.is 'test' do
@@ -837,9 +831,9 @@ END
       end
       html = body('/test')
       html.scan(/<link/).length.must_equal 1
-      html =~ %r{href="(/assets/css/app\.scss)"}
+      html =~ %r{href="(/assets/css/app\.str)"}
       css = body($1)
-      css.must_match(/app\.scss/)
+      css.must_match(/app\.str/)
       css.must_match(/type=css/)
       css.must_match(/tc=Symbol/)
       css.must_match(/font: red;/)
