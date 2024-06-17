@@ -1,3 +1,7 @@
+= master
+
+* Make capture_erb plugin call integrate better with erubi/capture_block (jeremyevans)
+
 = 3.81.0 (2024-06-12)
 
 * Make assets plugin :early_hints option follow Rack 3 SPEC if using Rack 3 (jeremyevans)
