@@ -1,5 +1,9 @@
 = master
 
+* Add :encodings option to public plugin to support configurable encoding order (jeremyevans)
+
+* Add :zstd option to public plugin to supplement it to serve zstd-compressed files with .zst extension (jeremyevans)
+
 * Make capture_erb plugin call integrate better with erubi/capture_block (jeremyevans)
 
 = 3.81.0 (2024-06-12)
