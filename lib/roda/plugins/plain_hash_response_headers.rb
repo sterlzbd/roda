@@ -3,7 +3,7 @@
 #
 class Roda
   module RodaPlugins
-    # The response_headers_plain_hash plugin will change Roda to
+    # The plain_hash_response_headers plugin will change Roda to
     # use a plain hash for response headers.  This is Roda's
     # default behavior on Rack 2, but on Rack 3+, Roda defaults
     # to using Rack::Headers for response headers for backwards
