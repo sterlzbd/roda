@@ -1,3 +1,7 @@
+= master
+
+* Add assume_ssl plugin for making request ssl? method always return true (jeremyevans)
+
 = 3.82.0 (2024-07-12)
 
 * Add :encodings option to public plugin to support configurable encoding order (jeremyevans)
