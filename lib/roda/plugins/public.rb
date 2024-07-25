@@ -31,7 +31,7 @@ class Roda
     #   plugin :public, root: 'static'
     #
     #   # Assuming public is the location of files
-    #   r.route do
+    #   route do
     #     # Make GET /images/foo.png look for public/images/foo.png 
     #     r.public
     #
