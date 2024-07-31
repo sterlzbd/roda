@@ -735,7 +735,7 @@ class Roda
         # You can use +dig+ to get access to nested arrays by using <tt>:array</tt> or <tt>:array!</tt> as
         # the first argument and providing the type in the second argument:
         #
-        #   tp.dig(:array, :pos_int, 'foo', 'bar', 'baz')  # tp['foo']['bar'].array(:int, 'baz')
+        #   tp.dig(:array, :pos_int, 'foo', 'bar', 'baz')  # tp['foo']['bar'].array(:pos_int, 'baz')
         def dig(type, *nest, key)
           _dig(false, type, nest, key)
         end
