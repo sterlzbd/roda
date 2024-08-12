@@ -1,4 +1,4 @@
-= master
+= 3.83.0 (2024-08-12)
 
 * Add assume_ssl plugin for making request ssl? method always return true (jeremyevans)
 
