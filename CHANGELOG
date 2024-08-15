@@ -1,5 +1,7 @@
 = master
 
+* Add hsts plugin for setting Strict-Transport-Security header (jeremyevans)
+
 * Remove documentation from the gem to reduce gem size by 25% (jeremyevans)
 
 = 3.83.0 (2024-08-12)
