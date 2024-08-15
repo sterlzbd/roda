@@ -1,3 +1,7 @@
+= master
+
+* Remove documentation from the gem to reduce gem size by 25% (jeremyevans)
+
 = 3.83.0 (2024-08-12)
 
 * Add assume_ssl plugin for making request ssl? method always return true (jeremyevans)
