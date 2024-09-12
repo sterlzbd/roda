@@ -8,7 +8,7 @@ describe "symbol_matchers plugin" do
 
       symbol_matcher(:f, /(f+)/)
       symbol_matcher(:f2, :f) do |fs|
-        [fs*2]
+        fs*2
       end
       symbol_matcher(:f3, :f)
 
@@ -16,17 +16,17 @@ describe "symbol_matchers plugin" do
         [cs, cs.length] unless cs.length == 5
       end
       symbol_matcher(:c2, :c) do |cs, len|
-        [len]
+        len
       end
       symbol_matcher(:c3, :c)
 
       plugin :class_matchers
       symbol_matcher(:int, Integer) do |i|
-        [i*2]
+        i*2
       end
       symbol_matcher(:i, Integer)
       symbol_matcher(:str, String) do |s|
-        [s*2]
+        s*2
       end
       symbol_matcher(:s, String)
 

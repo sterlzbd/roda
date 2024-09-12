@@ -12,11 +12,10 @@ class Roda
     #     # ...
     #   end
     #
-    # You can register a Date class matcher for that regexp (note that
-    # the block must return an array):
+    # You can register a Date class matcher for that regexp:
     #
     #   class_matcher(Date, /(\d\d\d\d)-(\d\d)-(\d\d)/) do |y, m, d|
-    #     [Date.new(y.to_i, m.to_i, d.to_i)]
+    #     Date.new(y.to_i, m.to_i, d.to_i)
     #   end
     #
     # And then use the Date class as a matcher, and it will yield a Date object:
@@ -26,7 +25,8 @@ class Roda
     #   end
     #
     # This is useful to DRY up code if you are using the same type of pattern and
-    # type conversion in multiple places in your application.
+    # type conversion in multiple places in your application. You can have the
+    # block return an array to yield multiple captures.
     #
     # If you have a segment match the passed regexp, but decide during block
     # processing that you do not want to treat it as a match, you can have the
@@ -37,7 +37,7 @@ class Roda
     #     y = y.to_i
     #     m = m.to_i
     #     d = d.to_i
-    #     [Date.new(y, m, d)] if Date.valid_date?(y, m, d)
+    #     Date.new(y, m, d) if Date.valid_date?(y, m, d)
     #   end
     #
     # The second argument to class_matcher can be a class already registered

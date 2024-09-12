@@ -1,5 +1,7 @@
 = master
 
+* Allow class_matcher and symbol_matcher blocks to return non-arrays (jeremyevans)
+
 * Make class_matcher and symbol_matcher plugin be able to build on top of existing registered matchers (jeremyevans)
 
 * Make capture_erb plugin not break if String#capture is defined (jeremyevans)

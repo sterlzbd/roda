@@ -39,11 +39,10 @@ class Roda
     # be loaded first.
     #
     # You can provide a block when calling +symbol_matcher+, and it will be called
-    # for all matches to allow for type conversion.  The block must return an
-    # array:
+    # for all matches to allow for type conversion:
     #
     #   symbol_matcher(:date, /(\d\d\d\d)-(\d\d)-(\d\d)/) do |y, m, d|
-    #     [Date.new(y.to_i, m.to_i, d.to_i)]
+    #     Date.new(y.to_i, m.to_i, d.to_i)
     #   end
     #
     #   route do |r|
@@ -61,8 +60,10 @@ class Roda
     #     y = y.to_i
     #     m = m.to_i
     #     d = d.to_i
-    #     [Date.new(y, m, d)] if Date.valid_date?(y, m, d)
+    #     Date.new(y, m, d) if Date.valid_date?(y, m, d)
     #   end
+    #
+    # You can have the block return an array to yield multiple captures.
     #
     # The second argument to symbol_matcher can be a symbol already registered
     # as a symbol matcher. This can DRY up code that wants a conversion

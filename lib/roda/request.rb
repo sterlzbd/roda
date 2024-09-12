@@ -562,7 +562,11 @@ class Roda
               return unless captures = yield(*captures)
             end
             @remaining_path = matchdata.post_match
-            @captures.concat(captures)
+            if captures.is_a?(Array)
+              @captures.concat(captures)
+            else
+              @captures << captures
+            end
           end
         end
 

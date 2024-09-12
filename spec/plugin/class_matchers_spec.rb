@@ -5,32 +5,32 @@ describe "class_matchers plugin" do
   it "allows class specific regexps with type conversion for class matchers" do
     app(:bare) do
       plugin :class_matchers
-      class_matcher(Date, /(\d\d\d\d)-(\d\d)-(\d\d)/){|y,m,d| [Date.new(y.to_i, m.to_i, d.to_i)] if Date.valid_date?(y.to_i, m.to_i, d.to_i)}
+      class_matcher(Date, /(\d\d\d\d)-(\d\d)-(\d\d)/){|y,m,d| Date.new(y.to_i, m.to_i, d.to_i) if Date.valid_date?(y.to_i, m.to_i, d.to_i)}
       class_matcher(Array, /(\w+)\/(\w+)/){|a, b| [[a, 1], [b, 2]]}
       class_matcher(Hash, /(\d+)\/(\d+)/){|a, b| [{a.to_i=>b.to_i}]}
 
       klass = Class.new
       def klass.to_s; "klass" end
-      class_matcher(klass, Integer){|i| [i*2] unless i == 10}
+      class_matcher(klass, Integer){|i| i*2 unless i == 10}
 
       plugin :symbol_matchers
       symbol_matcher(:i, /i(\d+)/, &:to_i)
       klass2 = Class.new
       def klass2.to_s; "klass2" end
-      class_matcher(klass2, :i){|i| [i*3]}
+      class_matcher(klass2, :i){|i| i*3}
 
       symbol_matcher(:j, /j(\d+)/)
       klass3 = Class.new
       def klass3.to_s; "klass3" end
-      class_matcher(klass3, :j){|j| [j*3]}
+      class_matcher(klass3, :j){|j| j*3}
 
       klass4 = Class.new
       def klass4.to_s; "klass4" end
-      class_matcher(klass4, String){|i| [i*2]}
+      class_matcher(klass4, String){|i| i*2}
 
       klass5 = Class.new
       def klass5.to_s; "klass5" end
-      class_matcher(klass5, klass){|i| [i*3]}
+      class_matcher(klass5, klass){|i| i*3}
 
       klass6 = Class.new
       def klass6.to_s; "klass6" end
@@ -42,7 +42,7 @@ describe "class_matchers plugin" do
 
       klass8 = Class.new
       def klass8.to_s; "klass8" end
-      class_matcher(klass8, :d){|i| [i*2]}
+      class_matcher(klass8, :d){|i| i*2}
 
       klass9 = Class.new
       def klass9.to_s; "klass9" end
