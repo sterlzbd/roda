@@ -1,5 +1,7 @@
 = master
 
+* Make class_matcher and symbol_matcher plugin be able to build on top of existing registered matchers (jeremyevans)
+
 * Make capture_erb plugin not break if String#capture is defined (jeremyevans)
 
 = 3.84.0 (2024-09-12)

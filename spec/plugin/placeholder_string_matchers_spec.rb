@@ -81,7 +81,24 @@ describe "placeholder_string_matchers plugin" do
       plugin :symbol_matchers
       symbol_matcher(:f, /(f+)/)
 
+      plugin :class_matchers
+      symbol_matcher(:s, String)
+      symbol_matcher(:i, Integer)
+      symbol_matcher(:j, :i)
+
       route do |r|
+        r.on "X" do
+          r.is "j/:j" do |i|
+            "j-#{i}"
+          end
+          r.is "i/:i" do |i|
+            "i-#{i}"
+          end
+          r.is "s/:s" do |s|
+            "s-#{s}"
+          end
+        end
+
         r.is ":d" do |d|
           "d#{d}"
         end
@@ -127,5 +144,9 @@ describe "placeholder_string_matchers plugin" do
     body('/q').must_equal 'rest'
     body('/thing/q').must_equal 'thingq'
     body('/thing2/q').must_equal 'thing2q'
+
+    body("/X/j/1").must_equal 'j-1'
+    body("/X/i/3").must_equal 'i-3'
+    body("/X/s/a").must_equal 's-a'
   end
 end

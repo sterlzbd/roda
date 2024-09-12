@@ -23,7 +23,7 @@ class Roda
     #
     # :d :: <tt>/(\d+)/</tt>, a decimal segment
     # :rest :: <tt>/(.*)/</tt>, all remaining characters, if any
-    # :w :: <tt>/(\w+)/</tt>, a alphanumeric segment
+    # :w :: <tt>/(\w+)/</tt>, an alphanumeric segment
     #
     # If the placeholder_string_matchers plugin is loaded, this feature also applies to
     # placeholders in strings, so the following:
@@ -64,7 +64,32 @@ class Roda
     #     [Date.new(y, m, d)] if Date.valid_date?(y, m, d)
     #   end
     #
-    # However, if providing a block to the symbol_matchers plugin, the symbol may 
+    # The second argument to symbol_matcher can be a symbol already registered
+    # as a symbol matcher. This can DRY up code that wants a conversion
+    # performed by an existing class matcher or to use the same regexp:
+    #
+    #   symbol_matcher :employee_id, :d do |id|
+    #     id.to_i
+    #   end
+    #   symbol_matcher :employee, :employee_id do |id|
+    #     Employee[id]
+    #   end
+    #
+    # With the above example, the :d matcher matches only decimal strings, but
+    # yields them as string.  The registered :employee_id matcher converts the
+    # decimal string to an integer.  The registered :employee matcher builds
+    # on that and uses the integer to lookup the related employee.  If there is
+    # no employee with that id, then the :employee matcher will not match.
+    #
+    # If using the class_matchers plugin, you can provide a recognized class
+    # matcher as the second argument to symbol_matcher, and it will work in
+    # a similar manner:
+    #
+    #   symbol_matcher :employee, Integer do |id|
+    #     Employee[id]
+    #   end
+    #
+    # If providing a block to the symbol_matchers plugin, the symbol may 
     # not work with the params_capturing plugin.
     module SymbolMatchers
       def self.load_dependencies(app)
@@ -72,18 +97,84 @@ class Roda
       end
 
       def self.configure(app)
+        app.opts[:symbol_matchers] ||= {}
         app.symbol_matcher(:d, /(\d+)/)
         app.symbol_matcher(:w, /(\w+)/)
         app.symbol_matcher(:rest, /(.*)/)
       end
 
       module ClassMethods
-        # Set the regexp to use for the given symbol, instead of the default.
-        def symbol_matcher(s, re, &block)
+        # Set the matcher and block to use for the given class.
+        # The matcher can be a regexp, registered symbol matcher, or registered class
+        # matcher (if using the class_matchers plugin).
+        #
+        # If providing a regexp, the block given will be called with all regexp captures.
+        # If providing a registered symbol or class, the block will be called with the
+        # captures returned by the block for the registered symbol or class, or the regexp
+        # captures if no block was registered with the symbol or class. In either case,
+        # if a block is given, it should return an array with the captures to yield to
+        # the match block.
+        def symbol_matcher(s, matcher, &block)
           meth = :"match_symbol_#{s}"
-          array = [re, block].freeze
+
+          case matcher
+          when Regexp
+            regexp = matcher
+            consume_regexp = self::RodaRequest.send(:consume_pattern, regexp)
+          when Symbol
+            regexp, consume_regexp, matcher_block = opts[:symbol_matchers][matcher]
+
+            unless regexp
+              raise RodaError, "unregistered symbol matcher given to symbol_matcher: #{matcher.inspect}"
+            end
+
+            block = merge_symbol_matcher_blocks(block, matcher_block)
+          when Class
+            unless opts[:class_matchers]
+              raise RodaError, "cannot provide Class matcher to symbol_matcher unless using class_matchers plugin: #{matcher.inspect}"
+            end
+
+            regexp, consume_regexp, matcher_block = opts[:class_matchers][matcher]
+            unless regexp
+              raise RodaError, "unregistered class matcher given to symbol_matcher: #{matcher.inspect}"
+            end
+            block = merge_symbol_matcher_blocks(block, matcher_block)
+          else
+            raise RodaError, "unsupported matcher given to symbol_matcher: #{matcher.inspect}"
+          end
+
+          array = opts[:symbol_matchers][s] = [regexp, consume_regexp, block].freeze
           self::RodaRequest.send(:define_method, meth){array}
           self::RodaRequest.send(:private, meth)
+        end
+
+        # Freeze the class_matchers hash when freezing the app.
+        def freeze
+          opts[:symbol_matchers].freeze
+          super
+        end
+
+        private
+
+        # If both block and matcher_block are given, return a
+        # proc that calls matcher block first, and only calls
+        # block with the return values of matcher_block if
+        # the matcher_block returns an array.
+        # Otherwise, return matcher_block or block.
+        def merge_symbol_matcher_blocks(block, matcher_block)
+          if matcher_block
+            if block
+              proc do |*a|
+                if captures = matcher_block.call(*a)
+                  block.call(*captures)
+                end
+              end
+            else
+              matcher_block
+            end
+          elsif block
+            block
+          end
         end
       end
 
@@ -97,8 +188,8 @@ class Roda
           meth = :"match_symbol_#{s}"
           if respond_to?(meth, true)
             # Allow calling private match methods
-            re, block = send(meth)
-            consume(self.class.cached_matcher(re){re}, &block)
+            _, re, block = send(meth)
+            consume(re, &block)
           else
             super
           end
