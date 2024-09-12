@@ -22,6 +22,9 @@ describe "capture_erb plugin" do
         r.get 'inject' do
           render(:inline => "<% some_method do %>foo<% end %>")
         end
+        r.get 'monkey-patch' do
+          render(:inline => "<% def (instance_variable_get(render_opts[:template_opts][:outvar])).capture(x); end ; value = capture_erb do %>foo<% end %>bar<%= value %>")
+        end
         r.get 'outside' do
           capture_erb{1}
         end
@@ -45,6 +48,10 @@ describe "capture_erb plugin" do
 
   it "should work with the inject_erb plugin" do
     body('/inject').strip.must_equal "barFOObaz"
+  end
+
+  it "should work if buffer String instance defines capture" do
+    body('/monkey-patch').must_equal "barfoo"
   end
 
   it "should return result of block converted to string when used outside template" do
