@@ -1,4 +1,4 @@
-= master
+= 3.84.0 (2024-09-12)
 
 * Add hsts plugin for setting Strict-Transport-Security header (jeremyevans)
 
