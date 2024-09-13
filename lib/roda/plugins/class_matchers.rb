@@ -77,16 +77,6 @@ class Roda
         }
       end
 
-      module InstanceMethods
-        private
-
-        def _convert_class_Integer(i)
-          if i = @_request.send(:_match_class_convert_Integer, i)
-            i
-          end
-        end
-      end
-
       module ClassMethods
         # Set the matcher and block to use for the given class.
         # The matcher can be a regexp, registered class matcher, or registered symbol

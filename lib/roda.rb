@@ -570,6 +570,13 @@ WARNING
         def session
           @_request.session
         end
+
+        private
+
+        # Convert the segment matched by the Integer matcher to an integer.
+        def _convert_class_Integer(value)
+          value.to_i
+        end
       end
     end
   end
