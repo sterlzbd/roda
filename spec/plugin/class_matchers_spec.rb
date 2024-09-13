@@ -116,6 +116,7 @@ describe "class_matchers plugin" do
   it "raises errors for unsupported calls to class matcher" do
     app(:class_matchers){}
     c = Class.new
+    proc{app.class_matcher(:foo, /a/)}.must_raise Roda::RodaError
     proc{app.class_matcher(c, Hash)}.must_raise Roda::RodaError
     proc{app.class_matcher(c, :foo)}.must_raise Roda::RodaError
     app.plugin :symbol_matchers

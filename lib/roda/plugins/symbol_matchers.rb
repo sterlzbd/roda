@@ -101,6 +101,7 @@ class Roda
     module SymbolMatchers
       def self.load_dependencies(app)
         app.plugin :_symbol_regexp_matchers
+        app.plugin :_symbol_class_matchers
       end
 
       def self.configure(app)
@@ -122,47 +123,8 @@ class Roda
         # if a block is given, it should return an array with the captures to yield to
         # the match block.
         def symbol_matcher(s, matcher, &block)
-          meth = :"match_symbol_#{s}"
-
-          case matcher
-          when Regexp
-            regexp = matcher
-            consume_regexp = self::RodaRequest.send(:consume_pattern, regexp)
-          when Symbol
-            regexp, consume_regexp, matcher_block = opts[:symbol_matchers][matcher]
-
-            unless regexp
-              raise RodaError, "unregistered symbol matcher given to symbol_matcher: #{matcher.inspect}"
-            end
-
-            block = merge_symbol_matcher_blocks(s, block, matcher_block)
-          when Class
-            unless opts[:class_matchers]
-              raise RodaError, "cannot provide Class matcher to symbol_matcher unless using class_matchers plugin: #{matcher.inspect}"
-            end
-
-            regexp, consume_regexp, matcher_block = opts[:class_matchers][matcher]
-            unless regexp
-              raise RodaError, "unregistered class matcher given to symbol_matcher: #{matcher.inspect}"
-            end
-            block = merge_symbol_matcher_blocks(s, block, matcher_block)
-          else
-            raise RodaError, "unsupported matcher given to symbol_matcher: #{matcher.inspect}"
-          end
-
-          if block.is_a?(Symbol)
-            convert_meth = block
-          elsif block
-            convert_meth = :"_convert_symbol_#{s}"
-            define_method(convert_meth, &block)
-            private convert_meth
-          end
-
-          array = opts[:symbol_matchers][s] = [regexp, consume_regexp, convert_meth].freeze
-
-          self::RodaRequest.class_eval do
+          _symbol_class_matcher(Symbol, s, matcher, block) do |meth, array|
             define_method(meth){array}
-            private meth
           end
 
           nil
@@ -172,33 +134,6 @@ class Roda
         def freeze
           opts[:symbol_matchers].freeze
           super
-        end
-
-        private
-
-        # If both block and matcher_block are given, return a
-        # proc that calls matcher block first, and only calls
-        # block with the return values of matcher_block if
-        # the matcher_block returns an array.
-        # Otherwise, return matcher_block or block.
-        def merge_symbol_matcher_blocks(sym, block, matcher_meth)
-          if matcher_meth
-            if block
-              convert_meth = :"_convert_merge_symbol_#{sym}"
-              define_method(convert_meth, &block)
-              private convert_meth
-
-              proc do |*a|
-                if captures = send(matcher_meth, *a)
-                  send(convert_meth, *captures)
-                end
-              end
-            else
-              matcher_meth
-            end
-          else
-            block
-          end
         end
       end
 

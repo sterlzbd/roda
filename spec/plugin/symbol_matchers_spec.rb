@@ -144,6 +144,7 @@ describe "symbol_matchers plugin" do
 
   it "raises errors for unsupported calls to class matcher" do
     app(:symbol_matchers){|r| }
+    proc{app.symbol_matcher(Hash, /a/)}.must_raise Roda::RodaError
     proc{app.symbol_matcher(:sym, :foo)}.must_raise Roda::RodaError
     proc{app.symbol_matcher(:sym, Integer)}.must_raise Roda::RodaError
     app.plugin :class_matchers
