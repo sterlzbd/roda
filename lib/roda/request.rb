@@ -555,13 +555,18 @@ class Roda
         # match, returns false without changes.  Otherwise, modifies
         # SCRIPT_NAME to include the matched path, removes the matched
         # path from PATH_INFO, and updates captures with any regex captures.
-        def consume(pattern)
+        def consume(pattern, meth=nil)
           if matchdata = pattern.match(@remaining_path)
             captures = matchdata.captures
-            if defined?(yield)
+
+            if meth
+              return unless captures = scope.send(meth, *captures)
+            elsif defined?(yield)
               return unless captures = yield(*captures)
             end
+
             @remaining_path = matchdata.post_match
+
             if captures.is_a?(Array)
               @captures.concat(captures)
             else

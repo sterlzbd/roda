@@ -29,16 +29,6 @@ class Roda
             private :_match_class_max_Integer
           end
         end
-        app.opts[:Integer_matcher_max] = max || 9223372036854775807
-      end
-
-      module ClassMethods
-        # Integrate with class matchers created by using class_matcher
-        # with the Integer class as the matcher.
-        def match_class_convert_Integer(i)
-          value = i.to_i
-          value if value <= opts[:Integer_matcher_max]
-        end
       end
 
       module RequestMethods

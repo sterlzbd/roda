@@ -90,8 +90,14 @@ class Roda
     #     Employee[id]
     #   end
     #
+    # Blocks passed to the symbol matchers plugin are evaluated in route
+    # block context.
+    #
     # If providing a block to the symbol_matchers plugin, the symbol may 
-    # not work with the params_capturing plugin.
+    # not work with the params_capturing plugin. Note that the use of
+    # symbol matchers inside strings when using the placeholder_string_matchers
+    # plugin only uses the regexp, it does not respect the conversion blocks
+    # registered with the symbols.
     module SymbolMatchers
       def self.load_dependencies(app)
         app.plugin :_symbol_regexp_matchers
@@ -129,7 +135,7 @@ class Roda
               raise RodaError, "unregistered symbol matcher given to symbol_matcher: #{matcher.inspect}"
             end
 
-            block = merge_symbol_matcher_blocks(block, matcher_block)
+            block = merge_symbol_matcher_blocks(s, block, matcher_block)
           when Class
             unless opts[:class_matchers]
               raise RodaError, "cannot provide Class matcher to symbol_matcher unless using class_matchers plugin: #{matcher.inspect}"
@@ -139,14 +145,27 @@ class Roda
             unless regexp
               raise RodaError, "unregistered class matcher given to symbol_matcher: #{matcher.inspect}"
             end
-            block = merge_symbol_matcher_blocks(block, matcher_block)
+            block = merge_symbol_matcher_blocks(s, block, matcher_block)
           else
             raise RodaError, "unsupported matcher given to symbol_matcher: #{matcher.inspect}"
           end
 
-          array = opts[:symbol_matchers][s] = [regexp, consume_regexp, block].freeze
-          self::RodaRequest.send(:define_method, meth){array}
-          self::RodaRequest.send(:private, meth)
+          if block.is_a?(Symbol)
+            convert_meth = block
+          elsif block
+            convert_meth = :"_convert_symbol_#{s}"
+            define_method(convert_meth, &block)
+            private convert_meth
+          end
+
+          array = opts[:symbol_matchers][s] = [regexp, consume_regexp, convert_meth].freeze
+
+          self::RodaRequest.class_eval do
+            define_method(meth){array}
+            private meth
+          end
+
+          nil
         end
 
         # Freeze the class_matchers hash when freezing the app.
@@ -162,18 +181,22 @@ class Roda
         # block with the return values of matcher_block if
         # the matcher_block returns an array.
         # Otherwise, return matcher_block or block.
-        def merge_symbol_matcher_blocks(block, matcher_block)
-          if matcher_block
+        def merge_symbol_matcher_blocks(sym, block, matcher_meth)
+          if matcher_meth
             if block
+              convert_meth = :"_convert_merge_symbol_#{sym}"
+              define_method(convert_meth, &block)
+              private convert_meth
+
               proc do |*a|
-                if captures = matcher_block.call(*a)
-                  block.call(*captures)
+                if captures = send(matcher_meth, *a)
+                  send(convert_meth, *captures)
                 end
               end
             else
-              matcher_block
+              matcher_meth
             end
-          elsif block
+          else
             block
           end
         end
@@ -189,8 +212,8 @@ class Roda
           meth = :"match_symbol_#{s}"
           if respond_to?(meth, true)
             # Allow calling private match methods
-            _, re, block = send(meth)
-            consume(re, &block)
+            _, re, convert_meth = send(meth)
+            consume(re, convert_meth)
           else
             super
           end

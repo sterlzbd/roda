@@ -64,14 +64,27 @@ class Roda
     #     Employee[id]
     #   end
     #
+    # Blocks passed to the class_matchers plugin are evaluated in route
+    # block context.
+    #
     # This plugin does not work with the params_capturing plugin, as it does not
     # offer the ability to associate block arguments with named keys.
     module ClassMatchers
       def self.configure(app)
         app.opts[:class_matchers] ||= {
-          Integer=>[/(\d{1,100})/, /\A\/(\d{1,100})(?=\/|\z)/, proc{|i| if i = app.match_class_convert_Integer(i); [i] end}].freeze,
+          Integer=>[/(\d{1,100})/, /\A\/(\d{1,100})(?=\/|\z)/, :_convert_class_Integer].freeze,
           String=>[/([^\/]+)/, /\A\/([^\/]+)(?=\/|\z)/, nil].freeze
         }
+      end
+
+      module InstanceMethods
+        private
+
+        def _convert_class_Integer(i)
+          if i = @_request.send(:_match_class_convert_Integer, i)
+            i
+          end
+        end
       end
 
       module ClassMethods
@@ -87,47 +100,49 @@ class Roda
         # the match block.
         def class_matcher(klass, matcher, &block)
           meth = :"_match_class_#{klass}"
-          opts = self.opts
-          self::RodaRequest.class_eval do
-            case matcher
-            when Regexp
-              regexp_matcher = matcher
-              regexp = consume_pattern(matcher)
-              define_method(meth){consume(regexp, &block)}
-            when Class
-              regexp_matcher, regexp, matcher_block = opts[:class_matchers][matcher]
-              unless regexp
-                raise RodaError, "unregistered class matcher given to class_matcher: #{matcher.inspect}"
-              end
 
-              block = merge_class_matcher_blocks(block, matcher_block)
-              define_method(meth){consume(regexp, &block)}
-            when Symbol
-              unless opts[:symbol_matchers]
-                raise RodaError, "cannot provide Symbol matcher to class_matcher unless using symbol_matchers plugin: #{matcher.inspect}"
-              end
-
-              regexp_matcher, regexp, matcher_block = opts[:symbol_matchers][matcher]
-              unless regexp
-                raise RodaError, "unregistered symbol matcher given to class_matcher: #{matcher.inspect}"
-              end
-
-              block = merge_class_matcher_blocks(block, matcher_block)
-              define_method(meth){consume(regexp, &block)}
-            else
-              raise RodaError, "unsupported matcher given to class_matcher: #{matcher.inspect}"
+          case matcher
+          when Regexp
+            regexp_matcher = matcher
+            regexp = self::RodaRequest.send(:consume_pattern, matcher)
+          when Class
+            regexp_matcher, regexp, matcher_block = opts[:class_matchers][matcher]
+            unless regexp
+              raise RodaError, "unregistered class matcher given to class_matcher: #{matcher.inspect}"
             end
 
-            private meth
-            opts[:class_matchers][klass] = [regexp_matcher, regexp, block].freeze
-            nil
-          end
-        end
+            block = merge_class_matcher_blocks(klass, block, matcher_block)
+          when Symbol
+            unless opts[:symbol_matchers]
+              raise RodaError, "cannot provide Symbol matcher to class_matcher unless using symbol_matchers plugin: #{matcher.inspect}"
+            end
 
-        # Integrate with the Integer_matcher_max plugin.
-        def match_class_convert_Integer(i)
-          return super if defined?(super)
-          i.to_i
+            regexp_matcher, regexp, matcher_block = opts[:symbol_matchers][matcher]
+            unless regexp
+              raise RodaError, "unregistered symbol matcher given to class_matcher: #{matcher.inspect}"
+            end
+
+            block = merge_class_matcher_blocks(klass, block, matcher_block)
+          else
+            raise RodaError, "unsupported matcher given to class_matcher: #{matcher.inspect}"
+          end
+
+          if block.is_a?(Symbol)
+            convert_meth = block
+          elsif block
+            convert_meth = :"_convert_class_#{klass}"
+            define_method(convert_meth, &block)
+            private convert_meth
+          end
+
+          opts[:class_matchers][klass] = [regexp_matcher, regexp, convert_meth].freeze
+
+          self::RodaRequest.class_eval do
+            define_method(meth){consume(regexp, convert_meth)}
+            private meth
+          end
+
+          nil
         end
 
         # Freeze the class_matchers hash when freezing the app.
@@ -135,9 +150,7 @@ class Roda
           opts[:class_matchers].freeze
           super
         end
-      end
 
-      module RequestClassMethods
         private
 
         # If both block and matcher_block are given, return a
@@ -145,16 +158,20 @@ class Roda
         # block with the return values of matcher_block if
         # the matcher_block returns an array.
         # Otherwise, return matcher_block or block.
-        def merge_class_matcher_blocks(block, matcher_block)
-          if matcher_block
+        def merge_class_matcher_blocks(klass, block, matcher_meth)
+          if matcher_meth
             if block
+              convert_meth = :"_convert_merge_class_#{klass}"
+              define_method(convert_meth, &block)
+              private convert_meth
+
               proc do |*a|
-                if captures = matcher_block.call(*a)
-                  block.call(*captures)
+                if captures = send(matcher_meth, *a)
+                  send(convert_meth, *captures)
                 end
               end
             else
-              matcher_block
+              matcher_meth
             end
           elsif block
             block
