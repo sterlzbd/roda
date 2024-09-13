@@ -7,16 +7,7 @@ class Roda
       module ClassMethods
         private
 
-        # Set the matcher and block to use for the given class.
-        # The matcher can be a regexp, registered symbol matcher, or registered class
-        # matcher (if using the class_matchers plugin).
-        #
-        # If providing a regexp, the block given will be called with all regexp captures.
-        # If providing a registered symbol or class, the block will be called with the
-        # captures returned by the block for the registered symbol or class, or the regexp
-        # captures if no block was registered with the symbol or class. In either case,
-        # if a block is given, it should return an array with the captures to yield to
-        # the match block.
+        # Backend of symbol_matcher and class_matcher.
         def _symbol_class_matcher(expected_class, obj, matcher, block, &request_class_block)
           unless obj.is_a?(expected_class)
             raise RodaError, "Invalid type passed to class_matcher or symbol_matcher: #{matcher.inspect}"
@@ -78,11 +69,12 @@ class Roda
           nil
         end
 
-        # If both block and matcher_block are given, return a
-        # proc that calls matcher block first, and only calls
-        # block with the return values of matcher_block if
-        # the matcher_block returns an array.
-        # Otherwise, return matcher_block or block.
+        # If both block and matche_meth are given, 
+        # define a method for block, and then return a
+        # proc that calls matcher_meth first, and only calls
+        # the newly defined method with the return values of matcher_meth
+        # if matcher_method returns a truthy value.
+        # Otherwise, return matcher_meth or block.
         def _merge_matcher_blocks(type, obj, block, matcher_meth)
           if matcher_meth
             if block
