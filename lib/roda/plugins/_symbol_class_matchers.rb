@@ -92,7 +92,11 @@ class Roda
 
               proc do |*a|
                 if captures = send(matcher_meth, *a)
-                  send(convert_meth, *captures)
+                  if captures.is_a?(Array)
+                    send(convert_meth, *captures)
+                  else
+                    send(convert_meth, captures)
+                  end
                 end
               end
             else

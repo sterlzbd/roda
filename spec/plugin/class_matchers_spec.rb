@@ -152,6 +152,17 @@ describe "class_matchers plugin" do
     body("/1000000000000000000001").must_equal ""
   end
 
+  it "yields hash instances as single arguments" do
+    app(:class_matchers) do |r|
+      r.is('a', Array){|h| h.to_a.join(',')}
+      r.is('h', Hash){|h| h.to_a.join('-')}
+    end
+    app.class_matcher(Hash, /(\w)(\w)/){|k,v| {k=>v}}
+    app.class_matcher(Array, Hash){|h| h['c'] = 'd'; h }
+    body('/h/ab').must_equal 'a-b'
+    body('/a/ab').must_equal 'a,b,c,d'
+  end
+
   it "freezes :class_matchers option when freezing app" do
     app(:class_matchers){|r| }
     app.freeze
