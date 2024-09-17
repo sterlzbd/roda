@@ -148,7 +148,12 @@ class Roda
           if respond_to?(meth, true)
             # Allow calling private match methods
             _, re, convert_meth = send(meth)
-            consume(re, convert_meth)
+            if re
+              consume(re, convert_meth)
+            else
+              # defined in class_matchers plugin
+              _consume_segment(convert_meth)
+            end
           else
             super
           end

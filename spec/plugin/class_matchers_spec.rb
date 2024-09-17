@@ -152,6 +152,24 @@ describe "class_matchers plugin" do
     body("/1000000000000000000001").must_equal ""
   end
 
+  it "handles conversion block returning falsey for matcher based on String " do
+    app(:class_matchers) do |r|
+      r.is(Array){|s| s}
+      r.remaining_path
+    end
+    app.class_matcher(Array, String){|s| s*2 unless s == 'a'}
+    body('/a').must_equal '/a'
+    body('/b').must_equal 'bb'
+  end
+
+  it "yields multiple arguments in matcher based on String " do
+    app(:class_matchers) do |r|
+      r.is(Array){|s, s2| "#{s}-#{s2}"}
+    end
+    app.class_matcher(Array, String){|s| [s, s*2]}
+    body('/a').must_equal 'a-aa'
+  end
+
   it "yields hash instances as single arguments" do
     app(:class_matchers) do |r|
       r.is('a', Array){|h| h.to_a.join(',')}

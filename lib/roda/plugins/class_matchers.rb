@@ -77,7 +77,7 @@ class Roda
       def self.configure(app)
         app.opts[:class_matchers] ||= {
           Integer=>[/(\d{1,100})/, /\A\/(\d{1,100})(?=\/|\z)/, :_convert_class_Integer].freeze,
-          String=>[/([^\/]+)/, /\A\/([^\/]+)(?=\/|\z)/, nil].freeze
+          String=>[/([^\/]+)/, nil, nil].freeze
         }
       end
 
@@ -94,7 +94,11 @@ class Roda
         # the match block.
         def class_matcher(klass, matcher, &block)
           _symbol_class_matcher(Class, klass, matcher, block) do |meth, (_, regexp, convert_meth)|
-            define_method(meth){consume(regexp, convert_meth)}
+            if regexp
+              define_method(meth){consume(regexp, convert_meth)}
+            else
+              define_method(meth){_consume_segment(convert_meth)}
+            end
           end
         end
 
@@ -102,6 +106,31 @@ class Roda
         def freeze
           opts[:class_matchers].freeze
           super
+        end
+      end
+
+      module RequestMethods
+        # Use faster approach for segment matching.  This is used for
+        # matchers based on the String class matcher, and avoids the
+        # use of regular expressions for scanning.
+        def _consume_segment(convert_meth)
+          rp = @remaining_path
+          if _match_class_String
+            if convert_meth
+              if captures = scope.send(convert_meth, @captures.pop)
+                if captures.is_a?(Array)
+                  @captures.concat(captures)
+                else
+                  @captures << captures
+                end
+              else
+                @remaining_path = rp
+                nil
+              end
+            else
+              true
+            end
+          end
         end
       end
     end
