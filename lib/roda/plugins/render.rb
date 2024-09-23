@@ -48,7 +48,7 @@ class Roda
     #
     # :allowed_paths :: Set the template paths to allow.  Attempts to render paths outside
     #                   of these paths will raise an error.  Defaults to the +:views+ directory.
-    # :cache :: nil/false to explicitly disable premanent template caching.  By default, permanent
+    # :cache :: nil/false to explicitly disable permanent template caching.  By default, permanent
     #           template caching is disabled by default if RACK_ENV is development.  When permanent
     #           template caching is disabled, for templates with paths in the file system, the
     #           modification time of the file will be checked on every render, and if it has changed,
