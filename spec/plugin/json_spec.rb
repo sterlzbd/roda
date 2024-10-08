@@ -61,8 +61,8 @@ describe "json plugin" do
   end
 
   it "should accept custom serializers" do
-    app.plugin :json, :serializer => proc{|o| o.inspect}
-    body("/hash").must_equal '{"a"=>"b"}'
+    app.plugin :json, :serializer => proc{|o| o.to_a.inspect}
+    body("/hash").must_equal '[["a", "b"]]'
   end
 
   it "should give serializer the request if :include_request is set" do

@@ -66,7 +66,7 @@ describe "class_matchers plugin" do
             [date.year, date.month, date.day, a, b, c, d].join('-')
           end
           r.get Hash do |h|
-            [h.inspect, a, b, c, d].join('-')
+            [h.to_a.inspect, a, b, c, d].join('-')
           end
           r.get Array do |(a1,b1), (c1,d1)|
             [a1, b1, c1, d1, a, b, c, d].join('-')
@@ -98,7 +98,7 @@ describe "class_matchers plugin" do
     body("/c/d/2009-10-a").must_equal 'c-1-d-2-2009-10-a2009-10-a-4'
     body("/c/d/2009-10-01").must_equal '2009-10-1-c-1-d-2'
     body("/c/d/2009-13-01").must_equal "c-1-d-2-2009-13-012009-13-01-4"
-    body("/c/d/1/2").must_equal '{1=>2}-c-1-d-2'
+    body("/c/d/1/2").must_equal '[[1, 2]]-c-1-d-2'
     body("/c/d/e/f").must_equal 'e-1-f-2-c-1-d-2'
     body("/c/d/3").must_equal 'c-1-d-2-6-1'
     body("/c/d/10").must_equal 'c-1-d-2-1010-4'

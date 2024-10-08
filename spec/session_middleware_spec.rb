@@ -55,7 +55,7 @@ describe "RodaSessionMiddleware" do
     sess.each{|k, v| a << k << v}
     a.must_equal %w'foo bar'
     sess.data.must_equal("foo"=>"bar")
-    sess.inspect.must_equal '{"foo"=>"bar"}'
+    sess.inspect.must_match(/\A\{"foo" ?=> ?"bar"\}\z/)
     sess.loaded?.must_equal true
 
     sess[:foo].must_equal "bar"

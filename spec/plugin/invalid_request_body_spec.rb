@@ -4,7 +4,7 @@ describe "invalid_request_body plugin" do
   def invalid_request_body_app(*args, &block)
     app(:bare) do
       plugin :invalid_request_body, *args, &block
-      route{|r| r.POST.inspect}
+      route{|r| r.POST.to_a.inspect}
     end
   end
   content_type = 'multipart/form-data; boundary=foobar'
@@ -18,26 +18,26 @@ describe "invalid_request_body plugin" do
 
   it "supports :empty_400 plugin argument" do
     invalid_request_body_app(:empty_400)
-    body(valid_request_hash).must_equal '{"x"=>"y"}'
+    body(valid_request_hash).must_equal '[["x", "y"]]'
     req(invalid_request_hash).must_equal [400, {RodaResponseHeaders::CONTENT_TYPE=>'text/html', RodaResponseHeaders::CONTENT_LENGTH=>'0'}, []]
   end
 
   it "supports :empty_hash plugin argument" do
     invalid_request_body_app(:empty_hash)
-    body(valid_request_hash).must_equal '{"x"=>"y"}'
-    req(invalid_request_hash).must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>'text/html', RodaResponseHeaders::CONTENT_LENGTH=>'2'}, ['{}']]
+    body(valid_request_hash).must_equal '[["x", "y"]]'
+    req(invalid_request_hash).must_equal [200, {RodaResponseHeaders::CONTENT_TYPE=>'text/html', RodaResponseHeaders::CONTENT_LENGTH=>'2'}, ['[]']]
   end
 
   it "supports :raise plugin argument" do
     invalid_request_body_app(:raise)
-    body(valid_request_hash).must_equal '{"x"=>"y"}'
+    body(valid_request_hash).must_equal '[["x", "y"]]'
     proc{req(invalid_request_hash)}.must_raise Roda::RodaPlugins::InvalidRequestBody::Error
   end
 
   it "supports plugin block argument" do
     invalid_request_body_app{|e| {'y'=>"x"}}
-    body(valid_request_hash).must_equal '{"x"=>"y"}'
-    body(invalid_request_hash).must_equal '{"y"=>"x"}'
+    body(valid_request_hash).must_equal '[["x", "y"]]'
+    body(invalid_request_hash).must_equal '[["y", "x"]]'
   end
 
   it "raises Error if configuring plugin with invalid plugin argument" do

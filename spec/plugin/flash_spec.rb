@@ -43,7 +43,7 @@ describe "flash plugin" do
       body.must_equal 'b'
       body.must_equal 'bb'
 
-      body('/f').must_equal '{"a"=>"bbb"}'
+      body('/f').must_match(/\A\{"a" ?=> ?"bbb"\}\z/)
       body('/f').must_equal 'nil'
     end
 
