@@ -1,5 +1,7 @@
 = master
 
+* Avoid deprecation warning in public plugin when using Ruby 3.4.0-preview2 (jeremyevans)
+
 * Evaluate class_matcher and symbol_matcher blocks in route-block context (jeremyevans)
 
 * Allow class_matcher and symbol_matcher blocks to return non-arrays (jeremyevans)

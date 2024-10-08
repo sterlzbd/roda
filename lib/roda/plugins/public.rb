@@ -42,12 +42,12 @@ class Roda
     #   end
     module Public
       SPLIT = Regexp.union(*[File::SEPARATOR, File::ALT_SEPARATOR].compact)
-      PARSER = URI::DEFAULT_PARSER
       RACK_FILES = defined?(Rack::Files) ? Rack::Files : Rack::File
       ENCODING_MAP = {:zstd=>'zstd', :brotli=>'br', :gzip=>'gzip'}.freeze
       ENCODING_EXTENSIONS = {'br'=>'.br', 'gzip'=>'.gz', 'zstd'=>'.zst'}.freeze
 
       # :nocov:
+      PARSER = defined?(::URI::RFC2396_PARSER) ? ::URI::RFC2396_PARSER : ::URI::DEFAULT_PARSER
       MATCH_METHOD = RUBY_VERSION >= '2.4' ? :match? : :match
       # :nocov:
 
