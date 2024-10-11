@@ -28,7 +28,7 @@
 
   Symbol matchers can build upon class matchers (and vice-versa):
 
-    symbol_matcher :ActiveEmployee, Employee |employee|
+    symbol_matcher :ActiveEmployee, Employee do |employee|
       employee if employee.active?
     end
 
