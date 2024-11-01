@@ -149,6 +149,14 @@ describe "content_security_policy plugin" do
     header(RodaResponseHeaders::CONTENT_SECURITY_POLICY).must_equal "default_src 'none';"
   end
 
+  it "should not set policy if response.content_security_policy = false" do
+    app(:content_security_policy) do |r|
+      response.content_security_policy = false
+      ''
+    end
+    header(RodaResponseHeaders::CONTENT_SECURITY_POLICY).must_be_nil
+  end
+
   it "works with error_handler" do
     app(:bare) do
       plugin(:error_handler){|_| ''}

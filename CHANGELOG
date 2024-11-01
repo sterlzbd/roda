@@ -1,3 +1,7 @@
+= master
+
+* Allow response.content_security_plugin = false to avoid setting policy in content_security_policy plugin (jeremyevans)
+
 = 3.85.0 (2024-10-11)
 
 * Avoid deprecation warning in public plugin when using Ruby 3.4.0-preview2 (jeremyevans)

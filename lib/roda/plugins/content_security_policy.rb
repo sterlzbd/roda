@@ -293,15 +293,20 @@ class Roda
       end
 
       module ResponseMethods
+        # Set the content security policy for the response.  Can be set to false
+        # to disable setting the content-security-policy header in the response.
+        attr_writer :content_security_policy
+
         # Unset any content security policy when reinitializing
         def initialize
           super
-          @content_security_policy &&= nil
+          @content_security_policy = nil
         end
 
         # The current content security policy to be used for this response.
         def content_security_policy
-          @content_security_policy ||= roda_class.opts[:content_security_policy].dup
+          return @content_security_policy unless @content_security_policy.nil?
+          @content_security_policy = roda_class.opts[:content_security_policy].dup
         end
 
         private
@@ -309,7 +314,16 @@ class Roda
         # Set the appropriate content security policy header.
         def set_default_headers
           super
-          (@content_security_policy || roda_class.opts[:content_security_policy]).set_header(headers)
+
+          csp = @content_security_policy
+
+          if csp.nil?
+            csp = roda_class.opts[:content_security_policy]
+          end
+
+          if csp
+            csp.set_header(headers)
+          end
         end
       end
     end
