@@ -76,7 +76,7 @@ describe "named_routes plugin" do
 
     $roda_app = @app
     @app.opts[:loaded] = []
-    @app.freeze
+    2.times{@app.freeze}
     @app.opts[:loaded].must_equal [:a, :b, :a_c, :a_d, :a_e]
     body('/c').must_equal '-'
     body('/b').must_equal 'b'

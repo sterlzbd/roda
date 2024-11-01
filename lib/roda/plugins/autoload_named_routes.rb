@@ -54,7 +54,7 @@ class Roda
 
         # Eagerly load all autoloaded named routes when freezing the application.
         def freeze
-          opts.delete(:autoload_named_route_files).each{|file| require file}
+          opts.delete(:autoload_named_route_files).each{|file| require file} unless opts.frozen?
           super
         end
       end

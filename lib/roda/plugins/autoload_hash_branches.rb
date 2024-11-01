@@ -68,7 +68,7 @@ class Roda
 
         # Eagerly load all hash branches when freezing the application.
         def freeze
-          opts.delete(:autoload_hash_branch_files).each{|file| require file}
+          opts.delete(:autoload_hash_branch_files).each{|file| require file} unless opts.frozen?
           super
         end
       end
