@@ -4,8 +4,7 @@
 class Roda
   module RodaPlugins
     # The early_hints plugin allows sending 103 Early Hints responses
-    # using the rack.early_hints environment variable.  Currently, this
-    # is only supported by puma 3.11+, and on other servers this is a no-op.
+    # using the rack.early_hints environment variable.
     # Early hints allow clients to preload necessary files before receiving
     # the response.
     module EarlyHints
