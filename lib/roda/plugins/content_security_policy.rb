@@ -92,7 +92,10 @@ class Roda
     #   content_security_policy.get_script_src
     #   # => [:self, :unsafe_eval, 'example.com', [:nonce, 'foobarbaz']]
     #
-    # The clear method can be used to remove all settings from the policy.
+    # The clear method can be used to remove all settings from the policy. Empty policies
+    # do not set any headers. You can use +response.skip_content_security_policy!+ to skip
+    # setting a policy.  This is faster than calling +content_security_policy.clear+, since
+    # it does not duplicate the default policy.
     #
     # The following methods to set boolean settings are also defined:
     #
@@ -293,20 +296,20 @@ class Roda
       end
 
       module ResponseMethods
-        # Set the content security policy for the response.  Can be set to false
-        # to disable setting the content-security-policy header in the response.
-        attr_writer :content_security_policy
-
         # Unset any content security policy when reinitializing
         def initialize
           super
-          @content_security_policy = nil
+          @content_security_policy &&= nil
         end
 
         # The current content security policy to be used for this response.
         def content_security_policy
-          return @content_security_policy unless @content_security_policy.nil?
-          @content_security_policy = roda_class.opts[:content_security_policy].dup
+          @content_security_policy ||= roda_class.opts[:content_security_policy].dup
+        end
+
+        # Do not set a content security policy header for this response.
+        def skip_content_security_policy!
+          @skip_content_security_policy = true
         end
 
         private
@@ -314,15 +317,8 @@ class Roda
         # Set the appropriate content security policy header.
         def set_default_headers
           super
-
-          csp = @content_security_policy
-
-          if csp.nil?
-            csp = roda_class.opts[:content_security_policy]
-          end
-
-          if csp
-            csp.set_header(headers)
+          unless @skip_content_security_policy
+            (@content_security_policy || roda_class.opts[:content_security_policy]).set_header(headers)
           end
         end
       end

@@ -149,10 +149,16 @@ describe "content_security_policy plugin" do
     header(RodaResponseHeaders::CONTENT_SECURITY_POLICY).must_equal "default_src 'none';"
   end
 
-  it "should not set policy if response.content_security_policy = false" do
-    app(:content_security_policy) do |r|
-      response.content_security_policy = false
-      ''
+  it "should not set header when using response.skip_content_security_policy!" do
+    app(:bare) do
+      plugin :content_security_policy do |csp|
+       csp.default_src :self
+      end
+
+      route do |r|
+        response.skip_content_security_policy!
+        ''
+      end
     end
     header(RodaResponseHeaders::CONTENT_SECURITY_POLICY).must_be_nil
   end

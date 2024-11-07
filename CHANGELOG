@@ -2,7 +2,7 @@
 
 * Make Roda.freeze work if already frozen when using the autoload_{hash_branches,named_routes} plugins (jeremyevans)
 
-* Allow response.content_security_plugin = false to avoid setting policy in content_security_policy plugin (jeremyevans)
+* In content_security_policy plugin, add response.skip_content_security_policy! to avoid setting header (jeremyevans)
 
 = 3.85.0 (2024-10-11)
 
