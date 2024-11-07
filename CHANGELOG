@@ -1,5 +1,7 @@
 = master
 
+* In permissions_policy plugin, add response.skip_permissions_policy! to avoid setting header (jeremyevans)
+
 * Make Roda.freeze work if already frozen when using the autoload_{hash_branches,named_routes} plugins (jeremyevans)
 
 * In content_security_policy plugin, add response.skip_content_security_policy! to avoid setting header (jeremyevans)

@@ -134,6 +134,20 @@ describe "permissions_policy plugin" do
     header(RodaResponseHeaders::PERMISSIONS_POLICY).must_equal "foo"
   end
 
+  it "should not set header when using response.skip_permissions_policy!" do
+    app(:bare) do
+      plugin :permissions_policy do |pp|
+        pp.fullscreen :self
+      end
+
+      route do |r|
+        response.skip_permissions_policy!
+        ''
+      end
+    end
+    header(RodaResponseHeaders::PERMISSIONS_POLICY).must_be_nil
+  end
+
   it "works with error_handler" do
     app(:bare) do
       plugin(:error_handler){|_| ''}

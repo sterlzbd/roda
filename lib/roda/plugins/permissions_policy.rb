@@ -99,7 +99,10 @@ class Roda
     #   permissions_policy.get_fullscreen
     #   # => [:self, "https://example.com", "https://*.example.com"]
     #
-    # The clear method can be used to remove all settings from the policy.
+    # The clear method can be used to remove all settings from the policy. Empty policies
+    # do not set any headers. You can use +response.skip_permissions_policy!+ to skip
+    # setting a policy.  This is faster than calling +permissions_policy.clear+, since
+    # it does not duplicate the default policy.
     module PermissionsPolicy
       SUPPORTED_SETTINGS = %w'
       accelerometer
@@ -311,12 +314,19 @@ class Roda
           @permissions_policy ||= roda_class.opts[:permissions_policy].dup
         end
 
+        # Do not set a permissions policy header for this response.
+        def skip_permissions_policy!
+          @skip_permissions_policy = true
+        end
+
         private
 
         # Set the appropriate permissions policy header.
         def set_default_headers
           super
-          (@permissions_policy || roda_class.opts[:permissions_policy]).set_header(headers)
+          unless @skip_permissions_policy
+            (@permissions_policy || roda_class.opts[:permissions_policy]).set_header(headers)
+          end
         end
       end
     end
