@@ -1,5 +1,7 @@
 = master
 
+* Add conditional_sessions plugin, for using the sessions plugin for only a subset of requests (jeremyevans)
+
 * In permissions_policy plugin, add response.skip_permissions_policy! to avoid setting header (jeremyevans)
 
 * Make Roda.freeze work if already frozen when using the autoload_{hash_branches,named_routes} plugins (jeremyevans)
