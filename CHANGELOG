@@ -1,4 +1,4 @@
-= master
+= 3.86.0 (2024-11-12)
 
 * Add conditional_sessions plugin, for using the sessions plugin for only a subset of requests (jeremyevans)
 
