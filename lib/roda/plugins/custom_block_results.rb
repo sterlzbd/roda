@@ -28,7 +28,16 @@ class Roda
     #
     # Note that custom block result handling only occurs if the types
     # are not handled by Roda itself.  You cannot use this to modify
-    # the handling of nil, false, or string results.
+    # the handling of nil, false, or string results.  Additionally,
+    # if the response body has already been written to before the the
+    # route block exits, then the result of the block is ignored,
+    # and the related +handle_block_result+ block will not be called
+    # (this is standard Roda behavior).
+    # 
+    # The return value of the +handle_block_result+ block is written
+    # to the body if the block return value is a String, similar to
+    # standard Roda handling of block results.  Non-String return
+    # values are ignored.
     module CustomBlockResults
       def self.configure(app)
         app.opts[:custom_block_results] ||= {}
@@ -55,7 +64,15 @@ class Roda
         # to get the block result.
         def unsupported_block_result(result)
           roda_class.opts[:custom_block_results].each do |klass, meth|
-            return scope.send(meth, result) if klass === result
+            if klass === result
+              result = scope.send(meth, result)
+
+              if String === result
+                return result
+              else
+                return
+              end
+            end
           end
 
           super

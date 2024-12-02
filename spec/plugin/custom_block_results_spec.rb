@@ -16,6 +16,16 @@ describe "custom_block_results plugin" do
     end
   end
 
+  it "should handle blocks that do not return strings" do
+    2.times do
+      @app.handle_block_result(Symbol) do |s|
+        response.status = 201
+      end
+      status.must_equal 201
+      body.must_be_empty
+    end
+  end
+
   it "should handle other objects supporting ===" do
     @app.handle_block_result(/sy/) do |s|
       "x#{s}"
