@@ -51,7 +51,8 @@ class Roda
 
         # Match if the given uppercase key is present inside the environment.
         def match_header(key)
-          key = key.upcase.tr("-","_")
+          key = key.upcase
+          key.tr!("-","_")
           unless key == "CONTENT_TYPE" || key == "CONTENT_LENGTH"
             key = "HTTP_#{key}"
           end
@@ -75,8 +76,8 @@ class Roda
         # Match the submitted user agent to the given pattern, capturing any
         # regexp match groups.
         def match_user_agent(pattern)
-          if (user_agent = @env["HTTP_USER_AGENT"]) && user_agent.to_s =~ pattern
-            @captures.concat($~[1..-1])
+          if (user_agent = @env["HTTP_USER_AGENT"]) && (match = pattern.match(user_agent))
+            @captures.concat(match.captures)
           end
         end
       end
