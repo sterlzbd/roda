@@ -1,5 +1,7 @@
 = master
 
+* Add host_routing plugin for routing based on request host header (jeremyevans)
+
 * Do not write non-String to response body when using custom_block_results plugin (jeremyevans)
 
 = 3.86.0 (2024-11-12)
