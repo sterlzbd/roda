@@ -1,4 +1,4 @@
-= master
+= 3.87.0 (2024-12-17)
 
 * Add host_routing plugin for routing based on request host header (jeremyevans)
 
