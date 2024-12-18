@@ -1,5 +1,7 @@
 === master
 
+* Make json_parser plugin handle case where Rack::Request#POST is called previously for env on Rack 3 (jeremyevans) (#372)
+
 * Fix strict_unused_block warnings when running specs on Ruby 3.4 (jeremyevans)
 
 = 3.87.0 (2024-12-17)

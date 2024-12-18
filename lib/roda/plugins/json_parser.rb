@@ -53,27 +53,28 @@ class Roda
         # parse the request body as JSON.  Ignore an empty request body.
         def POST
           env = @env
-          if post_params = (env["roda.json_params"] || env["rack.request.form_hash"])
-            post_params
-          elsif (input = env["rack.input"]) && content_type =~ /json/
-            str = _read_json_input(input)
-            return super if str.empty?
-            begin
-              json_params = parse_json(str)
-            rescue
-              roda_class.opts[:json_parser_error_handler].call(self)
-            end
-
-            wrap = roda_class.opts[:json_parser_wrap]
-            if wrap == :always || (wrap == :unless_hash && !json_params.is_a?(Hash))
-              json_params = {"_json"=>json_params}
-            end
-            env["roda.json_params"] = json_params
-            env["rack.request.form_input"] = input
-            json_params
-          else
-            super
+          if post_params = env["roda.json_params"]
+            return post_params
           end
+
+          unless (input = env["rack.input"]) && (content_type = self.content_type) && content_type.include?('json')
+            return super
+          end
+
+          str = _read_json_input(input)
+          return super if str.empty?
+          begin
+            json_params = parse_json(str)
+          rescue
+            roda_class.opts[:json_parser_error_handler].call(self)
+          end
+
+          wrap = roda_class.opts[:json_parser_wrap]
+          if wrap == :always || (wrap == :unless_hash && !json_params.is_a?(Hash))
+            json_params = {"_json"=>json_params}
+          end
+          env["roda.json_params"] = json_params
+          json_params
         end
 
         private

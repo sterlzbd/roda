@@ -170,8 +170,8 @@ class Minitest::Spec
     _req(@app, env)
   end
 
-  def _req(app, env)
-    env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge(env)
+  def req_env(env)
+    env = {"REQUEST_METHOD" => "GET", "PATH_INFO" => "/", "SCRIPT_NAME" => ""}.merge!(env)
     if ENV['LINT']
       env['SERVER_NAME'] ||= 'example.com'
       env['SERVER_PROTOCOL'] ||= env['HTTP_VERSION'] || 'HTTP/1.0'
@@ -187,7 +187,11 @@ class Minitest::Spec
         env['rack.multiprocess'] = env['rack.multithread'] = env['rack.run_once'] = false
       end
     end
-    a = @app.call(env)
+    env
+  end
+
+  def _req(app, env)
+    a = @app.call(req_env(env))
 
     if ENV['LINT']
       orig = a[2]

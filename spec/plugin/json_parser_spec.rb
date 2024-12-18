@@ -11,6 +11,13 @@ describe "json_parser plugin" do
     body('rack.input'=>rack_input('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST').must_equal '1'
   end
 
+  it "Handles Rack::Request#POST being called in advance" do
+    env = req_env('rack.input'=>rack_input('{"a":{"b":1}}'), 'CONTENT_TYPE'=>'text/json', 'REQUEST_METHOD'=>'POST')
+    r = Rack::Request.new(env)
+    r.POST
+    body(env).must_equal '1'
+  end
+
   it "doesn't affect parsing of non-json content type" do
     body('rack.input'=>rack_input('a[b]=1'), 'REQUEST_METHOD'=>'POST').must_equal '1'
   end
