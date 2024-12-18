@@ -135,7 +135,7 @@ describe "status_handler plugin" do
       end
 
       o = Object.new
-      def o.each; end
+      def o.each(&_); end
       route do |r|
         r.halt [404, {}, o]
       end

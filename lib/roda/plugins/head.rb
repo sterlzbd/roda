@@ -45,7 +45,7 @@ class Roda
         end
 
         # yield nothing
-        def each
+        def each(&_)
         end
 
         # this should be called by the Rack server
