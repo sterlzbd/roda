@@ -1,5 +1,7 @@
 === master
 
+* Make default_headers plugin correctly handle mixed/upper case content-type header on Rack 3 (jeremyevans) (#373)
+
 * Make json_parser plugin handle case where Rack::Request#POST is called previously for env on Rack 3 (jeremyevans) (#372)
 
 * Fix strict_unused_block warnings when running specs on Ruby 3.4 (jeremyevans)

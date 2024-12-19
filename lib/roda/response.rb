@@ -46,8 +46,6 @@ class Roda
 
       # Instance methods for RodaResponse
       module ResponseMethods
-        DEFAULT_HEADERS = {RodaResponseHeaders::CONTENT_TYPE => "text/html".freeze}.freeze
-
         # The body for the current response.
         attr_reader :body
 
@@ -179,11 +177,15 @@ class Roda
         private
 
         if defined?(Rack::Headers) && Rack::Headers.is_a?(Class)
+          DEFAULT_HEADERS = Rack::Headers[{RodaResponseHeaders::CONTENT_TYPE => "text/html".freeze}].freeze
+
           # Use Rack::Headers for headers by default on Rack 3
           def _initialize_headers
             Rack::Headers.new
           end
         else
+          DEFAULT_HEADERS = {RodaResponseHeaders::CONTENT_TYPE => "text/html".freeze}.freeze
+
           # Use plain hash for headers by default on Rack 1-2
           def _initialize_headers
             {}

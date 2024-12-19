@@ -29,6 +29,18 @@ describe "default_headers plugin" do
     req[1].must_equal h
   end
 
+  it "should handle case insensitive headers" do
+    app(:bare) do
+      plugin :default_headers, 'Content-Type' => 'application/json'
+
+      route do |r|
+        ''
+      end
+    end
+
+    header(RodaResponseHeaders::CONTENT_TYPE).must_equal "application/json"
+  end
+
   it "should allow modifying the default headers by reloading the plugin" do
     app(:bare) do
       plugin :default_headers, RodaResponseHeaders::CONTENT_TYPE => 'text/json'
