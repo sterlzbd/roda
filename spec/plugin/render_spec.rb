@@ -405,11 +405,11 @@ describe "render plugin" do
 
           app.render_opts[:template_method_cache][template].must_be_nil
           body.strip.must_equal "ct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           body.strip.must_equal "ct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           body.strip.must_equal "ct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
         end
 
@@ -482,14 +482,14 @@ describe "render plugin" do
           app.render_opts[:template_method_cache][template].must_be_nil
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Array)
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Array)
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal(2*multiplier)
         end
 
@@ -509,16 +509,16 @@ describe "render plugin" do
           app.freeze
 
           app.render_opts[:template_method_cache][template].must_be_nil
-          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Array)
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Array)
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Array)
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
-          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+          app.render_opts[:template_method_cache][:_roda_layout].must_be_kind_of(Array)
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal(2*multiplier)
         end
 
@@ -533,13 +533,13 @@ describe "render plugin" do
           app.render_opts[:template_method_cache][template].must_be_nil
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "act\nb"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier)
         end
@@ -557,7 +557,7 @@ describe "render plugin" do
           3.times do
             app.render_opts[:template_method_cache][:_roda_layout] = false
             body.strip.must_equal "act\nb"
-            app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+            app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
             app.render_opts[:template_method_cache][:_roda_layout].must_equal false
           end
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier)
@@ -574,13 +574,13 @@ describe "render plugin" do
           app.render_opts[:template_method_cache][template].must_be_nil
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "ct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "ct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "ct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
         end
@@ -596,16 +596,67 @@ describe "render plugin" do
           app.render_opts[:template_method_cache][template].must_be_nil
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "<title>Roda: Home</title>\nct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "<title>Roda: Home</title>\nct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           body.strip.must_equal "<title>Roda: Home</title>\nct"
-          app.render_opts[:template_method_cache][template].must_be_kind_of(Symbol)
+          app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
           app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
           app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
         end
+      end
+    end
+  end
+
+  if Roda::RodaPlugins::Render::FIXED_LOCALS_COMPILED_METHOD_SUPPORT
+    [true, false].each do |cache_plugin_option|
+      multiplier = cache_plugin_option ? 1 : 2
+
+      it "support fixed locals in layout templates with plugin option :cache=>#{cache_plugin_option}" do
+        template = "comp_test"
+
+        app(:bare) do
+          plugin :render, :views=>'spec/views/fixed', :layout_opts=>{:locals=>{:title=>"Home"}}, :cache=>cache_plugin_option, :template_opts=>{:extract_fixed_locals=>true}
+          route do
+            view(template)
+          end
+        end
+
+        app.render_opts[:template_method_cache][template].must_be_nil
+        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+        body.strip.must_equal "<title>Roda: Home</title>\nct"
+        app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+        body.strip.must_equal "<title>Roda: Home</title>\nct"
+        app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+        body.strip.must_equal "<title>Roda: Home</title>\nct"
+        app.render_opts[:template_method_cache][template].must_be_kind_of(Array)
+        app.render_opts[:template_method_cache][:_roda_layout].must_be_nil
+        app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
+      end
+
+      it "support fixed locals in render templates with plugin option :cache=>#{cache_plugin_option}" do
+        template = "local_test"
+
+        app(:bare) do
+          plugin :render, :views=>'spec/views/fixed', :cache=>cache_plugin_option, :template_opts=>{:extract_fixed_locals=>true}
+          route do
+            render(template, locals: {title: 'ct'})
+          end
+        end
+
+        key = [:_render_locals, template]
+        app.render_opts[:template_method_cache][key].must_be_nil
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
       end
     end
   end

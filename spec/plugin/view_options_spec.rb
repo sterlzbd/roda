@@ -74,9 +74,9 @@ describe "view_options plugin view subdirs" do
     end
     if Roda::RodaPlugins::Render::COMPILED_METHOD_SUPPORT
       method_cache = @app.opts[:render][:template_method_cache]
-      method_cache[['spec/views', 'comp_test']].must_be_kind_of(Symbol)
-      method_cache[['spec/views/about', 'comp_test']].must_be_kind_of(Symbol)
-      method_cache[:_roda_layout].must_be_kind_of(Symbol)
+      method_cache[['spec/views', 'comp_test']].must_be_kind_of(Array)
+      method_cache[['spec/views/about', 'comp_test']].must_be_kind_of(Array)
+      method_cache[:_roda_layout].must_be_kind_of(Array)
     end
   end
 end

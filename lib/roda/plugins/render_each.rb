@@ -105,7 +105,7 @@ class Roda
           def _optimized_render_each(enum, optimized_template, as, locals)
             enum.map do |v|
               locals[as] = v
-              send(optimized_template, locals)
+              _call_optimized_template_method(optimized_template, locals)
             end.join
           end
         else

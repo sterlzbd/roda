@@ -118,6 +118,45 @@ class Roda
     # have either +:template+, +:inline+, +:path+, or +:content+ (for +view+) as
     # one of the keys.
     #
+    # = Fixed Locals in Templates
+    #
+    # By default, you can pass any local variables to any templates.  A separate
+    # template method is compiled for each combination of locals.  This causes
+    # multiple issues:
+    # 
+    # * It is inefficient, especially for large templates that are called with
+    #   many combinations of locals.
+    # * It hides issues if unused local variable names are passed to the template
+    # * It does not support default values for local variables
+    # * It does not support required local variables
+    # * It does not support cases where you want to pass values via a keyword splat
+    # * It does not support named blocks
+    #
+    # If you are using Tilt 2.6+, you can used fixed locals in templates, by
+    # passing the appropriate options in :template_opts.  For example, if you
+    # are using ERB templates, the recommended way to use the render plugin is to
+    # use the +:extract_fixed_locals+ and +:default_fixed_locals+ template options:
+    #
+    #   plugin :render, template_opts: {extract_fixed_locals: true, default_fixed_locals: '()'}
+    #
+    # This will default templates to not allowing any local variables to be passed.
+    # If the template requires local variables, you can specify them using a magic
+    # comment in the template, such as:
+    # 
+    #   <%# locals(required_local:, optional_local: nil) %>
+    #
+    # The magic comment is used as method parameters when defining the compiled template
+    # method.
+    #
+    # For better debugging of issues with invalid keywords being passed to templates that
+    # have not been updated to support fixed locals, it can be helpful to set
+    # +:default_fixed_locals+ to use a single optional keyword argument
+    # <tt>'(_no_kw: nil)'</tt>.  This makes the error message show which keywords
+    # were passed, instead of showing that the takes no arguments (if you use <tt>'()'</tt>),
+    # or that no keywords are accepted (if you pass <tt>(**nil)</tt>).
+    #
+    # See Tilt's documentation for more information regarding fixed locals.
+    #
     # = Speeding Up Template Rendering
     #
     # The render/view method calls are optimized for usage with a single symbol/string
@@ -130,6 +169,21 @@ class Roda
     # only argument, you can speed things up by specifying a +:cache_key+ option in
     # the hash, making sure the +:cache_key+ is unique to the template you are
     # rendering.
+    #
+    # = Recommended +template_opts+
+    #
+    # Here are the recommended values of :template_opts for new applications (a couple
+    # are Erubi-specific and can be ignored if you are using other templates engines):
+    #
+    #   plugin :render, template_opts: {
+    #       scope_class: self,          # Always uses current class as scope class for compiled templates
+    #       freeze: true,               # Freeze string literals in templates
+    #       extract_fixed_locals: true, # Support fixed locals in templates
+    #       default_fixed_locals: '()', # Default to templates not supporting local variables
+    #       escape: true,               # For Erubi templates, escapes <%= by default (use <%== for unescaped
+    #       chain_appends: true,        # For Erubi templates, improves performance
+    #       skip_compiled_encoding_detection: true, # Unless you need encodings explicitly specified
+    #     }
     #
     # = Accepting Template Blocks in Methods
     #
@@ -228,6 +282,19 @@ class Roda
         ([1, -2].include?(((compiled_method_arity = Tilt::Template.instance_method(:compiled_method).arity) rescue false)))
       NO_CACHE = {:cache=>false}.freeze
       COMPILED_METHOD_SUPPORT = RUBY_VERSION >= '2.3' && tilt_compiled_method_support && ENV['RODA_RENDER_COMPILED_METHOD_SUPPORT'] != 'no'
+      FIXED_LOCALS_COMPILED_METHOD_SUPPORT = COMPILED_METHOD_SUPPORT && Tilt::Template.method_defined?(:fixed_locals?)
+
+      if FIXED_LOCALS_COMPILED_METHOD_SUPPORT
+        def self.tilt_template_fixed_locals?(template)
+          template.fixed_locals?
+        end
+      # :nocov:
+      else
+        def self.tilt_template_fixed_locals?(template)
+          false
+        end
+      end
+      # :nocov:
 
       if compiled_method_arity == -2
         def self.tilt_template_compiled_method(template, locals_keys, scope_class)
@@ -385,6 +452,11 @@ class Roda
         end
 
         if COMPILED_METHOD_SUPPORT
+          # Whether the underlying template uses fixed locals.
+          def fixed_locals?
+            Render.tilt_template_fixed_locals?(@template)
+          end
+
           # Compile a method in the given module with the given name that will
           # call the compiled template method, updating the compiled template method
           def define_compiled_method(roda_class, method_name, locals_keys=EMPTY_ARRAY)
@@ -401,6 +473,15 @@ class Roda
             mod.send(:private, method_name)
 
             method_name
+          end
+
+          # Returns an appropriate value for the template method cache.
+          def define_compiled_method_cache_value(roda_class, method_name, locals_keys=EMPTY_ARRAY)
+            if compiled_method = define_compiled_method(roda_class, method_name, locals_keys)
+              [compiled_method, false].freeze
+            else
+              compiled_method
+            end
           end
 
           private
@@ -422,7 +503,7 @@ class Roda
                 mod.send(:private, method_name)
               end
 
-              send(method_name, locals, &block)
+              _call_optimized_template_method([method_name, Render.tilt_template_fixed_locals?(template)], locals, &block)
             end
           end
         end
@@ -509,9 +590,9 @@ class Roda
         # Render the given template. See Render for details.
         def render(template, opts = (no_opts = true; optimized_template = _cached_template_method(template); OPTS), &block)
           if optimized_template
-            send(optimized_template, OPTS, &block)
+            _call_optimized_template_method(optimized_template, OPTS, &block)
           elsif !no_opts && opts.length == 1 && (locals = opts[:locals]) && (optimized_template = _optimized_render_method_for_locals(template, locals))
-            send(optimized_template, locals, &block)
+            _call_optimized_template_method(optimized_template, locals, &block)
           else
             opts = render_template_opts(template, opts)
             retrieve_template(opts).render((opts[:scope]||self), (opts[:locals]||OPTS), &block)
@@ -534,7 +615,7 @@ class Roda
             # and use it if so.  This way avoids the extra conditional and local variable
             # assignments in the next section.
             if layout_method = _layout_method
-              return send(layout_method, OPTS){content}
+              return _call_optimized_template_method(layout_method, OPTS){content}
             end
 
             # If we have an optimized template method but no optimized layout method, create the
@@ -543,7 +624,7 @@ class Roda
             if layout_template = self.class.opts[:render][:optimize_layout]
               retrieve_template(:template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
               if layout_method = _layout_method
-                return send(layout_method, OPTS){content}
+                return _call_optimized_template_method(layout_method, OPTS){content}
               end
             end
           else
@@ -594,37 +675,43 @@ class Roda
           def _optimized_render_method_for_locals(template, locals)
             return unless method_cache = render_opts[:template_method_cache]
 
-            locals_keys = locals.keys.sort
-            key = [:_render_locals, template, locals_keys]
-
-            optimized_template = case template
+            case template
             when String, Symbol
-              _cached_template_method_lookup(method_cache, key)
+              key = [:_render_locals, template]
+              if optimized_template = _cached_template_method_lookup(method_cache, key)
+                # Fixed locals case
+                return optimized_template
+              end
+
+              locals_keys = locals.keys.sort
+              key << locals_keys
+              if optimized_template = _cached_template_method_lookup(method_cache, key)
+                # Regular locals case
+                return optimized_template
+              end
             else
               return
             end
 
-            case optimized_template
-            when Symbol
-              optimized_template
-            else
-              if method_cache_key = _cached_template_method_key(key)
-                template_obj = retrieve_template(render_template_opts(template, NO_CACHE))
-                method_name = :"_roda_template_locals_#{self.class.object_id}_#{method_cache_key}"
+            if method_cache_key = _cached_template_method_key(key)
+              template_obj = retrieve_template(render_template_opts(template, NO_CACHE))
+              key.pop if fixed_locals = Render.tilt_template_fixed_locals?(template_obj)
+              key.freeze
+              method_cache_key.freeze
+              method_name = :"_roda_template_locals_#{self.class.object_id}_#{method_cache_key}"
 
-                method_cache[method_cache_key] = case template_obj
-                when Render::TemplateMtimeWrapper
-                  template_obj.define_compiled_method(self.class, method_name, locals_keys)
+              method_cache[method_cache_key] = case template_obj
+              when Render::TemplateMtimeWrapper
+                template_obj.define_compiled_method_cache_value(self.class, method_name, locals_keys)
+              else
+                begin
+                  unbound_method = Render.tilt_template_compiled_method(template_obj, locals_keys, self.class)
+                rescue ::NotImplementedError
+                  false
                 else
-                  begin
-                    unbound_method = Render.tilt_template_compiled_method(template_obj, locals_keys, self.class)
-                  rescue ::NotImplementedError
-                    false
-                  else
-                    self.class::RodaCompiledTemplates.send(:define_method, method_name, unbound_method)
-                    self.class::RodaCompiledTemplates.send(:private, method_name)
-                    method_name
-                  end
+                  self.class::RodaCompiledTemplates.send(:define_method, method_name, unbound_method)
+                  self.class::RodaCompiledTemplates.send(:private, method_name)
+                  [method_name, fixed_locals].freeze
                 end
               end
             end
@@ -634,11 +721,47 @@ class Roda
           # a single argument is passed to view.
           def _optimized_view_content(template)
             if optimized_template = _cached_template_method(template)
-              send(optimized_template, OPTS)
+              _call_optimized_template_method(optimized_template, OPTS)
             elsif template.is_a?(Hash) && template.length == 1
               template[:content]
             end
           end
+
+          if RUBY_VERSION >= '3'
+            class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
+              def _call_optimized_template_method((meth, fixed_locals), locals, &block)
+                if fixed_locals
+                  send(meth, **locals, &block)
+                else
+                  send(meth, locals, &block)
+                end
+              end
+            RUBY
+          # :nocov:
+          elsif RUBY_VERSION >= '2'
+            class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
+              def _call_optimized_template_method((meth, fixed_locals), locals, &block)
+                if fixed_locals
+                  if locals.empty?
+                    send(meth, &block)
+                  else
+                    send(meth, **locals, &block)
+                  end
+                else
+                  send(meth, locals, &block)
+                end
+              end
+            RUBY
+          else
+            # Call the optimized template method.  This is designed to be used with the
+            # method cache, which caches the method name and whether the method uses
+            # fixed locals.  Methods with fixed locals need to be called with a keyword
+            # splat.
+            def _call_optimized_template_method((meth, fixed_locals), locals, &block)
+              send(meth, locals, &block)
+            end
+          end
+          # :nocov:
         else
           def _cached_template_method(_)
             nil
@@ -660,7 +783,6 @@ class Roda
             nil
           end
         end
-
 
         # Convert template options to single hash when rendering templates using render.
         def render_template_opts(template, opts)
@@ -772,7 +894,7 @@ class Roda
 
               if define_compiled_method
                 method_name = :"_roda_template_#{self.class.object_id}_#{method_cache_key}"
-                method_cache[method_cache_key] = template.define_compiled_method(self.class, method_name)
+                method_cache[method_cache_key] = template.define_compiled_method_cache_value(self.class, method_name)
               end
             else
               template = self.class.create_template(opts, template_opts)
@@ -786,7 +908,7 @@ class Roda
                   method_name = :"_roda_template_#{self.class.object_id}_#{method_cache_key}"
                   self.class::RodaCompiledTemplates.send(:define_method, method_name, unbound_method)
                   self.class::RodaCompiledTemplates.send(:private, method_name)
-                  method_cache[method_cache_key] = method_name
+                  method_cache[method_cache_key] = [method_name, Render.tilt_template_fixed_locals?(template)].freeze
                 end
               end
             end
