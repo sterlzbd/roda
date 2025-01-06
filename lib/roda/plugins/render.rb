@@ -771,10 +771,6 @@ class Roda
             nil
           end
 
-          def _layout_method
-            nil
-          end
-
           def _optimized_render_method_for_locals(_, _)
             nil
           end
