@@ -406,7 +406,7 @@ if RUBY_VERSION >= '2'
       b.must_equal ['bar']
       _, h, b = req('/g/foo')
       h[RodaResponseHeaders::SET_COOKIE].must_be_nil
-      b.must_equal ['{:a=>"bar"}']
+      [['{:a=>"bar"}'], ['{a: "bar"}']].must_include b
 
       @app.plugin :sessions, :secret=>'1'*64,
                   :upgrade_from_rack_session_cookie_secret=>'1'
@@ -434,25 +434,25 @@ if RUBY_VERSION >= '2'
       @cookie = c
       _, h, b = req('/g/foo')
       h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
-      b.must_equal ['{"a"=>"bar"}']
+      [['{"a"=>"bar"}'], ['{"a" => "bar"}']].must_include b
 
       @app.plugin :sessions, :cookie_options=>{:path=>'/foo'}, :upgrade_from_rack_session_cookie_options=>{}
       @cookie = c
       _, h, b = req('/g/foo')
       h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/foo; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
-      b.must_equal ['{"a"=>"bar"}']
+      [['{"a"=>"bar"}'], ['{"a" => "bar"}']].must_include b
 
       @app.plugin :sessions, :upgrade_from_rack_session_cookie_options=>{:path=>'/baz'}
       @cookie = c
       _, h, b = req('/g/foo')
       h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nrack\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
-      b.must_equal ['{"a"=>"bar"}']
+      [['{"a"=>"bar"}'], ['{"a" => "bar"}']].must_include b
 
       @app.plugin :sessions, :upgrade_from_rack_session_cookie_key=>'quux.session'
       @cookie = c.sub(/\Arack/, 'quux')
       _, h, b = req('/g/foo')
       h[RodaResponseHeaders::SET_COOKIE].must_match(/\Aroda\.session=(.*); path=\/foo; HttpOnly(; SameSite=Lax)?\nquux\.session=; path=\/baz; max-age=0; expires=Thu, 01 Jan 1970 00:00:00/mi)
-      b.must_equal ['{"a"=>"bar"}']
+      [['{"a"=>"bar"}'], ['{"a" => "bar"}']].must_include b
     end
   end if Rack.release < '2.3'
 end
