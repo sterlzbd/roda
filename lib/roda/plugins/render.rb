@@ -570,17 +570,17 @@ class Roda
         def _freeze_layout_method
           if render_opts[:layout]
             instance = allocate
+            # This needs to be called even if COMPILED_METHOD_SUPPORT is not set,
+            # in order for the precompile_templates plugin to work correctly.
             instance.send(:retrieve_template, instance.send(:view_layout_opts, OPTS))
 
-            if COMPILED_METHOD_SUPPORT
-              if (layout_template = render_opts[:optimize_layout]) && !opts[:render][:optimized_layout_method_created]
+            if COMPILED_METHOD_SUPPORT && (layout_template = render_opts[:optimize_layout]) && !opts[:render][:optimized_layout_method_created]
                 instance.send(:retrieve_template, :template=>layout_template, :cache_key=>nil, :template_method_cache_key => :_roda_layout)
                 layout_method = opts[:render][:template_method_cache][:_roda_layout]
                 define_method(:_layout_method){layout_method}
                 private :_layout_method
                 alias_method(:_layout_method, :_layout_method)
                 opts[:render] = opts[:render].merge(:optimized_layout_method_created=>true)
-              end
             end
           end
         end
