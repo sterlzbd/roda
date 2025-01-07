@@ -15,6 +15,10 @@ describe "render_coverage plugin" do
 
   define_method(:setup_app) do |render_opts={}, render_coverage_opts={}, prefix=''|
     app(:bare) do
+      if render_opts == :scope_class_and_fixed_locals
+        render_opts = {:template_opts=>{:scope_class=>self, :default_fixed_locals=>'()'}}
+      end
+
       plugin :render, {:views=>"./spec/views/about", :check_paths=>true, :layout=>false}.merge!(render_opts)
       plugin :render_coverage, {:dir=>coverage_dir}.merge!(render_coverage_opts)
       plugin :render_coverage
@@ -25,7 +29,7 @@ describe "render_coverage plugin" do
         end
 
         r.get "path" do
-          render(:path=>"./spec/views/about.erb", :locals=>{:title => "About Roda"})
+          render(:path=>"./spec/views/about.erb", :locals=>{:title => "About Roda"}, :template_opts=>{:fixed_locals=>'(title:)'})
         end
 
         r.get "not-exist" do
@@ -58,6 +62,7 @@ describe "render_coverage plugin" do
 
   {
     [] => "should store files in specified directory",
+    [:scope_class_and_fixed_locals] => "should handle using of :scope_class and fixed_locals",
     [{:cache=>false}] => "should handle cache: false render plugin option",
     [{:views=>'./spec/views', :allowed_paths=>%w'./spec/views/about'}, {}, 'about/'] => "should strip paths based on render plugin :allowed_paths option",
     [{:views=>'./spec/views'}, {:strip_paths=>%w'./spec/views/about'}, 'about/'] => "should strip paths based on render_coverage plugin :strip_paths option"

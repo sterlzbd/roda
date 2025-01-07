@@ -50,16 +50,35 @@ class Roda
         # Set a compiled path on the created template, if the path for
         # the template is in one of the allowed_views.
         def create_template(opts, template_opts)
-          template = super
-          return template if opts[:template_block]
+          return super if opts[:template_block]
 
           path = File.expand_path(opts[:path])
+          compiled_path = nil
           (self.opts[:render_coverage_strip_paths] || render_opts[:allowed_paths]).each do |dir|
             if path.start_with?(dir + '/')
-              template.compiled_path = File.join(self.opts[:render_coverage_dir], path[dir.length+1, 10000000].gsub('/', '-'))
+              compiled_path = File.join(self.opts[:render_coverage_dir], path[dir.length+1, 10000000].gsub('/', '-'))
               break
             end
           end
+
+          # For Tilt 2.6+, when using :scope_class and fixed locals, must provide
+          # compiled path as option, since compilation happens during initalization
+          # in that case. This option should be ignored if the template does not
+          # support it, but some template class may break if the option is not
+          # handled, so for compatibility, only set the method if Tilt::Template
+          # will handle it.
+          if compiled_path && Tilt::Template.method_defined?(:fixed_locals?)
+            template_opts = template_opts.dup
+            template_opts[:compiled_path] = compiled_path
+            compiled_path = nil
+          end
+
+          template = super
+
+          # Set compiled path for template when using older tilt versions.
+          # :nocov:
+          template.compiled_path = compiled_path if compiled_path
+          # :nocov:
 
           template
         end
