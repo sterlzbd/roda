@@ -29,7 +29,7 @@ describe "render_coverage plugin" do
         end
 
         r.get "path" do
-          render(:path=>"./spec/views/about.erb", :locals=>{:title => "About Roda"}, :template_opts=>{:fixed_locals=>'(title:)'})
+          render(:path=>"./spec/views/about.erb", :locals=>{:title => "About Roda"}, :template_opts=>{:fixed_locals=>'(title: raise)'})
         end
 
         r.get "not-exist" do
