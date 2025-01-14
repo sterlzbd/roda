@@ -1,4 +1,4 @@
-=== master
+=== 3.88.0 (2025-01-14)
 
 * Support fixed locals in templates when using Tilt 2.6+ (jeremyevans)
 
