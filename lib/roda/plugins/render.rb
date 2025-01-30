@@ -48,6 +48,9 @@ class Roda
     #
     # :allowed_paths :: Set the template paths to allow.  Attempts to render paths outside
     #                   of these paths will raise an error.  Defaults to the +:views+ directory.
+    # :assume_fixed_locals :: Set if you are sure all templates in your application use fixed locals
+    #                         to allow for additional optimization. This is ignored unless both
+    #                         compiled methods and fixed locals are not supported.
     # :cache :: nil/false to explicitly disable permanent template caching.  By default, permanent
     #           template caching is disabled by default if RACK_ENV is development.  When permanent
     #           template caching is disabled, for templates with paths in the file system, the
@@ -155,6 +158,11 @@ class Roda
     # were passed, instead of showing that the takes no arguments (if you use <tt>'()'</tt>),
     # or that no keywords are accepted (if you pass <tt>(**nil)</tt>).
     #
+    # If you are sure your application works with all templates using fixed locals,
+    # set the :assume_fixed_locals render plugin option, which will allow the plugin
+    # to optimize cache lookup for renders with locals, and avoid duplicate compiled
+    # methods for templates rendered both with and without locals.
+    #
     # See Tilt's documentation for more information regarding fixed locals.
     #
     # = Speeding Up Template Rendering
@@ -175,7 +183,9 @@ class Roda
     # Here are the recommended values of :template_opts for new applications (a couple
     # are Erubi-specific and can be ignored if you are using other templates engines):
     #
-    #   plugin :render, template_opts: {
+    #   plugin :render, 
+    #     assume_fixed_locals: true,    # Optimize plugin by assuming all templates use fixed locals
+    #     template_opts: {
     #       scope_class: self,          # Always uses current class as scope class for compiled templates
     #       freeze: true,               # Freeze string literals in templates
     #       extract_fixed_locals: true, # Support fixed locals in templates
@@ -324,6 +334,7 @@ class Roda
         opts[:allowed_paths] ||= [opts[:views]].freeze
         opts[:allowed_paths] = opts[:allowed_paths].map{|f| app.expand_path(f, nil)}.uniq.freeze
         opts[:check_paths] = true unless opts.has_key?(:check_paths)
+        opts[:assume_fixed_locals] &&= FIXED_LOCALS_COMPILED_METHOD_SUPPORT
 
         unless opts.has_key?(:check_template_mtime)
           opts[:check_template_mtime] = if opts[:cache] == false || opts[:explicit_cache]
@@ -673,21 +684,29 @@ class Roda
           # of the template render if the optimized path is used, or nil if the optimized
           # path is not used and the long method needs to be used.
           def _optimized_render_method_for_locals(template, locals)
+            render_opts = self.render_opts
             return unless method_cache = render_opts[:template_method_cache]
 
             case template
             when String, Symbol
-              key = [:_render_locals, template]
-              if optimized_template = _cached_template_method_lookup(method_cache, key)
-                # Fixed locals case
-                return optimized_template
-              end
+              if fixed_locals = render_opts[:assume_fixed_locals]
+                key = template
+                if optimized_template = _cached_template_method_lookup(method_cache, key)
+                  return optimized_template
+                end
+              else
+                key = [:_render_locals, template]
+                if optimized_template = _cached_template_method_lookup(method_cache, key)
+                  # Fixed locals case
+                  return optimized_template
+                end
 
-              locals_keys = locals.keys.sort
-              key << locals_keys
-              if optimized_template = _cached_template_method_lookup(method_cache, key)
-                # Regular locals case
-                return optimized_template
+                locals_keys = locals.keys.sort
+                key << locals_keys
+                if optimized_template = _cached_template_method_lookup(method_cache, key)
+                  # Regular locals case
+                  return optimized_template
+                end
               end
             else
               return
@@ -695,9 +714,10 @@ class Roda
 
             if method_cache_key = _cached_template_method_key(key)
               template_obj = retrieve_template(render_template_opts(template, NO_CACHE))
-              key.pop if fixed_locals = Render.tilt_template_fixed_locals?(template_obj)
-              key.freeze
-              method_cache_key.freeze
+              unless fixed_locals
+                key.pop if fixed_locals = Render.tilt_template_fixed_locals?(template_obj)
+                key.freeze
+              end
               method_name = :"_roda_template_locals_#{self.class.object_id}_#{method_cache_key}"
 
               method_cache[method_cache_key] = case template_obj

@@ -133,7 +133,7 @@ class Roda
             return if @_view_options || @_layout_options
 
             if subdir = @_view_subdir
-              template = [subdir, template]
+              template = [subdir, template].freeze
             end
 
             super

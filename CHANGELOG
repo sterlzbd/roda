@@ -1,3 +1,7 @@
+=== master
+
+* Support :assume_fixed_locals render plugin option for better caching when all templates use fixed locals (jeremyevans)
+
 === 3.88.0 (2025-01-14)
 
 * Support fixed locals in templates when using Tilt 2.6+ (jeremyevans)
