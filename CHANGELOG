@@ -1,5 +1,7 @@
 === master
 
+* Add part plugin, with a simpler (and better performing when using :assume_fixed_locals) method for rendering with locals (jeremyevans)
+
 * Support :assume_fixed_locals render plugin option for better caching when all templates use fixed locals (jeremyevans)
 
 === 3.88.0 (2025-01-14)
