@@ -23,8 +23,11 @@ class Roda
     #     :foo
     #   end
     module SymbolViews
-      def self.configure(app)
+      def self.load_dependencies(app)
         app.plugin :custom_block_results
+      end
+
+      def self.configure(app)
         app.opts[:custom_block_results][Symbol] = :view
       end
     end
