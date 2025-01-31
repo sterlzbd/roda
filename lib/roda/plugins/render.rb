@@ -542,6 +542,12 @@ class Roda
               nil
             end
 
+            # Optimize _call_optimized_template_method if you know all templates
+            # are going to be using fixed locals.
+            if render_opts[:assume_fixed_locals] && !render_opts[:check_template_mtime]
+              include AssumeFixedLocalsInstanceMethods
+            end
+
             super
           end
         end
@@ -971,6 +977,18 @@ class Roda
 
             layout_opts
           end
+        end
+      end
+
+      module AssumeFixedLocalsInstanceMethods
+        # :nocov:
+        if RUBY_VERSION >= '3.0'
+        # :nocov:
+          class_eval(<<-RUBY, __FILE__, __LINE__ + 1)
+            def _call_optimized_template_method((meth,_), locals, &block)
+              send(meth, **locals, &block)
+            end
+          RUBY
         end
       end
     end
