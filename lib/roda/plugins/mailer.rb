@@ -151,6 +151,9 @@ class Roda
             mail
           end
         end
+        # :nocov:
+        ruby2_keywords(:mail) if respond_to?(:ruby2_keywords, true)
+        # :nocov:
 
         # Calls +mail+ with given arguments and immediately sends the resulting mail.
         def sendmail(*args)
@@ -158,6 +161,9 @@ class Roda
             m.deliver
           end
         end
+        # :nocov:
+        ruby2_keywords(:sendmail) if respond_to?(:ruby2_keywords, true)
+        # :nocov:
       end
 
       module RequestMethods
