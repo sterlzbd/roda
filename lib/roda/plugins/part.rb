@@ -3,8 +3,8 @@
 #
 class Roda
   module RodaPlugins
-    # The part plugin adds a part method, which is an optimized
-    # render method that only supports locals.
+    # The part plugin adds a part method, which is a
+    # render-like method that treats all keywords as locals.
     #
     #   # Can replace this:
     #   render(:template, locals: {foo: 'bar'})
@@ -16,18 +16,24 @@ class Roda
     # must pass keywords and not a positional hash for the locals.
     #
     # If you are using the :assume_fixed_locals render plugin option,
-    # template caching is enabled, and you are using Ruby 3+, in
-    # addition to providing a simpler API, this also provides a
-    # significant performance improvement (more significant on Ruby
-    # 3.4+).
+    # template caching is enabled, you are using Ruby 3+, and you
+    # are freezing your Roda application, in addition to providing a
+    # simpler API, this also provides a significant performance
+    # improvement (more significant on Ruby 3.4+).
     module Part
       def self.load_dependencies(app)
         app.plugin :render
       end
 
-      def self.configure(app)
-        if app.render_opts[:assume_fixed_locals] && !app.render_opts[:check_template_mtime]
-          app.send(:include, AssumeFixedLocalsInstanceMethods)
+      module ClassMethods
+        # When freezing, optimize the part method if assuming fixed locals
+        # and caching templates.
+        def freeze
+          if render_opts[:assume_fixed_locals] && !render_opts[:check_template_mtime]
+            include AssumeFixedLocalsInstanceMethods
+          end
+
+          super
         end
       end
 

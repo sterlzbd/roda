@@ -107,51 +107,54 @@ describe "part plugin" do
       end
 
       [true, false].each do |assume_fixed_locals_option|
-        it "caches expectedly for cache: #{cache_plugin_option}, assume_fixed_locals: #{assume_fixed_locals_option} options" do
-          template = "opt_local_test"
+        [true, false].each do |freeze_app|
+          it "caches expectedly for cache: #{cache_plugin_option}, assume_fixed_locals: #{assume_fixed_locals_option} options when #{'not ' unless freeze_app}freezing app" do
+            template = "opt_local_test"
 
-          app(:bare) do
-            plugin :render, :views=>'spec/views/fixed', :cache=>cache_plugin_option, :template_opts=>{:extract_fixed_locals=>true}, :assume_fixed_locals=>assume_fixed_locals_option
-            plugin :part
-            route do |r|
-              r.is 'a' do
-                render(template)
-              end
-              part(template, title: 'ct')
+            app(:bare) do
+              plugin :render, :views=>'spec/views/fixed', :cache=>cache_plugin_option, :template_opts=>{:extract_fixed_locals=>true}, :assume_fixed_locals=>assume_fixed_locals_option, :layout=>false
+              plugin :part
+              route do |r|
+                r.is 'a' do
+                  render(template)
+                end
+                part(template, title: 'ct')
+              end 
+              freeze if freeze_app
             end
-          end
 
-          cache_size = 1
-          key = if assume_fixed_locals_option
-            template
-          else
-            [:_render_locals, template]
-          end
-          cache = app.render_opts[:template_method_cache]
-          cache[key].must_be_nil
-          body.strip.must_equal "ct"
-          cache[key].must_be_kind_of(Array)
-          cache.instance_variable_get(:@hash).length.must_equal cache_size
-          body.strip.must_equal "ct"
-          cache[key].must_be_kind_of(Array)
-          cache.instance_variable_get(:@hash).length.must_equal cache_size
-          body.strip.must_equal "ct"
-          cache[key].must_be_kind_of(Array)
-          cache.instance_variable_get(:@hash).length.must_equal cache_size
-          app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
+            cache_size = 1
+            key = if assume_fixed_locals_option
+              template
+            else
+              [:_render_locals, template]
+            end
+            cache = app.render_opts[:template_method_cache]
+            cache[key].must_be_nil
+            body.strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body.strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body.strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
 
-          cache_size = 2 unless assume_fixed_locals_option
-          key = template
-          body('/a').strip.must_equal "ct"
-          cache[key].must_be_kind_of(Array)
-          cache.instance_variable_get(:@hash).length.must_equal cache_size
-          body('/a').strip.must_equal "ct"
-          cache[key].must_be_kind_of(Array)
-          cache.instance_variable_get(:@hash).length.must_equal cache_size
-          body('/a').strip.must_equal "ct"
-          cache[key].must_be_kind_of(Array)
-          cache.instance_variable_get(:@hash).length.must_equal cache_size
-          app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier * cache_size)
+            cache_size = 2 unless assume_fixed_locals_option
+            key = template
+            body('/a').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body('/a').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body('/a').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier * cache_size)
+          end
         end
       end
     end
