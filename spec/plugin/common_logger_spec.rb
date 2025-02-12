@@ -14,6 +14,14 @@ describe "common_logger plugin" do
     @logger.rewind
     @logger.read.must_match(/\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ HTTP\/1.0" 200 1 0.\d\d\d\d\n\z/)
 
+    unless ENV["LINT"]
+      @logger.rewind
+      @logger.truncate(0)
+      body("HTTP_VERSION"=>"HTTP\n1.0").must_equal '/'
+      @logger.rewind
+      @logger.read.must_match(/\A- - - \[\d\d\/[A-Z][a-z]{2}\/\d\d\d\d:\d\d:\d\d:\d\d [-+]\d\d\d\d\] "GET \/ HTTP\\xa1.0" 200 1 0.\d\d\d\d\n\z/)
+    end
+
     @logger.rewind
     @logger.truncate(0)
     body('/b', 'REMOTE_ADDR'=>'1.1.1.2', 'QUERY_STRING'=>'foo=bar', "HTTP_VERSION"=>'HTTP/1.0').must_equal '/b'
