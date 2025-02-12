@@ -1,4 +1,4 @@
-=== master
+=== 3.89.0 (2025-02-12)
 
 * Support passing keyword arguments to mailer plugin mail/sendmail class methods (jeremyevans)
 
