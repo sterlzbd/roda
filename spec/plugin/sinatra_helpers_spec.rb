@@ -390,6 +390,10 @@ describe "sinatra_helpers plugin" do
       body.must_equal @content
     end
 
+    it "returns response body implementing to_path" do
+      req[2].to_path.must_equal @file
+    end
+
     it 'sets the Content-Type response header if a mime-type can be located' do
       header(RodaResponseHeaders::CONTENT_TYPE).must_equal 'text/css'
     end

@@ -354,9 +354,7 @@ class Roda
           res.status = opts[:status] || s
           headers.delete(RodaResponseHeaders::CONTENT_LENGTH)
           headers.replace(h.merge!(headers))
-          res.body = b
-
-          halt
+          halt res.finish_with_body(b)
         rescue Errno::ENOENT
           not_found
         end
