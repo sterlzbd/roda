@@ -197,6 +197,7 @@ class Minitest::Spec
       orig = a[2]
       a[2] = a[2].to_enum(:each).to_a
       orig.close if orig.respond_to?(:close)
+      a[2].define_singleton_method(:to_path){orig.to_path} if orig.respond_to?(:to_path)
     end
 
     a
