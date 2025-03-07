@@ -49,5 +49,20 @@ class Roda
       end
       # :nocov:
     end
+
+    if RUBY_VERSION >= '3.3'
+      # Create a new module using the block, and set the temporary name
+      # on it using the given a containing module and name.
+      def self.set_temp_name(mod)
+        mod.set_temporary_name(yield)
+        mod
+      end
+    # :nocov:
+    else
+      def self.set_temp_name(mod)
+        mod
+      end
+    end
+    # :nocov:
   end
 end

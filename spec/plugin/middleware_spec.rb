@@ -147,7 +147,7 @@ describe "middleware plugin" do
       use a
       route {}
     end
-    body.must_equal 'anonymous'
+    body.must_include '::middleware_subclass'
 
     begin
       Object.const_set(:MyApp, a)
@@ -155,7 +155,7 @@ describe "middleware plugin" do
         use a
         route {}
       end
-      body.must_equal 'MyApp(middleware)'
+      body.must_equal 'MyApp::middleware_subclass'
     ensure
       Object.send(:remove_const, :MyApp)
     end

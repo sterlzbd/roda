@@ -1,5 +1,7 @@
 === master
 
+* Set temporary name on Ruby 3.3+ for remaining anonymous modules and classes (jeremyevans)
+
 * Make send_file in sinatra_helpers use a response body that implements to_path (jeremyevans) (#379)
 
 * Escape newlines in common logger lines (jeremyevans)

@@ -79,6 +79,7 @@ class Roda
               mod = instance_variable_get(iv)
             else
               mod = instance_variable_set(iv, Module.new)
+              RodaPlugins.set_temp_name(mod){"#{klass}::module_include"}
               klass.send(:include, mod)
             end
 

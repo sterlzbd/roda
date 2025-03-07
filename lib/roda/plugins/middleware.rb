@@ -134,9 +134,7 @@ class Roda
         # and store +app+ as the next middleware to call.
         def initialize(mid, app, *args, &block)
           @mid = Class.new(mid)
-          # :nocov:
-          @mid.set_temporary_name("#{mid.name}(middleware)") if mid.name && RUBY_VERSION >= "3.3"
-          # :nocov:
+          RodaPlugins.set_temp_name(@mid){"#{mid}::middleware_subclass"}
           if @mid.opts[:middleware_next_if_not_found]
             @mid.plugin(:not_found, &NEXT_PROC)
           end

@@ -159,6 +159,7 @@ class RodaSessionMiddleware
   # Setup the middleware, passing +opts+ as the Roda sessions plugin options.
   def initialize(app, opts)
     mid = Class.new(Roda)
+    Roda::RodaPlugins.set_temp_name(mid){"RodaSessionMiddleware::_RodaSubclass"}
     mid.plugin :sessions, opts
     @req_class = mid::RodaRequest
     @req_class.send(:include, RequestMethods)
