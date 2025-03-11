@@ -1,4 +1,4 @@
-=== master
+=== 3.90.0 (2025-03-11)
 
 * Set temporary name on Ruby 3.3+ for remaining anonymous modules and classes (jeremyevans)
 
