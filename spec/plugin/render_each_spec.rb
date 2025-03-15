@@ -50,6 +50,30 @@ describe "render_each plugin" do
           r.is 'g' do
             render_each([1,2,3], "each.foo")
           end
+
+          r.is 'h' do
+            body = String.new
+            render_each([1,2,3], :each){|t| body << t << " "}
+            body
+          end
+
+          r.is 'i' do
+            body = String.new
+            render_each([1,2,3], {:template=>:each}, :local=>:each){|t| body << t << "|"}
+            body
+          end
+
+          r.is 'j' do
+            body = String.new
+            render_each([1,2,3], :each, :local=>nil){|t| body << t << "|"}
+            body
+          end
+
+          r.is 'k' do
+            body = String.new
+            render_each([1,2,3], {:template=>:each}, :local=>nil){|t| body << t << "/"}
+            body
+          end
         end
       end
 
@@ -63,6 +87,10 @@ describe "render_each plugin" do
           body("/e").must_equal "r-1-\nr-2-\nr-3-\n"
           body("/f").must_equal "r-1-\nr-2-\nr-3-\n"
           body("/g").must_equal "r-1-\nr-2-\nr-3-\n"
+          body("/h").must_equal "r-1-\n r-2-\n r-3-\n "
+          body("/i").must_equal "r-1-\n|r-2-\n|r-3-\n|"
+          body("/j").must_equal "r--\n|r--\n|r--\n|"
+          body("/k").must_equal "r--\n/r--\n/r--\n/"
         end
         app.opts[:render] = app.opts[:render].dup
         app.opts[:render].delete(:template_method_cache)

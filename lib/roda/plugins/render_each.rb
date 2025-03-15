@@ -15,6 +15,38 @@ class Roda
     # is rendered, the local variable +foo+ will contain the given
     # value (e.g. on the first rendering +foo+ is 1).
     #
+    # If you provide a block when calling the method, it will yield
+    # each rendering instead of returning a concatentation of the
+    # renderings. This is useful if you want to wrap each rendering in
+    # something else.  For example, instead of calling +render+ multiple
+    # times in a loop:
+    #
+    #   <% [1,2,3].each do |v| %>
+    #     <p><%= render(:foo, locals: {foo: v}) %></p>
+    #   <% end %>
+    #  
+    # You can use +render_each+, allowing for simpler and more optimized
+    # code:
+    #
+    #   <% render_each([1,2,3], :foo) do |text| %>
+    #     <p><%= text %></p>
+    #   <% end %>
+    #
+    # You can also provide a block to avoid excess memory usage.  For
+    # example, if you are calling the method inside an erb template,
+    # instead of doing:
+    #
+    #   <%= render_each([1,2,3], :foo) %>
+    #
+    # You can do:
+    #
+    #   <% render_each([1,2,3], :foo) %><%= body %><% end %>
+    #
+    # This results in the same behavior, but avoids building a large
+    # intermediate string just to concatenate to the template result.
+    #
+    # When passing a block, +render_each+ returns +nil+.
+    #
     # You can pass additional render options via an options hash:
     #
     #   render_each([1,2,3], :foo, views: 'partials')
@@ -45,15 +77,15 @@ class Roda
         # :local :: The local variable to use for the current enum value
         #           inside the template.  An explicit +nil+ value does not
         #           set a local variable.  If not set, uses the template name.
-        def render_each(enum, template, opts=(no_opts = true; optimized_template = _cached_render_each_template_method(template); OPTS))
+        def render_each(enum, template, opts=(no_opts = true; optimized_template = _cached_render_each_template_method(template); OPTS), &block)
           if optimized_template
-            return _optimized_render_each(enum, optimized_template, render_each_default_local(template), {})
+            return _optimized_render_each(enum, optimized_template, render_each_default_local(template), {}, &block)
           elsif opts.has_key?(:local)
             as = opts[:local]
           else
             as = render_each_default_local(template)
             if no_opts && optimized_template.nil? && (optimized_template = _optimized_render_method_for_locals(template, (locals = {as=>nil})))
-              return _optimized_render_each(enum, optimized_template, as, locals)
+              return _optimized_render_each(enum, optimized_template, as, locals, &block)
             end
           end
 
@@ -67,14 +99,22 @@ class Roda
             locals[as] = nil
 
             if (opts.keys - ALLOWED_KEYS).empty? && (optimized_template = _optimized_render_method_for_locals(template, locals))
-              return _optimized_render_each(enum, optimized_template, as, locals)
+              return _optimized_render_each(enum, optimized_template, as, locals, &block)
             end
           end
 
-          enum.map do |v|
-            locals[as] = v if as
-            render_template(template, opts)
-          end.join
+          if defined?(yield)
+            enum.each do |v|
+              locals[as] = v if as
+              yield render_template(template, opts)
+            end
+            nil
+          else
+            enum.map do |v|
+              locals[as] = v if as
+              render_template(template, opts)
+            end.join
+          end
         end
         
         private
@@ -103,10 +143,18 @@ class Roda
 
           # Use an optimized render for each value in the enum.
           def _optimized_render_each(enum, optimized_template, as, locals)
-            enum.map do |v|
-              locals[as] = v
-              _call_optimized_template_method(optimized_template, locals)
-            end.join
+            if defined?(yield)
+              enum.each do |v|
+                locals[as] = v
+                yield _call_optimized_template_method(optimized_template, locals)
+              end
+              nil
+            else
+              enum.map do |v|
+                locals[as] = v
+                _call_optimized_template_method(optimized_template, locals)
+              end.join
+            end
           end
         else
           def _cached_render_each_template_method(template)

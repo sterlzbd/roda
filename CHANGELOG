@@ -1,3 +1,7 @@
+=== master
+
+* Allow render_each to accept a block and yield renderings, instead of returning a concatenation of the renderings (jeremyevans)
+
 === 3.90.0 (2025-03-11)
 
 * Set temporary name on Ruby 3.3+ for remaining anonymous modules and classes (jeremyevans)
