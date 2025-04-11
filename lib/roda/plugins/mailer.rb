@@ -103,7 +103,7 @@ class Roda
     # 
     #  Mailer.sendmail('/welcome/1', 'foo@example.com')
     #
-    #  r.mail 'welcome' do |user_id, mail_from| 
+    #  r.mail 'welcome', Integer do |user_id, mail_from| 
     #    from mail_from
     #    to User[user_id].email
     #    # ...
