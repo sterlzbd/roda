@@ -16,6 +16,13 @@ describe "capture_erb plugin" do
         r.root do
           render(:inline => "<% value = capture_erb do %>foo<% end %>bar<%= value %>")
         end
+        r.get "nil" do
+          render(:inline => "<% value = capture_erb do %>foo<% nil end %>bar<%= value %>")
+        end
+        r.get "returns", String do |x|
+          @x = x
+          render(:inline => "<% value = capture_erb(returns: @x.to_sym) do %>foo<% nil end %>bar<%= value %>")
+        end
         r.get 'rescue' do
           render(:inline => "<% value = capture_erb do %>foo<% raise %><% end rescue (value = 'baz') %>bar<%= value %>")
         end
@@ -40,6 +47,23 @@ describe "capture_erb plugin" do
 
   it "should capture erb output" do
     body.strip.must_equal "barfoo"
+  end
+
+  it "should return block value by default" do
+    body("/nil").strip.must_equal "bar"
+  end
+
+  it "should return buffer value if returns: :buffer plugin option is given" do
+    app.plugin :capture_erb, returns: :buffer
+    body("/nil").strip.must_equal "barfoo"
+  end
+
+  it "should return buffer value if returns: :buffer method option is given" do
+    body("/returns/other").strip.must_equal "bar"
+    body("/returns/buffer").strip.must_equal "barfoo"
+    app.plugin :capture_erb, returns: :buffer
+    body("/returns/other").strip.must_equal "bar"
+    body("/returns/buffer").strip.must_equal "barfoo"
   end
 
   it "should handle exceptions in captured blocks" do
@@ -77,6 +101,13 @@ describe "capture_erb plugin with erubi/capture_block" do
         r.root do
           render(:inline => "<% value = capture_erb do %>foo<% end %>bar<%= value %>")
         end
+        r.get "nil" do
+          render(:inline => "<% value = capture_erb do %>foo<% nil end %>bar<%= value %>")
+        end
+        r.get "returns", String do |x|
+          @x = x
+          render(:inline => "<% value = capture_erb(returns: @x.to_sym) do %>foo<% nil end %>bar<%= value %>")
+        end
         r.get 'rescue' do
           render(:inline => "<% value = capture_erb do %>foo<% raise %><% end rescue (value = 'baz') %>bar<%= value %>")
         end
@@ -96,6 +127,12 @@ describe "capture_erb plugin with erubi/capture_block" do
 
   it "should capture erb output" do
     body.strip.must_equal "barfoo"
+  end
+
+  it "should return buffer value always" do
+    body("/nil").strip.must_equal "barfoo"
+    body("/returns/other").strip.must_equal "barfoo"
+    body("/returns/buffer").strip.must_equal "barfoo"
   end
 
   it "should handle exceptions in captured blocks" do
