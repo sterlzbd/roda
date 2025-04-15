@@ -134,7 +134,8 @@ class Roda
             case template
             when String, Symbol
               if (method_cache = render_opts[:template_method_cache])
-                _cached_template_method_lookup(method_cache, [:_render_locals, template, [template.to_sym]])
+                key = render_opts[:assume_fixed_locals] ? template : [:_render_locals, template, [template.to_sym]]
+                _cached_template_method_lookup(method_cache, key)
               end
             else
               false

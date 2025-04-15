@@ -1,3 +1,7 @@
+=== master
+
+* Support :assume_fixed_locals render option in render_each plugin (jeremyevans)
+
 === 3.91.0 (2025-04-11)
 
 * Support returns: :buffer method and plugin option in capture_erb plugin (jeremyevans)

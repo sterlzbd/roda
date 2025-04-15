@@ -137,5 +137,105 @@ describe "render_each plugin" do
       end
     end
   end
+
+  if Roda::RodaPlugins::Render::FIXED_LOCALS_COMPILED_METHOD_SUPPORT
+    [true, false].each do |cache_plugin_option|
+      multiplier = cache_plugin_option ? 1 : 2
+
+      it "support fixed locals in layout templates with plugin option :cache=>#{cache_plugin_option}" do
+        template = "comp_each_test"
+
+        app(:bare) do
+          plugin :render, :views=>'spec/views/fixed', :layout_opts=>{:locals=>{:title=>"Home"}}, :cache=>cache_plugin_option, :template_opts=>{:extract_fixed_locals=>true}
+          plugin :render_each
+          route do
+            render_each([1], template)
+          end
+        end
+
+        key = [:_render_locals, "comp_each_test"]
+        app.render_opts[:template_method_cache][key].must_be_nil
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
+      end
+
+      it "support fixed locals in render templates with plugin option :cache=>#{cache_plugin_option}" do
+        template = "local_test"
+
+        app(:bare) do
+          plugin :render, :views=>'spec/views/fixed', :cache=>cache_plugin_option, :template_opts=>{:extract_fixed_locals=>true}
+          plugin :render_each
+          route do
+            render_each([1], template, locals: {title: 'ct'})
+          end
+        end
+
+        key = [:_render_locals, template]
+        app.render_opts[:template_method_cache][key].must_be_nil
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        body.strip.must_equal "ct"
+        app.render_opts[:template_method_cache][key].must_be_kind_of(Array)
+        app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
+      end
+
+      [true, false].each do |assume_fixed_locals_option|
+        [true, false].each do |freeze_app|
+          it "caches expectedly for cache: #{cache_plugin_option}, assume_fixed_locals: #{assume_fixed_locals_option} options, with #{'un' unless freeze_app}frozen app" do
+            template = "opt_local_test"
+
+            app(:bare) do
+              plugin :render, :views=>'spec/views/fixed', :cache=>cache_plugin_option, :template_opts=>{:extract_fixed_locals=>true}, :assume_fixed_locals=>assume_fixed_locals_option, :layout=>false
+              plugin :render_each
+              route do |r|
+                r.is 'a' do
+                  render_each([1], template)
+                end
+                render_each([1], template, locals: {title: 'ct'})
+              end
+              freeze if freeze_app
+            end
+
+            cache_size = 1
+            key = if assume_fixed_locals_option
+              template
+            else
+              [:_render_locals, template]
+            end
+            cache = app.render_opts[:template_method_cache]
+            cache[key].must_be_nil
+            body.strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body.strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body.strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            app::RodaCompiledTemplates.private_instance_methods.length.must_equal multiplier
+
+            body('/a').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body('/a').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body('/a').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier * cache_size)
+          end
+        end
+      end
+    end
+  end
 end
 end
