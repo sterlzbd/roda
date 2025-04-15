@@ -1,5 +1,7 @@
 === master
 
+* Add each_part plugin, with a simpler method for using render_each with locals (jeremyevans)
+
 * Support :assume_fixed_locals render option in render_each plugin (jeremyevans)
 
 === 3.91.0 (2025-04-11)
