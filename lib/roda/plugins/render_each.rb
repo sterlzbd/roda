@@ -91,12 +91,16 @@ class Roda
 
           if as
             opts = opts.dup
-            if locals = opts[:locals]
-              locals = opts[:locals] = Hash[locals]
+            if locals
+              opts[:locals] = locals
             else
-              locals = opts[:locals] = {}
+              locals = opts[:locals] = if locals = opts[:locals]
+                Hash[locals]
+              else
+                {}
+              end
+              locals[as] = nil
             end
-            locals[as] = nil
 
             if (opts.keys - ALLOWED_KEYS).empty? && (optimized_template = _optimized_render_method_for_locals(template, locals))
               return _optimized_render_each(enum, optimized_template, as, locals, &block)
