@@ -60,7 +60,7 @@ class Roda
     #   <%= assets(:css, media: 'print') %>
     #
     # The assets method will respect the application's +:add_script_name+ option,
-    # if it set it will automatically prefix the path with the +SCRIPT_NAME+ for
+    # if it is set it will automatically prefix the path with the +SCRIPT_NAME+ for
     # the request.
     #
     # == Asset Paths
