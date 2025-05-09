@@ -1,6 +1,5 @@
 require "rake"
 require "rake/clean"
-require "rdoc/task"
 
 NAME = 'roda'
 VERS = lambda do
@@ -18,27 +17,24 @@ end
 
 ### RDoc
 
-RDOC_OPTS = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web toolkit']
+desc "Generate rdoc"
+task :website_rdoc do
+  rdoc_dir = "www/public/rdoc"
+  rdoc_opts = ["--line-numbers", "--inline-source", '--title', 'Roda: Routing tree web toolkit']
 
-begin
-  gem 'hanna'
-  RDOC_OPTS.concat(['-f', 'hanna'])
-rescue Gem::LoadError
-end
+  begin
+    gem 'hanna'
+    rdoc_opts.concat(['-f', 'hanna'])
+  rescue Gem::LoadError
+  end
 
-RDOC_OPTS.concat(['--main', 'README.rdoc'])
-RDOC_FILES = %w"README.rdoc CHANGELOG doc/CHANGELOG.old MIT-LICENSE lib/**/*.rb" + Dir["doc/*.rdoc"] + Dir['doc/release_notes/*.txt']
+  rdoc_opts.concat(['--main', 'README.rdoc', "-o", rdoc_dir])
+  rdoc_opts.concat(%w"README.rdoc CHANGELOG doc/CHANGELOG.old MIT-LICENSE" + Dir["lib/**/*.rb"] + Dir["doc/**/*.rdoc"] + Dir['doc/release_notes/*.txt'])
 
-RDoc::Task.new do |rdoc|
-  rdoc.rdoc_dir = "rdoc"
-  rdoc.options += RDOC_OPTS
-  rdoc.rdoc_files.add RDOC_FILES
-end
+  FileUtils.rm_rf(rdoc_dir)
 
-RDoc::Task.new(:website_rdoc) do |rdoc|
-  rdoc.rdoc_dir = "www/public/rdoc"
-  rdoc.options += RDOC_OPTS
-  rdoc.rdoc_files.add RDOC_FILES
+  require "rdoc"
+  RDoc::RDoc.new.document(rdoc_opts)
 end
 
 ### Website
@@ -55,7 +51,6 @@ desc "Serve local version of website via rackup"
 task :serve => :website do
   sh %{#{FileUtils::RUBY} -C www -S rackup}
 end
-
 
 ### Specs
 
