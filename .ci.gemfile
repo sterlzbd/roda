@@ -15,6 +15,10 @@ else
   gem "tilt"
 end
 
+if RUBY_VERSION >= '3.4'
+  gem 'rdoc'
+end
+
 if RUBY_VERSION < '3.1.0' && RUBY_VERSION >= '3.0.0'
   gem 'json', '2.5.1'
 elsif RUBY_VERSION < '2.0.0'
