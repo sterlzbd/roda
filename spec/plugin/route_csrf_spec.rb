@@ -1,6 +1,10 @@
 require_relative "../spec_helper"
 
-require 'cgi'
+begin
+  require 'cgi/escape'
+rescue LoadError
+  require 'cgi'
+end
 
 describe "route_csrf plugin" do 
   include CookieJar
