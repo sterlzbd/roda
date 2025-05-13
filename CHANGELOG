@@ -1,4 +1,4 @@
-=== master
+=== 3.92.0 (2025-05-13)
 
 * Add each_part plugin, with a simpler method for using render_each with locals (jeremyevans)
 
