@@ -244,17 +244,24 @@ class Roda
     # when loading the typecast_params plugin.  This block is executed in the context of the
     # subclass, and calling +handle_type+ in the block can be used to add conversion methods.
     # +handle_type+ accepts a type name, an options hash, and the block used to convert the type.
-    # The only currently supported option is +:max_input_bytesize+, specifying the maximum bytesize of
-    # string input.  You can also override the max input bytesize of an existing type using the
-    # +max_input_bytesize+ method.
+    # Supported options are:
+    # +:invalid_value_message+ :: The message to use for type conversions that result in a nil value
+    #                             (a space and the parameter name is appended to this).
+    # +:max_input_bytesize+ :: The maximum bytesize of string input.
+    # 
+    # You can override the invalid value message of an existing type using the
+    # +invalid_value_message+ method.  You can also override the max input bytesize of an existing
+    # type using the +max_input_bytesize+ method.
     #
     #   plugin :typecast_params do
-    #     handle_type(:album, max_input_bytesize: 100) do |value|
+    #     handle_type(:album, max_input_bytesize: 100,
+    #                 invalid_value_message: "invalid album id in parameter") do |value|
     #       if id = convert_pos_int(val)
     #         Album[id]
     #       end
     #     end
     #     max_input_bytesize(:date, 256)
+    #     invalid_value_message(:pos_int, "value must be greater than 0 for parameter")
     #   end
     #
     # By default, the typecast_params conversion procs are passed the parameter value directly
@@ -441,6 +448,8 @@ class Roda
         # * foo!(key)
         # * convert_foo(value) # private
         # * _convert_array_foo(value) # private
+        # * _invalid_value_message_for_foo # private
+        # * _max_input_bytesize_for_foo # private
         #
         # This method is used to define all type conversions, even the built
         # in ones.  It can be called in subclasses to setup subclass-specific
@@ -449,25 +458,23 @@ class Roda
           convert_meth = :"convert_#{type}"
           define_method(convert_meth, &block)
 
-          max_input_bytesize = opts[:max_input_bytesize]
-          max_input_bytesize_meth = :"_max_input_bytesize_for_#{type}"
-          define_method(max_input_bytesize_meth){max_input_bytesize}
-
           convert_array_meth = :"_convert_array_#{type}"
           define_method(convert_array_meth) do |v|
             raise Error, "expected array but received #{v.inspect}" unless v.is_a?(Array)
             v.map! do |val|
-              check_allowed_bytesize(val, send(max_input_bytesize_meth))
+              check_allowed_bytesize(val, _max_input_bytesize_for(type))
               check_null_byte(val)
               send(convert_meth, val)
             end
           end
 
-          private convert_meth, convert_array_meth, max_input_bytesize_meth
-          alias_method max_input_bytesize_meth, max_input_bytesize_meth
+          private convert_meth, convert_array_meth
+
+          invalid_value_message(type, opts[:invalid_value_message])
+          max_input_bytesize(type, opts[:max_input_bytesize])
 
           define_method(type) do |key, default=nil|
-            process_arg(convert_meth, key, default, send(max_input_bytesize_meth)) if require_hash!
+            process_arg(convert_meth, key, default, type) if require_hash!
           end
 
           define_method(:"#{type}!") do |key|
@@ -475,8 +482,15 @@ class Roda
           end
         end
 
-        # Override the maximum input bytesize for the given type. This is mostly useful
-        # for overriding the sizes for the default input types.
+        # Set the invalid message for the given type.
+        def self.invalid_value_message(type, message)
+          invalid_value_message_meth = :"_invalid_value_message_for_#{type}"
+          define_method(invalid_value_message_meth){message}
+          private invalid_value_message_meth
+          alias_method invalid_value_message_meth, invalid_value_message_meth
+        end
+
+        # Set the maximum input bytesize for the given type.
         def self.max_input_bytesize(type, bytesize)
           max_input_bytesize_meth = :"_max_input_bytesize_for_#{type}"
           define_method(max_input_bytesize_meth){bytesize}
@@ -504,13 +518,13 @@ class Roda
           v
         end
 
-        handle_type(:nonempty_str) do |v|
+        handle_type(:nonempty_str, :invalid_value_message=>"empty string provided for parameter") do |v|
           if (v = convert_str(v)) && !v.strip.empty?
             v
           end
         end
 
-        handle_type(:bool) do |v|
+        handle_type(:bool, :invalid_value_message=>"empty string provided for parameter") do |v|
           case v
           when ''
             nil
@@ -523,18 +537,18 @@ class Roda
           end
         end
 
-        handle_type(:int, :max_input_bytesize=>100) do |v|
+        handle_type(:int, :max_input_bytesize=>100, :invalid_value_message=>"empty string provided for parameter") do |v|
           string_or_numeric!(v) && v.to_i
         end
         alias base_convert_int convert_int
 
-        handle_type(:pos_int, :max_input_bytesize=>100) do |v|
+        handle_type(:pos_int, :max_input_bytesize=>100, :invalid_value_message=>"empty string, non-integer, or non-positive integer provided for parameter") do |v|
           if (v = base_convert_int(v)) && v > 0
             v
           end
         end
 
-        handle_type(:Integer, :max_input_bytesize=>100) do |v|
+        handle_type(:Integer, :max_input_bytesize=>100, :invalid_value_message=>"empty string provided for parameter") do |v|
           if string_or_numeric!(v)
             case v
             when String
@@ -550,11 +564,11 @@ class Roda
         end
         alias base_convert_Integer convert_Integer
 
-        handle_type(:float, :max_input_bytesize=>1000) do |v|
+        handle_type(:float, :max_input_bytesize=>1000, :invalid_value_message=>"empty string provided for parameter") do |v|
           string_or_numeric!(v) && v.to_f
         end
 
-        handle_type(:Float, :max_input_bytesize=>1000) do |v|
+        handle_type(:Float, :max_input_bytesize=>1000, :invalid_value_message=>"empty string provided for parameter") do |v|
           string_or_numeric!(v) && ::Kernel::Float(v)
         end
 
@@ -752,7 +766,7 @@ class Roda
         def array(type, key, default=nil)
           meth = :"_convert_array_#{type}"
           raise ProgrammerError, "no typecast_params type registered for #{type.inspect}" unless respond_to?(meth, true)
-          process_arg(meth, key, default, send(:"_max_input_bytesize_for_#{type}")) if require_hash!
+          process_arg(meth, key, default, type) if require_hash!
         end
 
         # Call +array+ with the +type+, +key+, and +default+, but if the return value is nil or any value in
@@ -985,10 +999,10 @@ class Roda
 
         # If +key+ is not an array, convert the value at the given +key+ using the +meth+ method and +default+
         # value.  If +key+ is an array, return an array with the conversion done for each respective member of +key+.
-        def process_arg(meth, key, default, max_input_bytesize=nil)
+        def process_arg(meth, key, default, type)
           case key
           when String
-            v = process(meth, key, default, max_input_bytesize)
+            v = process(meth, key, default, type)
 
             if @capture
               key = key.to_sym if symbolize?
@@ -1001,11 +1015,21 @@ class Roda
           when Array
             key.map do |k|
               raise ProgrammerError, "non-String element in array argument passed to typecast_params: #{k.inspect}" unless k.is_a?(String)
-              process_arg(meth, k, default, max_input_bytesize)
+              process_arg(meth, k, default, type)
             end
           else
             raise ProgrammerError, "Unsupported argument for typecast_params conversion method: #{key.inspect}"
           end
+        end
+
+        # The invalid message to use if the given type conversion fails, which may be nil to use the default.
+        def _invalid_value_message_for(type)
+          send(:"_invalid_value_message_for_#{type}")
+        end
+
+        # The maximum input bytesize for the given type, which may be nil.
+        def _max_input_bytesize_for(type)
+          send(:"_max_input_bytesize_for_#{type}")
         end
 
         # Raise an Error if the value is a string with bytesize over max (if max is given)
@@ -1024,18 +1048,24 @@ class Roda
 
         # Get the value of +key+ for the object, and convert it to the expected type using +meth+.
         # If the value either before or after conversion is nil, return the +default+ value.
-        def process(meth, key, default, max_input_bytesize=nil)
-          v = param_value(key)
+        def process(meth, key, default, type)
+          orig_v = v = param_value(key)
 
-          unless v.nil?
-            check_allowed_bytesize(v, max_input_bytesize)
+          if v.nil?
+            if default == CHECK_NIL
+              handle_error(key, :missing, "missing parameter for #{param_name(key)}")
+            end
+          else
+            check_allowed_bytesize(v, _max_input_bytesize_for(type))
             check_null_byte(v)
             v = send(meth, v)
           end
 
           if v.nil?
-            if default == CHECK_NIL
-              handle_error(key, :missing, "missing parameter for #{param_name(key)}")
+            if !orig_v.nil? && default == CHECK_NIL
+              invalid_value_message = _invalid_value_message_for(type)
+              invalid_value_message ||= "invalid parameter value for"
+              handle_error(key, :invalid_value, "#{invalid_value_message} #{param_name(key)}")
             end
 
             default

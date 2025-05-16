@@ -51,37 +51,37 @@ class Roda
             max_signed = 2**(i-1)-1
             max_unsigned = 2**i-1
 
-            handle_type(:"int#{i}", :max_input_bytesize=>100) do |v|
+            handle_type(:"int#{i}", :max_input_bytesize=>100, :invalid_value_message=>"empty string, non-integer, or too-large integer provided for parameter") do |v|
               if (v = base_convert_int(v)) && v >= min_signed && v <= max_signed
                 v
               end
             end
 
-            handle_type(:"uint#{i}", :max_input_bytesize=>100) do |v|
+            handle_type(:"uint#{i}", :max_input_bytesize=>100, :invalid_value_message=>"empty string, non-integer, negative integer, or too-large integer provided for parameter") do |v|
               if (v = base_convert_int(v)) && v >= 0 && v <= max_unsigned
                 v
               end
             end
 
-            handle_type(:"pos_int#{i}", :max_input_bytesize=>100) do |v|
+            handle_type(:"pos_int#{i}", :max_input_bytesize=>100, :invalid_value_message=>"empty string, non-integer, non-positive integer, or too-large integer provided for parameter") do |v|
               if (v = base_convert_int(v)) && v > 0 && v <= max_signed
                 v
               end
             end
 
-            handle_type(:"pos_uint#{i}", :max_input_bytesize=>100) do |v|
+            handle_type(:"pos_uint#{i}", :max_input_bytesize=>100, :invalid_value_message=>"empty string, non-integer, non-positive integer, or too-large integer provided for parameter") do |v|
               if (v = base_convert_int(v)) && v > 0 && v <= max_unsigned
                 v
               end
             end
 
-            handle_type(:"Integer#{i}", :max_input_bytesize=>100) do |v|
+            handle_type(:"Integer#{i}", :max_input_bytesize=>100, :invalid_value_message=>"empty string, non-integer, or too-large integer provided for parameter") do |v|
               if (v = base_convert_Integer(v)) && v >= min_signed && v <= max_signed
                 v
               end
             end
 
-            handle_type(:"Integeru#{i}", :max_input_bytesize=>100) do |v|
+            handle_type(:"Integeru#{i}", :max_input_bytesize=>100, :invalid_value_message=>"empty string, non-integer, negative integer, or too-large integer provided for parameter") do |v|
               if (v = base_convert_Integer(v)) && v >= 0 && v <= max_unsigned
                 v
               end
@@ -92,7 +92,7 @@ class Roda
         if default = opts[:default_size]
           app::TypecastParams.class_eval do
             %w[int uint pos_int pos_uint Integer Integeru].each do |type|
-              ['', 'convert_', '_convert_array_', '_max_input_bytesize_for_'].each do |prefix|
+              ['', 'convert_', '_convert_array_', '_max_input_bytesize_for_', '_invalid_value_message_for_'].each do |prefix|
                 alias_method :"#{prefix}#{type}", :"#{prefix}#{type}#{default}"
               end
               alias_method :"#{type}!", :"#{type}#{default}!"

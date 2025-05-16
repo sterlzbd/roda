@@ -243,6 +243,16 @@ describe "typecast_params plugin" do
     lambda{tp('a[]=1&a[]=22').int('a')}.must_raise Roda::RodaPlugins::TypecastParams::Error
   end
 
+  it "should allow overriding invalid value message using max_input_bytesize" do
+    app.plugin :typecast_params do
+      invalid_value_message :pos_int, "value must be greater than 0 for"
+    end
+
+    tp('a=1').pos_int!('a').must_equal 1
+    lambda{tp('a=').pos_int!('a')}.must_raise(Roda::RodaPlugins::TypecastParams::Error).
+      message.must_equal "value must be greater than 0 for a"
+  end
+
   it "should allow disabling max input bytesize for specific type by passing nil to max_input_bytesize" do
     app.plugin :typecast_params do
       max_input_bytesize :int, nil
@@ -1335,7 +1345,7 @@ describe "typecast_params plugin" do
       end
     end
     e.param_names.must_equal %w'a[][b][][e] a[][b][][f] a[][b][][g] a[][b] c d e b'
-    e.all_errors.map(&:reason).must_equal [:missing, :missing, :missing, :pos_int, :missing, :missing, :missing, :missing]
+    e.all_errors.map(&:reason).must_equal [:invalid_value, :missing, :missing, :pos_int, :missing, :missing, :missing, :missing]
   end
 
   it "Error#param_names and #all_errors should handle #[] failures by skipping the rest of the block" do
@@ -1402,7 +1412,7 @@ describe "typecast_params plugin" do
       end
     end
     e.param_names.must_equal %w'a[][b] a[][b] a[][d] a[][e] a[][b] a[][c] a[][b] a[][b] a[][d] a[][e] a[][c]'
-    e.all_errors.map(&:reason).must_equal [:invalid_type, :invalid_type, :missing, :missing, :missing, :missing, :invalid_type, :invalid_type, :missing, :missing, :missing]
+    e.all_errors.map(&:reason).must_equal [:invalid_type, :invalid_type, :missing, :missing, :invalid_value, :missing, :invalid_type, :invalid_type, :missing, :missing, :missing]
   end
 
   it "Error#param_names and #all_errors should include all errors for invalid keys used in convert_each!" do
