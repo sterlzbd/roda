@@ -182,7 +182,7 @@ class Roda
         # contain a slash.
         def template_name(opts)
           name = super
-          if (v = @_view_subdir) && name !~ /\//
+          if (v = @_view_subdir) && !name.include?('/')
             "#{v}/#{name}"
           else
             name
