@@ -16,7 +16,7 @@ class Roda
     module StripPathPrefix
       # Set the regexp to use when stripping prefixes from internal paths.
       def self.configure(app, prefix=Dir.pwd)
-        prefix += '/' unless prefix=~ /\/\z/
+        prefix += '/' unless prefix.end_with?("/")
         app.opts[:strip_path_prefix] = /\A#{Regexp.escape(prefix)}/
       end
 

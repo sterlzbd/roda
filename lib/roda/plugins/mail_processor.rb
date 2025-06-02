@@ -467,7 +467,10 @@ class Roda
             end
           END
 
-          next if [:rcpt, :text, :body, :subject].include?(field)
+          case field
+          when :rcpt, :text, :body, :subject
+            next
+          end
 
           class_eval(<<-END, __FILE__, __LINE__+1)
             private
