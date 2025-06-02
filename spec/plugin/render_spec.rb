@@ -103,7 +103,7 @@ describe "render plugin" do
 
     File.binwrite(file, File.binread(file) + "b")
     File.utime(t, t+1, dependent_file)
-    body.gsub("\n", '').must_equal "ab"
+    body.delete("\n").must_equal "ab"
   end
 
   [{:cache=>false}, {:explicit_cache=>true}, {:check_template_mtime=>true}].each do |cache_plugin_opts|
@@ -122,19 +122,19 @@ describe "render plugin" do
 
       File.binwrite(file, File.binread(file) + "b")
       File.utime(t, t+1, file)
-      body.gsub("\n", '').must_equal "ab"
+      body.delete("\n").must_equal "ab"
 
       File.binwrite(file, File.binread(file) + "c")
       File.utime(t, t+2, file)
-      body.gsub("\n", '').must_equal "abc"
+      body.delete("\n").must_equal "abc"
 
       mtime = File.mtime(file)
       File.binwrite(file, File.binread(file) + "d")
       File.utime(t, mtime, file)
-      body.gsub("\n", '').must_equal "abc"
+      body.delete("\n").must_equal "abc"
 
       File.delete(file)
-      body.gsub("\n", '').must_equal "abc"
+      body.delete("\n").must_equal "abc"
     end
   end
 
@@ -159,7 +159,7 @@ describe "render plugin" do
 
     File.binwrite(file, content + "b")
     File.utime(t, t+1, file)
-    body.gsub("\n", '').must_equal "ab"
+    body.delete("\n").must_equal "ab"
   end
 
   it "does not check mtime if :cache render option is used" do
@@ -177,7 +177,7 @@ describe "render plugin" do
 
     File.binwrite(file, File.binread(file) + "b")
     File.utime(t, t+1, file)
-    body.gsub("\n", '').must_equal "a"
+    body.delete("\n").must_equal "a"
   end
 end
 
@@ -193,7 +193,7 @@ describe "render plugin" do
       end
     end
 
-    body.gsub(/\n+/, "\n").must_equal "Header\nThis is the actual content.\nFooter\n"
+    body.squeeze("\n").must_equal "Header\nThis is the actual content.\nFooter\n"
   end
 
   it "layout changing does not use cached template method" do
@@ -205,9 +205,9 @@ describe "render plugin" do
       end
     end
 
-    body.gsub(/\n+/, "\n").sub("\nFooter", 'Footer').must_equal "Header\n1Footer\n"
+    body.squeeze("\n").sub("\nFooter", 'Footer').must_equal "Header\n1Footer\n"
     app.plugin :render, :layout=>'layout-yield2'
-    body.gsub(/\n+/, "\n").sub("\nFooter", 'Footer').must_equal "Header2\n1Footer2\n"
+    body.squeeze("\n").sub("\nFooter", 'Footer').must_equal "Header2\n1Footer2\n"
   end
 
   it "should have :layout_opts=>:views plugin option respect :root app option" do
@@ -266,53 +266,53 @@ describe "render plugin" do
       end
     end
 
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "HeaderbarFooter"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "HeaderbarFooter"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>true
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "HeaderbarFooter"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>'layout-alternative'
-    body.gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
-    body('/a').gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "<title>Alternative Layout: a</title>bar"
+    body('/a').delete("\n").must_equal "<title>Alternative Layout: a</title>bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>nil
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>false
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout_opts=>{:template=>'layout-alternative', :locals=>{:title=>'a'}}
-    body.gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
-    body('/a').gsub("\n", '').must_equal "bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "<title>Alternative Layout: a</title>bar"
+    body('/a').delete("\n").must_equal "bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
   end
 
   it "app :root option affects :views default" do

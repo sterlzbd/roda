@@ -121,7 +121,7 @@ describe "permissions_policy plugin" do
     end
 
     Roda::RodaPlugins::PermissionsPolicy.const_get(:SUPPORTED_SETTINGS).each do |setting|
-      header(RodaResponseHeaders::PERMISSIONS_POLICY, "/#{setting.gsub('-', '_')}").must_equal "#{setting}=(self)"
+      header(RodaResponseHeaders::PERMISSIONS_POLICY, "/#{setting.tr('-', '_')}").must_equal "#{setting}=(self)"
     end
   end
 

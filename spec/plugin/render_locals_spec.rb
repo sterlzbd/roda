@@ -61,54 +61,54 @@ describe "render_locals plugin" do
       end
     end
 
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "HeaderbarFooter"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "HeaderbarFooter"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>true
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "HeaderbarFooter"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>'layout-alternative'
-    body.gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
-    body('/a').gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "<title>Alternative Layout: a</title>bar"
+    body('/a').delete("\n").must_equal "<title>Alternative Layout: a</title>bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>nil
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout=>false
-    body.gsub("\n", '').must_equal "HeaderbarFooter"
-    body('/a').gsub("\n", '').must_equal "bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "HeaderbarFooter"
+    body('/a').delete("\n").must_equal "bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
 
     app.plugin :render, :layout_opts=>{:template=>'layout-alternative'}
     app.plugin :render_locals, :layout=>{:title=>'a'}
-    body.gsub("\n", '').must_equal "<title>Alternative Layout: a</title>bar"
-    body('/a').gsub("\n", '').must_equal "bar"
-    body('/f').gsub("\n", '').must_equal "bar"
-    body('/s').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
-    body('/h').gsub("\n", '').must_equal "<title>Roda: a</title>bar"
+    body.delete("\n").must_equal "<title>Alternative Layout: a</title>bar"
+    body('/a').delete("\n").must_equal "bar"
+    body('/f').delete("\n").must_equal "bar"
+    body('/s').delete("\n").must_equal "<title>Roda: a</title>bar"
+    body('/h').delete("\n").must_equal "<title>Roda: a</title>bar"
   end
 end
 end

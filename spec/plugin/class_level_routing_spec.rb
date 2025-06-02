@@ -29,7 +29,7 @@ describe "class_level_routing plugin" do
       end
 
       meths = %w'get post delete head options patch put trace'
-      meths.concat(%w'link unlink') if ::Rack::Request.method_defined?("link?")
+      meths.concat(%w'link unlink') if ::Rack::Request.method_defined?(:link?)
       meths.each do |meth|
         send(meth, :d) do |m|
           if meth == 'head'
@@ -57,7 +57,7 @@ describe "class_level_routing plugin" do
     body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
     body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
     body('/bar', 'REQUEST_METHOD'=>'TRACE').must_equal "x-trace-bar"
-    if ::Rack::Request.method_defined?("link?")
+    if ::Rack::Request.method_defined?(:link?)
       body('/bar', 'REQUEST_METHOD'=>'LINK').must_equal "x-link-bar"
       body('/bar', 'REQUEST_METHOD'=>'UNLINK').must_equal "x-unlink-bar"
     end
@@ -156,7 +156,7 @@ describe "class_level_routing plugin" do
     body('/bar', 'REQUEST_METHOD'=>'PATCH').must_equal "x-patch-bar"
     body('/bar', 'REQUEST_METHOD'=>'PUT').must_equal "x-put-bar"
     body('/bar', 'REQUEST_METHOD'=>'TRACE').must_equal "x-trace-bar"
-    if ::Rack::Request.method_defined?("link?")
+    if ::Rack::Request.method_defined?(:link?)
       body('/bar', 'REQUEST_METHOD'=>'LINK').must_equal "x-link-bar"
       body('/bar', 'REQUEST_METHOD'=>'UNLINK').must_equal "x-unlink-bar"
     end

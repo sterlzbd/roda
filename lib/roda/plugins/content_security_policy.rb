@@ -135,7 +135,7 @@ class Roda
         style-src
         worker-src
         '.split.each(&:freeze).each do |setting|
-          meth = setting.gsub('-', '_').freeze
+          meth = setting.tr('-', '_').freeze
 
           # Setting method name sets the setting value, or removes it if no args are given.
           define_method(meth) do |*args|
@@ -165,7 +165,7 @@ class Roda
         end
 
         %w'block-all-mixed-content upgrade-insecure-requests'.each(&:freeze).each do |setting|
-          meth = setting.gsub('-', '_').freeze
+          meth = setting.tr('-', '_').freeze
 
           # Setting method name turns on setting if true or no argument given,
           # or removes setting if false is given.
@@ -258,7 +258,7 @@ class Roda
               raise RodaError, "unsupported CSP value used: #{v.inspect}"
             end
           when Symbol
-            s << " '" << v.to_s.gsub('_', '-') << "'"
+            s << " '" << v.to_s.tr('_', '-') << "'"
           else
             raise RodaError, "unsupported CSP value used: #{v.inspect}"
           end

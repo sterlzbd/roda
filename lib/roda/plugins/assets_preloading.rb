@@ -73,13 +73,13 @@ class Roda
         # Return an array of paths/as pairs for the given asset
         # types and/or groups.
         def _preload_assets_array(assets)
-          assets.map do |type|
+          assets.flat_map do |type|
             paths = assets_paths(type)
             type = type[0] if type.is_a?(Array)
             as = TYPE_AS[type]
 
             paths.map{|path| [path, as]}
-          end.flatten(1)
+          end
         end
       end
     end

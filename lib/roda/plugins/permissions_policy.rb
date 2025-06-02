@@ -138,7 +138,7 @@ class Roda
       # Represents a permissions policy.
       class Policy
         SUPPORTED_SETTINGS.each do |setting|
-          meth = setting.gsub('-', '_').freeze
+          meth = setting.tr('-', '_').freeze
 
           # Setting method name sets the setting value, or removes it if no args are given.
           define_method(meth) do |*args|
@@ -284,7 +284,7 @@ class Roda
 
         if default = opts[:default]
           SUPPORTED_SETTINGS.each do |setting|
-            policy.send(setting.gsub('-', '_'), *default)
+            policy.send(setting.tr('-', '_'), *default)
           end
         end
 

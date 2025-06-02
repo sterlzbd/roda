@@ -136,7 +136,7 @@ describe "content_security_policy plugin" do
     style_src
     worker_src
     '.split.each do |setting|
-      header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/#{setting}").must_equal "#{setting.gsub('_', '-')} 'self'; "
+      header(RodaResponseHeaders::CONTENT_SECURITY_POLICY, "/#{setting}").must_equal "#{setting.tr('_', '-')} 'self'; "
     end
   end
 

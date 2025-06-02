@@ -186,7 +186,7 @@ class Roda
           options[:csrf_failure] = :csrf_failure_method
           app.define_roda_method(:_roda_route_csrf_failure, 1, &app.send(:convert_route_block, block))
         end
-        options[:env_header] = "HTTP_#{options[:header].to_s.gsub('-', '_').upcase}".freeze
+        options[:env_header] = "HTTP_#{options[:header].to_s.tr('-', '_').upcase}".freeze
         options.freeze
       end
 

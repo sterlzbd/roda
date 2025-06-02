@@ -18,7 +18,7 @@ class Roda
        Permissions-Policy Permissions-Policy-Report-Only Strict-Transport-Security'.
       each do |value|
         value = value.downcase if downcase
-        const_set(value.gsub('-', '_').upcase!.to_sym, value.freeze)
+        const_set(value.tr('-', '_').upcase!.to_sym, value.freeze)
       end
   end
 

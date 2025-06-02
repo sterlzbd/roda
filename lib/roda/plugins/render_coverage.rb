@@ -56,7 +56,7 @@ class Roda
           compiled_path = nil
           (self.opts[:render_coverage_strip_paths] || render_opts[:allowed_paths]).each do |dir|
             if path.start_with?(dir + '/')
-              compiled_path = File.join(self.opts[:render_coverage_dir], path[dir.length+1, 10000000].gsub('/', '-'))
+              compiled_path = File.join(self.opts[:render_coverage_dir], path[dir.length+1, 10000000].tr('/', '-'))
               break
             end
           end
