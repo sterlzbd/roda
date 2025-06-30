@@ -1,5 +1,7 @@
 === master
 
+* Optimize render_each and each_part default local selection on Ruby 3+/!Windows (jeremyevans)
+
 * Optimize render_each and each_part template selection when freezing app with :assume_fixed_locals render plugin option (jeremyevans)
 
 === 3.93.0 (2025-06-12)

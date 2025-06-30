@@ -152,10 +152,31 @@ class Roda
         
         private
 
-        # The default local variable name to use for the template, if the :local option
-        # is not used when calling render_each.
-        def render_each_default_local(template)
-          File.basename(template.to_s).sub(/\..+\z/, '').to_sym
+        if File.basename("a/b") == "b" && File.basename("a\\b") == "a\\b" && RUBY_VERSION >= '3'
+          # The default local variable name to use for the template, if the :local option
+          # is not used when calling render_each.
+          def render_each_default_local(template)
+            # Optimize to avoid allocations when possible
+            template = case template
+            when Symbol
+              s = template.name
+              return template unless s.include?("/") || s.include?(".")
+              s
+            when String
+              return template.to_sym unless template.include?("/") || template.include?(".")
+              template
+            else
+              template.to_s
+            end
+
+            File.basename(template).sub(/\..+\z/, '').to_sym
+          end
+        # :nocov:
+        else
+          def render_each_default_local(template)
+            File.basename(template.to_s).sub(/\..+\z/, '').to_sym
+          end
+        # :nocov:
         end
 
         if Render::COMPILED_METHOD_SUPPORT

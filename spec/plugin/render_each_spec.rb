@@ -48,7 +48,7 @@ describe "render_each plugin" do
           end
 
           r.is 'g' do
-            render_each([1,2,3], "each.foo")
+            render_each([1,2,3], :"each.foo")
           end
 
           r.is 'h' do
