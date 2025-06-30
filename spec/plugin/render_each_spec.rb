@@ -198,6 +198,11 @@ describe "render_each plugin" do
                 r.is 'a' do
                   render_each([1], template)
                 end
+                r.is 'b' do
+                  o = Object.new
+                  o.define_singleton_method(:to_s){template}
+                  render_each([1], o)
+                end
                 render_each([1], template, locals: {title: 'ct'})
               end
               freeze if freeze_app
@@ -229,6 +234,17 @@ describe "render_each plugin" do
             cache[key].must_be_kind_of(Array)
             cache.instance_variable_get(:@hash).length.must_equal cache_size
             body('/a').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier * cache_size)
+
+            body('/b').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body('/b').strip.must_equal "ct"
+            cache[key].must_be_kind_of(Array)
+            cache.instance_variable_get(:@hash).length.must_equal cache_size
+            body('/b').strip.must_equal "ct"
             cache[key].must_be_kind_of(Array)
             cache.instance_variable_get(:@hash).length.must_equal cache_size
             app::RodaCompiledTemplates.private_instance_methods.length.must_equal(multiplier * cache_size)

@@ -70,6 +70,35 @@ class Roda
 
       ALLOWED_KEYS = [:locals, :local].freeze
 
+      if Render::COMPILED_METHOD_SUPPORT
+        module ClassMethods
+          # If using compiled methods and assuming fixed locals, optimize
+          # _cached_render_each_template_method.
+          def freeze
+            if render_opts[:assume_fixed_locals] && !render_opts[:check_template_mtime]
+              include AssumeFixedLocalsInstanceMethods
+            end
+
+            super
+          end
+        end
+
+        module AssumeFixedLocalsInstanceMethods
+          private
+
+          # Optimize method since this module is only loaded when using fixed locals
+          # and when caching templates.
+          def _cached_render_each_template_method(template)
+            case template
+            when String, Symbol
+              _cached_template_method_lookup(render_opts[:template_method_cache], template)
+            else
+              false
+            end
+          end
+        end
+      end
+
       module InstanceMethods
         # For each value in enum, render the given template using the
         # given opts.  The template and options hash are passed to +render+.
