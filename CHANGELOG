@@ -1,5 +1,7 @@
 === master
 
+* Add view_subdir_leading_slash plugin for using view subdirectory unless template name starts with slash (jeremyevans) (#395)
+
 * Optimize render_each and each_part default local selection on Ruby 3+/!Windows (jeremyevans)
 
 * Optimize render_each and each_part template selection when freezing app with :assume_fixed_locals render plugin option (jeremyevans)

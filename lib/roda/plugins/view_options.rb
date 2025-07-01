@@ -182,11 +182,16 @@ class Roda
         # contain a slash.
         def template_name(opts)
           name = super
-          if (v = @_view_subdir) && !name.include?('/')
+          if (v = @_view_subdir) && use_view_subdir_for_template_name?(name)
             "#{v}/#{name}"
           else
             name
           end
+        end
+
+        # Whether to use a view subdir for the template name.
+        def use_view_subdir_for_template_name?(name)
+          !name.include?('/')
         end
       end
     end
