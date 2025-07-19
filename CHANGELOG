@@ -1,3 +1,7 @@
+=== master
+
+* Add response_content_type plugin for more easily setting content-type for responses (jeremyevans)
+
 === 3.94.0 (2025-07-14)
 
 * Add view_subdir_leading_slash plugin for using view subdirectory unless template name starts with slash (jeremyevans) (#395)
