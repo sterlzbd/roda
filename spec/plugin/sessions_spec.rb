@@ -30,6 +30,11 @@ if RUBY_VERSION >= '2'
             env['roda.session.updated_at'] -= r.GET['sut'].to_i if r.GET['sut']
           end
           r.get('s', String, String){|k, v| v.force_encoding('UTF-8'); session[k] = v}
+          r.get('swc', String, String, String, String) do |k, v, ck, cv|
+            Rack::Utils.set_cookie_header!(response.headers, ck, cv)
+            v.force_encoding('UTF-8')
+            session[k] = v
+          end
           r.get('g',  String){|k| session[k].to_s}
           r.get('sct'){|i| session; env['roda.session.created_at'].to_s}
           r.get('ssct', Integer){|i| session; (env['roda.session.created_at'] -= i).to_s}
@@ -294,8 +299,39 @@ if RUBY_VERSION >= '2'
       errors.must_equal []
     end
 
-    it "raises CookieTooLarge if cookie is too large" do
-      proc{req('/s/foo/'+base64.urlsafe_encode64(SecureRandom.random_bytes(8192)))}.must_raise Roda::RodaPlugins::Sessions::CookieTooLarge
+    it "raises CookieTooLarge if cookie value is too large" do
+      @app.plugin(:sessions, :pad_size=>nil)
+      bytes = 1502
+      bytes -= 16 if per_cookie_cipher_secret
+      # Results in 4100 byte cookie value, fails earlier
+      proc{req("/s/foo/#{SecureRandom.hex(bytes)}")}.must_raise Roda::RodaPlugins::Sessions::CookieTooLarge
+    end
+
+    it "raises CookieTooLarge if cookie value is too large" do
+      @app.plugin(:sessions, :pad_size=>nil)
+      bytes = 1500
+      bytes -= 16 if per_cookie_cipher_secret
+      # Results in 4092 byte cookie value, but browser 4K limit includes
+      # cookie name and attributes, fails later
+      proc{req("/s/foo/#{SecureRandom.hex(bytes)}")}.must_raise Roda::RodaPlugins::Sessions::CookieTooLarge
+    end
+
+    it "handles large cookies that are under 4K limit" do
+      @app.plugin(:sessions, :pad_size=>nil)
+      bytes = 1481
+      bytes -= 16 if per_cookie_cipher_secret
+      cookie_size = Array(header(RodaResponseHeaders::SET_COOKIE, "/s/foo/#{SecureRandom.hex(bytes)}")).join.bytesize
+      cookie_size.must_be :>, (Rack.release < "2" ? 4078 : 4090)
+      cookie_size.must_be :<=, 4096
+    end
+
+    it "applies 4K limit to single cookie and not multiple cookies" do
+      @app.plugin(:sessions, :pad_size=>nil)
+      bytes = 1481
+      bytes -= 16 if per_cookie_cipher_secret
+      cookie_size = Array(header(RodaResponseHeaders::SET_COOKIE, "/swc/foo/#{SecureRandom.hex(bytes)}/bar/#{"1"*2000}")).join.bytesize
+      cookie_size.must_be :>, (Rack.release < "2" ? 6078 : 6090)
+      cookie_size.must_be :<=, 6112
     end
 
     it "ignores session cookies if session exceeds max time since create" do

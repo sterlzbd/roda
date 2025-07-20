@@ -1,5 +1,7 @@
 === master
 
+* Raise Roda::RodaPlugins::Sessions::CookieTooLarge for cookies where total cookie size is over 4K (not just cookie value) (jeremyevans)
+
 * Add response_content_type plugin for more easily setting content-type for responses (jeremyevans)
 
 === 3.94.0 (2025-07-14)

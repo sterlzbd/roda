@@ -110,7 +110,9 @@ module CookieJar
     env['HTTP_COOKIE'] = @cookie if @cookie
 
     a = super(env)
-    if set = a[1][RodaResponseHeaders::SET_COOKIE]
+    if (set = a[1][RodaResponseHeaders::SET_COOKIE]).is_a?(String)
+      # This currently doesn't handle setting multiple cookies in the same response.
+      # Support for that isn't yet needed in the specs.
       @cookie = set.sub(/(; path=\/)?(; secure)?; HttpOnly/, '')
     end
     a

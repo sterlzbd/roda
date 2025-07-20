@@ -273,7 +273,29 @@ class Roda
             cookie = Hash[opts[:cookie_options]]
             cookie[:value] = cookie_value
             cookie[:secure] = true if !cookie.has_key?(:secure) && ssl?
+
+            before_size = if (set_cookie_before = headers[RodaResponseHeaders::SET_COOKIE]).is_a?(String)
+              set_cookie_before.bytesize
+            else
+              0
+            end
+
             Rack::Utils.set_cookie_header!(headers, opts[:key], cookie)
+
+            cookie_size = case set_cookie_after = headers[RodaResponseHeaders::SET_COOKIE]
+            when String
+              # Rack < 3 always takes this branch, combines cookies into string, subtract previous size
+              # Rack 3+ takes this branch if this is the first cookie set, in which case before size is 0
+              set_cookie_after.bytesize - before_size
+            else # when Array
+              # Rack 3+ takes branch if this is not the first cookie set, and last element of the array
+              # is most recently added cookie
+              set_cookie_after.last.bytesize
+            end
+
+            if cookie_size >= 4096
+              raise CookieTooLarge, "attempted to create cookie larger than 4096 bytes (bytes: #{cookie_size})"
+            end
           end
           
           if env[SESSION_DELETE_RACK_COOKIE]
@@ -500,7 +522,7 @@ class Roda
           data = Base64_.urlsafe_encode64(data)
 
           if data.bytesize >= 4096
-            raise CookieTooLarge, "attempted to create cookie larger than 4096 bytes"
+            raise CookieTooLarge, "attempted to create cookie larger than 4096 bytes (bytes: #{data.bytesize})"
           end
 
           data
