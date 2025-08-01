@@ -1,5 +1,7 @@
 === master
 
+* Support typecast_query_params and typecast_body_params in typecast_params plugin (jeremyevans)
+
 * Raise Roda::RodaPlugins::Sessions::CookieTooLarge for cookies where total cookie size is over 4K (not just cookie value) (jeremyevans)
 
 * Add response_content_type plugin for more easily setting content-type for responses (jeremyevans)

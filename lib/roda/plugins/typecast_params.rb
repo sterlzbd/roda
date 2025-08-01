@@ -1155,10 +1155,25 @@ class Roda
       end
 
       module InstanceMethods
-        # Return and cache the instance of the Params class for the current request.
+        # Return and cache the instance of the TypecastParams class wrapping access
+        # to the request's params (merging query string params and body params).
         # Type conversion methods will be called on the result of this method.
         def typecast_params
           @_typecast_params ||= self.class::TypecastParams.new(@_request.params)
+        end
+
+        # Return and cache the instance of the TypecastParams class wrapping
+        # access to parameters in the request's query string.
+        # Type conversion methods will be called on the result of this method.
+        def typecast_query_params
+          @_typecast_query_params ||= self.class::TypecastParams.new(@_request.GET)
+        end
+
+        # Return and cache the instance of the TypecastParams class wrapping
+        # access to parameters in the request's body.
+        # Type conversion methods will be called on the result of this method.
+        def typecast_body_params
+          @_typecast_body_params ||= self.class::TypecastParams.new(@_request.POST)
         end
       end
     end

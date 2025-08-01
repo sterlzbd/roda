@@ -1442,6 +1442,29 @@ describe "typecast_params plugin" do
   end
 end
 
+describe "typecast_params plugin" do 
+  before do
+    app(:typecast_params) do |r|
+      r.post "q" do
+        response.status = typecast_query_params.pos_int("a")
+        ''
+      end
+      r.post "b" do
+        response.status = typecast_body_params.pos_int("a")
+        ''
+      end
+    end
+  end
+
+  it "typecast_query_params should access params in request query string" do
+    status('/q', 'QUERY_STRING'=>"a=242", 'rack.input'=>StringIO.new('a=243'.encode("BINARY")), "REQUEST_METHOD"=>"POST").must_equal 242
+  end
+
+  it "typecast_body_params should access params in request body" do
+    status('/b', 'QUERY_STRING'=>"a=242", 'rack.input'=>StringIO.new('a=243'.encode("BINARY")), "REQUEST_METHOD"=>"POST").must_equal 243
+  end
+end
+
 describe "typecast_params plugin with customized params" do 
   def tp(arg='a=1&b[]=2&b[]=3&c[d]=4&c[e]=5&f=&g[]=&h[i]=')
     @tp.call(arg)
