@@ -14,20 +14,20 @@ class Roda
     # 
     # Or, if you have registered mime types when loading the plugin:
     #
-    #  plugin :response_content_type, mime_types: {
-    #    plain: "text/plain",
-    #    html: "text/html",
-    #    pdf: "application/pdf"
-    #  }
+    #   plugin :response_content_type, mime_types: {
+    #     plain: "text/plain",
+    #     html: "text/html",
+    #     pdf: "application/pdf"
+    #   }
     #
     # You can use a symbol:
     #
-    #  response.content_type = :html
+    #   response.content_type = :html
     #
     # If you would like to load all mime types supported by rack/mime,
     # you can use the <tt>mime_types: :from_rack_mime</tt> option:
     #
-    #  plugin :response_content_type, mime_types: :from_rack_mime
+    #   plugin :response_content_type, mime_types: :from_rack_mime
     #
     # Note that you are unlikely to be using all of these mime types,
     # so doing this will likely result in unnecessary memory usage. It
