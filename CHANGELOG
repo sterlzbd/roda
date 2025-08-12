@@ -1,4 +1,4 @@
-=== master
+=== 3.95.0 (2025-08-12)
 
 * Support typecast_query_params and typecast_body_params in typecast_params plugin (jeremyevans)
 
