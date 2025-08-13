@@ -1,3 +1,7 @@
+=== master
+
+* Add redirect_path plugin, for automatically using the calling path with the redirect argument if not given a string (jeremyevans)
+
 === 3.95.0 (2025-08-12)
 
 * Support typecast_query_params and typecast_body_params in typecast_params plugin (jeremyevans)
