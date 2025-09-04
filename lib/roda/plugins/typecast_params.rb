@@ -7,8 +7,8 @@ class Roda
   module RodaPlugins
     # The typecast_params plugin allows for type conversion of submitted parameters.
     # Submitted parameters should be considered untrusted input, and in standard use
-    # with browsers, parameters are # submitted as strings (or a hash/array containing
-    # strings).  In most # cases it makes sense to explicitly convert the parameter to the
+    # with browsers, parameters are submitted as strings (or a hash/array containing
+    # strings).  In most cases it makes sense to explicitly convert the parameter to the
     # desired type.  While this can be done via manual conversion:
     #
     #   val = request.params['key'].to_i
