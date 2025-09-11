@@ -25,12 +25,12 @@ class Roda
     #   route do |r|
     #     r.get "example" do
     #       # redirects to /foo/1
-    #       redirect(foo)
+    #       r.redirect(foo)
     #     end
     #
     #     r.get "suffix-example" do
     #       # redirects to /foo/1/status
-    #       redirect(foo, "/status")
+    #       r.redirect(foo, "/status")
     #     end
     #   end
     module RedirectPath
