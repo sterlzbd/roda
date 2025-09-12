@@ -1,6 +1,6 @@
-=== master
+=== 3.96.0 (2025-09-12)
 
-* Add redirect_path plugin, for automatically using the calling path with the redirect argument if not given a string (jeremyevans)
+* Add redirect_path plugin, for automatically calling path with the redirect argument if not given a string (jeremyevans)
 
 === 3.95.0 (2025-08-12)
 
