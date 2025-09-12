@@ -17,7 +17,7 @@ class Roda
     #   Foo = Struct.new(:id)
     #   foo = Foo.new(1)
     #
-    #   plugin :path
+    #   plugin :redirect_path
     #   path Foo do |foo|
     #     "/foo/#{foo.id}"
     #   end
