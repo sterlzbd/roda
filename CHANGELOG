@@ -1,3 +1,7 @@
+=== master
+
+* Add map_matcher plugin, for matching next segment in request path to a hash key, yielding hash value (jeremyevans)
+
 === 3.96.0 (2025-09-12)
 
 * Add redirect_path plugin, for automatically calling path with the redirect argument if not given a string (jeremyevans)
