@@ -7,6 +7,8 @@ class Roda
     # allows for easily defining hash matchers:
     #
     #   class App < Roda
+    #     plugin :hash_matcher
+    #
     #     hash_matcher(:foo) do |v|
     #       params['foo'] == v
     #     end
