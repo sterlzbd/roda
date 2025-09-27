@@ -11,7 +11,7 @@ class Roda
     #
     # Example:
     #
-    #   plugin :multi_route
+    #   plugin :named_routes
     #
     #   route('foo') do |r|
     #     r.is 'bar' do
